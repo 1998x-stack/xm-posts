@@ -8,6 +8,14 @@ A post should answer one reader misconception: why depth degrades optimization i
 
 Separate statements by role: primary-paper claim, intuition/metaphor, toy worked example, independently derived equation, modern alternative implementation and unresolved claim. Original experiment metrics must retain their model variant, dataset, split, evaluation protocol and figure/table/section locator. The per-article `evidence.json` should name meaningful sources and verification status. Do not imply a minimal attention module replicates a machine-translation system.
 
+## Mathematical typesetting
+
+- Render mathematical derivations as actual mathematical structure. Prefer native MathML Core for offline self-contained articles: fractions, sub- and superscripts, operator limits, and inline symbols. Fully bundled third-party renderers are an alternative only with suitable licenses.
+- Do not represent substantial formulas as long Unicode strings formatted like a paragraph (for example, `Σᵢ` or `||w||²`). Preserve the mathematical structure, variable definitions, and correct limits/normalization.
+- Number major display equations and separate the main optimization target from its constraints. Provide accessible descriptions for each formula.
+- In 360px and 390px layouts, make long equations internally scrollable inside keyboard-focusable regions; do not hide terms or induce whole-page horizontal overflow. Verify fraction geometry and formula scrolling in real Chromium.
+- Avoid network/CDN dependencies for formula fonts or JavaScript.
+
 ## SVG visual grammar
 
 Each figure answers a single question. Keep a consistent conceptual color role across related diagrams, label inputs, transformations, outputs, tensors and arrows, avoid decorative lines that imply incorrect computational topology. SVG must include `viewBox` plus accessible `<title>`/description, and marker/clip-path IDs must be **unique across all SVGs in one HTML document**; prefer `arrow-f03` over repeated `arrow`. Export `.svg` individually to `assets/` and inspect them standalone. Diagrams are independently drawn from model computations; never copy reference artwork without permission.

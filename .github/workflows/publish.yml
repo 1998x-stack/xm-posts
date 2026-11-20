@@ -40,6 +40,7 @@ jobs:
         run: |
           python scripts/browser_check_all.py
           python scripts/browser_check_site.py --output reports/site
+          python scripts/browser_check_svm_math.py --output reports/svm-math
       - name: Upload browser QA evidence
         if: always()
         uses: actions/upload-artifact@v4
