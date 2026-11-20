@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="zh-CN"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light">
+<meta name="description" content="从 Taxonomy 到 Ontology，再到 RDF、RDFS、OWL、SKOS、SPARQL 与 SHACL，系统理解本体工程、知识图谱、逻辑推理、开放世界假设和 LLM 辅助本体构建。">
+<link rel="canonical" href="https://1998x-stack.github.io/xm-posts/posts/knowledge-representation/ontology/"><link rel="alternate" type="application/rss+xml" title="xm-posts RSS" href="../../../feed.xml">
+<title>Ontology Engineering：从分类树到可推理的知识模型 · xm-posts</title>
+<style>
+:root{--paper:#fffdf9;--bg:#f2f6f3;--ink:#20383d;--body:#425d61;--muted:#698184;--line:#d8e4de;--teal:#147f80;--coral:#c96f50;--soft:#eaf3ee}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.85 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}a{color:#176d70;text-underline-offset:4px}a:hover{color:#a65d40}a:focus-visible,button:focus-visible{outline:3px solid #c47b52;outline-offset:3px}
+.skip{position:absolute;top:-120px;left:12px;padding:9px 14px;background:#183c42;color:#fff;z-index:5}.skip:focus{top:10px}.sitebar{background:var(--paper);border-bottom:1px solid var(--line)}.barinner{max-width:1240px;margin:auto;padding:12px 22px;display:flex;justify-content:space-between;align-items:center;gap:16px}.brand{font-size:22px;font-weight:850;letter-spacing:-.06em;text-decoration:none;color:#24464a}.brand b{color:var(--coral)}.barinner nav{display:flex;gap:18px;flex-wrap:wrap;font-size:13px}
+.layout{max-width:1240px;margin:auto;padding:52px 24px 90px;display:grid;grid-template-columns:225px minmax(0,850px);gap:48px}.toc{position:sticky;top:18px;align-self:start;max-height:92vh;overflow-y:auto}.toc strong{display:block;color:var(--muted);font:750 11px system-ui;letter-spacing:.16em;margin:0 0 10px}.toc a{display:block;padding:6px 10px;border-left:2px solid var(--line);text-decoration:none;color:#607a7d;font-size:12px;line-height:1.55}.toc a:hover{border-left-color:var(--teal);color:var(--ink)}
+main,article{min-width:0}header.hero{margin-bottom:60px}.eyebrow{font:750 11px system-ui;letter-spacing:.17em;color:var(--teal)}h1{font-size:clamp(36px,5.8vw,66px);line-height:1.1;letter-spacing:-.06em;margin:13px 0 18px}.deck{font-size:21px;line-height:1.65;color:#426166;max-width:780px}.meta{display:flex;flex-wrap:wrap;gap:9px 16px;border-top:1px solid var(--line);padding-top:14px;margin-top:25px;color:var(--muted);font-size:12px}
+section{margin:0 0 76px;scroll-margin-top:28px}h2{font-size:clamp(25px,3.2vw,34px);line-height:1.3;letter-spacing:-.035em;margin:0 0 18px}h3{font-size:20px;line-height:1.5;margin:28px 0 11px}h4{font-size:16px;margin:22px 0 8px}p{margin:0 0 18px;color:var(--body)}strong{color:#24494b}ul,ol{padding-left:25px;color:var(--body)}li{margin:8px 0}.lead{font-size:19px;color:#34585d}
+.figure{margin:24px 0 30px;padding:12px;border:1px solid var(--line);border-radius:14px;background:#fff;box-shadow:0 14px 34px #214b4009}.figure img{display:block;width:100%;height:auto}.figure figcaption{padding:9px 7px 1px;color:#637d7e;font-size:13px;line-height:1.65}.note{padding:16px 19px;border-left:4px solid var(--teal);background:#eaf4ef;margin:22px 0}.note.warn{border-left-color:var(--coral);background:#fff2e9}.note p:last-child{margin-bottom:0}.card{padding:18px 21px;border:1px solid var(--line);border-radius:13px;background:#fff;margin:22px 0}
+code{font-size:.9em}p code,li code,td code{background:#eaf1ed;border-radius:4px;padding:2px 5px;color:#31575a}pre{margin:18px 0 24px;padding:17px 19px;overflow-x:auto;border-radius:11px;background:#203d45;color:#e7f4ee;font:13px/1.7 ui-monospace,SFMono-Regular,Consolas,monospace;tab-size:2}pre code{font-size:inherit;color:inherit;background:none;padding:0}
+.mathbox{margin:22px 0;padding:15px 18px;background:#eff5f1;border:1px solid var(--line);border-radius:12px}.math-scroll{max-width:100%;overflow-x:auto;overflow-y:hidden}.math-scroll:focus-visible{outline:3px solid var(--teal);outline-offset:3px}.math-scroll math[display="block"]{display:block;width:max-content;min-width:100%;font-size:1.15rem;font-family:"Cambria Math","STIX Two Math",serif}.mathbox small{display:block;margin-top:8px;color:var(--muted);font-size:12px}
+.table-wrap{overflow-x:auto;margin:22px 0;border:1px solid var(--line);border-radius:11px;background:#fff}table{width:100%;min-width:620px;border-collapse:collapse;font-size:14px}th,td{padding:11px 13px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}th{background:#edf4ef;color:#294e50}tr:last-child td{border-bottom:0}
+.demo{margin:24px 0;padding:18px;border:1px solid #cdded5;border-radius:14px;background:#fff}.demo h3{margin:0 0 9px}.demo-graph{max-width:100%;overflow-x:auto}.demo-graph svg{display:block;width:100%;min-width:540px;height:auto}.demo .inferred-edge,.demo .inferred-node{opacity:0;transition:opacity .2s ease}.demo[data-mode="inferred"] .inferred-edge,.demo[data-mode="inferred"] .inferred-node{opacity:1}.demo-controls{display:flex;gap:9px;flex-wrap:wrap;margin:14px 0}.demo-controls button{min-height:42px;padding:9px 15px;border:1px solid #368b7e;border-radius:9px;background:#fff;color:#216b64;font:650 13px system-ui;cursor:pointer}.demo-controls button[aria-pressed="true"]{background:#e5f2eb;border-color:#1b7c72;color:#174e4c}.demo-output{min-height:100px;padding:13px 16px;border:1px solid var(--line);border-radius:9px;background:#f3f7f4}.demo-output p{margin:0 0 7px;font:13px/1.65 ui-monospace,Consolas,monospace;overflow-wrap:anywhere}.demo-output p:last-child{margin-bottom:0}.demo-output .inferred-line{color:#8b5931}.small{font-size:13px;color:var(--muted)}.refs li{overflow-wrap:anywhere;font-size:14px}.end{border-top:1px solid var(--line);padding-top:19px;color:var(--muted);font-size:13px}
+@media(max-width:900px){.layout{grid-template-columns:minmax(0,1fr);gap:18px;padding-top:28px}.toc{position:static;max-height:none;display:flex;flex-wrap:wrap;gap:4px 12px;padding-bottom:16px;border-bottom:1px solid var(--line)}.toc strong{width:100%}.toc a{border:0;padding:4px 0}.hero{margin-bottom:38px}}
+@media(max-width:480px){body{font-size:16px}.layout{padding:26px 15px 65px}.barinner{padding:12px 15px}.barinner nav{gap:10px}.deck{font-size:19px}.figure{padding:5px}.figure figcaption{padding:9px}.card{padding:15px}.mathbox{padding:11px}.meta{gap:8px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation:none!important;transition:none!important}}
+@media print{body{background:#fff;color:#111}.sitebar,.toc,.skip,.demo-controls{display:none!important}.layout{display:block;max-width:none;padding:0}.figure,.card,.mathbox,.note{box-shadow:none;break-inside:avoid}section{margin-bottom:32px}h1{font-size:34px}a{color:#173f40;text-decoration:underline}.math-scroll{overflow:visible}}
+</style></head>
+<body><a class="skip" href="#main">跳转至正文</a>
+<header class="sitebar"><div class="barinner"><a class="brand" href="../../../">xm<b>.</b>posts</a><nav aria-label="网站导航"><a href="../../../">首页</a><a href="../../../topics/">知识地图</a><a href="../../../archive/">文章归档</a></nav></div></header>
+<div class="layout"><nav class="toc" aria-label="本文目录"><strong>READING MAP</strong><a href="#problem">01 为什么需要本体</a><a href="#concepts">02 五个概念的边界</a><a href="#formal">03 本体的形式化</a><a href="#rdf">04 RDF 与 RDFS</a><a href="#owl">05 OWL 与逻辑推理</a><a href="#skos">06 SKOS、SPARQL 与 SHACL</a><a href="#lifecycle">07 本体工程生命周期</a><a href="#evaluation">08 评估与常见陷阱</a><a href="#llm">09 LLM 辅助本体工程</a><a href="#demo">10 交互式推理实验</a><a href="#practice">11 实际系统如何选型</a><a href="#references">12 参考资料</a></nav>
+<main id="main"><article>
+<header class="hero"><p class="eyebrow">KNOWLEDGE REPRESENTATION · ONTOLOGY ENGINEERING</p><h1>Ontology Engineering：从分类树到可推理的知识模型</h1><p class="deck">把概念、关系、约束与实例组织成一个机器可以理解的语义系统。理解本体，不只是学会画一张知识图谱，而是学会<strong>明确地描述“什么是什么、什么与什么有关，以及哪些结论可以从已知事实中推出”。</strong></p><div class="meta"><span>知识领域：Knowledge Representation</span><span>难度：本科高年级 / 研究生</span><span>预计阅读：约 32 分钟</span><span>资料范围：W3C 标准、经典方法论与 2026 研究综述</span></div></header>
+<section id="problem"><h2>01 · 为什么需要 Ontology？先看一个真实的软件问题</h2>
+<p class="lead">假设一所大学有三个系统：教务系统记录“学生选课”，科研系统记录“研究生参与项目”，图书馆系统记录“读者借阅”。每个系统都有自己的字段、命名习惯和数据库结构。</p>
+<p>教务系统中的 <code>student_id</code>、科研系统中的 <code>researcher</code>、图书馆系统中的 <code>reader</code>，可能指向同一个人，也可能代表不同角色。一个系统说“研究生”，另一个系统说“硕士生”，第三个系统只存储“学籍类型 = 2”。如果仅把这些数据拼接起来，系统仍然不知道它们在语义上是否等价。</p>
+<p>问题至少包含四层：<strong>术语不同、概念边界不清、关系定义不一致、隐含知识无法被机器可靠使用。</strong> 本体工程的目标，就是把这些原本依赖人类默契的假设显式化。</p>
+<figure class="figure"><img src="assets/02-knowledge-stack.svg" alt="从业务问题和能力问题到概念、公理、RDF 图、推理与应用的知识工程层次图"><figcaption>图 1 · 本体工程不是先画图再补定义，而是从应用要回答的问题出发，逐层明确概念、语义、数据与推理。</figcaption></figure>
+<p>Stanford 的 Noy 与 McGuinness 将本体视为领域术语及其关系的显式、形式化规范。它的价值不只是统一名词，还包括知识复用、显式表达领域假设，以及让软件能够在同一套语义上协作。<a href="#ref-1">[1]</a></p>
+<div class="note"><p><strong>本文中的 Ontology 指计算机科学中的“本体 / 本体工程”</strong>，即用于知识表示的计算模型，而不是讨论哲学意义上“存在是什么”的形而上学本体论。</p></div></section>
+<section id="concepts"><h2>02 · Taxonomy、Ontology、Knowledge Graph：五个概念不要混为一谈</h2>
+<p>先把边界讲清楚，后面的标准才容易理解。它们并不是互相排斥的五种产品，而是解决不同层次问题的工具。</p>
+<div class="table-wrap"><table><thead><tr><th>概念</th><th>核心问题</th><th>典型结构</th><th>擅长什么</th></tr></thead><tbody>
+<tr><td><strong>Taxonomy</strong><br>分类体系</td><td>某个概念属于哪个上位类别？</td><td>树或层级图</td><td>目录、主题导航、层级归类</td></tr>
+<tr><td><strong>Thesaurus / SKOS</strong><br>叙词表与概念体系</td><td>概念有哪些首选词、别名和相关概念？</td><td>概念 + broader / narrower / related</td><td>主题标引、术语管理、跨语言概念映射</td></tr>
+<tr><td><strong>Ontology</strong><br>本体</td><td>概念、属性和关系具有怎样的形式语义？</td><td>类、属性、实例、公理与限制</td><td>语义互操作、分类推理、一致性分析</td></tr>
+<tr><td><strong>Knowledge Graph</strong><br>知识图谱</td><td>具体实体之间有哪些事实关系？</td><td>实体节点 + 关系边 + 属性</td><td>多跳查询、实体关联、知识整合</td></tr>
+<tr><td><strong>Embedding Space</strong><br>向量表示空间</td><td>哪些对象在学习到的表示空间中相似？</td><td>向量 + 距离或相似度</td><td>语义检索、近邻召回、聚类</td></tr>
+</tbody></table></div>
+<figure class="figure"><img src="assets/01-taxonomy-ontology-kg.svg" alt="Taxonomy、Ontology 与 Knowledge Graph 的结构差异对比"><figcaption>图 2 · 分类树描述“上下位”；本体进一步描述“关系和逻辑”；知识图谱则把概念应用到 Alice、课程等具体实例。</figcaption></figure>
+<h3>2.1 Taxonomy：只回答“属于哪一类”</h3><p>例如：<code>研究生 → 学生 → 人</code>。它表达的是层级归属。若一个节点属于“研究生”，就应该属于它的上位类别“学生”。但单独的树无法充分表达“学生选修课程”“导师指导学生”“课程由教师开设”等横向关系。</p>
+<h3>2.2 Ontology：回答“概念如何定义、关系意味着什么”</h3><p>除了层级，本体还需要定义对象属性（例如 <code>enrolledIn</code>）、数据属性（例如 <code>hasCredits</code>），以及逻辑公理（例如“研究生是一类学生”）。这些定义可以由推理器解释，而不是仅供人阅读。</p>
+<h3>2.3 Knowledge Graph：把抽象定义落到具体事实</h3><p>本体描述“学生”“课程”是什么，以及 <code>enrolledIn</code> 的语义；知识图谱记录“Alice 选修了 CS101”这样的事实。很多知识图谱会复用一个本体作为 Schema，但<strong>不是每个知识图谱都具有丰富、形式化的本体</strong>。</p>
+<h3>2.4 Embedding：相似不等于逻辑蕴含</h3><p>向量模型可能认为“研究生”和“学生”在语义空间中很接近，但相似度并不能证明子类关系。反过来，本体中的 <code>ResearchStudent ⊑ Student</code> 是明确的逻辑约束，不依赖训练语料中的距离。</p>
+<div class="note warn"><p><strong>一个重要区分：</strong>“两个概念很相似”是统计判断；“A 是 B 的子类”是语义承诺。不能仅凭向量相似度，把后者自动写入本体。</p></div></section>
+<section id="formal"><h2>03 · 把 Ontology 形式化：类、属性、实例与公理</h2>
+<p>本体可以看成一组关于某个领域的精确描述。它的关键不在于“节点数量”，而在于每一个符号和关系都有可解释的语义。OWL 2 将本体中的基本知识组织为实体、表达式和公理。<a href="#ref-3">[3]</a></p>
+<h3>3.1 四类基本构件</h3><div class="card">
+<p><strong>Class（类）</strong>：描述一组对象，例如 <code>Person</code>、<code>Student</code>、<code>Course</code>。</p><p><strong>Individual（个体 / 实例）</strong>：领域中的具体对象，例如 <code>alice</code>、<code>cs101</code>。</p><p><strong>Object Property（对象属性）</strong>：连接两个个体，例如 <code>enrolledIn(alice, cs101)</code>。</p><p><strong>Data Property（数据属性）</strong>：把个体连接到字面值，例如 <code>hasCredits(cs101, 3)</code>。</p><p><strong>Axiom（公理）</strong>：声明类、属性或个体之间必须满足的逻辑关系，例如子类、等价类、不相交类、属性限制。</p></div>
+<figure class="figure"><img src="assets/03-university-ontology.svg" alt="大学领域本体中的 Person、Student、ResearchStudent、Professor、Course 以及 enrolledIn 和 advisedBy 关系"><figcaption>图 3 · 一个大学领域的简化本体：既有类层级，也有连接不同类实例的对象属性。</figcaption></figure>
+<h3>3.2 子类不是“看起来像”，而是集合包含</h3><p>设解释结构为 (I)，它把类映射为论域中的对象集合。若每一个研究生都是学生，那么：</p>
+<div class="mathbox"><div class="math-scroll" tabindex="0" role="region" aria-label="子类关系公式，可横向滚动"><math display="block" aria-label="ResearchStudent 的解释是 Student 解释的子集"><mrow><msup><mi>ResearchStudent</mi><mi>I</mi></msup><mo>⊆</mo><msup><mi>Student</mi><mi>I</mi></msup></mrow></math></div><small>符号 ⊆ 表示集合包含；上标 I 表示在解释结构 I 下该类所对应的集合。</small></div>
+<p>同理，若每个学生都是人：</p><div class="mathbox"><div class="math-scroll" tabindex="0" role="region" aria-label="学生是人的子类公式，可横向滚动"><math display="block" aria-label="Student 的解释是 Person 解释的子集"><mrow><msup><mi>Student</mi><mi>I</mi></msup><mo>⊆</mo><msup><mi>Person</mi><mi>I</mi></msup></mrow></math></div></div>
+<p>于是通过传递性，可以推出 <code>ResearchStudent ⊑ Person</code>。这里的关键是：本体不需要为每一个研究生重复写一条“他是人”的事实，只需要声明正确的类层级，推理器就能计算蕴含关系。</p>
+<h3>3.3 属性也有语义</h3><p>若 <code>enrolledIn</code> 表示“选修课程”，我们可以规定其定义域为 <code>Student</code>、值域为 <code>Course</code>。它的直观含义是：一旦存在一条 <code>x enrolledIn y</code> 的事实，RDFS/OWL 语义就允许推断 x 属于 Student、y 属于 Course。</p>
+<div class="mathbox"><div class="math-scroll" tabindex="0" role="region" aria-label="对象属性的类型约束公式，可横向滚动"><math display="block" aria-label="enrolledIn 的解释是 Student 与 Course 的笛卡尔积的子集"><mrow><msup><mi>enrolledIn</mi><mi>I</mi></msup><mo>⊆</mo><msup><mi>Student</mi><mi>I</mi></msup><mo>×</mo><msup><mi>Course</mi><mi>I</mi></msup></mrow></math></div><small>这表示该关系连接的主体和客体分别属于 Student 与 Course；它不是“数据库字段必须填写”的语法校验。</small></div>
+<h3>3.4 更强的表达：等价类与存在限制</h3><p>例如，若我们把“研究生”定义为“至少存在一位导师的学生”，可以用描述逻辑风格的表达式表示：</p>
+<div class="mathbox"><div class="math-scroll" tabindex="0" role="region" aria-label="研究生等价类公式，可横向滚动"><math display="block" aria-label="GraduateStudent 等价于 Student 与存在 advisedBy 关系连接到 Professor 的交集"><mrow><mi>GraduateStudent</mi><mo>≡</mo><mi>Student</mi><mo>⊓</mo><mo>∃</mo><mi>advisedBy</mi><mo>.</mo><mi>Professor</mi></mrow></math></div><small>⊓ 表示交集；∃ 表示至少存在一个满足关系的对象。此处为教学模型，实际领域定义需要专家确认。</small></div>
+<p>这条定义比“GraduateStudent 是 Student 的子类”更强：它说明满足条件的学生属于研究生，同时也可能让推理器根据关系事实识别出新的研究生实例。</p></section>
+<section id="rdf"><h2>04 · RDF 与 RDFS：让知识变成可交换的图数据</h2>
+<p>理解本体技术，先从 RDF 开始。W3C RDF 1.1 的核心数据模型是三元组：主语（Subject）、谓词（Predicate）、宾语（Object）。一个 RDF 图就是一组这样的三元组。<a href="#ref-2">[2]</a></p>
+<figure class="figure"><img src="assets/04-rdf-triple.svg" alt="RDF 主语、谓词、宾语三元组结构示意图"><figcaption>图 4 · RDF 用带标签的有向边表达事实；主语和宾语可以是 IRI、空白节点或字面值，谓词标识关系。</figcaption></figure>
+<h3>4.1 用三元组表示大学知识</h3>
+<pre><code>@prefix ex: &lt;https://example.org/university#&gt; .
+@prefix rdf: &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#&gt; .
+@prefix rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt; .
+
+ex:ResearchStudent rdfs:subClassOf ex:Student .
+ex:Student         rdfs:subClassOf ex:Person .
+
+ex:enrolledIn rdfs:domain ex:Student ;
+              rdfs:range  ex:Course .
+
+ex:alice rdf:type ex:ResearchStudent ;
+         ex:enrolledIn ex:cs101 .</code></pre>
+<p>读这段 Turtle 时，可以把每一行理解为一条事实。比如 <code>ex:alice rdf:type ex:ResearchStudent</code> 表示 Alice 是研究生；<code>ex:enrolledIn</code> 则连接 Alice 和课程 CS101。IRI 用于标识资源，字面值用于表示字符串、数字、日期等数据。</p>
+<h3>4.2 RDFS 为什么不只是“给边起名字”？</h3><p>RDFS 提供 <code>rdfs:subClassOf</code>、<code>rdfs:domain</code>、<code>rdfs:range</code> 等基础词汇。它们有明确语义，可以支持类型传播和关系推导：</p>
+<ol><li>已知 <code>ResearchStudent ⊑ Student</code>，且 Alice 是 ResearchStudent，可推出 Alice 是 Student。</li><li>已知 <code>Student ⊑ Person</code>，可进一步推出 Alice 是 Person。</li><li>已知 <code>enrolledIn</code> 的 domain 是 Student，Alice 参与该关系，可推出 Alice 是 Student。</li><li>已知 <code>enrolledIn</code> 的 range 是 Course，Alice 选修 CS101，可推出 CS101 是 Course。</li></ol>
+<p>这就是从显式事实到隐含事实的过程。它不是模型凭经验猜测，而是按照已声明的语义规则进行推导。</p>
+<div class="note warn"><p><strong>工程陷阱：domain / range 不是数据库里的字段校验。</strong> 如果误把 <code>hasAuthor</code> 的 domain 设为 <code>Person</code>，而某个资源错误地使用了该属性，推理器会推断该资源是 Person；它不会自动替你报告“数据类型填错了”。数据验证要结合 SHACL 等约束语言。</p></div>
+<h3>4.3 SPARQL：从图中提出问题</h3><p>SPARQL 是面向 RDF 图的查询语言。它通过图模式匹配返回符合条件的绑定结果。<a href="#ref-5">[5]</a></p>
+<pre><code>PREFIX ex: &lt;https://example.org/university#&gt;
+PREFIX rdf: &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#&gt;
+
+SELECT ?student ?course
+WHERE {
+  ?student rdf:type ex:Student ;
+           ex:enrolledIn ?course .
+}</code></pre>
+<p>如果存储层已经物化了推理结果，或查询引擎支持相应的 entailment regime，那么 ResearchStudent 的实例也能出现在 Student 的查询结果中。如果没有启用推理，普通 RDF 图模式匹配通常只会匹配图中实际存在的类型声明。<strong>查询语法本身不会自动替你补齐所有逻辑结论。</strong></p></section>
+<section id="owl"><h2>05 · OWL：从基础分类走向形式逻辑与推理</h2>
+<p>RDFS 适合表达基础的类层级、定义域和值域；OWL 2 则提供更丰富的形式化建模能力，例如类等价、不相交类、属性特征、存在 / 全称限制、基数限制和属性链。OWL 2 的语义由标准明确规定，推理器负责计算相应结论。<a href="#ref-3">[3]</a></p>
+<h3>5.1 一些常用公理</h3><div class="table-wrap"><table><thead><tr><th>公理类型</th><th>直观含义</th><th>大学示例</th></tr></thead><tbody>
+<tr><td>SubClassOf</td><td>所有 A 都是 B</td><td>ResearchStudent ⊑ Student</td></tr><tr><td>EquivalentClasses</td><td>A 与 B 定义为同一类对象集合</td><td>GraduateStudent ≡ Student ⊓ 有导师的对象</td></tr><tr><td>DisjointClasses</td><td>两个类不能共享实例</td><td>Course 与 Person 不相交</td></tr><tr><td>ObjectPropertyDomain / Range</td><td>关系主体 / 客体具有的类型</td><td>enrolledIn 的主体是 Student</td></tr><tr><td>ObjectSomeValuesFrom</td><td>至少存在一个满足条件的关系对象</td><td>至少有一位 Professor 导师</td></tr><tr><td>Cardinality</td><td>限制关系对象数量</td><td>某种关系恰好有一位负责人</td></tr></tbody></table></div>
+<h3>5.2 开放世界假设（Open World Assumption）</h3><p>这是从关系数据库迁移到 OWL 时最容易踩的坑之一。数据库应用通常采用闭世界假设（Closed World Assumption）：查询没有返回某个事实，应用就可能把它视为不存在。OWL 默认采用开放世界假设：一个事实没有被写出来，只能说明当前知识库不知道它，不能直接断言它是假的。</p>
+<figure class="figure"><img src="assets/05-open-world.svg" alt="Closed World 与 Open World 对缺失事实的不同解释"><figcaption>图 5 · 缺少一条关系记录，在闭世界查询中可能被当作“不存在”；在 OWL 开放世界语义中，通常仍然是未知。</figcaption></figure>
+<p>例如：知识库没有记录 Alice 的导师。你不能据此推出 Alice 没有导师。她可能确实没有，也可能只是数据还未导入。若要表达明确的否定，需要使用相应的否定断言或其他明确建模机制。</p>
+<div class="note"><p><strong>开放世界 ≠ 什么都能推断。</strong>它意味着缺失信息不自动等于否定；推理仍然受已声明公理和形式语义约束。</p></div>
+<h3>5.3 没有默认的“不同名字必然是不同个体”</h3><p>OWL 不要求采用 Unique Name Assumption。<code>ex:alice</code> 和 <code>ex:alice_2024</code> 即使是两个不同 IRI，也不自动意味着它们指向两个不同现实对象。跨系统整合时，系统可能需要用 <code>owl:sameAs</code> 表示同一对象，或用 <code>owl:differentFrom</code> 明确区分。</p>
+<h3>5.4 OWL 2 Profiles：表达能力与计算成本之间的权衡</h3><p>完整的逻辑表达能力不等于工程上总是最合适。W3C 定义了 OWL 2 EL、QL、RL 等 Profile，针对不同的规模和计算方式做了取舍。<a href="#ref-3">[3]</a></p>
+<div class="table-wrap"><table><thead><tr><th>Profile</th><th>典型适用场景</th><th>设计重点</th></tr></thead><tbody>
+<tr><td>OWL 2 EL</td><td>大型、生物医学或结构化领域本体</td><td>高效处理丰富的类表达和分类</td></tr><tr><td>OWL 2 QL</td><td>关系数据库之上的概念查询和数据集成</td><td>把查询重写为关系查询，尽量不搬动原始数据</td></tr><tr><td>OWL 2 RL</td><td>已有 RDF 图、希望通过规则进行扩展的系统</td><td>便于采用规则技术实现可扩展推理</td></tr></tbody></table></div>
+<p>选型应从问题规模、查询形态、推理能力、存储方式和可用工具出发，而不是一开始就选择表达能力最强的语言。</p></section>
+<section id="skos"><h2>06 · SKOS、SPARQL 与 SHACL：概念组织、查询和验证各司其职</h2>
+<h3>6.1 SKOS：当你主要需要“概念管理”时，不必强行上完整 OWL</h3><p>SKOS（Simple Knowledge Organization System）是 W3C 为分类体系、叙词表、主题词表等知识组织系统定义的轻量数据模型。它允许概念拥有 URI、多语言标签、首选词、别名、定义、上下位关系和关联关系，并可与 OWL 组合使用。<a href="#ref-4">[4]</a></p>
+<pre><code>@prefix skos: &lt;http://www.w3.org/2004/02/skos/core#&gt; .
+@prefix ex:   &lt;https://example.org/concepts#&gt; .
+
+ex:graduateStudent a skos:Concept ;
+  skos:prefLabel "研究生"@zh ;
+  skos:altLabel "研究生学员"@zh ;
+  skos:broader ex:student .
+
+ex:student a skos:Concept ;
+  skos:prefLabel "学生"@zh .
+
+ex:course a skos:Concept ;
+  skos:prefLabel "课程"@zh ;
+  skos:related ex:student .</code></pre>
+<p>注意 SKOS 的 <code>skos:broader</code> 和 <code>skos:narrower</code> 按约定表达直接的层级关系；用于表达直接或间接祖先关系的传递闭包，则由 <code>skos:broaderTransitive</code> 等词汇承载。不能把 SKOS 的概念上下位关系不加区分地等同于 OWL 的类包含公理。<a href="#ref-4">[4]</a></p>
+<h3>6.2 三个常被混淆的工程角色</h3><div class="table-wrap"><table><thead><tr><th>技术</th><th>主要任务</th><th>典型问题</th></tr></thead><tbody>
+<tr><td><strong>SPARQL</strong></td><td>查询 RDF 图</td><td>哪些学生选修了哪些课程？</td></tr><tr><td><strong>OWL Reasoner</strong></td><td>根据公理计算蕴含、分类和一致性</td><td>哪些实例可以被推断为研究生？</td></tr><tr><td><strong>SHACL</strong></td><td>验证 RDF 数据是否符合声明的结构和约束</td><td>每个 Student 是否至少有一个学籍编号？</td></tr></tbody></table></div>
+<p>SHACL 将形状图（shapes graph）与数据图（data graph）分开，验证器会生成报告，说明哪些节点违反了哪些约束。它解决的是数据符合性检查，不应与 OWL 的逻辑开放世界推理混为一谈。<a href="#ref-6">[6]</a></p>
+<pre><code>@prefix sh: &lt;http://www.w3.org/ns/shacl#&gt; .
+@prefix ex: &lt;https://example.org/university#&gt; .
+
+ex:StudentShape a sh:NodeShape ;
+  sh:targetClass ex:Student ;
+  sh:property [
+    sh:path ex:studentNumber ;
+    sh:minCount 1 ;
+    sh:datatype xsd:string
+  ] .</code></pre>
+<p>这条 SHACL 规则表达：对每个目标 Student 节点，<code>studentNumber</code> 至少出现一次，并且值的数据类型为字符串。它是验证约束，不意味着 OWL 可以因为缺少字段就自动认定该对象不是 Student。</p></section>
+<section id="lifecycle"><h2>07 · 本体工程生命周期：从问题到可维护的模型</h2><p>本体不是一次性画出来的图，而是一个需要迭代、验证和维护的软件工程资产。Noy 与 McGuinness 的经典指南强调：不存在唯一正确的本体；建模方案应由应用目标决定，并通过反复使用和专家反馈修订。<a href="#ref-1">[1]</a></p>
+<figure class="figure"><img src="assets/06-ontology-lifecycle.svg" alt="本体工程从范围界定、复用、术语整理、类与属性建模、公理和实例到评估维护的迭代流程"><figcaption>图 6 · 七步建模过程不是瀑布式的一次完成，而是围绕应用问题持续迭代。</figcaption></figure>
+<h3>7.1 从 Competency Questions 开始</h3><p>Competency Questions（能力问题，简称 CQ）是一组系统必须能够回答的问题。它们帮助确定本体的范围和细节，并在后期作为验收标准。<a href="#ref-1">[1]</a></p>
+<div class="card"><p><strong>大学领域的能力问题示例</strong></p><ol><li>哪些研究生选修了课程 CS101？</li><li>哪些教师指导了至少一名研究生？</li><li>某门课程属于哪个学院？</li><li>一个研究生是否至少有一位导师？</li><li>哪些学生同时参与了某个科研项目？</li></ol></div>
+<p>每个问题都暗含所需的知识结构。例如，第 1 题需要 Student、Course、enrolledIn；第 2 题需要 Professor、ResearchStudent、advisedBy；第 4 题则涉及存在性或基数约束，以及如何验证数据完整性。</p>
+<h3>7.2 七个可执行步骤</h3><ol>
+<li><strong>确定领域与范围。</strong> 写清楚服务对象、应用目的、维护者，以及本体不打算覆盖的内容。</li><li><strong>考虑复用已有本体。</strong> 先检查领域标准、公共词汇和已有模型，避免为同一概念重复造词。</li><li><strong>枚举重要术语。</strong> 收集名词、动词、同义词、缩写和易混淆概念。</li><li><strong>定义类与层级。</strong> 判断哪些术语是类别，哪些只是实例或属性值；再设计上位和下位关系。</li><li><strong>定义属性。</strong> 区分对象属性与数据属性，明确 domain、range、方向和命名。</li><li><strong>定义约束与公理。</strong> 添加等价类、不相交类、存在限制、基数限制等必要语义。</li><li><strong>创建实例并验证。</strong> 用真实或代表性数据测试能力问题、逻辑一致性和查询结果。</li></ol>
+<p>NeOn 方法论进一步强调：大型本体常常是本体网络，需要复用已有知识资源、非本体资源和 Ontology Design Patterns，而不只是从零开始。<a href="#ref-7">[7]</a></p></section>
+<section id="evaluation"><h2>08 · 如何评价一个 Ontology？不是节点越多越好</h2><p>本体质量必须围绕它要解决的问题来衡量。一个拥有数万个类、数十万条边的模型，如果无法回答核心问题，或者把概念定义得互相矛盾，仍然是失败的工程资产。</p>
+<div class="table-wrap"><table><thead><tr><th>评价维度</th><th>检查问题</th><th>可执行手段</th></tr></thead><tbody>
+<tr><td>Coverage</td><td>关键概念、属性和 CQ 是否被覆盖？</td><td>CQ 覆盖矩阵、领域专家审查</td></tr><tr><td>Consistency</td><td>是否存在不可满足类或逻辑冲突？</td><td>OWL Reasoner、一致性测试</td></tr><tr><td>Competency</td><td>模型是否能回答预先定义的问题？</td><td>SPARQL 查询回归测试</td></tr><tr><td>Data Conformance</td><td>实例数据是否满足结构要求？</td><td>SHACL 验证报告</td></tr><tr><td>Interoperability</td><td>是否复用了稳定 URI 和公共词汇？</td><td>映射审查、跨系统集成测试</td></tr><tr><td>Maintainability</td><td>新增概念是否会破坏既有语义？</td><td>版本管理、差异审查、回归测试</td></tr><tr><td>Performance</td><td>推理与查询能否在业务预算内完成？</td><td>分类耗时、查询延迟、内存监控</td></tr></tbody></table></div>
+<h3>8.1 常见建模错误</h3><ul>
+<li><strong>把每个名词都建成类。</strong> “姓名”“年龄”通常更适合数据属性，而不是类。</li><li><strong>把角色和实体混淆。</strong> 同一个人可能同时是学生、教师和项目负责人，不能随意把这些身份拆成互斥实体。</li><li><strong>把同义词当作同一实体。</strong> 词语相似不代表指向同一个现实对象；应区分标签、概念和个体身份。</li><li><strong>过度使用等价类。</strong> 等价类是双向语义承诺，不能只因两个名称在某些场景下接近就宣布它们等价。</li><li><strong>把 OWL 当成数据库约束语言。</strong> 如果业务要求“每条记录必须有编号”，应明确使用 SHACL 或数据库约束，而不是依赖开放世界语义。</li><li><strong>忽略时间和版本。</strong> 现实中的组织结构、课程归属、法规和术语会变化；本体需要版本、来源和生效时间管理。</li></ul></section>
+<section id="llm"><h2>09 · LLM 如何参与 Ontology Engineering？从自动生成走向人机协同</h2>
+<p>大模型能够阅读文档、归纳术语、生成候选类和关系、提出 Competency Questions、编写 Turtle / OWL 片段、生成映射建议，甚至辅助撰写本体文档。但“能生成一个看起来合理的 OWL 文件”不等于“生成了一个正确的本体”。</p>
+<figure class="figure"><img src="assets/07-llm-ontology-workflow.svg" alt="LLM 辅助本体工程的流程：领域文档进入候选模型，经形式验证、推理和专家审查后版本化发布"><figcaption>图 7 · 更可靠的方式是让 LLM 提出候选模型，再由形式工具和领域专家进行验证，而不是让模型直接决定最终语义。</figcaption></figure>
+<h3>9.1 2026 年系统性综述提供了什么信号？</h3><p>Li、Garijo 与 Poveda-Villalón 于 2026 年发表的系统性综述分析了 36 篇论文、49 项任务级研究，覆盖本体需求定义、实现、发布和维护。其统计中，31 项任务（63.3%）集中在实现阶段，12 项（24.5%）涉及需求定义，5 项（10.2%）涉及发布，只有 1 项（2.0%）涉及维护。<a href="#ref-8">[8]</a></p>
+<p>这意味着当前研究更多聚焦于“如何生成或修改本体”，而对长期维护、标准化评估和可重复性仍有明显不足。综述也指出，不同研究的任务定义、数据集、评价指标和实验流程尚未充分统一，部分工作没有公开完整评估协议或代码。</p>
+<h3>9.2 推荐的人机协同流水线</h3><ol>
+<li><strong>文档理解：</strong> 从论文、标准、业务规则和数据库字段中抽取术语及候选关系。</li><li><strong>需求生成：</strong> 让 LLM 起草能力问题、术语表和概念边界，并由领域专家修订。</li><li><strong>本体草案：</strong> 生成类层级、对象属性、数据属性和初步公理。</li><li><strong>形式验证：</strong> 检查 RDF / OWL 语法，运行推理器检查一致性与可满足性。</li><li><strong>数据验证：</strong> 使用 SHACL 检查实例图是否满足数据结构要求。</li><li><strong>问题回归：</strong> 把 CQ 转换为 SPARQL 测试，比较答案是否符合预期。</li><li><strong>专家批准：</strong> 对高风险语义决策、跨本体映射和实体合并进行人工审查。</li><li><strong>版本发布：</strong> 记录变更、来源、版本、弃用概念和迁移路径。</li></ol>
+<div class="note warn"><p><strong>核心原则：</strong>LLM 是候选知识生成器，不是领域真理的裁判。形式推理能发现逻辑问题，但不能替代领域专家判断一个概念是否定义正确；专家也不能替代自动化回归测试。</p></div></section>
+<section id="demo"><h2>10 · 交互式实验：从显式事实到推导结果</h2><p>下面用同一个大学例子观察推理前后的差异。初始数据只写入六条事实：Alice 是 ResearchStudent、ResearchStudent 是 Student、Student 是 Person、Alice 选修 CS101，以及 enrolledIn 的 domain 和 range 声明。</p>
+<div class="demo" id="ontology-demo" data-mode="explicit"><h3>RDFS 风格的正向推理</h3><p class="small">选择一个状态，观察推理器如何根据子类、domain 和 range 规则扩展事实集合。</p>
+<div class="demo-graph"><svg viewBox="0 0 760 300" role="img" aria-labelledby="demo-svg-title demo-svg-desc" xmlns="http://www.w3.org/2000/svg"><title id="demo-svg-title">Alice 与课程 CS101 的显式事实和推导类型</title><desc id="demo-svg-desc">Alice 是 ResearchStudent，ResearchStudent 是 Student，Student 是 Person，Alice enrolledIn CS101。推理后 Alice 还属于 Student 和 Person，CS101 属于 Course。</desc>
+<defs><marker id="demo-arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8" fill="#66817d"/></marker></defs>
+<rect x="24" y="22" width="180" height="60" rx="11" fill="#e8f3ed" stroke="#27877b" stroke-width="2"/><text x="114" y="48" text-anchor="middle" font-size="17" fill="#23494a" font-weight="700">Alice</text><text x="114" y="68" text-anchor="middle" font-size="12" fill="#557374">Individual</text>
+<rect x="290" y="22" width="180" height="60" rx="11" fill="#f2edfc" stroke="#7967b7" stroke-width="2"/><text x="380" y="48" text-anchor="middle" font-size="16" fill="#423b70" font-weight="700">ResearchStudent</text><text x="380" y="68" text-anchor="middle" font-size="12" fill="#6c6694">Class</text>
+<path d="M204 52H282" stroke="#27877b" stroke-width="2.5"/><text x="243" y="40" text-anchor="middle" font-size="11" fill="#557374">rdf:type</text>
+<rect x="290" y="125" width="180" height="54" rx="10" fill="#eef5f1" stroke="#8aa99e"/><text x="380" y="157" text-anchor="middle" font-size="15" fill="#23494a">Student</text><path d="M380 82V116" stroke="#7967b7" stroke-width="2.3"/><text x="396" y="105" font-size="11" fill="#6c6694">subClassOf</text>
+<rect x="290" y="224" width="180" height="54" rx="10" fill="#eef5f1" stroke="#8aa99e"/><text x="380" y="256" text-anchor="middle" font-size="15" fill="#23494a">Person</text><path d="M380 179V215" stroke="#8aa99e" stroke-width="2.3"/><text x="396" y="202" font-size="11" fill="#6c8580">subClassOf</text>
+<rect x="555" y="22" width="180" height="60" rx="11" fill="#fff1e8" stroke="#cb7956" stroke-width="2"/><text x="645" y="48" text-anchor="middle" font-size="17" fill="#75452f" font-weight="700">CS101</text><text x="645" y="68" text-anchor="middle" font-size="12" fill="#9a6b55">Individual</text>
+<path d="M204 65C335 105 430 105 547 65" fill="none" stroke="#cb7956" stroke-width="2.6"/><text x="380" y="105" text-anchor="middle" font-size="12" fill="#9a6b55">enrolledIn</text>
+<g class="inferred-edge"><path d="M204 52C230 125 245 145 282 151" fill="none" stroke="#bd7940" stroke-width="3" stroke-dasharray="7 5"/><path d="M204 52C220 210 245 245 282 250" fill="none" stroke="#bd7940" stroke-width="3" stroke-dasharray="7 5"/></g>
+<g class="inferred-node"><rect x="555" y="125" width="180" height="54" rx="10" fill="#fff4df" stroke="#c28b36" stroke-width="2"/><text x="645" y="157" text-anchor="middle" font-size="15" fill="#7c5a22">Course</text><path d="M645 82V116" stroke="#c28b36" stroke-width="2.5" stroke-dasharray="6 4"/><text x="645" y="211" text-anchor="middle" font-size="11" fill="#8b6a36">range(enrolledIn)</text><text x="114" y="145" text-anchor="middle" font-size="12" fill="#8b6a36">domain 推导</text><text x="114" y="165" text-anchor="middle" font-size="12" fill="#8b6a36">Student / Person</text></g>
+</svg></div>
+<div class="demo-controls"><button type="button" data-demo-mode="explicit" aria-pressed="true">只看显式事实</button><button type="button" data-demo-mode="inferred" aria-pressed="false">运行推理并查看闭包</button></div>
+<div class="demo-output" id="ontology-demo-output" aria-live="polite"><p>Alice rdf:type ResearchStudent</p><p>ResearchStudent rdfs:subClassOf Student</p><p>Student rdfs:subClassOf Person</p><p>Alice enrolledIn CS101</p><p>enrolledIn rdfs:domain Student</p><p>enrolledIn rdfs:range Course</p></div>
+<p class="small">教学模型只实现了正向的 subClassOf、domain、range 三类规则，不是完整 RDFS 实现，更不是 OWL 2 推理器。正式系统必须使用符合目标语义标准的工具。</p></div>
+<h3>10.1 这个例子实际推导了什么？</h3><ul><li>由 <code>Alice rdf:type ResearchStudent</code> 和子类公理，推出 Alice 是 Student。</li><li>再由 Student 是 Person 的子类，推出 Alice 是 Person。</li><li>由 <code>Alice enrolledIn CS101</code> 与 domain，推出 Alice 是 Student。</li><li>由同一关系与 range，推出 CS101 是 Course。</li></ul><p>注意，推理结果是原始事实集合的扩展。推理器没有删除 Alice 的原始类型，也没有因为“缺少某条边”就推断其否定。</p></section>
+<section id="practice"><h2>11 · 实际系统如何选型？从最小语义开始</h2><p>不要为了使用 Ontology 而使用 Ontology。一个工程团队可以按需要逐级增加语义能力：</p>
+<div class="table-wrap"><table><thead><tr><th>你的真实需求</th><th>优先考虑</th><th>什么时候升级</th></tr></thead><tbody>
+<tr><td>只需要目录和上下位分类</td><td>Taxonomy / SKOS</td><td>出现大量横向关系、跨体系映射或机器可读查询</td></tr><tr><td>需要统一实体、关系和数据交换</td><td>RDF + RDFS</td><td>出现复杂等价、限制、互斥和分类推理需求</td></tr><tr><td>需要显式逻辑语义与推理</td><td>OWL 2 + Reasoner</td><td>需要按业务数据形状进行强约束验证时</td></tr><tr><td>需要验证实例数据的结构</td><td>SHACL</td><td>规则复杂、需要查询和自动化业务处理时</td></tr><tr><td>需要实体关系查询与应用</td><td>RDF Store / Knowledge Graph</td><td>根据图模型、性能和团队生态评估存储实现</td></tr><tr><td>需要语义召回与模糊匹配</td><td>Embedding / Vector Search</td><td>需要可解释的关系和确定性规则时，与知识图谱结合</td></tr></tbody></table></div>
+<h3>11.1 与 RAG 结合时，Ontology 的位置在哪里？</h3><p>在 RAG 系统中，向量检索适合找出语义相似的文本片段；本体与知识图谱适合表达明确的实体类型、关系和约束。两者可以互补：先用向量检索召回候选证据，再利用实体链接、图查询和本体规则补充结构化上下文。</p><p>但本体并不能自动保证来源事实真实。知识图谱仍需要 provenance（来源）、时间、置信度和数据治理；LLM 也不能因为看到一条逻辑上可推出的关系，就把它当作已经被原始资料直接陈述的事实。</p>
+<h3>11.2 推荐的工程检查清单</h3><ul><li>每个核心概念都有唯一、稳定的标识符和定义。</li><li>类、实例、对象属性、数据属性没有混用。</li><li>domain / range 与子类关系经过领域专家审查。</li><li>每条关键公理都有设计理由和可测试的能力问题。</li><li>推理器报告的一致性与可满足性结果被纳入 CI。</li><li>SHACL 验证数据完整性，SPARQL 回归测试业务问题。</li><li>版本、来源、弃用映射和跨系统对齐均可追踪。</li></ul></section>
+<section id="references"><h2>12 · 参考资料与进一步阅读</h2><ol class="refs">
+<li id="ref-1">Natalya F. Noy and Deborah L. McGuinness. <em>Ontology Development 101: A Guide to Creating Your First Ontology.</em> Stanford Knowledge Systems Laboratory, 2001. <a href="https://protege.stanford.edu/publications/ontology_development/ontology101-noy-mcguinness.html" target="_blank" rel="noopener">Stanford 原文</a>。</li>
+<li id="ref-2">W3C. <em>RDF 1.1 Concepts and Abstract Syntax.</em> W3C Recommendation, 2014. <a href="https://www.w3.org/TR/rdf-concepts/" target="_blank" rel="noopener">标准文档</a>。</li>
+<li id="ref-3">W3C. <em>OWL 2 Web Ontology Language Primer (Second Edition).</em> W3C Recommendation, 2012. <a href="https://www.w3.org/TR/owl2-primer/" target="_blank" rel="noopener">标准文档</a>。</li>
+<li id="ref-4">W3C. <em>SKOS Simple Knowledge Organization System Reference.</em> W3C Recommendation, 2009. <a href="https://www.w3.org/TR/skos-reference/" target="_blank" rel="noopener">标准文档</a>。</li>
+<li id="ref-5">W3C. <em>SPARQL 1.1 Query Language.</em> W3C Recommendation, 2013. <a href="https://www.w3.org/TR/sparql11-query/" target="_blank" rel="noopener">标准文档</a>。</li>
+<li id="ref-6">W3C. <em>Shapes Constraint Language (SHACL).</em> W3C Recommendation, 2017. <a href="https://www.w3.org/TR/shacl/" target="_blank" rel="noopener">标准文档</a>。</li>
+<li id="ref-7">Mari Carmen Suárez-Figueroa, Asunción Gómez-Pérez, and Mariano Fernández-López. <em>The NeOn Methodology framework: A scenario-based methodology for ontology development.</em> Applied Ontology, 10(2), 2015. <a href="https://doi.org/10.3233/AO-150145" target="_blank" rel="noopener">DOI</a>。</li>
+<li id="ref-8">Jiayi Li, Daniel Garijo, and María Poveda-Villalón. <em>Large Language Models for Ontology Engineering: A Systematic Literature Review.</em> Semantic Web, first published online 13 July 2026. <a href="https://doi.org/10.1177/22104968261465514" target="_blank" rel="noopener">DOI</a>。</li>
+</ol><p class="end">理解 Ontology 的关键，不是记住更多 RDF 或 OWL 术语，而是建立一个稳定的思考顺序：先问系统需要回答什么，再定义概念和关系，随后明确逻辑语义，最后用真实数据、查询、推理和验证反复检验模型。</p></section>
+</article></main></div>
+<script>
+(() => {
+ const root=document.getElementById("ontology-demo");if(!root)return;
+ const output=document.getElementById("ontology-demo-output");
+ const buttons=Array.from(root.querySelectorAll("[data-demo-mode]"));
+ const facts=[["Alice","rdf:type","ResearchStudent"],["ResearchStudent","rdfs:subClassOf","Student"],["Student","rdfs:subClassOf","Person"],["Alice","enrolledIn","CS101"],["enrolledIn","rdfs:domain","Student"],["enrolledIn","rdfs:range","Course"]];
+ function closure(input){const known=new Set(input.map(row=>row.join("|")));let changed=true;while(changed){changed=false;const rows=Array.from(known,key=>key.split("|"));const subclasses=rows.filter(row=>row[1]==="rdfs:subClassOf");const domains=rows.filter(row=>row[1]==="rdfs:domain");const ranges=rows.filter(row=>row[1]==="rdfs:range");const add=row=>{const key=row.join("|");if(!known.has(key)){known.add(key);changed=true;}};rows.forEach(([subject,predicate,object])=>{if(predicate==="rdf:type")subclasses.forEach(([child,,parent])=>{if(object===child)add([subject,"rdf:type",parent]);});domains.forEach(([property,,domain])=>{if(predicate===property)add([subject,"rdf:type",domain]);});ranges.forEach(([property,,range])=>{if(predicate===property)add([object,"rdf:type",range]);});});subclasses.forEach(([child,,parent])=>subclasses.forEach(([middle,,ancestor])=>{if(parent===middle)add([child,"rdfs:subClassOf",ancestor]);}));}return Array.from(known).map(key=>key.split("|"));}
+ const inferred=closure(facts);
+ function render(mode){root.dataset.mode=mode;buttons.forEach(button=>button.setAttribute("aria-pressed",String(button.dataset.demoMode===mode)));output.replaceChildren();(mode==="inferred"?inferred:facts).forEach(row=>{const p=document.createElement("p");p.textContent=row.join("  ");if(mode==="inferred"&&!facts.some(base=>base.join("|")===row.join("|")))p.className="inferred-line";output.appendChild(p);});}
+ buttons.forEach(button=>button.addEventListener("click",()=>render(button.dataset.demoMode)));render("explicit");
+})();
+</script></body></html>

@@ -3,7 +3,7 @@
 > 维护对象：`content/categories.json`（一级分类与稳定二级 topic slug）、`content/posts.json`（每篇文章的唯一主分类/主专题）。
 > `posts/<category>/_topics/<topic>/README.md` 是规划占位，不是文章，也不是发布目录；`posts/<category>/<slug>/index.html` 才是文章源文件。
 
-## 14 个一级分类及领域边界
+## 15 个一级分类及领域边界
 
 | 分类 slug | 收录范围 | 与邻近类别的边界 |
 | --- | --- | --- |
@@ -12,6 +12,7 @@
 | `architectures` | CNN、RNN、Transformer、门控、MoE、状态空间与高效注意力结构 | GPU 算子实现归 `systems`，线上请求管理归 `inference` |
 | `reinforcement-learning` | MDP、Bellman、Policy Gradient、Actor–Critic、探索与搜索 | RLHF/GRPO 等模型后训练方案的训练目标与流程归 `training` |
 | `datasets` | 语料来源、清洗去重、混合、污染与数据治理 | 任务指标、Benchmark 设计与可重复性归 `evaluation` |
+| `knowledge-representation` | 本体工程、RDF/RDFS/OWL/SKOS、知识图谱 Schema、语义互操作与逻辑推理 | 向量表示基础归 `foundations`；图神经网络归 `architectures`；检索与 RAG 应用归 `retrieval-rag` |
 | `training` | 预训练、Scaling Laws、PEFT、偏好对齐、分布式与混合精度 | 权重衰减的基础推导可以在 `foundations`，但工程训练管线在此 |
 | `reasoning` | CoT、自一致性、推理采样、验证与测试时计算 | 涉及工具和环境反馈闭环时归 `agents` |
 | `inference` | KV Cache、解码、Batching、服务调度和 Prefill/Decode | 硬件 kernel/编译与通讯归 `systems` |
@@ -27,10 +28,10 @@
 1. 每篇文章恰好登记一个 `category` 与一个 **已注册** `topic`。跨学科关联使用 `tags` 与文章链接，不为同一术语复制多个一级分类。
 2. `topic.slug` 是公开锚点的一部分（`#topic-<slug>`），**先保留现有稳定 slug，再改善标题、解释和页面导航**。不要仅因措辞好看而改 slug。
 3. 对确有不同边界的二级主题，要求标题与描述不同；不得让两个 topic 共享同一展示标题。当前 Systems 已区分 Kernel 编程、GPU 内存、编译/内核优化、Collectives、分布式通信和 Roofline/Benchmark。
-4. 占位目录必须使用精确的注册 slug。新增 Topic 优先写分类元数据，再添加 `_topics/` 的 README；单篇新文章通常不值得新增一级分类。
+4. 占位目录必须使用精确的注册 slug。新增 Topic 优先写分类元数据，再添加 `_topics/` 的 README；单篇新文章通常不值得新增一级分类。若新领域横跨多个现有分类、拥有独立的方法论与多条可持续研究线，则可以新增一级分类，但必须先写清边界并规划稳定 Topic。
 5. Draft 必须继续以 `status: draft` 保持离线，不要将规划中的 README 当作 `published` 条目。
 
-## 2026-11 分类占位整合
+## 2026-11 新增：Knowledge Representation & Semantic Technologies\n\n新增一级分类用于承载显式符号知识与形式语义研究。现有 `foundations / representation` 主要讨论学习型向量表示，`architectures / graph-neural-networks` 讨论神经网络上的消息传递，`retrieval-rag` 讨论检索与生成应用；它们都不能完整覆盖概念定义、公理、语义 Web 标准、知识图谱 Schema、逻辑推理和本体生命周期。新分类规划五条稳定 Topic：Ontology Engineering、Semantic Web Standards、Knowledge Graphs、Logical Reasoning、Ontology Learning & Alignment。首篇正式文章为 `posts/knowledge-representation/ontology/`。\n\n## 2026-11 分类占位整合
 
 | 原占位目录（未注册 ID） | 归并到已注册的主 topic |
 | --- | --- |

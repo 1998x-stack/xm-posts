@@ -348,5 +348,13 @@
       "agent-memory-components",
       "harness-engineering"
     ]
+  },
+  {
+    "id": "path-38",
+    "title": "显式知识建模与向量语义表示",
+    "posts": [
+      "ontology",
+      "embeddings"
+    ]
   }
-]
+]\n
