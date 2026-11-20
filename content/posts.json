@@ -363,6 +363,49 @@
     "illustration": "sgd"
   },
   {
+    "slug": "alexnet",
+    "title": "Understanding AlexNet",
+    "subtitle": "一张图如何改变视觉识别？从卷积、ReLU 到双 GPU 与 ImageNet 证据",
+    "category": "architectures",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 34,
+    "tags": [
+      "AlexNet",
+      "CNN",
+      "ImageNet",
+      "Computer Vision",
+      "ReLU",
+      "Dropout",
+      "Data Augmentation",
+      "GPU Training"
+    ],
+    "summary": "以 Krizhevsky、Sutskever、Hinton 2012 原论文为证据，逐层拆解八层 AlexNet、卷积输出尺寸、ReLU、LRN、重叠池化、双 GPU 分组、Dropout 与十裁剪推理；辨明单模型和竞赛集成指标，配原创 SVG、交互形状实验及纯 Python 断言。",
+    "paper": "https://papers.nips.cc/paper_files/paper/2012/file/c399862d3b9d6b76c8436e924a68c45b-Paper.pdf",
+    "illustration": "alexnet"
+  },
+  {
+    "slug": "lstm",
+    "title": "Understanding LSTM",
+    "subtitle": "记忆如何跨越时间？从 1997 CEC 到现代遗忘门",
+    "category": "architectures",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 32,
+    "tags": [
+      "LSTM",
+      "Recurrent Networks",
+      "Long-term Dependencies",
+      "Forget Gate",
+      "Gradient Flow"
+    ],
+    "summary": "从普通 RNN 的长期梯度问题出发，精读 1997 年 CEC 与两门结构，厘清 2000 年遗忘门与 2002 年 Peephole 的历史演进，再以现代四门 MathML 公式、6 幅图、交互状态模拟和确定性 Python 断言理解记忆更新。",
+    "paper": "https://doi.org/10.1162/neco.1997.9.8.1735",
+    "illustration": "lstm"
+  },
+  {
     "slug": "rnn",
     "title": "Understanding RNN",
     "subtitle": "从循环记忆到时间反向传播：一条状态链为何既有力量也有局限？",

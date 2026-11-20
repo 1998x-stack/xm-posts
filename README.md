@@ -11,8 +11,10 @@
 | Post | 解释的问题 | 文章源码 | 核心资料 |
 |---|---|---|---|
 | **Understanding FlashAttention** | Attention 的 FLOPs 没变，为什么 GPU 仍能提速？ | [`posts/systems/flashattention/`](posts/systems/flashattention/index.html) | [Dao et al. (2022)](https://arxiv.org/abs/2205.14135) |
-| **Understanding RNN** | 为什么新输入能携带历史状态，长依赖又为何难学？ | [`posts/architectures/rnn/`](posts/architectures/rnn/index.html) | [Elman (1990)](https://doi.org/10.1207/S15516709COG1402_1) |
+| **Understanding AlexNet** | 为什么深层 CNN 能在 2012 ImageNet 上突破？卷积、ReLU、双 GPU 与真实集成指标 | [`posts/architectures/alexnet/`](posts/architectures/alexnet/index.html) | [Krizhevsky et al. (NeurIPS 2012)](https://papers.nips.cc/paper_files/paper/2012/file/c399862d3b9d6b76c8436e924a68c45b-Paper.pdf) |
 | **Understanding ResNet** | 网络越深，为什么训练反而可能更难？ | [`posts/architectures/resnet/`](posts/architectures/resnet/index.html) | [He et al.](https://arxiv.org/abs/1512.03385) |
+| **Understanding RNN** | 为什么新输入还能携带历史状态，长期依赖又为何难学？ | [`posts/architectures/rnn/`](posts/architectures/rnn/index.html) | [Elman (1990)](https://doi.org/10.1207/S15516709COG1402_1) |
+| **Understanding LSTM** | 为什么一千步前的线索仍可能影响当前输出？ | [`posts/architectures/lstm/`](posts/architectures/lstm/index.html) | [Hochreiter & Schmidhuber (1997)](https://doi.org/10.1162/neco.1997.9.8.1735) |
 | **Understanding RoPE** | 为什么旋转 Q/K 就能编码相对位置？ | [`posts/architectures/rope/`](posts/architectures/rope/index.html) | [Su et al., RoFormer](https://arxiv.org/abs/2104.09864) |
 | **Understanding Transformer** | 为什么用 Self-Attention 替代循环结构？ | [`posts/architectures/transformer/`](posts/architectures/transformer/index.html) | [Vaswani et al.](https://arxiv.org/abs/1706.03762) |
 | **Understanding Pre-LN vs Post-LN** | LayerNorm 改动为何影响残差梯度与 warm-up？ | [`posts/architectures/pre-ln-vs-post-ln/`](posts/architectures/pre-ln-vs-post-ln/index.html) | [Xiong et al. (ICML 2020)](https://proceedings.mlr.press/v119/xiong20b.html) |
@@ -31,7 +33,7 @@
 
 Pre-LN vs Post-LN 具有 12 节解读、5 幅独立 SVG、交互式平移实验和纯 Python 的 Jacobian 数值检查；SGD 具有 14 节渐进推导、7 幅独立 SVG、Mini-batch 抽样交互与纯 Python 随机梯度单元测试；ResNet 具有 11 节解读与 10 幅独立 SVG；Transformer 具有 16 节解读与 13 幅独立 SVG，另有最小 PyTorch Attention 示例；SVM 具有 12 节机制推导、6 幅独立 SVG、可调 RBF 相似度矩阵和纯 Python 一维解析示例，采用离线原生 MathML 排版分式、上下标和求和范围；Word2Vec 具有 12 节精读、5 幅内嵌原创图、7 份独立 SVG、SGNS 训练器和数值梯度校验。AdamW 具有 14 节渐进推导、6 幅独立 SVG、二维预条件器交互实验与纯 Python Adam/AdamW 代码断言。GRPO 具有 11 节深度解读、4 幅独立 SVG、可交互优势示例和 Python 断言测试。RLHF 从 SFT、奖励模型与 PPO 出发，包含 12 节推导、4 幅机制图、2 个交互实验和最小数学断言；Adam 具有 14 节机制讲解、7 幅独立 SVG、时间步交互及含 AdamW/AMSGrad 分支的纯 Python 最小实现与单元测试。LoRA 具有 12 节论文精读、6 幅独立 SVG、rank 参数预算交互与纯 Python 合并等价性算例。DPO 具有 12 节机制推导、6 幅独立 SVG、可调 β 交互与最小 Python 公式检验。KV Cache 具有 13 节解读、6 幅独立 SVG、KV 显存交互计算器与纯 Python 数值一致性测试。RoPE 具有 12 节机制推导、4 幅独立 SVG、平移交互演示、纯 Python 旋转验证与长上下文扩展比较。Self-Consistency 提供 12 节解读、5 幅独立 SVG、答案计票交互、数学推导及可执行 Python 示例。教学简化、原论文和后续变体需明确区分；每篇文章的发布状态以 CI 和浏览器验证结果为准。
 
-RNN 具有 12 节机制精读、4 幅独立 SVG、4 处离线 MathML 数学公式、梯度传播交互实验与纯 Python BPTT 数值微分测试，并区分 Elman 1990 原始实验和现代训练示例。
+RNN 具有 12 节渐进式机制解读、4 幅独立 SVG、4 处原生 MathML、可调梯度实验、纯 Python BPTT 有限差分验证，并区分 Elman 1990 原论文和现代训练算例。
 
 PPO 包含 14 节原论文推导、6 幅独立 SVG、交互式裁剪目标演算、纯标准库数学测试，并单独辨析了 RLHF 的参考模型 KL 与 PPO 的旧策略偏移指标。
 
@@ -41,7 +43,7 @@ PPO 包含 14 节原论文推导、6 幅独立 SVG、交互式裁剪目标演算
 |---|---|---|
 | 基础理论 | `posts/foundations/` | Adam、Word2Vec、词嵌入、优化器（AdamW）、正则化、表示学习 |
 | **经典机器学习** | `posts/classical-ml/` | SVM、核方法、线性与树模型 |
-| **模型架构** | `posts/architectures/` | RNN、ResNet、Transformer、Recurrent & Sequence Models、Normalization & Residual Paths、状态空间模型 |
+| **模型架构** | `posts/architectures/` | RNN / LSTM、AlexNet / CNN、ResNet、Transformer、Normalization & Residual Paths、状态空间模型 |
 | **强化学习** | `posts/reinforcement-learning/` | Policy Gradient、Actor–Critic、GAE、PPO/TRPO 与序贯决策 |
 | 训练与对齐 | `posts/training/` | 预训练、微调、偏好对齐、DPO 与 RLHF与 PPO / GRPO 等强化学习策略优化 |
 | 推理与 Serving | `posts/inference/` | KV Cache、PagedAttention、Prefix Caching、Decode、在线 Serving |
@@ -49,7 +51,11 @@ PPO 包含 14 节原论文推导、6 幅独立 SVG、交互式裁剪目标演算
 | 多模态 | `posts/multimodal/` | Vision/Audio/Language 与跨模态交互 |
 | 评测与复现 | `posts/evaluation/` | Benchmark、消融、复现协议 |
 
-RNN 归入 `architectures`，在现有顶层分类下新增 **Recurrent & Sequence Models** 主题，供后续 LSTM、GRU 与递归/状态式序列架构延展；不为单篇 RNN 另设顶层目录。
+AlexNet 归入 `architectures` 的 **Convolutional Neural Networks & Vision** 主题，而不新建视觉顶层目录；后续 VGG、Inception、ResNet 可形成连贯的 CNN 历史线。原论文的 15.3% Top-5 test error 来自七模型集成，绝非单模型结果。
+
+RNN 沿用 `architectures` 下现有 **Recurrent Networks / LSTM** 主题，不重复新增顶层或近义二级分类；以 Elman 1990 为基本模型，串接 LSTM / GRU 与其他序列架构。
+
+LSTM 归入 `architectures` 的 **Recurrent Networks / LSTM** 二级主题，区分 1997 原始两门版、2000 年遗忘门与现代标准实现。
 
 RoPE 归入 `architectures`，补充 **Positional Encoding** 主题；不为单篇位置编码论文增设顶层分类，后续 ALiBi、PI、YaRN 可以继续沿此脉络整理。
 
