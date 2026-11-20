@@ -923,5 +923,27 @@
     "summary": "从两动作概率学习切入，以 Williams 1992 原文为证据推导 score-function 梯度、伯努利 logit、原始 eligibility 规则，再区分现代 reward-to-go 与 baseline，配五幅机制图、精确枚举交互及可复现 Python 测试。",
     "paper": "https://doi.org/10.1007/BF00992696",
     "illustration": "reinforce"
+  },
+  {
+    "slug": "importance-sampling",
+    "title": "Understanding Importance Sampling",
+    "subtitle": "换一种分布抽样，为什么仍能估计原来的概率？从稀有事件到离策略学习",
+    "category": "foundations",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 31,
+    "tags": [
+      "Importance Sampling",
+      "Monte Carlo & Importance Sampling",
+      "Variance Reduction",
+      "Rare Event Simulation",
+      "Self-normalized IS",
+      "Effective Sample Size",
+      "Off-policy Evaluation & Importance Sampling"
+    ],
+    "summary": "以 Kahn–Marshall 1953 为历史起点，从稀有事件与换测度推导无偏性、方差、最优提议分布、SNIS/ESS 和离策略比率；包含五幅独立 SVG、离线 MathML、解析交互以及 Python 确定性检验。",
+    "paper": "https://doi.org/10.1287/opre.1.5.263",
+    "illustration": "importance-sampling"
   }
 ]
