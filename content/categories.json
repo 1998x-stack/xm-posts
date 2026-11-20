@@ -223,7 +223,7 @@
     "slug": "training",
     "title": "训练与对齐",
     "english": "Training & Alignment",
-    "description": "从预训练、Scaling Laws 与参数高效微调，到分布式训练、训练并行、混合精度、检查点与偏好对齐，系统拆解模型训练的数学目标和工程实现。 增加 BERT 双向 Encoder 的 MLM / NSP 预训练与迁移学习。",
+    "description": "从预训练、Scaling Laws 与参数高效微调，到分布式训练、训练并行、混合精度、检查点、偏好对齐、奖励建模与奖励黑客，系统拆解模型训练的数学目标、优化机制和安全边界。增加 BERT 双向 Encoder 的 MLM / NSP 预训练与迁移学习。",
     "topics": [
       {
         "slug": "pretraining",
@@ -244,6 +244,10 @@
       {
         "slug": "rlhf",
         "title": "RLHF & Reward Modeling"
+      },
+      {
+        "slug": "reward-hacking",
+        "title": "Reward Hacking & Specification Gaming"
       },
       {
         "slug": "preference-optimization",
