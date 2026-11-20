@@ -2049,5 +2049,42 @@
       "src": "assets/cover-mixture.svg",
       "caption": "RAG-Sequence 整句共享文档，RAG-Token 逐词混合证据"
     }
+  },
+  {
+    "slug": "deepspeed",
+    "title": "Understanding DeepSpeed",
+    "subtitle": "从 ZeRO 状态切分到异构卸载、3D 并行与通信优化",
+    "category": "training",
+    "status": "published",
+    "published": "2026-11-21",
+    "updated": "2026-11-21",
+    "reading_minutes": 35,
+    "tags": [
+      "DeepSpeed",
+      "ZeRO",
+      "ZeRO-1",
+      "ZeRO-2",
+      "ZeRO-3",
+      "ZeRO-Offload",
+      "ZeRO-Infinity",
+      "ZeRO++",
+      "Distributed Training",
+      "Data Parallelism",
+      "Tensor Parallelism",
+      "Pipeline Parallelism",
+      "Sequence Parallelism",
+      "GPU Memory",
+      "Collective Communication",
+      "Offloading",
+      "PyTorch"
+    ],
+    "summary": "从混合精度 Adam 的 16 bytes/parameter 显存账本出发，推导 ZeRO-1/2/3 的状态分片公式，解释参数 All-Gather、梯度 Reduce-Scatter、CPU/NVMe Offload、3D 并行与 ZeRO++ 通信优化，并区分训练和推理的内存瓶颈。",
+    "paper": "https://arxiv.org/abs/1910.02054",
+    "illustration": "deepspeed",
+    "topic": "distributed-training",
+    "cover": {
+      "src": "assets/zero-stages.svg",
+      "caption": "ZeRO 从优化器状态到参数逐级切分，减少多 GPU 训练中的状态冗余"
+    }
   }
 ]
