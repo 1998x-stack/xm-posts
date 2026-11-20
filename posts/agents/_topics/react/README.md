@@ -9,3 +9,5 @@
 - **发布规则**：先完成 HTML、独立 SVG、`evidence.json` 与 QA，再由 `content/posts.json` 控制 `draft` / `published`。
 
 此目录仅保留专题规划，不作为站点文章或 RSS 条目发布。
+
+> 关联正式文章：[`posts/agents/react/index.html`](../../react/index.html)。此占位本身仍不发布。

@@ -1081,6 +1081,55 @@
     "illustration": "react"
   },
   {
+    "slug": "moe",
+    "title": "Understanding Mixture of Experts (MoE)",
+    "subtitle": "为什么只执行少量专家，就能扩展模型参数容量？",
+    "category": "architectures",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 35,
+    "tags": [
+      "MoE",
+      "Mixture of Experts",
+      "Sparse Gating",
+      "Top-K",
+      "Conditional Computation",
+      "Load Balancing",
+      "Expert Parallelism",
+      "Switch Transformer",
+      "GShard",
+      "Mixtral",
+      "DeepSeekMoE"
+    ],
+    "summary": "以 Shazeer et al. ICLR 2017 为核心，渐进推导稀疏路由、Noisy Top-K、Importance/Load、容量和专家并行，区分 Switch、GShard、Mixtral 与 DeepSeekMoE；配七幅 SVG、八组原生 MathML、交互实验和 Python 数值测试。",
+    "paper": "https://arxiv.org/abs/1701.06538",
+    "illustration": "moe"
+  },
+  {
+    "slug": "bert",
+    "title": "Understanding BERT",
+    "subtitle": "双向 Transformer 如何用 MLM 与 NSP 学到可迁移的语言理解表征？",
+    "category": "training",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 34,
+    "tags": [
+      "BERT",
+      "Bidirectional Encoder Pretraining / BERT",
+      "Masked Language Model",
+      "Next Sentence Prediction",
+      "WordPiece",
+      "Pretraining",
+      "Fine-tuning",
+      "Transformer Encoder"
+    ],
+    "summary": "精读 Devlin et al. NAACL 2019：从因果注意力与双向上下文的矛盾出发，逐层图解 Encoder、输入三重嵌入、MLM 15%/80-10-10、NSP、任务微调及原论文消融；含六幅独立 SVG、原生 MathML、交互式遮蔽实验、证据账本与纯 Python 测试，并区分 RoBERTa 的后续研究。",
+    "paper": "https://aclanthology.org/N19-1423/",
+    "illustration": "bert"
+  },
+  {
     "slug": "td3",
     "title": "Understanding TD3",
     "subtitle": "为什么 DDPG 会追逐错误的 Q 值？双 Critic、延迟更新与目标策略平滑",

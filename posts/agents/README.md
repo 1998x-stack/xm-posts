@@ -4,7 +4,7 @@
 
 ## 专题占位
 
-- [ReAct](_topics/react/README.md) — 研究规划占位；尚非正式 Post。
+- [ReAct](react/) — 已有正式论文解读；[专题研究规划](_topics/react/README.md) 仍作为未发布的历史规划记录。
 - [Planning](_topics/planning/README.md) — 研究规划占位；尚非正式 Post。
 - [Tool Calling](_topics/tool-calling/README.md) — 研究规划占位；尚非正式 Post。
 - [Memory](_topics/memory/README.md) — 研究规划占位；尚非正式 Post。
