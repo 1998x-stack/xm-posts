@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 340" role="img" aria-labelledby="lifecycle-title lifecycle-desc">
+<title id="lifecycle-title">ZeRO-3 一次训练迭代中的参数聚合与梯度分片</title>
+<desc id="lifecycle-desc">参数分片在需要计算某层前通过 all-gather 临时重建；前向和反向计算后释放不再需要的完整参数；梯度通过 reduce-scatter 分配到负责该分片的 rank，局部优化器更新后再按需聚合。</desc>
+<rect width="960" height="340" rx="22" fill="#f5f8f4"/>
+<g font-family="system-ui,-apple-system,'PingFang SC','Microsoft YaHei',sans-serif">
+<text x="34" y="44" font-size="22" font-weight="750" fill="#203c3e">ZeRO-3：状态被切分，但计算仍需要完整的当前层</text>
+<g stroke="#b7c9c0" stroke-width="3" fill="none" stroke-linecap="round"><path d="M192 168 H220"/><path d="M402 168 H430"/><path d="M612 168 H640"/><path d="M822 168 H850"/></g>
+<g fill="#fff" stroke="#d3e0d8" stroke-width="1.5">
+<rect x="34" y="103" width="158" height="130" rx="12"/><rect x="220" y="103" width="182" height="130" rx="12"/><rect x="430" y="103" width="182" height="130" rx="12"/><rect x="640" y="103" width="182" height="130" rx="12"/><rect x="850" y="103" width="82" height="130" rx="12"/>
+</g>
+<g font-size="16" font-weight="750" text-anchor="middle" fill="#28514e"><text x="113" y="132">① 参数分片</text><text x="311" y="132">② All-Gather</text><text x="521" y="132">③ 前向 / 反向</text><text x="731" y="132">④ Reduce-Scatter</text><text x="891" y="132">⑤ 更新</text></g>
+<g font-size="13" text-anchor="middle" fill="#617a74"><text x="113" y="161">每个 rank 只持有</text><text x="113" y="182">自己负责的 shard</text><text x="311" y="161">临时拼出当前层</text><text x="311" y="182">所需完整参数</text><text x="521" y="161">用完整参数执行</text><text x="521" y="182">局部计算</text><text x="731" y="161">梯度归约并分发</text><text x="731" y="182">到各自 owner</text><text x="891" y="161">更新</text><text x="891" y="182">本地 shard</text></g>
+<g font-size="12" fill="#197a70" font-weight="700"><text x="34" y="265">存储：</text><text x="34" y="286" fill="#617a74" font-weight="500">参数 / 梯度 / 优化器状态按 rank 分片</text><text x="350" y="265">通信：</text><text x="350" y="286" fill="#617a74" font-weight="500">按需 all-gather 参数；reduce-scatter 梯度</text><text x="690" y="265">调度：</text><text x="690" y="286" fill="#617a74" font-weight="500">prefetch + overlap 减少等待</text></g>
+<text x="34" y="320" font-size="13" fill="#7c8d85">这是按层理解的简化流程；实际执行还包含 bucket、参数生命周期、持久化阈值与通信组管理。</text>
+</g>
+</svg>
