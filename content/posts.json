@@ -766,5 +766,27 @@
     "summary": "以 McCallum 与 Nigam 1998 的文本事件模型比较为主线，推导贝叶斯判别、条件独立、Multinomial/Bernoulli 似然、加法平滑与对数域计算；结合论文证据、六幅机制图、交互比较及纯 Python 可复验算例。",
     "paper": "https://www.cse.iitb.ac.in/~soumen/readings/papers/McCallumN1998event.pdf",
     "illustration": "naive-bayes"
+  },
+  {
+    "slug": "qlora",
+    "title": "Understanding QLoRA",
+    "subtitle": "65B 如何在单张 48GB GPU 上微调？NF4、Double Quantization 与分页优化器",
+    "category": "training",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 33,
+    "tags": [
+      "QLoRA",
+      "NF4",
+      "4-bit Quantization",
+      "Double Quantization",
+      "Paged Optimizers",
+      "LoRA",
+      "PEFT"
+    ],
+    "summary": "以 QLoRA NeurIPS 2023 为主线，拆解冻结主干的 NF4 存储、BF16 计算、双重量化 0.373 bit/参数、分页优化器和 MMLU 证据；附六幅 SVG、MathML 公式、交互内存账本与纯 Python 验证。",
+    "paper": "https://arxiv.org/abs/2305.14314",
+    "illustration": "qlora"
   }
 ]

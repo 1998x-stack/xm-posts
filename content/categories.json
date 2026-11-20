@@ -83,6 +83,7 @@
       "Scaling Laws / Compute-Optimal Training",
       "Fine-tuning",
       "PEFT / LoRA",
+      "Quantized Fine-tuning / QLoRA",
       "Preference Alignment",
       "RL / Policy Optimization",
       "Preference Optimization",
