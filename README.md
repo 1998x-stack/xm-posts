@@ -151,6 +151,25 @@ xm-posts/
 
 只修改 `skills/olah-style-paper-posts/` 正本；更新后执行 `python scripts/sync_skills.py` 同步四份镜像，最后以 `--check` 校验。完整技术说明见 [`docs/architecture.md`](docs/architecture.md)。
 
+## 每篇文章下载 PDF
+
+网站上每篇正式发布的 Post 右下角都有一个轻量的 **「下载 PDF」** 按钮，点击后直接下载 `xm-posts-<slug>.pdf`。在线阅读的原始 Olah 风格排版不变；PDF 由 Chromium 按 HTML 原有 CSS（含 `@media print`）排版，尽可能保持 SVG、数学公式、配色和代码内容。打印为 A4 时会自然分页；可交互实验在 PDF 中保留生成时的静态状态，操作仍需使用 HTML 版。
+
+- 直接文件地址：`/xm-posts/posts/<category>/<slug>/article.pdf`。
+- **自动生成**：仅处理 `content/posts.json` 中 `published` 的文章；新 Post 正式发布后不需要手动上传 PDF，也不需要逐篇修改 HTML。
+- **设计原则**：下载入口是小型固定浮动控件，不挤压文章内容；打印/导出的 PDF 不显示按钮和网站导航，不改变正文 SVG 和数学表达式的源文件。
+- **质量检查**：部署前要求 PDF 可解析、有正文文本、图片资源加载成功，并运行站点链接检查。极宽公式、长代码和跨页图表仍应按文章单独抽查。
+
+本地生成（先安装 `requirements-dev.txt` 和 Playwright Chromium；Linux CI 还安装 Noto CJK 与 STIX 字体）：
+
+```bash
+python scripts/build_site.py
+python scripts/render_pdfs.py
+python scripts/validate_site.py
+```
+
+只检查一篇文章时，先构建再运行 `python scripts/render_pdfs.py --only transformer`；正式发布流程默认为全部正式文章生成 PDF。不要提交自动生成的 `_site/` 或 `article.pdf`。
+
 ## GitHub Pages 部署与排查
 
 [Validate & publish xm-posts](https://github.com/1998x-stack/xm-posts/actions/workflows/publish.yml) 在 PR 上完成测试与浏览器 QA，在 `main` push 后部署经过验证的 `_site/` Artifact。
