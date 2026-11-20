@@ -15,7 +15,20 @@ main,article{min-width:0}.eyebrow{font:700 11px/1.4 -apple-system,BlinkMacSystem
 @media(max-width:1010px){.frame{grid-template-columns:1fr;max-width:860px;padding-top:32px;gap:25px}.toc{position:static;max-height:none;display:flex;flex-wrap:wrap;gap:4px;border-bottom:1px solid var(--line);padding-bottom:12px}.toc b{width:100%;margin:0 0 8px}.toc a{border:0;border-radius:4px;background:#e7f0ea;padding:7px 9px}}
 @media(max-width:590px){body{font-size:16px}.frame{padding:24px 15px 70px}.top-inner{padding:9px 15px}.navtop{gap:11px}.navtop a{font-size:11px}h1{font-size:42px}.dek{font-size:18px}.meta{margin-bottom:38px}.compare,.model-grid{grid-template-columns:1fr}.figure-card{padding:6px 3px 12px}.figure-card figcaption{padding:9px}.lab{padding:14px}.toc a{font-size:11px}.math-scroll{padding:13px 9px}.math-scroll math[display=block]{font-size:17px}.chapter{margin-bottom:57px}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;transition:none!important}}
-@media print{body{background:#fff}.top,.toc,.skip,.controls,.lab input{display:none!important}.frame{display:block;max-width:none;padding:0}.chapter{break-inside:avoid;margin-bottom:30px}.figure-card,.eq{break-inside:avoid}.math-scroll{overflow:visible}.math-scroll math[display=block]{font-size:16px}.code{background:#f3f6f4;color:#233c42}}</style></head>
+@media print{body{background:#fff}.top,.toc,.skip,.controls,.lab input{display:none!important}.frame{display:block;max-width:none;padding:0}.chapter{break-inside:avoid;margin-bottom:30px}.figure-card,.eq{break-inside:avoid}.math-scroll{overflow:visible}.math-scroll math[display=block]{font-size:16px}.code{background:#f3f6f4;color:#233c42}}
+/* Fourth teaching pass: make each word's contribution visible, not just the posterior. */
+.nb-evidence{margin:22px 0 4px;padding:17px 17px 13px;background:#fff;border:1px solid #cbded4;border-radius:8px}
+.nb-evidence h3{margin:0 0 8px;font-size:18px}.nb-evidence p{font-size:13px;line-height:1.7;margin:0 0 12px}
+.nb-evidence table{width:100%;border-collapse:collapse;font-size:13px;line-height:1.55;table-layout:fixed}
+.nb-evidence th,.nb-evidence td{border-bottom:1px solid #e2eee8;padding:10px 7px;text-align:left;vertical-align:middle}
+.nb-evidence th{color:#526e6b;font-weight:750}.nb-evidence th:first-child{width:22%}.nb-evidence th:nth-child(2){width:20%}
+.nb-evidence td:last-child{font-variant-numeric:tabular-nums}.nb-evidence tbody tr:last-child td{border-bottom:0}
+.nb-evidence .signal{height:7px;background:#edf1ed;border-radius:8px;overflow:hidden;margin-top:4px}
+.nb-evidence .signal span{display:block;height:100%;background:#277d70;border-radius:8px}
+.nb-evidence .signal span.against{background:#ba7150}
+.nb-evidence .total{margin-top:12px;padding-top:12px;border-top:1px solid #dceae2;font-size:14px;font-weight:750;color:#225e56}
+@media(max-width:590px){.nb-evidence{padding:11px 8px}.nb-evidence table{font-size:11px}.nb-evidence th,.nb-evidence td{padding:8px 4px;overflow-wrap:anywhere}}
+</style></head>
 <body><a class="skip" href="#article-content">跳转正文</a><header class="top"><div class="top-inner"><a class="brand" href="../../../" aria-label="xm.posts 首页">xm<span>.</span>posts</a><nav class="navtop" aria-label="站点导航"><a href="../../../categories/classical-ml/">经典机器学习</a><a href="../../../archive/">所有文章</a></nav></div></header>
 <div class="frame"><nav class="toc" aria-label="文章章节"><b>PROBABILISTIC CLASSIFICATION</b><a href="#question">01 · 从一封消息出发</a><a href="#bayes">02 · 条件概率</a><a href="#independence">03 · 图模型</a><a href="#event-models">04 · 两种事件模型</a><a href="#smoothing">05 · 零概率问题</a><a href="#log-space">06 · 数值稳定</a><a href="#toy">07 · 逐笔手算</a><a href="#lab">08 · 交互实验</a><a href="#variants">09 · 超出文本</a><a href="#evidence">10 · 原始论文</a><a href="#limitations">11 · 误区与风险</a><a href="#implementation">12 · 最小可复验代码</a><a href="#takeaway">13 · 知识地图</a></nav><main id="article-content"><article><header><div class="eyebrow">PAPER STUDY · CLASSICAL MACHINE LEARNING</div><h1>Understanding Naive Bayes</h1><p class="dek">为什么“天真”的条件独立假设，也能成为有效的分类器？从词袋证据到概率、平滑与模型误区。</p><div class="meta"><span>核心文献 1997 · 1998 · 2003</span><span>预计阅读 30 分钟</span><span>概率分类 · 生成式模型</span></div></header><section class="chapter" id="question" aria-labelledby="question-heading"><div class="chapter-kicker">CHAPTER 01 · 从一封消息出发</div><h2 id="question-heading">为什么两个词就能改变一封消息的类别？</h2>
 <p class="lead">一条新消息只有 <em>free offer</em> 两个词。我们想判断它更像「推广」还是「工作」：不是先背下贝叶斯公式，而是先问——<strong>哪一类消息更容易产生这两个词？</strong></p>
@@ -70,6 +83,19 @@ main,article{min-width:0}.eyebrow{font:700 11px/1.4 -apple-system,BlinkMacSystem
 <label class="range-label" for="alpha">加法平滑 α = <output id="alpha-value">1.00</output></label>
 <input id="alpha" type="range" min="0.25" max="3" step="0.25" value="1">
 <div class="model-grid"><section class="model-result" aria-label="Multinomial 结果"><h3>Multinomial NB</h3><p id="multi-label">free offer · 推广 ≈ 92.3%</p><div class="bar" role="img" aria-label="Multinomial NB 推广类概率条"><span id="multi-bar" style="width:92.3%"></span></div><small id="multi-detail">词频计数；重复词重复提供证据</small></section><section class="model-result" aria-label="Bernoulli 结果"><h3>Bernoulli NB</h3><p id="bern-label">观察词出现与缺席</p><div class="bar alt" role="img" aria-label="Bernoulli NB 推广类概率条"><span id="bern-bar" style="width:50%"></span></div><small id="bern-detail">二元出现标记；全部词表都参与</small></section></div>
+
+<div class="nb-evidence" aria-labelledby="nb-evidence-heading">
+<h3 id="nb-evidence-heading">拆开后验：每个词贡献了多少证据？</h3>
+<p>先只看 <strong>Multinomial</strong>。两个类别各有 9 个训练词位，因此分母相同；一个词在测试消息中出现 <em>k</em> 次，就贡献 <strong>k × ln[(推广词频 + α) / (工作词频 + α)]</strong>。正数支持推广，负数支持工作。</p>
+<table aria-label="所选消息的逐词对数优势分解">
+<thead><tr><th scope="col">测试词</th><th scope="col">出现次数</th><th scope="col">训练频数（推广 / 工作）</th><th scope="col">对数优势贡献</th></tr></thead>
+<tbody id="nb-evidence-rows">
+<tr><td>free</td><td>1</td><td>3 / 0</td><td>+1.386<div class="signal" aria-hidden="true"><span style="width:55.5%"></span></div></td></tr>
+<tr><td>offer</td><td>1</td><td>2 / 0</td><td>+1.099<div class="signal" aria-hidden="true"><span style="width:44%"></span></div></td></tr>
+</tbody></table>
+<div class="total" id="nb-evidence-total">先验对数优势 0 + 词贡献 2.485 → 优势约 12 : 1</div>
+<p id="nb-evidence-tip">注意：<strong>12 : 1 是优势比，不是 12% 概率</strong>；推广后验为 12 / (12 + 1) ≈ 92.3%。伯努利模型还会把词表中<strong>没有出现的词</strong>计入证据。</p>
+</div>
 <p id="lab-readout" class="readout" role="status" aria-live="polite">初始语句 free offer；调整参数后模型对比会更新。</p>
 </div>
 <p class="note">进阶辨析：当一个词不在<strong>训练词表</strong>中时，此处的最小实现直接忽略它；真实系统还要明确 tokenization、OOV 策略、特征选择和数据泄漏边界。本文交互是模型演示，不是准确率基准。</p></section>
@@ -173,12 +199,48 @@ scores[name]=score;
 const max=Math.max(scores.promo,scores.work),p=Math.exp(scores.promo-max),n=Math.exp(scores.work-max);
 return {promo:p/(p+n),odds:Math.exp(scores.promo-scores.work)};
 }
+
+function explainMultinomial(alpha,selected,odds){
+  const counts={promo:Object.create(null),work:Object.create(null)};
+  for(const [name,items] of Object.entries(docs))
+    for(const doc of items)for(const word of doc.split(' '))
+      counts[name][word]=(counts[name][word]||0)+1;
+  const words=selected.split(' ').filter(w=>vocabulary.includes(w));
+  const frequency=Object.create(null);
+  for(const word of words)frequency[word]=(frequency[word]||0)+1;
+  const tbody=document.getElementById('nb-evidence-rows');
+  const rows=[];
+  let sum=0;
+  for(const [word,k] of Object.entries(frequency)){
+    const promo=counts.promo[word]||0,work=counts.work[word]||0;
+    const contribution=k*Math.log((promo+alpha)/(work+alpha));
+    sum+=contribution;
+    const tr=document.createElement('tr');
+    for(const value of [word,String(k),promo+' / '+work]){
+      const td=document.createElement('td');td.textContent=value;tr.appendChild(td);
+    }
+    const td=document.createElement('td');
+    td.appendChild(document.createTextNode((contribution>=0?'+':'')+contribution.toFixed(3)));
+    const bar=document.createElement('div');bar.className='signal';bar.setAttribute('aria-hidden','true');
+    const fill=document.createElement('span');if(contribution<0)fill.className='against';
+    fill.style.width=Math.min(100,Math.abs(contribution)/3.5*100).toFixed(1)+'%';
+    bar.appendChild(fill);td.appendChild(bar);tr.appendChild(td);rows.push(tr);
+  }
+  tbody.replaceChildren(...rows);
+  document.getElementById('nb-evidence-total').textContent=
+    '先验对数优势 0 + 词贡献 '+(sum>=0?'+':'')+sum.toFixed(3)+
+    ' → 优势约 '+odds.toFixed(3)+' : 1';
+  document.getElementById('nb-evidence-tip').textContent=
+    '优势比不是概率：推广后验为 '+(odds/(1+odds)*100).toFixed(1)+
+    '%。上表只分解 Multinomial 的已出现词；Bernoulli 还使用缺席词信息。';
+}
 function render(){
 const alpha=Number(slider.value);
 document.querySelector('#alpha-value').textContent=alpha.toFixed(2);
 for(const button of buttons)button.setAttribute('aria-pressed',String(button.dataset.query===query));
 const m=prob(query,alpha,'multinomial'),b=prob(query,alpha,'bernoulli');
 const pct=p=>(p*100).toFixed(1)+'%';
+explainMultinomial(alpha,query,m.odds);
 document.querySelector('#multi-label').textContent='推广 '+pct(m.promo)+' · 工作 '+pct(1-m.promo);
 document.querySelector('#bern-label').textContent='推广 '+pct(b.promo)+' · 工作 '+pct(1-b.promo);
 document.querySelector('#multi-bar').style.width=pct(m.promo);
