@@ -428,3 +428,29 @@
   .index-kicker, .index-tags { overflow-wrap: anywhere; }
   .index-arrow { justify-self: end; }
 }
+
+
+/* Shared bounded pagination: links are static in archive, buttons in homepage search. */
+.pagination{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:7px;min-width:0}
+.pagination[hidden]{display:none!important}
+.pagination .page-number,.pagination .page-control,.pagination .page-ellipsis{
+  display:inline-flex;align-items:center;justify-content:center;min-width:38px;min-height:38px;
+  padding:6px 10px;border:1px solid #d6e4db;border-radius:6px;background:#fffefa;
+  color:#315c59;font-size:12px;font-weight:750;line-height:1.4
+}
+.pagination button{cursor:pointer}
+.pagination a:hover,.pagination button:hover:not(:disabled){background:#eaf4ed;border-color:#8fbdb0;color:#1d6762}
+.pagination .page-number.is-current{background:#194b4d;border-color:#194b4d;color:#fff}
+.pagination .page-ellipsis{border-color:transparent;background:transparent;min-width:18px;padding:0}
+.pagination .page-control{min-width:93px}
+.pagination .is-disabled,.pagination button:disabled{opacity:.45;cursor:default}
+.index-footer .pagination{justify-content:flex-start}
+.archive-page > .pagination{margin-top:32px}
+.archive-range{margin:23px 0 0;color:#667d77;font-size:13px;font-weight:700}
+@media(max-width:600px){
+  .index-footer{align-items:flex-start;flex-direction:column}
+  .pagination{gap:5px}
+  .pagination .page-number,.pagination .page-control{min-width:34px;min-height:36px;padding:6px 8px;font-size:11px}
+  .pagination .page-control{min-width:77px}
+}
+@media print{.pagination{display:none!important}}

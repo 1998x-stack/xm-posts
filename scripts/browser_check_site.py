@@ -18,6 +18,12 @@ def offline_html(site:Path, page:Path):
     for script in soup.select('script[src]'):
         js=(site/'assets/site.js').read_text(encoding='utf-8')
         tag=soup.new_tag('script');tag.string=js;script.decompose();soup.body.append(tag)
+    if page == site/'index.html':
+        # Offline-browser QA cannot fetch the built JSON over localhost.
+        seed=soup.new_tag('script')
+        payload=json.dumps(json.loads((site/'posts.json').read_text(encoding='utf-8')),ensure_ascii=False)
+        seed.string='window.__XM_INDEX_DATA__ = '+payload.replace('</','<\\/')+';'
+        soup.head.append(seed)
     return str(soup)
 
 
@@ -55,13 +61,18 @@ def run(output:Path, site:Path):
                     report['viewports'][label]={**result,'pass':okay,'errors':errors,'http_errors':status}
                     if not okay:report['pass']=False
                     if label=='desktop':
-                        total=page.locator('[data-post-card]').count()
+                        total=len(json.loads((site/'posts.json').read_text(encoding='utf-8')))
+                        assert page.locator('[data-post-card]').count()==min(8,total)
                         assert page.locator('[data-post-card]:visible').count()==min(8,total)
-                        more=page.locator('[data-load-more]')
+                        pager=page.locator('[data-home-pagination]')
                         if total>8:
-                            assert more.is_visible()
-                            more.click()
-                            assert page.locator('[data-post-card]:visible').count()==min(16,total)
+                            assert pager.is_visible()
+                            pager.get_by_role('button',name='转到第 2 页').last.click()
+                            assert page.locator('[data-post-card]').count()==min(8,total-8)
+                            assert page.locator('.index-order').first.inner_text()=='09'
+                            assert page.locator('[data-home-pagination] [aria-current="page"]').inner_text()=='2'
+                            pager.get_by_role('button',name='转到第 1 页').first.click()
+                            assert page.locator('.index-order').first.inner_text()=='01'
                         category=page.locator('[data-category-filter]')
                         category.select_option('architectures')
                         visible=page.locator('[data-post-card]:visible')
@@ -174,7 +185,7 @@ def run(output:Path, site:Path):
                         page.set_content(offline_html(site,site/'archive/index.html'),wait_until='load')
                     entries=page.locator('.archive-entry')
                     thumbs=page.locator('.archive-entry .archive-cover img')
-                    assert entries.count()>=60 and thumbs.count()==entries.count()
+                    assert 1<=entries.count()<=16 and thumbs.count()==entries.count()
                     paths=thumbs.evaluate_all('(images) => images.map(img => img.getAttribute("src"))')
                     assert len(set(paths))==len(paths), 'Archive has duplicate SVG cover paths'
                     assert all(path.startswith('../posts/') and path.endswith('.svg') for path in paths)
@@ -193,6 +204,14 @@ def run(output:Path, site:Path):
                     report['archive'][label]={**archive_layout,'pass':True}
                     page.screenshot(path=str(output/f'archive-{label}.png'),full_page=False)
                     if label=='desktop' and report['mode']=='http':
+                        next_page=page.locator('.archive-page .pagination a[rel="next"]')
+                        assert next_page.count()==1
+                        next_page.click()
+                        assert page.url.endswith('/archive/page/2/')
+                        assert 1<=page.locator('.archive-entry').count()<=16
+                        assert page.locator('.archive-cover img').first.get_attribute('src').startswith('../../../posts/')
+                        assert page.locator('.archive-page .pagination [aria-current="page"]').inner_text()=='2'
+                        page.go_back(wait_until='networkidle')
                         page.locator('.archive-cover').first.click()
                         assert '/posts/' in page.url, 'Archive thumbnail must navigate to article'
                         page.go_back(wait_until='networkidle')
