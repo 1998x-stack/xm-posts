@@ -62,6 +62,10 @@
         "title": "Dimensionality Reduction"
       },
       {
+        "slug": "nearest-neighbors",
+        "title": "Instance-based Learning & Nearest Neighbors"
+      },
+      {
         "slug": "clustering",
         "title": "Clustering & Unsupervised Learning"
       }
