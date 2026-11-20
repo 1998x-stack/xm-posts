@@ -142,5 +142,14 @@
     "locator": "§1 The anatomy of a skill; progressive disclosure",
     "status": "verified",
     "notes": "用于解释 Harness 的 extensibility surface；Skill 结构不是唯一可用的扩展机制。"
+  },
+  {
+    "id": "E17",
+    "kind": "conceptual-model",
+    "claim": "Agent System = Model + Harness + Environment is a conceptual decomposition, not a numerical equation or measured empirical law.",
+    "source_url": "https://arxiv.org/abs/2609.00006",
+    "locator": "Section 01; the equation-like summary is an independent teaching abstraction, not a formula stated by the paper",
+    "status": "illustrative",
+    "notes": "Rendered as native MathML to satisfy the repository-wide semantic mathematics contract; the plus signs express conceptual composition only."
   }
 ]
