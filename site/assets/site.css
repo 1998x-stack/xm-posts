@@ -255,3 +255,6 @@
   .index-card.post-card{break-inside:avoid}
   .research-grid,.route-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
+
+.index-tags .paper-source{color:#28776d;text-decoration:underline;text-decoration-color:#a9cec0;text-underline-offset:3px;font-weight:750}
+.anchor-alias{position:relative;top:-24px;display:block;height:0;visibility:hidden}
