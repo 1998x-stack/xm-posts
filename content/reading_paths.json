@@ -327,5 +327,15 @@
       "bert",
       "rag"
     ]
+  },
+  {
+    "id": "path-36",
+    "title": "从模型规模到分布式训练系统",
+    "posts": [
+      "transformer",
+      "chinchilla",
+      "deepspeed",
+      "flashattention"
+    ]
   }
 ]
