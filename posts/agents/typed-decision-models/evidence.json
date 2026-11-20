@@ -173,10 +173,46 @@
   {
     "id": "E20",
     "kind": "survey_and_scope",
-    "claim": "A 2026 survey connects typed decision models to routing, zero-shot classification, label-probability readout, calibration and selective prediction; it reports that the evidence was still developing and discloses author involvement in AnyJev.",
+    "claim": "A 2026 survey on typed decision models organizes prior work across routing, zero-shot classification, safety guards and label-probability readout; the authors' version is marked accepted to ACM SIGKDD Explorations and discloses author involvement in AnyJev.",
     "source_url": "https://evan-py-chen.github.io/jev-survey/jev-survey.pdf",
     "locator": "Abstract; §1 scope and sources; author disclosure",
     "status": "verified",
-    "notes": "Use as a survey, not as a neutral consensus statement; the authors disclose development work on AnyJev."
+    "notes": "Use as a research map, not as a neutral consensus or independent benchmark; the authors disclose development work on AnyJev and CARGO."
+  },
+  {
+    "id": "E21",
+    "kind": "risk_control",
+    "claim": "A 2026 study across six moderation, safety and reranking datasets reports that naive threshold selection exceeded the target false-omission risk in 42.0% of defined test-risk settings, compared with 7.8% for Learn Then Test (LTT).",
+    "source_url": "https://arxiv.org/abs/2610.19811",
+    "locator": "Abstract; §4 results and risk-budget tables",
+    "status": "verified",
+    "notes": "Preprint. Denominators include only settings with defined test risk; LTT can fail to certify a threshold and relies on fixed scorer/threshold candidates plus an i.i.d. calibration/deployment assumption."
+  },
+  {
+    "id": "E22",
+    "kind": "selective_reasoning",
+    "claim": "A 2026 study on 768 ProofWriter, LogiQA 2.0 and ARC-Challenge questions reports 70.96% direct-read accuracy and 84.38% with selective reasoning; against 1,024-token terminal reading it reports 46.30% lower pipeline time with a -1.17 percentage-point accuracy difference.",
+    "source_url": "https://arxiv.org/abs/2610.19644",
+    "locator": "Abstract; §4 results",
+    "status": "verified",
+    "notes": "Preprint about a research architecture that adds benefit-gated, interruptible reasoning; not a built-in Jev feature."
+  },
+  {
+    "id": "E23",
+    "kind": "tabular_robustness",
+    "claim": "A 2026 study of four typed decision models and three LLMs on tabular tasks uses 21 content-preserving rewrites and reports sensitivity to table organization; at least one third of row decisions change under some tested rewrite.",
+    "source_url": "https://arxiv.org/abs/2610.19536",
+    "locator": "Abstract; rewrite robustness results",
+    "status": "verified",
+    "notes": "Preprint; task and rewrite-specific findings. The result motivates testing serialization, column order, row layout and option descriptions."
+  },
+  {
+    "id": "E24",
+    "kind": "score_confidence_formula",
+    "claim": "TypeSafe's Score confidence formula uses probability-weighted distance from the most likely ordinal level, normalized by the mean absolute deviation under a uniform distribution and floored at zero.",
+    "source_url": "https://docs.typesafe.ai/confidence",
+    "locator": "How confidence is calculated > Score",
+    "status": "verified",
+    "notes": "This is a concentration/spread summary, not the probability that the numeric score is correct."
   }
 ]
