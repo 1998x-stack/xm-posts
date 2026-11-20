@@ -75,3 +75,31 @@ def test_taxonomy_topic_placeholders_are_not_published(tmp_path):
             assert not (output / 'posts' / slug).exists()
     assert (output / 'posts' / 'agents' / 'react' / 'index.html').is_file()
     assert not any('_topics' in path.parts for path in output.rglob('*'))
+
+
+def test_second_level_taxonomy_and_deep_links(tmp_path):
+    categories,posts=data(ROOT)
+    assert len(categories)>=13
+    assert sum(len(c['topics']) for c in categories)>=70
+    assert {'retrieval-rag','agents'} <= {c['slug'] for c in categories}
+    for c in categories:
+        valid={t['slug'] for t in c['topics']}
+        assert valid and len(valid)==len(c['topics'])
+        for p in [p for p in posts if p['category']==c['slug']]:
+            assert p['topic'] in valid, p['slug']
+    output=tmp_path/'taxonomysite'
+    build(ROOT,output,DEFAULT_URL)
+    index=BeautifulSoup((output/'topics/index.html').read_text(encoding='utf-8'),'html.parser')
+    assert len(index.select('.taxonomy-group'))==len(categories)
+    assert len(index.select('.taxonomy-links a'))==sum(len(c['topics']) for c in categories)
+    for c in categories:
+        category_page=BeautifulSoup((output/'categories'/c['slug']/'index.html').read_text(encoding='utf-8'),'html.parser')
+        assert len(category_page.select('.topic-section'))==len(c['topics'])
+        assert len(category_page.select('.topic-jumps a'))==len(c['topics'])
+        for topic in c['topics']:
+            assert category_page.select_one(f'#topic-{topic["slug"]}')
+        assert len(category_page.select('.post-card'))==sum(p['category']==c['slug'] and p['status']=='published' for p in posts)
+    assert len(index.select('.taxonomy-links small'))>=70
+    assert 'topics/' in (output/'sitemap.xml').read_text(encoding='utf-8')
+    assert DEFAULT_URL in (output/'404.html').read_text(encoding='utf-8')
+    published_site(output)
