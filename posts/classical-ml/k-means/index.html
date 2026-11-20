@@ -16,6 +16,20 @@ main,article,section{min-width:0}h1{font-size:clamp(44px,5.9vw,72px);letter-spac
 @media(max-width:1000px){.layout{grid-template-columns:minmax(0,1fr);max-width:820px;gap:25px}.toc{position:static;max-height:none;display:flex;flex-wrap:wrap;gap:4px;border-bottom:1px solid var(--line);padding-bottom:12px}.toc strong{width:100%}.toc a{padding:5px 8px;background:#eaf2ec;border:0;border-radius:5px}}
 @media(max-width:550px){body{font-size:16px}.layout{padding:26px 15px 60px}.sitebar-inner{padding:9px 14px}h1{font-size:44px}.deck{font-size:18px}.meta{margin-bottom:42px}.columns{grid-template-columns:1fr}section{margin-bottom:62px}.viz{padding:5px 3px 12px}.viz figcaption{padding:8px}.math-scroll{padding:11px 12px 16px}.math-scroll math[display=block]{font-size:19px}.demo{padding:11px}.mini-table{font-size:12px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}@media print{body{background:#fff}.sitebar,.toc,.controls,.skip{display:none}.layout{display:block;max-width:none;padding:0}section{break-inside:auto;margin:0 0 25px}.equation,.viz{break-inside:avoid}.math-scroll{overflow:visible}.math-scroll math[display=block]{font-size:17px}pre{color:#20353e;background:#f0f2ef}}
+
+/* The actual Lloyd objective explained point by point. */
+.km-objective{margin:17px 0;padding:13px 15px;background:#f5faf6;border:1px solid #d8e8df;border-radius:9px}
+.km-objective label{display:block;font-weight:750;color:#2b6261;font-size:14px}
+.km-objective progress{display:block;width:100%;height:15px;margin-top:10px;accent-color:#cb8356}
+.km-objective p{margin:8px 0 0;font-size:13px;color:#5d7475}
+.km-current-phase{font-weight:750;color:#2f7270;margin:5px 0 12px;font-size:15px}
+.km-table-wrap{max-width:100%;overflow-x:auto}
+.km-live-table{min-width:425px;width:100%;border-collapse:collapse;margin:14px 0;font-size:14px;font-variant-numeric:tabular-nums}
+.km-live-table th,.km-live-table td{border-bottom:1px solid #deebe2;padding:9px 11px;text-align:left}
+.km-live-table th{color:#2e6564;background:#edf6ef}.km-live-table tfoot th{background:#f1f7f3}
+.km-tip{font-size:13px;color:#567575;margin:8px 0 0}
+.km-learning-path{background:#f1f8f3;border:1px solid #d1e5db;border-radius:9px;padding:15px;font-size:14px}
+@media(max-width:550px){.km-objective{padding:12px}.km-live-table{font-size:12px}}
 </style></head><body>
 <a class="skip" href="#main">跳转正文</a><header class="sitebar"><div class="sitebar-inner"><a class="wordmark" href="../../../">xm<span>.</span>posts</a><nav class="site-links" aria-label="站点导航"><a href="../../../categories/classical-ml/">经典机器学习</a><a href="../../../topics/">知识地图</a><a href="../../../archive/">全部文章</a></nav></div></header>
 <div class="layout"><nav class="toc" aria-label="文章目录"><strong>ANATOMY OF K-MEANS</strong>
@@ -58,9 +72,9 @@ main,article,section{min-width:0}h1{font-size:clamp(44px,5.9vw,72px);letter-spac
 <p>最初的损失为 <code>0² + 0² + 6² + 8² = 100</code>。第一次更新使右簇的均值变为 20/3；随后点 2 改派左簇；下一次均值为 1 与 9，总平方误差为 <code>1 + 1 + 1 + 1 = 4</code>。<strong>分配步与更新步都不能增加同一个目标 J。</strong></p>
 </section>
 <section id="interact"><h2>06 · 交互实验：一步一步看中心移动</h2>
-<p>下面的微型演示重现上述四点数据。蓝色与橙色点表示当前归属，叉号表示当前质心。按“下一半步”分开观察更新；即使不操作，初始状态与算例也完整可读。</p>
+<p>下面的微型演示重现上述四点数据。蓝色与橙色点表示当前归属，叉号表示质心，连接线显示每个点与所属中心的距离。逐个点击「下一半步」，先看谁属于谁，再看中心如何移动。下方的数字表实时列出<strong>每个点的平方误差</strong>；即使不操作，上面的手算例子也完整可读。</p>
 <div class="demo"><svg id="demo-plot" viewBox="0 0 660 140" role="img" aria-label="四点一维 K-Means 交互示意"><title>四点一维聚类的当前状态</title><line x1="40" y1="93" x2="610" y2="93" stroke="#abc0c0" stroke-width="2"/><circle cx="50" cy="77" r="9" fill="#397f98"/><circle cx="158" cy="77" r="9" fill="#dc8756"/><circle cx="482" cy="77" r="9" fill="#dc8756"/><circle cx="590" cy="77" r="9" fill="#dc8756"/></svg>
-<div class="controls"><button id="demo-next" type="button">下一半步</button><button id="demo-reset" type="button">重置实验</button></div><div id="demo-output" class="output" role="status" aria-live="polite">初始：中心为 0 与 2，平方距离和 J = 100。</div></div>
+<div class="controls"><button id="demo-next" type="button">下一半步</button><button id="demo-prev" type="button" disabled>上一步</button><button id="demo-finish" type="button">直接看收敛</button><button id="demo-reset" type="button">重置实验</button></div><p id="km-phase" class="km-current-phase">初始状态｜确认最近中心前</p><div id="demo-output" class="output" role="status" aria-live="polite">初始：中心为 0 与 2，平方距离和 J = 100。</div><div class="km-objective"><label for="km-objective-meter">当前总平方误差 J：<output id="km-j">100.000</output>（越短越好）</label><progress id="km-objective-meter" max="100" value="100">100</progress><p>以最初 J=100 为满格；长度是<strong>损失</strong>，不是聚类准确率。每次重新分配或更新中心，损失不会上升。</p></div><div class="km-table-wrap"><table class="km-live-table" aria-label="每个点对当前平方误差的贡献"><caption>跟着每一步逐项检查：点 → 中心 → 距离平方</caption><thead><tr><th scope="col">样本 x</th><th scope="col">当前簇</th><th scope="col">所属中心</th><th scope="col">平方误差</th></tr></thead><tbody id="km-point-rows"><tr><th scope="row">0</th><td>簇 1</td><td>0</td><td>0</td></tr><tr><th scope="row">2</th><td>簇 2</td><td>2</td><td>0</td></tr><tr><th scope="row">8</th><td>簇 2</td><td>2</td><td>36</td></tr><tr><th scope="row">10</th><td>簇 2</td><td>2</td><td>64</td></tr></tbody><tfoot><tr><th scope="row" colspan="3">合计 J</th><td id="km-total">100.000</td></tr></tfoot></table></div><p class="km-tip">先点击「下一半步」观察：第一次<strong>更新中心</strong>时成员不变，但 J 从 100 变成 34.667；接着<strong>重新分配</strong>点 2，J 又下降到约 16.889。表格会告诉你是哪一项变小。</p></div>
 <div class="callout"><p><strong>解释边界：</strong>演示使用固定的四点样本和明确的平局规则。它验证 Lloyd 迭代的局部机制，不是大型真实数据集上的性能实验。</p></div>
 </section>
 <section id="seeding"><h2>07 · 初始化不是小事：k-means++</h2>
@@ -121,32 +135,59 @@ assert updated == (0.0, 20 / 3)</code></pre>
 <li>Lloyd, S. (1982). <a href="https://doi.org/10.1109/TIT.1982.1056489">Least Squares Quantization in PCM</a>. IEEE Transactions on Information Theory, 28(2), 129–137.</li>
 <li>Arthur, D. &amp; Vassilvitskii, S. (2007). <a href="https://research.google/pubs/k-means-the-advantages-of-careful-seeding/">k-means++: The Advantages of Careful Seeding</a>. SODA, 1027–1035.</li>
 <li><a href="https://scikit-learn.org/stable/modules/clustering.html">scikit-learn User Guide: Clustering</a> 与 <a href="https://scikit-learn.org/stable/modules/generated/sklearn.cluster.KMeans.html">KMeans API</a>（与历史论文区分）。</li>
-</ol><p>继续阅读：<a href="../pca/">Understanding PCA</a>，理解为什么先降维再聚类时必须审视保留的几何信息。</p></section>
+</ol><p>继续阅读：<a href="../pca/">Understanding PCA</a>，理解为什么先降维再聚类时必须审视保留的几何信息。</p><p class="km-learning-path"><strong>本批学习路线：</strong><a href="../pca/">PCA</a> 是找保留最大方差的方向；K-Means 是把点<strong>硬分配</strong>给最近中心；再看 <a href="../gmm/">GMM</a>，同一个点可以对不同分量有不同的<strong>软责任</strong>。三者是不同问题，不是同一个模型的三级升级。</p></section>
 <div class="footer">xm.posts · Classical Machine Learning / Clustering &amp; Unsupervised Learning</div>
-</article></main></div><script>(function(){
-  'use strict';
-  const points=[0,2,8,10], states=[
-    {c:[0,2],z:[0,1,1,1],j:100,note:'初始：中心为 0 与 2，平方距离和 J = 100'},
-    {c:[0,2],z:[0,1,1,1],j:100,note:'① 分配：每个点选择最近中心；平局选编号较小者'},
-    {c:[0,20/3],z:[0,1,1,1],j:104/3,note:'② 更新：第二簇 {2, 8, 10} 的均值为 20/3'},
-    {c:[0,20/3],z:[0,0,1,1],j:152/9,note:'③ 再分配：2 改入左簇，目标进一步下降'},
-    {c:[1,9],z:[0,0,1,1],j:4,note:'④ 更新：两组均值变为 1 和 9，J = 4'},
-    {c:[1,9],z:[0,0,1,1],j:4,note:'⑤ 再分配不变：达到固定点，但不保证全局最优'}
+</article></main></div><script>
+(function(){
+  "use strict";
+  const points=[0,2,8,10],states=[
+    {c:[0,2],z:[0,1,1,1],j:100,stage:"初始状态",note:"中心 0 与 2，按最近中心得到初始成员"},
+    {c:[0,2],z:[0,1,1,1],j:100,stage:"① 分配",note:"每点选择最近中心；点 0、2 分属不同簇"},
+    {c:[0,20/3],z:[0,1,1,1],j:104/3,stage:"② 更新中心",note:"右簇 {2,8,10} 求均值 20/3≈6.667；成员不变"},
+    {c:[0,20/3],z:[0,0,1,1],j:152/9,stage:"③ 重新分配",note:"点 2 更靠近中心 0，改入左簇"},
+    {c:[1,9],z:[0,0,1,1],j:4,stage:"④ 再更新中心",note:"左簇 {0,2} 的均值为 1，右簇 {8,10} 为 9"},
+    {c:[1,9],z:[0,0,1,1],j:4,stage:"⑤ 再分配",note:"分配不变，算法在当前初始化下收敛"}
   ];
   let index=0;
-  const svg=document.getElementById('demo-plot'),output=document.getElementById('demo-output'),next=document.getElementById('demo-next'),reset=document.getElementById('demo-reset');
+  const svg=document.getElementById("demo-plot"),output=document.getElementById("demo-output"),
+        next=document.getElementById("demo-next"),prev=document.getElementById("demo-prev"),
+        finish=document.getElementById("demo-finish"),reset=document.getElementById("demo-reset"),
+        rows=document.getElementById("km-point-rows");
   const xp=x=>50+x*54;
   function paint(){
-    const s=states[index];
+    const state=states[index];
     const axis='<line x1="40" y1="93" x2="610" y2="93" stroke="#abc0c0" stroke-width="2"/>';
-    const marks=Array.from({length:11},(_,v)=>'<text x="'+xp(v)+'" y="123" font-size="12" fill="#62787e" text-anchor="middle">'+v+'</text>').join('');
-    const dots=points.map((x,i)=>'<circle cx="'+xp(x)+'" cy="77" r="9" fill="'+(s.z[i]===0?'#397f98':'#dc8756')+'" stroke="white" stroke-width="2"/>').join('');
-    const centers=s.c.map((x,j)=>'<path d="M '+(xp(x)-12)+' 29 L '+(xp(x)+12)+' 53 M '+(xp(x)-12)+' 53 L '+(xp(x)+12)+' 29" stroke="'+(j===0?'#397f98':'#dc8756')+'" stroke-width="5" stroke-linecap="round"/>').join('');
-    svg.innerHTML=axis+marks+dots+centers;
-    output.textContent=s.note+'。第 '+index+' / 5 步。';
+    const marks=Array.from({length:11},(_,v)=>'<text x="'+xp(v)+'" y="123" font-size="12" fill="#62787e" text-anchor="middle">'+v+'</text>').join("");
+    const links=points.map((x,i)=>'<line x1="'+xp(x)+'" y1="75" x2="'+xp(state.c[state.z[i]])+'" y2="47" stroke="'+(state.z[i]===0?'#397f98':'#dc8756')+'" stroke-width="2" opacity=".55" stroke-dasharray="4 4"/>').join("");
+    const dots=points.map((x,i)=>'<circle cx="'+xp(x)+'" cy="77" r="9" fill="'+(state.z[i]===0?'#397f98':'#dc8756')+'" stroke="white" stroke-width="2"/>').join("");
+    const centers=state.c.map((x,j)=>'<path d="M '+(xp(x)-12)+' 29 L '+(xp(x)+12)+' 53 M '+(xp(x)-12)+' 53 L '+(xp(x)+12)+' 29" stroke="'+(j===0?'#397f98':'#dc8756')+'" stroke-width="5" stroke-linecap="round"/>').join("");
+    svg.innerHTML=axis+marks+links+dots+centers;
+    let sum=0;rows.replaceChildren();
+    points.forEach((x,i)=>{
+      const c=state.c[state.z[i]],sq=(x-c)**2;sum+=sq;
+      const tr=document.createElement("tr");
+      [String(x),"簇 "+(state.z[i]+1),Number(c.toFixed(3)).toString(),sq.toFixed(3)].forEach((value,j)=>{
+        const cell=document.createElement(j===0?"th":"td");
+        if(j===0)cell.setAttribute("scope","row");
+        cell.textContent=value;
+        tr.append(cell);
+      });
+      rows.append(tr);
+    });
+    if(Math.abs(sum-state.j)>1e-8)throw Error("K-Means toy loss inconsistency at step "+index);
+    document.getElementById("km-phase").textContent=state.stage+" ｜ 第 "+index+"/5 个半步";
+    output.textContent=state.note+"；当前 J="+sum.toFixed(3)+"。";
+    document.getElementById("km-j").textContent=sum.toFixed(3);
+    document.getElementById("km-total").textContent=sum.toFixed(3);
+    document.getElementById("km-objective-meter").value=sum;
     next.disabled=index===states.length-1;
+    prev.disabled=index===0;
+    finish.disabled=index===states.length-1;
   }
-  next.addEventListener('click',()=>{if(index<states.length-1){index++;paint();}});
-  reset.addEventListener('click',()=>{index=0;paint();});
+  next.addEventListener("click",()=>{if(index<states.length-1){index++;paint();}});
+  prev.addEventListener("click",()=>{if(index>0){index--;paint();}});
+  finish.addEventListener("click",()=>{index=states.length-1;paint();});
+  reset.addEventListener("click",()=>{index=0;paint();});
   paint();
-})();</script></body></html>
+})();
+</script></body></html>
