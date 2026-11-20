@@ -381,5 +381,16 @@
       "context-engineering",
       "harness-engineering"
     ]
+  },
+  {
+    "id": "path-40",
+    "title": "从 Agent 上下文到 Harness 与持续自主执行",
+    "posts": [
+      "react",
+      "agent-memory-components",
+      "context-engineering",
+      "harness-engineering",
+      "loop-engineering"
+    ]
   }
 ]
