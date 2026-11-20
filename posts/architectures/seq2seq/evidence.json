@@ -1,0 +1,83 @@
+[
+  {
+    "id": "S1",
+    "claim": "Sutskever et al. (2014) use a deep LSTM encoder to map a source sequence into fixed-dimensional representation and a deep LSTM decoder to generate a target sequence",
+    "kind": "original-mechanism",
+    "source_url": "https://proceedings.neurips.cc/paper_files/paper/2014/hash/5a18e133cbf9f257297f410bb7eca942-Abstract.html",
+    "locator": "Abstract; Section 2 and Figure 1",
+    "status": "verified",
+    "notes": "Two LSTMs and variable-length sequences; figures here are independently drawn schematic abstractions."
+  },
+  {
+    "id": "S2",
+    "claim": "Sutskever et al. report WMT14 English-to-French test BLEU 34.8 for standalone LSTM, 33.3 for phrase-based SMT baseline, 36.5 for LSTM reranking 1000 SMT candidates",
+    "kind": "paper-metric",
+    "source_url": "https://proceedings.neurips.cc/paper_files/paper/2014/hash/5a18e133cbf9f257297f410bb7eca942-Abstract.html",
+    "locator": "Official NeurIPS abstract; WMT14 English→French, full test BLEU",
+    "status": "verified",
+    "notes": "Reported numbers, not reproduced. 36.5 is reranking combination system, not standalone LSTM. OOV penalty noted for standalone 34.8."
+  },
+  {
+    "id": "S3",
+    "claim": "Reversing source words but not target words markedly improved model performance by shortening certain dependencies",
+    "kind": "historical-mechanism",
+    "source_url": "https://arxiv.org/abs/1409.3215",
+    "locator": "Abstract; paper Section 3 and original Figure 1",
+    "status": "verified",
+    "notes": "Observed for original LSTM experiments, not universal recommendation for modern architectures."
+  },
+  {
+    "id": "S4",
+    "claim": "Cho et al. (EMNLP 2014) use an RNN encoder-decoder to score phrase pairs as an additional feature in phrase-based statistical machine translation",
+    "kind": "prior-work",
+    "source_url": "https://aclanthology.org/D14-1179/",
+    "locator": "Abstract; Methods and experiment sections",
+    "status": "verified",
+    "notes": "Do not conflate standalone end-to-end translation with phrase scoring feature."
+  },
+  {
+    "id": "S5",
+    "claim": "Bahdanau et al. hypothesize fixed-length context is a bottleneck and propose trainable alignment plus time-varying weighted source annotations",
+    "kind": "subsequent-mechanism",
+    "source_url": "https://arxiv.org/abs/1409.0473",
+    "locator": "Abstract; Sections 3 and 5, Figure 2/Table 1/Figure 3",
+    "status": "verified",
+    "notes": "2014 preprint/ICLR 2015. Article names later Attention as follow-on, not original Sutskever mechanism."
+  },
+  {
+    "id": "S6",
+    "claim": "Luong et al. compare global and local attention approaches in neural machine translation",
+    "kind": "subsequent-work",
+    "source_url": "https://aclanthology.org/D15-1166/",
+    "locator": "Abstract; Sections 3-4",
+    "status": "verified",
+    "notes": "2015 postdates original NeurIPS 2014 work."
+  },
+  {
+    "id": "S7",
+    "claim": "Autoregressive factorization, right-shifted teacher forcing and padding-masked negative log-likelihood used in the article",
+    "kind": "derived-teaching",
+    "source_url": "https://arxiv.org/abs/1409.3215",
+    "locator": "Conditional probability training objective, Section 2; article Eq 01–04",
+    "status": "derived",
+    "notes": "Formula chain rule and token masking are independently explained, not a claim of exact original code or dataset reproduction."
+  },
+  {
+    "id": "S8",
+    "claim": "Simple beam search can choose a different sequence from greedy decoding, and attention weights form a normalized distribution over source positions",
+    "kind": "teaching-demo",
+    "source_url": "https://arxiv.org/abs/1409.0473",
+    "locator": "Attention method Section 3; original seq2seq inference discussion in Sutskever Section 2",
+    "status": "illustrative",
+    "notes": "Widget weights and Beam diagram numbers are synthetic. Runnable toy code verifies only the mathematical invariants."
+  },
+  {
+    "id": "S9",
+    "claim": "The Transformer replaces recurrence with attention mechanisms while retaining an encoder-decoder organization in its original configuration",
+    "kind": "subsequent-architecture",
+    "source_url": "https://arxiv.org/abs/1706.03762",
+    "locator": "Abstract; Section 3; Figure 1",
+    "status": "verified",
+    "notes": "Not a property of the 2014 LSTM paper."
+  }
+]
