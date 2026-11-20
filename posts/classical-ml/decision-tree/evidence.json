@@ -88,5 +88,14 @@
     "locator": "Classifier parameter documentation",
     "status": "verified",
     "notes": "Version-specific details not conflated with historical algorithms"
+  },
+  {
+    "id": "DT11",
+    "claim": "For labels [0,0,1,0,1,1,1,1] at x=1..8, threshold 4.5 minimizes the child-size-weighted Gini among seven candidate midpoints, yielding 0.1875 and decrease 0.28125.",
+    "kind": "toy-derivation",
+    "source_url": "https://scikit-learn.org/stable/modules/tree.html",
+    "locator": "Article Section 09; independent enumeration of 7 splits and dynamic score values",
+    "status": "derived",
+    "notes": "This is only a single parent-node split on fixed teaching data, not generalization accuracy or a fitted full tree."
   }
 ]
