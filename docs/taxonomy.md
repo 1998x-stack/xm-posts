@@ -24,6 +24,9 @@
 
 ## 二级分类治理
 
+**分布式训练框架的归属边界：** DeepSpeed / ZeRO / FSDP 这类以模型训练状态分片、训练过程编排、offload 和多 GPU 并行为主要研究对象的内容，主归 `training/distributed-training`；如果文章只研究 NCCL / All-Reduce / Reduce-Scatter / All-Gather 等 collective 算法、链路拓扑与 GPU 间通信性能，则主归 `systems/distributed-communication`。同一篇文章只保留一个主分类，跨领域关联通过 tags 与 reading paths 表达。
+
+
 1. 每篇文章恰好登记一个 `category` 与一个 **已注册** `topic`。跨学科关联使用 `tags` 与文章链接，不为同一术语复制多个一级分类。
 2. `topic.slug` 是公开锚点的一部分（`#topic-<slug>`），**先保留现有稳定 slug，再改善标题、解释和页面导航**。不要仅因措辞好看而改 slug。
 3. 对确有不同边界的二级主题，要求标题与描述不同；不得让两个 topic 共享同一展示标题。当前 Systems 已区分 Kernel 编程、GPU 内存、编译/内核优化、Collectives、分布式通信和 Roofline/Benchmark。
