@@ -124,5 +124,32 @@
     "locator": "Key Risks; Tool Description & Schema Integrity; Prompt Injection via Tool Return Values",
     "status": "verified",
     "notes": "OWASP MCP Security Cheat Sheet; recommendations are defense-in-depth practices, not guarantees."
+  },
+  {
+    "id": "E15",
+    "kind": "security",
+    "claim": "Under the stateless 2026-07-28 model, application state may be represented by explicit handles; servers must not treat possession as authentication and should bind handles to authenticated users, use unpredictable values and enforce expiry.",
+    "source_url": "https://modelcontextprotocol.io/docs/2026-07-28/tutorials/security/security_best_practices",
+    "locator": "State Handle Hijacking; Mitigation",
+    "status": "verified",
+    "notes": "Official MCP security guidance for the stateless protocol revision."
+  },
+  {
+    "id": "E16",
+    "kind": "authorization",
+    "claim": "The 2026-07-28 revision requires issuer validation per RFC 9207, binds client credentials to the issuing authorization server, and formally deprecates Dynamic Client Registration in favor of Client ID Metadata Documents while preserving backward compatibility.",
+    "source_url": "https://blog.modelcontextprotocol.io/posts/2026-07-28/",
+    "locator": "Authorization section",
+    "status": "verified",
+    "notes": "Official MCP specification release notes."
+  },
+  {
+    "id": "E17",
+    "kind": "schema",
+    "claim": "MCP 2026-07-28 tools support full JSON Schema 2020-12 inputSchema and outputSchema; structuredContent can be any JSON value, with output validation and bounded schema processing.",
+    "source_url": "https://blog.modelcontextprotocol.io/posts/2026-07-28-release-candidate/",
+    "locator": "Full JSON Schema 2020-12 for Tools",
+    "status": "verified",
+    "notes": "The release-candidate article documents SEP-2106, incorporated in the final 2026-07-28 revision."
   }
 ]

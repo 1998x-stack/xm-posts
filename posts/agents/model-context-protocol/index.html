@@ -124,6 +124,7 @@ pre{overflow-x:auto;white-space:pre;font:13px/1.75 ui-monospace,SFMono-Regular,C
 <tr><td><strong>Resources</strong></td><td>向应用提供上下文数据</td><td><code>resources/list</code>、<code>resources/read</code></td><td>通常由应用选择并读取，再决定是否加入模型上下文</td><td>文件内容、数据库 Schema、项目状态</td></tr>
 <tr><td><strong>Prompts</strong></td><td>暴露可复用的交互模板</td><td><code>prompts/list</code>、<code>prompts/get</code></td><td>通常由用户显式选择；Server 提供模板与参数</td><td>代码审查模板、周报模板</td></tr>
 </tbody></table></div>
+<p><strong>Schema 不只是“参数说明”，而是工具契约。</strong>工具定义至少包含名称、描述和 <code>inputSchema</code>，也可以声明 <code>outputSchema</code>。在 2026-07-28 规范中，二者采用完整的 JSON Schema 2020-12 词汇：输入 Schema 仍以 object 为根，但可组合 <code>oneOf</code>、<code>anyOf</code>、<code>allOf</code>、条件分支和本地 <code>$ref</code>；输出 Schema 可以使用任意合法根类型，<code>structuredContent</code> 也可以是任意 JSON 值。Server 必须让结构化结果符合声明的输出 Schema，Client 应当进行验证。不要自动拉取外部 <code>$ref</code>，并应限制 Schema 深度与校验耗时。</p>
 <h3>为什么要把 Resource 与 Tool 分开？</h3>
 <p>假设 Server 能读取一个项目的 <code>README.md</code>。把读取行为设计成 Tool，模型可以主动决定何时读取；把它设计成 Resource，Host 可以在构建上下文时主动拉取内容。二者可能访问同一底层文件，但调用控制权和产品交互语义不同。</p>
 <p>再看数据库：<code>database://schema/users</code> 可以是 Resource，让应用获取结构说明；<code>query_users</code> 可以是 Tool，让模型提出查询。前者提供“我能依据什么信息”，后者执行“我现在要做什么”。</p>
@@ -236,6 +237,7 @@ Mcp-Name: search_issues
 </tbody></table></div>
 <h3>无状态不等于应用不能保存状态</h3>
 <p>旧设计把一部分连接状态隐含在协议 Session 中。新设计倾向于让状态成为显式应用数据：例如，<code>create_cart</code> 返回 <code>cart_id</code>，下一次 <code>add_item</code> 调用把这个 ID 作为普通参数传回。这样状态由应用自己管理，负载均衡器不必知道某个请求属于哪个协议会话。</p>
+<div class="insight note"><strong>新安全边界：State Handle Hijacking。</strong>显式句柄让状态可组合，也让它成为攻击面。如果 <code>cart_id</code> 或 <code>workflow_id</code> 被猜中、泄漏或跨用户复用，攻击者可能读取或修改别人的状态。句柄只是资源引用，不是身份凭证；Server 必须在每次请求中验证当前主体对句柄的归属关系，使用不可预测的随机值，并设置合理过期时间。不能把“知道句柄”当作“已经完成认证”。</div>
 <h3>多轮往返请求（MRTR）</h3>
 <p>如果 Server 在执行过程中发现缺少参数或需要用户输入，可以返回 <code>input_required</code>，并说明需要哪些输入；Client 收集用户答案后，重新提交原调用并附上 <code>inputResponses</code>。这使交互式请求不再依赖长期保持一个双向流。</p>
 <h3>长时间任务与扩展</h3>
@@ -270,6 +272,9 @@ Mcp-Name: search_issues
 <p>一个拥有较高权限的 MCP Server 可能替低权限调用者访问下游服务。如果 Server 没有把调用者身份、资源范围和授权意图正确绑定，就可能被诱导替攻击者执行本不该执行的操作。</p>
 <h3>威胁三：Token Passthrough（令牌透传）</h3>
 <p>Server 不应把客户端提供、但并非为该 Server 签发的访问令牌直接转发给下游 API。必须验证令牌受众（Audience），并按正确的 OAuth 资源边界获取或使用凭证。MCP 官方授权安全说明明确要求 Server 验证令牌确实是为自己签发的，并禁止危险的 Token Passthrough 模式。</p>
+<p>2026-07-28 还强化了 OAuth 授权链：客户端需要按 RFC 9207 校验授权响应中的 <code>iss</code>，并将客户端凭证绑定到签发它的 Authorization Server；Dynamic Client Registration（DCR）已正式弃用，转向 Client ID Metadata Documents（CIMD），但 DCR 仍为旧实现保留兼容期。MCP Proxy 还要维护逐 Client 的用户同意记录、精确校验 <code>redirect_uri</code> 和单次使用的 <code>state</code>。授权元数据发现也可能成为 SSRF 入口，因此不能盲目请求 Server 提供的任意 URL；应限制私有地址、重定向和出站网络。</p>
+<h3>威胁四：State Handle Hijacking</h3>
+<p>无状态核心把状态交给应用用显式句柄管理，但句柄可能被猜测或泄漏。Server 必须把句柄与已认证用户在服务端绑定，并在每次调用时检查所有权；随机句柄、过期策略和访问审计可以降低风险。<strong>句柄是定位状态的键，不是授权凭证。</strong></p>
 <h3>把安全要求落实为工程控制</h3>
 <ul>
 <li><strong>最小权限：</strong>按 Server、用户和任务限制 OAuth Scope；优先只读权限、短期凭证和细粒度访问。</li>
@@ -351,7 +356,8 @@ python posts/agents/model-context-protocol/mcp_contract_demo.py</code></pre>
 <li><a href="https://modelcontextprotocol.io/docs/2026-07-28/learn/architecture" target="_blank" rel="noopener noreferrer">MCP 官方文档 · Architecture Overview</a>：Host / Client / Server 与两层架构。</li>
 <li><a href="https://modelcontextprotocol.io/specification/2026-07-28" target="_blank" rel="noopener noreferrer">MCP Specification · 2026-07-28</a>：当前规范主入口。</li>
 <li><a href="https://blog.modelcontextprotocol.io/posts/2026-07-28/" target="_blank" rel="noopener noreferrer">MCP · The 2026-07-28 Specification</a>：无状态核心、MRTR、Header 路由、缓存与授权变化。</li>
-<li><a href="https://modelcontextprotocol.io/docs/2026-07-28/tutorials/security/security_best_practices" target="_blank" rel="noopener noreferrer">MCP Security Best Practices</a>：Confused Deputy、Token Passthrough 与授权安全。</li>
+<li><a href="https://modelcontextprotocol.io/docs/2026-07-28/tutorials/security/security_best_practices" target="_blank" rel="noopener noreferrer">MCP Security Best Practices</a>：Confused Deputy、Token Passthrough、State Handle Hijacking 与授权安全。</li>
+<li><a href="https://modelcontextprotocol.io/specification/2026-07-28/basic/authorization" target="_blank" rel="noopener noreferrer">MCP Authorization Specification</a>：OAuth 资源边界、授权服务器发现与凭证校验。</li>
 <li><a href="https://developers.openai.com/api/docs/guides/tools-connectors-mcp" target="_blank" rel="noopener noreferrer">OpenAI API · MCP servers</a>：Responses API 如何发现和调用远程 MCP 工具、审批与工具筛选。</li>
 <li><a href="https://cheatsheetseries.owasp.org/cheatsheets/MCP_Security_Cheat_Sheet.html" target="_blank" rel="noopener noreferrer">OWASP · MCP Security Cheat Sheet</a>：面向部署者的纵深防御清单。</li>
 </ul>

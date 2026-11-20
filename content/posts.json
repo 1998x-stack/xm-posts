@@ -2091,7 +2091,7 @@
     "summary": "深度拆解 MCP 的架构角色、Tools / Resources / Prompts、JSON-RPC 调用链、STDIO 与 Streamable HTTP、2026-07-28 无状态规范、Function Calling 边界，以及 Prompt Injection、Tool Poisoning、OAuth 令牌受众和人工审批等安全设计。",
     "published": "2026-11-21",
     "updated": "2026-11-21",
-    "status": "draft",
+    "status": "published",
     "reading_minutes": 32,
     "paper": "https://modelcontextprotocol.io/specification/2026-07-28",
     "tags": [

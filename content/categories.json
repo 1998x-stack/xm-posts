@@ -466,6 +466,10 @@
         "title": "Tool Calling"
       },
       {
+        "slug": "tool-integration-protocols",
+        "title": "Tool Integration & Interoperability Protocols"
+      },
+      {
         "slug": "memory",
         "title": "Agent Memory"
       },
@@ -476,10 +480,6 @@
       {
         "slug": "software-engineering-agents",
         "title": "Software Engineering Agents & ACI"
-      },
-      {
-        "slug": "tool-integration-protocols",
-        "title": "Tool Integration & Interoperability Protocols"
       }
     ]
   },
