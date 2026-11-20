@@ -45,6 +45,7 @@ jobs:
           python scripts/ci_metrics.py run --name browser-fifth -- python scripts/browser_check_fifth_batch.py --output reports/fifth-batch
           python scripts/ci_metrics.py run --name browser-fourth -- python scripts/browser_check_fourth_batch.py --output reports/fourth-batch
           python scripts/ci_metrics.py run --name browser-nb-svm-sgd -- python scripts/browser_check_nb_svm_sgd.py --output reports/nb-svm-sgd
+          python scripts/ci_metrics.py run --name browser-teacher-forcing -- python scripts/browser_check_teacher_forcing.py --output reports/teacher-forcing
           python scripts/ci_metrics.py run --name browser-third -- python scripts/browser_check_third_batch.py --output reports/third-batch
           python scripts/ci_metrics.py run --name browser-svm-math -- python scripts/browser_check_svm_math.py --output reports/svm-math
           python scripts/ci_metrics.py run --name browser-three-guides -- python scripts/browser_check_three_guides.py
