@@ -489,5 +489,26 @@
     "summary": "依据 Radford 等人 2018 年 GPT-1 原论文，拆解 BooksCorpus 自回归预训练、Decoder-only 因果 Mask、任务输入变换与联合微调目标，对照 Tables 2–5 的正负证据，并提供 5 幅 SVG、MathML 和纯 Python 数值断言。",
     "paper": "https://cdn.openai.com/research-covers/language-unsupervised/language_understanding_paper.pdf",
     "illustration": "gpt1"
+  },
+  {
+    "slug": "the-pile",
+    "title": "Understanding The Pile",
+    "subtitle": "为什么 22 种语料的混合，比只扩大网页抓取更有意义？",
+    "category": "datasets",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 31,
+    "tags": [
+      "The Pile",
+      "Pretraining Data",
+      "Data Mixtures",
+      "Data Curation",
+      "Bits Per Byte",
+      "Dataset Governance"
+    ],
+    "summary": "解读 Gao et al. (2020) The Pile：22 个来源与 825.18 GiB 原始语料、1,254.20 GiB 采样后有效规模、BPB 指标、受控 1.3B 模型对照，以及可交互权重实验和版权、泄漏、数据治理边界。",
+    "paper": "https://arxiv.org/abs/2101.00027",
+    "illustration": "pile"
   }
 ]
