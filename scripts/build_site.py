@@ -179,7 +179,7 @@ def build_home(categories,posts,base):
         steps=''.join(f'<li><a href="{article_url(p)}">{H(p["title"])}</a></li>' for p in available[:3])
         extra=f'<span class="route-extra">另有 {len(available)-3} 篇已收录</span>' if len(available)>3 else ''
         route_cards.append(
-            f'<article class="route-card"><div class="route-top"><span>ROUTE {number:02d}</span><span>{len(available)} 篇已收录</span></div>'
+            f'<article class="route-card learning-card"><div class="route-top"><span>ROUTE {number:02d}</span><span>{len(available)} 篇已收录</span></div>'
             f'<h3>{H(name)}</h3><p>{H(description)}</p><ol>{steps}</ol>{extra}'
             f'<a class="route-start" href="{article_url(available[0])}">从第一篇开始 <span aria-hidden="true">↗</span></a></article>'
         )
@@ -207,7 +207,7 @@ def build_home(categories,posts,base):
             <span class="index-order">{i+1:02d}</span>
             <div class="index-main"><div class="index-kicker">{H(category)} <span>/</span> {H(topic)}</div>
                 <h3><a href="{article_url(p)}">{H(p['title'])}</a></h3><p>{H(p['subtitle'])}</p>
-                <div class="index-tags"><span>{p['reading_minutes']} 分钟</span><span>{H(p['published'])}</span></div>
+                <div class="index-tags"><span>{p['reading_minutes']} 分钟</span><span>{H(p['published'])}</span><a class="paper-source" href="{H(p['paper'],quote=True)}" target="_blank" rel="noopener noreferrer" aria-label="原始论文：{H(p['title'],quote=True)}">原始论文 ↗</a></div>
             </div><a class="index-arrow" href="{article_url(p)}" aria-label="阅读 {H(p['title'],quote=True)}">↗</a>
             </article>'''
         )
