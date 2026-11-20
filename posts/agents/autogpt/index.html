@@ -378,7 +378,8 @@ assert approved.completed</code></pre>
 <tr><td>安全性</td><td>越权动作率、误操作率、审批绕过率</td><td>是否避免了不允许的副作用？</td></tr>
 <tr><td>泛化能力</td><td>新任务、新工具、新环境下的表现</td><td>是否只记住了固定任务轨迹？</td></tr>
 </tbody></table></div>
-<p>Benchmark 也要按任务类型选择：网页交互、软件工程、通用任务和工具调用并不是同一能力。AgentBench、GAIA、WebArena、SWE-bench 等基准可用于不同任务族的研究，但不能把一个基准上的分数当作“Agent 总体智能”的度量。对 AutoGPT 这种长程系统，必须同时报告成功率、成本、失败轨迹和安全行为。</p>
+<p>Benchmark 也要按任务类型选择：网页交互、软件工程、通用任务和工具调用并不是同一能力。<a href="https://arxiv.org/abs/2308.03688">AgentBench</a> 覆盖多种交互环境，<a href="https://arxiv.org/abs/2311.12983">GAIA</a> 聚焦需要工具与多步推理的通用助理任务，<a href="https://arxiv.org/abs/2307.13854">WebArena</a> 在可控网站环境中检验任务状态，<a href="https://arxiv.org/abs/2310.06770">SWE-bench</a> 则以真实代码仓库 Issue 和测试验证软件修复。它们测量的是不同能力，不能把一个基准上的分数当作“Agent 总体智能”的度量。对 AutoGPT 这种长程系统，必须同时报告成功率、成本、失败轨迹和安全行为。</p>
+<p>2026 年的一篇部署评测综述进一步指出，标准化任务完成分数与真实部署可行性之间存在落差：成本效率、安全合规、可维护性和工作流集成也必须纳入评价。换言之，Agent benchmark 不应只问“做没做对”，还要问“用了多少资源、是否越权、能否复现、出了错能否恢复”。</p>
 <p>更重要的是，报告实验时要固定模型版本、工具权限、环境状态、提示模板、最大步数、预算和重试策略。否则比较到的可能不是 Agent 算法，而是不同运行时配置。</p>
 </section>
 
@@ -413,6 +414,8 @@ assert approved.completed</code></pre>
 <li>Huang et al., <a href="https://arxiv.org/abs/2402.02716">Understanding the Planning of LLM Agents: A Survey</a>, 2024：任务分解、计划选择、外部模块、反思和记忆。</li>
 <li>Wang et al., <a href="https://doi.org/10.1007/s11704-024-40231-1">A Survey on Large Language Model Based Autonomous Agents</a>, Frontiers of Computer Science, 2024：Profile、Memory、Planning、Action 的统一视角。</li>
 <li>Yehudai et al., <a href="https://arxiv.org/abs/2503.16416">Survey on Evaluation of LLM-based Agents</a>, 2025：能力、应用基准、评测框架与成本、安全、鲁棒性挑战。</li>
+<li>Liu et al., <a href="https://arxiv.org/abs/2308.03688">AgentBench</a>, 2023；Mialon et al., <a href="https://arxiv.org/abs/2311.12983">GAIA</a>, 2023；Zhou et al., <a href="https://arxiv.org/abs/2307.13854">WebArena</a>, 2023；Jimenez et al., <a href="https://arxiv.org/abs/2310.06770">SWE-bench</a>, 2023：不同任务族的原始评测基准。</li>
+<li><a href="https://doi.org/10.1007/s10462-026-11571-0">From benchmarks to deployment: a comprehensive review of agentic AI evaluation</a>, 2026：讨论任务完成指标与部署可行性之间的差距。</li>
 </ul>
 <p class="small">证据边界：AutoGPT 没有在本文中被伪装成某一篇原始学术论文。官方仓库和源码用于说明项目行为；综述用于组织研究脉络；可靠性曲线、状态方程与交互示例属于明确标注的教学抽象，并非官方实验结果。</p>
 <div class="foot"><a href="../../../categories/agents/">智能体专题</a><a href="../../../topics/">知识地图</a><a href="../react/">ReAct</a><a href="../agent-memory-components/">Agent Memory</a><a href="../swe-agent/">SWE-agent</a><a href="https://github.com/Significant-Gravitas/AutoGPT">AutoGPT 官方仓库</a></div>

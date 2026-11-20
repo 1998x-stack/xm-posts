@@ -124,5 +124,50 @@
     "locator": "Independent teaching implementation in this article",
     "status": "illustrative",
     "notes": "Not original AutoGPT source and not a benchmark reproduction."
+  },
+  {
+    "id": "E15",
+    "kind": "benchmark",
+    "claim": "AgentBench evaluates LLMs as agents across multiple interactive environments; it is a general multi-environment benchmark, not a universal measure of agent quality.",
+    "source_url": "https://arxiv.org/abs/2308.03688",
+    "locator": "Liu et al., AgentBench: Evaluating LLMs as Agents, 2023",
+    "status": "verified",
+    "notes": "Use its task-family scope; do not treat a single score as general agent intelligence."
+  },
+  {
+    "id": "E16",
+    "kind": "benchmark",
+    "claim": "GAIA evaluates general AI assistant tasks requiring combinations of reasoning, tool use and multimodal inputs.",
+    "source_url": "https://arxiv.org/abs/2311.12983",
+    "locator": "Mialon et al., GAIA: A Benchmark for General AI Assistants, 2023",
+    "status": "verified",
+    "notes": "Benchmark scope only; no leaderboard results are claimed in this article."
+  },
+  {
+    "id": "E17",
+    "kind": "benchmark",
+    "claim": "WebArena provides a controlled web environment for evaluating agents on realistic website tasks and environment state.",
+    "source_url": "https://arxiv.org/abs/2307.13854",
+    "locator": "Zhou et al., WebArena: A Realistic Web Environment for Building Autonomous Agents, 2023",
+    "status": "verified",
+    "notes": "Benchmark scope only; no performance results are claimed in this article."
+  },
+  {
+    "id": "E18",
+    "kind": "benchmark",
+    "claim": "SWE-bench evaluates software engineering agents on real GitHub issues with repository-level patches and tests.",
+    "source_url": "https://arxiv.org/abs/2310.06770",
+    "locator": "Jimenez et al., SWE-bench: Can Language Models Resolve Real-World GitHub Issues?, 2023",
+    "status": "verified",
+    "notes": "Benchmark scope only; no leaderboard results are claimed in this article."
+  },
+  {
+    "id": "E19",
+    "kind": "survey",
+    "claim": "A 2026 review highlights the gap between benchmark task completion and deployment viability, including cost efficiency, safety compliance, maintainability and workflow integration.",
+    "source_url": "https://doi.org/10.1007/s10462-026-11571-0",
+    "locator": "Abstract and benchmark-to-deployment discussion",
+    "status": "verified",
+    "notes": "Review-level synthesis; used to motivate a broader evaluation scorecard."
   }
 ]
