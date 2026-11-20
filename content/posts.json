@@ -340,5 +340,26 @@
     "summary": "从单条 CoT 的脆弱性出发，图解多路径采样、答案边缘化、投票机制与原论文实验，附交互示例、数学推导及可运行 Python 代码。",
     "paper": "https://arxiv.org/abs/2203.11171",
     "illustration": "self-consistency"
+  },
+  {
+    "slug": "sgd",
+    "title": "Understanding SGD",
+    "subtitle": "为什么用一个样本的梯度，就能训练大规模模型？从随机逼近到 Mini-batch",
+    "category": "foundations",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 30,
+    "tags": [
+      "SGD",
+      "Optimization",
+      "Stochastic Approximation",
+      "Mini-batch",
+      "Learning Rate",
+      "Gradient Noise"
+    ],
+    "summary": "以 Bottou 2010 为主线，拆解全批量与随机梯度的计算路径、条件无偏、Mini-batch 方差、步长计划与有限算力权衡；配七幅图、可交互一维算例和纯 Python 测试。",
+    "paper": "https://bottou.org/papers/bottou-2010",
+    "illustration": "sgd"
   }
 ]
