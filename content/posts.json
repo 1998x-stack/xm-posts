@@ -1199,5 +1199,28 @@
     "summary": "沿苏剑林 2026 年 LogSumExp / Softmax 展开思路，推导中心矩、四阶累积量和三阶 Softmax 校正，再构建前缀状态形式的一阶 Attention；含五幅独立 SVG、交互误差实验、原生 MathML 和可运行的 Python 数值验证，严格区分 GDN 论文与教学近似。",
     "paper": "https://spaces.ac.cn/archives/11814",
     "illustration": "softmax-taylor"
+  },
+  {
+    "slug": "deltanet",
+    "title": "Understanding DeltaNet",
+    "subtitle": "为什么线性注意力需要纠错式记忆？从 Delta Rule 到 WY 分块并行",
+    "category": "architectures",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 34,
+    "tags": [
+      "DeltaNet",
+      "Efficient Attention",
+      "Linear RNNs",
+      "Delta Rule",
+      "WY Representation",
+      "Chunkwise Parallelism",
+      "Associative Recall",
+      "NeurIPS 2024"
+    ],
+    "summary": "精读 Yang et al. NeurIPS 2024：从普通线性注意力的记忆干扰出发，推导 Delta Rule 误差修正、矩阵转移与 WY 伪值表示，图解 Chunkwise 并行和现代 DeltaNet Block，审计 340M/1.3B 实验及局限；附四幅独立 SVG、离线 MathML、写入强度交互、Python 断言与 15 条证据账本。",
+    "paper": "https://proceedings.neurips.cc/paper_files/paper/2024/hash/d13a3eae72366e61dfdc7eea82eeb685-Abstract-Conference.html",
+    "illustration": "deltanet"
   }
 ]
