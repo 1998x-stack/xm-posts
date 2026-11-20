@@ -1,6 +1,6 @@
 # Context Engineering & Context Management
 
-> 稳定 Topic ID：\`agents/context-engineering\`
+> 稳定 Topic ID：`agents/context-engineering`
 
 ## 收录范围
 
@@ -19,11 +19,11 @@
 
 | Topic | 边界 |
 |---|---|
-| \`memory\` | 聚焦跨会话知识如何写入、组织、维护与重用；本专题覆盖完整推理时上下文生命周期 |
-| \`tool-calling\` | 聚焦工具接口、参数与调用协议；本专题研究工具定义和工具结果如何进入上下文 |
-| \`retrieval-rag\` | 聚焦检索算法和证据召回；本专题研究召回结果如何筛选、压缩和组装 |
-| \`react\` | 聚焦 Thought / Action / Observation 推理—行动循环；本专题聚焦每轮循环的上下文状态管理 |
-| \`software-engineering-agents\` | 聚焦代码 Agent 与 ACI；本专题研究可迁移到各类 Agent 的上下文组织方法 |
+| `memory` | 聚焦跨会话知识如何写入、组织、维护与重用；本专题覆盖完整推理时上下文生命周期 |
+| `tool-calling` | 聚焦工具接口、参数与调用协议；本专题研究工具定义和工具结果如何进入上下文 |
+| `retrieval-rag` | 聚焦检索算法和证据召回；本专题研究召回结果如何筛选、压缩和组装 |
+| `react` | 聚焦 Thought / Action / Observation 推理—行动循环；本专题聚焦每轮循环的上下文状态管理 |
+| `software-engineering-agents` | 聚焦代码 Agent 与 ACI；本专题研究可迁移到各类 Agent 的上下文组织方法 |
 
 ## 典型学习路径
 
