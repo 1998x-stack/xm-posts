@@ -264,3 +264,5 @@ GAE 归入 `reinforcement-learning` 下已有的 **Policy Gradient / Actor–Cri
 ### Agents & Tool Use — ReAct
 
 ReAct（Yao et al., ICLR 2023）收录于 `posts/agents/react/`：解释 Thought / Action / Observation 的闭环、论文实验口径、MathML 形式化、可交互轨迹与有限状态 Python 验证。该目录属于 `Agents & Tool Use`，不同于 `reasoning` 的 CoT 与 Self-Consistency；专题规划位于 `posts/agents/_topics/react/`，不单独发布。
+
+MoE 复用 `Architectures → Mixture of Experts (MoE)` 已有二级研究主题，不新增重复分类。[Understanding MoE](posts/architectures/moe/index.html) 以 Shazeer et al. 2017 为主线，区分 GShard、Switch、Mixtral 与 DeepSeekMoE，提供七幅独立 SVG、八组 MathML、路由容量交互与 `tests/test_moe.py` 数值验证。
