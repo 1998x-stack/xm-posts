@@ -1,0 +1,92 @@
+[
+  {
+    "id": "CE-01",
+    "claim": "Context Engineering 管理推理时进入模型上下文的全部信息，不仅是 Prompt 指令。",
+    "kind": "definition",
+    "source_url": "https://www.anthropic.com/research/effective-context-engineering-for-ai-agents",
+    "locator": "Context engineering vs. prompt engineering, lines 46–53",
+    "status": "verified",
+    "notes": "Anthropic 的官方定义；本文用中文独立表述。"
+  },
+  {
+    "id": "CE-02",
+    "claim": "上下文规模增加可能出现召回与长程推理性能退化，窗口容量不等于有效利用能力。",
+    "kind": "engineering-observation",
+    "source_url": "https://www.anthropic.com/research/effective-context-engineering-for-ai-agents",
+    "locator": "Why context engineering is important, lines 54–60",
+    "status": "verified",
+    "notes": "Anthropic 描述 context rot 与 performance gradient；不同模型和任务表现不同，不将其写成统一定律。"
+  },
+  {
+    "id": "CE-03",
+    "claim": "Just-in-Time Context 可通过文件路径、查询、URL 等轻量标识符按需加载信息，并可与预加载组合。",
+    "kind": "engineering-pattern",
+    "source_url": "https://www.anthropic.com/research/effective-context-engineering-for-ai-agents",
+    "locator": "Context retrieval and agentic search, lines 79–93",
+    "status": "verified",
+    "notes": "Anthropic 的工程实践；本文将其归纳为固定核心加动态证据的混合策略。"
+  },
+  {
+    "id": "CE-04",
+    "claim": "长时任务可组合使用 Compaction、结构化笔记和多 Agent 架构。",
+    "kind": "engineering-pattern",
+    "source_url": "https://www.anthropic.com/research/effective-context-engineering-for-ai-agents",
+    "locator": "Context engineering for long-horizon tasks, lines 94–101 and following sections",
+    "status": "verified",
+    "notes": "本文对三种策略进行概念区分和教学化比较。"
+  },
+  {
+    "id": "CE-05",
+    "claim": "OpenAI Agents SDK Cookbook 给出按最近 N 轮裁剪和将旧消息压缩为结构化摘要的 Session 管理方法，并讨论两者权衡。",
+    "kind": "implementation-example",
+    "source_url": "https://developers.openai.com/cookbook/examples/agents_sdk/session_memory",
+    "locator": "Context Trimming and Context Summarization sections",
+    "status": "verified",
+    "notes": "Cookbook 实现示例；不表示所有 SDK 或 API 自动采用相同策略。"
+  },
+  {
+    "id": "CE-06",
+    "claim": "OpenAI Responses API 的计算环境文章介绍了工具输出上限与原生 Compaction，用于控制工具日志和长任务上下文增长。",
+    "kind": "product-engineering-example",
+    "source_url": "https://openai.com/index/equip-responses-api-computer-environment/",
+    "locator": "Orchestrating the agent loop; When the context window gets full: compaction",
+    "status": "verified",
+    "notes": "具体产品实现；本文避免将其推广为所有模型通用的内置能力。"
+  },
+  {
+    "id": "CE-07",
+    "claim": "OpenAI Harness Engineering 强调将 AGENTS.md 作为知识地图入口，并把结构化文档、计划和机械化检查作为仓库知识系统。",
+    "kind": "engineering-case-study",
+    "source_url": "https://openai.com/index/harness-engineering/",
+    "locator": "We made repository knowledge the system of record",
+    "status": "verified",
+    "notes": "OpenAI 工程案例，不作为通用性能基准。"
+  },
+  {
+    "id": "CE-08",
+    "claim": "Agent Memory 可按会话日志、记忆笔记、记忆表示和注入上下文分层，并通过 Dreaming 回顾、验证和纠错。",
+    "kind": "engineering-pattern",
+    "source_url": "https://www.anthropic.com/research/components-of-agent-memory",
+    "locator": "Memory notes; Dreaming can correct memory; Dreaming can build new memory representations",
+    "status": "verified",
+    "notes": "Anthropic 2026-11-06 官方文章；本文对分层结构做了独立绘图。"
+  },
+  {
+    "id": "CE-09",
+    "claim": "Context Engineering 的基础组件可归纳为检索与生成、处理、管理，并集成到 RAG、Memory、工具推理和多 Agent 系统。",
+    "kind": "survey-taxonomy",
+    "source_url": "https://arxiv.org/abs/2507.13334",
+    "locator": "Abstract and taxonomy overview",
+    "status": "verified",
+    "notes": "Mei et al. survey, arXiv:2507.13334, 2025-07-17。"
+  },
+  {
+    "id": "CE-10",
+    "claim": "本文六阶段生命周期、上下文评分函数、Token 预算分解和参考伪代码是为教学而提出的综合工程模型。",
+    "kind": "original-synthesis",
+    "source_url": "https://www.anthropic.com/research/effective-context-engineering-for-ai-agents",
+    "locator": "Synthesis informed by Anthropic and OpenAI engineering sources listed above",
+    "status": "derived",
+    "notes": "不是 Anthropic、OpenAI 或 Survey 原文中的标准算法，也不是经过实验验证的统一最优策略。"
+  }
+]
