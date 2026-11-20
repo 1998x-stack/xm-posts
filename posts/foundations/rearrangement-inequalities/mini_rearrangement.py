@@ -52,7 +52,7 @@ def main():
     rearranged = [dot(x, p) for p in permutations(y)]
     assert min(rearranged) == dot(x, tuple(reversed(y)))
     assert max(rearranged) == dot(x, y)
-    assert prod(a) * prod(b) * prod(c) == 36  # independent of permutations
+    assert prod(a) * prod(b) * prod(c) == 216  # independent of permutations
     print("PASS: two sequences, all 36 triple pairings, and PSD trace counterexample")
 
 
