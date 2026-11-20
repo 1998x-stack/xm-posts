@@ -23,3 +23,8 @@ RoPE 位于 `posts/architectures/rope/`，主题为 **Positional Encoding**；�
 
 - [Understanding LSTM](lstm/index.html)：从普通 RNN 的长期梯度问题到 1997 CEC / 输入与输出门；明确区分 2000 年遗忘门、2002 年 peephole 和现代四门实现。
 - 本主题为 `Architectures` 内的二级研究方向，可继续容纳 Vanilla RNN、GRU、双向 LSTM 与序列状态模型；暂不新建顶层类别。
+
+## Sequence-to-Sequence / Encoder–Decoder
+
+- [Understanding Seq2Seq](seq2seq/index.html)：2014 年 LSTM Encoder–Decoder、Teacher Forcing、自回归解码、反转源序列与 Attention 解决固定向量瓶颈的后续发展。
+- 属于模型架构的二级主题，后续 RNN、LSTM、Bahdanau Attention、Luong Attention 与 Transformer Encoder–Decoder 可沿此线索组织；无需新建一级分类。

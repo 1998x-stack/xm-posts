@@ -404,5 +404,27 @@
     "summary": "从普通 RNN 的长期梯度问题出发，精读 1997 年 CEC 与两门结构，厘清 2000 年遗忘门与 2002 年 Peephole 的历史演进，再以现代四门 MathML 公式、6 幅图、交互状态模拟和确定性 Python 断言理解记忆更新。",
     "paper": "https://doi.org/10.1162/neco.1997.9.8.1735",
     "illustration": "lstm"
+  },
+  {
+    "slug": "seq2seq",
+    "title": "Understanding Seq2Seq",
+    "subtitle": "一段序列如何变成另一段？从 LSTM Encoder–Decoder 到 Attention",
+    "category": "architectures",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 32,
+    "tags": [
+      "Seq2Seq",
+      "Encoder–Decoder",
+      "LSTM",
+      "Machine Translation",
+      "Teacher Forcing",
+      "Attention",
+      "Beam Search"
+    ],
+    "summary": "以 Sutskever et al.（NeurIPS 2014）为主线，图解变长输入输出、固定向量瓶颈、LSTM 编解码、条件概率与 Teacher Forcing、源序列反转及 Beam Search；沿 Cho、Bahdanau、Luong 到 Transformer 辨析 Attention 演进，附交互示例、MathML 推导和确定性 Python 断言。",
+    "paper": "https://arxiv.org/abs/1409.3215",
+    "illustration": "seq2seq"
   }
 ]
