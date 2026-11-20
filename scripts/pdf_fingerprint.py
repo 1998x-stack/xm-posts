@@ -74,7 +74,9 @@ def _linked_files(site_root: Path, html_path: Path) -> set[Path]:
                     add(html_path, tag[attr])
         if name in ("img", "source") and tag.get("srcset"):
             for candidate in tag["srcset"].split(","):
-                add(html_path, candidate.strip().split()[0])
+                tokens = candidate.strip().split()
+                if tokens:
+                    add(html_path, tokens[0])
         if tag.get("style"):
             for ref in _css_references(str(tag["style"])):
                 add(html_path, ref)
