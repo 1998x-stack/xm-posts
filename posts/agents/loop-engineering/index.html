@@ -126,7 +126,7 @@ pre{padding:18px 20px;background:#223e45;color:#e7f3ea;border-radius:10px;overfl
 
 <section id="definition">
 <h2>02 · Loop Engineering 到底是什么？</h2>
-<p>Loop Engineering 是 2026 年逐渐出现的实践术语。Lulla 等人的探索性研究将其描述为：开发者不再每次亲自向 Agent 发出下一条提示，而是设计一个系统，由系统在日程或仓库事件发生时启动 Agent，并通过机器可检查的条件决定何时停止。[1]</p>
+<p>Loop Engineering 是 2026 年 6 月开始被实践者使用的新兴术语。Lulla 等人的探索性研究将其描述为：开发者不再每次亲自向 Agent 发出下一条提示，而是设计一个系统，由系统在日程或仓库事件发生时启动 Agent，并通过机器可检查的条件决定何时停止。[1]</p>
 <p>这不是一个已经拥有统一标准、成熟理论体系和充分因果证据的学科名称。更准确的说法是：它正在成为一组工程实践的统称，关注如何把 Agent 的执行组织成<strong>可触发、可验证、可恢复、可治理的重复工作循环</strong>。</p>
 <figure class="figure"><div class="figure-scroll"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 360" role="img" aria-labelledby="outer-title outer-desc">
 <title id="outer-title">Loop Engineering 的外层任务闭环</title><desc id="outer-desc">外部事件触发任务发现与执行，独立验证后进入持久化、重试、人工升级或终止。</desc>
@@ -470,6 +470,8 @@ def run_loop(task_id, act, verify, state_path: Path, max_attempts=3):
 </tbody></table></div>
 <p>这项 2026 年预印本报告分析了 36,710 个软件仓库，并在启发式筛选的 256 个候选仓库中确认了 217 个自主循环案例。研究还指出：虽然仓库里可以看到循环配置，但几乎没有仓库提交实践讨论中所建议的持久状态文件；受控实验仍是计划中的研究方向。[1]</p>
 <div class="note"><strong>如何正确解读这组数字？</strong>217 / 256 是在启发式筛选候选集中的确认比例，不是“全球 84.8% 的仓库都在使用 Loop Engineering”。36,710 是被挖掘的仓库规模，也不是受控实验样本。该研究支持“这种实践已经出现在开源仓库中”，但不证明“Loop Engineering 一定提高开发效率或代码质量”。</div>
+<p>还有一个容易被忽略的细节：论文报告的 217 个已确认循环中，有 180 个只由仓库事件触发，其中很多是在每个新 Pull Request 到来时运行一次审查，然后结束。下一轮处理的是另一个 PR，因此并不一定需要把跨轮进度写入仓库文件；部分 Issue Triage 循环则直接把 Issue Tracker 当作状态来源。<strong>所以，缺少一个名为 STATE.md 的文件，不等于循环设计必然不合格；是否需要持久状态，取决于任务是否真的跨运行延续。</strong></p>
+<p>作者也明确讨论了构念效度风险：不同来源对 Loop 的定义并不完全一致，普通自动化与工程化循环之间存在判断边界；启发式可能漏掉采用其他约定的循环，也可能把普通自动化误识别为 Loop。因而这组仓库挖掘结果应视为探索性证据，而不是无偏的全 GitHub 采用率。</p>
 <h3>15.1 仍然值得研究的问题</h3>
 <ul>
 <li><strong>自主等级：</strong>只允许自动分析、自动修改、自动开 PR、自动合并和自动部署，哪一种授权边界最合适？</li>
@@ -491,7 +493,7 @@ def run_loop(task_id, act, verify, state_path: Path, max_attempts=3):
 <p>如果要设计自己的第一个 Loop，不妨从一个低风险、可验证、可回滚的任务开始：例如每天检查文档链接、每次 CI 失败后生成诊断报告，或自动整理待处理 Issue。先让触发、状态和验证链条可靠，再逐步增加 Agent 的执行权限。</p>
 <h3>参考资料</h3>
 <ol>
-<li>Jai Lal Lulla, Vahram Nersesyan, Seyedmoein Mohsenimofidi, Christoph Treude, Sebastian Baltes. <a href="https://arxiv.org/abs/2608.21884">Loop Engineering: Building Blocks, Adoption, and Impact</a>. 2026. Exploratory preprint.</li>
+<li>Jai Lal Lulla, Vahram Nersesyan, Seyedmoein Mohsenimofidi, Christoph Treude, Sebastian Baltes. <a href="https://arxiv.org/abs/2608.21884">Loop Engineering: Building Blocks, Adoption, and Impact</a>. 2026. Preprint submitted to the 2nd Journal Ahead Workshop (JAWs@ASE 2026); the arXiv record marks it under review.</li>
 <li>Michael Bolin. <a href="https://openai.com/index/unrolling-the-codex-agent-loop/">Unrolling the Codex agent loop</a>. OpenAI Engineering, 2026-01-23.</li>
 <li>Anthropic. <a href="https://www.anthropic.com/research/effective-harnesses-for-long-running-agents">Effective harnesses for long-running agents</a>. 2025-11-26.</li>
 <li>OpenAI. <a href="https://developers.openai.com/cookbook/examples/codex/build_iterative_repair_loops_with_codex">Build iterative repair loops with Codex</a>. 2026-05-11.</li>
