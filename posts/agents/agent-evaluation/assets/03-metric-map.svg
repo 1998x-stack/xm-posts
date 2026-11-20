@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="540" viewBox="0 0 1100 540" role="img" aria-labelledby="agent-eval-03-title agent-eval-03-desc">
+<title id="agent-eval-03-title">Agent Evaluation 六类指标地图</title><desc id="agent-eval-03-desc">中心为 Agent Evaluation，周围六个指标维度：任务结果、执行过程、可靠性、安全性、效率成本和用户体验。每个维度列出典型观察对象。</desc>
+<rect width="1100" height="540" rx="20" fill="#f8fbf9"/>
+<text x="42" y="43" font-family="system-ui,sans-serif" font-size="17" font-weight="800" fill="#247e73" letter-spacing="2">EVALUATION SCORECARD</text>
+<rect x="410" y="215" width="280" height="100" rx="18" fill="#203b40"/><text x="550" y="254" text-anchor="middle" font-size="24" font-weight="850" fill="#eaf5ee" font-family="system-ui,sans-serif">Agent Evaluation</text><text x="550" y="284" text-anchor="middle" font-size="15" fill="#b7d2c6" font-family="system-ui,sans-serif">Outcome + Process + Risk + Cost</text>
+<g stroke="#9bb9ad" stroke-width="2.5" fill="none">
+<path d="M410 240 L330 145"/><path d="M550 215 V130"/><path d="M690 240 L770 145"/><path d="M410 290 L330 390"/><path d="M550 315 V410"/><path d="M690 290 L770 390"/>
+</g>
+<g font-family="system-ui,sans-serif">
+<rect x="42" y="75" width="300" height="112" rx="13" fill="#e9f4ee" stroke="#91bca9" stroke-width="2"/><text x="65" y="111" font-size="21" font-weight="850" fill="#214f49">01 · 任务结果</text><text x="65" y="143" font-size="15" fill="#52736b">Success Rate · Goal State</text><text x="65" y="165" font-size="15" fill="#52736b">Output Quality · Partial Completion</text>
+<rect x="400" y="48" width="300" height="112" rx="13" fill="#eaf1f8" stroke="#9cb8d1" stroke-width="2"/><text x="423" y="84" font-size="21" font-weight="850" fill="#254d68">02 · 执行过程</text><text x="423" y="116" font-size="15" fill="#58768c">Tool / Argument Accuracy</text><text x="423" y="138" font-size="15" fill="#58768c">Plan · Steps · Recovery · Loops</text>
+<rect x="758" y="75" width="300" height="112" rx="13" fill="#fff2e8" stroke="#d9ae8b" stroke-width="2"/><text x="781" y="111" font-size="21" font-weight="850" fill="#85583b">03 · 可靠性</text><text x="781" y="143" font-size="15" fill="#94715a">Pass@k · Pass^k</text><text x="781" y="165" font-size="15" fill="#94715a">Robustness · Recovery Rate</text>
+<rect x="42" y="360" width="300" height="112" rx="13" fill="#f8eceb" stroke="#d7aaa5" stroke-width="2"/><text x="65" y="396" font-size="21" font-weight="850" fill="#89524c">04 · 安全性</text><text x="65" y="428" font-size="15" fill="#98716d">Policy / Permission Violation</text><text x="65" y="450" font-size="15" fill="#98716d">Prompt Injection · Side Effects</text>
+<rect x="400" y="390" width="300" height="112" rx="13" fill="#e9f4ee" stroke="#91bca9" stroke-width="2"/><text x="423" y="426" font-size="21" font-weight="850" fill="#214f49">05 · 效率与成本</text><text x="423" y="458" font-size="15" fill="#52736b">Latency · Tokens · Tool Calls</text><text x="423" y="480" font-size="15" fill="#52736b">Cost per Successful Task</text>
+<rect x="758" y="360" width="300" height="112" rx="13" fill="#eaf1f8" stroke="#9cb8d1" stroke-width="2"/><text x="781" y="396" font-size="21" font-weight="850" fill="#254d68">06 · 用户体验</text><text x="781" y="428" font-size="15" fill="#58768c">Satisfaction · Trust</text><text x="781" y="450" font-size="15" fill="#58768c">Clarification · Human Handoff</text>
+</g>
+<text x="550" y="526" text-anchor="middle" font-size="13" fill="#6b8580" font-family="system-ui,sans-serif">不要将六个维度压成一个无法解释的总分；先报告各维度，再按业务风险定义决策门槛。</text>
+</svg>
