@@ -126,6 +126,16 @@ pre{overflow-x:auto;white-space:pre;font:13px/1.75 ui-monospace,SFMono-Regular,C
 <h3>Strict Mode 到底保证什么？</h3>
 <p>OpenAI 文档建议对 function tools 使用 <code>strict: true</code>。其严格模式基于 Structured Outputs，并要求对象的 <code>additionalProperties</code> 为 <code>false</code>，且 <code>properties</code> 中的字段都出现在 <code>required</code> 中。若要表达“可选”，通常要把字段类型设计为可空，而不是简单地从 <code>required</code> 删掉。[<a href="https://developers.openai.com/api/docs/guides/function-calling">OpenAI · Strict mode</a>]</p>
 <p>这能显著降低结构错误，却不能证明参数真实、操作合法或用户已授权。模型可以生成一个结构完全合规、但业务上错误的订单 ID；也可以在 Schema 合规的情况下，提出用户从未授权的删除操作。</p>
+<h3>Tool Choice：控制模型“是否调用、能调用哪些工具”</h3>
+<p>工具 Schema 定义“工具长什么样”；<code>tool_choice</code> 则控制本轮模型可以如何选择工具。以 OpenAI Function Calling 为例，<code>auto</code> 允许模型决定不调用、调用一个或多个工具；<code>required</code> 要求至少调用一个；指定函数对象会强制选择一个具体函数；<code>allowed_tools</code> 可以把可调用集合限制为已声明工具的子集；<code>none</code> 则禁止本轮工具调用。[<a href="https://developers.openai.com/api/docs/guides/function-calling">OpenAI · Tool choice</a>]</p>
+<pre><code>tool_choice: "auto"       // 模型自行决定
+tool_choice: "required"   // 至少调用一个工具
+tool_choice: {
+  "type": "function",
+  "name": "get_weather"
+}                         // 指定一个函数
+tool_choice: "none"       // 本轮不调用工具</code></pre>
+<p>注意：强制选择函数只约束模型输出，不代表应用已经授予该工具权限。执行器仍要做身份、资源和副作用检查；<code>tool_choice</code> 不是授权机制。工具搜索场景还可以先加载工具子集，再通过 <code>allowed_tools</code> 限定本轮可调用集合。</p>
 <div class="insight warning"><strong>安全原则：</strong>不要把“模型输出符合 JSON Schema”当成“可以直接执行”。Schema 是第一道门，不是授权系统。</div>
 <p>可以把应用侧的最低验证条件写成一个逻辑合取：</p>
 <div class="math-equation" role="group" aria-label="工具调用验证条件"><div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="验证条件公式，可横向滚动"><math display="block" aria-label="Valid 等于 JSON 解析、Schema 校验、业务规则和权限校验四者同时成立"><mrow><mi>Valid</mi><mo>(</mo><mi>q</mi><mo>)</mo><mo>=</mo><mi>J</mi><mo>(</mo><mi>q</mi><mo>)</mo><mo>∧</mo><mi>S</mi><mo>(</mo><mi>q</mi><mo>)</mo><mo>∧</mo><mi>B</mi><mo>(</mo><mi>q</mi><mo>)</mo><mo>∧</mo><mi>P</mi><mo>(</mo><mi>q</mi><mo>)</mo></mrow></math></div><div class="math-caption">式 2 · J = JSON 可解析，S = Schema 合法，B = 业务规则通过，P = 调用者权限允许。</div></div>
@@ -303,6 +313,7 @@ if __name__ == "__main__":
         "call_id": result.call_id,
         "output": result.output,
     }, ensure_ascii=False, indent=2))</code></pre>
+<p class="hint">实现边界：这里用手工检查演示一个很小的固定参数 Schema，并不是通用 JSON Schema 验证器。生产代码应使用经过测试的 Schema 校验库，并在 Schema 校验后继续执行业务规则、用户授权和副作用控制。</p>
 <p>完整示例与测试可以在文章目录中运行：</p><pre><code>python posts/agents/function-calling/tool_call_demo.py
 python -m pytest -q posts/agents/function-calling/test_tool_call_demo.py</code></pre>
 <p>这个例子只演示一个只读、确定性的本地工具。它没有实现真实用户认证、数据库事务、网络超时、速率限制或人工审批。生产系统必须把这些能力放在真实执行器边界，而不是从这个教学例子推断“已经安全”。</p></section>
@@ -350,7 +361,7 @@ function show(title,paragraphs,code,kind){trace.replaceChildren();const h=docume
 function render(){status.textContent="步骤 "+step+" / 5";
 if(step===0)show("当前状态：用户请求",["用户希望查询 "+(city.value.trim()||"某个城市")+" 的当前天气。模型尚未发出调用。","点击下一步，先观察模型生成的结构化调用。"]);
 if(step===1)show("模型输出：function_call",["模型选择 get_weather，并为本次调用生成唯一标识。","注意：此时外部天气服务尚未被访问。"],JSON.stringify(call,null,2));
-if(step===2){const valid=!!call.arguments.location&&Object.keys(call.arguments).every(k=>k==="location");blocked=!valid;if(valid)show("应用校验：Schema 通过",["location 是非空字符串，且没有额外字段。","现在执行器可以继续检查业务规则与权限，再调用工具。"],"required: [\"location\"]\nadditionalProperties: false","ok");else show("应用校验：拒绝执行",["发现未声明字段 forecast_days。","Strict Schema 不允许额外字段；工具没有执行，模型也不能把它描述成已成功查询。"],"Unexpected field: forecast_days","bad");}
+if(step===2){const valid=!!call.arguments.location&&Object.keys(call.arguments).every(k=>k==="location");blocked=!valid;if(valid)show("应用校验：Schema 通过",["location 是非空字符串，且没有额外字段。","这是只读教学工具；生产系统还需独立完成业务规则和权限检查。"],"required: [\"location\"]\nadditionalProperties: false","ok");else show("应用校验：拒绝执行",[city.value.trim()?"发现未声明字段 forecast_days。":"location 不能为空，缺少必需参数。","Strict Schema 不允许额外字段；工具没有执行，模型也不能把它描述成已成功查询。"],"Unexpected field: forecast_days","bad");}
 if(step===3)show("工具执行：返回教学数据",["执行器调用本地固定函数，不访问真实天气 API。","工具返回 "+call.arguments.location+" 的教学数据：18°C，cloudy。"],JSON.stringify(result,null,2));
 if(step===4)show("结果回传：关联原 call_id",["应用把工具结果交回模型，并保留 call_demo_001。","模型现在可以基于工具结果生成回答。"],JSON.stringify({type:"function_call_output",call_id:call.call_id,output:result},null,2));
 if(step===5)show("模型最终回答",["教学演示："+call.arguments.location+" 的示例天气为 18°C，多云。","这个结论来自工具返回的固定教学数据，不代表实时天气。"]);

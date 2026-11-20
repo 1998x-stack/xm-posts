@@ -142,5 +142,23 @@
     "locator": "Original SVG files under posts/agents/function-calling/assets/",
     "status": "illustrative",
     "notes": "Teaching diagrams, not reproduced figures from the cited papers or vendor documentation."
+  },
+  {
+    "id": "E17",
+    "kind": "api-configuration",
+    "claim": "OpenAI tool_choice supports automatic selection, required calls, forcing a named function, restricting calls to allowed_tools, and none to disable tool use.",
+    "source_url": "https://developers.openai.com/api/docs/guides/function-calling",
+    "locator": "Additional configurations → Tool choice",
+    "status": "verified",
+    "notes": "Provider-specific configuration checked 2026-11-21; forcing selection does not grant runtime authorization."
+  },
+  {
+    "id": "E18",
+    "kind": "implementation-boundary",
+    "claim": "The Python teaching executor performs explicit hand-written checks for one fixed input shape and is not a general JSON Schema validator.",
+    "source_url": "https://developers.openai.com/api/docs/guides/function-calling",
+    "locator": "Independent teaching implementation",
+    "status": "illustrative",
+    "notes": "Production deployments should use a tested schema validator and then perform business and authorization checks."
   }
 ]
