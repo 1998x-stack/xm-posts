@@ -348,5 +348,16 @@
       "agent-memory-components",
       "harness-engineering"
     ]
+  },
+  {
+    "id": "path-38",
+    "title": "从 ReAct 到 Harness，再到持续自主执行",
+    "posts": [
+      "react",
+      "swe-agent",
+      "agent-memory-components",
+      "harness-engineering",
+      "loop-engineering"
+    ]
   }
 ]
