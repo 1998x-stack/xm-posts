@@ -55,6 +55,27 @@
     "illustration": "svm"
   },
   {
+    "slug": "understanding-word2vec",
+    "title": "Understanding Word2Vec",
+    "subtitle": "词，如何找到自己的位置？从上下文预测到语义空间",
+    "category": "foundations",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 32,
+    "tags": [
+      "Word2Vec",
+      "Word Embeddings",
+      "CBOW",
+      "Skip-gram",
+      "Negative Sampling",
+      "SGNS"
+    ],
+    "summary": "从词窗自监督出发，图解 CBOW 与 Skip-gram，推导负采样损失和梯度，并用可运行的 NumPy SGNS 验证实现。",
+    "paper": "https://arxiv.org/abs/1301.3781",
+    "illustration": "word2vec"
+  },
+  {
     "slug": "adamw",
     "title": "Understanding AdamW",
     "subtitle": "为什么 Adam 中的 L₂ 正则化，不等于真正的 Weight Decay？",
