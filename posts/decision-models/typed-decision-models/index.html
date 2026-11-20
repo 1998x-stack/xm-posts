@@ -238,7 +238,7 @@ p_max = 0.70</code></pre>
 <p>当概率均匀分布时，confidence 为 0；当概率全部集中在一个选项时，confidence 为 1。对于三个选项、最大概率 0.70 的例子：</p>
 <pre><code>confidence = (0.70 - 1/3) / (1 - 1/3)
            = 0.55</code></pre>
-<p>因此，<strong>0.70 是 top-option probability，0.55 是分布集中度 confidence</strong>。两者不是同一个统计量。官方文档特别提醒：confidence 并不等于“所选答案正确的概率”。对固定选项数的 Choice，confidence 是 top probability 的单调变换，并没有创造一份独立的新证据。[8]</p>
+<p>因此，<strong>0.70 是 top-option probability，0.55 是分布集中度 confidence</strong>。两者不是同一个统计量。官方文档特别提醒：confidence 并不等于“所选答案正确的概率”。对固定选项数的 Choice，confidence 只是 top probability 的单调变换，并没有创造一份独立的新证据。若需要判断第一名是否只比第二名略高，应继续检查完整概率向量，尤其是 top-to-second ratio（p<sub>max</sub> / p<sub>second</sub>）；它回答的是“第一名领先第二名多少”，而 confidence 回答的是“概率质量集中到什么程度”。对 Noul，直接使用 P(Yes) 更清楚；官方给出的 0.7 / 0.3 可作为起始阈值，中间区间应有独立的复核结果，而不是强行四舍五入。[8]</p>
 <h3>5.3 Calibration 是群体层面的概率可靠性</h3>
 <p>概率校准问的是：在大量预测中，所有被模型赋予 0.8 置信概率的预测，是否大约有 80% 最终正确？用 top-label 校准表达为：</p>
 <div class="math-equation" role="group" aria-label="概率校准定义">
