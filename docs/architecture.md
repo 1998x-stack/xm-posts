@@ -66,3 +66,12 @@ Each article needs one H1, semantic `<main>`, anchored navigation, captions, acc
 `scripts/pdf_fingerprint.py` hashes built HTML, article-local assets, local links needed by the printed document (including cross-article related covers and CSS dependencies), PDF renderer source/dependencies, public URL, and installed CJK/math font signature. Homepage-only changes do not cause full re-renders. Changing shared print CSS or the renderer invalidates affected/all PDFs. Cache manifests record SHA-256, byte count and page count, and re-use verifies PDF parseability and extractable text. Invalid entries are re-rendered.
 
 `.github/workflows/publish.yml` restores a versioned GitHub Actions cache after browser QA and font installation, validates the complete PDF-enabled site, then saves the cache on successful runs. A missing/evicted cache is a performance miss only, not a publishing failure. To deliberately regenerate all PDFs, run `python scripts/render_pdfs.py --force` following a clean site build. Never commit `.pdf-cache/` or `_site/`.
+
+
+## CI timing and bounded browser workers
+
+`scripts/ci_metrics.py start/run/summary` wraps quality-gate commands without changing their exit status. It records a per-phase JSON in `reports/ci/`, captures PDF terminal JSON and reports cached/rendered counts, and writes a Markdown job summary. The local timing window begins after `setup-python`; it explicitly excludes runner provisioning, queue delay and the separate Pages deploy job. Missing metrics are not treated as success or zero. `reports/` is always excluded from Pages.
+
+`scripts/browser_check_all.py --workers 2` partitions all published posts deterministically. Its worker processes each launch one Chromium and call the canonical Skill checker, retaining full four-viewport, SVG/MathML, keyboard/interaction, screenshot and print coverage with isolated contexts. Failures are aggregated and fail the job. The canonical Skill script remains usable as a standalone CLI. The specialized browser batch scripts and site-level Pages navigation QA still run in addition to the all-articles check; worker reuse does not eliminate tests.
+
+**Performance rollout:** first compare the baseline with a warm-cache CI run, then assess the shared-browser browser-all timer and overall build wall time. If worker memory pressure or flaky runtime occurs, set `--workers 1` while retaining all checks. Larger job-level matrix parallelism and deploy queue redesign are a separate subsequent phase.
