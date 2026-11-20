@@ -348,5 +348,14 @@
       "agent-memory-components",
       "harness-engineering"
     ]
+  },
+  {
+    "id": "path-38",
+    "title": "从用户意图到检索增强生成",
+    "posts": [
+      "embeddings",
+      "query-understanding",
+      "rag"
+    ]
   }
 ]

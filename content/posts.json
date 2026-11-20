@@ -2116,5 +2116,41 @@
       "src": "assets/03-llm-rejection-pipeline.svg",
       "caption": "同一提示生成多个回答，经奖励模型排序后保留高分样本并用于 SFT"
     }
+  },
+  {
+    "slug": "query-understanding",
+    "title": "Understanding Query Understanding",
+    "subtitle": "从用户的自然语言需求，到可检索、可执行的语义表示：意图识别、查询解析、重写、澄清与 LLM Agent 路由",
+    "category": "retrieval-rag",
+    "topic": "query-understanding",
+    "status": "published",
+    "published": "2026-11-21",
+    "updated": "2026-11-21",
+    "reading_minutes": 32,
+    "tags": [
+      "Query Understanding",
+      "Query Intent",
+      "Query Classification",
+      "Query Segmentation",
+      "Semantic Parsing",
+      "Slot Filling",
+      "Entity Linking",
+      "Query Rewriting",
+      "Query Expansion",
+      "Query Decomposition",
+      "Conversational Search",
+      "Query Clarification",
+      "LLM for Information Retrieval",
+      "Agent Routing",
+      "Information Retrieval",
+      "Search Systems"
+    ],
+    "summary": "从经典 IR 的查询分类、分词标注、意图识别、纠错、重写、扩展和建议出发，逐层解释 LLM 多轮对话中的上下文消解、澄清与复杂查询分解；通过七幅原创 SVG、原生 MathML、交互式语义解析实验和可测试 Python 示例，区分 Query Understanding、Query Rewriting、Retrieval 与 Agent Execution，并分析 LLM 的真实评测边界。",
+    "paper": "https://doi.org/10.1007/978-3-030-58334-7",
+    "illustration": "query-understanding",
+    "cover": {
+      "src": "assets/01-query-pipeline.svg",
+      "caption": "把自然语言请求拆解为意图、实体、约束与检索路径"
+    }
   }
 ]

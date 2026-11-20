@@ -67,7 +67,7 @@ p code,li code{background:#e8f0ed;padding:2px 5px;border-radius:3px;color:#245e5
 <text x="600" y="326" fill="#8a664c" font-size="13" text-anchor="middle">执行结果、测试与日志回流</text>
 </g></svg><figcaption>图 1 · Harness 不是模型本身，也不是代码仓库本身；它位于两者之间，负责组织模型如何观察环境、执行动作、接收反馈并证明任务完成。<a href="assets/01-model-harness-environment.svg">独立 SVG</a></figcaption></figure>
 <p>可以把系统的研究对象写成：</p>
-<div class="formula"><strong>Agent System = Model + Harness + Environment</strong><small>这是一个概念分解，不是数值相加。系统能力取决于三者之间的接口与协同。</small></div>
+<div class="formula"><math aria-label="Agent System equals Model plus Harness plus Environment"><mrow><mtext>Agent System</mtext><mo>=</mo><mtext>Model</mtext><mo>+</mo><mtext>Harness</mtext><mo>+</mo><mtext>Environment</mtext></mrow></math><small>这是一个概念分解，不是数值相加。系统能力取决于三者之间的接口与协同。</small></div>
 <p><strong>Model</strong> 提供语言理解、推理和代码生成能力；<strong>Environment</strong> 提供真实的仓库、文件、浏览器、测试、日志与运行时状态；<strong>Harness</strong> 决定模型能看到什么、能做什么、如何保存状态、如何解释反馈，以及什么证据足以判定完成。2026 年一篇 AI Harness Engineering 研究预印本也将软件工程能力的分析单位从“模型单体”扩展为 model–harness–environment 系统，并提出 autonomy gap：模型看起来会写补丁，但整个系统仍无法独立、可验证地完成任务。[5]</p>
 <p>这也改变了调试问题的方式。当 Agent 失败时，不应立刻归因于“模型不够聪明”。它可能根本没有看到相关文件、没有可用的浏览器、没有正确的测试命令、没有跨会话进度，或者缺少一个能够阻止它过早宣布完成的验证协议。</p>
 </section>

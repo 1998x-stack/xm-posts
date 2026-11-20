@@ -17,7 +17,7 @@
 | `inference` | KV Cache、解码、Batching、服务调度和 Prefill/Decode | 硬件 kernel/编译与通讯归 `systems` |
 | `systems` | GPU 内存、算子、编译、通信、性能分析及底层优化 | 服务请求、token 调度、端到端 serving 归 `inference` |
 | `storage-indexing` | B+ Tree、LSM Tree、页与缓冲区管理、事务恢复、MVCC | 数据库磁盘/索引结构归此类；向量语义召回归 `retrieval-rag`，GPU 算子实现归 `systems` |
-| `retrieval-rag` | 向量/ANN、稀疏混合检索、重排序、RAG、证据落地 | Agent 任务计划与工具执行归 `agents`，embedding 基础表征归 `foundations` |
+| `retrieval-rag` | Query Understanding、查询解析/重写/扩展/澄清、向量/ANN、稀疏混合检索、重排序、RAG、证据落地 | Agent 任务计划与工具执行归 `agents`；查询理解产生的工具路由意图可用跨领域标签关联；embedding 基础表征归 `foundations` |
 | `agents` | ReAct、规划、工具调用、记忆、软件工程 Agent、Agent-Computer Interface、Harness Engineering 与端到端评测 | 纯推理策略归 `reasoning`；检索方法归 `retrieval-rag`；Harness 研究模型外部的 Agent Runtime 与工程闭环 |
 | `multimodal` | 视觉/语言/音频的跨模态建模与对齐 | 通用单模态 CNN 架构仍可归 `architectures` |
 | `evaluation` | 模型/任务 Benchmark、ROC/PR、消融与复现 | 训练数据质量、污染事实与许可证归 `datasets` |
@@ -60,3 +60,12 @@
 - ReAct 主要解释推理—行动—观察循环；SWE-agent / ACI 主要研究操作接口；Agent Memory 主要研究跨会话知识；Harness Engineering 将这些能力置于完整任务生命周期中进行系统设计。
 - Harness 与 Evaluation Harness 必须区分：前者使模型能够行动，后者运行任务并测量结果。
 - 当前专题文献仍在快速演进；对预印本提出的子系统分类，应标注来源和研究状态，不把它们描述为已统一的行业标准。
+
+
+## Query Understanding 专题归属（2026-11）
+
+- 主专题：`retrieval-rag/query-understanding`，因为其核心输出是面向检索与信息获取的结构化查询表示。
+- 任务簇：`understand`（意图分类、分词/语义标注、实体链接）、`transform`（纠错、重写、扩展、分解）、`interact`（自动补全、建议、澄清）。
+- 横切维度：多轮上下文解析、歧义与不确定性、评测和鲁棒性；这些不是重复的一级分类。
+- 下游边界：检索系统负责候选召回与排序；Agent 执行层负责工具参数校验、权限和副作用确认。推断出意图不等于获得执行授权。
+- 学习路径：`embeddings → query-understanding → rag`，见 `content/reading_paths.json` 的 `path-38`。

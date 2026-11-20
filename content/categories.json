@@ -417,10 +417,14 @@
   },
   {
     "slug": "retrieval-rag",
-    "title": "检索与 RAG",
-    "english": "Retrieval & RAG",
-    "description": "围绕外部知识访问与检索增强生成，研究向量检索、近似最近邻、重排序、稀疏/稠密融合、证据溯源与回答可靠性。",
+    "title": "查询理解、检索与 RAG",
+    "english": "Query Understanding, Retrieval & RAG",
+    "description": "从用户信息需求的理解、查询分类与语义解析，到查询重写、扩展、澄清和复杂查询分解，再到稀疏/稠密检索、ANN、重排序、RAG 与证据落地，建立从自然语言到可靠检索的完整链路。",
     "topics": [
+      {
+        "slug": "query-understanding",
+        "title": "Query Understanding & Conversational Search"
+      },
       {
         "slug": "embedding-retrieval",
         "title": "Embedding Retrieval"

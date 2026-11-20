@@ -36,6 +36,7 @@
 | 训练与优化 | [SGD](posts/foundations/sgd/index.html) | [AdamW](posts/foundations/adamw/index.html) · [LoRA](posts/training/lora/index.html) |
 | 强化学习 | [Bellman Equations](posts/reinforcement-learning/bellman-equations/index.html) | [MCTS](posts/reinforcement-learning/mcts/index.html) |
 | Agent 工程化 | [ReAct](posts/agents/react/index.html) | [SWE-agent](posts/agents/swe-agent/index.html) · [Agent Memory](posts/agents/agent-memory-components/index.html) · [Harness Engineering](posts/agents/harness-engineering/index.html) |
+| 检索与 Query Understanding | [Embeddings](posts/foundations/embeddings/index.html) | [Query Understanding](posts/retrieval-rag/query-understanding/index.html) · [RAG](posts/retrieval-rag/rag/index.html) |
 | LLM 推理与系统 | [KV Cache](posts/inference/kv-cache/index.html) | [GQA](posts/architectures/gqa/index.html) · [FlashAttention](posts/systems/flashattention/index.html) |
 
 **完整且权威的文章清单是 [`content/posts.json`](content/posts.json)**。新文章通过发布门禁后自动进入网站归档与 RSS；不要根据 README 的示例表格统计文章数量。
@@ -48,7 +49,7 @@
 - **Architectures**：CNN、RNN、Transformer、Attention、MoE、SSM 等模型结构。
 - **Training / Reinforcement Learning**：预训练、对齐、PEFT、价值与策略学习及搜索。
 - **Reasoning / Agents & Tool Use**：推理策略、工具调用、规划、Agent Memory、Harness Engineering 与可验证智能体工作流。
-- **Retrieval & RAG / Inference**：向量检索、增强生成、解码、KV Cache、请求调度与 Serving。
+- **Query Understanding / Retrieval & RAG / Inference**：查询意图与语义解析、对话式澄清、向量检索、增强生成，以及解码、KV Cache、请求调度与 Serving。
 - **Systems / Datasets / Evaluation / Multimodal**：算子与 GPU、数据、评测和多模态。
 - **Storage & Indexing**：B+ Tree、存储页、LSM、事务与索引结构。
 
