@@ -10,6 +10,7 @@
 
 | Post | 解释的问题 | 文章源码 | 核心资料 |
 |---|---|---|---|
+| **Understanding The Pile** | 为什么 22 种语料混合能增强跨领域文本建模？ | [`posts/datasets/the-pile/`](posts/datasets/the-pile/index.html) | [Gao et al. (2020)](https://arxiv.org/abs/2101.00027) |
 | **Understanding FlashAttention** | Attention 的 FLOPs 没变，为什么 GPU 仍能提速？ | [`posts/systems/flashattention/`](posts/systems/flashattention/index.html) | [Dao et al. (2022)](https://arxiv.org/abs/2205.14135) |
 | **Understanding ResNet** | 网络越深，为什么训练反而可能更难？ | [`posts/architectures/resnet/`](posts/architectures/resnet/index.html) | [He et al.](https://arxiv.org/abs/1512.03385) |
 | **Understanding RoPE** | 为什么旋转 Q/K 就能编码相对位置？ | [`posts/architectures/rope/`](posts/architectures/rope/index.html) | [Su et al., RoFormer](https://arxiv.org/abs/2104.09864) |
@@ -32,6 +33,8 @@ Pre-LN vs Post-LN 具有 12 节解读、5 幅独立 SVG、交互式平移实验�
 
 PPO 包含 14 节原论文推导、6 幅独立 SVG、交互式裁剪目标演算、纯标准库数学测试，并单独辨析了 RLHF 的参考模型 KL 与 PPO 的旧策略偏移指标。
 
+The Pile 的 22 个来源按原论文 Table 1 给出有效采样权重，配五幅独立 SVG、原生 MathML 的混合权重与 BPB 公式、可交互三来源采样算例、受控 1.3B 模型实验证据及 Python 数值测试；明确区分历史论文结果与教学模拟。
+
 ## 内容分类
 
 | 分类 | 路径 | 范围 |
@@ -40,6 +43,7 @@ PPO 包含 14 节原论文推导、6 幅独立 SVG、交互式裁剪目标演算
 | **经典机器学习** | `posts/classical-ml/` | SVM、核方法、线性与树模型 |
 | **模型架构** | `posts/architectures/` | ResNet、Transformer、Normalization & Residual Paths、状态空间模型 |
 | **强化学习** | `posts/reinforcement-learning/` | Policy Gradient、Actor–Critic、GAE、PPO/TRPO 与序贯决策 |
+| **数据与语料** | `posts/datasets/` | 预训练语料、数据清洗/去重、混合采样、污染检查与治理 |
 | 训练与对齐 | `posts/training/` | 预训练、微调、偏好对齐、DPO 与 RLHF与 PPO / GRPO 等强化学习策略优化 |
 | 推理与 Serving | `posts/inference/` | KV Cache、PagedAttention、Prefix Caching、Decode、在线 Serving |
 | 系统与 Kernel | `posts/systems/` | GPU、Attention Kernels、算子、并行与性能分析 |
