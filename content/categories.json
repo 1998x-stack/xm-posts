@@ -3,11 +3,12 @@
     "slug": "foundations",
     "title": "基础理论",
     "english": "Foundations",
-    "description": "从线性代数、矩阵分解、优化器、正则化、词嵌入、表示学习与数学直觉出发，建立理解现代模型训练的共同语言。",
+    "description": "从线性代数、矩阵分解、优化器、正则化、词嵌入、表示学习与数学直觉出发，加入 BPE 子词与 Tokenization，建立理解现代模型训练的共同语言。",
     "topics": [
       "Optimization & Optimizers",
       "Optimization & Regularization",
       "Representation",
+      "Tokenization & Subword Units",
       "Representation Learning & Embeddings",
       "Math",
       "Word Embeddings",
@@ -48,7 +49,7 @@
     "slug": "reinforcement-learning",
     "title": "强化学习",
     "english": "Reinforcement Learning",
-    "description": "从 Bellman 方程、DQN 的价值学习与经验回放，到 Policy Gradient、Actor–Critic、GAE 和 PPO，拆解经验回放、最大熵控制和参数空间噪声等序贯决策的探索与学习机制。",
+    "description": "从 Bellman 方程、DQN 的价值学习与经验回放，到 Policy Gradient、Actor–Critic、GAE 和 PPO，拆解经验回放与最大熵控制等序贯决策的学习信号，并延伸至 AlphaGo 的神经网络引导搜索与 MCTS 规划，并解析参数空间噪声探索。",
     "topics": [
       "Policy Gradient",
       "Actor–Critic",
@@ -59,6 +60,7 @@
       "Maximum Entropy RL",
       "Continuous Control",
       "Off-policy Actor–Critic",
+      "Planning & Tree Search",
       "Exploration & Parameter Noise"
     ]
   },

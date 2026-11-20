@@ -1,0 +1,128 @@
+[
+  {
+    "id": "A01",
+    "claim": "2016 Nature introduction gives Go branching approximately 250 and length approximately 150; policy reduces breadth and value reduces depth",
+    "kind": "paper-claim",
+    "source_url": "https://storage.googleapis.com/deepmind-media/alphago/AlphaGoNaturePaper.pdf",
+    "locator": "Introduction; p. 484",
+    "status": "verified",
+    "notes": "Verified against source; article toy diagrams/numeric widgets are independently illustrative."
+  },
+  {
+    "id": "A02",
+    "claim": "SL, RL, value and fast rollout policies are distinct; policy/v networks are convolutional",
+    "kind": "paper-claim",
+    "source_url": "https://storage.googleapis.com/deepmind-media/alphago/AlphaGoNaturePaper.pdf",
+    "locator": "Figure 1; pp. 484–485",
+    "status": "verified",
+    "notes": "Verified against source; article toy diagrams/numeric widgets are independently illustrative."
+  },
+  {
+    "id": "A03",
+    "claim": "13-layer SL policy trained on 30 million KGS positions predicts held-out expert moves with 57.0 percent accuracy",
+    "kind": "experiment",
+    "source_url": "https://storage.googleapis.com/deepmind-media/alphago/AlphaGoNaturePaper.pdf",
+    "locator": "Supervised learning; p. 485",
+    "status": "verified",
+    "notes": "Verified against source; article toy diagrams/numeric widgets are independently illustrative."
+  },
+  {
+    "id": "A04",
+    "claim": "RL policy initialized from SL, trained using terminal policy-gradient self-play and wins over 80 percent versus SL policy without search",
+    "kind": "experiment",
+    "source_url": "https://storage.googleapis.com/deepmind-media/alphago/AlphaGoNaturePaper.pdf",
+    "locator": "Reinforcement learning of policy networks; p. 485",
+    "status": "verified",
+    "notes": "Verified against source; article toy diagrams/numeric widgets are independently illustrative."
+  },
+  {
+    "id": "A05",
+    "claim": "Value network uses 30 million positions sampled one per self-play game; MSE train 0.226 and test 0.234",
+    "kind": "experiment",
+    "source_url": "https://storage.googleapis.com/deepmind-media/alphago/AlphaGoNaturePaper.pdf",
+    "locator": "Reinforcement learning of value networks; p. 486",
+    "status": "verified",
+    "notes": "Verified against source; article toy diagrams/numeric widgets are independently illustrative."
+  },
+  {
+    "id": "A06",
+    "claim": "SL policy is preferred as search prior despite stronger no-search RL policy; RL policy used to create value training data",
+    "kind": "paper-claim",
+    "source_url": "https://storage.googleapis.com/deepmind-media/alphago/AlphaGoNaturePaper.pdf",
+    "locator": "Searching with policy and value networks; p. 486–487",
+    "status": "verified",
+    "notes": "Verified against source; article toy diagrams/numeric widgets are independently illustrative."
+  },
+  {
+    "id": "A07",
+    "claim": "MCTS selection expansion evaluation backup; root plays most visited action; separate asynchronous stats",
+    "kind": "algorithm",
+    "source_url": "https://storage.googleapis.com/deepmind-media/alphago/AlphaGoNaturePaper.pdf",
+    "locator": "Figure 3; Methods: Search algorithm; p. 486, 489",
+    "status": "verified",
+    "notes": "Verified against source; article toy diagrams/numeric widgets are independently illustrative."
+  },
+  {
+    "id": "A08",
+    "claim": "2016 PUCT uses c_puct P sqrt(sum_b N_r(s,b)) over 1+N_r(s,a)",
+    "kind": "equation",
+    "source_url": "https://storage.googleapis.com/deepmind-media/alphago/AlphaGoNaturePaper.pdf",
+    "locator": "Methods: Selection; p. 489",
+    "status": "verified",
+    "notes": "Verified against source; article toy diagrams/numeric widgets are independently illustrative."
+  },
+  {
+    "id": "A09",
+    "claim": "Leaf evaluation mixture V and separate Q mean contributions Wv/Nv Wr/Nr",
+    "kind": "equation",
+    "source_url": "https://storage.googleapis.com/deepmind-media/alphago/AlphaGoNaturePaper.pdf",
+    "locator": "Searching with policy and value networks; Methods: Backup; pp. 486, 489",
+    "status": "verified",
+    "notes": "Verified against source; article toy diagrams/numeric widgets are independently illustrative."
+  },
+  {
+    "id": "A10",
+    "claim": "Fast rollout policy reaches 24.2 percent prediction accuracy at about 2 microseconds versus 3 milliseconds for policy network",
+    "kind": "experiment",
+    "source_url": "https://storage.googleapis.com/deepmind-media/alphago/AlphaGoNaturePaper.pdf",
+    "locator": "Supervised learning; p. 485",
+    "status": "verified",
+    "notes": "Verified against source; article toy diagrams/numeric widgets are independently illustrative."
+  },
+  {
+    "id": "A11",
+    "claim": "Single-machine program tournament 494/495 wins; Fan Hui 5-0; move time and handicap protocols distinguished",
+    "kind": "experiment",
+    "source_url": "https://storage.googleapis.com/deepmind-media/alphago/AlphaGoNaturePaper.pdf",
+    "locator": "Figure 4a, Figure 6; pp. 487–488",
+    "status": "verified",
+    "notes": "Verified against source; article toy diagrams/numeric widgets are independently illustrative."
+  },
+  {
+    "id": "A12",
+    "claim": "Lambda 0.5 mixture best among value-only and rollout-only search variants in ablation",
+    "kind": "experiment",
+    "source_url": "https://storage.googleapis.com/deepmind-media/alphago/AlphaGoNaturePaper.pdf",
+    "locator": "Figure 4b; p. 488",
+    "status": "verified",
+    "notes": "Verified against source; article toy diagrams/numeric widgets are independently illustrative."
+  },
+  {
+    "id": "A13",
+    "claim": "AlphaGo Lee differs from 2016 Nature AlphaGo Fan; 2017 AlphaGo Zero removes human expert games and rollout policy",
+    "kind": "historical",
+    "source_url": "https://doi.org/10.1038/nature24270",
+    "locator": "Silver et al. (2017), Introduction/Methods",
+    "status": "verified",
+    "notes": "Verified against source; article toy diagrams/numeric widgets are independently illustrative."
+  },
+  {
+    "id": "A14",
+    "claim": "Single-machine AlphaGo 40 search threads 48 CPUs 8 GPUs; distributed separate",
+    "kind": "systems",
+    "source_url": "https://storage.googleapis.com/deepmind-media/alphago/AlphaGoNaturePaper.pdf",
+    "locator": "Searching with policy and value networks; p. 487",
+    "status": "verified",
+    "notes": "Verified against source; article toy diagrams/numeric widgets are independently illustrative."
+  }
+]
