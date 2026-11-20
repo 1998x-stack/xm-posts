@@ -37,7 +37,7 @@ if __name__ == "__main__":
     pairs = shifted_pairs(["<bos>", "我", "爱", "机器", "学习", "<eos>"])
     assert pairs == [("<bos>", "我"), ("我", "爱"), ("爱", "机器"),
                      ("机器", "学习"), ("学习", "<eos>")]
-    assert abs(token_cross_entropy([0.8, 0.7, 0.6]) - 0.3635494) < 1e-6
+    assert abs(token_cross_entropy([0.8, 0.7, 0.6]) - 0.3635480) < 1e-6
     trajectories = demo_rollouts()
     assert trajectories["teacher_outputs"] == ["We", "love", "cats"]
     assert trajectories["free_outputs"] == ["We", "like", "dogs"]
