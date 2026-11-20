@@ -38,7 +38,7 @@ p code,li code{background:#e8f0ed;padding:2px 5px;border-radius:3px;color:#245e5
 <p class="lead">假设你给一个能力很强的模型一个看似简单的任务：“给这个网站增加分页，并确保手机端可用。”模型可能几秒钟就能写出一个分页组件。但真正完成任务，还要回答更多问题：应该改哪个页面？项目有没有现成的分页规范？数据是否应该在构建期切片？URL 是否需要独立？旧页面会不会回归？移动端是否溢出？最终部署是否成功？</p>
 <p>这说明“生成一段正确代码”与“完成一项真实的软件工程任务”不是同一个能力。后者是一个有状态、跨多步、依赖外部工具并且必须验证结果的过程。模型需要读仓库、运行命令、观察输出、理解错误、恢复现场、保留进度，还要知道什么时候应该停止并交付。</p>
 <div class="takeaway"><strong>核心问题：</strong>模型的潜在能力不会自动变成可靠的任务完成能力。它需要一个运行时系统，把目标、上下文、工具、状态、反馈、安全与验收连接起来。</div>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 340" role="img" aria-labelledby="h1-title h1-desc">
+<figure class="figure"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 340" role="img" aria-labelledby="h1-title h1-desc">
 <title id="h1-title">Model, Harness, Environment 三层系统边界</title>
 <desc id="h1-desc">模型提供推理能力，Harness 管理上下文、工具、状态、安全和验证，环境提供代码仓库、命令、测试和运行时反馈；两条反馈路径让系统迭代。</desc>
 <rect width="900" height="340" rx="22" fill="#f5f8f5"/>
@@ -65,8 +65,7 @@ p code,li code{background:#e8f0ed;padding:2px 5px;border-radius:3px;color:#245e5
 <path d="M754 263V300H450V282" stroke="#c47e50" stroke-width="2.5" fill="none" stroke-dasharray="6 5"/>
 <path d="M441 291L450 282L459 291" stroke="#c47e50" stroke-width="2.5" fill="none"/>
 <text x="600" y="326" fill="#8a664c" font-size="13" text-anchor="middle">执行结果、测试与日志回流</text>
-</g></svg>
-<figure class="figure"><figcaption>图 1 · Harness 不是模型本身，也不是代码仓库本身；它位于两者之间，负责组织模型如何观察环境、执行动作、接收反馈并证明任务完成。<a href="assets/01-model-harness-environment.svg">独立 SVG</a></figcaption></figure>
+</g></svg><figcaption>图 1 · Harness 不是模型本身，也不是代码仓库本身；它位于两者之间，负责组织模型如何观察环境、执行动作、接收反馈并证明任务完成。<a href="assets/01-model-harness-environment.svg">独立 SVG</a></figcaption></figure>
 <p>可以把系统的研究对象写成：</p>
 <div class="formula"><strong>Agent System = Model + Harness + Environment</strong><small>这是一个概念分解，不是数值相加。系统能力取决于三者之间的接口与协同。</small></div>
 <p><strong>Model</strong> 提供语言理解、推理和代码生成能力；<strong>Environment</strong> 提供真实的仓库、文件、浏览器、测试、日志与运行时状态；<strong>Harness</strong> 决定模型能看到什么、能做什么、如何保存状态、如何解释反馈，以及什么证据足以判定完成。2026 年一篇 AI Harness Engineering 研究预印本也将软件工程能力的分析单位从“模型单体”扩展为 model–harness–environment 系统，并提出 autonomy gap：模型看起来会写补丁，但整个系统仍无法独立、可验证地完成任务。[5]</p>
@@ -92,7 +91,7 @@ p code,li code{background:#e8f0ed;padding:2px 5px;border-radius:3px;color:#245e5
 <section id="anatomy"><h2>03 · 七大核心子系统：一个 Harness 究竟由什么构成？</h2>
 <p>如果只看一个 ReAct 循环，Agent 似乎只有三步：思考、行动、观察。但一个能够稳定运行数小时、操作大型仓库、调用多个工具并在失败后恢复的系统，必须把更多职责显式化。</p>
 <p>2026 年 7 月的《Harness Engineering: Anatomy, Architecture, and Evolution of Coding Agents》对 11 个代码 Agent 系统进行源码层分析，将 Harness 归纳为七个子系统，并指出界面层与会话持久化是跨越多个子系统的支撑面。[6]</p>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 390" role="img" aria-labelledby="h2-title h2-desc">
+<figure class="figure"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 390" role="img" aria-labelledby="h2-title h2-desc">
 <title id="h2-title">Harness 的七个核心子系统</title>
 <desc id="h2-desc">围绕 Agent Loop 的七个子系统：模型集成、工具与动作、记忆与上下文、安全与权限、编排、扩展性，以及横切的接口和会话底座。</desc>
 <rect width="900" height="390" rx="22" fill="#f6f8f5"/>
@@ -117,8 +116,7 @@ p code,li code{background:#e8f0ed;padding:2px 5px;border-radius:3px;color:#245e5
 </g>
 <rect x="36" y="365" width="828" height="1" fill="#d7e4dd"/>
 <text x="450" y="382" text-anchor="middle" font-size="12" fill="#70847e">七个子系统是架构观察维度；接口层与会话持久化是跨模块支撑面</text>
-</g></svg>
-<figure class="figure"><figcaption>图 2 · 七个子系统围绕 Agent Loop 协同。它们不是七个必须独立部署的微服务，而是七类必须被设计和管理的运行时责任。<a href="assets/02-seven-subsystems.svg">独立 SVG</a></figcaption></figure>
+</g></svg><figcaption>图 2 · 七个子系统围绕 Agent Loop 协同。它们不是七个必须独立部署的微服务，而是七类必须被设计和管理的运行时责任。<a href="assets/02-seven-subsystems.svg">独立 SVG</a></figcaption></figure>
 <h3>3.1 Agent Loop：决定何时行动、何时观察、何时停止</h3>
 <p>Agent Loop 是整个 Harness 的控制骨架。它反复执行：接收当前状态 → 请求模型决策 → 解析动作 → 执行工具 → 收集观察结果 → 更新状态。它还必须定义停止条件、最大步数、超时、失败重试和中断恢复。</p>
 <pre><code>state = initialize(task, environment)
@@ -180,7 +178,7 @@ return verify_and_report(state)</code></pre>
 <h3>5.2 AGENTS.md 应该是一张地图，而不是一本百科全书</h3>
 <p>OpenAI 文章明确指出，把所有规则都塞进一个超长 AGENTS.md 并不可取：上下文预算有限；过多规则会让重点消失；文档很快过时；单个大文件也难以自动检查覆盖率、时效性和链接关系。</p>
 <p>他们最终采用的思路是：<strong>AGENTS.md 负责告诉 Agent 从哪里开始，真正的知识库由结构化 docs/ 承载。</strong> 仓库包含架构说明、设计文档、产品规格、执行计划、质量评分、安全规范和可靠性规则。Agent 从一个简短入口出发，再按任务需要逐步读取相关文档，这就是 Progressive Disclosure（渐进式披露）。</p>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 350" role="img" aria-labelledby="h5-title h5-desc">
+<figure class="figure"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 350" role="img" aria-labelledby="h5-title h5-desc">
 <title id="h5-title">OpenAI Codex 的仓库知识与可观测性闭环</title>
 <desc id="h5-desc">AGENTS.md 作为入口地图指向结构化 docs，架构和质量规则由 linter 与结构测试执行，agent 在隔离 worktree 中操作应用并读取浏览器、日志和指标，再把修复与清理结果写回仓库。</desc>
 <rect width="900" height="350" rx="20" fill="#f6f8f5"/>
@@ -200,8 +198,7 @@ return verify_and_report(state)</code></pre>
 <path d="M792 154V186H693V259H702 M702 250L693 259L702 268" fill="none" stroke="#c17b4d" stroke-width="2.5"/>
 <path d="M207 259H118V187H133V162" fill="none" stroke="#c17b4d" stroke-width="2.5" stroke-dasharray="6 5"/>
 <text x="450" y="329" text-anchor="middle" fill="#607c75" font-size="13">反馈、修复、文档与质量规则持续回写</text>
-</g></svg>
-<figure class="figure"><figcaption>图 3 · 入口文件只负责导航，深层知识留在可维护、可索引、可机械校验的文档系统中。这样既减少无关上下文，也降低规则腐烂。<a href="assets/05-openai-repository-loop.svg">独立 SVG</a></figcaption></figure>
+</g></svg><figcaption>图 3 · 入口文件只负责导航，深层知识留在可维护、可索引、可机械校验的文档系统中。这样既减少无关上下文，也降低规则腐烂。<a href="assets/05-openai-repository-loop.svg">独立 SVG</a></figcaption></figure>
 <p>这对真实项目的启发是：AGENTS.md 不应重复 README、架构文档和所有开发规范。它应该回答四个问题：项目入口在哪里？遇到什么任务应先读哪些文档？哪些规则是硬约束？如何验证修改？具体实现细节应该放在更靠近代码或主题的文件里。</p>
 <h3>5.3 Agent Legibility：让应用本身可以被 Agent 观察</h3>
 <p>当代码生成吞吐量提高后，瓶颈会转移到人工 QA。OpenAI 的工程实践是为每个 Git worktree 启动隔离应用实例，并将 Chrome DevTools Protocol、DOM 快照、截图、页面导航和本地 observability 工具接入 Agent。每个 worktree 还拥有独立的日志、指标和 trace 环境。</p>
@@ -220,7 +217,7 @@ return verify_and_report(state)</code></pre>
 <p>2025 年 11 月《Effective harnesses for long-running agents》指出，长任务的两个典型失败是：Agent 一开始试图一次性实现太多功能，导致上下文耗尽时留下半成品；以及后续会话看到已有进展后，误以为整个项目已经完成。[2]</p>
 <p>Anthropic 的解决方案分成两种角色：</p>
 <ul><li><strong>Initializer Agent：</strong>首次运行时建立项目环境，生成 <code>init.sh</code>、功能清单、进度文件和初始 Git commit。</li><li><strong>Coding Agent：</strong>后续每个会话先恢复项目状态，再挑选一个尚未完成的功能，逐步实现、测试、提交，并写下结构化进度。</li></ul>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 350" role="img" aria-labelledby="h3-title h3-desc">
+<figure class="figure"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 350" role="img" aria-labelledby="h3-title h3-desc">
 <title id="h3-title">长任务中的上下文交接</title>
 <desc id="h3-desc">Initializer 创建运行脚本、功能清单和进度记录；多个 coding session 每次读取状态、完成一个增量任务、运行端到端测试、提交并写入交接记录。</desc>
 <rect width="900" height="350" rx="20" fill="#f6f8f5"/>
@@ -242,8 +239,7 @@ return verify_and_report(state)</code></pre>
 <g stroke="#418b78" stroke-width="3" fill="none"><path d="M223 163H277 M267 154L277 163L267 172 M457 163H497 M487 154L497 163L487 172 M677 163H717 M707 154L717 163L707 172"/></g>
 <path d="M371 284V311H796V284" stroke="#c17b4d" stroke-width="2.5" stroke-dasharray="6 5" fill="none"/>
 <text x="584" y="334" text-anchor="middle" fill="#94633f" font-size="13">Git 历史 + 结构化进度文件 = 跨窗口交接协议</text>
-</g></svg>
-<figure class="figure"><figcaption>图 4 · 上下文窗口之间的交接依靠 Git 历史、功能清单与进度记录。每个会话都应该留下可继续工作的干净状态，而不是只留一段自然语言总结。<a href="assets/03-context-handoff.svg">独立 SVG</a></figcaption></figure>
+</g></svg><figcaption>图 4 · 上下文窗口之间的交接依靠 Git 历史、功能清单与进度记录。每个会话都应该留下可继续工作的干净状态，而不是只留一段自然语言总结。<a href="assets/03-context-handoff.svg">独立 SVG</a></figcaption></figure>
 <p>这里的 <strong>clean state</strong> 很重要：新会话开始时，项目应当可以运行，已经完成的功能应有清楚的记录，未完成的功能应能被明确识别。Agent 需要先检查项目是否仍然正常，再继续增加功能。</p>
 <p>为什么不能只依赖对话摘要？因为摘要可能丢失执行状态、未提交修改和关键错误。Git commit 提供可恢复的代码状态，功能清单提供可检查的完成标准，进度文件提供下一步线索，初始化脚本提供可重复的启动方式。它们合在一起，才构成可靠的跨会话交接协议。</p>
 <h3>6.2 Compaction 与 Context Reset：压缩不等于重新开始</h3>
@@ -255,7 +251,7 @@ return verify_and_report(state)</code></pre>
 <p>Anthropic 报告，在他们早期的 Sonnet 4.5 长任务实验中，单纯 compaction 不足以消除明显的 context anxiety，因此 context reset 成为必要设计。到了 Opus 4.5 / 4.6，模型持续规划和处理长上下文的能力提升，部分场景可以减少甚至取消 reset。<strong>这说明 Harness 不是固定模板，而是需要随模型能力重新校准的运行时系统。</strong></p>
 <h3>6.3 2026：Planner–Generator–Evaluator</h3>
 <p>2026 年 3 月《Harness design for long-running application development》进一步把“独立评估”加入架构，形成三个角色：[3]</p>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 340" role="img" aria-labelledby="h4-title h4-desc">
+<figure class="figure"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 340" role="img" aria-labelledby="h4-title h4-desc">
 <title id="h4-title">Planner Generator Evaluator 三角色反馈回路</title>
 <desc id="h4-desc">Planner 将目标变成规格和验收条件，Generator 实现，Evaluator 在真实应用中通过浏览器与测试检查；不通过时将可执行的缺陷反馈给 Generator。</desc>
 <rect width="900" height="340" rx="20" fill="#f6f8f5"/>
@@ -274,8 +270,7 @@ return verify_and_report(state)</code></pre>
 <path d="M441 259L450 249L459 259" stroke="#c17b4d" stroke-width="3" fill="none"/>
 <text x="598" y="318" fill="#94633f" font-size="13" text-anchor="middle">具体缺陷、复现步骤与验收结果</text>
 <text x="450" y="44" fill="#607c75" font-size="14" text-anchor="middle">先约定“完成”的定义，再开始实现</text>
-</g></svg>
-<figure class="figure"><figcaption>图 5 · Planner 把模糊意图转成规格；Generator 负责实现；Evaluator 在真实运行环境中独立检查结果，并将具体缺陷反馈给 Generator。<a href="assets/04-planner-generator-evaluator.svg">独立 SVG</a></figcaption></figure>
+</g></svg><figcaption>图 5 · Planner 把模糊意图转成规格；Generator 负责实现；Evaluator 在真实运行环境中独立检查结果，并将具体缺陷反馈给 Generator。<a href="assets/04-planner-generator-evaluator.svg">独立 SVG</a></figcaption></figure>
 <p><strong>Planner</strong> 从一到四句话的需求中扩展出产品规格，重点描述交付物和产品目标，而不把实现细节过早锁死。这样可以避免规划阶段的错误技术假设向后传播。</p>
 <p><strong>Generator</strong> 按功能或 sprint 增量实现应用。对于每个 sprint，它需要和 Evaluator 协商一个 sprint contract：本轮做什么、哪些行为应该可见、如何验证“完成”。</p>
 <p><strong>Evaluator</strong> 不应只阅读代码，而是使用 Playwright 操作正在运行的应用，点击按钮、检查 API、观察数据库状态，并依据功能完整性、代码质量、视觉设计和产品深度等标准给出反馈。</p>
@@ -379,7 +374,7 @@ Evidence:
 
 <section id="failures"><h2>11 · 失败归因：不要把所有问题都叫作“模型不够聪明”</h2>
 <p>Harness 的价值之一，是让不同类型的失败能被分开处理。以下诊断矩阵把常见现象映射到应该检查的运行时能力。</p>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 360" role="img" aria-labelledby="h6-title h6-desc">
+<figure class="figure"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 360" role="img" aria-labelledby="h6-title h6-desc">
 <title id="h6-title">Agent 失败的诊断路径</title>
 <desc id="h6-desc">从观察到的失败开始，依次检查上下文、工具、反馈与可观测性、验证、安全权限、维护熵和模型能力，避免盲目重复修改。</desc>
 <rect width="900" height="360" rx="20" fill="#f6f8f5"/>
@@ -403,8 +398,7 @@ Evidence:
 <path d="M447 265H461 M456 256L465 265L456 274" fill="none" stroke="#c17b4d" stroke-width="2.5"/>
 <path d="M567 301V327H350V302" stroke="#c17b4d" stroke-width="2.2" stroke-dasharray="6 5" fill="none"/>
 <text x="450" y="348" text-anchor="middle" fill="#8a664c" font-size="13">每次修复都应留下可复核的证据与状态</text>
-</g></svg>
-<figure class="figure"><figcaption>图 6 · 先观察和归因，再执行恢复。盲目重复调用模型，往往只会重复制造相同类型的错误。<a href="assets/06-failure-attribution.svg">独立 SVG</a></figcaption></figure>
+</g></svg><figcaption>图 6 · 先观察和归因，再执行恢复。盲目重复调用模型，往往只会重复制造相同类型的错误。<a href="assets/06-failure-attribution.svg">独立 SVG</a></figcaption></figure>
 <div class="table-wrap"><table><thead><tr><th>可观察现象</th><th>可能缺失的 Harness 能力</th><th>更合理的修复方向</th></tr></thead><tbody>
 <tr><td>Agent 总是打开错误文件</td><td>Context Manager / Project Memory</td><td>补充目录地图、相关文档索引和检索证据。</td></tr>
 <tr><td>命令频繁失败或输出难以解析</td><td>Tool Registry / Tool Interface</td><td>稳定参数 schema、错误格式、超时和输出截断。</td></tr>
