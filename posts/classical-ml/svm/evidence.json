@@ -1,0 +1,83 @@
+[
+  {
+    "id": "S01",
+    "claim": "The 1992 optimal margin classifier is represented by supporting patterns",
+    "kind": "paper-claim",
+    "source_url": "https://mlanthology.org/colt/1992/boser1992colt-training/",
+    "locator": "Abstract and Introduction",
+    "status": "verified",
+    "notes": "Primary paper scanned: max margin and supporting patterns"
+  },
+  {
+    "id": "S02",
+    "claim": "The 1995 Support-Vector Networks paper extends prior separable work to nonseparable data",
+    "kind": "paper-claim",
+    "source_url": "https://doi.org/10.1007/BF00994018",
+    "locator": "Abstract; Section 3",
+    "status": "verified",
+    "notes": "1995 paper is a distinct historical extension"
+  },
+  {
+    "id": "S03",
+    "claim": "The hard-margin optimization and dual representation use Lagrange multipliers and training point dot products",
+    "kind": "paper-claim",
+    "source_url": "https://homepages.math.uic.edu/~lreyzin/papers/cortes95.pdf",
+    "locator": "Sections 2 and Appendix A.1; equations 42–48",
+    "status": "verified",
+    "notes": "Mathematical derivation shown in article is the standard hard-margin dual"
+  },
+  {
+    "id": "S04",
+    "claim": "The original 1995 main-section soft margin uses a nonlinear slack penalty and Appendix A also discusses linear penalty F(u)=u",
+    "kind": "paper-claim",
+    "source_url": "https://homepages.math.uic.edu/~lreyzin/papers/cortes95.pdf",
+    "locator": "Section 3 equations 24–30; Appendix A.2 after equation 66",
+    "status": "verified",
+    "notes": "Do not conflate main text squared aggregate slack with modern C hinge loss"
+  },
+  {
+    "id": "S05",
+    "claim": "The SVM prediction function can be written in terms of kernel inner products",
+    "kind": "paper-claim",
+    "source_url": "https://homepages.math.uic.edu/~lreyzin/papers/cortes95.pdf",
+    "locator": "Section 4 equations 31–34",
+    "status": "verified",
+    "notes": "Kernel is defined as feature-space dot product"
+  },
+  {
+    "id": "S06",
+    "claim": "The 1995 paper compares performance in optical character recognition",
+    "kind": "experiment",
+    "source_url": "https://doi.org/10.1007/BF00994018",
+    "locator": "Abstract; Section 6",
+    "status": "verified",
+    "notes": "No numerical accuracy reproduced in this tutorial"
+  },
+  {
+    "id": "S07",
+    "claim": "C and gamma play different roles for modern RBF SVC and merit cross validation",
+    "kind": "modern-implementation",
+    "source_url": "https://scikit-learn.org/stable/modules/svm.html",
+    "locator": "RBF SVM parameters section",
+    "status": "verified",
+    "notes": "User guide interpretation; not a 1995 paper result"
+  },
+  {
+    "id": "S08",
+    "claim": "The 1D four-point example has w=1,b=0 and alpha=1/2 on each nearest point",
+    "kind": "toy-derivation",
+    "source_url": "https://doi.org/10.1145/130385.130401",
+    "locator": "Independently derived educational hard-margin example",
+    "status": "derived",
+    "notes": "Verified algebraically; not a historical benchmark"
+  },
+  {
+    "id": "S09",
+    "claim": "The heatmap has Kij=exp(-gamma (xi-xj)^2) for five one-dimensional points",
+    "kind": "toy-derivation",
+    "source_url": "https://scikit-learn.org/stable/modules/svm.html",
+    "locator": "Kernel functions section; independently computed example",
+    "status": "derived",
+    "notes": "Interactive widget does not train an SVM"
+  }
+]

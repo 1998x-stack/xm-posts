@@ -34,5 +34,24 @@
     "summary": "以 Q/K/V 为线索，图解注意力计算、Mask、多头机制、位置编码及原始 Encoder–Decoder，并用简化 PyTorch 对照。",
     "paper": "https://arxiv.org/abs/1706.03762",
     "illustration": "transformer"
+  },
+  {
+    "slug": "svm",
+    "title": "Understanding SVM",
+    "subtitle": "为什么「分对了」还不够？从最大间隔到核技巧",
+    "category": "classical-ml",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 28,
+    "tags": [
+      "Support Vector Machine",
+      "Maximum Margin",
+      "Kernel Methods",
+      "Convex Optimization"
+    ],
+    "summary": "从支持超平面的几何距离出发，推导硬间隔和对偶、软间隔的历史与现代形式，图解核映射和 RBF 参数，并用可验证的一维解析例子落实公式。",
+    "paper": "https://doi.org/10.1007/BF00994018",
+    "illustration": "svm"
   }
 ]
