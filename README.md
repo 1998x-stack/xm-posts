@@ -45,6 +45,8 @@ FineWeb 包含 14 节数据管道精读、6 幅独立 SVG、1 幅正文交互示
 
 SAC 归入 `reinforcement-learning`，在现有分类内增加 **Off-policy & Experience Replay** 与 **Maximum Entropy RL** 两条主题，不新建顶层分类。文章明确区分 ICML 2018 原版独立 V 网络与后续 twin-target-Q / 自动温度设计，采用离线 MathML、6 幅可独立打开的 SVG、温度交互与标准库单测。
 
+DDPG 包含 13 节连续控制精读、5 幅独立 SVG、可交互 Bellman target 实验、MathML 公式、最小数学断言与 ICLR 2016 原文证据；保留在 `Reinforcement Learning → Continuous Control / Off-policy Actor–Critic`，不新建顶层分类。
+
 PPO 包含 14 节原论文推导、6 幅独立 SVG、交互式裁剪目标演算、纯标准库数学测试，并单独辨析了 RLHF 的参考模型 KL 与 PPO 的旧策略偏移指标。
 
 Chinchilla 的解读包含 12 节渐进讲解、5 幅独立 SVG、6 组原生 MathML 公式、固定预算交互实验与纯 Python 数学断言；原论文数据和教学示意分别标注。

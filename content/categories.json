@@ -51,7 +51,9 @@
       "Value-based RL",
       "Deep Q-Learning",
       "Off-policy & Experience Replay",
-      "Maximum Entropy RL"
+      "Maximum Entropy RL",
+      "Continuous Control",
+      "Off-policy Actor–Critic"
     ]
   },
   {
