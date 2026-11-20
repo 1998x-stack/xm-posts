@@ -1,0 +1,119 @@
+[
+  {
+    "id": "S01",
+    "claim": "SAC combines off-policy replay and a maximum entropy stochastic actor-critic architecture",
+    "kind": "paper-claim",
+    "source_url": "https://proceedings.mlr.press/v80/haarnoja18b/haarnoja18b.pdf",
+    "locator": "Abstract; Sections 1, 4.2; Algorithm 1",
+    "status": "verified",
+    "notes": "Historical 2018 ICML formulation"
+  },
+  {
+    "id": "S02",
+    "claim": "The maximum entropy objective rewards return and policy entropy; temperature controls tradeoff",
+    "kind": "paper-claim",
+    "source_url": "https://proceedings.mlr.press/v80/haarnoja18b/haarnoja18b.pdf",
+    "locator": "Section 3.2, Equation (1); 1812.05905 Section 3",
+    "status": "verified",
+    "notes": "Discounted sampling formulation is the didactic rewrite"
+  },
+  {
+    "id": "S03",
+    "claim": "Soft policy iteration consists of evaluation and KL-based improvement with finite-action convergence assumptions",
+    "kind": "paper-claim",
+    "source_url": "https://proceedings.mlr.press/v80/haarnoja18b/haarnoja18b.pdf",
+    "locator": "Sections 4.1 and Appendix B, Theorem 1",
+    "status": "verified",
+    "notes": "Neural function approximator convergence is not claimed"
+  },
+  {
+    "id": "S04",
+    "claim": "Modern twin-Q soft Bellman target uses min target Q and subtracts alpha times next logprob",
+    "kind": "modern-implementation",
+    "source_url": "https://arxiv.org/abs/1812.05905",
+    "locator": "Section 4.2, Equations (3)–(6); Algorithm 1",
+    "status": "verified",
+    "notes": "Terminal mask and target detach are implementation details"
+  },
+  {
+    "id": "S05",
+    "claim": "The actor minimizes alpha log pi minus Q using reparameterized actions",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/abs/1812.05905",
+    "locator": "Section 4.2, Equations (7)–(10)",
+    "status": "verified",
+    "notes": "Modern min-of-two-Q variant follows common implementation"
+  },
+  {
+    "id": "S06",
+    "claim": "The ICML 2018 architecture separately trains V and target V in addition to Q and actor",
+    "kind": "paper-claim",
+    "source_url": "https://proceedings.mlr.press/v80/haarnoja18b/haarnoja18b.pdf",
+    "locator": "Section 4.2, Equations (5)–(13); Algorithm 1",
+    "status": "verified",
+    "notes": "Do not conflate with later no-V variant"
+  },
+  {
+    "id": "S07",
+    "claim": "The follow-up SAC paper proposes automated entropy temperature adjustment",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/abs/1812.05905",
+    "locator": "Section 5, Equations (13)–(18)",
+    "status": "verified",
+    "notes": "Separate follow-up paper from ICML 2018"
+  },
+  {
+    "id": "S08",
+    "claim": "Tanh-squashed Gaussian requires change-of-variables log-density correction",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/abs/1812.05905",
+    "locator": "Appendix C; OpenAI Spinning Up core.py",
+    "status": "verified",
+    "notes": "The numeric softplus identity is a stable equivalent, not a copied implementation"
+  },
+  {
+    "id": "S09",
+    "claim": "A replay buffer can be used for off-policy Q and policy training; target Q updated by Polyak averaging",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/abs/1812.05905",
+    "locator": "Section 4.2, Algorithm 1; Appendix",
+    "status": "verified",
+    "notes": "Tensors shaped [B] are documented implementation convention"
+  },
+  {
+    "id": "S10",
+    "claim": "Spinning Up describes twin target Q, fixed alpha and squashed Gaussian modern SAC",
+    "kind": "modern-implementation",
+    "source_url": "https://spinningup.openai.com/en/latest/algorithms/sac.html",
+    "locator": "Key Equations, Pseudocode, Code",
+    "status": "verified",
+    "notes": "Spinning Up does not implement adaptive alpha here"
+  },
+  {
+    "id": "S11",
+    "claim": "ICML 2018 Figure 1 compares SAC on six continuous control tasks versus several baselines",
+    "kind": "experiment",
+    "source_url": "https://proceedings.mlr.press/v80/haarnoja18b/haarnoja18b.pdf",
+    "locator": "Section 5.1; Figure 1 and caption; Appendix D",
+    "status": "verified",
+    "notes": "No numerical replot or independent reproduction"
+  },
+  {
+    "id": "S12",
+    "claim": "ICML 2018 Figure 2 shows stochastic versus deterministic variance and Figure 3 analyses reward scale/target smoothing",
+    "kind": "experiment",
+    "source_url": "https://proceedings.mlr.press/v80/haarnoja18b/haarnoja18b.pdf",
+    "locator": "Section 5.2; Figures 2–3 and captions",
+    "status": "verified",
+    "notes": "Limited to paper protocols"
+  },
+  {
+    "id": "S13",
+    "claim": "Discrete Boltzmann buttons and standard-library equations are teaching derivations rather than an SAC agent",
+    "kind": "toy-derivation",
+    "source_url": "https://arxiv.org/abs/1812.05905",
+    "locator": "This article, Section 9 and mini_sac.py",
+    "status": "derived",
+    "notes": "Does not produce benchmark metrics"
+  }
+]
