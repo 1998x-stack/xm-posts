@@ -36,7 +36,7 @@
 | 三维视觉与神经渲染 | [CNN](posts/architectures/cnn/index.html) · [ResNet](posts/architectures/resnet/index.html) | [NeRF](posts/architectures/nerf/index.html) |
 | 训练与优化 | [SGD](posts/foundations/sgd/index.html) | [AdamW](posts/foundations/adamw/index.html) · [LoRA](posts/training/lora/index.html) |
 | 强化学习 | [Bellman Equations](posts/reinforcement-learning/bellman-equations/index.html) | [MCTS](posts/reinforcement-learning/mcts/index.html) |
-| Agent 工程化 | [ReAct](posts/agents/react/index.html) | [SWE-agent](posts/agents/swe-agent/index.html) · [Agent Memory](posts/agents/agent-memory-components/index.html) · [Context Engineering](posts/agents/context-engineering/index.html) · [Agentic RL](posts/agents/agentic-rl/index.html) · [Harness Engineering](posts/agents/harness-engineering/index.html)  · [Loop Engineering](posts/agents/loop-engineering/index.html) |
+| Agent 工程化 | [ReAct](posts/agents/react/index.html) | [SWE-agent](posts/agents/swe-agent/index.html) · [Agent Memory](posts/agents/agent-memory-components/index.html) · [Context Engineering](posts/agents/context-engineering/index.html) · [Agentic RL](posts/agents/agentic-rl/index.html) · [Harness Engineering](posts/agents/harness-engineering/index.html) · [Loop Engineering](posts/agents/loop-engineering/index.html) |
 | LLM 推理与系统 | [KV Cache](posts/inference/kv-cache/index.html) | [GQA](posts/architectures/gqa/index.html) · [FlashAttention](posts/systems/flashattention/index.html) |
 
 **完整且权威的文章清单是 [`content/posts.json`](content/posts.json)**。新文章通过发布门禁后自动进入网站归档与 RSS；不要根据 README 的示例表格统计文章数量。
