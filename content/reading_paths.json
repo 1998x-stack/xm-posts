@@ -277,6 +277,15 @@
   },
   {
     "id": "path-30",
+    "title": "从 Agent 行动到跨会话记忆",
+    "posts": [
+      "react",
+      "swe-agent",
+      "agent-memory-components"
+    ]
+  },
+  {
+    "id": "path-31",
     "title": "从向量表示到检索增强生成",
     "posts": [
       "embeddings",

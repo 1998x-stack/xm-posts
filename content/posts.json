@@ -1882,6 +1882,34 @@
     }
   },
   {
+    "slug": "agent-memory-components",
+    "title": "Understanding Agent Memory",
+    "subtitle": "从事件日志、可信笔记与知识索引，到跨会话 Dreaming 纠错和上下文预算",
+    "category": "agents",
+    "topic": "memory",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 22,
+    "tags": [
+      "Agent Memory",
+      "Dreaming",
+      "Context Engineering",
+      "Long-running Agents",
+      "Memory Notes",
+      "Knowledge Wiki",
+      "Evidence Verification",
+      "Anthropic Engineering"
+    ],
+    "summary": "精读 Anthropic Engineering 2026《The components of agent memory》：解释跨会话日志、可验证记忆笔记、知识索引与最小注入层；以四幅原创 SVG、原生 MathML 教学目标函数、CL-Bench 实验对照、交互式纠错和纯 Python 确定性测试区分工程证据与教学抽象。",
+    "paper": "https://www.anthropic.com/research/components-of-agent-memory",
+    "illustration": "agent-memory",
+    "cover": {
+      "src": "assets/01-memory-flow.svg",
+      "caption": "事件日志经过证据核验与索引整理，才进入下一轮会话"
+    }
+  },
+  {
     "slug": "rag",
     "title": "Understanding RAG",
     "subtitle": "从 DPR 检索到 RAG-Sequence 和 RAG-Token：两篇文档、两个词算明白",

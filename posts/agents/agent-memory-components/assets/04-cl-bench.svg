@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 385" role="img" aria-label="Anthropic CL-Bench 数据库任务的两个模型有无记忆的平均奖励对照">
+<title>CL-Bench 数据库任务：记忆前后平均奖励</title><desc>Opus 5 从0.564提升到0.828，Sonnet 4.6从0.330提升到0.364。均为 Anthropic 2026 年文章所报告的实验结果，不代表普遍提升幅度。</desc>
+<rect width="900" height="385" rx="20" fill="#f4f7f5"/>
+<g font-family="Arial,Helvetica,sans-serif">
+<text x="30" y="40" fill="#24464b" font-size="20" font-weight="700">MEMORY DOES NOT HELP EVERY MODEL EQUALLY</text>
+<text x="30" y="68" fill="#627c7d" font-size="15">CL-Bench 1.0 · database task · mean reward (Anthropic, 2026)</text>
+<line x1="256" y1="320" x2="817" y2="320" stroke="#8da6a4" stroke-width="2"/>
+<g font-size="14" fill="#67817f"><text x="250" y="345">0</text><text x="388" y="345">0.25</text><text x="526" y="345">0.50</text><text x="667" y="345">0.75</text><text x="804" y="345">1.0</text></g>
+<g stroke="#d3dfdb" stroke-dasharray="5 7"><path d="M397 90 V320 M537 90 V320 M677 90 V320 M817 90 V320"/></g>
+<text x="30" y="155" fill="#294b52" font-size="20" font-weight="700">Opus 5</text><text x="30" y="268" fill="#294b52" font-size="20" font-weight="700">Sonnet 4.6</text>
+<rect x="256" y="100" width="316" height="26" rx="5" fill="#84a4b0"/><rect x="256" y="137" width="464" height="26" rx="5" fill="#2d907d"/>
+<rect x="256" y="213" width="185" height="26" rx="5" fill="#84a4b0"/><rect x="256" y="250" width="204" height="26" rx="5" fill="#2d907d"/>
+<g font-size="14" font-weight="700" fill="#28484c"><text x="583" y="119">0.564</text><text x="731" y="156">0.828</text><text x="451" y="232">0.330</text><text x="470" y="269">0.364</text></g>
+<rect x="30" y="297" width="15" height="15" rx="3" fill="#84a4b0"/><text x="52" y="310" font-size="13" fill="#536f70">No memory</text><rect x="132" y="297" width="15" height="15" rx="3" fill="#2d907d"/><text x="154" y="310" font-size="13" fill="#536f70">With memory</text>
+<text x="30" y="369" fill="#6b8582" font-size="12">Values: source Figure 3; bar lengths are proportional to published means, not a causal estimate beyond this setup.</text>
+</g></svg>

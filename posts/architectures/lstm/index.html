@@ -11,6 +11,22 @@ figure{border:1px solid var(--edge);border-radius:14px;padding:16px;background:w
 
 /* Keep SVG labels legible on phones by allowing horizontal panning. */
 @media (max-width:700px){figure{overflow-x:auto;scrollbar-width:thin}figure svg,figure .diagram svg{min-width:640px;max-width:none}}
+
+/* A fixed-gate scalar experiment: keep old memory and add new contribution. */
+.lstm-memory-track{margin:17px 0;background:#f6faf7;border:1px solid #d6e6dd;border-radius:10px;padding:14px}
+.lstm-memory-track h3{margin:0 0 8px;font-size:18px}.lstm-memory-track p{margin:9px 0;font-size:13px;color:#51706d}
+.lstm-parts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:12px 0}
+.lstm-parts div{background:white;border:1px solid #d9e8df;border-radius:8px;padding:10px}
+.lstm-parts b{display:block;font-size:12px;color:#3c6865}
+.lstm-parts output{display:block;font-size:20px;font-weight:800;color:#2b6964;font-variant-numeric:tabular-nums}
+.lstm-memory-chart{margin:13px 0;border:1px solid #dfebe4;border-radius:9px;padding:8px;background:white}
+.lstm-memory-chart svg{display:block;width:100%;height:auto}
+.lstm-memory-chart figcaption{font-size:12px;color:#587673;margin-top:6px}
+.lstm-preset{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.lstm-preset button{border:1px solid #a9cdc0;background:white;color:#2c6962;border-radius:6px;padding:8px 12px;font-size:13px;font-weight:700;cursor:pointer}
+.lstm-preset button[aria-pressed=true]{background:#27776e;color:white}
+.lstm-routelink{border:1px solid #d4e6de;background:#f1f8f4;border-radius:9px;padding:14px 16px}
+@media(max-width:560px){.lstm-memory-track{padding:10px}.lstm-parts{grid-template-columns:1fr}.lstm-parts div{padding:9px}}
 </style></head><body>
 <a class="skip" href="#content">跳转正文</a><header class="sitebar"><div class="sitebar-in"><a class="brand" href="../../../">xm<span>.</span>posts</a><nav aria-label="站点导航"><a href="../../../categories/architectures/">模型架构</a><a href="../../../archive/">全部文章</a></nav></div></header>
 <div class="layout"><nav class="toc" aria-label="文章目录"><strong>LONG SHORT-TERM MEMORY</strong><a href="#problem">01 · 为什么早期输入会被忘掉？</a><a href="#gradient">02 · 梯度到底在哪里消失？</a><a href="#carousel">03 · CEC：把记忆通路变成加法</a><a href="#original">04 · 1997 年的两扇门</a><a href="#original-math">05 · 精读原始状态方程</a><a href="#modern">06 · 遗忘门如何进入标准 LSTM</a><a href="#math">07 · 现代四门方程与张量形状</a><a href="#flow">08 · 从写入、保持到读取</a><a href="#demo">09 · 动手实验：记忆能保留多久？</a><a href="#gradient-path">10 · LSTM 不等于梯度永不消失</a><a href="#code">11 · 最小代码：算出一个时间步</a><a href="#evidence">12 · 回到论文：证据与边界</a><a href="#variants">13 · 工程视角与历史版本</a><a href="#references">参考文献与进一步阅读</a></nav>
@@ -49,7 +65,12 @@ figure{border:1px solid var(--edge);border-radius:14px;padding:16px;background:w
 <figure><div class="fighead">FIG 05 / 一条可解释的记忆时间线</div><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 275" role="img" aria-label="最早一个信息写入细胞状态，穿过不相关步骤时保持，最后输出门选择读取" font-family="system-ui,-apple-system,'PingFang SC',sans-serif" aria-describedby="lstm-svg-desc-05"><title>长序列的记忆写读</title><desc id="lstm-svg-desc-05">示意的门值只描述希望学到的行为，不是训练数据，也不代表真实 LSTM 总会得到如此整齐的门开关。</desc><rect width="920" height="275" rx="18" fill="#f6faf8"/><rect x="24" y="75" width="154" height="72" rx="13" fill="#fff0e3" stroke="#cf8860" stroke-width="1.6"/><text x="101" y="116" text-anchor="middle" font-size="17" font-weight="650" fill="#25474a">关键线索</text><rect x="208" y="75" width="154" height="72" rx="13" fill="#e1f2ed" stroke="#4e9b92" stroke-width="1.6"/><text x="285" y="116" text-anchor="middle" font-size="17" font-weight="650" fill="#25474a">噪声 A</text><rect x="392" y="75" width="154" height="72" rx="13" fill="#e1f2ed" stroke="#4e9b92" stroke-width="1.6"/><text x="469" y="116" text-anchor="middle" font-size="17" font-weight="650" fill="#25474a">噪声 B</text><rect x="576" y="75" width="154" height="72" rx="13" fill="#e1f2ed" stroke="#4e9b92" stroke-width="1.6"/><text x="653" y="116" text-anchor="middle" font-size="17" font-weight="650" fill="#25474a">噪声 C</text><rect x="760" y="75" width="154" height="72" rx="13" fill="#eee8fb" stroke="#9480bb" stroke-width="1.6"/><text x="837" y="116" text-anchor="middle" font-size="17" font-weight="650" fill="#25474a">要回答了</text><path d="M 178 113 H 207" fill="none" stroke="#6e898b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M 198 107 L 207 113 L 198 119" fill="none" stroke="#6e898b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M 362 113 H 391" fill="none" stroke="#6e898b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M 382 107 L 391 113 L 382 119" fill="none" stroke="#6e898b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M 546 113 H 575" fill="none" stroke="#6e898b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M 566 107 L 575 113 L 566 119" fill="none" stroke="#6e898b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M 730 113 H 759" fill="none" stroke="#6e898b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M 750 107 L 759 113 L 750 119" fill="none" stroke="#6e898b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><text x="100" y="178" font-size="16" fill="#446b70" text-anchor="middle">i=1 · 写</text><text x="284" y="178" font-size="16" fill="#446b70" text-anchor="middle">f≈1 · 留</text><text x="468" y="178" font-size="16" fill="#446b70" text-anchor="middle">f≈1 · 留</text><text x="652" y="178" font-size="16" fill="#446b70" text-anchor="middle">f≈1 · 留</text><text x="836" y="178" font-size="16" fill="#446b70" text-anchor="middle">o≈1 · 读</text><text x="460" y="236" font-size="15" fill="#5a7477" text-anchor="middle">这些是便于理解的门控示意，而不是训练后门值必然为 0 或 1 的断言。</text></svg><figcaption>示意的门值只描述希望学到的行为，不是训练数据，也不代表真实 LSTM 总会得到如此整齐的门开关。</figcaption></figure>
 <p>这里也能看到 <strong>cell state c</strong> 和 <strong>hidden state h</strong> 的区别：c 是可跨时间延续的内部载体；h 是经过输出门、非线性映射后可被下一层和输出头直接使用的表征。二者维度通常相同，但含义与读取方式不同。</p></section>
 <section id="demo"><h2>09 · 动手实验：记忆能保留多久？</h2><p>暂时只考虑一个标量记忆单元：先令 c₀ = 1，随后每步遗忘门固定为 f，不再写入新候选，则 cₙ = fⁿ。选择不同 f 和步数观察直接保留比例；也可以切换到“每步有固定新写入”的教学情境，看到保持与覆盖如何共同作用。</p>
-<div class="demo"><label for="forget">遗忘门常数 f：<output id="forget-value" for="forget">0.980</output></label><input type="range" id="forget" min="0" max="1" step="0.001" value="0.98"><label for="steps">时间跨度 N：<output id="steps-value" for="steps">40</output> 步</label><input type="range" id="steps" min="1" max="200" step="1" value="40"><div class="controls" aria-label="选择更新情形"><button id="retain-only" type="button" aria-pressed="true">只保留旧记忆</button><button id="write-new" type="button" aria-pressed="false">每步写入 0.02</button></div><div class="readout" id="memory-readout" role="status" aria-live="polite">f=0.980，N=40；旧记忆占比 0.4457，最终状态 cₙ=0.4457（只保留模式）。</div></div>
+<div class="demo"><label for="forget">遗忘门常数 f：<output id="forget-value" for="forget">0.980</output></label><input type="range" id="forget" min="0" max="1" step="0.001" value="0.98"><label for="steps">时间跨度 N：<output id="steps-value" for="steps">40</output> 步</label><input type="range" id="steps" min="1" max="200" step="1" value="40"><div class="controls" aria-label="选择更新情形"><button id="retain-only" type="button" aria-pressed="true">只保留旧记忆</button><button id="write-new" type="button" aria-pressed="false">每步写入 0.02</button></div><div class="lstm-preset" role="group" aria-label="遗忘门示例"><button type="button" data-forget=".9" aria-pressed="false">f=0.90：忘得快</button><button type="button" data-forget=".98" aria-pressed="true">f=0.98：忘得慢</button><button type="button" data-forget="1" aria-pressed="false">f=1：完全保留</button></div>
+<div class="readout" id="memory-readout" role="status" aria-live="polite">f=0.980，N=40；来自最初状态的保留量 0.445700，累积新写入 0.000000，最终 cₙ=0.445700。</div>
+<div class="lstm-memory-track"><h3>40 步后，最终状态来自哪里？</h3><p>蓝色部分来自初始记忆 c₀=1；橙色部分来自后续每一步写入的 0.02（如果启用）。两个贡献相加就是最终状态；本例保持非负，方便直观理解。</p>
+<div class="lstm-parts"><div><b>旧记忆贡献 fᴺc₀</b><output id="lstm-old">0.445700</output></div><div><b>后续新增贡献</b><output id="lstm-added">0.000000</output></div><div><b>最终状态：两者相加</b><output id="lstm-total">0.445700</output></div></div>
+<figure class="lstm-memory-chart"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 270" role="img" aria-labelledby="lstm-memory-svg-title lstm-memory-svg-desc"><title id="lstm-memory-svg-title">记忆状态随时间变化，拆分为初始记忆与累计写入</title><desc id="lstm-memory-svg-desc">同一数值标尺下，蓝色是遗忘门保留下来的初始状态贡献，橙色是之后每步写入的累积贡献。</desc><rect width="760" height="270" rx="10" fill="#fcfefc"/><rect x="32" y="21" width="14" height="14" fill="#3d8b9b"/><text x="55" y="33" font-size="14" fill="#365e61">旧记忆</text><rect x="184" y="21" width="14" height="14" fill="#c98a60"/><text x="207" y="33" font-size="14" fill="#365e61">新写入</text><text x="740" y="33" text-anchor="end" font-size="12" fill="#68817d">所有时间点使用同一条数值刻度</text><g id="lstm-trajectory-rows"><text x="32" y="79" font-size="14" fill="#365e61">k=0</text><rect x="105" y="61" width="575" height="24" fill="#3d8b9b" rx="3"/><text x="698" y="79" font-size="13" fill="#365e61">1.000</text></g><line x1="105" y1="241" x2="681" y2="241" stroke="#99b7ae" stroke-width="2"/></svg><figcaption>这是固定门值的标量递推，不是论文中的隐藏状态训练曲线。每行都使用同一绝对刻度；上面的数字能显示比 0.001 更小的贡献。</figcaption></figure>
+<p id="lstm-explanation" class="small">当前只保留初始状态，N=40 时旧记忆剩 0.445700；加入新写入后，两个贡献需要相加，不应误当作两种独立概率。</p></div></div>
 <p class="note">此实验固定门值，完全不包含由输入、隐藏状态计算门值或梯度训练的过程；数值只说明状态更新公式的结构。若每步写入 0.02，最终 cₙ = fⁿ + 0.02(1−fⁿ)/(1−f)（f ≠ 1），f=1 时为 1+0.02N。</p></section>
 <section id="gradient-path"><h2>10 · LSTM 不等于梯度永不消失</h2><p>在现代变体中，沿着细胞状态的直接保留通路，每步乘以 fₜ。这让网络有机会学到接近 1 的门值，但 fₜ 也可能显著低于 1；而且损失到参数的完整梯度还有其他通路与非线性。</p>
 <div class="math-equation"><div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="沿细胞状态直接路径的梯度由各步遗忘门相乘，可横向滚动"><math display="block" aria-label="沿细胞状态直接路径的梯度由各步遗忘门相乘"><mrow><msub><mrow><mo>(</mo><mfrac><mrow><mo>∂</mo><msub><mi>c</mi><mi>T</mi></msub></mrow><mrow><mo>∂</mo><msub><mi>c</mi><mi>t</mi></msub></mrow></mfrac><mo>)</mo></mrow><mtext>direct</mtext></msub><mo>=</mo><munderover><mo>∏</mo><mrow><mi>k</mi><mo>=</mo><mi>t</mi><mo>+</mo><mn>1</mn></mrow><mi>T</mi></munderover><msub><mi>f</mi><mi>k</mi></msub></mrow></math></div><p class="eq-note">这是保持门值固定、仅跟踪 cₖ₋₁ → cₖ 的直接支路的局部导数；完整梯度还可能经门网络和 h 返回，因此不能把它误作全网络的唯一梯度。</p></div>
@@ -74,14 +95,63 @@ h_t = o * tanh(c_t)</code></pre>
 <li><a href="https://www.jmlr.org/papers/v3/gers02a.html">Gers, Schraudolph &amp; Schmidhuber (2002), Learning Precise Timing with LSTM Recurrent Networks</a>，<em>JMLR</em> 3:115–143。</li>
 <li><a href="https://arxiv.org/abs/1503.04069">Greff et al., LSTM: A Search Space Odyssey</a>（2015 preprint；2017 journal）。</li>
 <li><a href="https://docs.pytorch.org/docs/stable/generated/torch.nn.LSTM.html">PyTorch · torch.nn.LSTM</a>：现代门方程、参数形状及可选结构。</li></ol></section>
-<footer class="foot">阅读延伸：<a href="../transformer/">Understanding Transformer</a> · 从循环状态到注意力的架构变迁。</footer>
+<footer class="foot">推荐阅读顺序：<a href="../rnn/">Understanding RNN</a>（为何长链梯度困难）→ 本篇 LSTM（门控记忆）→ <a href="../seq2seq/">Understanding Seq2Seq</a>（将循环单元用于编码和逐词解码）→ <a href="../transformer/">Understanding Transformer</a>（位置间注意力）。</footer>
 </article></main></div>
 <script>
 (function(){
 "use strict";
-const f=document.getElementById("forget"),n=document.getElementById("steps"),fv=document.getElementById("forget-value"),nv=document.getElementById("steps-value"),out=document.getElementById("memory-readout"),retain=document.getElementById("retain-only"),write=document.getElementById("write-new");let mode="retain";
-function update(){let ff=Number(f.value),nn=Number(n.value),old=Math.pow(ff,nn),newInput=mode==="write"?0.02:0;let added=ff===1?newInput*nn:newInput*(1-old)/(1-ff);let total=old+added;fv.textContent=ff.toFixed(3);nv.textContent=String(nn);out.textContent="f="+ff.toFixed(3)+"，N="+nn+"；来自最初状态的保留量 "+old.toFixed(6)+"，累积新写入 "+added.toFixed(6)+"，最终 cₙ="+total.toFixed(6)+"。";retain.setAttribute("aria-pressed",String(mode==="retain"));write.setAttribute("aria-pressed",String(mode==="write"));}
-retain.addEventListener("click",()=>{mode="retain";update()});write.addEventListener("click",()=>{mode="write";update()});f.addEventListener("input",update);n.addEventListener("input",update);
-if(Math.abs(Math.pow(.99,100)-.3660323412732292)>1e-10)throw Error("LSTM retention invariant failed");update();
+const f=document.getElementById("forget"),n=document.getElementById("steps"),
+ fv=document.getElementById("forget-value"),nv=document.getElementById("steps-value"),
+ out=document.getElementById("memory-readout"),retain=document.getElementById("retain-only"),
+ write=document.getElementById("write-new"),presets=[...document.querySelectorAll("[data-forget]")],
+ plot=document.getElementById("lstm-trajectory-rows");
+let mode="retain";
+const svg=(tag,attrs,text)=>{
+ const el=document.createElementNS("http://www.w3.org/2000/svg",tag);
+ for(const [name,value] of Object.entries(attrs))el.setAttribute(name,String(value));
+ if(text!==undefined)el.textContent=text;
+ return el;
+};
+function contribution(k,rate,writeAmount){
+ const old=Math.pow(rate,k);
+ const added=rate===1?writeAmount*k:writeAmount*(1-old)/(1-rate);
+ return{old,added,total:old+added};
+}
+function update(){
+ const rate=Number(f.value),N=Number(n.value),writeAmount=mode==="write"?.02:0;
+ const result=contribution(N,rate,writeAmount);
+ fv.textContent=rate.toFixed(3);nv.textContent=String(N);
+ out.textContent="f="+rate.toFixed(3)+"，N="+N+
+  "；来自最初状态的保留量 "+result.old.toFixed(6)+
+  "，累积新写入 "+result.added.toFixed(6)+"，最终 cₙ="+result.total.toFixed(6)+"。";
+ document.getElementById("lstm-old").textContent=result.old.toFixed(6);
+ document.getElementById("lstm-added").textContent=result.added.toFixed(6);
+ document.getElementById("lstm-total").textContent=result.total.toFixed(6);
+ retain.setAttribute("aria-pressed",String(mode==="retain"));
+ write.setAttribute("aria-pressed",String(mode==="write"));
+ presets.forEach(b=>b.setAttribute("aria-pressed",String(Math.abs(Number(b.dataset.forget)-rate)<.0001)));
+ const checkpoints=[...new Set([0,Math.floor(N/3),Math.floor(2*N/3),N])].sort((a,b)=>a-b);
+ const maxTotal=Math.max(1,...checkpoints.map(k=>contribution(k,rate,writeAmount).total));
+ plot.replaceChildren();
+ checkpoints.forEach((k,i)=>{
+  const v=contribution(k,rate,writeAmount),y=62+i*44;
+  plot.append(svg("text",{x:32,y:y+16,fill:"#366365","font-size":14},"k="+k));
+  plot.append(svg("rect",{x:105,y:y,width:575,height:24,fill:"#eef5f0",rx:3}));
+  const wOld=575*v.old/maxTotal,wNew=575*v.added/maxTotal;
+  if(wOld>0)plot.append(svg("rect",{x:105,y:y,width:wOld,height:24,fill:"#3d8b9b",rx:2}));
+  if(wNew>0)plot.append(svg("rect",{x:105+wOld,y:y,width:wNew,height:24,fill:"#c98a60",rx:2}));
+  plot.append(svg("text",{x:690,y:y+16,fill:"#315e60","font-size":13},v.total.toFixed(3)));
+ });
+ document.getElementById("lstm-explanation").textContent=
+  "初始状态贡献 "+result.old.toFixed(6)+" + 后续写入贡献 "+result.added.toFixed(6)+
+  " = 最终状态 "+result.total.toFixed(6)+
+  "。这是现代遗忘门公式下的标量固定门值演示；1997 年原始 LSTM 没有这一可学习遗忘门。";
+}
+retain.addEventListener("click",()=>{mode="retain";update()});
+write.addEventListener("click",()=>{mode="write";update()});
+presets.forEach(button=>button.addEventListener("click",()=>{f.value=button.dataset.forget;update()}));
+f.addEventListener("input",update);n.addEventListener("input",update);
+if(Math.abs(Math.pow(.99,100)-.3660323412732292)>1e-10)throw Error("retention invariant failed");
+update();
 })();
 </script></body></html>

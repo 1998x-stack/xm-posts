@@ -11,6 +11,25 @@ section{margin-top:72px;scroll-margin-top:34px}h2{font-size:clamp(25px,3.3vw,34p
 pre{max-width:100%;overflow:auto;background:#223b42;border-radius:10px;color:#eaf5f1;padding:17px 20px;font:13px/1.8 ui-monospace,SFMono-Regular,Consolas,monospace}code{font: .91em ui-monospace,SFMono-Regular,Consolas,monospace}
 .widget{margin:26px 0;border:1px solid #cfe2dd;background:white;padding:20px;border-radius:14px}.controls{display:flex;flex-wrap:wrap;gap:9px;margin:14px 0}.controls button{font:600 14px/1.4 inherit;font-family:inherit;border:1px solid #9ecbc2;background:#f8fcfa;color:#267c78;cursor:pointer;border-radius:8px;padding:9px 16px}.controls button[aria-pressed="true"]{background:#277d78;color:white}.demo-grid{display:grid;grid-template-columns:110px minmax(0,1fr) 54px;gap:10px 12px;align-items:center}.track{height:16px;background:#eaf1ed;border-radius:8px;overflow:hidden}.track span{display:block;height:100%;width:20%;background:#8b70b8;transition:width .2s}.demo-label{font-size:14px}.readout{background:#eff8f4;padding:12px 16px;border-radius:8px;margin-top:14px;color:#345e62;font-size:14px}.sources{font-size:14px}.sources li{margin-bottom:16px}.foot{font-size:12px;border-top:1px solid var(--line);padding-top:19px;color:#6b8283;margin-top:70px}
 @media(max-width:980px){.layout{display:block;max-width:900px;padding-top:32px}.toc{position:static;max-height:none;margin-bottom:34px;display:flex;flex-wrap:wrap;gap:5px}.toc strong{flex-basis:100%}.toc a{border:1px solid #d9e7e1;border-radius:7px;padding:6px 8px}}@media(max-width:560px){body{font-size:15.5px}.layout{padding:27px 15px 70px}.sitebar>div{padding:11px 15px}h1{font-size:47px}.dek{font-size:19px}section{margin-top:54px}.cards{grid-template-columns:1fr}.illustration{padding:8px 7px 11px}.widget{padding:13px}.math-scroll{padding:9px 10px}.math-scroll math[display="block"]{font-size:1.04rem}}@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}@media print{body{background:#fff;font-size:11pt}.sitebar,.toc,.skip,.controls{display:none!important}.layout{display:block;padding:0}.article{max-width:none}.illustration{break-inside:avoid}.math-scroll{overflow:visible}.math-scroll math[display="block"]{font-size:1rem}pre{background:#f1f4f1;color:#23444b}}
+
+/* Matrix: different decoder outputs can read different encoder annotations. */
+.s2s-matrix-frame{max-width:100%;overflow:auto;margin-top:16px;border:1px solid #d9e7e2;border-radius:9px}
+.s2s-matrix{margin:0;width:100%;min-width:480px;border-collapse:collapse;font-variant-numeric:tabular-nums}
+.s2s-matrix caption{padding:11px 12px;text-align:left;font-weight:700;color:#2c6464;background:#f4faf6}
+.s2s-matrix th,.s2s-matrix td{border-bottom:1px solid #dce9e4;padding:10px 9px;font-size:13px;text-align:center}
+.s2s-matrix thead th{background:#e7f3ec;color:#2b6965}
+.s2s-matrix tbody th{text-align:left;white-space:nowrap;color:#345f61}
+.s2s-matrix td{position:relative;background:#f9fcfa;color:#244c50}
+.s2s-matrix td .s2s-heat-fill{position:absolute;inset:4px auto 4px 4px;border-radius:4px;background:#a8d8ce;opacity:.72;pointer-events:none}
+.s2s-matrix td .s2s-heat-number{position:relative;font-weight:800}
+.s2s-matrix tr.active th{border-left:4px solid #27877f;color:#246661}
+.s2s-matrix tr.active td{box-shadow:inset 0 -2px #238b81}
+.s2s-numeric{margin-top:15px;background:#eff7f2;border:1px solid #d1e5d9;border-radius:9px;padding:14px 16px}
+.s2s-numeric b{color:#2b6a65}.s2s-numeric output{font-size:21px;font-weight:800;color:#265f5d}
+.s2s-numeric p{font-size:13px;line-height:1.7;margin:8px 0 0}
+.s2s-numeric code{white-space:normal;overflow-wrap:anywhere}
+.s2s-path{background:#eff7f3;border:1px solid #d0e5dc;border-radius:9px;padding:14px 16px}
+@media(max-width:560px){.s2s-numeric{padding:11px}.s2s-matrix th,.s2s-matrix td{padding:9px}}
 </style></head>
 <body><a class="skip" href="#content">跳转正文</a><header class="sitebar"><div><a class="brand" href="../../../">xm<span>.</span>posts</a><nav aria-label="站点导航"><a href="../../../categories/architectures/">模型架构</a><a href="../../../archive/">文章归档</a></nav></div></header>
 <div class="layout"><nav class="toc" aria-label="文章目录"><strong>SEQUENCE → SEQUENCE</strong><a href="#task">01 / 为什么不是逐词分类</a><a href="#origins">02 / 两项 2014 年工作</a><a href="#mechanism">03 / 从 Encoder 到 Decoder</a><a href="#factor">04 / 条件概率如何拆开</a><a href="#state">05 / LSTM 在传什么状态</a><a href="#training">06 / Teacher Forcing</a><a href="#decode">07 / 推理和 Beam Search</a><a href="#reverse">08 / 反转源序列</a><a href="#bottleneck">09 / 固定向量的代价</a><a href="#attention">10 / Attention 的改进</a><a href="#experiment">11 / 原论文证据</a><a href="#code">12 / 最小可验证实现</a><a href="#pitfalls">13 / 常见误区</a><a href="#sources">14 / 文献与下一站</a></nav>
@@ -44,7 +63,9 @@ pre{max-width:100%;overflow:auto;background:#223b42;border-radius:10px;color:#ea
 <figure class="illustration" id="fig-6"><div class="fig-label">FIG 06 · 按步注意力</div><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 339" width="780" height="339" role="img" aria-label="多个 Encoder annotations h1 到 h4 经 softmax 选择，形成供当前 decoder step 使用的 c_t" font-family="system-ui,-apple-system,'PingFang SC','Microsoft Yahei',sans-serif"><title>注意力提供时间步相关的上下文</title><desc>多个 Encoder annotations h1 到 h4 经 softmax 选择，形成供当前 decoder step 使用的 c_t</desc><rect width="780" height="339" rx="16" fill="#f7faf8"/><text x="29" y="42" fill="#237e7b" font-size="17" text-anchor="start" font-weight="700">ENCODER ANNOTATIONS</text><rect x="32" y="65" width="154" height="67" rx="12" fill="#e1f2ed" stroke="#6caaa4" stroke-width="1.8"/><text x="109" y="104" fill="#294c55" font-size="20" text-anchor="middle" font-weight="500">h1</text><rect x="217" y="65" width="154" height="67" rx="12" fill="#e1f2ed" stroke="#6caaa4" stroke-width="1.8"/><text x="294" y="104" fill="#294c55" font-size="20" text-anchor="middle" font-weight="500">h2</text><rect x="402" y="65" width="154" height="67" rx="12" fill="#e1f2ed" stroke="#6caaa4" stroke-width="1.8"/><text x="479" y="104" fill="#294c55" font-size="20" text-anchor="middle" font-weight="500">h3</text><rect x="587" y="65" width="154" height="67" rx="12" fill="#e1f2ed" stroke="#6caaa4" stroke-width="1.8"/><text x="664" y="104" fill="#294c55" font-size="20" text-anchor="middle" font-weight="500">h4</text><path d="M109 134 L390 213" fill="none" stroke="#458d88" stroke-width="2" /><path d="M 390 213 L 380.8720231429275 204.82442427123635 L 377.9490424138875 215.22135572516356 Z" fill="#458d88"/><path d="M294 134 L390 213" fill="none" stroke="#9b79bb" stroke-width="4" /><path d="M 390 213 L 384.93751050406155 201.84064517530192 L 378.07491749812783 210.1799987014998 Z" fill="#9b79bb"/><path d="M479 134 L390 213" fill="none" stroke="#9b79bb" stroke-width="2" /><path d="M 390 213 L 401.81134767533496 209.73624968902953 L 394.6418529139549 201.65922394519635 Z" fill="#9b79bb"/><path d="M664 134 L390 213" fill="none" stroke="#458d88" stroke-width="2" /><path d="M 390 213 L 402.0654496323428 215.1412438369786 L 399.073459390433 204.76396122579771 Z" fill="#458d88"/><rect x="311" y="216" width="159" height="62" rx="12" fill="#eae3f5" stroke="#957aba" stroke-width="1.8"/><text x="390" y="253" fill="#694f99" font-size="19" text-anchor="middle" font-weight="500">cₜ = Σ αₜᵢhᵢ</text><path d="M472 247 L566 247" fill="none" stroke="#a27abd" stroke-width="2.5" /><path d="M 566 247 L 555 241.6 L 555 252.4 Z" fill="#a27abd"/><rect x="569" y="213" width="171" height="68" rx="12" fill="#fff0e3" stroke="#cd936b" stroke-width="1.8"/><text x="654" y="253" fill="#945f3f" font-size="17" text-anchor="middle" font-weight="500">Decoder step t</text><text x="390" y="311" fill="#587076" font-size="15" text-anchor="middle" font-weight="500">αₜᵢ 由当前解码状态与各源 annotation 的匹配分数决定。</text></svg><figcaption>只画出一个解码时间步的源位置加权；不同目标词会产生不同的权重。这里并未宣称 Attention 权重必然是人类可解释的词对齐真值。 <a href="assets/06-attention.svg" aria-label="查看图 6 的独立矢量图">放大图示 ↗</a></figcaption></figure>
 <div class="math-equation" aria-label="公式 05：Attention 权重在源位置上归一化"><div class="eq-head"><span>EQ 05</span><span>Attention 权重在源位置上归一化</span></div><div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="公式 05 Attention 权重在源位置上归一化，可横向滚动"><math display="block" aria-label="Attention 权重在源位置上归一化"><mrow><msub><mi>α</mi><mrow><mi>t</mi><mi>i</mi></mrow></msub><mo>=</mo><mfrac><mrow><mi>exp</mi><mo>(</mo><msub><mi>e</mi><mrow><mi>t</mi><mi>i</mi></mrow></msub><mo>)</mo></mrow><mrow><munderover><mo>∑</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mi>T</mi></munderover><mi>exp</mi><mo>(</mo><msub><mi>e</mi><mrow><mi>t</mi><mi>j</mi></mrow></msub><mo>)</mo></mrow></mfrac></mrow></math></div><p class="eq-note">eₜᵢ 是第 t 个 decoder 步与第 i 个源位置之间的可训练匹配分数；αₜᵢ 的 i 维总和为 1。</p></div><div class="math-equation" aria-label="公式 06：按解码时间步变化的上下文向量"><div class="eq-head"><span>EQ 06</span><span>按解码时间步变化的上下文向量</span></div><div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="公式 06 按解码时间步变化的上下文向量，可横向滚动"><math display="block" aria-label="按解码时间步变化的上下文向量"><mrow><msub><mi>c</mi><mi>t</mi></msub><mo>=</mo><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>T</mi></munderover><msub><mi>α</mi><mrow><mi>t</mi><mi>i</mi></mrow></msub><msub><mi>h</mi><mi>i</mi></msub></mrow></math></div><p class="eq-note">每个 encoder annotation hᵢ∈ℝᵈ，因而 cₜ∈ℝᵈ；解码器不再只能依赖单个静态句向量。</p></div>
 <p><a href="https://arxiv.org/abs/1409.0473">Bahdanau et al.（2014 预印本 / ICLR 2015）</a>引入联合对齐与翻译；<a href="https://aclanthology.org/D15-1166/">Luong et al.（EMNLP 2015）</a>系统讨论 global 和 local Attention。二者与原始 2014 固定向量 LSTM 在时间顺序上需要清楚区分；Attention 不等于 Transformer，后者进一步用自注意力处理序列内部的 token 交互。</p>
-<div class="widget" id="attention-demo"><h3>互动：目标词变了，源位置权重如何变化？</h3><p>下面是人为设置、各行权重和为 1 的示意分布；按不同目标 token，观察哪个源位置更重要。不是论文模型的实际输出。</p><div class="controls" role="group" aria-label="选择当前预测的目标词"><button type="button" data-target="le" aria-pressed="false">目标：le</button><button type="button" data-target="chat" aria-pressed="true">目标：chat</button><button type="button" data-target="dort" aria-pressed="false">目标：dort</button></div><div class="demo-grid" aria-label="Attention 权重条形图"><div class="demo-label">the</div><div class="track"><span data-weight="0" style="width:10%"></span></div><strong data-number="0">0.10</strong><div class="demo-label">cat</div><div class="track"><span data-weight="1" style="width:70%"></span></div><strong data-number="1">0.70</strong><div class="demo-label">sleeps</div><div class="track"><span data-weight="2" style="width:15%"></span></div><strong data-number="2">0.15</strong><div class="demo-label">today</div><div class="track"><span data-weight="3" style="width:5%"></span></div><strong data-number="3">0.05</strong></div><div class="readout" id="attention-readout" role="status" aria-live="polite">当前目标 chat；最关注源词 cat（0.70），权重总和 1.00。</div></div></section>
+<div class="widget" id="attention-demo"><h3>互动：目标词变了，源位置权重如何变化？</h3><p>下面是人为设置、各行权重和为 1 的示意分布；按不同目标 token，观察哪个源位置更重要，再在下方的三行矩阵中<strong>横向比较不同解码步骤</strong>。示例权重是人为构造的，不是论文模型的实际输出；权重也不等于翻译词与词之间被证明的真实语义对齐。</p><div class="controls" role="group" aria-label="选择当前预测的目标词"><button type="button" data-target="le" aria-pressed="false">目标：le</button><button type="button" data-target="chat" aria-pressed="true">目标：chat</button><button type="button" data-target="dort" aria-pressed="false">目标：dort</button></div><div class="demo-grid" aria-label="Attention 权重条形图"><div class="demo-label">the</div><div class="track"><span data-weight="0" style="width:10%"></span></div><strong data-number="0">0.10</strong><div class="demo-label">cat</div><div class="track"><span data-weight="1" style="width:70%"></span></div><strong data-number="1">0.70</strong><div class="demo-label">sleeps</div><div class="track"><span data-weight="2" style="width:15%"></span></div><strong data-number="2">0.15</strong><div class="demo-label">today</div><div class="track"><span data-weight="3" style="width:5%"></span></div><strong data-number="3">0.05</strong></div><div class="readout" id="attention-readout" role="status" aria-live="polite">当前目标 chat；最关注源词 cat（0.70），权重总和 1.00。</div>
+<div class="s2s-matrix-frame"><table class="s2s-matrix"><caption>解码步骤 × 源词 Attention：颜色深浅与行内数值共同编码权重</caption><thead><tr><th scope="col">目标词 ↓ / 源词 →</th><th scope="col">the</th><th scope="col">cat</th><th scope="col">sleeps</th><th scope="col">today</th></tr></thead><tbody id="s2s-matrix-rows"><tr data-attention-row="le"><th scope="row">le</th><td>0.73</td><td>0.11</td><td>0.11</td><td>0.05</td></tr><tr data-attention-row="chat" class="active"><th scope="row">chat</th><td>0.10</td><td>0.70</td><td>0.15</td><td>0.05</td></tr><tr data-attention-row="dort"><th scope="row">dort</th><td>0.05</td><td>0.10</td><td>0.78</td><td>0.07</td></tr></tbody></table></div>
+<div class="s2s-numeric"><b>再用一个一维小例子，把“加权求和”算出来</b><p>假设四个 Encoder 表示仅是教学标量 <code>h = [1, 2, 3, 0]</code>，不同于真实模型的高维向量。当前目标词的上下文值为：</p><p><code id="s2s-context-equation">0.10×1 + 0.70×2 + 0.15×3 + 0.05×0</code> = <output id="s2s-context-value">1.950</output></p><p id="s2s-context-note">这是给定权重对四个标量的加权平均；不是解码器真实预测分数，也不是模型学得的语义表示。</p></div></div></section>
 <section id="experiment"><h2>11 · 原论文究竟给出了什么实证？</h2><p>NeurIPS 2014 的主要实验是 <strong>WMT14 英语→法语机器翻译</strong>。以下数字来自<a href="https://proceedings.neurips.cc/paper_files/paper/2014/hash/5a18e133cbf9f257297f410bb7eca942-Abstract.html">原论文官方会议摘要</a>，并非本站重新训练的结果。</p>
 <div class="tablewrap"><table><thead><tr><th>系统 / 评测设置</th><th>测试集 BLEU ↑</th><th>应该如何读</th></tr></thead><tbody><tr><td>独立深层 LSTM Seq2Seq 翻译</td><td><strong>34.8</strong></td><td>WMT14 英法完整测试集；原论文声明 OOV 受罚，词表限制需要考虑。</td></tr><tr><td>原论文所述短语式 SMT 基线</td><td><strong>33.3</strong></td><td>同任务中的比较系统，不代表 LSTM 的所有配置都领先 SMT。</td></tr><tr><td>SMT 的 1000 候选经 LSTM 重排序</td><td><strong>36.5</strong></td><td>这是组合系统；不能冒充纯 LSTM 直接译文的 BLEU。</td></tr></tbody></table></div>
 <p>这些报告说明 seq2seq 在当时能直接完成有竞争力的机器翻译任务，同时也说明<strong>系统评估的单位非常重要</strong>：直接生成和重排序不是同一个实验条件。BLEU 分数不能跨数据集、分词与推理配置自由比较。</p><p>Bahdanau 论文进一步展示固定向量基线与软对齐模型的长度切片对照（该论文 Fig. 2、Table 1），以及每个目标词与源位置的 soft alignment 可视化（Fig. 3），支持改良信息访问路径的动机；这里不杜撰跨论文的数值对比。</p></section>
@@ -58,26 +79,52 @@ assert labels == ["je", "suis", "EOS"]
 <p>若用 PyTorch 写一个真正可训练的 Seq2Seq，建议逐一验证 shape：输入 [B,T]、Encoder 状态（含层数、方向）[L,B,H]、Decoder logits [B,U,V]、目标 mask [B,U]，并用固定 seed 的 tiny overfit 测试检查模型能否记住两三对小样本。Attention 版本还要确认源 padding mask 在 softmax 的源位置轴上生效。</p></section>
 <section id="pitfalls"><h2>13 · 五个最容易混淆的边界</h2>
 <ol><li><strong>Seq2Seq 不等于 LSTM。</strong>它描述序列到序列的条件映射任务与一类 Encoder–Decoder 组织方式，CNN、RNN、Transformer 都能实现。</li><li><strong>原始 Seq2Seq 不自带 Attention。</strong>两者是相关但不同的历史阶段；Bahdanau 与 Luong 扩展是后续工作。</li><li><strong>Teacher Forcing 不是测试时输入。</strong>训练用真实历史前缀；推理递归消费预测前缀。</li><li><strong>Beam Search 不保证找到全局最佳序列。</strong>有限宽度会剪枝，分数还可能受长度偏置影响。</li><li><strong>BLEU 不是无上下文的真理数字。</strong>同名指标仍受数据切片、分词、OOV 和系统组合方式影响。</li></ol><p>从 LLM Infra 的角度，最重要的延伸是：<strong>编码源数据、条件生成以及解码策略是可分离的系统组件。</strong>后来的 Transformer 换掉了编码/解码内部的信息通路；在线推理则继续在解码循环上研究 KV Cache、批处理和吞吐优化。</p></section>
-<section id="sources"><h2>14 · 原始文献与继续阅读</h2><ol class="sources"><li><a href="https://arxiv.org/abs/1409.3215">Sutskever, Vinyals &amp; Le. Sequence to Sequence Learning with Neural Networks.</a> NeurIPS 2014。主线：深层 LSTM Encoder–Decoder、源序列反转、WMT14 英法 BLEU。</li><li><a href="https://aclanthology.org/D14-1179/">Cho et al. Learning Phrase Representations using RNN Encoder–Decoder for Statistical Machine Translation.</a> EMNLP 2014。短语概率与传统 SMT 集成。</li><li><a href="https://arxiv.org/abs/1409.0473">Bahdanau, Cho &amp; Bengio. Neural Machine Translation by Jointly Learning to Align and Translate.</a> ICLR 2015。软对齐与动态上下文。</li><li><a href="https://aclanthology.org/D15-1166/">Luong, Pham &amp; Manning. Effective Approaches to Attention-based Neural Machine Translation.</a> EMNLP 2015。Global / Local Attention。</li><li><a href="https://arxiv.org/abs/1706.03762">Vaswani et al. Attention Is All You Need.</a> NeurIPS 2017。以 Attention 为核心的后续 Encoder–Decoder 架构。</li></ol><p>站内建议串读：<a href="../transformer/">Understanding Transformer</a>、<a href="../pre-ln-vs-post-ln/">Understanding Pre-LN vs Post-LN</a>。如果要深究循环内部的记忆机制，可再阅读 RNN、LSTM、GRU 主题。</p></section>
+<section id="sources"><h2>14 · 原始文献与继续阅读</h2><ol class="sources"><li><a href="https://arxiv.org/abs/1409.3215">Sutskever, Vinyals &amp; Le. Sequence to Sequence Learning with Neural Networks.</a> NeurIPS 2014。主线：深层 LSTM Encoder–Decoder、源序列反转、WMT14 英法 BLEU。</li><li><a href="https://aclanthology.org/D14-1179/">Cho et al. Learning Phrase Representations using RNN Encoder–Decoder for Statistical Machine Translation.</a> EMNLP 2014。短语概率与传统 SMT 集成。</li><li><a href="https://arxiv.org/abs/1409.0473">Bahdanau, Cho &amp; Bengio. Neural Machine Translation by Jointly Learning to Align and Translate.</a> ICLR 2015。软对齐与动态上下文。</li><li><a href="https://aclanthology.org/D15-1166/">Luong, Pham &amp; Manning. Effective Approaches to Attention-based Neural Machine Translation.</a> EMNLP 2015。Global / Local Attention。</li><li><a href="https://arxiv.org/abs/1706.03762">Vaswani et al. Attention Is All You Need.</a> NeurIPS 2017。以 Attention 为核心的后续 Encoder–Decoder 架构。</li></ol><p>推荐阅读顺序：<a href="../rnn/">RNN</a> 学状态如何随序列递推，<a href="../lstm/">LSTM</a> 学门控如何帮助保存长时信息，接着读本篇 Seq2Seq 理解 Encoder/Decoder、Teacher Forcing 与 Attention；之后对照 <a href="../transformer/">Transformer</a> 和 <a href="../pre-ln-vs-post-ln/">Pre-LN vs Post-LN</a>。</p></section>
 <footer class="foot">模型与实验事实归属所引论文。图中翻译、Attention 权重与 Beam 路径均为说明计算机制的教学示例。</footer></article></main></div>
 <script>
-(function () {
-  "use strict";
-  const weights = {le:[0.73,0.11,0.11,0.05],chat:[0.10,0.70,0.15,0.05],dort:[0.05,0.10,0.78,0.07]};
-  const words = ["the","cat","sleeps","today"];
-  const buttons = [...document.querySelectorAll("[data-target]")];
-  const bars = [...document.querySelectorAll("[data-weight]")];
-  const values = [...document.querySelectorAll("[data-number]")];
-  const status = document.getElementById("attention-readout");
-  buttons.forEach(button => button.addEventListener("click", () => {
-    const name = button.dataset.target;
-    const row = weights[name];
-    buttons.forEach(b => b.setAttribute("aria-pressed", String(b === button)));
-    bars.forEach((bar,i) => {bar.style.width = (100 * row[i]) + "%";});
-    values.forEach((value,i) => {value.textContent = row[i].toFixed(2);});
-    const peak = row.indexOf(Math.max(...row));
-    status.textContent = "当前目标 " + name + "；最关注源词 " + words[peak] +
-      "（" + row[peak].toFixed(2) + "），权重总和 " + row.reduce((a,b)=>a+b,0).toFixed(2) + "。";
-  }));
+(function(){
+"use strict";
+const weights={le:[.73,.11,.11,.05],chat:[.10,.70,.15,.05],dort:[.05,.10,.78,.07]},
+ words=["the","cat","sleeps","today"],encoderScalar=[1,2,3,0],
+ buttons=[...document.querySelectorAll("[data-target]")],
+ bars=[...document.querySelectorAll("[data-weight]")],
+ values=[...document.querySelectorAll("[data-number]")],
+ tbody=document.getElementById("s2s-matrix-rows"),
+ status=document.getElementById("attention-readout");
+let active="chat";
+function render(){
+ const selected=weights[active];
+ buttons.forEach(button=>button.setAttribute("aria-pressed",String(button.dataset.target===active)));
+ bars.forEach((bar,i)=>{bar.style.width=(100*selected[i])+"%";});
+ values.forEach((val,i)=>{val.textContent=selected[i].toFixed(2);});
+ tbody.replaceChildren();
+ for(const [target,row] of Object.entries(weights)){
+  const tr=document.createElement("tr");tr.dataset.attentionRow=target;
+  if(target===active)tr.classList.add("active");
+  const name=document.createElement("th");name.scope="row";name.textContent=target;tr.append(name);
+  row.forEach((weight,i)=>{
+   const td=document.createElement("td"),fill=document.createElement("span"),num=document.createElement("span");
+   fill.className="s2s-heat-fill";fill.style.width=(100*weight)+"%";
+   num.className="s2s-heat-number";num.textContent=weight.toFixed(2);
+   td.setAttribute("aria-label",words[i]+": "+weight.toFixed(2));
+   td.append(fill,num);tr.append(td);
+  });
+  tbody.append(tr);
+ }
+ const sum=selected.reduce((a,b)=>a+b,0);
+ if(Math.abs(sum-1)>1e-12)throw Error("attention weights must sum to 1");
+ const context=selected.reduce((acc,weight,i)=>acc+weight*encoderScalar[i],0);
+ const peak=selected.indexOf(Math.max(...selected));
+ status.textContent="当前目标 "+active+"；最关注源词 "+words[peak]+
+  "（"+selected[peak].toFixed(2)+"），权重总和 "+sum.toFixed(2)+"。";
+ document.getElementById("s2s-context-equation").textContent=
+   selected.map((w,i)=>w.toFixed(2)+"×"+encoderScalar[i]).join(" + ");
+ document.getElementById("s2s-context-value").textContent=context.toFixed(3);
+ document.getElementById("s2s-context-note").textContent=
+  "用这一行注意力权重计算 c = "+context.toFixed(3)+
+  "；目标词变化会改变读取各源位置的比例。这里 h 只是标量教学示例，并非真实高维 Encoder 状态或训练结果。";
+}
+buttons.forEach(button=>button.addEventListener("click",()=>{active=button.dataset.target;render()}));
+render();
 })();
 </script></body></html>

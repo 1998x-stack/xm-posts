@@ -3,12 +3,30 @@
 from __future__ import annotations
 from pathlib import Path
 from bs4 import BeautifulSoup
-import importlib.util,json,sys
+import importlib.util,json,sys,re
 from urllib.parse import urlparse,urljoin,unquote
 from build_site import ROOT,data,DEFAULT_URL,article_url
 from sync_skills import run as check_mirrors
 
 BAD_COPY=['原创图解 · 单文件离线 HTML','用直觉 → 图示 → 数学 → 工程实现，理解残差网络 · 参考 Colah 风格，非原文翻译','原创教程 · 单 HTML 文件','参考 Colah 风格，非原文翻译','原创 SVG，可在浏览器内放大','图形均为独立绘制的 SVG，可无损放大','文章中的教学简化已单独注明']
+
+
+
+def check_article_layout(html: str, filename: str) -> None:
+    """Catch document-mode, heading-order, print and reduced-motion regressions."""
+    doctypes = re.findall(r'<!doctype\s+html\s*>', html, re.IGNORECASE)
+    assert len(doctypes) == 1, f'{filename}: expected one HTML5 doctype, found {len(doctypes)}'
+    soup = BeautifulSoup(html, 'html.parser')
+    styles = '\n'.join(style.get_text() for style in soup.find_all('style'))
+    assert re.search(r'@media\s+print\s*\{', styles), f'{filename}: missing valid print stylesheet'
+    assert re.search(r'@media\s*\(\s*prefers-reduced-motion\s*:', styles), f'{filename}: missing reduced-motion stylesheet'
+    assert not re.search(r'@media\s*\(\s*print\s*\)', styles), f'{filename}: invalid @media(print) syntax'
+    headings = list(soup.find_all(re.compile(r'^h[1-6]$')))
+    for previous, current in zip(headings, headings[1:]):
+        if int(current.name[1]) > int(previous.name[1]) + 1:
+            label = current.get_text(" ", strip=True)[:70]
+            raise AssertionError(f'{filename}: heading skips {previous.name} to {current.name}: {label}')
+
 
 def source_articles(root=ROOT):
     spec=importlib.util.spec_from_file_location('upstream_validator',root/'skills/olah-style-paper-posts/scripts/validate.py')
@@ -18,6 +36,7 @@ def source_articles(root=ROOT):
         if p['status']!='published':continue
         f=root/'posts'/p['category']/p['slug']/'index.html'
         article=f.read_text(encoding='utf-8')
+        check_article_layout(article, str(f.relative_to(root)))
         for bad in BAD_COPY:
             assert bad not in article,f'Forbidden production text: {bad} in {f}'
         result=mod.validate(f)

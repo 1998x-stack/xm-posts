@@ -126,3 +126,11 @@ The teaching *method* is inspired by Christopher Olah and Harvard NLP. All artic
 - Article permalink is the **stable RSS GUID**. Preserve it when updating the article. Do not change `feed.xml`, public article slugs, or base paths casually. Include absolute item links, summaries, category/topic labels, `atom:link rel="self"`, and HTML `application/rss+xml` autodiscovery.
 - Update `README.md` as a reader-first project guide, **not** an ever-growing manual mirror of the article manifest. Give representative reading routes; point complete inventories to generated pages and the manifests. Keep deployment instructions explicit about PR-only validation vs successful Pages deployment.
 - Required RSS QA: `python -m pytest -q tests/test_rss.py` plus full site build/validator and, after merge, actual live feed verification. Check XML parseability, unique stable GUIDs, no drafts, date semantics, link correctness and non-duplicated article-head discovery. Never claim live feed availability from local tests alone.
+
+## HTML layout regression contract
+
+- Published article source must start with **one** HTML5 doctype; never append another when updating a post.
+- Preserve the semantic heading ladder: one H1, H2 sections, H3 widgets/subsections, and H4 only inside an H3 subsection. Styling is controlled by classes, not heading rank.
+- Every published standalone article must provide valid `@media print { ... }` and `@media (prefers-reduced-motion: reduce) { ... }`. `@media(print)` is invalid and silently drops print rules.
+- Keep long equations, code and wide diagrams inside explicit keyboard-focusable scroll regions where applicable; never suppress page-level overflow with `overflow-x:hidden`. Use `min-width:0` on grid and flex children, allow long headings and references to wrap, and keep mobile illustrations readable by local scrolling when required.
+- Run `python scripts/validate_site.py` and Chromium checks at 360px, 390px, tablet, desktop and print. The static layout contract in `check_article_layout` prevents duplicate doctypes, skipped heading ranks and absent print/reduced-motion coverage; actual viewport overflow requires browser QA.
