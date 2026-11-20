@@ -53,5 +53,25 @@
     "summary": "从支持超平面的几何距离出发，推导硬间隔和对偶、软间隔的历史与现代形式，图解核映射和 RBF 参数，并用可验证的一维解析例子落实公式。",
     "paper": "https://doi.org/10.1007/BF00994018",
     "illustration": "svm"
+  },
+  {
+    "slug": "flashattention",
+    "title": "Understanding FlashAttention",
+    "subtitle": "Attention 的复杂度没变，为什么还能更快？从 HBM/SRAM 到 Online Softmax",
+    "category": "systems",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 32,
+    "tags": [
+      "FlashAttention",
+      "Attention Kernels",
+      "GPU Memory",
+      "Online Softmax",
+      "IO-aware Algorithms"
+    ],
+    "summary": "以 FlashAttention 2022 原论文为主线，分块拆解 HBM/SRAM 数据流、在线 Softmax、反向重计算及理论边界，并辨析 FA2、FA3、FA4 演进与系统实证。",
+    "paper": "https://arxiv.org/abs/2205.14135",
+    "illustration": "flashattention"
   }
 ]

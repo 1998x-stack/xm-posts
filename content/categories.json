@@ -62,7 +62,8 @@
     "topics": [
       "CUDA",
       "Triton",
-      "Parallelism"
+      "Parallelism",
+      "Attention Kernels"
     ]
   },
   {
