@@ -20,8 +20,8 @@ VALID_MATH = (
 
 def check_html(tmp_path, fragment):
     html = SOURCE.read_text(encoding="utf-8")
-    assert "</article>" in html
-    html = html.replace("</article>", fragment + "</article>", 1)
+    assert "</body>" in html
+    html = html.replace("</body>", fragment + "</body>", 1)
     path = tmp_path / "test-article.html"
     path.write_text(html, encoding="utf-8")
     return validator.validate(path)
