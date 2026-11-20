@@ -23,3 +23,5 @@
 - [Understanding Embeddings](embeddings/index.html)：覆盖 lookup、Word2Vec/GloVe、BERT、SBERT、SimCSE/E5、cosine 与 ANN/RAG 召回；附七幅图示、MathML、交互实验、证据与 Python 断言。所属二级主题：`Representation Learning & Embeddings`。
 
 - [Understanding BPE](bpe/index.html)：带词频的贪心子词合并、原论文实验与 byte-level 变体；含六幅机制图、交互分词实验、MathML 与纯 Python 验证。
+
+- [Understanding WordPiece](wordpiece/index.html)：从 2012 语音搜索、GNMT 到 BERT MaxMatch 编码，区分训练教学评分与原始未开源实现；配七幅独立 SVG、四组 MathML、双交互实验及最小 Python 测试。专题：`Tokenization & Subword Units`。
