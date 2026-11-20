@@ -1,0 +1,128 @@
+[
+  {
+    "id": "SGD01",
+    "claim": "Full batch GD computes all per-example gradients at the same parameters and takes their average",
+    "kind": "paper-claim",
+    "source_url": "https://leon.bottou.org/publications/pdf/compstat-2010.pdf",
+    "locator": "§2.1, Eq. (2)",
+    "status": "verified",
+    "notes": "Average empirical loss; n samples; not one example at a time"
+  },
+  {
+    "id": "SGD02",
+    "claim": "Single-example SGD uses a randomly sampled example gradient in each iteration",
+    "kind": "paper-claim",
+    "source_url": "https://leon.bottou.org/publications/pdf/compstat-2010.pdf",
+    "locator": "§2.2, Eq. (4)",
+    "status": "verified",
+    "notes": "Practical random reshuffling differs in independence from with-replacement assumption"
+  },
+  {
+    "id": "SGD03",
+    "claim": "SGD diminishing gains may be subject to sums of learning rates divergent and squared gains summable",
+    "kind": "paper-claim",
+    "source_url": "https://leon.bottou.org/publications/pdf/compstat-2010.pdf",
+    "locator": "§2.2, paragraph after Eq. (4)",
+    "status": "verified",
+    "notes": "Convergence requires additional objective/noise assumptions; schedule alone insufficient"
+  },
+  {
+    "id": "SGD04",
+    "claim": "Robbins and Monro developed a general stochastic approximation root-finding method in 1951",
+    "kind": "historical",
+    "source_url": "https://doi.org/10.1214/aoms/1177729586",
+    "locator": "Robbins–Monro 1951 abstract",
+    "status": "verified",
+    "notes": "Do not claim the 1951 paper introduced minibatch GPU neural network training"
+  },
+  {
+    "id": "SGD05",
+    "claim": "In the fixed quadratic example with a=[-3,1,3,7] at theta=0, the gradients are [3,-1,-3,-7] and their mean is -2",
+    "kind": "toy-derivation",
+    "source_url": "https://leon.bottou.org/publications/pdf/compstat-2010.pdf",
+    "locator": "§2.2 Eq.(4); independent worked example",
+    "status": "derived",
+    "notes": "Not original paper data; elementary derivative theta-a_i"
+  },
+  {
+    "id": "SGD06",
+    "claim": "Uniform with-replacement selection produces an unbiased gradient estimate of finite-sum empirical risk at fixed theta",
+    "kind": "toy-derivation",
+    "source_url": "https://doi.org/10.1137/16M1080173",
+    "locator": "SG general theory; independent finite-sum derivation in post",
+    "status": "derived",
+    "notes": "Unbiased conditional on fixed theta and uniform sampling; not all practical data samplers"
+  },
+  {
+    "id": "SGD07",
+    "claim": "For independent identically distributed per-example gradient noise, minibatch mean covariance decreases as Sigma/B",
+    "kind": "toy-derivation",
+    "source_url": "https://arxiv.org/abs/1606.04838",
+    "locator": "Minibatch SGD discussion and elementary covariance identity",
+    "status": "derived",
+    "notes": "Not a universal rule with correlated, stratified or without-replacement samples"
+  },
+  {
+    "id": "SGD08",
+    "claim": "Bottou discusses approximation, estimation and optimization errors under finite computational budgets",
+    "kind": "paper-claim",
+    "source_url": "https://leon.bottou.org/publications/pdf/compstat-2010.pdf",
+    "locator": "§3.1, Eq. (6); Table 2",
+    "status": "verified",
+    "notes": "Theory tradeoff is not proof SGD universally wins in predictive accuracy"
+  },
+  {
+    "id": "SGD09",
+    "claim": "Bottou's RCV1 hinge loss linear SVM comparison has SGD 1.4 seconds / 6.02 percent test error and SVMPERF 66 seconds / 6.03 percent test error",
+    "kind": "experiment",
+    "source_url": "https://leon.bottou.org/publications/pdf/compstat-2010.pdf",
+    "locator": "§5, Figure 1 table, p.8",
+    "status": "verified",
+    "notes": "Original experiment, incomparable with modern GPU throughput"
+  },
+  {
+    "id": "SGD10",
+    "claim": "The ALPHA squared hinge loss task uses 100000 samples with 500 normalized input variables",
+    "kind": "experiment",
+    "source_url": "https://leon.bottou.org/publications/pdf/compstat-2010.pdf",
+    "locator": "§5, Figure 2 caption and paragraph, pp.8–9",
+    "status": "verified",
+    "notes": "The original benchmark is a linear SVM, not transformer training"
+  },
+  {
+    "id": "SGD11",
+    "claim": "The CONLL chunking CRF experiment reports test loss and test F1 comparing SGD, SGDQN and ASGD",
+    "kind": "experiment",
+    "source_url": "https://leon.bottou.org/publications/pdf/compstat-2010.pdf",
+    "locator": "§5, Figure 3, p.8",
+    "status": "verified",
+    "notes": "ASGD does not attain asymptotic promise in this task"
+  },
+  {
+    "id": "SGD12",
+    "claim": "Bottou discusses Polyak Juditsky averaged stochastic gradients separately from vanilla SGD",
+    "kind": "later-variant",
+    "source_url": "https://leon.bottou.org/publications/pdf/compstat-2010.pdf",
+    "locator": "§4, Eq. (12)",
+    "status": "verified",
+    "notes": "ASGD averages iterates; not identical to momentum"
+  },
+  {
+    "id": "SGD13",
+    "claim": "The PyTorch SGD optimizer supports momentum, dampening, Nesterov and weight decay options",
+    "kind": "modern-implementation",
+    "source_url": "https://docs.pytorch.org/docs/stable/generated/torch.optim.SGD.html",
+    "locator": "torch.optim.SGD API",
+    "status": "verified",
+    "notes": "Modern implementation options rather than Bottou 2010 bare SGD update"
+  },
+  {
+    "id": "SGD14",
+    "claim": "Hand-drawn noisy path and learning-rate curves are pedagogical figures, not recorded experimental trajectories",
+    "kind": "illustrative",
+    "source_url": "https://leon.bottou.org/publications/pdf/compstat-2010.pdf",
+    "locator": "Separate from §5 plotted results",
+    "status": "illustrative",
+    "notes": "No numerical reproduction claim"
+  }
+]
