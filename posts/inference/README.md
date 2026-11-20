@@ -8,6 +8,6 @@
 
 ## Published deep dives
 
-- [Understanding PagedAttention](pagedattention/index.html) — KV cache 分页、Block Table、Copy-on-Write、Serving 调度与 GPU kernel。
+- [Understanding PagedAttention](pagedattention/index.html) — KV Cache 分页、Block Table、Copy-on-Write、Serving 调度与 GPU kernel。
 
-本分类已有空间容纳 KV Cache / PagedAttention / Continuous Batching；系统级 kernel 细节通过标签关联 `systems/`，无需新增顶级类别。
+分类沿用 `inference`，无需新增顶级分类。
