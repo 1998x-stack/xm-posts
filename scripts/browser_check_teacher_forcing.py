@@ -17,11 +17,11 @@ def check(out: Path) -> None:
             page.set_viewport_size({"width": width, "height": 900})
             page.goto(HTML.resolve().as_uri(), wait_until="load")
             assert page.locator("h1").count() == 1
-            assert page.locator("figure img").count() == 4
-            images = page.locator("figure img").evaluate_all(
-                "(nodes) => nodes.map(i => ({loaded:i.complete && i.naturalWidth > 0, src:i.getAttribute('src')}))"
+            assert page.locator("figure svg").count() == 5
+            diagrams = page.locator("figure svg").evaluate_all(
+                "(nodes) => nodes.map(svg => ({loaded:svg.getBoundingClientRect().width > 0 && svg.getBoundingClientRect().height > 0, title:svg.querySelector('title')?.textContent}))"
             )
-            assert all(i["loaded"] for i in images), images
+            assert all(d["loaded"] and d["title"] for d in diagrams), diagrams
             assert page.locator("math[display='block']").count() >= 3
             maths = page.locator("math").evaluate_all(
                 "(nodes) => nodes.every(n => n.namespaceURI === 'http://www.w3.org/1998/Math/MathML' && n.getBoundingClientRect().height > 0)"
@@ -46,9 +46,9 @@ def check(out: Path) -> None:
         assert "1.01218" in page.locator("#loss-output").inner_text()
         page.emulate_media(media="print")
         assert page.locator("h1").is_visible()
-        assert page.locator("figure img").first.is_visible()
+        assert page.locator("figure svg").first.is_visible()
         browser.close()
-    print("TEACHER FORCING BROWSER QA OK: 4 viewports, SVG, MathML, interactivity, print")
+    print("TEACHER FORCING BROWSER QA OK: 4 viewports, inline SVG, MathML, interactivity, print")
 
 
 if __name__ == "__main__":
