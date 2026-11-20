@@ -8,12 +8,14 @@ into generated _site/ HTML after the PDF is successfully written.
 from __future__ import annotations
 
 import argparse
+from io import BytesIO
 from html import escape
 import json
 from pathlib import Path
 import re
 
 from playwright.sync_api import sync_playwright
+from pypdf import PdfReader
 
 from build_site import ROOT, DEFAULT_URL, article_url, data
 
@@ -133,16 +135,19 @@ def export(out: Path, base_url: str = DEFAULT_URL, only: str | None = None) -> l
                         '<span class="pageNumber"></span> / <span class="totalPages"></span></div>'
                     ),
                     margin={"top": "12mm", "right": "12mm", "bottom": "16mm", "left": "12mm"},
-                    timeout=90000,
                 )
                 if not pdf.startswith(b"%PDF-") or len(pdf) < 4096:
                     raise RuntimeError(f"{p['slug']}: invalid or unexpectedly empty PDF")
+                reader = PdfReader(BytesIO(pdf))
+                page_count = len(reader.pages)
+                if page_count < 2 or not (reader.pages[0].extract_text() or "").strip():
+                    raise RuntimeError(f"{p['slug']}: empty or unsearchable document")
                 pdf_path.write_bytes(pdf)
                 # Inject the link only after its downloadable file exists.
                 original_html = html_path.read_text(encoding="utf-8")
                 html_path.write_text(with_download_link(original_html, p["title"], p["slug"]), encoding="utf-8")
-                report.append({"slug": p["slug"], "pdf": str(pdf_path.relative_to(out)), "bytes": len(pdf)})
-                print(f"PDF OK {p['slug']}: {len(pdf):,} bytes", flush=True)
+                report.append({"slug": p["slug"], "pdf": str(pdf_path.relative_to(out)), "bytes": len(pdf), "pages": page_count})
+                print(f"PDF OK {p['slug']}: {page_count} pages / {len(pdf):,} bytes", flush=True)
         finally:
             browser.close()
     return report
