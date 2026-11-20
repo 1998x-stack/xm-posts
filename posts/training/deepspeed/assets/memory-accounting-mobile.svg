@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 650" role="img" aria-labelledby="mm-title mm-desc">
+<title id="mm-title">混合精度 Adam 的 16 字节模型状态账本</title><desc id="mm-desc">五段纵向堆叠，分别是 FP16 权重 2 字节、FP16 梯度 2 字节、FP32 主权重 4 字节、Adam 一阶矩 4 字节和二阶矩 4 字节。</desc>
+<rect width="560" height="650" rx="20" fill="#f5f8f4"/><g font-family="system-ui,-apple-system,'PingFang SC','Microsoft YaHei',sans-serif">
+<text x="28" y="48" font-size="25" font-weight="750" fill="#203c3e">每个参数背后的 16 bytes</text><text x="28" y="82" font-size="17" fill="#5c746e">混合精度训练 + Adam（按字节数分配高度）</text>
+<rect x="35" y="112" width="490" height="76" rx="9" fill="#3b9c8c"/><rect x="35" y="190" width="490" height="76" rx="9" fill="#d18a55"/><rect x="35" y="268" width="490" height="118" rx="9" fill="#6d78b9"/><rect x="35" y="388" width="490" height="118" rx="9" fill="#8b6cb0"/><rect x="35" y="508" width="490" height="118" rx="9" fill="#b46c85"/>
+<g font-size="20" font-weight="750" fill="#fff"><text x="58" y="145">FP16 参数权重</text><text x="58" y="173">2 bytes</text><text x="58" y="223">FP16 梯度</text><text x="58" y="251">2 bytes</text><text x="58" y="311">FP32 主权重</text><text x="58" y="343">4 bytes</text><text x="58" y="431">Adam 一阶矩 m</text><text x="58" y="463">4 bytes</text><text x="58" y="551">Adam 二阶矩 v</text><text x="58" y="583">4 bytes</text></g>
+</g></svg>
