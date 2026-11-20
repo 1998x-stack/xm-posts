@@ -2150,5 +2150,34 @@
       "src": "assets/01-single-vs-multi-turn.svg",
       "caption": "从一次生成扩展为由环境反馈驱动的多轮决策轨迹"
     }
+  },
+  {
+    "slug": "loop-engineering",
+    "title": "Understanding Loop Engineering",
+    "subtitle": "从单次 Agent 执行到可持续、可验证、可恢复的自主工作循环",
+    "category": "agents",
+    "topic": "loop-engineering",
+    "status": "published",
+    "published": "2026-11-21",
+    "updated": "2026-11-21",
+    "reading_minutes": 28,
+    "tags": [
+      "Loop Engineering",
+      "Agentic Workflows",
+      "Agent Orchestration",
+      "Long-running Agents",
+      "Harness Engineering",
+      "Context Engineering",
+      "Verification",
+      "Persistent State",
+      "Human-in-the-loop"
+    ],
+    "summary": "从 ReAct 的内层行动循环出发，系统解释外层任务触发、任务发现、上下文投影、隔离执行、独立验证、状态持久化、预算与人工升级；通过 MathML 推导、七幅原创 SVG、交互实验和可测试 Python 控制器，理解如何构建长期、可治理的 Agent 工作系统。",
+    "paper": "https://arxiv.org/abs/2608.21884",
+    "illustration": "loop-engineering",
+    "cover": {
+      "src": "assets/02-outer-loop.svg",
+      "caption": "事件触发后，Agent 通过验证证据决定重试、持久化、人工升级或终止"
+    }
   }
 ]

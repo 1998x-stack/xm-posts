@@ -361,5 +361,16 @@
       "agentic-rl",
       "swe-agent"
     ]
+  },
+  {
+    "id": "path-39",
+    "title": "从 Agent Runtime 到跨会话持续自主执行",
+    "posts": [
+      "react",
+      "swe-agent",
+      "agent-memory-components",
+      "harness-engineering",
+      "loop-engineering"
+    ]
   }
 ]
