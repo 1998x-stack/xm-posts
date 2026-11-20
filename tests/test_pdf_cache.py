@@ -97,3 +97,42 @@ def test_full_build_prunes_unpublished_entries_but_one_post_does_not(tmp_path, m
     cache.save({"still-published"})  # complete build removes stale entries
     assert not cache.pdf_path("now-unpublished").exists()
     assert "now-unpublished" not in PdfCache(tmp_path / "cache").entries
+
+
+def test_cached_export_still_publishes_pdf_and_download_link(tmp_path, monkeypatch):
+    """A warm cache must never launch Chromium or omit the download action."""
+    import render_pdfs
+    root, out, article, _ = sample_site(tmp_path)
+    (out / "index.html").write_text("<html>site</html>", encoding="utf-8")
+    post = {
+        "slug": "test-post", "category": "architectures",
+        "title": "Test Post", "status": "published",
+    }
+    monkeypatch.setattr(render_pdfs, "ROOT", root)
+    monkeypatch.setattr(render_pdfs, "data", lambda _root: ([], [post]))
+    monkeypatch.setattr(render_pdfs, "fingerprint", lambda *_args: "fingerprint-1")
+    monkeypatch.setattr(render_pdfs, "inspect_pdf", lambda pdf, slug: 2)
+
+    class FakePlaywright:
+        def __enter__(self):
+            class Chromium:
+                @staticmethod
+                def launch():
+                    raise AssertionError("Chromium must not launch on cache hits")
+            return type("BrowserDriver", (), {"chromium": Chromium()})()
+
+        def __exit__(self, *_args):
+            return False
+
+    monkeypatch.setattr(render_pdfs, "sync_playwright", lambda: FakePlaywright())
+    cache = render_pdfs.PdfCache(tmp_path / "cache")
+    pdf = b"%PDF-" + b"valid-cache-payload" * 300
+    cache.store("test-post", "fingerprint-1", pdf, 2)
+    cache.save({"test-post"})
+
+    report = render_pdfs.export(out, only="test-post", cache_dir=cache.directory)
+    assert report[0]["cache"] == "cached"
+    assert (article / "article.pdf").read_bytes() == pdf
+    html = (article / "index.html").read_text(encoding="utf-8")
+    assert html.count("data-pdf-download") == 1
+    assert 'href="article.pdf"' in html
