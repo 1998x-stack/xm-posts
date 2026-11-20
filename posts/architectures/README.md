@@ -46,6 +46,12 @@ RoPE 位于 `posts/architectures/rope/`，主题为 **Positional Encoding**；�
 - [Understanding GNN](gnn/index.html)：从节点/边/邻接矩阵进入消息传递；通过四节点手算、GCN 对称归一化、两跳交互和原始论文证据，理解 GCN、GraphSAGE 与 GAT 的区别。
 - [专题归属](_topics/graph-neural-networks/README.md)：作为 `architectures` 下的独立二级主题，图数据上的节点/边/图任务均可延伸到这里，不与规则网格 CNN 或全序列 Transformer Attention 混同。
 
+## Neural Rendering & 3D Scene Representations
+
+- [Understanding NeRF](nerf/index.html)：从多视角图像、相机位姿与射线采样出发，解释五维连续场景函数、位置编码、密度/方向相关颜色、可微体渲染、分层采样与原论文实验；并区分 Mip-NeRF、Instant-NGP 和 3D Gaussian Splatting。
+- 专题占位：[Neural Rendering & 3D Scene Representations](_topics/neural-rendering-3d-vision/README.md)。后续 NeRF 家族、神经隐式场景表示与显式/混合新视角合成方法可沿此主题组织。
+- 归属原则：不新建顶层 Computer Vision 分类；NeRF 的重点是模型信息流和场景表示。3D Gaussian Splatting 可作为同一任务下的对照方法，但不是 NeRF 变体。
+
 ## 专题规划占位（非文章）
 
 `architectures` 研究模型信息流与结构算法：MoE、State Space Models、Efficient Attention、Long-context。FlashAttention 等特定 GPU kernel 优化应与 `systems` 双向链接而不重复归档。
