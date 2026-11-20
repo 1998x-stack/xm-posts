@@ -53,6 +53,10 @@ jobs:
           python scripts/ci_metrics.py run --name browser-second -- python scripts/browser_check_second_batch.py --output reports/second-batch
       - name: Check every published article with shared Chromium workers
         run: python scripts/ci_metrics.py run --name browser-all -- python scripts/browser_check_all.py --workers 2
+      - name: Validate Reward Hacking source and interactive lab
+        run: |
+          python scripts/ci_metrics.py run --name reward-hacking-static -- python skills/olah-style-paper-posts/scripts/validate.py posts/training/reward-hacking/index.html
+          python scripts/ci_metrics.py run --name reward-hacking-browser -- python skills/olah-style-paper-posts/scripts/browser_check.py posts/training/reward-hacking/index.html --output reports/reward-hacking
       - name: Verify actual generated Pages site in Chromium
         run: python scripts/ci_metrics.py run --name browser-site -- python scripts/browser_check_site.py --output reports/site
       - name: Install Chinese and math fonts for PDF export
