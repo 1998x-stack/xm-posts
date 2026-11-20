@@ -156,5 +156,26 @@
     "summary": "以 InstructGPT 为主案例，渐进图解 SFT、偏好数据、Bradley–Terry 奖励模型、PPO 与参考 KL，解释 PPO-ptx 和局限，附两项交互实验、最小数学断言与论文证据。",
     "paper": "https://arxiv.org/abs/2203.02155",
     "illustration": "rlhf"
+  },
+  {
+    "slug": "adam",
+    "title": "Understanding Adam",
+    "subtitle": "为什么梯度需要两份记忆？从自适应矩估计到 AdamW 与收敛边界",
+    "category": "foundations",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 32,
+    "tags": [
+      "Adam",
+      "Optimization",
+      "Adaptive Moments",
+      "Bias Correction",
+      "AdamW",
+      "AMSGrad"
+    ],
+    "summary": "从随机梯度的方向与尺度出发，以七幅机制图、逐步推导、时间步交互和纯 Python 单元测试解释 Adam，并区分 AdamW、AMSGrad 与原论文证据。",
+    "paper": "https://arxiv.org/abs/1412.6980",
+    "illustration": "adam"
   }
 ]
