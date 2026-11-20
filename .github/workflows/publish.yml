@@ -32,9 +32,11 @@ jobs:
         run: python scripts/sync_skills.py --check
       - name: Run tests
         run: python -m pytest -q
+      - name: Audit inline and standalone SVG integrity
+        run: python scripts/audit_svg.py
       - name: Build static site
         run: python scripts/build_site.py
-      - name: Validate original site and articles
+      - name: Validate generated site and original articles
         run: python scripts/validate_site.py
       - name: Verify actual browser rendering & interactions
         run: |
@@ -49,7 +51,7 @@ jobs:
           sudo apt-get install -y fonts-noto-cjk fonts-stix
       - name: Render downloadable PDFs for all published posts
         run: python scripts/render_pdfs.py
-      - name: Validate generated site and original articles
+      - name: Validate final site with generated PDFs
         run: python scripts/validate_site.py
       - name: Upload browser QA evidence
         if: always()

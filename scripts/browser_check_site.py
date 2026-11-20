@@ -32,7 +32,7 @@ def run(output:Path, site:Path):
         server=http.server.ThreadingHTTPServer(('127.0.0.1',0),handler)
         thread=threading.Thread(target=server.serve_forever,daemon=True);thread.start()
         base=f'http://127.0.0.1:{server.server_address[1]}/xm-posts/'
-        report={'base':base,'viewports':{},'navigation':{},'errors':[],'pass':True,'mode':'http' if os.getenv('GITHUB_ACTIONS')=='true' else 'offline-emulated (local sandbox does not allow http/file navigation)'}
+        report={'base':base,'viewports':{},'archive':{},'navigation':{},'errors':[],'pass':True,'mode':'http' if os.getenv('GITHUB_ACTIONS')=='true' else 'offline-emulated (local sandbox does not allow http/file navigation)'}
         try:
             with sync_playwright() as p:
                 browser=p.chromium.launch(headless=True,args=['--no-sandbox'],**({'executable_path':os.getenv('CHROMIUM_PATH','/usr/bin/chromium')} if Path(os.getenv('CHROMIUM_PATH','/usr/bin/chromium')).exists() else {}))
@@ -121,6 +121,42 @@ def run(output:Path, site:Path):
                             category_cover.scroll_into_view_if_needed()
                             assert category_cover.evaluate('(img) => img.complete && img.naturalWidth > 0')
                             page.screenshot(path=str(output/'category-narrow.png'),full_page=False)
+                    # Verify the archive at each desktop/tablet/mobile width.
+                    # CI uses HTTP mode; the offline sandbox checks layout + DOM.
+                    # Previous article navigation may request its own absent favicon;
+                    # don't misattribute that earlier 404 to the archive itself.
+                    errors.clear()
+                    status.clear()
+                    if report['mode']=='http':
+                        page.goto(base+'archive/',wait_until='networkidle')
+                    else:
+                        page.set_content(offline_html(site,site/'archive/index.html'),wait_until='load')
+                    entries=page.locator('.archive-entry')
+                    thumbs=page.locator('.archive-entry .archive-cover img')
+                    assert entries.count()>=60 and thumbs.count()==entries.count()
+                    paths=thumbs.evaluate_all('(images) => images.map(img => img.getAttribute("src"))')
+                    assert len(set(paths))==len(paths), 'Archive has duplicate SVG cover paths'
+                    assert all(path.startswith('../posts/') and path.endswith('.svg') for path in paths)
+                    first=thumbs.first
+                    first.scroll_into_view_if_needed()
+                    if report['mode']=='http':
+                        page.wait_for_function("() => {const img=document.querySelector('.archive-cover img'); return img && img.complete && img.naturalWidth > 0}")
+                    archive_layout=page.evaluate('''() => ({
+                        overflow:document.documentElement.scrollWidth>innerWidth+1,
+                        h1:document.querySelectorAll('h1').length,
+                        entries:document.querySelectorAll('.archive-entry').length,
+                        thumbnails:document.querySelectorAll('.archive-cover img').length
+                    })''')
+                    assert not archive_layout['overflow'],f'Archive overflows at {w}px'
+                    assert archive_layout['h1']==1
+                    report['archive'][label]={**archive_layout,'pass':True}
+                    page.screenshot(path=str(output/f'archive-{label}.png'),full_page=False)
+                    if label=='desktop' and report['mode']=='http':
+                        page.locator('.archive-cover').first.click()
+                        assert '/posts/' in page.url, 'Archive thumbnail must navigate to article'
+                        page.go_back(wait_until='networkidle')
+                        assert page.url.endswith('/archive/')
+                    assert not errors and not status,(errors,status)
                     page.close()
                 browser.close()
         finally:server.shutdown();server.server_close()
