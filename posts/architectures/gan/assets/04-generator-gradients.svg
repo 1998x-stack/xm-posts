@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 408" role="img" aria-labelledby="title desc">
+<title id="title">GAN 生成器两种训练损失的局部梯度比较</title>
+<desc id="desc">当判别器给伪样本的真实概率为0.01时，minimax 的判别器 logit 导数大小为0.01，非饱和生成器损失导数大小为0.99。</desc>
+<rect width="960" height="408" rx="20" fill="#fbfcf8"/>
+<g font-family="system-ui,'PingFang SC',sans-serif">
+<text x="46" y="49" fill="#254b4f" font-size="26" font-weight="750">D 准确识破伪样本时，G 得到多少学习信号？</text>
+<text x="46" y="87" fill="#5f7771" font-size="18">令 D(G(z)) = 0.01；横条比较生成器损失对 D 的 logit s 的局部导数绝对值</text>
+<rect x="49" y="119" width="863" height="105" rx="13" fill="#f0f5f0" stroke="#d0dfd5"/>
+<text x="72" y="153" fill="#3b6864" font-size="22" font-weight="750">Minimax</text><text x="72" y="183" fill="#5a7570" font-size="18">log(1 − D)</text>
+<rect x="342" y="163" width="486" height="25" rx="6" fill="#d7e5db"/>
+<rect x="342" y="163" width="5" height="25" rx="2" fill="#c98058"/>
+<text x="841" y="184" fill="#b26f4b" font-size="23" font-weight="750">0.01</text>
+<rect x="49" y="235" width="863" height="108" rx="13" fill="#fff0e6" stroke="#eacbb3"/>
+<text x="72" y="267" fill="#965b3f" font-size="22" font-weight="750">Non-saturating</text><text x="72" y="299" fill="#936347" font-size="18">−log D</text>
+<rect x="342" y="281" width="486" height="25" rx="6" fill="#e3d7c9"/>
+<rect x="342" y="281" width="481" height="25" rx="6" fill="#28857c"/>
+<text x="841" y="303" fill="#256c66" font-size="23" font-weight="750">0.99</text>
+<text x="47" y="385" fill="#536f6a" font-size="17">局部导数不等于 G 的整体参数梯度；这个对照也不是训练稳定性的保证。</text>
+</g></svg>
