@@ -34,7 +34,7 @@
 
 `knowledge-distillation` 注册为 `training` 下的二级专题，不新增 `model-compression` 一级分类。原因是 KD 的核心对象是训练监督与教师—学生知识迁移；它可以服务模型压缩，也可以用于同规模能力迁移、LLM 推理轨迹学习和多模态知识迁移。剪枝、量化与低秩分解仍保留各自技术边界，通过 tags、文章链接与阅读路径建立交叉关系。
 
-专题采用多维标签而非互斥树：知识信号（response / feature / relation / sequence）、教师访问方式（white-box / black-box）、数据机制（offline / online / on-policy / self / multi-teacher）和能力目标（通用任务 / reasoning / multimodal / agent）。一篇论文可以同时落在多个轴上；每篇文章仍只有一个主 category/topic。
+专题采用多维标签而非互斥树：知识信号（response / feature / relation / sequence）、教师访问方式（white-box / black-box）、教师拓扑（single / multi-teacher / self-distillation）、数据机制（offline / online / on-policy / data-free / synthetic）和能力目标（通用任务 / reasoning / multimodal / agent）。一篇论文可以同时落在多个轴上；每篇文章仍只有一个主 category/topic。
 
 ## 2026-11 分类占位整合
 

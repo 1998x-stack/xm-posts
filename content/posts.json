@@ -2139,7 +2139,11 @@
       "LLM Post-training",
       "DeepSeek-R1",
       "GKD",
-      "Dataset Distillation"
+      "Dataset Distillation",
+      "Data-free Distillation",
+      "Self-distillation",
+      "Multi-teacher Distillation",
+      "Cross-modal Distillation"
     ],
     "summary": "从 Hinton 软目标与温度缩放出发，推导 KL 蒸馏损失及 T² 梯度校正，比较响应/特征/关系蒸馏、离线/在线与序列级蒸馏；拆解 DistilBERT、TinyBERT、GKD 和 DeepSeek-R1 的训练路径，附温度交互实验、可复现 Python 数值验证和证据账本。",
     "paper": "https://arxiv.org/abs/1503.02531",

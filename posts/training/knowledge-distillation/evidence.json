@@ -178,5 +178,14 @@
     "locator": "Abstract; article scope and definitions",
     "status": "verified",
     "notes": "The survey appeared in Artificial Intelligence Review 59:17 (2026); the arXiv preprint is 2504.14772."
+  },
+  {
+    "id": "KD21",
+    "claim": "Data-free knowledge distillation can synthesize or invert inputs to query a teacher when the original training data are unavailable; it is a data-access regime rather than a teacher-access or on-policy label.",
+    "kind": "survey-claim",
+    "source_url": "https://doi.org/10.1016/j.mlwa.2024.100605",
+    "locator": "Sections on data-free knowledge distillation and advanced distillation paradigms",
+    "status": "verified",
+    "notes": "Synthetic inputs can be paired with white-box or black-box teacher access; distribution mismatch remains a central risk."
   }
 ]

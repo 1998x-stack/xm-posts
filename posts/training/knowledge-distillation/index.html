@@ -266,9 +266,12 @@ td:first-child{font-weight:700}
 <div><b>Offline KD（离线蒸馏）</b><p>先用教师在 transfer set 上生成 logits / soft labels，再固定这些目标训练学生。实现和数据管线较简单，但学生训练时看到的前缀可能与部署时自己生成的前缀不同。</p></div>
 <div><b>Online KD（在线蒸馏）</b><p>训练时教师和学生持续交互，或者根据当前学生状态更新监督信号。它可以适应学生变化，但需要额外的教师前向计算与更复杂的训练调度。</p></div>
 </div>
-<div class="note"><strong>分类不是一棵互斥树，而是多个正交坐标轴：</strong>“传递什么知识”（response / feature / relation）、“能看到教师什么”（white-box / black-box）、“样本从哪里来”（offline / online / on-policy / self-generated）以及“迁移哪种能力”（通用任务 / 推理 / 多模态 / Agent）。一篇论文可以同时落在多个坐标上；这也是本专题采用多维标签而非把每个词都建成独立一级分类的原因。</div>
+<div class="note"><strong>分类不是一棵互斥树，而是多个正交坐标轴：</strong>“传递什么知识”（response / feature / relation / sequence）、“能看到教师什么”（white-box / black-box）、“教师拓扑”（single / multi-teacher / self-distillation）、“数据机制”（offline / online / on-policy / data-free / synthetic）以及“迁移哪种能力”（通用任务 / 推理 / 多模态 / Agent）。这些轴彼此正交，一篇论文可以同时落在多个坐标上；这也是本专题采用多维标签而非互斥树的原因。</div>
+<p><strong>Online 与 on-policy 不是同义词。</strong>Online 描述教师和学生如何在训练过程中协同更新或交互；on-policy 描述训练样本由谁的策略分布产生。一个方法可以在线更新教师与学生，却仍使用固定数据；也可以使用冻结教师，但在学生自己采样的前缀上做 on-policy 蒸馏。</p>
 <h3>自蒸馏与多教师蒸馏</h3>
 <p><strong>Self-distillation</strong> 不要求教师一定比学生大很多：同一个模型的深层/浅层、早期/后期 checkpoint，或带有额外监督头的分支，都可以形成 teacher–student 关系。<strong>Multi-teacher KD</strong> 则组合多个教师，可能通过平均概率、置信度加权或特征融合来生成学生目标。前者的风险是放大自身错误，后者的风险是教师之间的冲突和额外成本。</p>
+<h3>Data-free KD：没有原始训练数据怎么办？</h3>
+<p>当原始训练集因隐私、许可或存储限制而不可访问时，可以让生成器、输入反演或统计先验产生合成样本，再查询教师并用教师响应训练学生。这类 <strong>Data-free KD</strong> 解决的是“学生从哪里获得输入数据”的约束；它不等同于 black-box KD，也不等同于 on-policy KD：合成样本可以由白盒或黑盒教师标注，生成器也不一定来自学生策略。主要风险是合成输入覆盖不到真实数据分布，学生因此学到教师在伪数据上的行为而非部署环境中的能力。<a href="https://doi.org/10.1016/j.mlwa.2024.100605">2024 年 KD 综述</a>将 data-free distillation 作为重要的进阶方向讨论。</p>
 <h3>GKD：让学生从自己的错误中学习</h3>
 <p>自回归模型存在一个关键问题：训练时学生可能只在真实数据或教师生成的序列上学习，但推理时它会不断消费自己的输出。一旦学生早期生成了不同于教师轨迹的 token，后续前缀也会改变，训练分布和部署分布便出现 <strong>distribution mismatch</strong>。</p>
 <p>Agarwal 等人在 ICLR 2024 的 <strong>Generalized Knowledge Distillation (GKD)</strong> 中，让学生采样自己的输出序列，再让教师对这些序列提供反馈。这样，学生会在自己实际访问到的状态上学习，而不只是在教师预先写好的轨迹上学习。GKD 还讨论了 forward KL、reverse KL 和 generalized JS 等可选散度，并可与 RL fine-tuning 结合。<a href="https://arxiv.org/abs/2306.13649">阅读 GKD 原论文</a>。</p>

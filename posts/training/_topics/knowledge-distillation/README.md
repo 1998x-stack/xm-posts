@@ -14,8 +14,9 @@
 
 1. 知识信号：Response / Logit、Feature、Relation、Sequence / Rationale。
 2. 教师访问：White-box / Black-box。
-3. 数据机制：Offline / Online / On-policy / Self-distillation / Multi-teacher。
-4. 目标能力：分类与表征、语言任务、推理、工具调用、多模态。
+3. 教师拓扑：Single-teacher / Multi-teacher / Self-distillation。
+4. 数据机制：Offline / Online / On-policy / Data-free / Synthetic data。
+5. 目标能力：分类与表征、语言任务、推理、工具调用、多模态。
 
 这些维度彼此正交；单篇论文可以同时采用多种信号与训练机制。文章仍保持一个主 category/topic，避免分类重复。
 
