@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 322" role="img" aria-labelledby="td3-fig4-title td3-fig4-desc" style="font-family:system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif"><title id="td3-fig4-title">目标策略平滑避免在单个尖峰上 bootstrap</title><desc id="td3-fig4-desc">围绕确定性目标动作的邻域采样，减少对 Q 值局部窄峰的依赖；噪声在目标网络上使用，不等于行为探索噪声。</desc><rect width="900" height="322" rx="18" fill="#f7faf8"/><text x="38" y="37" font-size="21" font-weight="600" fill="#294d53" text-anchor="start">目标动作周围的局部邻域</text>
+<path d="M55 256L845 256" stroke="#6d9292" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M55 256L55 66" stroke="#6d9292" stroke-width="3" fill="none" stroke-linecap="round"/>
+<path d="M62 238 C185 219 272 167 335 161 C391 155 433 184 472 172 L507 58 L540 190 C608 194 693 233 839 241" stroke="#bb7951" stroke-width="5" fill="none"/>
+<rect x="320" y="51" width="330" height="204" rx="18" fill="#77bfb0" opacity=".12"/>
+<circle cx="350" cy="255" r="7" fill="#248a7a" opacity="0.40"/><circle cx="392" cy="246" r="7" fill="#248a7a" opacity="0.48"/><circle cx="434" cy="237" r="7" fill="#248a7a" opacity="0.56"/><circle cx="476" cy="255" r="7" fill="#248a7a" opacity="0.64"/><circle cx="518" cy="246" r="7" fill="#248a7a" opacity="0.72"/><circle cx="560" cy="237" r="7" fill="#248a7a" opacity="0.80"/><circle cx="602" cy="255" r="7" fill="#248a7a" opacity="0.88"/>
+<path d="M486 260V70" stroke="#288d7b" stroke-dasharray="7 6" stroke-width="3"/>
+<text x="485" y="286" font-size="16" font-weight="800" fill="#268874" text-anchor="middle">π′(s′)</text>
+<text x="548" y="88" font-size="16" font-weight="800" fill="#b7744e" text-anchor="start">窄尖峰</text>
+<text x="666" y="143" font-size="17" font-weight="800" fill="#277c6f" text-anchor="start">对 ã = π′ + ε</text>
+<text x="666" y="170" font-size="16" font-weight="600" fill="#5d7b77" text-anchor="start">计算 Q′₁、Q′₂</text>
+<text x="38" y="301" font-size="14" font-weight="600" fill="#687d7c" text-anchor="start">绿色点表示邻近目标动作：图为机制示意，不是原论文实验曲线。</text></svg>

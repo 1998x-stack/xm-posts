@@ -12,7 +12,7 @@
 |---|---|---|---|
 | **Understanding SentencePiece** | 原始文字如何编码为子词 ID？BPE、Unigram、归一化与解码边界 | [`posts/foundations/sentencepiece/`](posts/foundations/sentencepiece/index.html) | [Kudo & Richardson (EMNLP 2018)](https://aclanthology.org/D18-2012/) |
 | **Understanding GAE** | 一步 TD 与全轨迹回报之间，如何权衡偏差与方差？ | [`posts/reinforcement-learning/gae/`](posts/reinforcement-learning/gae/index.html) | [Schulman et al. (ICLR 2016)](https://arxiv.org/abs/1506.02438) |
-| **Understanding AlphaGo** | 为什么策略网络与价值网络能引导树搜索，避免只靠遍历下围棋？ | [`posts/reinforcement-learning/alphago/`](posts/reinforcement-learning/alphago/index.html) | [Silver et al. (Nature 2016)](https://doi.org/10.1038/nature16961) |
+| **Understanding AlphaGo** | 15 幅 SVG 解析 AlphaGo：19×19×48 特征、APV-MCTS、虚拟损失与 BayesElo 消融 | [`posts/reinforcement-learning/alphago/`](posts/reinforcement-learning/alphago/index.html) | [Silver et al. (Nature 2016)](https://doi.org/10.1038/nature16961) |
 | **Understanding The Pile** | 为什么 22 种语料混合能增强跨领域文本建模？ | [`posts/datasets/the-pile/`](posts/datasets/the-pile/index.html) | [Gao et al. (2020)](https://arxiv.org/abs/2101.00027) |
 | **Understanding Chinchilla** | 在固定训练 FLOPs 下，参数量与训练 tokens 如何均衡？ | [`posts/training/chinchilla/`](posts/training/chinchilla/index.html) | [Hoffmann et al. (NeurIPS 2022)](https://arxiv.org/abs/2203.15556) |
 | **Understanding FineWeb** | 跨快照去重越强，为什么训练效果反而可能更差？ | [`posts/datasets/fineweb/`](posts/datasets/fineweb/index.html) | [Penedo et al. (NeurIPS 2024)](https://arxiv.org/abs/2406.17557) |
@@ -272,3 +272,6 @@ ReAct（Yao et al., ICLR 2023）收录于 `posts/agents/react/`：解释 Thought
 MoE 复用 `Architectures → Mixture of Experts (MoE)` 已有二级研究主题，不新增重复分类。[Understanding MoE](posts/architectures/moe/index.html) 以 Shazeer et al. 2017 为主线，区分 GShard、Switch、Mixtral 与 DeepSeekMoE，提供七幅独立 SVG、八组 MathML、路由容量交互与 `tests/test_moe.py` 数值验证。
 
 BERT 归入现有 `Training → Pretraining`，新增二级专题 **Bidirectional Encoder Pretraining / BERT**，不新增顶层类别。文章包含六幅机制 SVG、五组 MathML、MLM 交互、论文消融与标准库不变量测试。
+
+
+TD3 归入 `reinforcement-learning` → **Continuous Control / Off-policy Actor–Critic** 既有分类，不新建一级或重复二级分类；论文精读位于 [`posts/reinforcement-learning/td3/`](posts/reinforcement-learning/td3/index.html)。内容以 Fujimoto et al. ICML 2018 为准，包含 16 节机制解释、五幅独立 SVG、五组原生 MathML、交互式 clipped double-Q 算例、Table 1 与 Table 2 分指标实验对照、纯 Python 数学核验及证据台账。
