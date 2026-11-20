@@ -17,6 +17,11 @@ import shutil
 from urllib.parse import urlparse
 from xml.sax.saxutils import escape as X
 
+if __package__:
+    from .related_posts import enrich_article_related, load_reading_paths
+else:
+    from related_posts import enrich_article_related, load_reading_paths
+
 ROOT=Path(__file__).resolve().parents[1]
 DEFAULT_URL='https://1998x-stack.github.io/xm-posts/'
 VALID_SLUG=re.compile(r'^[a-z0-9]+(?:-[a-z0-9]+)*$')
@@ -373,11 +378,14 @@ def build(root:Path,out:Path,base:str):
     write(out,'topics/index.html',build_topics(categories,posts,base))
     for c in categories:write(out,f'categories/{c["slug"]}/index.html',build_category(c,posts,categories,base))
     published=[p for p in posts if p['status']=='published']
+    reading_paths=load_reading_paths(root,published)
     for p in published:
         src=root/'posts'/p['category']/p['slug'];dst=out/'posts'/p['category']/p['slug']
         shutil.copytree(src,dst,ignore=shutil.ignore_patterns('README.md','*.pyc','__pycache__','*.py','evidence.json'))
         published_html=dst/'index.html'
-        published_html.write_text(enrich_article_head(published_html.read_text(encoding='utf-8'),p,base),encoding='utf-8')
+        page=enrich_article_head(published_html.read_text(encoding='utf-8'),p,base)
+        page=enrich_article_related(page,p,published,reading_paths)
+        published_html.write_text(page,encoding='utf-8')
     shutil.copytree(root/'site/assets',out/'assets')
     write(out,'.nojekyll','')
     write(out,'404.html',html_page(title='页面未找到 · xm-posts',description='你访问的页面不存在。',canonical=url_join(base,'404.html'),body='<div class="container category-empty not-found"><h1>这条路径尚未被写下。</h1><p>页面可能移动了，或文章尚未正式发布。</p><a href="'+H(base,quote=True)+'">回到首页 ↗</a></div>',root_href=base))
