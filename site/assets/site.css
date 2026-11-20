@@ -301,3 +301,12 @@
 @media print{
   .cover-illustration,.index-image-link,.spotlight-cover-link{break-inside:avoid}
 }
+
+/* Long research titles must wrap inside editorial cards instead of expanding grids. */
+.index-card.post-card > *, .research-card, .route-card, .spotlight-card, .index-main { min-width: 0; }
+.index-main h3, .index-main > p, .research-card strong, .research-description,
+.route-card h3, .route-card li, .spotlight-card h3, .cover-caption { overflow-wrap: anywhere; }
+@media (max-width: 390px) {
+  .index-kicker, .index-tags { overflow-wrap: anywhere; }
+  .index-arrow { justify-self: end; }
+}
