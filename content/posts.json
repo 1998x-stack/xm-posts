@@ -260,6 +260,27 @@
     "illustration": "pagedattention"
   },
   {
+    "slug": "ddpg",
+    "title": "Understanding DDPG",
+    "subtitle": "连续动作如何学习？从确定性策略梯度到双目标网络与经验回放",
+    "category": "reinforcement-learning",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 32,
+    "tags": [
+      "DDPG",
+      "Deterministic Policy Gradient",
+      "Continuous Control",
+      "Off-policy Actor–Critic",
+      "Replay Buffer",
+      "Target Networks"
+    ],
+    "summary": "以 Lillicrap 等 ICLR 2016 原论文为证据，从连续动作枚举困境推导确定性 Actor 梯度、Critic Bellman 目标、经验回放、Polyak 双目标网络与 OU 探索，配五幅结构图、可交互 TD 目标算例、纯 Python 梯度核验和论文实验对照，并辨析 TD3/SAC 演进。",
+    "paper": "https://arxiv.org/abs/1509.02971",
+    "illustration": "ddpg"
+  },
+  {
     "slug": "ppo",
     "title": "Understanding PPO",
     "subtitle": "为什么同一批经验能学多轮，却不能任意改写策略？",

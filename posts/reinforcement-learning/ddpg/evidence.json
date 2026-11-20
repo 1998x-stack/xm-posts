@@ -1,0 +1,128 @@
+[
+  {
+    "id": "D01",
+    "claim": "A 7-DoF system with three choices per joint yields 3^7=2187 discretized actions",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/pdf/1509.02971",
+    "locator": "Original ICLR 2016 paper, Introduction p.1",
+    "status": "verified",
+    "notes": "Example is coarse quantization, not continuous-space action count"
+  },
+  {
+    "id": "D02",
+    "claim": "DDPG is a model-free, off-policy deterministic actor-critic combining DPG with replay and target networks",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/pdf/1509.02971",
+    "locator": "Sections 1–3, pp.1–4",
+    "status": "verified",
+    "notes": "Historical DPG theorem itself is Silver et al., ICML 2014"
+  },
+  {
+    "id": "D03",
+    "claim": "Deterministic policy gradient uses chain rule through Q(s,a) and mu(s)",
+    "kind": "equation",
+    "source_url": "https://arxiv.org/pdf/1509.02971",
+    "locator": "Section 3, Eq.(6), p.3",
+    "status": "verified",
+    "notes": "Expectations over off-policy state visitation; discount in that distribution ignored in practical estimate"
+  },
+  {
+    "id": "D04",
+    "claim": "Uniform replay minibatches reduce adjacent sample correlations",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/pdf/1509.02971",
+    "locator": "Section 3, p.4",
+    "status": "verified",
+    "notes": "Original algorithm stores (s,a,r,s'); terminal mask is a modern implementation clarification"
+  },
+  {
+    "id": "D05",
+    "claim": "Both target actor and target critic are softly updated with tau theta + (1-tau) theta_target",
+    "kind": "equation",
+    "source_url": "https://arxiv.org/pdf/1509.02971",
+    "locator": "Section 3, p.4 and Algorithm 1, p.5",
+    "status": "verified",
+    "notes": "The small tau convention is opposite of Spinning Up polyak rho near 1"
+  },
+  {
+    "id": "D06",
+    "claim": "Original exploration uses temporally correlated Ornstein–Uhlenbeck process",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/pdf/1509.02971",
+    "locator": "Section 3, Eq.(7), p.4; Supplementary Materials",
+    "status": "verified",
+    "notes": "OU discretization in mini_ddpg.py is pedagogical, not a claim about exactly replicated implementation"
+  },
+  {
+    "id": "D07",
+    "claim": "Training ablations find no-target-network behavior poor in several environments",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/pdf/1509.02971",
+    "locator": "Section 4, p.5; Figure 2, p.6",
+    "status": "verified",
+    "notes": "Does not establish universal necessity of batch norm in modern implementations"
+  },
+  {
+    "id": "D08",
+    "claim": "Performance after at most 2.5M steps averages five replicas; normalized random=0 and planner iLQG=1 except Torcs",
+    "kind": "experiment",
+    "source_url": "https://arxiv.org/pdf/1509.02971",
+    "locator": "Section 4 Table 1, p.7",
+    "status": "verified",
+    "notes": "Do not interpret score as percentage accuracy or compare Torcs with normalized tasks"
+  },
+  {
+    "id": "D09",
+    "claim": "Selected Table 1 mean scores cartpole lowd=.844 pix=.482 cntrl=.244; cheetah .903 .457 -.008; fixedReacher .849 .693 .259; pendulum .946 .663 .099",
+    "kind": "experiment",
+    "source_url": "https://arxiv.org/pdf/1509.02971",
+    "locator": "Table 1, p.7",
+    "status": "verified",
+    "notes": "R_av columns only, not best-run scores; paper-specific control benchmark"
+  },
+  {
+    "id": "D10",
+    "claim": "Pixel observations comprise 3 RGB images each at 64x64 after repeating action for three steps",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/pdf/1509.02971",
+    "locator": "Section 4, p.5",
+    "status": "verified",
+    "notes": "9 feature maps, not a single still image"
+  },
+  {
+    "id": "D11",
+    "claim": "Modern DDPG implementations add terminal masks and may use Gaussian noise or initial random exploration",
+    "kind": "modern-implementation",
+    "source_url": "https://spinningup.openai.com/en/latest/algorithms/ddpg.html",
+    "locator": "OpenAI Spinning Up DDPG docs, Bellman backup and pseudocode",
+    "status": "verified",
+    "notes": "Not to be confused with ICLR 2016 Algorithm 1's minimal notation"
+  },
+  {
+    "id": "D12",
+    "claim": "TD3 addresses DDPG's critic overestimation/exploitation with twin critics, delayed actor updates and target policy smoothing",
+    "kind": "later-work",
+    "source_url": "https://spinningup.openai.com/en/latest/algorithms/td3.html",
+    "locator": "OpenAI Spinning Up TD3 docs, Key Equations",
+    "status": "verified",
+    "notes": "These are additions in TD3, not original DDPG"
+  },
+  {
+    "id": "D13",
+    "claim": "The scalar numerical code validates Bellman target, EMA, critic MSE and actor gradient versus finite differences",
+    "kind": "toy-derivation",
+    "source_url": "https://arxiv.org/abs/1509.02971",
+    "locator": "mini_ddpg.py and tests/test_ddpg.py",
+    "status": "derived",
+    "notes": "Not a control benchmark, not a neural-network trainer"
+  },
+  {
+    "id": "D14",
+    "claim": "All diagrams are explanatory abstractions rather than reproductions of paper figures",
+    "kind": "illustration",
+    "source_url": "https://arxiv.org/abs/1509.02971",
+    "locator": "SVG assets 01–05",
+    "status": "illustrative",
+    "notes": "Numbers appearing in diagrams are directly identified as toy or paper example"
+  }
+]

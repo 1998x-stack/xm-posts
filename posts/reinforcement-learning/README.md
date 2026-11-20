@@ -3,6 +3,7 @@
 从环境反馈、信用分配与值函数到策略优化，系统解释 Policy Gradient、Actor–Critic、GAE、TRPO、PPO 及其与 LLM 偏好对齐的联系。
 
 ## 已发布
+- [Understanding DDPG](ddpg/index.html)：连续动作、确定性策略梯度、Off-policy Replay 与双目标网络。
 - [Understanding SAC](sac/index.html)：最大熵离策略 Actor–Critic、经验回放、双 Q、tanh 高斯策略、自动温度与版本分辨。
 - [Understanding DQN](dqn/index.html)：贝尔曼自举、经验回放、目标网络、Atari 架构与论文证据。
 - [Understanding PPO](ppo/index.html)：为什么用 clipped surrogate、如何估计优势以及两种 KL 的区别。
