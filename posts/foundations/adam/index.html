@@ -11,6 +11,22 @@ a{color:#217470;text-underline-offset:4px;text-decoration-color:#a7ccc8}a:hover{
 @media(max-width:580px){body{font-size:16px}.layout{padding:27px 16px 75px}.sitebar-inner{padding:10px 16px}.trail{display:none}.links{gap:11px}.links a{font-size:12px}h1{font-size:43px}.dek{font-size:18px}.meta{margin-bottom:39px}.compare{grid-template-columns:1fr}.eq{font-size:17px;padding:13px 12px}.figure-card{padding:4px 2px 10px}.figure-card figcaption{padding:9px}.step{grid-template-columns:1fr;gap:2px}.toc a{font-size:11px}section{margin-bottom:62px}.experiment{padding:17px}.readout{padding:13px}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
 @media print{body{background:white}.sitebar,.toc,.skip,.controls{display:none!important}.layout{display:block;padding:0;max-width:none}section{break-inside:avoid;margin:0 0 26px}.figure-card{break-inside:avoid}.code{background:#f1f4f2;color:#21363b}.experiment{break-inside:avoid}}
+
+.adam-math-lab{background:#fff;border:1px solid #d4e7de;border-radius:10px;padding:12px;margin:18px 0}
+.adam-math-lab svg{display:block;width:100%;height:auto;min-width:500px}
+.adam-math-scroller{max-width:100%;overflow:auto;scrollbar-width:thin}
+.adam-math-lab figcaption{font-size:13px;color:#577470;margin-top:9px;line-height:1.6}
+.adam-math-scroll{max-width:100%;overflow:auto}
+.adam-math-scroll table{min-width:720px;width:100%;font-variant-numeric:tabular-nums;font-size:13px}
+.adam-math-scroll td,.adam-math-scroll th{padding:9px 8px;text-align:right}
+.adam-math-scroll td:first-child,.adam-math-scroll th:first-child{text-align:left}
+.adam-math-scroll tr[aria-current=step]{background:#eaf7ed}
+.adam-math-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin:13px 0}
+.adam-math-stats>div{border:1px solid #d5e8de;background:#f0f8f2;padding:11px;border-radius:8px}
+.adam-math-stats b{font-size:12px;color:#486e68;display:block}
+.adam-math-stats output{font-size:18px;font-weight:800;color:#296e67;font-variant-numeric:tabular-nums}
+.adam-math-lesson{background:#ecf7f0;color:#386860;border-left:3px solid #24877a;padding:12px 14px;font-size:14px;line-height:1.6}
+@media(max-width:580px){.adam-math-lab{padding:6px}.adam-math-stats{grid-template-columns:1fr}}
 </style><style id="offline-mathml-typography">
 .math-inline{font-family:"Cambria Math","STIX Two Math","Latin Modern Math","DejaVu Serif",serif;vertical-align:-.06em;font-size:1.04em}
 [data-math-enhanced="true"]{min-width:0;max-width:100%;white-space:normal!important;overflow-x:visible!important}
@@ -53,7 +69,12 @@ a{color:#217470;text-underline-offset:4px;text-decoration-color:#a7ccc8}a:hover{
 <p>需要分清 <strong>“每坐标自适应”</strong> 与 <strong>“学习率不需要调”</strong>：前者是计算规则，后者不是理论保证。极端梯度稀疏、学习率调度、权重衰减和低精度表示都会改变实际效果。</p></section>
 <section id="interactive" aria-labelledby="interactive-heading"><h2 id="interactive-heading">08 · 交互实验：改变时间步</h2><p>现在让一维梯度按顺序到来：<strong>[2, −1, 0.5, 0]</strong>。尝试切换时间步，对照未修正和修正后的 m、v，并观察参数增量为何具有历史依赖。</p>
 <div class="experiment"><span class="mini-label">交互实验 · 一维确定性梯度序列</span><div class="controls" role="group" aria-label="选择 Adam 计算的时间步"><button type="button" data-time="1" aria-pressed="true">t = 1</button><button type="button" data-time="2" aria-pressed="false">t = 2</button><button type="button" data-time="3" aria-pressed="false">t = 3</button><button type="button" data-time="4" aria-pressed="false">t = 4</button></div>
-<div class="readout" id="adam-readout" aria-live="polite"><p><strong>第 1 步 · g₁ = 2</strong></p><p>m₁ = 0.200000 → m̂₁ = 2.000000</p><p>v₁ = 0.004000 → v̂₁ = 4.000000</p><p>Δθ₁ = −0.00100000（α = 0.001，ε = 10⁻⁸）</p></div><p class="widget-note">这些数值是本页按 Algorithm 1 独立计算的教学示例，不是论文实测曲线；禁用 JavaScript 时仍显示第一步。</p></div>
+<div class="readout" id="adam-readout" aria-live="polite"><p><strong>第 1 步 · g₁ = 2</strong></p><p>m₁ = 0.200000 → m̂₁ = 2.000000</p><p>v₁ = 0.004000 → v̂₁ = 4.000000</p><p>Δθ₁ = −0.00100000（α = 0.001，ε = 10⁻⁸）</p></div>
+<figure class="adam-math-lab"><div class="adam-math-scroller"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 710 270" role="img" aria-labelledby="adam-curve-title adam-curve-desc"><title id="adam-curve-title">当前梯度与历史一阶矩的同尺度柱形对照</title><desc id="adam-curve-desc">四个时间步梯度 2、负 1、0.5、0。橙色为当前梯度，绿色为修正后的动量方向。共同零线展示正负方向及历史惯性。</desc><rect width="710" height="270" rx="10" fill="#fcfefa"/><text x="27" y="30" font-size="18" font-weight="700" fill="#2f6761">gₜ 是当前方向；m̂ₜ 还记着前面的梯度</text><rect x="27" y="41" width="14" height="12" rx="2" fill="#ca8057"/><text x="49" y="52" font-size="13" fill="#51746f">当前 g</text><rect x="157" y="41" width="14" height="12" rx="2" fill="#318a7f"/><text x="177" y="52" font-size="13" fill="#51746f">历史 m̂</text><line x1="40" y1="154" x2="683" y2="154" stroke="#a8c4b9" stroke-width="2"/><text x="29" y="81" font-size="12" fill="#567973">正 ↑</text><text x="29" y="254" font-size="12" fill="#567973">负 ↓</text><g id="adam-dynamic-bars"><rect x="99" y="76.000" width="26" height="78.000" rx="3" fill="#ca8057" opacity="1"/><rect x="138" y="76.000" width="26" height="78.000" rx="3" fill="#318a7f" opacity="1"/><text x="130" y="247" text-anchor="middle" font-size="14" fill="#176c64" font-weight="800">t=1</text><rect x="82" y="65" width="110" height="187" rx="8" stroke="#2d897e" stroke-width="2" fill="none"/><rect x="247" y="154.000" width="26" height="39.000" rx="3" fill="#ca8057" opacity="0.55"/><rect x="286" y="137.579" width="26" height="16.421" rx="3" fill="#318a7f" opacity="0.55"/><text x="278" y="247" text-anchor="middle" font-size="14" fill="#5f7c75" font-weight="500">t=2</text><rect x="395" y="134.500" width="26" height="19.500" rx="3" fill="#ca8057" opacity="0.55"/><rect x="434" y="136.443" width="26" height="17.557" rx="3" fill="#318a7f" opacity="0.55"/><text x="426" y="247" text-anchor="middle" font-size="14" fill="#5f7c75" font-weight="500">t=3</text><rect x="543" y="154.000" width="26" height="0.000" rx="3" fill="#ca8057" opacity="0.55"/><rect x="582" y="141.548" width="26" height="12.452" rx="3" fill="#318a7f" opacity="0.55"/><text x="574" y="247" text-anchor="middle" font-size="14" fill="#5f7c75" font-weight="500">t=4</text></g></svg></div><figcaption>所有四步使用同一个数值比例；橙色/青色柱的正负方向能不同。调节时间步只高亮对应状态，不改变已经发生的历史。</figcaption></figure>
+<div class="adam-math-scroll"><table><caption>四步完整账本：当前 g、一阶 m、二阶原始矩 v、偏差修正和最终参数</caption><thead><tr><th>步数 / g</th><th>m</th><th>m̂</th><th>v</th><th>v̂</th><th>Δθ</th><th>θ（θ₀=3）</th></tr></thead><tbody id="adam-dynamic-rows"><tr aria-current="step"><th scope="row">1 / +2.00</th><td>0.200000</td><td>2.000000</td><td>0.004000</td><td>4.000000</td><td>−0.00100000</td><td>2.999000</td></tr></tbody></table></div>
+<div class="adam-math-stats"><div><b>当前梯度 g</b><output id="adam-g">+2.00</output></div><div><b>修正方向 m̂</b><output id="adam-mhat">+2.0000</output></div><div><b>累计参数 θ</b><output id="adam-theta">2.999000</output></div></div>
+<p class="adam-math-lesson" id="adam-dynamic-explain">第一步，零初始化造成 m₁=0.2 和 v₁=0.004 偏小，修正后分别是 2 和 4。</p>
+<p class="widget-note">这些数值是本页按 Algorithm 1 独立计算的教学示例，不是论文实测曲线；禁用 JavaScript 时仍显示第一步。</p></div>
 <div class="note"><strong>思考：</strong>当 g₄=0 时，本步是否一定 Δθ₄=0？并不一定：此前累积的 m₃ 往往仍非零，因此即使当前梯度为零，动量仍可能带来更新。</div></section>
 <section id="algorithm" aria-labelledby="algorithm-heading"><h2 id="algorithm-heading">09 · 完整算法与代码</h2><p class="lead">把所有组件合在一起，得到 Adam 的精确定义。请特别关注 <strong>ε 在 √v̂ 的外面</strong>；不同实现可能通过改变运算顺序使用不同形式的有效 ε，不能随意当作数值上完全相同。</p>
 <div class="eq" data-math-enhanced="true"><div class="math-scroll" data-math-scroll role="region" tabindex="0" aria-label="公式 1，可横向滚动"><math display="block" class="math-display" aria-label="gₜ = ∇θ fₜ(θₜ₋₁)"><mrow><msub><mi>g</mi><mrow><mi>t</mi></mrow></msub><mo>=</mo><mo>∇</mo><mi>θ</mi><msub><mi>f</mi><mrow><mi>t</mi></mrow></msub><mrow><mo>(</mo><msub><mi>θ</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>)</mo></mrow></mrow></math></div><div class="math-scroll" data-math-scroll role="region" tabindex="0" aria-label="公式 2，可横向滚动"><math display="block" class="math-display" aria-label="mₜ = β₁mₜ₋₁ + (1−β₁)gₜ"><mrow><msub><mi>m</mi><mrow><mi>t</mi></mrow></msub><mo>=</mo><msub><mi>β</mi><mrow><mn>1</mn></mrow></msub><msub><mi>m</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>+</mo><mrow><mo>(</mo><mn>1</mn><mo>−</mo><msub><mi>β</mi><mrow><mn>1</mn></mrow></msub><mo>)</mo></mrow><msub><mi>g</mi><mrow><mi>t</mi></mrow></msub></mrow></math></div><div class="math-scroll" data-math-scroll role="region" tabindex="0" aria-label="公式 3，可横向滚动"><math display="block" class="math-display" aria-label="vₜ = β₂vₜ₋₁ + (1−β₂)gₜ²"><mrow><msub><mi>v</mi><mrow><mi>t</mi></mrow></msub><mo>=</mo><msub><mi>β</mi><mrow><mn>2</mn></mrow></msub><msub><mi>v</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>+</mo><mrow><mo>(</mo><mn>1</mn><mo>−</mo><msub><mi>β</mi><mrow><mn>2</mn></mrow></msub><mo>)</mo></mrow><msubsup><mi>g</mi><mrow><mi>t</mi></mrow><mrow><mn>2</mn></mrow></msubsup></mrow></math></div><div class="math-scroll" data-math-scroll role="region" tabindex="0" aria-label="公式 4，可横向滚动"><math display="block" class="math-display" aria-label="m̂ₜ = mₜ/(1−β₁ᵗ), v̂ₜ=vₜ/(1−β₂ᵗ)"><mrow><msub><mover accent="true"><mi>m</mi><mo>ˆ</mo></mover><mi>t</mi></msub><mo>=</mo><mfrac><msub><mi>m</mi><mrow><mi>t</mi></mrow></msub><mrow><mo>(</mo><mn>1</mn><mo>−</mo><msubsup><mi>β</mi><mrow><mn>1</mn></mrow><mrow><mi>t</mi></mrow></msubsup><mo>)</mo></mrow></mfrac><mo>,</mo><msub><mover accent="true"><mi>v</mi><mo>ˆ</mo></mover><mi>t</mi></msub><mo>=</mo><mfrac><msub><mi>v</mi><mrow><mi>t</mi></mrow></msub><mrow><mo>(</mo><mn>1</mn><mo>−</mo><msubsup><mi>β</mi><mrow><mn>2</mn></mrow><mrow><mi>t</mi></mrow></msubsup><mo>)</mo></mrow></mfrac></mrow></math></div><div class="math-scroll" data-math-scroll role="region" tabindex="0" aria-label="公式 5，可横向滚动"><math display="block" class="math-display" aria-label="θₜ = θₜ₋₁ − α m̂ₜ/(√v̂ₜ + ε)"><mrow><msub><mi>θ</mi><mrow><mi>t</mi></mrow></msub><mo>=</mo><msub><mi>θ</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>−</mo><mfrac><mrow><mi>α</mi><msub><mover accent="true"><mi>m</mi><mo>ˆ</mo></mover><mi>t</mi></msub></mrow><mrow><mo>(</mo><msqrt><msub><mover accent="true"><mi>v</mi><mo>ˆ</mo></mover><mi>t</mi></msub></msqrt><mo>+</mo><mi>ε</mi><mo>)</mo></mrow></mfrac></mrow></math></div><div class="math-note">所有向量操作逐元素，时间步 t 从 1 开始；这是原论文 Algorithm 1 的清晰写法。</div></div>
@@ -85,17 +106,54 @@ for t, gradient in enumerate(gradients, 1):
 <section id="summary" aria-labelledby="summary-heading"><h2 id="summary-heading">14 · 回顾与原始文献</h2><p class="lead"><strong>理解 Adam，可以记住三句话。</strong> m 追踪方向，v 追踪平方尺度；两份零初始化的移动平均需要在早期进行质量修正；最终每个参数用自己的历史尺度缩放更新，而不是共享单一梯度步长。</p>
 <p>如果你在调试训练异常，建议沿着 <strong>当前梯度 → m/v 状态 → 偏差修正 → ε → 权重衰减位置 → 学习率调度</strong> 的路径定位，先验证公式与实现，再讨论最终指标。</p>
 <ol class="references"><li><a href="https://arxiv.org/abs/1412.6980">Kingma, D. P. &amp; Ba, J. (2015). Adam: A Method for Stochastic Optimization.</a> ICLR 2015，Algorithm 1，§2–4，§6。</li><li><a href="https://arxiv.org/abs/1711.05101">Loshchilov, I. &amp; Hutter, F. (2019). Decoupled Weight Decay Regularization.</a> ICLR 2019，AdamW。</li><li><a href="https://arxiv.org/abs/1904.09237">Reddi, S. J., Kale, S. &amp; Kumar, S. (2018). On the Convergence of Adam and Beyond.</a> ICLR 2018，AMSGrad。</li><li><a href="https://docs.pytorch.org/docs/stable/generated/torch.optim.Adam">PyTorch torch.optim.Adam API 与实现。</a> 辨别现代参数及算法实现路径。</li></ol>
-<p class="footer-note">继续阅读：<a href="../../../categories/foundations/">基础理论</a> · <a href="../../../archive/">全部论文解读</a></p></section></article></main></div><script>
+<p class="footer-note">推荐阅读顺序：<a href="../weight-decay/">Weight Decay</a>（参数直接衰减）→ 本文 Adam（方向与平方尺度的历史估计）→ <a href="../adamw/">AdamW</a>（为何解耦直接缩小步骤）。另见 <a href="../../../categories/foundations/">基础理论</a> 与 <a href="../../../archive/">全部文章</a>。</p></section></article></main></div><script>
 (function(){
-  const buttons = document.querySelectorAll('[data-time]');
-  const out = document.getElementById('adam-readout');
-  const grads = [2,-1,0.5,0]; const b1=0.9,b2=0.999,lr=0.001,eps=1e-8;
-  function display(t){
-    let m=0,v=0,step=0,g=0,mhat=0,vhat=0;
-    for(let i=1;i<=t;i++){g=grads[i-1];m=b1*m+(1-b1)*g;v=b2*v+(1-b2)*g*g;mhat=m/(1-Math.pow(b1,i));vhat=v/(1-Math.pow(b2,i));step=-lr*mhat/(Math.sqrt(vhat)+eps);}
-    for(const b of buttons)b.setAttribute('aria-pressed',String(Number(b.dataset.time)===t));
-    out.innerHTML='<p><strong>第 '+t+' 步 · g'+t+' = '+g+'</strong></p><p>m'+t+' = '+m.toFixed(6)+' → m̂'+t+' = '+mhat.toFixed(6)+'</p><p>v'+t+' = '+v.toFixed(6)+' → v̂'+t+' = '+vhat.toFixed(6)+'</p><p>Δθ'+t+' = '+step.toFixed(8)+'（α = 0.001，ε = 10⁻⁸）</p>';
-  }
-  for(const b of buttons)b.addEventListener('click',()=>display(Number(b.dataset.time)));
+"use strict";
+const buttons=[...document.querySelectorAll("[data-time]")],grads=[2,-1,.5,0];
+const by=id=>document.getElementById(id);
+const snapshots=[];let m=0,v=0,theta=3;
+for(let t=1;t<=4;t++){
+ const g=grads[t-1];
+ m=.9*m+.1*g;v=.999*v+.001*g*g;
+ const mh=m/(1-.9**t),vh=v/(1-.999**t),delta=-.001*mh/(Math.sqrt(vh)+1e-8);
+ theta+=delta;snapshots.push({t,g,m,v,mh,vh,delta,theta});
+}
+if(Math.abs(snapshots[3].delta)<1e-7)throw Error("Adam momentum must persist at zero gradient");
+const plus=(num,n)=>(num<0?"−":"+")+Math.abs(num).toFixed(n),ns="http://www.w3.org/2000/svg";
+function svg(tag,attributes,value){let node=document.createElementNS(ns,tag);for(let [k,v] of Object.entries(attributes))node.setAttribute(k,String(v));if(value!==undefined)node.textContent=value;return node;}
+function render(t){
+ const chosen=snapshots[t-1],rows=by("adam-dynamic-rows"),bars=by("adam-dynamic-bars");
+ buttons.forEach(b=>b.setAttribute("aria-pressed",String(Number(b.dataset.time)===t)));
+ const readout=by("adam-readout");readout.replaceChildren();
+ ["第 "+t+" 步 · g="+chosen.g,
+  "m="+chosen.m.toFixed(6)+" → m̂="+chosen.mh.toFixed(6),
+  "v="+chosen.v.toFixed(6)+" → v̂="+chosen.vh.toFixed(6),
+  "Δθ="+plus(chosen.delta,8)+"（α=0.001，ε=10⁻⁸）"].forEach((text,index)=>{
+    let p=document.createElement("p"),node=document.createElement(index?"span":"strong");node.textContent=text;p.append(node);readout.append(p);
+  });
+ rows.replaceChildren();bars.replaceChildren();
+ snapshots.forEach(d=>{
+  const tr=document.createElement("tr");if(d.t===t)tr.setAttribute("aria-current","step");
+  [d.t+" / "+plus(d.g,2),d.m.toFixed(6),d.mh.toFixed(6),d.v.toFixed(6),d.vh.toFixed(6),plus(d.delta,8),d.theta.toFixed(6)]
+    .forEach((txt,j)=>{const c=document.createElement(j?"td":"th");if(j===0)c.scope="row";c.textContent=txt;tr.append(c)});
+  rows.append(tr);
+  const center=130+(d.t-1)*148;
+  [{x:center-31,value:d.g,color:"#ca8057"},{x:center+8,value:d.mh,color:"#318a7f"}].forEach(q=>{
+   const height=Math.abs(q.value)*39;bars.append(svg("rect",{x:q.x,y:q.value>=0?154-height:154,width:26,height:height.toFixed(3),rx:3,fill:q.color,opacity:d.t===t?1:.55}));
+  });
+  bars.append(svg("text",{x:center,y:247,"text-anchor":"middle","font-size":14,fill:d.t===t?"#176c64":"#5f7c75","font-weight":d.t===t?800:500},"t="+d.t));
+  if(d.t===t)bars.append(svg("rect",{x:center-48,y:65,width:110,height:187,rx:8,stroke:"#2d897e","stroke-width":2,fill:"none"}));
+ });
+ by("adam-g").textContent=plus(chosen.g,2);
+ by("adam-mhat").textContent=plus(chosen.mh,4);
+ by("adam-theta").textContent=chosen.theta.toFixed(6);
+ by("adam-dynamic-explain").textContent=t===1?
+ "第一步：m₁=0.2、v₁=0.004 是从零起步的指数平均；经偏差修正变为 m̂₁=2、v̂₁=4。":
+ t===4?"第四步当前梯度 g₄=0，但历史方向 m̂₄="+chosen.mh.toFixed(6)+" 仍不为零，所以 Δθ₄="+plus(chosen.delta,8)+"；这是动量记忆，不是参数衰减。":
+ "第 "+t+" 步，当前 g="+plus(chosen.g,2)+" 与历史方向 m̂="+plus(chosen.mh,4)+
+ " 不同；v̂="+chosen.vh.toFixed(4)+" 衡量平方梯度的原始二阶矩，不是中心化方差。";
+}
+buttons.forEach(b=>b.addEventListener("click",()=>render(Number(b.dataset.time))));
+render(1);
 })();
 </script></body></html>

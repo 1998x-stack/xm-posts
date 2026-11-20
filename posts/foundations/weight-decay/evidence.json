@@ -97,5 +97,14 @@
     "locator": "Independently derived classroom example",
     "status": "derived",
     "notes": "Not claimed as source experiment"
+  },
+  {
+    "id": "WD12",
+    "claim": "With data gradient identically zero, original parameter retention is the product of per-step factors (1-alpha_t*lambda). A fixed alpha=0.1,lambda=0.2 for 50 steps retains about 36.42%; linear alpha_t=alpha*(1-(t-1)/T) retains more in this teaching example.",
+    "kind": "toy-derivation",
+    "source_url": "https://arxiv.org/abs/1711.05101",
+    "locator": "Article Section 07; independent product-of-factors calculation, building on Loshchilov and Hutter's decoupled decay equations",
+    "status": "derived",
+    "notes": "Both trajectories are deterministic scalar zero-gradient examples. They do not measure weight norm changes during actual optimization, which includes gradient updates."
   }
 ]
