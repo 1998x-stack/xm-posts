@@ -18,7 +18,7 @@
 | `systems` | GPU 内存、算子、编译、通信、性能分析及底层优化 | 服务请求、token 调度、端到端 serving 归 `inference` |
 | `storage-indexing` | B+ Tree、LSM Tree、页与缓冲区管理、事务恢复、MVCC | 数据库磁盘/索引结构归此类；向量语义召回归 `retrieval-rag`，GPU 算子实现归 `systems` |
 | `retrieval-rag` | 向量/ANN、稀疏混合检索、重排序、RAG、证据落地 | Agent 任务计划与工具执行归 `agents`，embedding 基础表征归 `foundations` |
-| `agents` | ReAct、规划、工具调用、记忆、Agent 端到端评估 | 纯推理策略归 `reasoning`；检索方法归 `retrieval-rag` |
+| `agents` | ReAct、规划、工具调用、记忆、软件工程智能体、Agent 端到端评估，以及 Loop Engineering 的跨会话触发、验证与治理 | 纯推理策略归 `reasoning`；检索方法归 `retrieval-rag` |
 | `multimodal` | 视觉/语言/音频的跨模态建模与对齐 | 通用单模态 CNN 架构仍可归 `architectures` |
 | `evaluation` | 模型/任务 Benchmark、ROC/PR、消融与复现 | 训练数据质量、污染事实与许可证归 `datasets` |
 
@@ -29,6 +29,10 @@
 3. 对确有不同边界的二级主题，要求标题与描述不同；不得让两个 topic 共享同一展示标题。当前 Systems 已区分 Kernel 编程、GPU 内存、编译/内核优化、Collectives、分布式通信和 Roofline/Benchmark。
 4. 占位目录必须使用精确的注册 slug。新增 Topic 优先写分类元数据，再添加 `_topics/` 的 README；单篇新文章通常不值得新增一级分类。
 5. Draft 必须继续以 `status: draft` 保持离线，不要将规划中的 README 当作 `published` 条目。
+
+## Loop Engineering 的专题边界（2026-11）
+
+`agents/loop-engineering` 是 `agents` 下的独立二级 Topic，不新增一级分类。它研究外层工作循环：触发器、任务发现与去重、上下文投影、隔离执行、独立验证、状态持久化、预算、停止条件和人工升级。它与 `react`（单次行动轨迹）、`planning`（计划生成与更新）、`memory`（信息保存与检索）以及 `software-engineering-agents`（软件任务中的 ACI 与执行）相互关联但不互相替代。跨主题阅读关系维护在 `content/reading_paths.json`。
 
 ## 2026-11 分类占位整合
 
