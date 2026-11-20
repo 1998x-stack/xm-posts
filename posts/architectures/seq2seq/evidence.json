@@ -79,5 +79,14 @@
     "locator": "Abstract; Section 3; Figure 1",
     "status": "verified",
     "notes": "Not a property of the 2014 LSTM paper."
+  },
+  {
+    "id": "S10",
+    "claim": "In a synthetic three-target four-source attention matrix, each target row sums to one; applying a chosen row to toy one-dimensional encoder values [1,2,3,0] yields an explicit weighted context scalar.",
+    "kind": "teaching-demo",
+    "source_url": "https://arxiv.org/abs/1409.0473",
+    "locator": "Bahdanau attention mechanism, §3; independent demonstration in article Section 10",
+    "status": "derived",
+    "notes": "All attention matrix entries and scalar annotations are independent teaching choices, not trained alignment scores or a historical reproduction."
   }
 ]
