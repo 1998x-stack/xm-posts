@@ -1154,5 +1154,29 @@
     "summary": "精读 Fujimoto 等 ICML 2018：从 DDPG 的函数逼近高估风险出发，推导 clipped double Q、延迟 Actor 更新与目标策略平滑；含 5 幅独立 SVG、5 组原生 MathML、双 Q 交互实验、原论文 Table 1/2 与确定性 Python 断言。",
     "paper": "https://proceedings.mlr.press/v80/fujimoto18a.html",
     "illustration": "td3"
+  },
+  {
+    "slug": "mobilenet",
+    "title": "Understanding MobileNet",
+    "subtitle": "从 Depthwise Separable Convolution 到 V2/V3/V4：把移动视觉的计算账本拆开",
+    "category": "architectures",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 33,
+    "tags": [
+      "MobileNet",
+      "MobileNetV1",
+      "MobileNetV2",
+      "MobileNetV3",
+      "MobileNetV4",
+      "Efficient & Mobile CNNs",
+      "Depthwise Separable Convolution",
+      "Inverted Residual",
+      "Edge AI"
+    ],
+    "summary": "基于 MobileNet V1 原论文逐步推导 Depthwise/Pointwise 计算量、参数与 α/ρ 缩放；复核 ImageNet 70.6%/569M/4.2M 实验，交互探索计算账本，并对比 V2 逆残差线性瓶颈、V3 硬件感知 NAS 与 V4 UIB。含五幅独立 SVG、MathML、纯 Python 验证和论文证据台账。",
+    "paper": "https://arxiv.org/abs/1704.04861",
+    "illustration": "mobilenet"
   }
 ]

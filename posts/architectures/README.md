@@ -51,3 +51,9 @@ RoPE 位于 `posts/architectures/rope/`，主题为 **Positional Encoding**；�
 
 - [Understanding Mixture of Experts (MoE)](moe/index.html)：精读 ICLR 2017 的 LSTM+稀疏专家结构，拆解 Noisy Top-K、Importance/Load、容量约束与 Expert Parallelism；区分 GShard、Switch、Mixtral 与 DeepSeekMoE。
 - 复用现有 `Mixture of Experts (MoE)` 二级专题和 [`_topics/moe` 研究规划](_topics/moe/README.md)，不增设重复分类。
+
+
+## Efficient & Mobile CNNs
+
+- [Understanding MobileNet](mobilenet/index.html)：V1 深度可分离卷积、α/ρ 可调资源预算、ImageNet 证据，以及 V2 逆残差线性瓶颈、V3 硬件感知搜索与 V4 UIB 的演进。
+- 本主题作为 CNN & Vision 下的高效移动架构研究轨道，可纳入 ShuffleNet、MnasNet、EfficientNet，无需新建一级分类。
