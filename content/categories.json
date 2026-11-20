@@ -33,6 +33,17 @@
     ]
   },
   {
+    "slug": "reinforcement-learning",
+    "title": "强化学习",
+    "english": "Reinforcement Learning",
+    "description": "从策略梯度、价值估计到 PPO、TRPO 与现代偏好优化，拆解序贯决策中的学习信号。",
+    "topics": [
+      "Policy Gradient",
+      "Actor–Critic",
+      "RL Optimization"
+    ]
+  },
+  {
     "slug": "training",
     "title": "训练与对齐",
     "english": "Training & Alignment",

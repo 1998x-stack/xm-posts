@@ -13,8 +13,11 @@
 | **Understanding ResNet** | 网络越深，为什么训练反而可能更难？ | [`posts/architectures/resnet/`](posts/architectures/resnet/index.html) | [He et al.](https://arxiv.org/abs/1512.03385) |
 | **Understanding Transformer** | 为什么用 Self-Attention 替代循环结构？ | [`posts/architectures/transformer/`](posts/architectures/transformer/index.html) | [Vaswani et al.](https://arxiv.org/abs/1706.03762) |
 | **Understanding SVM** | 为什么分对了仍需最大间隔？ | [`posts/classical-ml/svm/`](posts/classical-ml/svm/index.html) | [Cortes & Vapnik (1995)](https://doi.org/10.1007/BF00994018) |
+| **Understanding PPO** | 为什么能复用同一批轨迹又避免过大更新？ | [`posts/reinforcement-learning/ppo/`](posts/reinforcement-learning/ppo/index.html) | [Schulman et al. (2017)](https://arxiv.org/abs/1707.06347) |
 
 ResNet 具有 11 节解读与 10 幅独立 SVG；Transformer 具有 16 节解读与 13 幅独立 SVG，另有最小 PyTorch Attention 示例；SVM 具有 12 节机制推导、6 幅独立 SVG、可调 RBF 相似度矩阵和纯 Python 一维解析示例。文章在发布前经过静态内容核验、浏览器布局与交互检查；教学简化、原论文和后续变体需明确区分。
+
+PPO 包含 14 节原论文推导、6 幅独立 SVG、交互式裁剪目标演算、纯标准库数学测试，并单独辨析了 RLHF 的参考模型 KL 与 PPO 的旧策略偏移指标。
 
 ## 内容分类
 
@@ -23,6 +26,7 @@ ResNet 具有 11 节解读与 10 幅独立 SVG；Transformer 具有 16 节解读
 | 基础理论 | `posts/foundations/` | 表示、优化、数学直觉 |
 | **经典机器学习** | `posts/classical-ml/` | SVM、核方法、线性与树模型 |
 | **模型架构** | `posts/architectures/` | ResNet、Transformer、状态空间模型 |
+| **强化学习** | `posts/reinforcement-learning/` | Policy Gradient、Actor–Critic、GAE、PPO/TRPO 与序贯决策 |
 | 训练与对齐 | `posts/training/` | 预训练、微调、偏好对齐 |
 | 推理与 Serving | `posts/inference/` | KV Cache、Decode、在线 Serving |
 | 系统与 Kernel | `posts/systems/` | GPU、算子、并行与性能分析 |
@@ -52,7 +56,7 @@ xm-posts/
 │   │       ├── assets/*.svg
 │   │       ├── mini_attention.py
 │   │       └── evidence.json
-│   └── {foundations,training,inference,systems,multimodal,evaluation}/
+│   └── {foundations,reinforcement-learning,training,inference,systems,multimodal,evaluation}/
 │       └── README.md             # 占位与投稿约定，不发布
 ├── skills/olah-style-paper-posts/ # Skill 正本；SKILL / references / assets / scripts
 ├── .claude/skills/olah-style-paper-posts/  # 完整 Skill 镜像
