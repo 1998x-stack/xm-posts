@@ -32,17 +32,20 @@
     "slug": "architectures",
     "title": "模型架构",
     "english": "Architectures",
-    "description": "拆开模型的信息路径：LSTM 循环记忆、AlexNet 与 ResNet 的视觉卷积架构、RNN/LSTM Seq2Seq Encoder–Decoder、Attention、Transformer 注意力、归一化布局与深层架构稳定性。",
+    "description": "拆开模型的信息路径：CNN、循环网络、Transformer、MoE、状态空间模型、高效注意力与长上下文架构，明确结构变化与工程实现的边界。",
     "topics": [
       "Convolutional Neural Networks & Vision",
       "Sequence-to-Sequence / Encoder–Decoder",
       "ResNet",
       "Transformer",
-      "State Space",
+      "State Space Models",
       "Normalization & Residual Paths",
       "Positional Encoding",
       "Recurrent Networks / LSTM",
-      "Attention Head Sharing"
+      "Attention Head Sharing",
+      "Mixture of Experts (MoE)",
+      "Efficient Attention",
+      "Long-context Architectures"
     ]
   },
   {
@@ -81,7 +84,7 @@
     "slug": "training",
     "title": "训练与对齐",
     "english": "Training & Alignment",
-    "description": "预训练、微调、偏好对齐，以及 PPO / GRPO 等后训练强化学习与策略优化的可验证拆解。",
+    "description": "从预训练、Scaling Laws 与参数高效微调，到分布式训练、训练并行、混合精度、检查点与偏好对齐，系统拆解模型训练的数学目标和工程实现。",
     "topics": [
       "Pretraining",
       "Scaling Laws / Compute-Optimal Training",
@@ -91,7 +94,11 @@
       "Preference Alignment",
       "RL / Policy Optimization",
       "Preference Optimization",
-      "RLHF"
+      "RLHF",
+      "Distributed Training",
+      "Training Parallelism",
+      "Mixed Precision",
+      "Checkpointing"
     ]
   },
   {
@@ -110,26 +117,61 @@
     "slug": "inference",
     "title": "推理与 Serving",
     "english": "Inference & Serving",
-    "description": "从自回归解码、KV Cache 的生命周期与内存管理，到批处理、低延迟与高吞吐在线服务。",
+    "description": "关注单次请求与在线服务：自回归解码、KV Cache、动态批处理、请求调度、推测解码、Prefill/Decode 解耦，以及端到端延迟、吞吐与服务质量。",
     "topics": [
       "KV Cache",
       "Batching",
       "Decoding",
       "PagedAttention",
       "Continuous Batching",
-      "Prefix Caching"
+      "Prefix Caching",
+      "Request Scheduling",
+      "Speculative Decoding",
+      "Prefill / Decode Disaggregation",
+      "Serving Performance"
     ]
   },
   {
     "slug": "systems",
     "title": "系统与 Kernel",
     "english": "Systems & Kernels",
-    "description": "内存层级、GPU 算子、编译与系统性能分析。",
+    "description": "关注 GPU 与底层运行时：内存层级、CUDA/Triton、算子和编译优化、分布式通信、计算与访存性能建模；区别于面向请求的 Inference & Serving。",
     "topics": [
       "CUDA",
       "Triton",
       "Parallelism",
-      "Attention Kernels"
+      "Attention Kernels",
+      "GPU Architecture & Memory Hierarchy",
+      "Compiler & Kernel Optimization",
+      "Distributed Communication",
+      "Performance Modeling"
+    ]
+  },
+  {
+    "slug": "retrieval-rag",
+    "title": "检索与 RAG",
+    "english": "Retrieval & RAG",
+    "description": "围绕外部知识访问与检索增强生成，研究向量检索、近似最近邻、重排序、稀疏/稠密融合、证据溯源与回答可靠性。",
+    "topics": [
+      "Embedding Retrieval",
+      "ANN",
+      "Reranking",
+      "RAG",
+      "Grounding",
+      "Hybrid Search"
+    ]
+  },
+  {
+    "slug": "agents",
+    "title": "智能体与工具使用",
+    "english": "Agents & Tool Use",
+    "description": "围绕模型与外部环境交互的闭环，研究 ReAct、任务规划、工具调用、状态与记忆，以及端到端的 Agent 评测。",
+    "topics": [
+      "ReAct",
+      "Planning",
+      "Tool Calling",
+      "Memory",
+      "Agent Evaluation"
     ]
   },
   {

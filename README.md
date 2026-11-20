@@ -79,16 +79,21 @@ The Pile 的 22 个来源按原论文 Table 1 给出有效采样权重，配五�
 
 | 分类 | 路径 | 范围 |
 |---|---|---|
-| 基础理论 | `posts/foundations/` | Adam、Word2Vec、BPE / Tokenization、词嵌入、优化器（AdamW）、正则化、表示学习 |
-| **经典机器学习** | `posts/classical-ml/` | SVM、核方法、线性模型、XGBoost 与树集成、PCA 与无监督降维 |
-| **模型架构** | `posts/architectures/` | RNN / LSTM、AlexNet / CNN、ResNet、Seq2Seq、Transformer、Normalization & Residual Paths、状态空间模型 |
-| **强化学习** | `posts/reinforcement-learning/` | Policy Gradient、Actor–Critic、Off-policy Replay、SAC / Maximum Entropy、PPO/TRPO 与序贯决策 |
-| **数据与语料** | `posts/datasets/` | 预训练语料、数据清洗/去重、混合采样、污染检查与治理 |
-| 训练与对齐 | `posts/training/` | 预训练（Scaling Laws / Compute-Optimal Training）、微调、偏好对齐、DPO 与 RLHF与 PPO / GRPO 等强化学习策略优化 |
-| 推理与 Serving | `posts/inference/` | KV Cache、PagedAttention、Prefix Caching、Decode、在线 Serving |
-| 系统与 Kernel | `posts/systems/` | GPU、Attention Kernels、算子、并行与性能分析 |
-| 多模态 | `posts/multimodal/` | Vision/Audio/Language 与跨模态交互 |
-| 评测与复现 | `posts/evaluation/` | Benchmark、消融、复现协议 |
+| 基础理论 | `posts/foundations/` | 优化器、正则化、Embedding、Tokenization / BPE、数学基础 |
+| 经典机器学习 | `posts/classical-ml/` | SVM、概率模型、树与集成、降维和线性模型 |
+| 模型架构 | `posts/architectures/` | CNN、RNN、Transformer、MoE、状态空间、高效注意力与长上下文架构 |
+| 强化学习 | `posts/reinforcement-learning/` | Policy Gradient、Actor–Critic、Replay、MCTS、连续控制 |
+| 数据与语料 | `posts/datasets/` | 预训练语料、清洗、混合采样、污染与数据治理 |
+| 训练与对齐 | `posts/training/` | 预训练、微调、RLHF、分布式训练、Training Parallelism、Mixed Precision、Checkpointing |
+| 推理策略与测试时计算 | `posts/reasoning/` | CoT、Self-Consistency、搜索、验证、Test-time Scaling |
+| 推理与 Serving | `posts/inference/` | 请求调度、Continuous Batching、KV Cache、Speculative Decoding、Prefill/Decode |
+| 系统与 Kernel | `posts/systems/` | GPU、内存层级、CUDA/Triton、编译、Collective Communication、性能建模 |
+| **检索与 RAG（新增）** | `posts/retrieval-rag/` | Embedding Retrieval、ANN、Reranking、RAG、Grounding、Hybrid Search |
+| **智能体与工具使用（新增）** | `posts/agents/` | ReAct、Planning、Tool Calling、Memory、Agent Evaluation |
+| 多模态 | `posts/multimodal/` | Vision / Audio / Language 与跨模态融合 |
+| 评测与复现 | `posts/evaluation/` | Benchmark、消融、复现实验协议 |
+
+**分类与目录规则：** `content/categories.json` 是一级分类和二级 Topic 的唯一来源。新分类通过 `posts/<category>/README.md` 建立实体占位；研究专题通过 `posts/<category>/_topics/<topic>/README.md` 建立非发布占位。正式文章始终位于 `posts/<category>/<article-slug>/`，由 `content/posts.json` 注册和管理发布状态。
 
 Linear Regression 使用现有 `classical-ml` → **Linear Models** 分类，不为单篇线性模型新增顶层分类；与后续 Logistic Regression、Ridge/Lasso 构成同一学习路径。其基础历史跨越 Legendre 与 Gauss，证据采用 NIST 和 Berkeley 等方法资料，而非误称一篇现代原论文。
 
@@ -141,8 +146,15 @@ xm-posts/
 │   │       ├── assets/*.svg
 │   │       ├── mini_attention.py
 │   │       └── evidence.json
+│   ├── retrieval-rag/
+│   │   ├── README.md             # 检索与 RAG 一级分类占位
+│   │   └── _topics/*/README.md   # 六个二级主题规划占位（不发布）
+│   ├── agents/
+│   │   ├── README.md             # Agent 一级分类占位
+│   │   └── _topics/*/README.md   # 五个二级主题规划占位（不发布）
 │   └── {foundations,reinforcement-learning,training,inference,systems,multimodal,evaluation}/
-│       └── README.md             # 占位与投稿约定，不发布
+│       ├── README.md            # 分类占位与投稿约定
+│       └── _topics/*/README.md  # 规划中的二级主题，不是文章
 ├── skills/olah-style-paper-posts/ # Skill 正本；SKILL / references / assets / scripts
 ├── .claude/skills/olah-style-paper-posts/  # 完整 Skill 镜像
 ├── .pi/skills/olah-style-paper-posts/      # 完整 Skill 镜像
