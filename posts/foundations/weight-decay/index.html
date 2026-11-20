@@ -7,6 +7,23 @@ figure{margin:32px 0 37px}.diagram{max-width:100%;overflow-x:auto;background:#fc
 @media(max-width:900px){.layout{display:block;padding:13px 13px 70px}aside{position:relative;top:auto;max-height:none;margin:5px 0 19px}.toc-title{display:none}nav{display:flex;overflow-x:auto;gap:4px;white-space:nowrap}nav a{border-left:0;border-bottom:2px solid var(--line);flex:none;white-space:normal;max-width:180px;font-size:12px}article{padding:36px clamp(16px,4vw,40px) 50px}.section{margin-top:55px}}
 @media(max-width:510px){body{font-size:16px}.layout{padding:8px 7px 65px}article{border-radius:14px;padding:25px 16px}h1{font-size:42px}.lead{font-size:18px}.section{margin-top:52px}.columns,.controls{grid-template-columns:1fr}.math-block{padding:11px}.math-scroll math[display=block]{font-size:17px}.diagram svg{min-width:620px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}@media print{body{background:white}.layout{display:block;padding:0}aside,.skip,.lab button{display:none}article{border:0;box-shadow:none;padding:0}.section{break-inside:auto}.diagram{overflow:visible}.diagram svg{min-width:0}.math-scroll{overflow:visible}.math-scroll math[display=block]{font-size:16px}.lab{background:white}}
+
+/* Fixed versus scheduled learning rate in the identical zero-gradient problem. */
+.wd-curve-wrap{background:#fff;border:1px solid #d6e9df;border-radius:12px;margin:18px 0;padding:13px}
+.wd-curve-wrap svg{display:block;width:100%;height:auto}
+.wd-curve-wrap figcaption{font-size:13px;line-height:1.65;color:#557875;margin-top:8px}
+.wd-legend{display:flex;flex-wrap:wrap;gap:10px 20px;margin:8px 0;font-size:13px;color:#355e5c}
+.wd-legend b{display:inline-block;width:18px;height:6px;vertical-align:middle;margin-right:5px;border-radius:4px}
+.wd-legend .a{background:#d08557}.wd-legend .b{background:#278878}
+.wd-curve-results{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px;margin:14px 0}
+.wd-curve-results>div{background:#fff;border:1px solid #d4e8de;border-radius:9px;padding:12px;min-width:0}
+.wd-curve-results b{display:block;font-size:13px;color:#416e69}
+.wd-curve-results output{font-size:23px;font-weight:800;color:#286b67;font-variant-numeric:tabular-nums}
+.wd-steps-table{max-width:100%;overflow-x:auto}
+.wd-steps-table table{min-width:440px;font-variant-numeric:tabular-nums}
+.wd-tip{background:#ebf6ef;border-left:3px solid #21857b;color:#315f5b;padding:13px 15px;border-radius:5px;font-size:14px;margin:10px 0}
+.wd-journey{background:#f0f8f4;border:1px solid #cee5da;padding:13px 16px;border-radius:8px}
+@media(max-width:510px){.wd-curve-results{grid-template-columns:1fr}.wd-curve-wrap{padding:7px}}
 </style></head><body>
 <a class="skip" href="#content">跳转正文</a><div class="layout"><aside><a class="brand" href="../../../">xm<span>.</span>posts</a><div class="toc-title">IN THIS ARTICLE</div><nav aria-label="文章目录"><a href="#why">为什么让参数变小？</a><a href="#definition">权重衰减的定义</a><a href="#penalty">L₂ 惩罚与几何</a><a href="#sgd">SGD 为什么能等价</a><a href="#adaptive">Adam 为什么不等价</a><a href="#schedule">学习率调度与累积效应</a><a href="#lab">交互式零梯度实验</a><a href="#practice">实践中的参数分组</a><a href="#code">确定性 Python 实现</a><a href="#evidence">论文证据与边界</a><a href="#reading">参考与延伸阅读</a></nav></aside><main id="content"><article><header class="head"><div class="kicker">FOUNDATIONS / OPTIMIZATION &amp; REGULARIZATION</div><h1>Understanding<br>Weight Decay</h1><p class="lead">让权重逐步缩小，就能更好泛化吗？从一个收缩因子开始，沿着 L₂ 正则化、SGD 与自适应优化器，理解 Weight Decay 的真正作用。</p><p class="meta">Krogh &amp; Hertz · NeurIPS 1991 / Loshchilov &amp; Hutter · ICLR 2019 · 约 27 分钟阅读</p></header>
 <section class="section" id="why"><h2>01 · 为什么让参数变小？</h2>
@@ -63,7 +80,11 @@ figure{margin:32px 0 37px}.diagram{max-width:100%;overflow-x:auto;background:#fc
 <div><label for="lr">学习率 α = <output id="v-lr">0.10</output></label><input id="lr" type="range" min="0.01" max="0.20" step="0.01" value="0.10"></div>
 <div><label for="wd">Weight Decay λ = <output id="v-wd">0.20</output></label><input id="wd" type="range" min="0" max="0.40" step="0.01" value="0.20"></div>
 <div><label for="steps">步数 T = <output id="v-steps">50</output></label><input id="steps" type="range" min="1" max="100" step="1" value="50"></div>
-</div><p class="small">单步保留因子：<strong id="factor">0.9800</strong></p><div class="result" id="retention" aria-live="polite">36.42%</div><p id="calc" class="small">(1 − 0.10 × 0.20)^50 ≈ 0.3642</p><button type="button" id="reset">恢复默认值</button> <span id="changed" class="small" aria-live="polite"></span></div>
+</div><p class="small">单步保留因子：<strong id="factor">0.9800</strong></p><div class="result" id="retention" aria-live="polite">36.42%</div><p id="calc" class="small">(1 − 0.10 × 0.20)^50 ≈ 0.3642</p><div class="wd-curve-results"><div><b>固定学习率 · 旧参数保留率</b><output id="wd-constant-final">36.42%</output></div><div><b>线性递减学习率 · 旧参数保留率</b><output id="wd-scheduled-final">60.0%</output></div></div>
+<figure class="wd-curve-wrap"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 280" role="img" aria-labelledby="wd-curves-title wd-curves-desc"><title id="wd-curves-title">在相同初始学习率与衰减系数下，固定学习率和线性递减学习率的参数保留轨迹</title><desc id="wd-curves-desc">横轴为零数据梯度下的训练步数；纵轴为初始权重的剩余比例。两种学习率调度在每步都直接缩小旧参数，但累计程度不同。</desc><rect x="0" y="0" width="720" height="280" rx="10" fill="#fcfefa"/><g font-size="13" fill="#537673"><text x="20" y="31">100%</text><text x="28" y="124">50%</text><text x="37" y="222">0%</text><text x="50" y="251">0</text><text id="wd-axis-n" x="664" y="251">T=50</text></g><path d="M63 28 V221 H684" fill="none" stroke="#a8c9bd" stroke-width="2"/><path d="M63 125 H684" stroke="#d7e7e0" stroke-width="1" stroke-dasharray="5 5"/><path id="wd-constant-path" d="M63 28 L684 147" fill="none" stroke="#d08557" stroke-width="3.5" stroke-linecap="round"/><path id="wd-schedule-path" d="M63 28 L684 104" fill="none" stroke="#278878" stroke-width="3.5" stroke-linecap="round"/><circle id="wd-constant-dot" cx="684" cy="147" r="5" fill="#d08557"/><circle id="wd-schedule-dot" cx="684" cy="104" r="5" fill="#278878"/></svg><div class="wd-legend"><span><b class="a"></b>固定 α（每步同样衰减）</span><span><b class="b"></b>αₜ 线性递减（后期衰减减弱）</span></div><figcaption>为了公平比较，两条曲线使用相同的初始 α、λ 和总步数。只改变学习率日程；纵轴统一为 0%—100%，没有按单条曲线重新归一化。</figcaption></figure>
+<div class="wd-steps-table"><table><caption>沿训练时间看一次真实乘积（初始 θ₀=1、任务梯度恒为零）</caption><thead><tr><th scope="col">已完成步数</th><th scope="col">固定 α</th><th scope="col">线性递减 αₜ</th></tr></thead><tbody id="wd-step-rows"><tr><th scope="row">0</th><td>1.000000</td><td>1.000000</td></tr></tbody></table></div>
+<p class="wd-tip" id="wd-schedule-explain">同样的 λ 并不意味着相同的累计衰减：后期逐渐降低学习率的策略通常会保留更多初始参数。此处没有梯度，因此不代表真实训练得到的参数范数。</p>
+<button type="button" id="reset">恢复默认值</button> <span id="changed" class="small" aria-live="polite"></span></div>
 <noscript><p>静态计算：0.98 的 50 次幂约为 0.3642，即保留 36.42%。</p></noscript>
 </section>
 <section class="section" id="practice"><h2>08 · 哪些参数应该使用 Weight Decay？</h2>
@@ -100,11 +121,54 @@ assert all(abs(x - y) &lt; 1e-12 for x, y in zip(a, b))
 <li>Anders Krogh &amp; John A. Hertz. <a href="https://papers.nips.cc/paper_files/paper/1991/hash/8eefcfdf5990e441f0fb6f3fad709e21-Abstract.html">A Simple Weight Decay Can Improve Generalization</a>, NeurIPS 4, 1991.</li>
 <li>Ilya Loshchilov &amp; Frank Hutter. <a href="https://arxiv.org/abs/1711.05101">Decoupled Weight Decay Regularization</a>, ICLR 2019；<a href="https://ar5iv.labs.arxiv.org/html/1711.05101">HTML 全文与图注</a>。</li>
 <li><a href="https://docs.pytorch.org/docs/stable/generated/torch.optim.AdamW">PyTorch 官方 AdamW 更新说明</a>。</li>
-<li>站内阅读路径：<a href="../sgd/">Understanding SGD</a> → <a href="../adam/">Understanding Adam</a> → <a href="../adamw/">Understanding AdamW</a>。</li></ol>
+<li>推荐阅读顺序：本篇 <strong>Weight Decay</strong> 先理解“直接缩小旧参数”和“累积衰减”；接着读 <a href="../adam/">Understanding Adam</a> 理解自适应矩估计；最后读 <a href="../adamw/">Understanding AdamW</a> 看为何衰减需要绕开自适应梯度路径。需要 SGD 背景可读 <a href="../sgd/">Understanding SGD</a>。</li></ol>
 </section><footer class="closing"><p>记住一条问题线索：<strong>衰减究竟施加到旧参数，还是作为梯度交给优化器处理？</strong></p><p><a href="../../../">返回 xm.posts 首页</a></p></footer>
 </article></main></div><script>
-(function(){const lr=document.getElementById('lr'),wd=document.getElementById('wd'),steps=document.getElementById('steps');
-function render(){const a=Number(lr.value),d=Number(wd.value),n=Number(steps.value),f=1-a*d,r=Math.pow(f,n);document.getElementById('v-lr').textContent=a.toFixed(2);document.getElementById('v-wd').textContent=d.toFixed(2);document.getElementById('v-steps').textContent=String(n);document.getElementById('factor').textContent=f.toFixed(4);document.getElementById('retention').textContent=(r*100).toFixed(2)+'%';document.getElementById('calc').textContent='(1 − '+a.toFixed(2)+' × '+d.toFixed(2)+')^'+n+' ≈ '+r.toFixed(4);}
-[lr,wd,steps].forEach(el=>el.addEventListener('input',()=>{render();document.getElementById('changed').textContent='参数已更新';}));
-document.getElementById('reset').addEventListener('click',()=>{lr.value='0.10';wd.value='0.20';steps.value='50';render();document.getElementById('changed').textContent='已恢复初始值';});render();})();
+(function(){
+"use strict";
+const lr=document.getElementById("lr"),wd=document.getElementById("wd"),steps=document.getElementById("steps");
+const el=id=>document.getElementById(id);
+const fmt=n=>(100*n).toFixed(2)+"%";
+function series(alpha,lambda,n){
+ let fixed=[1],scheduled=[1];
+ for(let i=1;i<=n;i++){
+  const scheduledRate=alpha*(1-(i-1)/n);
+  fixed.push(fixed[i-1]*(1-alpha*lambda));
+  scheduled.push(scheduled[i-1]*(1-scheduledRate*lambda));
+ }
+ return{fixed,scheduled};
+}
+function render(){
+ const a=Number(lr.value),d=Number(wd.value),n=Number(steps.value),f=1-a*d;
+ const {fixed,scheduled}=series(a,d,n),constant=fixed[n],taper=scheduled[n];
+ el("v-lr").textContent=a.toFixed(2);el("v-wd").textContent=d.toFixed(2);
+ el("v-steps").textContent=String(n);el("factor").textContent=f.toFixed(4);
+ el("retention").textContent=fmt(constant);
+ el("calc").textContent="(1 − "+a.toFixed(2)+" × "+d.toFixed(2)+")^"+n+" ≈ "+constant.toFixed(4);
+ el("wd-constant-final").textContent=fmt(constant);
+ el("wd-scheduled-final").textContent=fmt(taper);
+ el("wd-axis-n").textContent="T="+n;
+ const x=k=>63+621*k/n,y=v=>221-193*v;
+ [["wd-constant-path",fixed],["wd-schedule-path",scheduled]].forEach(([id,values])=>
+   el(id).setAttribute("d",values.map((v,k)=>(k?"L ":"M ")+x(k).toFixed(2)+" "+y(v).toFixed(2)).join(" ")));
+ el("wd-constant-dot").setAttribute("cy",y(constant).toFixed(2));
+ el("wd-schedule-dot").setAttribute("cy",y(taper).toFixed(2));
+ const checkpoints=[...new Set([0,1,Math.ceil(n/2),n])].sort((a,b)=>a-b);
+ const rows=el("wd-step-rows");rows.replaceChildren();
+ checkpoints.forEach(k=>{
+  let tr=document.createElement("tr");
+  [String(k),fixed[k].toFixed(6),scheduled[k].toFixed(6)].forEach((value,i)=>{
+   let c=document.createElement(i?"td":"th");if(!i)c.scope="row";c.textContent=value;tr.append(c);
+  });rows.append(tr);
+ });
+ el("wd-schedule-explain").textContent=
+  "当前零梯度教学例：固定 α 最终保留 "+fmt(constant)+
+  "，每一步 αₜ=α×(1−(t−1)/T) 的线性递减策略最终保留 "+fmt(taper)+
+  "。后者的累计缩小因子为逐步乘积，不是把初始 α 直接代入一个固定幂次。"+
+  "真实有梯度时参数还会被优化更新，不能据此断言范数或模型精度。";
+}
+[lr,wd,steps].forEach(input=>input.addEventListener("input",()=>{render();el("changed").textContent="参数已更新"}));
+el("reset").addEventListener("click",()=>{lr.value=".10";wd.value=".20";steps.value="50";render();el("changed").textContent="已恢复初始值";});
+render();
+})();
 </script></body></html>
