@@ -18,7 +18,7 @@
 | `systems` | GPU 内存、算子、编译、通信、性能分析及底层优化 | 服务请求、token 调度、端到端 serving 归 `inference` |
 | `storage-indexing` | B+ Tree、LSM Tree、页与缓冲区管理、事务恢复、MVCC | 数据库磁盘/索引结构归此类；向量语义召回归 `retrieval-rag`，GPU 算子实现归 `systems` |
 | `retrieval-rag` | 向量/ANN、稀疏混合检索、重排序、RAG、证据落地 | Agent 任务计划与工具执行归 `agents`，embedding 基础表征归 `foundations` |
-| `agents` | ReAct、规划、工具调用、记忆、软件工程 Agent、Agent-Computer Interface、Harness Engineering 与端到端评测 | 纯推理策略归 `reasoning`；检索方法归 `retrieval-rag`；Harness 研究模型外部的 Agent Runtime 与工程闭环 |
+| `agents` | ReAct、规划、工具调用、记忆、软件工程 Agent、Agent-Computer Interface、Harness Engineering、Agentic RL 与端到端评测 | 纯推理策略归 `reasoning`；检索方法归 `retrieval-rag`；PPO / GRPO 等优化算法仍按其训练方法归 `training` 或 `reinforcement-learning` |
 | `multimodal` | 视觉/语言/音频的跨模态建模与对齐 | 通用单模态 CNN 架构仍可归 `architectures` |
 | `evaluation` | 模型/任务 Benchmark、ROC/PR、消融与复现 | 训练数据质量、污染事实与许可证归 `datasets` |
 
@@ -60,3 +60,11 @@
 - ReAct 主要解释推理—行动—观察循环；SWE-agent / ACI 主要研究操作接口；Agent Memory 主要研究跨会话知识；Harness Engineering 将这些能力置于完整任务生命周期中进行系统设计。
 - Harness 与 Evaluation Harness 必须区分：前者使模型能够行动，后者运行任务并测量结果。
 - 当前专题文献仍在快速演进；对预印本提出的子系统分类，应标注来源和研究状态，不把它们描述为已统一的行业标准。
+
+
+## Agentic RL 专题归属（2026-11）
+
+- **主分类：** `agents`；**二级专题：** `agentic-rl`。
+- 研究多轮、部分可观测环境中的策略学习、工具交互、轨迹奖励、信用分配、长程课程与异步 Rollout。
+- 不新增一级分类：Agentic RL 的任务形态属于 Agent 环境交互闭环；PPO、GAE、GRPO 等算法仍保留在原有强化学习 / 训练专题。
+- 与 ReAct / Tool Calling / Planning 通过阅读路径关联，避免把“行动协议”“优化算法”和“训练系统”混成一个概念。
