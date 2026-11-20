@@ -2049,5 +2049,35 @@
       "src": "assets/cover-mixture.svg",
       "caption": "RAG-Sequence 整句共享文档，RAG-Token 逐词混合证据"
     }
+  },
+  {
+    "slug": "typed-decision-models",
+    "title": "Understanding Jev：类型化概率决策模型",
+    "subtitle": "从 Choice、Score、Noul 到校准概率、贝叶斯风险与 Agent 工作流",
+    "category": "agents",
+    "topic": "typed-decision-models",
+    "status": "draft",
+    "published": "2026-11-21",
+    "updated": "2026-11-21",
+    "reading_minutes": 28,
+    "tags": [
+      "Jev",
+      "System One Models",
+      "Typed Decision Models",
+      "Probabilistic Decisions",
+      "Probability Calibration",
+      "Bayes Risk",
+      "Selective Prediction",
+      "Abstention",
+      "Agent Routing",
+      "RLCD"
+    ],
+    "summary": "从客服分流的具体问题出发，拆解 Jev 的 Choice、Score、Noul 接口，区分概率、confidence 与校准；推导贝叶斯风险和非对称成本阈值，并通过交互式成本实验、六幅原创 SVG、MathML 公式与标准库 Python 单元测试，讲清 Agent 中的自动执行、拒绝和人工复核边界。",
+    "paper": "https://arxiv.org/abs/2609.37647",
+    "illustration": "typed-decision-models",
+    "cover": {
+      "src": "assets/01-contract-pipeline.svg",
+      "caption": "把自然语言状态映射为类型化概率，再由策略代码决定执行、复核或拒绝"
+    }
   }
 ]
