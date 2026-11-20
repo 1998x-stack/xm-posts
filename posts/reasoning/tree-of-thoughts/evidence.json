@@ -1,0 +1,164 @@
+[
+  {
+    "id": "E01",
+    "kind": "method",
+    "claim": "ToT represents a node as the input together with the partial sequence of thoughts generated so far",
+    "source_url": "https://arxiv.org/abs/2305.10601",
+    "locator": "§3, Tree of Thoughts; state definition",
+    "status": "verified",
+    "notes": "A state is a partial solution, not merely an isolated sentence."
+  },
+  {
+    "id": "E02",
+    "kind": "method",
+    "claim": "A ToT instantiation specifies thought decomposition, thought generation, state evaluation, and a search algorithm",
+    "source_url": "https://arxiv.org/abs/2305.10601",
+    "locator": "§3, four design questions",
+    "status": "verified",
+    "notes": "These are the four modular design choices used throughout the article."
+  },
+  {
+    "id": "E03",
+    "kind": "method",
+    "claim": "The paper explores independent thought sampling and sequential proposal prompts for candidate generation",
+    "source_url": "https://arxiv.org/abs/2305.10601",
+    "locator": "§3, Thought generator",
+    "status": "verified",
+    "notes": "Sampling is used for richer thought spaces; proposing is used for constrained thought spaces."
+  },
+  {
+    "id": "E04",
+    "kind": "method",
+    "claim": "The state evaluator can score states independently or vote across a set of candidate states",
+    "source_url": "https://arxiv.org/abs/2305.10601",
+    "locator": "§3, State evaluator",
+    "status": "verified",
+    "notes": "Value estimates are heuristics, not calibrated success probabilities."
+  },
+  {
+    "id": "E05",
+    "kind": "method",
+    "claim": "The original ToT paper implements BFS with a breadth limit and DFS with threshold-based pruning and backtracking; A* and MCTS are discussed as future directions",
+    "source_url": "https://arxiv.org/abs/2305.10601",
+    "locator": "§3, Search algorithm, Algorithms 1–2",
+    "status": "verified",
+    "notes": "Do not attribute MCTS to the original ToT experiments."
+  },
+  {
+    "id": "E06",
+    "kind": "experiment",
+    "claim": "Game of 24 test set uses 100 relatively hard games indexed 901–1000 from 4nums.com, with success requiring a valid equation equaling 24 and using each input number exactly once",
+    "source_url": "https://arxiv.org/abs/2305.10601",
+    "locator": "§4.1, Task Setup",
+    "status": "verified",
+    "notes": "The paper reports success rate over 100 games."
+  },
+  {
+    "id": "E07",
+    "kind": "result",
+    "claim": "Game of 24 success rates are IO 7.3%, CoT 4.0%, CoT-SC k=100 9.0%, ToT b=1 45%, and ToT b=5 74%",
+    "source_url": "https://arxiv.org/abs/2305.10601",
+    "locator": "Table 2, Game of 24 Results",
+    "status": "verified",
+    "notes": "Historical GPT-4 experiment; not reproduced in this article."
+  },
+  {
+    "id": "E08",
+    "kind": "result",
+    "claim": "Game of 24 best-of-100 baselines report IO 33% and CoT 49%",
+    "source_url": "https://arxiv.org/abs/2305.10601",
+    "locator": "Table 2, Game of 24 Results",
+    "status": "verified",
+    "notes": "Best-of-k is an oracle-style comparison, distinct from majority-vote CoT-SC."
+  },
+  {
+    "id": "E09",
+    "kind": "analysis",
+    "claim": "Around 60% of CoT samples already failed after generating the first step in Game of 24",
+    "source_url": "https://arxiv.org/abs/2305.10601",
+    "locator": "§4.1, Error analysis; Figure 3(b)",
+    "status": "verified",
+    "notes": "The article reports this as the paper's error analysis, not as a universal property of CoT."
+  },
+  {
+    "id": "E10",
+    "kind": "result",
+    "claim": "Creative Writing ToT coherency score is 7.56 versus IO 6.19 and CoT 6.93; human comparison prefers ToT in 41 cases, CoT in 21, and finds 38 similar",
+    "source_url": "https://arxiv.org/abs/2305.10601",
+    "locator": "§4.2, Results; Figure 5",
+    "status": "verified",
+    "notes": "Task-specific evaluation over the paper's 100 inputs."
+  },
+  {
+    "id": "E11",
+    "kind": "result",
+    "claim": "Mini Crosswords ToT reports 78% letter-level, 60% word-level and 20% game-level success; the method solves 4 of 20 games",
+    "source_url": "https://arxiv.org/abs/2305.10601",
+    "locator": "Table 3; §4.3, Results",
+    "status": "verified",
+    "notes": "The three success levels are not interchangeable."
+  },
+  {
+    "id": "E12",
+    "kind": "analysis",
+    "claim": "The Mini Crosswords evaluator sometimes marks viable rare or obsolete words impossible, causing false pruning; oracle best state solves 7/20 while removing pruning reduces game success",
+    "source_url": "https://arxiv.org/abs/2305.10601",
+    "locator": "§4.3, Oracle and ablation studies",
+    "status": "verified",
+    "notes": "Supports the discussion of heuristic false negatives and irreversible pruning."
+  },
+  {
+    "id": "E13",
+    "kind": "experiment",
+    "claim": "Unless otherwise stated, paper experiments use GPT-4 Chat Completion with temperature 0.7; experiments were conducted May 5–16, 2023",
+    "source_url": "https://arxiv.org/abs/2305.10601",
+    "locator": "§4 introduction and footnote 1",
+    "status": "verified",
+    "notes": "Historical model and evaluation setup; not current-model performance."
+  },
+  {
+    "id": "E14",
+    "kind": "limitation",
+    "claim": "ToT requires more resources than simple sampling methods, including additional GPT-4 API calls; cost-performance trade-offs depend on modular search choices",
+    "source_url": "https://arxiv.org/abs/2305.10601",
+    "locator": "§6, Discussion",
+    "status": "verified",
+    "notes": "Qualitative cost statement from the paper; no invented cost figure."
+  },
+  {
+    "id": "E15",
+    "kind": "comparison",
+    "claim": "RAP repurposes an LLM as both world model and reasoning agent and uses MCTS for planning",
+    "source_url": "https://arxiv.org/abs/2305.14992",
+    "locator": "Abstract; EMNLP 2023",
+    "status": "verified",
+    "notes": "RAP is a later related framework, not the search algorithm used in original ToT experiments."
+  },
+  {
+    "id": "E16",
+    "kind": "comparison",
+    "claim": "ReAct interleaves reasoning traces with task-specific actions and observations from external sources or environments",
+    "source_url": "https://arxiv.org/abs/2210.03629",
+    "locator": "Abstract; ICLR 2023",
+    "status": "verified",
+    "notes": "Used to distinguish external action/observation loops from ToT's internal partial-solution search."
+  },
+  {
+    "id": "E17",
+    "kind": "illustration",
+    "claim": "The displayed Game of 24 branch diagram, BFS/DFS teaching trace, and interactive state labels are independently authored pedagogical examples",
+    "source_url": "https://arxiv.org/abs/2305.10601",
+    "locator": "Article §§1,5–7; teaching reconstruction",
+    "status": "illustrative",
+    "notes": "Not original paper figures, prompts, or logged trajectories."
+  },
+  {
+    "id": "E18",
+    "kind": "implementation",
+    "claim": "The bundled Fraction-based solver is a deterministic exact-arithmetic teaching utility and does not reproduce the LLM ToT method or paper benchmark",
+    "source_url": "https://arxiv.org/abs/2305.10601",
+    "locator": "Article §12; accompanying game24_exact.py and tests",
+    "status": "illustrative",
+    "notes": "It demonstrates a complementary symbolic verifier for hard arithmetic constraints."
+  }
+]
