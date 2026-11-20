@@ -947,5 +947,27 @@
     "summary": "精读 Fortunato et al. ICLR 2018：图解参数噪声的时间一致性、可学习 μ/σ、因子化高斯采样及重参数化梯度，区分 NoisyNet-DQN、Dueling 与 A3C，核验 Atari-57 Table 1。含六幅独立 SVG、MathML、双动作交互与标准库 Python 断言。",
     "paper": "https://arxiv.org/abs/1706.10295",
     "illustration": "noisynet"
+  },
+  {
+    "slug": "a3c",
+    "title": "Understanding A3C",
+    "subtitle": "不存 Replay Buffer，多个异步 Actor 为什么能让策略稳定学习？",
+    "category": "reinforcement-learning",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 36,
+    "tags": [
+      "A3C",
+      "Asynchronous & Parallel RL",
+      "Actor–Critic",
+      "Policy Gradient",
+      "n-step Returns",
+      "Entropy Regularization",
+      "Shared RMSProp"
+    ],
+    "summary": "精读 Mnih et al. ICML 2016：从经验相关性到多线程异步参数更新，推导 n-step Return、Advantage、策略梯度与熵正则，解析共享 RMSProp 和 57 款 Atari 的原论文数据。含 5 幅独立 SVG、6 组离线 MathML、交互算例、Python 确定性测试及 16 条证据。",
+    "paper": "https://proceedings.mlr.press/v48/mniha16.html",
+    "illustration": "a3c"
   }
 ]
