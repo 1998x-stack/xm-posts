@@ -9,7 +9,8 @@
 ## 已发布的长文
 
 | Post | 解释的问题 | 文章源码 | 核心资料 |
-|---|---|---|---|
+|---|---|---|
+| **Understanding AlphaGo** | 为什么策略网络与价值网络能引导树搜索，避免只靠遍历下围棋？ | [`posts/reinforcement-learning/alphago/`](posts/reinforcement-learning/alphago/index.html) | [Silver et al. (Nature 2016)](https://doi.org/10.1038/nature16961) |
 | **Understanding The Pile** | 为什么 22 种语料混合能增强跨领域文本建模？ | [`posts/datasets/the-pile/`](posts/datasets/the-pile/index.html) | [Gao et al. (2020)](https://arxiv.org/abs/2101.00027) |
 | **Understanding Chinchilla** | 在固定训练 FLOPs 下，参数量与训练 tokens 如何均衡？ | [`posts/training/chinchilla/`](posts/training/chinchilla/index.html) | [Hoffmann et al. (NeurIPS 2022)](https://arxiv.org/abs/2203.15556) |
 | **Understanding FineWeb** | 跨快照去重越强，为什么训练效果反而可能更差？ | [`posts/datasets/fineweb/`](posts/datasets/fineweb/index.html) | [Penedo et al. (NeurIPS 2024)](https://arxiv.org/abs/2406.17557) |
