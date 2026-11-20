@@ -1,0 +1,119 @@
+[
+  {
+    "id": "E01",
+    "kind": "provenance",
+    "claim": "Anthropic introduced and open-sourced MCP as a standard for connecting AI assistants to external data systems on 2024-11-25.",
+    "source_url": "https://www.anthropic.com/news/model-context-protocol",
+    "locator": "Announcement, opening paragraphs",
+    "status": "verified",
+    "notes": "Primary announcement; used only for origin and stated motivation."
+  },
+  {
+    "id": "E02",
+    "kind": "architecture",
+    "claim": "MCP follows a Host–Client–Server architecture; a Host can manage multiple clients, and servers expose focused capabilities.",
+    "source_url": "https://modelcontextprotocol.io/docs/2026-07-28/learn/architecture",
+    "locator": "Architecture overview; participants and design principles",
+    "status": "verified",
+    "notes": "Current official documentation."
+  },
+  {
+    "id": "E03",
+    "kind": "protocol_primitives",
+    "claim": "MCP servers expose Tools, Resources and Prompts as distinct primitives with different interaction models.",
+    "source_url": "https://modelcontextprotocol.io/specification/2026-07-28",
+    "locator": "Server Features: Tools, Resources, Prompts",
+    "status": "verified",
+    "notes": "Current specification; exact methods and lifecycle are version-scoped."
+  },
+  {
+    "id": "E04",
+    "kind": "transport",
+    "claim": "MCP supports local STDIO and remote Streamable HTTP transports; transport is distinct from the JSON-RPC data layer.",
+    "source_url": "https://modelcontextprotocol.io/docs/2026-07-28/learn/architecture",
+    "locator": "Layers and transport overview",
+    "status": "verified",
+    "notes": "Current official architecture documentation."
+  },
+  {
+    "id": "E05",
+    "kind": "protocol_evolution",
+    "claim": "The 2026-07-28 specification removes initialize/initialized and Mcp-Session-Id from the stateless core; requests carry version and client metadata, and server/discover is optional.",
+    "source_url": "https://blog.modelcontextprotocol.io/posts/2026-07-28/",
+    "locator": "The 2026-07-28 Specification; What changed; No handshake or sessions",
+    "status": "verified",
+    "notes": "Official specification release article by MCP maintainers."
+  },
+  {
+    "id": "E06",
+    "kind": "protocol_evolution",
+    "claim": "2026-07-28 adds Multi Round-Trip Requests, Mcp-Method/Mcp-Name routing headers and cache hints including ttlMs/cacheScope.",
+    "source_url": "https://blog.modelcontextprotocol.io/posts/2026-07-28/",
+    "locator": "MRTR; Header-based routing; List results are cacheable",
+    "status": "verified",
+    "notes": "Official release article."
+  },
+  {
+    "id": "E07",
+    "kind": "extensions",
+    "claim": "Tasks moved from experimental core functionality to the io.modelcontextprotocol/tasks extension, with task handles and tasks/get, tasks/update and tasks/cancel.",
+    "source_url": "https://blog.modelcontextprotocol.io/posts/2026-07-28/",
+    "locator": "Tasks section",
+    "status": "verified",
+    "notes": "Current extension lifecycle; not every client supports every extension."
+  },
+  {
+    "id": "E08",
+    "kind": "authorization",
+    "claim": "MCP authorization requires audience-bound token validation; token passthrough is forbidden, and the 2026-07-28 revision hardens issuer validation and moves away from DCR toward CIMD.",
+    "source_url": "https://modelcontextprotocol.io/docs/2026-07-28/tutorials/security/security_best_practices",
+    "locator": "Token Passthrough and authorization security guidance",
+    "status": "verified",
+    "notes": "Official security guidance; implementation must follow OAuth security best practices."
+  },
+  {
+    "id": "E09",
+    "kind": "security",
+    "claim": "Confused deputy, token passthrough, prompt injection and tool poisoning are relevant risks in MCP deployments.",
+    "source_url": "https://modelcontextprotocol.io/docs/2026-07-28/tutorials/security/security_best_practices",
+    "locator": "Attacks and Mitigations",
+    "status": "verified",
+    "notes": "Threat categories from official MCP security guidance."
+  },
+  {
+    "id": "E10",
+    "kind": "implementation",
+    "claim": "OpenAI Responses API can connect remote MCP servers and private/local servers via Secure MCP Tunnel, with approval, tool filtering and deferred tool loading controls.",
+    "source_url": "https://developers.openai.com/api/docs/guides/tools-connectors-mcp",
+    "locator": "MCP servers; Secure MCP Tunnel; Filtering tools; Approval and risks",
+    "status": "verified",
+    "notes": "Current OpenAI developer documentation; API details may evolve."
+  },
+  {
+    "id": "E11",
+    "kind": "security",
+    "claim": "OWASP recommends least privilege, scoped credentials, short-lived tokens and integrity review of tool definitions.",
+    "source_url": "https://cheatsheetseries.owasp.org/cheatsheets/MCP_Security_Cheat_Sheet.html",
+    "locator": "Best Practices",
+    "status": "verified",
+    "notes": "OWASP MCP Security Cheat Sheet."
+  },
+  {
+    "id": "E12",
+    "kind": "pedagogy",
+    "claim": "The N×M versus N+M integration comparison is a simplified conceptual model of bespoke versus shared-protocol adapter structure, not a measured benchmark.",
+    "source_url": "https://www.anthropic.com/news/model-context-protocol",
+    "locator": "Original announcement: fragmented integrations and custom implementation motivation",
+    "status": "illustrative",
+    "notes": "Independent teaching abstraction; no empirical cost or latency claim."
+  },
+  {
+    "id": "E13",
+    "kind": "pedagogy",
+    "claim": "The Python example models Host-side allow-list, schema and approval checks plus a 2026-07-28-shaped JSON-RPC request; it is not a complete MCP implementation.",
+    "source_url": "https://modelcontextprotocol.io/specification/2026-07-28",
+    "locator": "Base protocol and tools/call; teaching adapter code",
+    "status": "illustrative",
+    "notes": "Tested invariants are local demonstrations only, not conformance or security certification."
+  }
+]
