@@ -20,5 +20,4 @@
 .figure-embedding .embedding-dots{display:block;margin:15px 0 6px;font-size:27px;letter-spacing:14px;color:#25877b;white-space:nowrap}
 .figure-embedding .embedding-eq{display:block;color:#a96b4f;font:650 11px/1.5 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.05em}
 
-
 .figure-lowrank{background:#e8f2ec}.figure-lowrank .math-mark{color:#246e67}.lowrank-base,.lowrank-a,.lowrank-b,.lowrank-plus{position:absolute;text-align:center;font-weight:800;font-size:16px;line-height:37px;z-index:1;border-radius:5px}.lowrank-base{right:168px;top:64px;width:78px;height:78px;line-height:78px;color:#215c5b;background:#c1e2d5}.lowrank-a{right:91px;top:119px;width:46px;color:#9e5b3b;background:#f8d8c5}.lowrank-b{right:37px;top:119px;width:46px;color:#6759a2;background:#e2dcf7}.lowrank-plus{right:139px;top:119px;color:#7d8881}
