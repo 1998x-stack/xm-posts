@@ -27,13 +27,13 @@ def test_wordpiece_narrow_mobile_document_width():
                   parent: el.parentElement ? el.parentElement.tagName.toLowerCase() +
                     '.' + String(el.parentElement.className || '').slice(0,50) : ''
                 };
-              }).filter(x => x.right > innerWidth + 1 && x.width > 0 && x.tag !== 'svg');
+              }).filter(x => x.right > innerWidth + 1 && x.width > 0 && x.tag !== 'svg' && !['rect', 'text', 'path', 'g', 'title', 'desc'].includes(x.tag));
               return {
                  innerWidth,
                  scrollWidth: document.documentElement.scrollWidth,
                  offenders: overflowing.slice(0,50)
               };
             }""")
-            assert report["scrollWidth"] <= report["innerWidth"] + 1, report
+            assert report["scrollWidth"] <= report["innerWidth"] + 1, (\n                "document width=" + str(report["scrollWidth"]) + " at viewport " + str(report["innerWidth"]) +\n                "; overflowing HTML elements: " + repr(report["offenders"][:12])\n            )
         finally:
             browser.close()
