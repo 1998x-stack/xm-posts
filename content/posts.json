@@ -361,5 +361,26 @@
     "summary": "以 Bottou 2010 为主线，拆解全批量与随机梯度的计算路径、条件无偏、Mini-batch 方差、步长计划与有限算力权衡；配七幅图、可交互一维算例和纯 Python 测试。",
     "paper": "https://bottou.org/papers/bottou-2010",
     "illustration": "sgd"
+  },
+  {
+    "slug": "the-pile",
+    "title": "Understanding The Pile",
+    "subtitle": "为什么 22 种语料的混合，比只扩大网页抓取更有意义？",
+    "category": "datasets",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 31,
+    "tags": [
+      "The Pile",
+      "Pretraining Data",
+      "Data Mixtures",
+      "Data Curation",
+      "Bits Per Byte",
+      "Dataset Governance"
+    ],
+    "summary": "解读 Gao et al. (2020) The Pile：22 个来源与 825.18 GiB 原始语料、1,254.20 GiB 采样后有效规模、BPB 指标、受控 1.3B 模型对照，以及可交互权重实验和版权、泄漏、数据治理边界。",
+    "paper": "https://arxiv.org/abs/2101.00027",
+    "illustration": "pile"
   }
 ]
