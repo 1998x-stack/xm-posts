@@ -1,0 +1,128 @@
+[
+  {
+    "id": "M01",
+    "claim": "2017 ICLR MoE defines sparse weighted expert sum",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/abs/1701.06538",
+    "locator": "§2; Eq. (1)",
+    "status": "verified",
+    "notes": "Specific paper/model version as written"
+  },
+  {
+    "id": "M02",
+    "claim": "Noisy Top-K uses learned Gaussian noise scale and KeepTopK+Softmax",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/abs/1701.06538",
+    "locator": "§2.1; Eq. (2)–(5)",
+    "status": "verified",
+    "notes": "Specific paper/model version as written"
+  },
+  {
+    "id": "M03",
+    "claim": "Original experimental model puts MoE between LSTM layers",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/abs/1701.06538",
+    "locator": "Abstract; §1.2; Figure 1",
+    "status": "verified",
+    "notes": "Specific paper/model version as written"
+  },
+  {
+    "id": "M04",
+    "claim": "Original research reaches MoE architectures up to 137 billion parameters",
+    "kind": "paper-result",
+    "source_url": "https://arxiv.org/abs/1701.06538",
+    "locator": "Abstract",
+    "status": "verified",
+    "notes": "Specific paper/model version as written"
+  },
+  {
+    "id": "M05",
+    "claim": "Shrinking expert batch and bandwidth limit sparse execution efficiency",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/abs/1701.06538",
+    "locator": "§3.1–3.2",
+    "status": "verified",
+    "notes": "Specific paper/model version as written"
+  },
+  {
+    "id": "M06",
+    "claim": "Importance CV squared and separately defined Load loss are used",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/abs/1701.06538",
+    "locator": "§4; Eq. (6)–(7); Appendix A",
+    "status": "verified",
+    "notes": "Specific paper/model version as written"
+  },
+  {
+    "id": "M07",
+    "claim": "GShard conditional computation combined with sharding and >600B parameters",
+    "kind": "later-work",
+    "source_url": "https://arxiv.org/abs/2006.16668",
+    "locator": "Abstract",
+    "status": "verified",
+    "notes": "Specific paper/model version as written"
+  },
+  {
+    "id": "M08",
+    "claim": "Switch top-1 and N sum f_i P_i loss differ from 2017 losses",
+    "kind": "later-work",
+    "source_url": "https://jmlr.org/papers/v23/21-0998.html",
+    "locator": "§2.1–2.2",
+    "status": "verified",
+    "notes": "Specific paper/model version as written"
+  },
+  {
+    "id": "M09",
+    "claim": "Mixtral has 8 FFN experts per layer and selects 2, ~47B total ~13B active",
+    "kind": "later-work",
+    "source_url": "https://arxiv.org/abs/2401.04088",
+    "locator": "Abstract; §2",
+    "status": "verified",
+    "notes": "Specific paper/model version as written"
+  },
+  {
+    "id": "M10",
+    "claim": "DeepSeekMoE isolates shared experts and segments experts",
+    "kind": "later-work",
+    "source_url": "https://aclanthology.org/2024.acl-long.70/",
+    "locator": "Abstract; §2",
+    "status": "verified",
+    "notes": "Specific paper/model version as written"
+  },
+  {
+    "id": "M11",
+    "claim": "Top2 logits toy example yields 0.622459/0.377541 gate weights",
+    "kind": "toy-derivation",
+    "source_url": "https://arxiv.org/abs/1701.06538",
+    "locator": "Eq. (3) form; posts/architectures/moe/moe_toy.py",
+    "status": "derived",
+    "notes": "Educational or independently derived, not a reproduced paper benchmark"
+  },
+  {
+    "id": "M12",
+    "claim": "Capacity C=ceil(c*T*k/N) is only a generalized illustration",
+    "kind": "toy-derivation",
+    "source_url": "https://arxiv.org/abs/2006.16668",
+    "locator": "Capacity/dispatch discussion; educational assumption",
+    "status": "derived",
+    "notes": "Educational or independently derived, not a reproduced paper benchmark"
+  },
+  {
+    "id": "M13",
+    "claim": "Total vs active parameter accounts differ for k<N",
+    "kind": "derived-math",
+    "source_url": "https://arxiv.org/abs/1701.06538",
+    "locator": "§2 sparse-gating logic; independent derivation",
+    "status": "derived",
+    "notes": "Educational or independently derived, not a reproduced paper benchmark"
+  },
+  {
+    "id": "M14",
+    "claim": "Expert specialization is not guaranteed from names or mere routing",
+    "kind": "interpretation",
+    "source_url": "https://aclanthology.org/2024.acl-long.70/",
+    "locator": "Introduction; problem framing",
+    "status": "derived",
+    "notes": "Educational or independently derived, not a reproduced paper benchmark"
+  }
+]

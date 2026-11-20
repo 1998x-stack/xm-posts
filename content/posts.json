@@ -1079,5 +1079,31 @@
     "summary": "精读 ICLR 2023 ReAct：扩展动作空间、Thought/Action/Observation 机制与 MathML 推导，核验 HotpotQA、FEVER、ALFWorld、WebShop 原论文数字；以五幅独立图解、交互式失败检索恢复和确定性 Python 控制器辨析提示范式与现代 Agent 工程边界。",
     "paper": "https://arxiv.org/abs/2210.03629",
     "illustration": "react"
+  },
+  {
+    "slug": "moe",
+    "title": "Understanding Mixture of Experts (MoE)",
+    "subtitle": "为什么只执行少量专家，就能扩展模型参数容量？",
+    "category": "architectures",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 35,
+    "tags": [
+      "MoE",
+      "Mixture of Experts",
+      "Sparse Gating",
+      "Top-K",
+      "Conditional Computation",
+      "Load Balancing",
+      "Expert Parallelism",
+      "Switch Transformer",
+      "GShard",
+      "Mixtral",
+      "DeepSeekMoE"
+    ],
+    "summary": "以 Shazeer et al. ICLR 2017 为核心，渐进推导稀疏路由、Noisy Top-K、Importance/Load、容量和专家并行，区分 Switch、GShard、Mixtral 与 DeepSeekMoE；配七幅 SVG、八组原生 MathML、交互实验和 Python 数值测试。",
+    "paper": "https://arxiv.org/abs/1701.06538",
+    "illustration": "moe"
   }
 ]
