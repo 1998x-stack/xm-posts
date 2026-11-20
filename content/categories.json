@@ -530,7 +530,6 @@
   {
     "slug": "decision-models",
     "title": "概率决策模型",
-    "english": "Probabilistic Decision Models",
     "description": "研究如何把有限答案空间中的模型判断转化为可审计、可校准、可执行的概率决策，包括类型化决策模型、贝叶斯风险、概率校准、风险预算、选择性预测、模型路由与鲁棒性。",
     "topics": [
       {
