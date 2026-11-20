@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 390" role="img" aria-labelledby="lse-f2-title lse-f2-desc"><title id="lse-f2-title">LogSumExp 的均值与波动分解</title><desc id="lse-f2-desc">中心化之后，零阶为 log n 加均值，二阶补偿为方差的一半，三阶与偏度有关。</desc><rect x="1" y="1" width="958" height="388" rx="22" fill="#f9fcf9" stroke="#d9e7df"/>
+<g font-family="system-ui,-apple-system,'PingFang SC',sans-serif"><text x="42" y="54" font-size="26" fill="#24444b" font-weight="800">LSE = log n + μ + 波动修正</text>
+<rect x="42" y="90" width="218" height="204" rx="12" fill="#e6f2ef" stroke="#b9d8cc" stroke-width="1.5"/><rect x="293" y="90" width="218" height="204" rx="12" fill="#e9f1fc" stroke="#bed3e5" stroke-width="1.5"/><rect x="544" y="90" width="369" height="204" rx="12" fill="#fcf1e7" stroke="#edcfb3" stroke-width="1.5"/>
+<text x="67" y="131" font-size="16" fill="#28736f" font-weight="800">0 阶</text><text x="67" y="177" font-size="25" fill="#28434a" >log n + μ</text><text x="67" y="221" font-size="17" fill="#527a7a" >共同基线</text>
+<text x="316" y="131" font-size="16" fill="#4676a0" font-weight="800">2 阶</text><text x="316" y="177" font-size="25" fill="#28434a" >+ m₂ / 2</text><text x="316" y="221" font-size="17" fill="#52718a" >logit 方差</text>
+<text x="563" y="131" font-size="16" fill="#b4774e" font-weight="800">3 / 4 阶</text><text x="563" y="171" font-size="24" fill="#28434a" >+ m₃ / 6</text><text x="563" y="208" font-size="20" fill="#28434a" >+ (m₄ − 3m₂²) / 24</text><text x="563" y="251" font-size="16" fill="#9c6a48" >偏斜、尾部与高阶误差</text>
+<line x1="263" y1="192" x2="273" y2="192" stroke="#387f7b" stroke-width="3.5"/><path d="M271 183 L285 192 L271 201 Z" fill="#387f7b"/><line x1="513" y1="192" x2="524" y2="192" stroke="#387f7b" stroke-width="3.5"/><path d="M522 183 L536 192 L522 201 Z" fill="#387f7b"/>
+<text x="47" y="340" font-size="18" fill="#476970" >mᵣ = n⁻¹ Σ (xᵢ − μ)ʳ ；展开关于 λ，x = μ1 + λδ</text>
+</g></svg>

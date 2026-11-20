@@ -17,6 +17,7 @@
 | **Understanding Chinchilla** | 在固定训练 FLOPs 下，参数量与训练 tokens 如何均衡？ | [`posts/training/chinchilla/`](posts/training/chinchilla/index.html) | [Hoffmann et al. (NeurIPS 2022)](https://arxiv.org/abs/2203.15556) |
 | **Understanding FineWeb** | 跨快照去重越强，为什么训练效果反而可能更差？ | [`posts/datasets/fineweb/`](posts/datasets/fineweb/index.html) | [Penedo et al. (NeurIPS 2024)](https://arxiv.org/abs/2406.17557) |
 | **Understanding Multi-Head Attention** | 为什么多个 Q/K/V 投影比单个注意力汇总更有表达空间？ | [`posts/architectures/multi-head-attention/`](posts/architectures/multi-head-attention/index.html) | [Vaswani et al. (NeurIPS 2017)](https://arxiv.org/abs/1706.03762) |
+| **Understanding DeltaNet** | 为什么矩阵记忆需要 Delta Rule 纠错，怎样通过 WY 低秩表示实现分块训练？ | [`posts/architectures/deltanet/`](posts/architectures/deltanet/index.html) | [Yang et al. (NeurIPS 2024)](https://proceedings.neurips.cc/paper_files/paper/2024/hash/d13a3eae72366e61dfdc7eea82eeb685-Abstract-Conference.html) |
 | **Understanding GQA** | 为什么共享 KV Head 能降低 Decode 带宽又保留 Query 多头？ | [`posts/architectures/gqa/`](posts/architectures/gqa/index.html) | [Ainslie et al. (EMNLP 2023)](https://aclanthology.org/2023.emnlp-main.298/) |
 | **Understanding FlashAttention** | Attention 的 FLOPs 没变，为什么 GPU 仍能提速？ | [`posts/systems/flashattention/`](posts/systems/flashattention/index.html) | [Dao et al. (2022)](https://arxiv.org/abs/2205.14135) |
 | **Understanding AlexNet** | 为什么深层 CNN 能在 2012 ImageNet 上突破？卷积、ReLU、双 GPU 与真实集成指标 | [`posts/architectures/alexnet/`](posts/architectures/alexnet/index.html) | [Krizhevsky et al. (NeurIPS 2012)](https://papers.nips.cc/paper_files/paper/2012/file/c399862d3b9d6b76c8436e924a68c45b-Paper.pdf) |
@@ -45,6 +46,7 @@
 | **Understanding SAC** | 为什么旧经验可复用，还要用最大熵保留探索？ | [`posts/reinforcement-learning/sac/`](posts/reinforcement-learning/sac/index.html) | [Haarnoja et al. (ICML 2018)](https://proceedings.mlr.press/v80/haarnoja18b.html) |
 | **Understanding RLHF** | 为什么示范微调还需要人类偏好与策略优化？ | [`posts/training/rlhf/`](posts/training/rlhf/index.html) | [Ouyang et al. (2022)](https://arxiv.org/abs/2203.02155) |
 | **Understanding GRPO** | 为什么不需要 Critic 也能构造策略优势？ | [`posts/training/grpo/`](posts/training/grpo/index.html) | [Shao et al. (2024)](https://arxiv.org/abs/2402.03300) |
+| **Understanding WordPiece** | 为什么 BERT MaxMatch 与训练词表不是一个算法？ | [`posts/foundations/wordpiece/`](posts/foundations/wordpiece/index.html) | [Schuster & Nakajima (2012)](https://research.google/pubs/japanese-and-korean-voice-search/) · [BERT tokenizer](https://github.com/google-research/bert/blob/master/tokenization.py) |
 | **Understanding Word2Vec** | 为什么上下文预测能产生词向量？ | [`posts/foundations/understanding-word2vec/`](posts/foundations/understanding-word2vec/index.html) | [Mikolov et al. (2013)](https://arxiv.org/abs/1301.3781) · [NeurIPS 2013](https://arxiv.org/abs/1310.4546) |
 | **Understanding Embeddings** | 为什么词的编号能够变成可比较的语义向量？从 Word2Vec 到对比检索 | [`posts/foundations/embeddings/`](posts/foundations/embeddings/index.html) | [Word2Vec](https://arxiv.org/abs/1301.3781) · [SBERT](https://aclanthology.org/D19-1410/) · [SimCSE](https://aclanthology.org/2021.emnlp-main.552/) |
 | **Understanding Importance Sampling** | 为什么故意改变抽样分布，仍可无偏估计目标概率？稀有事件、SNIS、ESS 与 Off-policy | [`posts/foundations/importance-sampling/`](posts/foundations/importance-sampling/index.html) | [Kahn & Marshall (1953)](https://doi.org/10.1287/opre.1.5.263) · [Owen (2013)](https://artowen.su.domains/mc/Ch-var-is.pdf) |
@@ -54,6 +56,7 @@
 | **Understanding PagedAttention** | 为什么 KV Cache 需要像操作系统一样分页？从 Block Table 到 vLLM Serving | [`posts/inference/pagedattention/`](posts/inference/pagedattention/index.html) | [研究出处](https://arxiv.org/abs/2309.06180) |
 | **Understanding DDPG** | 连续动作如何学习？从确定性策略梯度到双目标网络与经验回放 | [`posts/reinforcement-learning/ddpg/`](posts/reinforcement-learning/ddpg/index.html) | [研究出处](https://arxiv.org/abs/1509.02971) |
 | **Understanding CNN** | 为什么一个小核在整张图上滑动，就能学习视觉结构？ | [`posts/architectures/cnn/`](posts/architectures/cnn/index.html) | [研究出处](https://doi.org/10.1109/5.726791) |
+| **Understanding LogSumExp & Softmax Taylor Expansion** | 为什么中心化 Softmax 会出现方差修正，及一阶近似如何线性化 Attention？ | [`posts/foundations/logsumexp-softmax-taylor/`](posts/foundations/logsumexp-softmax-taylor/index.html) | [苏剑林 (2026)](https://spaces.ac.cn/archives/11814) · [Kuzina et al. (2026)](https://arxiv.org/abs/2607.07706) |
 | **Understanding SVD** | 矩阵如何把空间拉伸成椭圆？从奇异值到最优低秩近似、PCA 与伪逆 | [`posts/foundations/svd/`](posts/foundations/svd/index.html) | [研究出处](https://doi.org/10.1007/BF02288367) |
 | **Understanding KV Cache** | 自回归 Decode 为什么要保存历史 K/V？ | [`posts/inference/kv-cache/`](posts/inference/kv-cache/index.html) | [Kwon et al. (SOSP 2023)](https://doi.org/10.1145/3600006.3613165) |
 | **Understanding GPT-1** | 为什么预测下一个 token 能迁移到多种语言理解任务？ | [`posts/training/gpt-1/`](posts/training/gpt-1/index.html) | [Radford et al. (2018)](https://cdn.openai.com/research-covers/language-unsupervised/language_understanding_paper.pdf) |
@@ -124,6 +127,8 @@ XGBoost 归入 `classical-ml` 既有 **Trees & Ensembles** 主题，不新建顶
 BPE 放在 `foundations` → **Tokenization & Subword Units**（新增二级专题，沿用现有一级分类），而不是再新增一级目录；对应 `posts/foundations/bpe/` 包含原论文证据、六幅独立 SVG、交互训练/编码演示、MathML 与纯 Python 回归测试。明确区分 Gage 1994、Sennrich et al. ACL 2016 与 GPT-2 byte-level BPE。
 
 SentencePiece 继续归入 `foundations` → **Tokenization & Subword Units**，与 BPE 共享已有二级专题；包含 Unigram 动态规划、子词采样、原生 MathML、五幅 SVG 与原论文实证核验。
+
+WordPiece 继续归于 `foundations` → **Tokenization & Subword Units**，与 BPE 共享二级专题，不新增顶级分类。`posts/foundations/wordpiece/` 提供 14 节论文/源码精读、七幅独立 SVG、MathML、双交互实验、词表评分教学重建与 BERT MaxMatch 纯 Python 测试；明确标出 Google 原版词表训练源码未公开。
 
 ## 仓库结构
 
@@ -275,4 +280,4 @@ TD3 归入 `reinforcement-learning` → **Continuous Control / Off-policy Actor�
 
 ## MobileNet / Efficient & Mobile CNNs
 
-MobileNet 归入 `architectures` → **Convolutional Neural Networks & Vision** → **Efficient & Mobile CNNs**，不新增一级分类。文章 [`Understanding MobileNet`](posts/architectures/mobilenet/index.html) 位于 `posts/architectures/mobilenet/`，以 Howard et al. 2017 的 Depthwise Separable Convolution、α/ρ 缩放及 ImageNet 实验为主线，区分 MobileNetV2 的逆残差/线性瓶颈、V3 的 NAS/SE/h-swish 与 V4 的 UIB/Mobile MQA。包含 5 幅独立 SVG、MathML 公式、交互计算账本、标准库 Python 数值验证及原论文证据台账。
+MobileNet 归入 `architectures` → **Convolutional Neural Networks & Vision** → **Efficient & Mobile CNNs**，无需新建一级分类。文章 [`Understanding MobileNet`](posts/architectures/mobilenet/index.html) 位于 `posts/architectures/mobilenet/`，以 2017 原论文为主线，区分 V2 逆残差、V3 NAS/SE 与 V4 UIB/Mobile MQA。包含五幅 SVG、MathML、交互成本分析、Python 验证及证据台账。
