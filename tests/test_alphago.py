@@ -8,7 +8,7 @@ def test_mixing_and_bounds():
     assert mix(.6,-1,0)==.6 and mix(.6,-1,1)==-1
 def test_puct_visit_bonus():
     f=M["puct_score"]
-    assert abs(f(.2,.5,3,16,2)-.7)<1e-12
+    assert abs(f(.2,.5,3,16,2)-1.2)<1e-12
     assert f(.2,.5,0,16,2)>f(.2,.5,3,16,2)
 def test_root_choice_and_perspective():
     assert M["select_most_visited"]({"A":3,"B":10})=="B"
