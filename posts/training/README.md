@@ -13,3 +13,5 @@
 相关子主题：Preference Optimization / RLHF。DPO 属于训练与对齐，不另建同义的顶层类别。
 
 - [Understanding Chinchilla](chinchilla/index.html) — Hoffmann et al. (NeurIPS 2022)：固定训练算力、参数/token 比、IsoFLOP 和三种 scaling-law 估计；属于 Pretraining → Scaling Laws / Compute-Optimal Training。
+
+- [Understanding GPT-1](gpt-1/index.html) — Radford et al. (2018)：自回归预训练、任务输入转换、联合微调与消融分析。

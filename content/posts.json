@@ -468,5 +468,26 @@
     "summary": "以 Hoffmann et al. (NeurIPS 2022) 为主线，拆解 6ND 预算约束、三种经验缩放方法、幂律损失解析推导、70B/1.4T 验证、部署成本边界，并提供五幅机制图、MathML 公式、交互计算器与确定性数学测试。",
     "paper": "https://arxiv.org/abs/2203.15556",
     "illustration": "chinchilla"
+  },
+  {
+    "slug": "gpt-1",
+    "title": "Understanding GPT-1",
+    "subtitle": "为什么预测下一个 token，能够迁移到语言理解任务？",
+    "category": "training",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 30,
+    "tags": [
+      "GPT-1",
+      "Generative Pretraining",
+      "Autoregressive Language Modeling",
+      "Decoder-only Transformer",
+      "Fine-tuning",
+      "Transfer Learning"
+    ],
+    "summary": "依据 Radford 等人 2018 年 GPT-1 原论文，拆解 BooksCorpus 自回归预训练、Decoder-only 因果 Mask、任务输入变换与联合微调目标，对照 Tables 2–5 的正负证据，并提供 5 幅 SVG、MathML 和纯 Python 数值断言。",
+    "paper": "https://cdn.openai.com/research-covers/language-unsupervised/language_understanding_paper.pdf",
+    "illustration": "gpt1"
   }
 ]
