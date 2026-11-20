@@ -293,5 +293,13 @@
       "pagedattention",
       "speculative-decoding"
     ]
+  },
+  {
+    "id": "path-32",
+    "title": "从规则网格卷积到图结构学习",
+    "posts": [
+      "cnn",
+      "gnn"
+    ]
   }
 ]
