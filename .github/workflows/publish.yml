@@ -82,6 +82,7 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
+      - uses: actions/checkout@v4
       - name: Download validated site
         uses: actions/download-artifact@v4
         with:
@@ -112,3 +113,5 @@ jobs:
       - name: Deploy Pages
         id: deployment
         uses: actions/deploy-pages@v4
+      - name: Verify public Pages article recommendations
+        run: python scripts/verify_deployed_related.py --base-url "${{ steps.deployment.outputs.page_url }}"
