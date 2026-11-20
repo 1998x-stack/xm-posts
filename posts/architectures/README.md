@@ -30,3 +30,8 @@ RoPE 位于 `posts/architectures/rope/`，主题为 **Positional Encoding**；�
 
 - [Understanding Seq2Seq](seq2seq/index.html)：2014 年 LSTM Encoder–Decoder、Teacher Forcing、自回归解码、反转源序列与 Attention 解决固定向量瓶颈的后续发展。
 - 属于模型架构的二级主题，后续 RNN、LSTM、Bahdanau Attention、Luong Attention 与 Transformer Encoder–Decoder 可沿此线索组织；无需新建一级分类。
+
+## Attention Head Sharing
+
+- [Understanding GQA](gqa/index.html)：以 EMNLP 2023 原论文为主线，解释 MHA / GQA / MQA 头共享、Checkpoint mean-pooling + uptraining、KV Cache 成本与 T5-XXL 结果；提供交互演算、原生 MathML、独立 SVG、数值测试与证据账本。
+- 研究主题属于注意力架构；KV Cache 的内存分配、页表和在线调度延伸至 `inference`，无需新建顶层分类。

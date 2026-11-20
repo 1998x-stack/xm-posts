@@ -1,0 +1,164 @@
+[
+  {
+    "id": "G01",
+    "claim": "GQA-G has G KV groups, GQA-1 equals MQA, GQA-H equals MHA",
+    "kind": "paper-claim",
+    "source_url": "https://aclanthology.org/2023.emnlp-main.298/",
+    "locator": "§2.2; Figure 2",
+    "status": "verified",
+    "notes": "Defines G as groups/KV heads, not queries per group"
+  },
+  {
+    "id": "G02",
+    "claim": "Mean pooling existing K/V projection matrices by group initializes GQA from an MHA checkpoint",
+    "kind": "paper-claim",
+    "source_url": "https://aclanthology.org/2023.emnlp-main.298/",
+    "locator": "§2.1–2.2; Figure 1",
+    "status": "verified",
+    "notes": "Q and output projections remain; adaptation training follows"
+  },
+  {
+    "id": "G03",
+    "claim": "Converted checkpoints are additionally trained for alpha fraction of original pretraining steps",
+    "kind": "paper-claim",
+    "source_url": "https://aclanthology.org/2023.emnlp-main.298/",
+    "locator": "§2.1; §3.1",
+    "status": "verified",
+    "notes": "Alpha=0.05 is original training fraction, not a 95% reduction in model inference compute"
+  },
+  {
+    "id": "G04",
+    "claim": "T5-XXL alpha=0.05 uptraining took about 600 TPUv3 chip-days",
+    "kind": "paper-claim",
+    "source_url": "https://aclanthology.org/2023.emnlp-main.298/",
+    "locator": "§3.1 Uptraining",
+    "status": "verified",
+    "notes": "Model- and recipe-specific"
+  },
+  {
+    "id": "G05",
+    "claim": "GQA/MQA applied to decoder self- and cross-attention, not encoder self-attention",
+    "kind": "paper-claim",
+    "source_url": "https://aclanthology.org/2023.emnlp-main.298/",
+    "locator": "§3.1 Configurations",
+    "status": "verified",
+    "notes": "Encoder-decoder T5.1.1 experiments only"
+  },
+  {
+    "id": "G06",
+    "claim": "Table 1 T5 XXL MHA: time 1.51s and Average 47.2",
+    "kind": "paper-result",
+    "source_url": "https://aclanthology.org/2023.emnlp-main.298/",
+    "locator": "Table 1 MHA-XXL",
+    "status": "verified",
+    "notes": "Per sample, TPUv4; task aggregation"
+  },
+  {
+    "id": "G07",
+    "claim": "Table 1 T5 XXL MQA: time 0.24s and Average 46.6",
+    "kind": "paper-result",
+    "source_url": "https://aclanthology.org/2023.emnlp-main.298/",
+    "locator": "Table 1 MQA-XXL",
+    "status": "verified",
+    "notes": "5% uptrained"
+  },
+  {
+    "id": "G08",
+    "claim": "Table 1 T5 XXL GQA-8: time 0.28s and Average 47.1",
+    "kind": "paper-result",
+    "source_url": "https://aclanthology.org/2023.emnlp-main.298/",
+    "locator": "Table 1 GQA-8-XXL",
+    "status": "verified",
+    "notes": "5% uptrained; not a general hardware guarantee"
+  },
+  {
+    "id": "G09",
+    "claim": "Table 1 T5 Large MHA: time 0.37s and Average 46.0",
+    "kind": "paper-result",
+    "source_url": "https://aclanthology.org/2023.emnlp-main.298/",
+    "locator": "Table 1 MHA-Large",
+    "status": "verified",
+    "notes": "Different parameter scale from XXL"
+  },
+  {
+    "id": "G10",
+    "claim": "Mean-pooling conversion outperforms first-head and random initialization in tested setup",
+    "kind": "paper-result",
+    "source_url": "https://aclanthology.org/2023.emnlp-main.298/",
+    "locator": "§3.3; Figure 4",
+    "status": "verified",
+    "notes": "T5 Large converted to MQA, alpha=0.05"
+  },
+  {
+    "id": "G11",
+    "claim": "5% uptraining benefits GQA/MQA, 10% gives diminishing returns",
+    "kind": "paper-result",
+    "source_url": "https://aclanthology.org/2023.emnlp-main.298/",
+    "locator": "§3.3; Figure 5",
+    "status": "verified",
+    "notes": "Representative task subset; avoid treating curve as Table 1 averages"
+  },
+  {
+    "id": "G12",
+    "claim": "Increasing KV groups from 1 to 8 has modest latency cost in reported setup",
+    "kind": "paper-result",
+    "source_url": "https://aclanthology.org/2023.emnlp-main.298/",
+    "locator": "§3.3; Figure 6",
+    "status": "verified",
+    "notes": "2048-token input, 512-token output; measured system dependent"
+  },
+  {
+    "id": "G13",
+    "claim": "Raw KV storage scales as 2 L B T G d s for uniform same-dimension keys/values",
+    "kind": "derived-math",
+    "source_url": "https://aclanthology.org/2023.emnlp-main.298/",
+    "locator": "§2.2 cache-size argument; independent dimensional analysis",
+    "status": "derived",
+    "notes": "Ignores layout, allocator, fragmentation, RoPE and paging overhead"
+  },
+  {
+    "id": "G14",
+    "claim": "For L32 B1 T4096 H32 d128 BF16 MHA is 2GiB and GQA-8 is 512MiB",
+    "kind": "toy-derivation",
+    "source_url": "https://aclanthology.org/2023.emnlp-main.298/",
+    "locator": "Independent calculation in mini_gqa.py",
+    "status": "derived",
+    "notes": "Not measured GPU performance"
+  },
+  {
+    "id": "G15",
+    "claim": "GQA group mapping uses floor(i/(H/G)) for contiguous equal-sized groups",
+    "kind": "toy-derivation",
+    "source_url": "https://aclanthology.org/2023.emnlp-main.298/",
+    "locator": "§2.2 applied to contiguous index convention",
+    "status": "derived",
+    "notes": "Implementation choice; requires H divisible by G"
+  },
+  {
+    "id": "G16",
+    "claim": "Article pure-Python toy maps query heads to shared K/V and passes endpoint assertions",
+    "kind": "toy-derivation",
+    "source_url": "https://aclanthology.org/2023.emnlp-main.298/",
+    "locator": "mini_gqa.py and tests/test_gqa.py",
+    "status": "derived",
+    "notes": "Check by CI; no benchmark or T5 reproduction"
+  },
+  {
+    "id": "G17",
+    "claim": "Paper limits include T5 encoder-decoder scope, no XXL from-scratch GQA comparison, ROUGE limitations",
+    "kind": "paper-claim",
+    "source_url": "https://aclanthology.org/2023.emnlp-main.298/",
+    "locator": "Limitations; Appendix A",
+    "status": "verified",
+    "notes": "Do not project paper results onto decoder-only models"
+  },
+  {
+    "id": "G18",
+    "claim": "MQA predates GQA; Shazeer introduced single shared KV head",
+    "kind": "prior-work",
+    "source_url": "https://arxiv.org/abs/1911.02150",
+    "locator": "Introduction; Related Work",
+    "status": "verified",
+    "notes": "https://arxiv.org/abs/1911.02150"
+  }
+]
