@@ -1,0 +1,110 @@
+[
+  {
+    "id": "K01",
+    "claim": "Causal decoder attention cannot read future positions",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/abs/1706.03762",
+    "locator": "Section 3.2.3 / Masked Multi-Head Attention",
+    "status": "verified",
+    "notes": "Historical architecture source; reuse inference is a later engineering formulation."
+  },
+  {
+    "id": "K02",
+    "claim": "KV reuse keeps historical keys/values under fixed causal dependencies",
+    "kind": "derived-math",
+    "source_url": "https://arxiv.org/abs/1706.03762",
+    "locator": "Section 3.2 / causal masking and decoder operation",
+    "status": "derived",
+    "notes": "Derived from causal dependence; applies under position/context/model consistency."
+  },
+  {
+    "id": "K03",
+    "claim": "MQA shares key/value heads across query heads",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/abs/1911.02150",
+    "locator": "Abstract and method",
+    "status": "verified",
+    "notes": "Shazeer 2019; separate from GQA."
+  },
+  {
+    "id": "K04",
+    "claim": "GQA uses an intermediate number of key/value heads between MHA and MQA",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/abs/2305.13245",
+    "locator": "Abstract and method",
+    "status": "verified",
+    "notes": "Ainslie et al. 2023; architecture/weight conversion choice, not free equivalence."
+  },
+  {
+    "id": "K05",
+    "claim": "PagedAttention maps logical KV blocks to non-contiguous physical blocks",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/abs/2309.06180",
+    "locator": "Abstract; Section 3 PagedAttention",
+    "status": "verified",
+    "notes": "SOSP 2023 paper; ignore graphics and benchmark values in independent diagrams."
+  },
+  {
+    "id": "K06",
+    "claim": "PagedAttention supports flexible block sharing and reduces allocation waste",
+    "kind": "paper-claim",
+    "source_url": "https://doi.org/10.1145/3600006.3613165",
+    "locator": "Abstract; memory management design and evaluation",
+    "status": "verified",
+    "notes": "Performance claims are workload-specific; no numeric multiplier reused."
+  },
+  {
+    "id": "K07",
+    "claim": "Prefix caching reuses earlier full prefix KV blocks under matching cache keys",
+    "kind": "modern-implementation",
+    "source_url": "https://docs.vllm.ai/en/stable/design/prefix_caching/",
+    "locator": "Automatic Prefix Caching design; cache blocks and hash keys",
+    "status": "verified",
+    "notes": "Current vLLM documentation, separate from SOSP 2023 algorithm."
+  },
+  {
+    "id": "K08",
+    "claim": "Static and Dynamic caches have different compilation/allocation tradeoffs",
+    "kind": "modern-implementation",
+    "source_url": "https://huggingface.co/docs/transformers/kv_cache",
+    "locator": "Cache strategies; DynamicCache / StaticCache",
+    "status": "verified",
+    "notes": "Framework-specific behavior can change with version."
+  },
+  {
+    "id": "K09",
+    "claim": "KV raw storage is 2 L B T Hkv d s bytes for uniform full-context layers",
+    "kind": "derived-math",
+    "source_url": "https://arxiv.org/abs/2309.06180",
+    "locator": "Concept of keys/values stored per layer; dimensional counting independently derived",
+    "status": "derived",
+    "notes": "Excludes overhead and special attention architectures; calculation verified by mini_kv_cache."
+  },
+  {
+    "id": "K10",
+    "claim": "The example KV storage is 512 MiB for 8 KV heads and 2 GiB for 32 KV heads",
+    "kind": "toy-derivation",
+    "source_url": "https://arxiv.org/abs/2309.06180",
+    "locator": "Independent educational numeric example, not a paper benchmark",
+    "status": "derived",
+    "notes": "32 layers; batch 1; 4096 tokens; head_dim 128; 2 bytes per element."
+  },
+  {
+    "id": "K11",
+    "claim": "Mini cached and uncached causal single-head computations are equal",
+    "kind": "toy-derivation",
+    "source_url": "https://arxiv.org/abs/1706.03762",
+    "locator": "Independently written pure-Python code in mini_kv_cache.py",
+    "status": "derived",
+    "notes": "No RoPE, learned projections, multi-layer decoding, or GPU benchmarking."
+  },
+  {
+    "id": "K12",
+    "claim": "Sliding-window/quantized/offloaded cache methods are implementation-dependent",
+    "kind": "modern-implementation",
+    "source_url": "https://huggingface.co/docs/transformers/kv_cache",
+    "locator": "Cache strategies table and descriptions",
+    "status": "verified",
+    "notes": "Do not treat all layers as globally attending."
+  }
+]

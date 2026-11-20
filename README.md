@@ -13,15 +13,20 @@
 | **Understanding ResNet** | 网络越深，为什么训练反而可能更难？ | [`posts/architectures/resnet/`](posts/architectures/resnet/index.html) | [He et al.](https://arxiv.org/abs/1512.03385) |
 | **Understanding Transformer** | 为什么用 Self-Attention 替代循环结构？ | [`posts/architectures/transformer/`](posts/architectures/transformer/index.html) | [Vaswani et al.](https://arxiv.org/abs/1706.03762) |
 | **Understanding Pre-LN vs Post-LN** | LayerNorm 改动为何影响残差梯度与 warm-up？ | [`posts/architectures/pre-ln-vs-post-ln/`](posts/architectures/pre-ln-vs-post-ln/index.html) | [Xiong et al. (ICML 2020)](https://proceedings.mlr.press/v119/xiong20b.html) |
+| **Understanding DPO** | 为什么偏好对可以直接训练策略而无需显式奖励模型？ | [`posts/training/dpo/`](posts/training/dpo/index.html) | [Rafailov et al. (NeurIPS 2023)](https://arxiv.org/abs/2305.18290) |
 | **Understanding SVM** | 为什么分对了仍需最大间隔？ | [`posts/classical-ml/svm/`](posts/classical-ml/svm/index.html) | [Cortes & Vapnik (1995)](https://doi.org/10.1007/BF00994018) |
+| **Understanding PPO** | 为什么能复用同一批轨迹又避免过大更新？ | [`posts/reinforcement-learning/ppo/`](posts/reinforcement-learning/ppo/index.html) | [Schulman et al. (2017)](https://arxiv.org/abs/1707.06347) |
 | **Understanding RLHF** | 为什么示范微调还需要人类偏好与策略优化？ | [`posts/training/rlhf/`](posts/training/rlhf/index.html) | [Ouyang et al. (2022)](https://arxiv.org/abs/2203.02155) |
 | **Understanding GRPO** | 为什么不需要 Critic 也能构造策略优势？ | [`posts/training/grpo/`](posts/training/grpo/index.html) | [Shao et al. (2024)](https://arxiv.org/abs/2402.03300) |
 | **Understanding Word2Vec** | 为什么上下文预测能产生词向量？ | [`posts/foundations/understanding-word2vec/`](posts/foundations/understanding-word2vec/index.html) | [Mikolov et al. (2013)](https://arxiv.org/abs/1301.3781) · [NeurIPS 2013](https://arxiv.org/abs/1310.4546) |
 | **Understanding Adam** | 梯度为什么需要方向和平方尺度的两份记忆？ | [`posts/foundations/adam/`](posts/foundations/adam/index.html) | [Kingma & Ba (2015)](https://arxiv.org/abs/1412.6980) |
 | **Understanding AdamW** | 为什么 Adam 的 L₂ 与 Weight Decay 不等价？ | [`posts/foundations/adamw/`](posts/foundations/adamw/index.html) | [Loshchilov & Hutter (ICLR 2019)](https://arxiv.org/abs/1711.05101) |
+| **Understanding KV Cache** | 自回归 Decode 为什么要保存历史 K/V？ | [`posts/inference/kv-cache/`](posts/inference/kv-cache/index.html) | [Kwon et al. (SOSP 2023)](https://doi.org/10.1145/3600006.3613165) |
 | **Understanding LoRA** | 为什么低秩矩阵足以适配部分下游任务？ | [`posts/training/lora/`](posts/training/lora/index.html) | [Hu et al. (ICLR 2022)](https://arxiv.org/abs/2106.09685) |
 
-Pre-LN vs Post-LN 具有 12 节解读、5 幅独立 SVG、交互式平移实验和纯 Python 的 Jacobian 数值检查；ResNet 具有 11 节解读与 10 幅独立 SVG；Transformer 具有 16 节解读与 13 幅独立 SVG，另有最小 PyTorch Attention 示例；SVM 具有 12 节机制推导、6 幅独立 SVG、可调 RBF 相似度矩阵和纯 Python 一维解析示例，另采用离线原生 MathML 排版分式、上下标与求和范围；Word2Vec 具有 12 节精读、5 幅内嵌原创图、7 份独立 SVG、SGNS 训练器和数值梯度校验。AdamW 具有 14 节渐进推导、6 幅独立 SVG、二维预条件器交互实验与纯 Python Adam/AdamW 代码断言。GRPO 具有 11 节深度解读、4 幅独立 SVG、可交互优势示例和 Python 断言测试。RLHF 从 SFT、奖励模型与 PPO 出发，包含 12 节推导、4 幅机制图、2 个交互实验和最小数学断言；Adam 具有 14 节机制讲解、7 幅独立 SVG、时间步交互及含 AdamW/AMSGrad 分支的纯 Python 最小实现与单元测试。LoRA 具有 12 节论文精读、6 幅独立 SVG、rank 参数预算交互与纯 Python 合并等价性算例。文章在发布前经过静态内容核验、浏览器布局与交互检查；教学简化、原论文和后续变体需明确区分。
+Pre-LN vs Post-LN 具有 12 节解读、5 幅独立 SVG、交互式平移实验和纯 Python 的 Jacobian 数值检查；ResNet 具有 11 节解读与 10 幅独立 SVG；Transformer 具有 16 节解读与 13 幅独立 SVG，另有最小 PyTorch Attention 示例；SVM 具有 12 节机制推导、6 幅独立 SVG、可调 RBF 相似度矩阵和纯 Python 一维解析示例；Word2Vec 具有 12 节精读、5 幅内嵌原创图、7 份独立 SVG、SGNS 训练器和数值梯度校验。AdamW 具有 14 节渐进推导、6 幅独立 SVG、二维预条件器交互实验与纯 Python Adam/AdamW 代码断言。GRPO 具有 11 节深度解读、4 幅独立 SVG、可交互优势示例和 Python 断言测试。RLHF 从 SFT、奖励模型与 PPO 出发，包含 12 节推导、4 幅机制图、2 个交互实验和最小数学断言；Adam 具有 14 节机制讲解、7 幅独立 SVG、时间步交互及含 AdamW/AMSGrad 分支的纯 Python 最小实现与单元测试。LoRA 具有 12 节论文精读、6 幅独立 SVG、rank 参数预算交互与纯 Python 合并等价性算例。DPO 具有 12 节机制推导、6 幅独立 SVG、可调 β 交互与最小 Python 公式检验。KV Cache 具有 13 节解读、6 幅独立 SVG、KV 显存交互计算器与纯 Python 数值一致性测试。文章在发布前经过静态内容核验、浏览器布局与交互检查；教学简化、原论文和后续变体需明确区分。
+
+PPO 包含 14 节原论文推导、6 幅独立 SVG、交互式裁剪目标演算、纯标准库数学测试，并单独辨析了 RLHF 的参考模型 KL 与 PPO 的旧策略偏移指标。
 
 ## 内容分类
 
@@ -30,8 +35,9 @@ Pre-LN vs Post-LN 具有 12 节解读、5 幅独立 SVG、交互式平移实验�
 | 基础理论 | `posts/foundations/` | Adam、Word2Vec、词嵌入、优化器（AdamW）、正则化、表示学习 |
 | **经典机器学习** | `posts/classical-ml/` | SVM、核方法、线性与树模型 |
 | **模型架构** | `posts/architectures/` | ResNet、Transformer、Normalization & Residual Paths、状态空间模型 |
-| 训练与对齐 | `posts/training/` | 预训练、微调、偏好对齐与 PPO / GRPO 等强化学习策略优化 |
-| 推理与 Serving | `posts/inference/` | KV Cache、Decode、在线 Serving |
+| **强化学习** | `posts/reinforcement-learning/` | Policy Gradient、Actor–Critic、GAE、PPO/TRPO 与序贯决策 |
+| 训练与对齐 | `posts/training/` | 预训练、微调、偏好对齐、DPO 与 RLHF与 PPO / GRPO 等强化学习策略优化 |
+| 推理与 Serving | `posts/inference/` | KV Cache、PagedAttention、Prefix Caching、Decode、在线 Serving |
 | 系统与 Kernel | `posts/systems/` | GPU、算子、并行与性能分析 |
 | 多模态 | `posts/multimodal/` | Vision/Audio/Language 与跨模态交互 |
 | 评测与复现 | `posts/evaluation/` | Benchmark、消融、复现协议 |
@@ -48,8 +54,10 @@ xm-posts/
 │   ├── categories.json           # 分类元数据
 │   └── posts.json                # 单一文章注册表；draft / published
 ├── posts/
+│   ├── training/dpo/              # DPO: 原论文解读、SVG、证据与最小代码
 │   ├── foundations/adamw/         # AdamW: HTML、SVG、Python 与证据
 │   ├── training/grpo/              # GRPO: HTML、SVG、数值核与证据
+│   ├── inference/kv-cache/          # KV Cache: HTML、SVG、证据与代码
 │   ├── classical-ml/svm/          # SVM: HTML、SVG、代码与证据
 │   ├── foundations/adam/         # Adam: HTML、SVG、Python 优化器与证据
 │   ├── foundations/understanding-word2vec/  # Word2Vec: HTML、SVG、SGNS 与证据
@@ -65,7 +73,7 @@ xm-posts/
 │   │       ├── assets/*.svg
 │   │       ├── mini_attention.py
 │   │       └── evidence.json
-│   └── {foundations,training,inference,systems,multimodal,evaluation}/
+│   └── {foundations,reinforcement-learning,training,inference,systems,multimodal,evaluation}/
 │       └── README.md             # 占位与投稿约定，不发布
 ├── skills/olah-style-paper-posts/ # Skill 正本；SKILL / references / assets / scripts
 ├── .claude/skills/olah-style-paper-posts/  # 完整 Skill 镜像
@@ -116,13 +124,13 @@ cd _site && python -m http.server 8000
 1. 从分类中选定一个稳定 slug，执行：
 
    ```bash
-   python scripts/new_post.py inference understanding-kv-cache \
+   python scripts/new_post.py inference kv-cache \
      --title 'Understanding KV Cache' \
      --subtitle '为什么缓存 Key 与 Value 能加速自回归解码？' \
      --paper 'https://arxiv.org/...'
    ```
 
-2. 这会创建 `posts/inference/understanding-kv-cache/`，并在 `content/posts.json` 注册 `status: draft`。依据 [`SKILL.md`](skills/olah-style-paper-posts/SKILL.md) 完成论文取证、渐进式图解、SVG 单独提取、数学与代码核验，填充 `evidence.json`。
+2. 这会创建 `posts/inference/kv-cache/`，并在 `content/posts.json` 注册 `status: draft`。依据 [`SKILL.md`](skills/olah-style-paper-posts/SKILL.md) 完成论文取证、渐进式图解、SVG 单独提取、数学与代码核验，填充 `evidence.json`。
 3. 在本地执行 `python scripts/build_site.py && python scripts/validate_site.py && python -m pytest -q`；在 Chromium 桌面 / 手机宽度下检查文章交互、图片与溢出。
 4. 论文证据和浏览器检查通过后，手动将注册条目的 `status` 改为 `published`，更新实际发布日期、摘要、阅读时长等数据。提交 PR；PR 会自动验证但**不会部署**。
 5. PR 合并到 `main` 后，Actions 重新构建并部署。首页、分类列表、归档、`posts.json`、RSS 和 Sitemap 自动更新。`draft` 从线上构建完全排除。

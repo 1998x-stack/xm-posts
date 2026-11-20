@@ -1,7 +1,18 @@
 # 推理与 Serving / Inference & Serving
 
-从自回归解码、KV Cache、批处理到实际在线服务的延迟与吞吐。
+专注自回归生成、KV Cache 的生命周期、缓存共享与内存分配、批处理策略、低延迟和高吞吐在线服务。
 
-该目录包含本分类文章。添加新 Post 时创建 `posts/inference/<slug>/index.html`、`assets/*.svg` 与 `evidence.json`，并在 `content/posts.json` 注册元数据。
+## 已发布文章
 
-`status: draft` 不进入线上索引；只有 `published` 会被 Actions 自动打包。不要把 README 占位文件发布到 GitHub Pages。
+- [Understanding KV Cache](kv-cache/index.html)：以因果 Attention 为起点，深入 Prefill、Decode、KV 内存公式、MHA/GQA/MQA、PagedAttention、Prefix Caching，包含原创机制图、计算器、证据账本和纯 Python 数值校验。
+  
+  - [论文与工程证据](kv-cache/evidence.json)
+  - [纯 Python 教学示例](kv-cache/mini_kv_cache.py)
+
+## 分类边界
+
+本分类解释端到端推理请求路径与 Serving；GPU kernel 优化与低层内存访问细节归在 `systems`。现有 `inference` 已能够容纳 KV Cache，无须为单篇文章新增一级分类。
+
+后续主题：PagedAttention 详解、连续批处理、Prefix Caching、KV 量化/Offloading、长上下文评测。
+
+发布依据：`content/categories.json` 定义分类；`content/posts.json` 定义正式文章。草稿不会进入站点，`README.md` 不作为文章发布。

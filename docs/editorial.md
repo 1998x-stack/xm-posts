@@ -10,10 +10,10 @@ Separate statements by role: primary-paper claim, intuition/metaphor, toy worked
 
 ## Mathematical typesetting
 
-- Use mathematically structured output, preferably native MathML Core, for self-contained offline articles. Fractions, indices, exponents and sum limits must typeset as mathematics rather than as long Unicode strings.
-- Number important display equations and separate constraints; keep explicit symbols, variable definitions and source scope.
-- Long expressions should scroll inside labeled, keyboard-focusable formula regions at 360px and 390px without causing page-wide horizontal overflow. Validate actual MathML geometry and fraction stacking in Chromium.
-- Avoid CDN scripts/fonts; alternative renderers must be bundled and licensed.
+- Use mathematically structured output, preferably native MathML Core, for self-contained offline articles. Fractions, indices, exponents and sum limits should not be long Unicode strings.
+- Number major equations and separate constraints; preserve the precise symbols and mathematical scope.
+- Long expressions must scroll within labeled, keyboard-focusable formula regions at 360px and 390px without page-wide overflow; validate MathML and fraction stacking in real Chromium.
+- Avoid third-party CDN scripts/fonts for mathematical rendering.
 
 ## SVG visual grammar
 

@@ -36,6 +36,17 @@
     ]
   },
   {
+    "slug": "reinforcement-learning",
+    "title": "强化学习",
+    "english": "Reinforcement Learning",
+    "description": "从策略梯度、价值估计到 PPO、TRPO 与现代偏好优化，拆解序贯决策中的学习信号。",
+    "topics": [
+      "Policy Gradient",
+      "Actor–Critic",
+      "RL Optimization"
+    ]
+  },
+  {
     "slug": "training",
     "title": "训练与对齐",
     "english": "Training & Alignment",
@@ -45,18 +56,23 @@
       "Fine-tuning",
       "PEFT / LoRA",
       "Preference Alignment",
-      "RL / Policy Optimization"
+      "RL / Policy Optimization",
+      "Preference Optimization",
+      "RLHF"
     ]
   },
   {
     "slug": "inference",
     "title": "推理与 Serving",
     "english": "Inference & Serving",
-    "description": "从自回归解码、KV Cache、批处理到实际在线服务的延迟与吞吐。",
+    "description": "从自回归解码、KV Cache 的生命周期与内存管理，到批处理、低延迟与高吞吐在线服务。",
     "topics": [
       "KV Cache",
       "Batching",
-      "Decoding"
+      "Decoding",
+      "PagedAttention",
+      "Continuous Batching",
+      "Prefix Caching"
     ]
   },
   {
