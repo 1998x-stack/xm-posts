@@ -782,6 +782,39 @@
     }
   },
   {
+    "slug": "checkpoint-optimization",
+    "title": "Understanding Checkpoint Optimization",
+    "subtitle": "从 Young–Daly、CheckFreq 到 PyTorch DCP：如何平衡训练开销、故障恢复与分布式一致性？",
+    "category": "training",
+    "topic": "checkpointing",
+    "status": "draft",
+    "published": "2026-11-21",
+    "updated": "2026-11-21",
+    "reading_minutes": 30,
+    "tags": [
+      "Checkpoint Optimization",
+      "Training Checkpoint",
+      "Fault Tolerance",
+      "Checkpoint Interval",
+      "Young-Daly",
+      "CheckFreq",
+      "Asynchronous Checkpointing",
+      "Distributed Checkpoint",
+      "PyTorch DCP",
+      "FSDP",
+      "ZeRO",
+      "Resharding",
+      "Recovery"
+    ],
+    "summary": "从 Young–Daly 一阶最优间隔模型出发，精读 CheckFreq 的两阶段快照与自适应频率，再连接 PyTorch DCP、FSDP、DeepSpeed ZeRO、Megatron Core 的分布式分片与恢复协议。配套六幅 SVG、MathML 推导、交互式成本实验、可执行 Python 模型与确定性测试。",
+    "paper": "https://www.usenix.org/conference/fast21/presentation/mohan",
+    "illustration": "checkpoint-optimization",
+    "cover": {
+      "src": "assets/00-cover.svg",
+      "caption": "保存成本与故障回滚成本在最优间隔处取得平衡"
+    }
+  },
+  {
     "slug": "gpt-1",
     "title": "Understanding GPT-1",
     "subtitle": "为什么预测下一个 token，能够迁移到语言理解任务？",

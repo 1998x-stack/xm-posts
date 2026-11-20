@@ -1,0 +1,119 @@
+[
+  {
+    "id": "checkfreq-problem",
+    "claim": "DNN training interruptions can erase work since the last persisted checkpoint; epoch-level checkpointing can lose substantial training time.",
+    "kind": "paper claim",
+    "source_url": "https://www.usenix.org/conference/fast21/presentation/mohan",
+    "locator": "Mohan et al., FAST 2021, Abstract and Sections 1–2, pp. 203–204",
+    "status": "verified",
+    "notes": "Historical motivation from the paper; do not generalize its cluster failure rates to current LLM clusters."
+  },
+  {
+    "id": "checkfreq-two-phase",
+    "claim": "CheckFreq separates checkpointing into snapshot and persist phases and carefully overlaps them with computation while preserving a consistent snapshot boundary.",
+    "kind": "paper claim",
+    "source_url": "https://files.usenix.org/s3fs-public/cdn/fast21-mohan.pdf",
+    "locator": "Sections 4.3.1, pp. 206–207; Figure 4",
+    "status": "verified",
+    "notes": "The next parameter update must not race with an unfinished snapshot copy."
+  },
+  {
+    "id": "checkfreq-policy",
+    "claim": "CheckFreq profiles iteration, snapshot and storage costs, chooses an initial checkpoint frequency and adapts it to runtime interference.",
+    "kind": "paper claim",
+    "source_url": "https://files.usenix.org/s3fs-public/cdn/fast21-mohan.pdf",
+    "locator": "Section 4.3.2, Algorithm 1, pp. 208–209",
+    "status": "verified",
+    "notes": "This is a framework-specific policy, not the same algorithm as the simple Young-Daly calculator in this article."
+  },
+  {
+    "id": "checkfreq-overhead",
+    "claim": "In the paper's evaluated configurations, CheckFreq checkpointed 83–278 times more frequently than epoch-level policies while incurring at most 3.5% runtime overhead.",
+    "kind": "paper result",
+    "source_url": "https://files.usenix.org/s3fs-public/cdn/fast21-mohan.pdf",
+    "locator": "Section 5.4 and Table 4, p. 211",
+    "status": "verified",
+    "notes": "Preserve the paper's hardware/model scope; this is not a current LLM training benchmark."
+  },
+  {
+    "id": "checkfreq-bert-recovery",
+    "claim": "For BERT in the paper's single-V100 configuration, average recovery time was reported as 4920 seconds for the baseline and 85 seconds for CheckFreq.",
+    "kind": "paper result",
+    "source_url": "https://files.usenix.org/s3fs-public/cdn/fast21-mohan.pdf",
+    "locator": "Table 6, p. 211, column (a), 1 GPU (V100), BERT row",
+    "status": "verified",
+    "notes": "Historical result under the paper's specific training and interruption setup."
+  },
+  {
+    "id": "young-daly-model",
+    "claim": "The first-order checkpoint interval is approximately sqrt(2*C*M), where C is checkpoint duration and M is mean time between failures.",
+    "kind": "derived",
+    "source_url": "https://doi.org/10.1016/j.future.2004.11.016",
+    "locator": "Daly (2006), Section 2; first-order approximation and discussion of Young's estimate",
+    "status": "derived",
+    "notes": "The article derives the simplified overhead C/tau + tau/(2M). It explicitly labels the stationary Poisson and uniform failure-position assumptions."
+  },
+  {
+    "id": "young-daly-limitations",
+    "claim": "Young-Daly interval models are approximations whose applicability depends on failure assumptions and workflow structure.",
+    "kind": "survey finding",
+    "source_url": "https://doi.org/10.1016/j.future.2024.07.022",
+    "locator": "A survey on checkpointing strategies: Should we always checkpoint à la Young/Daly?, Future Generation Computer Systems 161 (2024)",
+    "status": "verified",
+    "notes": "Supports the article's warning against treating the formula as a universal production policy."
+  },
+  {
+    "id": "pytorch-dcp",
+    "claim": "PyTorch Distributed Checkpoint saves and loads across multiple ranks, stores multiple files and supports load-time resharding.",
+    "kind": "official documentation",
+    "source_url": "https://docs.pytorch.org/docs/stable/distributed.checkpoint.html",
+    "locator": "PyTorch Distributed Checkpoint API documentation",
+    "status": "verified",
+    "notes": "API behavior and compatibility are version-sensitive; consult the installed PyTorch version."
+  },
+  {
+    "id": "pytorch-async-save",
+    "claim": "DCP async_save stages state into memory buffers before background storage writes; staging and in-flight request management have additional memory and synchronization requirements.",
+    "kind": "official documentation",
+    "source_url": "https://docs.pytorch.org/tutorials/recipes/distributed_async_checkpoint_recipe.html",
+    "locator": "Asynchronous Checkpointing Overview and async_save examples",
+    "status": "verified",
+    "notes": "The tutorial recommends limiting concurrent outstanding checkpoint requests for most users."
+  },
+  {
+    "id": "pytorch-default-stager",
+    "claim": "PyTorch 2.9 introduced DefaultStager and async_stager to move state-dict construction and D2H staging into a background thread.",
+    "kind": "official documentation",
+    "source_url": "https://docs.pytorch.org/tutorials/recipes/distributed_async_checkpoint_recipe.html",
+    "locator": "Fully Asynchronous Staging with DefaultStager",
+    "status": "verified",
+    "notes": "Requires checking the installed PyTorch version and hardware-specific memory/CPU constraints."
+  },
+  {
+    "id": "megatron-reshardable",
+    "claim": "Megatron Core documents dp_reshardable as faster but not model-parallel reshardable, while fully_reshardable is more flexible and slower.",
+    "kind": "official documentation",
+    "source_url": "https://docs.nvidia.com/megatron-core/developer-guide/latest/api-guide/core/dist_checkpointing.html",
+    "locator": "Distributed Optimizer Checkpoint Formats",
+    "status": "verified",
+    "notes": "The exact format and support depend on Megatron Core version."
+  },
+  {
+    "id": "deepspeed-zero",
+    "claim": "DeepSpeed provides ZeRO checkpoint conversion to consolidated FP32 weights and documents Universal Checkpoints as under development.",
+    "kind": "official documentation",
+    "source_url": "https://deepspeed.readthedocs.io/en/stable/model-checkpointing.html",
+    "locator": "ZeRO checkpoint FP32 weights recovery and Universal Checkpoints",
+    "status": "verified",
+    "notes": "A consolidated inference/model artifact is not automatically a full training-resume checkpoint."
+  },
+  {
+    "id": "activation-checkpoint",
+    "claim": "PyTorch activation checkpointing trades compute for memory by recomputing forward intermediates during backward.",
+    "kind": "official documentation",
+    "source_url": "https://docs.pytorch.org/docs/stable/checkpoint.html",
+    "locator": "torch.utils.checkpoint overview",
+    "status": "verified",
+    "notes": "Included to distinguish activation checkpointing from persistent training checkpoints."
+  }
+]

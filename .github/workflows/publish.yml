@@ -51,6 +51,8 @@ jobs:
           python scripts/ci_metrics.py run --name browser-svm-math -- python scripts/browser_check_svm_math.py --output reports/svm-math
           python scripts/ci_metrics.py run --name browser-three-guides -- python scripts/browser_check_three_guides.py
           python scripts/ci_metrics.py run --name browser-second -- python scripts/browser_check_second_batch.py --output reports/second-batch
+      - name: Check checkpoint optimization article in Chromium
+        run: python scripts/ci_metrics.py run --name browser-checkpoint-optimization -- python skills/olah-style-paper-posts/scripts/browser_check.py posts/training/checkpoint-optimization/index.html --output reports/checkpoint-optimization
       - name: Check every published article with shared Chromium workers
         run: python scripts/ci_metrics.py run --name browser-all -- python scripts/browser_check_all.py --workers 2
       - name: Verify actual generated Pages site in Chromium
