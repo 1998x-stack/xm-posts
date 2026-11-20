@@ -94,5 +94,25 @@
     "summary": "从 SGD 的 L₂ 等价推导出发，逐坐标追踪 Adam 动量和衰减的两条路径，对照 ICLR 2019 原论文实验、现代 PyTorch 语义，并用可交互的二维例子与确定性代码验证差异。",
     "paper": "https://arxiv.org/abs/1711.05101",
     "illustration": "adamw"
+  },
+  {
+    "slug": "rope",
+    "title": "Understanding RoPE",
+    "subtitle": "位置如何变成旋转？从相对距离到长上下文",
+    "category": "architectures",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 30,
+    "tags": [
+      "RoPE",
+      "Positional Encoding",
+      "Rotary Embedding",
+      "Relative Position",
+      "Long Context"
+    ],
+    "summary": "从二维旋转和矩阵恒等式出发，图解 RoPE 如何将相对位移写入 Q/K 内积，结合交互平移实验、纯 Python 断言、RoFormer 论文证据与 PI、YaRN、LongRoPE 的工程边界。",
+    "paper": "https://arxiv.org/abs/2104.09864",
+    "illustration": "rope"
   }
 ]

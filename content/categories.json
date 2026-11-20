@@ -26,11 +26,12 @@
     "slug": "architectures",
     "title": "模型架构",
     "english": "Architectures",
-    "description": "拆开网络的信息路径：从 ResNet 的残差学习到 Transformer 的注意力结构。",
+    "description": "拆开网络的信息路径：从 ResNet 的残差学习、Transformer 的注意力结构到 RoPE 位置编码与状态空间模型。",
     "topics": [
       "ResNet",
       "Transformer",
-      "State Space"
+      "State Space",
+      "Positional Encoding"
     ]
   },
   {

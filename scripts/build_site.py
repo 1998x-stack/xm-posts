@@ -84,6 +84,8 @@ def post_card(p,rel,ordinal=0):
         icon, art = 'attention', '<span class="math-mark">softmax(QKᵀ / √dₖ)V</span><span class="attention-dots">● · ● · ● · ● · ●</span>'
     elif p['slug'] == 'adamw':
         icon, art = 'generic', '<span class="math-mark">θ ← θ − α·Adam(g) − α·λθ</span>'
+    elif p['slug'] == 'rope':
+        icon, art = 'generic', '<span class="math-mark">R(m)ᵀR(n) = R(n−m)</span>'
     elif p['slug'] == 'svm':
         icon, art = 'margin', '<span class="math-mark">margin = 2 / ||w||</span><span class="svm-boundary svm-left"></span><span class="svm-boundary svm-center"></span><span class="svm-boundary svm-right"></span><span class="svm-point point-blue"></span><span class="svm-point point-orange"></span>'
     elif p['slug'] == 'understanding-word2vec':
