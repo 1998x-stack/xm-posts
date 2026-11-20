@@ -55,11 +55,11 @@ def assert_regression(page) -> None:
 def assert_tree(page) -> None:
     assert page.locator("#dt-impurity").inner_text() == "0.1875"
     assert page.locator("#dt-gain").inner_text() == "0.2813"
-    assert page.locator("#dt-live-threshold").inner_text() == "t = 4.5"
+    assert page.locator("#dt-live-threshold").text_content() == "t = 4.5"
     x0 = float(page.locator("#dt-threshold-line").get_attribute("x1"))
     page.locator('[data-t="2.5"]').click()
     assert page.locator("#dt-impurity").inner_text() == "0.2083"
-    assert page.locator("#dt-left-detail").inner_text().startswith("0 正 / 2 负")
+    assert page.locator("#dt-left-detail").text_content().startswith("0 正 / 2 负")
     x1 = float(page.locator("#dt-threshold-line").get_attribute("x1"))
     assert x1 < x0
     page.locator('[data-t="5.5"]').click()
@@ -71,7 +71,7 @@ def assert_tree(page) -> None:
     page.locator("#threshold-range").focus()
     page.keyboard.press("ArrowRight")
     assert page.locator("#threshold-value").inner_text() == "5.5"
-    assert page.locator("#dt-live-threshold").inner_text() == "t = 5.5"
+    assert page.locator("#dt-live-threshold").text_content() == "t = 5.5"
 
 
 def assert_xgboost(page) -> None:
