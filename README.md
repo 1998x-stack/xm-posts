@@ -14,14 +14,15 @@
 | **Understanding Transformer** | 为什么用 Self-Attention 替代循环结构？ | [`posts/architectures/transformer/`](posts/architectures/transformer/index.html) | [Vaswani et al.](https://arxiv.org/abs/1706.03762) |
 | **Understanding SVM** | 为什么分对了仍需最大间隔？ | [`posts/classical-ml/svm/`](posts/classical-ml/svm/index.html) | [Cortes & Vapnik (1995)](https://doi.org/10.1007/BF00994018) |
 | **Understanding Word2Vec** | 为什么上下文预测能产生词向量？ | [`posts/foundations/understanding-word2vec/`](posts/foundations/understanding-word2vec/index.html) | [Mikolov et al. (2013)](https://arxiv.org/abs/1301.3781) · [NeurIPS 2013](https://arxiv.org/abs/1310.4546) |
+| **Understanding AdamW** | 为什么 Adam 的 L₂ 与 Weight Decay 不等价？ | [`posts/foundations/adamw/`](posts/foundations/adamw/index.html) | [Loshchilov & Hutter (ICLR 2019)](https://arxiv.org/abs/1711.05101) |
 
-ResNet 具有 11 节解读与 10 幅独立 SVG；Transformer 具有 16 节解读与 13 幅独立 SVG，另有最小 PyTorch Attention 示例；SVM 具有 12 节机制推导、6 幅独立 SVG、可调 RBF 相似度矩阵和纯 Python 一维解析示例；Word2Vec 具有 12 节精读、5 幅内嵌原创图、7 份独立 SVG、SGNS 训练器和数值梯度校验。文章在发布前经过静态内容核验、浏览器布局与交互检查；教学简化、原论文和后续变体需明确区分。
+ResNet 具有 11 节解读与 10 幅独立 SVG；Transformer 具有 16 节解读与 13 幅独立 SVG，另有最小 PyTorch Attention 示例；SVM 具有 12 节机制推导、6 幅独立 SVG、可调 RBF 相似度矩阵和纯 Python 一维解析示例；Word2Vec 具有 12 节精读、5 幅内嵌原创图、7 份独立 SVG、SGNS 训练器和数值梯度校验。AdamW 具有 14 节渐进推导、6 幅独立 SVG、二维预条件器交互实验与纯 Python Adam/AdamW 代码断言。文章在发布前经过静态内容核验、浏览器布局与交互检查；教学简化、原论文和后续变体需明确区分。
 
 ## 内容分类
 
 | 分类 | 路径 | 范围 |
 |---|---|---|
-| 基础理论 | `posts/foundations/` | Word2Vec、词嵌入、表示学习、优化与数学直觉 |
+| 基础理论 | `posts/foundations/` | Word2Vec、词嵌入、优化器（AdamW）、正则化、表示学习 |
 | **经典机器学习** | `posts/classical-ml/` | SVM、核方法、线性与树模型 |
 | **模型架构** | `posts/architectures/` | ResNet、Transformer、状态空间模型 |
 | 训练与对齐 | `posts/training/` | 预训练、微调、偏好对齐 |
@@ -30,7 +31,7 @@ ResNet 具有 11 节解读与 10 幅独立 SVG；Transformer 具有 16 节解读
 | 多模态 | `posts/multimodal/` | Vision/Audio/Language 与跨模态交互 |
 | 评测与复现 | `posts/evaluation/` | Benchmark、消融、复现协议 |
 
-各类别均有 `README.md` 占位；占位**不会作为文章上线**。`content/categories.json` 是分类单一数据源，`content/posts.json` 是文章元数据和发布状态的单一数据源。增加新文章不用手动编辑首页、Sitemap 或 RSS。
+AdamW 继续使用 `foundations` 中的 **Optimization & Regularization** 主题，不为单篇优化器论文新建顶层分类；未来 Adam、SGD 和学习率调度可共享该主题。各类别均有 `README.md` 占位；占位**不会作为文章上线**。`content/categories.json` 是分类单一数据源，`content/posts.json` 是文章元数据和发布状态的单一数据源。增加新文章不用手动编辑首页、Sitemap 或 RSS。
 
 ## 仓库结构
 
@@ -42,6 +43,7 @@ xm-posts/
 │   ├── categories.json           # 分类元数据
 │   └── posts.json                # 单一文章注册表；draft / published
 ├── posts/
+│   ├── foundations/adamw/         # AdamW: HTML、SVG、Python 与证据
 │   ├── classical-ml/svm/          # SVM: HTML、SVG、代码与证据
 │   ├── foundations/understanding-word2vec/  # Word2Vec: HTML、SVG、SGNS 与证据
 │   ├── architectures/

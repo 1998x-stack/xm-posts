@@ -74,5 +74,25 @@
     "summary": "从词窗自监督出发，图解 CBOW 与 Skip-gram，推导负采样损失和梯度，并用可运行的 NumPy SGNS 验证实现。",
     "paper": "https://arxiv.org/abs/1301.3781",
     "illustration": "word2vec"
+  },
+  {
+    "slug": "adamw",
+    "title": "Understanding AdamW",
+    "subtitle": "为什么 Adam 中的 L₂ 正则化，不等于真正的 Weight Decay？",
+    "category": "foundations",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 29,
+    "tags": [
+      "AdamW",
+      "Optimization",
+      "Decoupled Weight Decay",
+      "L2 Regularization",
+      "Adaptive Optimizers"
+    ],
+    "summary": "从 SGD 的 L₂ 等价推导出发，逐坐标追踪 Adam 动量和衰减的两条路径，对照 ICLR 2019 原论文实验、现代 PyTorch 语义，并用可交互的二维例子与确定性代码验证差异。",
+    "paper": "https://arxiv.org/abs/1711.05101",
+    "illustration": "adamw"
   }
 ]
