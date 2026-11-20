@@ -3,7 +3,7 @@
 > 维护对象：`content/categories.json`（一级分类与稳定二级 topic slug）、`content/posts.json`（每篇文章的唯一主分类/主专题）。
 > `posts/<category>/_topics/<topic>/README.md` 是规划占位，不是文章，也不是发布目录；`posts/<category>/<slug>/index.html` 才是文章源文件。
 
-## 14 个一级分类及领域边界
+## 15 个一级分类及领域边界
 
 | 分类 slug | 收录范围 | 与邻近类别的边界 |
 | --- | --- | --- |
@@ -18,9 +18,10 @@
 | `systems` | GPU 内存、算子、编译、通信、性能分析及底层优化 | 服务请求、token 调度、端到端 serving 归 `inference` |
 | `storage-indexing` | B+ Tree、LSM Tree、页与缓冲区管理、事务恢复、MVCC | 数据库磁盘/索引结构归此类；向量语义召回归 `retrieval-rag`，GPU 算子实现归 `systems` |
 | `retrieval-rag` | 向量/ANN、稀疏混合检索、重排序、RAG、证据落地 | Agent 任务计划与工具执行归 `agents`，embedding 基础表征归 `foundations` |
-| `agents` | ReAct、规划、工具调用、记忆、Agent 端到端评估、类型化概率决策与模型路由 | 纯推理策略归 `reasoning`；检索方法归 `retrieval-rag`；通用概率校准指标归 `evaluation` |
+| `agents` | ReAct、规划、工具调用、记忆、Agent 端到端评估 | 纯推理策略归 `reasoning`；检索方法归 `retrieval-rag`；类型化决策模型归 `decision-models` |
 | `multimodal` | 视觉/语言/音频的跨模态建模与对齐 | 通用单模态 CNN 架构仍可归 `architectures` |
 | `evaluation` | 模型/任务 Benchmark、ROC/PR、消融与复现 | 训练数据质量、污染事实与许可证归 `datasets` |
+| `decision-models` | 类型化概率决策模型、贝叶斯风险、成本敏感决策、概率校准、风险预算、选择性预测、模型路由与鲁棒性 | 经典分类器训练归 `classical-ml`；跨模型评测方法归 `evaluation`；Agent 的环境观察与工具执行归 `agents` |
 
 ## 二级分类治理
 
@@ -30,15 +31,19 @@
 4. 占位目录必须使用精确的注册 slug。新增 Topic 优先写分类元数据，再添加 `_topics/` 的 README；单篇新文章通常不值得新增一级分类。
 5. Draft 必须继续以 `status: draft` 保持离线，不要将规划中的 README 当作 `published` 条目。
 
-## 2026-11 Typed Decision Models
+## 2026-11 Decision Models
 
-`agents/typed-decision-models` 收录 Jev / System One 风格的类型化概率决策接口，以及它们在 Agent、模型路由、Guardrail 和自动化工作流中的使用。其主问题是“如何把有限答案空间中的判断安全地交给代码消费”，因此主分类归 `agents`，不新增一级分类。
+新增一级分类 `decision-models`，不是因为 Jev 单一产品，而是因为 2026 年已经形成相互关联的研究脉络：类型化决策接口、成本敏感决策、概率校准、有限样本风险控制、选择性推理、模型路由和鲁棒性评估。该分类用于沉淀可复用的模型与决策理论；Agent 只在实际工作流中调用它们，不再作为主归档位置。
 
-- `classical-ml` 继续收录 Logistic Regression、Naive Bayes 等模型本身的统计学习机制；`typed-decision-models` 讨论调用时定义问题、答案类型和概率输出的决策接口。
-- `evaluation` 继续负责 ECE、Brier Score、校准曲线、风险—覆盖率和 benchmark 方法；文章可用 tags 与阅读路径交叉链接，但不把 Jev 主文章重复归档。
-- `reasoning` 负责多步推理、搜索与验证；Jev 的窄范围快速判断不应被误写成通用 System 2 推理器。
-- 类型安全只约束结构，不等于语义正确；上线决策必须由目标任务校准、成本矩阵、拒绝策略和代码权限共同控制。
+- `typed-decision-models`：Jev / System One / 其他 typed decision model 的接口与能力边界。
+- `cost-sensitive-decision-theory`：Bayes Risk、Expected Loss、非对称错误成本和动作选择。
+- `probability-calibration`：ECE、Brier Score、reliability diagrams、温度缩放与子群体校准。
+- `risk-budgeting`：Learn Then Test、有限样本风险保证和部署阈值认证。
+- `selective-prediction`：Abstention、Selective Classification、Coverage–Risk 权衡与按需推理。
+- `decision-routing`：模型路由、级联、决策委托和工作流控制。
+- `robustness-and-bias`：选项顺序、措辞、数据布局、对抗输入和群体偏差。
 
+分类边界：传统模型学习机制仍归 `classical-ml`；通用评测协议与跨模型 benchmark 仍归 `evaluation`；Agent 环境交互和工具执行仍归 `agents`。决策模型文章可通过 tags 和 reading paths 连接这些领域，但只登记一个主分类。
 ## 2026-11 分类占位整合
 
 | 原占位目录（未注册 ID） | 归并到已注册的主 topic |
