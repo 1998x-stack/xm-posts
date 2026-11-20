@@ -57,8 +57,18 @@ def test_narrow_mobile_has_no_document_overflow():
                     width:Math.round(r.width), minWidth:css.minWidth,
                     whiteSpace:css.whiteSpace, overflowX:css.overflowX
                 };
-            }).filter(x => x.right > innerWidth + 1 || x.left < -1)
-              .sort((a,b)=>b.right-a.right).slice(0,25)
+            }).filter(x => (x.right > innerWidth + 1 || x.left < -1)
+              && ![...document.querySelectorAll('body *')].some(e => {
+                  if (e.tagName.toLowerCase() !== x.tag || e.id !== x.id ||
+                      Math.round(e.getBoundingClientRect().right) !== x.right) return false;
+                  let p=e.parentElement;
+                  while(p && p !== document.body){
+                      if(['auto','scroll','hidden','clip'].includes(getComputedStyle(p).overflowX))return true;
+                      p=p.parentElement;
+                  }
+                  return false;
+              }))
+              .sort((a,b)=>b.right-a.right).slice(0,12)
         })""")
         browser.close()
     assert details["htmlWidth"] <= 361, details
