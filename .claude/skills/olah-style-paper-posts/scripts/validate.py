@@ -51,11 +51,34 @@ def validate(path: Path) -> dict:
         if script['src'].startswith('http'): warnings.append('External JS dependency: ' + script['src'])
     for link in soup.find_all('link', href=True):
         if link['href'].startswith('http'): warnings.append('External stylesheet dependency: ' + link['href'])
+    # MathML is optional for legacy articles; whenever present it must be well formed.
+    maths = soup.find_all('math')
+    for idx, math in enumerate(maths, 1):
+        if math.find_parent('svg'):
+            failures.append(f'MathML {idx} nested inside SVG (invalid namespace)')
+        if not (math.get('aria-label') or math.get('aria-labelledby')):
+            failures.append(f'MathML {idx} missing accessible description')
+        if not math.find(['mi', 'mn', 'mo', 'mrow', 'mfrac', 'msup', 'msub', 'munder', 'munderover', 'mtable']):
+            failures.append(f'MathML {idx} has no mathematical structure')
+        if math.get('display') not in (None, 'inline', 'block'):
+            failures.append(f'MathML {idx} invalid display attribute')
+        for name, arity in [('mfrac', 2), ('msub', 2), ('msup', 2),
+                            ('msubsup', 3), ('munder', 2), ('mover', 2), ('munderover', 3)]:
+            for node in math.find_all(name):
+                children = [child for child in node.children if getattr(child, 'name', None)]
+                if len(children) != arity:
+                    failures.append(f'MathML {idx} malformed {name}: expected {arity} children, got {len(children)}')
+        if math.get('display') == 'block':
+            region = math.find_parent(attrs={'data-math-scroll': True})
+            if region is None:
+                region = math.find_parent(class_=['math-scroll', 'eq-scroll'])
+            if region is None or region.get('tabindex') != '0' or region.get('role') != 'region':
+                failures.append(f'MathML {idx} display equation needs a keyboard-focusable scroll region')
     if not soup.find('a', href=re.compile('arxiv.org|doi.org|thecvf.com')):
         warnings.append('No obvious primary-paper reference in article')
     return {
         'path': str(path), 'pass': not failures,
-        'counts': {'h2': len(soup.find_all('h2')), 'figures': len(figures), 'svg': len(svgs), 'buttons': len(soup.find_all('button'))},
+        'counts': {'h2': len(soup.find_all('h2')), 'figures': len(figures), 'svg': len(svgs), 'buttons': len(soup.find_all('button')), 'mathml': len(maths)},
         'failures': failures, 'warnings': warnings,
     }
 

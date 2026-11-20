@@ -143,6 +143,10 @@ cd _site && python -m http.server 8000
 4. 论文证据和浏览器检查通过后，手动将注册条目的 `status` 改为 `published`，更新实际发布日期、摘要、阅读时长等数据。提交 PR；PR 会自动验证但**不会部署**。
 5. PR 合并到 `main` 后，Actions 重新构建并部署。首页、分类列表、归档、`posts.json`、RSS 和 Sitemap 自动更新。`draft` 从线上构建完全排除。
 
+## 数学公式渲染规范
+
+论文中的关键公式优先使用浏览器原生 **MathML Core**，不再以 Unicode 字符串拼凑分式、求和及上下标。新增 [Math Typesetting](skills/olah-style-paper-posts/references/math-typesetting.md) 规范覆盖离线数学排版、公式无障碍、手机端键盘横向滚动、SVG 命名空间隔离与 Playwright QA；静态校验器与浏览器检查自动验证这些约束。对应更新源于 [Olah-style-posts](https://github.com/1998x-stack/Olah-style-posts) 并同步至四份 Agent Skill 镜像。
+
 ## 多 Agent Skill 兼容
 
 本仓库从 [Olah-style-posts](https://github.com/1998x-stack/Olah-style-posts) 引入 `olah-style-paper-posts`，并在四个 Agent 可发现的位置保留**完整文件副本**，包含 `SKILL.md`、`references/`、`assets/`、`scripts/`。实际 Agent 的发现规则视软件配置而定；这四个目录不只是指向正本的坏链接或简短转发文件。

@@ -23,13 +23,45 @@ def main():
             page.route('https?://**',lambda route,log=network:(log.append(route.request.url),route.abort()))
             page.set_content(page_file.read_text(encoding='utf-8'), wait_until='load')
             page.screenshot(path=str(args.output/f'{label}.png'),full_page=False)
-            measure=page.evaluate('''() => ({scrollWidth:document.documentElement.scrollWidth,
-              viewport:innerWidth,heading:document.querySelectorAll('h1').length,
-              svgs:document.querySelectorAll('svg').length,
-              blankSVG:[...document.querySelectorAll('svg')].filter(s=>s.getBoundingClientRect().width<1||s.getBoundingClientRect().height<1).length,
-              brokenImages:[...document.images].filter(i=>!i.complete||i.naturalWidth<1).length})''')
+            measure=page.evaluate('''() => {
+              const math = [...document.querySelectorAll('math')];
+              const ns = 'http://www.w3.org/1998/Math/MathML';
+              const visible = e => getComputedStyle(e).display !== 'none'
+                && e.getClientRects().length > 0;
+              const fractions = [...document.querySelectorAll('math mfrac')].filter(visible);
+              const badFractions = fractions.filter(e => {
+                const children = [...e.children];
+                if (children.length !== 2) return true;
+                const numerator = children[0].getBoundingClientRect();
+                const denominator = children[1].getBoundingClientRect();
+                return !(numerator.top < denominator.top);
+              }).length;
+              const regions = [...document.querySelectorAll(
+                '[data-math-scroll],.math-scroll,.eq-scroll')];
+              const wrongScroll = regions.filter(e => e.scrollWidth > e.clientWidth + 2
+                && (e.tabIndex < 0 || !['auto','scroll'].includes(getComputedStyle(e).overflowX))).length;
+              return {
+                scrollWidth:document.documentElement.scrollWidth,
+                viewport:innerWidth,
+                heading:document.querySelectorAll('h1').length,
+                svgs:document.querySelectorAll('svg').length,
+                blankSVG:[...document.querySelectorAll('svg')]
+                  .filter(s=>s.getBoundingClientRect().width<1||s.getBoundingClientRect().height<1).length,
+                brokenImages:[...document.images].filter(i=>!i.complete||i.naturalWidth<1).length,
+                mathCount:math.length,
+                mathWrongNamespace:math.filter(e=>e.namespaceURI!==ns).length,
+                mathNestedInSVG:document.querySelectorAll('svg math').length,
+                mathZeroSized:math.filter(e=>visible(e)
+                  && (e.getBoundingClientRect().width<2||e.getBoundingClientRect().height<4)).length,
+                mathBadFractions:badFractions,
+                mathBadScrollRegions:wrongScroll
+              };
+            }''')
             okay=(measure['scrollWidth']<=measure['viewport']+1 and measure['blankSVG']==0
-               and measure['brokenImages']==0 and measure['heading']==1 and not errors and not network)
+               and measure['brokenImages']==0 and measure['heading']==1
+               and measure['mathWrongNamespace']==0 and measure['mathNestedInSVG']==0
+               and measure['mathZeroSized']==0 and measure['mathBadFractions']==0
+               and measure['mathBadScrollRegions']==0 and not errors and not network)
             report['viewports'][label]={'pass':okay,**measure,'errors':errors,'external_requests':network}
             if not okay:report['pass']=False
             if label=='desktop':

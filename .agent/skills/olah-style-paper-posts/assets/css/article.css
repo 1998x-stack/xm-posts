@@ -21,3 +21,12 @@ figure{margin:2.1rem 0;padding:1.2rem;border:1px solid var(--border);border-radi
 @media(max-width:480px){body{font-size:16px}.layout{padding:1.3rem 1rem 4rem}figure{padding:.6rem}section{margin-top:3.25rem}h2{margin-bottom:1rem}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation:none!important;transition:none!important}}
 @media print{body{background:white;color:black;font-size:11pt}.layout{display:block;padding:0}.toc,.control-row,.skip-link{display:none!important}article{max-width:none}figure{break-inside:avoid;box-shadow:none}a{color:#164e54}section{margin-top:1.6rem}}
+
+/* Mathematical typography: native MathML, offline and accessible. */
+.math-inline{font-family:"Cambria Math","STIX Two Math","Latin Modern Math",serif;vertical-align:-.05em}
+.math-equation{max-width:100%;min-width:0;margin:1.6rem 0;padding:.5rem 0;border-block:1px solid #dfe8e4}
+.math-scroll,[data-math-scroll]{display:block;max-width:100%;min-width:0;overflow-x:auto;overflow-y:hidden;scrollbar-width:thin}
+.math-scroll:focus-visible,[data-math-scroll]:focus-visible{outline:3px solid #147f80;outline-offset:2px}
+.math-scroll math[display="block"],[data-math-scroll] math[display="block"]{width:max-content;min-width:100%;font-size:clamp(1.05rem,2.2vw,1.3rem)}
+@media(max-width:480px){.math-scroll math[display="block"],[data-math-scroll] math[display="block"]{font-size:1.03rem}}
+@media print{.math-equation{break-inside:avoid}.math-scroll,[data-math-scroll]{overflow:visible}.math-scroll math[display="block"],[data-math-scroll] math[display="block"]{font-size:1rem}}

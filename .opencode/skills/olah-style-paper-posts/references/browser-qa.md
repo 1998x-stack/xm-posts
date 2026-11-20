@@ -18,6 +18,7 @@ Use actual Chromium/Playwright; HTML parsing alone is insufficient. Save a machi
 - Collect `pageerror`, console errors and request failures; distinguish expected offline aborts from a truly passing result.
 - Each `<figure>` contains SVG/image plus nonempty figcaption; inline SVG has meaningful title/role/label.
 - Check anchor targets, image loads and SVGs with nonzero dimensions.
+- For MathML posts, verify valid MathML namespace, no math nested within SVG, nonzero formula dimensions, numerator above denominator for fractions, accessible math descriptions and responsive equation-region scrolling (including keyboard). See [math-typesetting.md](math-typesetting.md). Do not call DOM presence alone a rendering check.
 - Tab through controls; verify visible focus and accessible names.
 - Click each article's declared demo selector (if present) and assert a meaningful DOM/text change; inspect JS exception log.
 - Take screenshot on each viewport and at least one representative dense figure. Report skip if any test could not execute.
