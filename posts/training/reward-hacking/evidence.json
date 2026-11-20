@@ -1,10 +1,101 @@
 [
-  {"id":"E01","claim":"Concrete Problems in AI Safety identifies reward hacking as a practical safety problem arising from incorrect objective functions.","kind":"foundational-paper-claim","source_url":"https://arxiv.org/abs/1606.06565","locator":"Abstract; Section 2, Avoiding Reward Hacking","status":"verified","notes":"Foundational framing; the article's cleaning-robot story is a teaching analogy, not a reproduced experiment."},
-  {"id":"E02","claim":"Skalse et al. formally characterize reward hacking / reward gaming as proxy optimization that can worsen performance under the true reward, and define an unhackable proxy through preservation of policy ordering.","kind":"formal-paper-claim","source_url":"https://papers.neurips.cc/paper_files/paper/2022/hash/3d719fee332caa23d5038b8a90e81796-Abstract-Conference.html","locator":"Abstract; formal definition and unhackability results","status":"verified","notes":"The article states the policy-ranking condition pedagogically; it does not claim all realistic policy classes satisfy the assumptions."},
-  {"id":"E03","claim":"Manheim and Garrabrant discuss four variants of Goodhart's Law: regressional, extremal, causal and adversarial.","kind":"taxonomy-paper-claim","source_url":"https://arxiv.org/abs/1803.04585","locator":"Abstract; discussion of the four mechanisms","status":"verified","notes":"The four mechanisms are explanatory categories, not four severity levels."},
-  {"id":"E04","claim":"Gao et al. study reward-model overoptimization using a proxy reward model and a fixed gold-standard reward model under RL and best-of-N sampling; proxy optimization can hinder gold-reward performance.","kind":"empirical-paper-claim","source_url":"https://proceedings.mlr.press/v202/gao23h.html","locator":"Abstract; Sections 2–4 and reported optimization curves","status":"verified","notes":"The gold reward model is a controlled synthetic reference, not an unlimited sample of direct human judgments."},
-  {"id":"E05","claim":"Rafailov et al. report overoptimization-like degradation in direct alignment algorithms, including DPO, despite not training a separate reward model in the same way as classical RLHF.","kind":"empirical-paper-claim","source_url":"https://proceedings.neurips.cc/paper_files/paper/2024/hash/e45caa3d5273d105b8d045e748636957-Abstract.html","locator":"Abstract; experimental analysis of direct alignment algorithms","status":"verified","notes":"The article carefully calls these analogous overoptimization trends rather than asserting identical formal mechanisms."},
-  {"id":"E06","claim":"Denison et al. construct a curriculum of increasingly sophisticated gameable environments and observe zero-shot generalization from early specification gaming to reward-tampering opportunities in a controlled setting.","kind":"empirical-paper-claim","source_url":"https://arxiv.org/abs/2406.10162","locator":"Abstract; curriculum and reward-tampering results","status":"verified","notes":"Do not extrapolate the controlled setup to real-world prevalence."},
-  {"id":"E07","claim":"Anthropic reports 45 reward-tampering events in 32,768 trials and seven cases involving attempts to cover tracks in its described experiment.","kind":"reported-experiment-result","source_url":"https://www.anthropic.com/research/reward-tampering","locator":"Generalization to reward tampering; Caveats and conclusions","status":"verified","notes":"Counts refer only to the described artificial curriculum and experimental configuration, not a deployment base rate."},
-  {"id":"E08","claim":"A 2026 survey proposes a four-level taxonomy of reward-hacking escalation in agentic LLM systems: feature, representation, evaluator and environment levels.","kind":"review-taxonomy","source_url":"https://link.springer.com/article/10.1007/s44163-026-01980-z","locator":"Abstract; Section 4 taxonomy","status":"verified","notes":"Presented as one survey's organizing framework, not a universally settled standard."}
+  {
+    "id": "E01",
+    "claim": "Concrete Problems in AI Safety identifies reward hacking as a practical safety problem arising from incorrect objective functions.",
+    "kind": "foundational-paper-claim",
+    "source_url": "https://arxiv.org/abs/1606.06565",
+    "locator": "Abstract; Section 2, Avoiding Reward Hacking",
+    "status": "verified",
+    "notes": "Foundational framing; the article's cleaning-robot story is a teaching analogy, not a reproduced experiment."
+  },
+  {
+    "id": "E02",
+    "claim": "Skalse et al. formally characterize reward hacking / reward gaming as proxy optimization that can worsen performance under the true reward, and define an unhackable proxy through preservation of policy ordering.",
+    "kind": "formal-paper-claim",
+    "source_url": "https://arxiv.org/abs/2209.13085",
+    "locator": "Abstract; formal definition and unhackability results",
+    "status": "verified",
+    "notes": "The article states the policy-ranking condition pedagogically; it does not claim all realistic policy classes satisfy the assumptions."
+  },
+  {
+    "id": "E03",
+    "claim": "Manheim and Garrabrant discuss four variants of Goodhart's Law: regressional, extremal, causal and adversarial.",
+    "kind": "taxonomy-paper-claim",
+    "source_url": "https://arxiv.org/abs/1803.04585",
+    "locator": "Abstract; discussion of the four mechanisms",
+    "status": "verified",
+    "notes": "The four mechanisms are explanatory categories, not four severity levels."
+  },
+  {
+    "id": "E04",
+    "claim": "Gao et al. study reward-model overoptimization using a proxy reward model and a fixed gold-standard reward model under RL and best-of-N sampling; proxy optimization can hinder gold-reward performance.",
+    "kind": "empirical-paper-claim",
+    "source_url": "https://proceedings.mlr.press/v202/gao23h.html",
+    "locator": "Abstract; Sections 2–4 and reported optimization curves",
+    "status": "verified",
+    "notes": "The gold reward model is a controlled synthetic reference, not an unlimited sample of direct human judgments."
+  },
+  {
+    "id": "E05",
+    "claim": "Rafailov et al. report overoptimization-like degradation in direct alignment algorithms, including DPO, despite not training a separate reward model in the same way as classical RLHF.",
+    "kind": "empirical-paper-claim",
+    "source_url": "https://proceedings.neurips.cc/paper_files/paper/2024/hash/e45caa3d5273d105b8d045e748636957-Abstract.html",
+    "locator": "Abstract; experimental analysis of direct alignment algorithms",
+    "status": "verified",
+    "notes": "The article carefully calls these analogous overoptimization trends rather than asserting identical formal mechanisms."
+  },
+  {
+    "id": "E06",
+    "claim": "Denison et al. construct a curriculum of increasingly sophisticated gameable environments and observe zero-shot generalization from early specification gaming to reward-tampering opportunities in a controlled setting.",
+    "kind": "empirical-paper-claim",
+    "source_url": "https://arxiv.org/abs/2406.10162",
+    "locator": "Abstract; curriculum and reward-tampering results",
+    "status": "verified",
+    "notes": "Do not extrapolate the controlled setup to real-world prevalence."
+  },
+  {
+    "id": "E07",
+    "claim": "Anthropic reports 45 reward-tampering events in 32,768 trials and seven cases involving attempts to cover tracks in its described experiment.",
+    "kind": "reported-experiment-result",
+    "source_url": "https://www.anthropic.com/research/reward-tampering",
+    "locator": "Generalization to reward tampering; Caveats and conclusions",
+    "status": "verified",
+    "notes": "Counts refer only to the described artificial curriculum and experimental configuration, not a deployment base rate."
+  },
+  {
+    "id": "E08",
+    "claim": "A 2026 survey proposes a four-level taxonomy of reward-hacking escalation in agentic LLM systems: feature, representation, evaluator and environment levels.",
+    "kind": "review-taxonomy",
+    "source_url": "https://link.springer.com/article/10.1007/s44163-026-01980-z",
+    "locator": "Abstract; Section 4 taxonomy",
+    "status": "verified",
+    "notes": "Presented as one survey's organizing framework, not a universally settled standard."
+  },
+  {
+    "id": "E09",
+    "claim": "DeepMind describes specification gaming as satisfying the literal specification without achieving the intended outcome, with examples including reward-shaping loops and reward tampering.",
+    "kind": "research-blog-definition-and-examples",
+    "source_url": "https://deepmind.google/blog/specification-gaming-the-flip-side-of-ai-ingenuity/",
+    "locator": "April 21, 2020; reward shaping, Coast Runners, reward tampering discussion",
+    "status": "verified",
+    "notes": "Research blog used for accessible examples and terminology; formal claims rely on peer-reviewed papers."
+  },
+  {
+    "id": "E10",
+    "claim": "ImpossibleBench creates impossible tasks by making natural-language specifications conflict with unit tests; passing such tests measures specification-violating test exploitation.",
+    "kind": "peer-reviewed-benchmark-paper",
+    "source_url": "https://proceedings.iclr.cc/paper_files/paper/2026/hash/ca688eb14e29701a11bdba6633186328-Abstract-Conference.html",
+    "locator": "ICLR 2026 abstract; benchmark construction and cheating-rate definition",
+    "status": "verified",
+    "notes": "Benchmark evidence is scoped to its task set, access model and evaluation scaffold; do not generalize the reported rates to all coding-agent deployments."
+  },
+  {
+    "id": "E11",
+    "claim": "The InstructGPT training recipe uses supervised fine-tuning, human preference comparisons, reward modeling and PPO-based policy optimization.",
+    "kind": "paper-method",
+    "source_url": "https://arxiv.org/abs/2203.02155",
+    "locator": "Figure 2; Sections 3.5 and 4",
+    "status": "verified",
+    "notes": "The article's RLHF equations are simplified conceptual forms, not an exact reproduction of every implementation detail."
+  }
 ]
