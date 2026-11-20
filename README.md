@@ -13,6 +13,7 @@
 | **Understanding ResNet** | 网络越深，为什么训练反而可能更难？ | [`posts/architectures/resnet/`](posts/architectures/resnet/index.html) | [He et al.](https://arxiv.org/abs/1512.03385) |
 | **Understanding Transformer** | 为什么用 Self-Attention 替代循环结构？ | [`posts/architectures/transformer/`](posts/architectures/transformer/index.html) | [Vaswani et al.](https://arxiv.org/abs/1706.03762) |
 | **Understanding SVM** | 为什么分对了仍需最大间隔？ | [`posts/classical-ml/svm/`](posts/classical-ml/svm/index.html) | [Cortes & Vapnik (1995)](https://doi.org/10.1007/BF00994018) |
+| **Understanding LoRA** | 为什么低秩矩阵足以适配部分下游任务？ | [`posts/training/lora/`](posts/training/lora/index.html) | [Hu et al. (ICLR 2022)](https://arxiv.org/abs/2106.09685) |
 | **Understanding Word2Vec** | 为什么上下文预测能产生词向量？ | [`posts/foundations/understanding-word2vec/`](posts/foundations/understanding-word2vec/index.html) | [Mikolov et al. (2013)](https://arxiv.org/abs/1301.3781) · [NeurIPS 2013](https://arxiv.org/abs/1310.4546) |
 
 ResNet 具有 11 节解读与 10 幅独立 SVG；Transformer 具有 16 节解读与 13 幅独立 SVG，另有最小 PyTorch Attention 示例；SVM 具有 12 节机制推导、6 幅独立 SVG、可调 RBF 相似度矩阵和纯 Python 一维解析示例；Word2Vec 具有 12 节精读、5 幅内嵌原创图、7 份独立 SVG、SGNS 训练器和数值梯度校验。文章在发布前经过静态内容核验、浏览器布局与交互检查；教学简化、原论文和后续变体需明确区分。
@@ -24,7 +25,7 @@ ResNet 具有 11 节解读与 10 幅独立 SVG；Transformer 具有 16 节解读
 | 基础理论 | `posts/foundations/` | Word2Vec、词嵌入、表示学习、优化与数学直觉 |
 | **经典机器学习** | `posts/classical-ml/` | SVM、核方法、线性与树模型 |
 | **模型架构** | `posts/architectures/` | ResNet、Transformer、状态空间模型 |
-| 训练与对齐 | `posts/training/` | 预训练、微调、偏好对齐 |
+| 训练与对齐 | `posts/training/` | 预训练、PEFT / LoRA、微调、偏好对齐 |
 | 推理与 Serving | `posts/inference/` | KV Cache、Decode、在线 Serving |
 | 系统与 Kernel | `posts/systems/` | GPU、算子、并行与性能分析 |
 | 多模态 | `posts/multimodal/` | Vision/Audio/Language 与跨模态交互 |
@@ -54,6 +55,7 @@ xm-posts/
 │   │       ├── assets/*.svg
 │   │       ├── mini_attention.py
 │   │       └── evidence.json
+│   ├── training/lora/              # LoRA: HTML、6 SVG、证据与纯 Python 算例
 │   └── {foundations,training,inference,systems,multimodal,evaluation}/
 │       └── README.md             # 占位与投稿约定，不发布
 ├── skills/olah-style-paper-posts/ # Skill 正本；SKILL / references / assets / scripts

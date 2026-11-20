@@ -41,6 +41,7 @@
     "topics": [
       "Pretraining",
       "Fine-tuning",
+      "PEFT / LoRA",
       "Alignment"
     ]
   },

@@ -1,0 +1,110 @@
+[
+  {
+    "id": "L01",
+    "claim": "LoRA freezes pretrained W0 and learns B in R^{d x r}, A in R^{r x k}; h=W0x+BAx",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/pdf/2106.09685",
+    "locator": "§4.1; Equation (3) and Figure 1",
+    "status": "verified",
+    "notes": "Original paper uses alpha/r scaling and B zero at initialization."
+  },
+  {
+    "id": "L02",
+    "claim": "Original Gaussian A, zero B initialization makes initial update zero",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/pdf/2106.09685",
+    "locator": "§4.1, paragraphs after Equation (3)",
+    "status": "verified",
+    "notes": "Gradient observation is independently derived using product rule."
+  },
+  {
+    "id": "L03",
+    "claim": "GPT-3 175B LoRA trainable parameter and GPU memory reduction claims",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/pdf/2106.09685",
+    "locator": "Abstract; §1",
+    "status": "verified",
+    "notes": "Conditional comparisons to full fine-tuning with Adam, not universal ratios."
+  },
+  {
+    "id": "L04",
+    "claim": "GPT-3 175B Table 4 WikiSQL, MultiNLI-m and SAMSum measurements",
+    "kind": "experiment",
+    "source_url": "https://arxiv.org/pdf/2106.09685",
+    "locator": "§5.5; Table 4",
+    "status": "verified",
+    "notes": "WikiSQL and MNLI-m validation accuracy; SAMSum ROUGE-1/2/L; FT 175255.8M vs LoRA 4.7M/37.7M."
+  },
+  {
+    "id": "L05",
+    "claim": "Under 18M LoRA parameter budget, target projection ablation",
+    "kind": "experiment",
+    "source_url": "https://arxiv.org/pdf/2106.09685",
+    "locator": "§7.1; Table 5",
+    "status": "verified",
+    "notes": "WikiSQL: Wq=70.4, Wv=73.0, Wq+Wv=73.7, all=73.7. MultiNLI tracked in paper."
+  },
+  {
+    "id": "L06",
+    "claim": "Wq Wv rank r=1 vs r=8 WikiSQL validation accuracy",
+    "kind": "experiment",
+    "source_url": "https://arxiv.org/pdf/2106.09685",
+    "locator": "§7.2; Table 6",
+    "status": "verified",
+    "notes": "73.4 vs 73.8; paper cautions not all tasks suit low ranks."
+  },
+  {
+    "id": "L07",
+    "claim": "Linear matrix folding Wmerged=W0+alpha/r BA eliminates extra dense path in merged inference",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/pdf/2106.09685",
+    "locator": "§4.1; No Additional Inference Latency",
+    "status": "verified",
+    "notes": "Only under merged, compatible weights; unmerged/quantized serving can differ."
+  },
+  {
+    "id": "L08",
+    "claim": "Original paper adapter latency comparison is GPT-2 medium on RTX8000",
+    "kind": "experiment",
+    "source_url": "https://arxiv.org/pdf/2106.09685",
+    "locator": "§3; Table 1",
+    "status": "verified",
+    "notes": "Benchmark context stated; no extrapolation to modern inference stacks."
+  },
+  {
+    "id": "L09",
+    "claim": "A 4096x4096 linear layer at r=8 has 65536 LoRA trainable parameters",
+    "kind": "toy-derivation",
+    "source_url": "https://arxiv.org/pdf/2106.09685",
+    "locator": "§4.1 parameter formula; independently computed",
+    "status": "derived",
+    "notes": "Compared to 16,777,216 original layer parameters, 0.390625%; omits biases."
+  },
+  {
+    "id": "L10",
+    "claim": "Standard-library toy returns [3,10] equivalently before and after merge",
+    "kind": "toy-derivation",
+    "source_url": "https://github.com/microsoft/LoRA",
+    "locator": "Independent deterministic 2x2 demonstration and repo tests",
+    "status": "derived",
+    "notes": "Does not train or reproduce paper benchmark."
+  },
+  {
+    "id": "L11",
+    "claim": "QLoRA is a later method combining 4-bit quantized frozen base with LoRA",
+    "kind": "modern-variant",
+    "source_url": "https://arxiv.org/abs/2305.14314",
+    "locator": "Abstract and §3",
+    "status": "verified",
+    "notes": "Clearly distinct from Hu et al. 2022."
+  },
+  {
+    "id": "L12",
+    "claim": "rsLoRA, DoRA and AdaLoRA are subsequent methods",
+    "kind": "modern-variant",
+    "source_url": "https://huggingface.co/docs/peft/en/package_reference/lora",
+    "locator": "LoRA API methods; linked variant papers in article",
+    "status": "verified",
+    "notes": "Different rank scaling, magnitude-direction adaptation, and budget allocation respectively."
+  }
+]
