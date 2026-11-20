@@ -406,6 +406,28 @@
     "illustration": "lstm"
   },
   {
+    "slug": "seq2seq",
+    "title": "Understanding Seq2Seq",
+    "subtitle": "一段序列如何变成另一段？从 LSTM Encoder–Decoder 到 Attention",
+    "category": "architectures",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 32,
+    "tags": [
+      "Seq2Seq",
+      "Encoder–Decoder",
+      "LSTM",
+      "Machine Translation",
+      "Teacher Forcing",
+      "Attention",
+      "Beam Search"
+    ],
+    "summary": "以 Sutskever et al.（NeurIPS 2014）为主线，图解变长输入输出、固定向量瓶颈、LSTM 编解码、条件概率与 Teacher Forcing、源序列反转及 Beam Search；沿 Cho、Bahdanau、Luong 到 Transformer 辨析 Attention 演进，附交互示例、MathML 推导和确定性 Python 断言。",
+    "paper": "https://arxiv.org/abs/1409.3215",
+    "illustration": "seq2seq"
+  },
+  {
     "slug": "dqn",
     "title": "Understanding DQN",
     "subtitle": "为什么只看像素和奖励，就能学会玩 Atari？从贝尔曼自举到经验回放与目标网络",
