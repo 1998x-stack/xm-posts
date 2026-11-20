@@ -56,6 +56,15 @@ def data(root:Path):
             assert isinstance(p.get('paper'),str) and urlparse(p['paper']).scheme=='https',p
             path=root/'posts'/p['category']/p['slug']/'index.html'
             assert path.is_file(),f'Article missing: {path}'
+            # Covers are editorial decisions, never a generic visual fallback.
+            cover=p.get('cover')
+            assert isinstance(cover,dict),f'Missing curated cover for {p["slug"]}'
+            assert re.fullmatch(r'assets/[a-zA-Z0-9][a-zA-Z0-9_.-]*\.svg',cover.get('src','')),f'Invalid SVG cover path: {p["slug"]}'
+            assert isinstance(cover.get('caption'),str) and 8<=len(cover['caption'])<=80,f'Missing cover explanation: {p["slug"]}'
+            assert 'observe' not in cover['caption'].lower() and 'derive' not in cover['caption'].lower(),f'Generic cover: {p["slug"]}'
+            assert (path.parent/cover['src']).is_file(),f'Cover SVG missing: {p["slug"]}: {cover["src"]}'
+    cover_captions=[p['cover']['caption'] for p in posts if p['status']=='published']
+    assert len(cover_captions)==len(set(cover_captions)),'Published cover explanations must be unique'
     return categories,posts
 
 
@@ -93,30 +102,25 @@ def category_pill(c, rel, count, active=False):
     return f'<a class="category-pill {"is-selected" if active else ""}" href="{rel}categories/{H(c["slug"])}/"><span>{H(c["title"])}</span><small>{count:02d}</small></a>'
 
 
+def cover_art(p,rel,*,compact=False):
+    """Article's own curated, existing mechanism SVG; no repeated placeholder."""
+    cover=p['cover']
+    src=rel+article_url(p)+cover['src']
+    caption=H(cover['caption'])
+    if compact:
+        return f'<img class="article-cover-thumb" src="{H(src,quote=True)}" alt="" loading="lazy" decoding="async">'
+    return (
+        f'<div class="figure-abstract cover-figure">'
+        f'<div class="cover-illustration"><img src="{H(src,quote=True)}" alt="{H(cover["caption"],quote=True)}" loading="lazy" decoding="async"></div>'
+        f'<span class="cover-caption">{caption}</span></div>'
+    )
+
+
 def post_card(p,rel,ordinal=0,topic_title=None):
     path=rel+article_url(p)
-    if p['slug'] == 'resnet':
-        icon, art = 'residual', '<span class="math-mark">H(x) = x + F(x)</span><span class="pathline pathline-a"></span><span class="pathline pathline-b"></span><span class="pathline pathline-c"></span>'
-    elif p['slug'] == 'transformer':
-        icon, art = 'attention', '<span class="math-mark">softmax(QKᵀ / √dₖ)V</span><span class="attention-dots">● · ● · ● · ● · ●</span>'
-    elif p['slug'] == 'adamw':
-        icon, art = 'generic', '<span class="math-mark">θ ← θ − α·Adam(g) − α·λθ</span>'
-    elif p['slug'] == 'rope':
-        icon, art = 'generic', '<span class="math-mark">R(m)ᵀR(n) = R(n−m)</span>'
-    elif p['slug'] == 'self-consistency':
-        icon, art = 'consistency', '<span class="math-mark">argmaxₐ Σᵢ 𝟙[aᵢ = a]</span><span class="attention-dots">10 · 13 · 10 · 10 → 10</span>'
-    elif p['slug'] == 'svm':
-        icon, art = 'margin', '<span class="math-mark">margin = 2 / ||w||</span><span class="svm-boundary svm-left"></span><span class="svm-boundary svm-center"></span><span class="svm-boundary svm-right"></span><span class="svm-point point-blue"></span><span class="svm-point point-orange"></span>'
-    elif p['slug'] == 'lora':
-        icon, art = 'lowrank', '<span class="math-mark">ΔW = BA</span><span class="lowrank-base">W₀</span><span class="lowrank-a">A</span><span class="lowrank-b">B</span><span class="lowrank-plus">+</span>'
-    elif p['slug'] == 'understanding-word2vec':
-        icon, art = 'embedding', '<span class="math-mark">P(context | center)</span><span class="embedding-dots">● ● ● ● ●</span><span class="embedding-eq">positive + k negatives</span>'
-    else:
-        icon, art = 'generic', '<span class="math-mark">Observe → Derive → Verify</span>'
     topic_link=(f'<a class="card-topic" href="{rel}categories/{H(p["category"])}/#topic-{H(p["topic"])}">{H(topic_title)}</a>' if topic_title else '')
-    poster=f'<div class="figure-abstract figure-{icon}" aria-hidden="true"><span class="accent-label">FIG. {ordinal or 1:02d}</span>{art}</div>'
     return f'''<article class="post-card" data-post-card data-search="{H((p['title']+' '+p['summary']+' '+' '.join(p['tags'])+' '+p['category']+' '+p['topic']+' '+(topic_title or '')).lower(),quote=True)}" data-category="{H(p['category'])}">
-<a class="card-hit" href="{path}" aria-label="阅读 {H(p['title'],quote=True)}">{poster}</a>
+<a class="card-hit" href="{path}" aria-label="阅读 {H(p['title'],quote=True)}">{cover_art(p,rel)}</a>
 <div class="card-body"><div class="card-topline"><span>MODEL STUDY / {H(p['category']).upper()}</span><span>{H(p['published'])}</span></div>
 {topic_link}<h3><a href="{path}">{H(p['title'])}</a></h3><p class="card-subtitle">{H(p['subtitle'])}</p>
 <p class="card-summary">{H(p['summary'])}</p><div class="card-bottom"><span>{p['reading_minutes']} 分钟阅读</span><span class="card-actions"><a class="paper-source" href="{H(p.get('paper',''),quote=True)}" target="_blank" rel="noopener noreferrer" aria-label="原始论文：{H(p['title'],quote=True)}">原论文</a><a href="{path}" aria-label="阅读 {H(p['title'],quote=True)}">阅读全文 <span aria-hidden="true">↗</span></a></span></div></div></article>'''
@@ -139,9 +143,7 @@ def build_home(categories,posts,base):
     if feature:
         feature_markup=f'''<aside class="hero-feature" aria-label="推荐阅读">
             <div class="feature-top"><span>EDITOR'S STARTING POINT</span><span>01 / GUIDE</span></div>
-            <div class="feature-art" aria-hidden="true"><span class="feature-art-caption">A VIEW INTO THE MODEL</span>
-                <div class="feature-art-core"><span class="feature-art-left">INPUT</span><span class="feature-art-arrow">→</span><span class="feature-art-center">Q · K · V</span><span class="feature-art-arrow">→</span><span class="feature-art-right">CONTEXT</span></div>
-                <span class="feature-art-foot">OBSERVE / DERIVE / VERIFY</span></div>
+            <div class="feature-art feature-art--cover"><img src="{article_url(feature)+feature['cover']['src']}" alt="{H(feature['cover']['caption'],quote=True)}" loading="eager" decoding="async"></div>
             <div class="feature-copy"><span class="feature-kicker">本期精选 · {H(labels[(feature['category'],feature['topic'])])}</span>
                 <h2><a href="{article_url(feature)}">{H(feature['title'])} <span aria-hidden="true">↗</span></a></h2>
                 <p>{H(feature['subtitle'])}</p>
@@ -189,7 +191,7 @@ def build_home(categories,posts,base):
         if slug not in by_slug:continue
         p=by_slug[slug]
         spotlight.append(
-            f'''<article class="spotlight-card"><div class="spotlight-top"><span>{H(eyebrow)}</span><span>{p['reading_minutes']} MIN READ</span></div>
+            f'''<article class="spotlight-card"><a class="spotlight-cover-link" href="{article_url(p)}" aria-label="阅读 {H(p['title'],quote=True)}">{cover_art(p,'./',compact=True)}</a><div class="spotlight-top"><span>{H(eyebrow)}</span><span>{p['reading_minutes']} MIN READ</span></div>
                 <h3><a href="{article_url(p)}">{H(p['title'])}</a></h3>
                 <p>{H(p['subtitle'])}</p>
                 <a class="spotlight-link" href="{article_url(p)}">阅读全文 <span aria-hidden="true">↗</span></a>
@@ -204,7 +206,7 @@ def build_home(categories,posts,base):
                          p['topic'],*p['tags']]).lower()
         search_cards.append(
             f'''<article class="index-card post-card" data-post-card data-category="{H(p['category'],quote=True)}" data-search="{H(tokens,quote=True)}">
-            <span class="index-order">{i+1:02d}</span>
+            <span class="index-order">{i+1:02d}</span><a class="index-image-link" href="{article_url(p)}" aria-label="阅读 {H(p['title'],quote=True)}">{cover_art(p,'./',compact=True)}</a>
             <div class="index-main"><div class="index-kicker">{H(category)} <span>/</span> {H(topic)}</div>
                 <h3><a href="{article_url(p)}">{H(p['title'])}</a></h3><p>{H(p['subtitle'])}</p>
                 <div class="index-tags"><span>{p['reading_minutes']} 分钟</span><span>{H(p['published'])}</span><a class="paper-source" href="{H(p['paper'],quote=True)}" target="_blank" rel="noopener noreferrer" aria-label="原始论文：{H(p['title'],quote=True)}">原始论文 ↗</a></div>

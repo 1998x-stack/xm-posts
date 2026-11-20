@@ -22,7 +22,11 @@
     ],
     "summary": "从二分类直觉推导对数胜算、Bernoulli 最大似然与交叉熵，解析梯度/Hessian 的凸性、完全分离与正则化，并通过七幅独立 SVG、11 组原生 MathML、交互概率曲线和标准库 Python 数值测试区分原始方法、历史证据与现代实现。",
     "paper": "https://doi.org/10.1111/j.2517-6161.1958.tb00292.x",
-    "illustration": "logistic"
+    "illustration": "logistic",
+    "cover": {
+      "src": "assets/sigmoid.svg",
+      "caption": "Sigmoid 将线性分数映射为概率"
+    }
   },
   {
     "slug": "gmm",
@@ -46,7 +50,11 @@
     "summary": "精读 Dempster–Laird–Rubin (1977) EM 方法与 Bishop PRML §9.2 的 GMM：从隐变量生成过程、软后验责任和对数似然出发，推导 E/M 步的均值、权重、协方差更新；配四幅可独立打开的原创 SVG、六组原生 MathML、固定参数后验交互、BIC 与协方差选型，以及纯 Python 数值不变量测试。",
     "paper": "https://doi.org/10.1111/j.2517-6161.1977.tb01600.x",
     "illustration": "gmm",
-    "topic": "mixture-models-density-estimation"
+    "topic": "mixture-models-density-estimation",
+    "cover": {
+      "src": "assets/soft-responsibility.svg",
+      "caption": "软责任：一个样本属于不同高斯成分的程度"
+    }
   },
   {
     "slug": "multi-head-attention",
@@ -69,7 +77,11 @@
     "summary": "精读 Vaswani et al. NeurIPS 2017 §3.2 与 Table 3：从单头信息汇总、独立 Q/K/V 投影、Softmax 缩放和掩码，逐步推导多头张量形状、参数量与复杂度；包含六幅独立 SVG、六组 MathML、两组交互实验、原论文 Head 数消融证据及确定性 Python 数值实现，并厘清 MHA、MQA、GQA 的关系。",
     "paper": "https://arxiv.org/abs/1706.03762",
     "illustration": "attention",
-    "topic": "attention-variants"
+    "topic": "attention-variants",
+    "cover": {
+      "src": "assets/01-one-vs-many.svg",
+      "caption": "多个注意力头同时寻找不同关联"
+    }
   },
   {
     "slug": "alphago",
@@ -96,7 +108,11 @@
     "summary": "深度解读 Silver 等 Nature 2016 AlphaGo：19×19×48 围棋特征、策略与价值卷积网络、历史对手池自对弈、三阶段胜负样本生成、APV-MCTS 的 PUCT、双路异步回传、虚拟损失、根节点访问决策；新增 15 幅独立 SVG、12 组 MathML、三种交互实验、Extended Data Table 7/8 的真实 BayesElo 对照及确定性 Python 断言。",
     "paper": "https://doi.org/10.1038/nature16961",
     "illustration": "alphago",
-    "topic": "planning-search"
+    "topic": "planning-search",
+    "cover": {
+      "src": "assets/03-apv-mcts.svg",
+      "caption": "策略、价值与树搜索如何相互配合"
+    }
   },
   {
     "slug": "flashattention",
@@ -117,7 +133,11 @@
     "summary": "以 FlashAttention 2022 原论文为主线，分块拆解 HBM/SRAM 数据流、在线 Softmax、反向重计算及理论边界，并辨析 FA2、FA3、FA4 演进与系统实证。",
     "paper": "https://arxiv.org/abs/2205.14135",
     "illustration": "flashattention",
-    "topic": "attention-kernels"
+    "topic": "attention-kernels",
+    "cover": {
+      "src": "assets/tile-grid.svg",
+      "caption": "分块计算减少 Attention 的显存读写"
+    }
   },
   {
     "slug": "resnet",
@@ -136,7 +156,11 @@
     "summary": "从深度退化与恒等捷径出发，逐步理解残差块、梯度传播、ResNet-50、投影连接与论文中的对照实验。",
     "paper": "https://arxiv.org/abs/1512.03385",
     "illustration": "resnet",
-    "topic": "convolutional-vision"
+    "topic": "convolutional-vision",
+    "cover": {
+      "src": "assets/residual_block_step_by_step.svg",
+      "caption": "残差分支与恒等捷径重新汇合"
+    }
   },
   {
     "slug": "transformer",
@@ -155,7 +179,11 @@
     "summary": "以 Q/K/V 为线索，图解注意力计算、Mask、多头机制、位置编码及原始 Encoder–Decoder，并用简化 PyTorch 对照。",
     "paper": "https://arxiv.org/abs/1706.03762",
     "illustration": "transformer",
-    "topic": "transformers"
+    "topic": "transformers",
+    "cover": {
+      "src": "assets/04_attention_pipeline.svg",
+      "caption": "从 Q、K、V 到注意力输出的路径"
+    }
   },
   {
     "slug": "svm",
@@ -175,7 +203,11 @@
     "summary": "从支持超平面的几何距离出发，推导硬间隔和对偶、软间隔的历史与现代形式，图解核映射和 RBF 参数，并用可验证的一维解析例子落实公式。",
     "paper": "https://doi.org/10.1007/BF00994018",
     "illustration": "svm",
-    "topic": "margin-kernels"
+    "topic": "margin-kernels",
+    "cover": {
+      "src": "assets/02-margin.svg",
+      "caption": "支持向量与最大间隔分类边界"
+    }
   },
   {
     "slug": "understanding-word2vec",
@@ -197,7 +229,11 @@
     "summary": "从词窗自监督出发，图解 CBOW 与 Skip-gram，推导负采样损失和梯度，并用可运行的 NumPy SGNS 验证实现。",
     "paper": "https://arxiv.org/abs/1301.3781",
     "illustration": "word2vec",
-    "topic": "representation"
+    "topic": "representation",
+    "cover": {
+      "src": "assets/semantic-space.svg",
+      "caption": "相近语义的词汇在向量空间聚集"
+    }
   },
   {
     "slug": "adamw",
@@ -218,7 +254,11 @@
     "summary": "从 SGD 的 L₂ 等价推导出发，逐坐标追踪 Adam 动量和衰减的两条路径，对照 ICLR 2019 原论文实验、现代 PyTorch 语义，并用可交互的二维例子与确定性代码验证差异。",
     "paper": "https://arxiv.org/abs/1711.05101",
     "illustration": "adamw",
-    "topic": "optimization"
+    "topic": "optimization",
+    "cover": {
+      "src": "assets/03-decoupled-path.svg",
+      "caption": "梯度更新与权重衰减走两条路径"
+    }
   },
   {
     "slug": "weight-decay",
@@ -241,7 +281,11 @@
     "summary": "从 Krogh–Hertz 1991 与 Loshchilov–Hutter ICLR 2019 论文出发，以四幅可独立查看的 SVG 和九组原生 MathML，推导参数按比例收缩、L₂ 正则化、无动量 SGD 等价条件、自适应预条件器的不等价以及衰减累积规律；包含零梯度交互实验、参数分组实践与纯 Python 确定性测试，并与站内 AdamW 专文建立学习路径。",
     "paper": "https://arxiv.org/abs/1711.05101",
     "illustration": "weight-decay",
-    "topic": "optimization"
+    "topic": "optimization",
+    "cover": {
+      "src": "assets/01-two-forces.svg",
+      "caption": "优化梯度与权重收缩的共同作用"
+    }
   },
   {
     "slug": "pre-ln-vs-post-ln",
@@ -263,7 +307,11 @@
     "summary": "从恒等捷径与 LayerNorm 放置出发，推导局部梯度 Jacobian、核对 warm-up 论文证据，并用可交互数值实验理解 Pre-LN、Post-LN 与后续 DeepNorm、Peri-LN 设计。",
     "paper": "https://proceedings.mlr.press/v119/xiong20b.html",
     "illustration": "normalization",
-    "topic": "normalization"
+    "topic": "normalization",
+    "cover": {
+      "src": "assets/01-residual-paths.svg",
+      "caption": "LayerNorm 的位置如何改变残差通道"
+    }
   },
   {
     "slug": "grpo",
@@ -285,7 +333,11 @@
     "summary": "以同题四条回答为直觉起点，图解组内优势、PPO clipped objective、参考 KL、token mask 与 DeepSeekMath 原始实验；区分 DAPO、Dr. GRPO 等后续变体。",
     "paper": "https://arxiv.org/abs/2402.03300",
     "illustration": "grpo",
-    "topic": "rl-post-training"
+    "topic": "rl-post-training",
+    "cover": {
+      "src": "assets/02-group-advantage.svg",
+      "caption": "比较同组候选答案的相对优势"
+    }
   },
   {
     "slug": "rlhf",
@@ -306,7 +358,11 @@
     "summary": "以 InstructGPT 为主案例，渐进图解 SFT、偏好数据、Bradley–Terry 奖励模型、PPO 与参考 KL，解释 PPO-ptx 和局限，附两项交互实验、最小数学断言与论文证据。",
     "paper": "https://arxiv.org/abs/2203.02155",
     "illustration": "rlhf",
-    "topic": "rlhf"
+    "topic": "rlhf",
+    "cover": {
+      "src": "assets/02-pipeline.svg",
+      "caption": "人工偏好如何进入语言模型训练"
+    }
   },
   {
     "slug": "adam",
@@ -328,7 +384,11 @@
     "summary": "从随机梯度的方向与尺度出发，以七幅机制图、逐步推导、时间步交互和纯 Python 单元测试解释 Adam，并区分 AdamW、AMSGrad 与原论文证据。",
     "paper": "https://arxiv.org/abs/1412.6980",
     "illustration": "adam",
-    "topic": "optimization"
+    "topic": "optimization",
+    "cover": {
+      "src": "assets/02-two-memories.svg",
+      "caption": "一阶动量和二阶矩的双重记忆"
+    }
   },
   {
     "slug": "lora",
@@ -349,7 +409,11 @@
     "summary": "从冻结主干与低秩增量出发，推导矩阵形状、初始化梯度和 rank 参数预算，核对 GPT-3 原论文实验，并解释推理合并及 QLoRA 等后续方法。",
     "paper": "https://arxiv.org/abs/2106.09685",
     "illustration": "lowrank",
-    "topic": "parameter-efficient"
+    "topic": "parameter-efficient",
+    "cover": {
+      "src": "assets/02-factorization.svg",
+      "caption": "两个低秩矩阵构造权重增量"
+    }
   },
   {
     "slug": "dpo",
@@ -370,7 +434,11 @@
     "summary": "从成对偏好与 KL 正则化目标出发，推导最优策略、隐式奖励和 DPO log-sigmoid 损失，配合 6 幅机制图、β 交互、最小数值代码与原论文证据。",
     "paper": "https://arxiv.org/abs/2305.18290",
     "illustration": "dpo",
-    "topic": "preference-optimization"
+    "topic": "preference-optimization",
+    "cover": {
+      "src": "assets/02-preference-pair.svg",
+      "caption": "偏好答案对如何构成训练信号"
+    }
   },
   {
     "slug": "pagedattention",
@@ -392,7 +460,11 @@
     "summary": "从连续 KV 缓存的碎片和预留浪费出发，逐步推导逻辑块与物理块映射、Decode 扩容、CoW 共享、分页 Attention Kernel 与调度策略，并用交互模拟、代码及 SOSP 2023 实验辨析吞吐收益和边界。",
     "paper": "https://arxiv.org/abs/2309.06180",
     "illustration": "pagedattention",
-    "topic": "paged-memory"
+    "topic": "paged-memory",
+    "cover": {
+      "src": "assets/02-block-table.svg",
+      "caption": "块表把连续序列映射到非连续显存"
+    }
   },
   {
     "slug": "ddpg",
@@ -414,7 +486,11 @@
     "summary": "以 Lillicrap 等 ICLR 2016 原论文为证据，从连续动作枚举困境推导确定性 Actor 梯度、Critic Bellman 目标、经验回放、Polyak 双目标网络与 OU 探索，配五幅结构图、可交互 TD 目标算例、纯 Python 梯度核验和论文实验对照，并辨析 TD3/SAC 演进。",
     "paper": "https://arxiv.org/abs/1509.02971",
     "illustration": "ddpg",
-    "topic": "off-policy-control"
+    "topic": "off-policy-control",
+    "cover": {
+      "src": "assets/02-actor-critic.svg",
+      "caption": "Actor 与 Critic 协同学习连续动作"
+    }
   },
   {
     "slug": "ppo",
@@ -436,7 +512,11 @@
     "summary": "从普通策略梯度与 TRPO 出发，图解概率比与 clipped surrogate 的符号分支，贯通 GAE、Actor–Critic、原论文 MuJoCo 实验与 RLHF 两种 KL。附交互算例与确定性 Python 测试。",
     "paper": "https://arxiv.org/abs/1707.06347",
     "illustration": "ppo",
-    "topic": "on-policy-optimization"
+    "topic": "on-policy-optimization",
+    "cover": {
+      "src": "assets/03-clip-shape.svg",
+      "caption": "概率比裁剪怎样抑制过大更新"
+    }
   },
   {
     "slug": "kv-cache",
@@ -458,7 +538,11 @@
     "summary": "从因果 Attention 的单步计算与显存公式出发，图解 Prefill/Decode、MHA/GQA/MQA、PagedAttention、前缀复用，附交互显存计算器和可验证的最小 Python 示例。",
     "paper": "https://arxiv.org/abs/2309.06180",
     "illustration": "kv-cache",
-    "topic": "kv-cache"
+    "topic": "kv-cache",
+    "cover": {
+      "src": "assets/01-recompute-vs-cache.svg",
+      "caption": "缓存历史 Key、Value 避免重复计算"
+    }
   },
   {
     "slug": "rope",
@@ -479,7 +563,11 @@
     "summary": "从二维旋转和矩阵恒等式出发，图解 RoPE 如何将相对位移写入 Q/K 内积，结合交互平移实验、纯 Python 断言、RoFormer 论文证据与 PI、YaRN、LongRoPE 的工程边界。",
     "paper": "https://arxiv.org/abs/2104.09864",
     "illustration": "rope",
-    "topic": "positional-encoding"
+    "topic": "positional-encoding",
+    "cover": {
+      "src": "assets/03-rotation-plane.svg",
+      "caption": "相对位置在旋转平面中体现"
+    }
   },
   {
     "slug": "self-consistency",
@@ -500,7 +588,11 @@
     "summary": "从单条 CoT 的脆弱性出发，图解多路径采样、答案边缘化、投票机制与原论文实验，附交互示例、数学推导及可运行 Python 代码。",
     "paper": "https://arxiv.org/abs/2203.11171",
     "illustration": "self-consistency",
-    "topic": "self-consistency"
+    "topic": "self-consistency",
+    "cover": {
+      "src": "assets/02-diverse-paths.svg",
+      "caption": "多条推理路径汇总为答案投票"
+    }
   },
   {
     "slug": "sgd",
@@ -522,7 +614,11 @@
     "summary": "以 Bottou 2010 为主线，拆解全批量与随机梯度的计算路径、条件无偏、Mini-batch 方差、步长计划与有限算力权衡；配七幅图、可交互一维算例和纯 Python 测试。",
     "paper": "https://bottou.org/papers/bottou-2010",
     "illustration": "sgd",
-    "topic": "optimization"
+    "topic": "optimization",
+    "cover": {
+      "src": "assets/05-noisy-path.svg",
+      "caption": "带噪随机梯度走向低损失区域"
+    }
   },
   {
     "slug": "alexnet",
@@ -546,7 +642,11 @@
     "summary": "以 Krizhevsky、Sutskever、Hinton 2012 原论文为证据，逐层拆解八层 AlexNet、卷积输出尺寸、ReLU、LRN、重叠池化、双 GPU 分组、Dropout 与十裁剪推理；辨明单模型和竞赛集成指标，配原创 SVG、交互形状实验及纯 Python 断言。",
     "paper": "https://papers.nips.cc/paper_files/paper/2012/file/c399862d3b9d6b76c8436e924a68c45b-Paper.pdf",
     "illustration": "alexnet",
-    "topic": "convolutional-vision"
+    "topic": "convolutional-vision",
+    "cover": {
+      "src": "assets/02-eight-layers.svg",
+      "caption": "视觉特征如何沿深层卷积网络流动"
+    }
   },
   {
     "slug": "lstm",
@@ -567,7 +667,11 @@
     "summary": "从普通 RNN 的长期梯度问题出发，精读 1997 年 CEC 与两门结构，厘清 2000 年遗忘门与 2002 年 Peephole 的历史演进，再以现代四门 MathML 公式、6 幅图、交互状态模拟和确定性 Python 断言理解记忆更新。",
     "paper": "https://doi.org/10.1162/neco.1997.9.8.1735",
     "illustration": "lstm",
-    "topic": "recurrent-networks"
+    "topic": "recurrent-networks",
+    "cover": {
+      "src": "assets/04-modern-gates.svg",
+      "caption": "输入门与遗忘门共同维护长时记忆"
+    }
   },
   {
     "slug": "seq2seq",
@@ -590,7 +694,11 @@
     "summary": "以 Sutskever et al.（NeurIPS 2014）为主线，图解变长输入输出、固定向量瓶颈、LSTM 编解码、条件概率与 Teacher Forcing、源序列反转及 Beam Search；沿 Cho、Bahdanau、Luong 到 Transformer 辨析 Attention 演进，附交互示例、MathML 推导和确定性 Python 断言。",
     "paper": "https://arxiv.org/abs/1409.3215",
     "illustration": "seq2seq",
-    "topic": "encoder-decoder"
+    "topic": "encoder-decoder",
+    "cover": {
+      "src": "assets/02-fixed-vector.svg",
+      "caption": "编码器如何压缩变长输入序列"
+    }
   },
   {
     "slug": "cnn",
@@ -612,7 +720,11 @@
     "summary": "从局部感受野、共享核、空间形状和梯度累积，到 1998 原始 LeNet-5 的部分连接、可学习池化与 RBF 输出；配八幅独立机制图、交互滑窗、MathML 推导及纯 Python 数值验证。",
     "paper": "https://doi.org/10.1109/5.726791",
     "illustration": "cnn",
-    "topic": "convolutional-vision"
+    "topic": "convolutional-vision",
+    "cover": {
+      "src": "assets/02-slide.svg",
+      "caption": "一个卷积核在图像各处共享参数"
+    }
   },
   {
     "slug": "chinchilla",
@@ -634,7 +746,11 @@
     "summary": "以 Hoffmann et al. (NeurIPS 2022) 为主线，拆解 6ND 预算约束、三种经验缩放方法、幂律损失解析推导、70B/1.4T 验证、部署成本边界，并提供五幅机制图、MathML 公式、交互计算器与确定性数学测试。",
     "paper": "https://arxiv.org/abs/2203.15556",
     "illustration": "chinchilla",
-    "topic": "scaling-laws"
+    "topic": "scaling-laws",
+    "cover": {
+      "src": "assets/02-isoflop-valley.svg",
+      "caption": "固定算力下模型大小与数据量的平衡"
+    }
   },
   {
     "slug": "gpt-1",
@@ -656,7 +772,11 @@
     "summary": "依据 Radford 等人 2018 年 GPT-1 原论文，拆解 BooksCorpus 自回归预训练、Decoder-only 因果 Mask、任务输入变换与联合微调目标，对照 Tables 2–5 的正负证据，并提供 5 幅 SVG、MathML 和纯 Python 数值断言。",
     "paper": "https://cdn.openai.com/research-covers/language-unsupervised/language_understanding_paper.pdf",
     "illustration": "gpt1",
-    "topic": "pretraining"
+    "topic": "pretraining",
+    "cover": {
+      "src": "assets/pipeline.svg",
+      "caption": "自回归预训练如何迁移到具体任务"
+    }
   },
   {
     "slug": "the-pile",
@@ -678,7 +798,11 @@
     "summary": "解读 Gao et al. (2020) The Pile：22 个来源与 825.18 GiB 原始语料、1,254.20 GiB 采样后有效规模、BPB 指标、受控 1.3B 模型对照，以及可交互权重实验和版权、泄漏、数据治理边界。",
     "paper": "https://arxiv.org/abs/2101.00027",
     "illustration": "pile",
-    "topic": "pretraining-corpora"
+    "topic": "pretraining-corpora",
+    "cover": {
+      "src": "assets/mixture-weights.svg",
+      "caption": "不同来源语料如何构成训练混合"
+    }
   },
   {
     "slug": "dqn",
@@ -700,7 +824,11 @@
     "summary": "以 Mnih et al. Nature 2015 为核心，逐步拆解 Q-learning 自举目标、回放缓存、双网络延迟同步、卷积架构与 Atari 证据；提供六幅机制图、可调 TD 目标和纯 Python 数学检验，并区分 2013 DQN、Double DQN 等后续工作。",
     "paper": "https://doi.org/10.1038/nature14236",
     "illustration": "dqn",
-    "topic": "value-learning"
+    "topic": "value-learning",
+    "cover": {
+      "src": "assets/two-networks.svg",
+      "caption": "在线网络与目标网络稳定价值学习"
+    }
   },
   {
     "slug": "fineweb",
@@ -724,7 +852,11 @@
     "summary": "以 FineWeb NeurIPS 2024 论文为主线，拆解 96 个 Common Crawl 快照、WARC 正文提取、逐快照 MinHash、质量过滤和教育数据蒸馏；含六幅机制图、可交互阈值实验、原文证据及教学数值测试。",
     "paper": "https://arxiv.org/abs/2406.17557",
     "illustration": "fineweb",
-    "topic": "curation-filtering"
+    "topic": "curation-filtering",
+    "cover": {
+      "src": "assets/01-curation-pipeline.svg",
+      "caption": "网页文本经过清洗、筛选和去重"
+    }
   },
   {
     "slug": "sac",
@@ -747,7 +879,11 @@
     "summary": "以 ICML 2018 SAC 原论文为主线，逐步理解离策略 Replay、最大熵 Soft Bellman、随机 Actor 和双 Critic，区分独立 V 原版与后续无 V/自动温度版本；配六幅机制图、α 交互、MathML、纯 Python 检验和证据台账。",
     "paper": "https://proceedings.mlr.press/v80/haarnoja18b.html",
     "illustration": "sac",
-    "topic": "maximum-entropy"
+    "topic": "maximum-entropy",
+    "cover": {
+      "src": "assets/soft-backup.svg",
+      "caption": "熵项怎样进入价值自举更新"
+    }
   },
   {
     "slug": "gqa",
@@ -770,7 +906,11 @@
     "summary": "精读 Ainslie et al. (EMNLP 2023)：图解 MHA/GQA/MQA 的共享结构、KV Cache 显存比例、MHA 权重均值池化与 5% 继续训练；核对 T5-XXL 数据，附交互组数实验、MathML 和纯 Python 断言。",
     "paper": "https://aclanthology.org/2023.emnlp-main.298/",
     "illustration": "gqa",
-    "topic": "attention-variants"
+    "topic": "attention-variants",
+    "cover": {
+      "src": "assets/02-head-sharing.svg",
+      "caption": "多个 Query 头共享一组 Key 与 Value"
+    }
   },
   {
     "slug": "chain-of-thought",
@@ -792,7 +932,11 @@
     "summary": "精读 Wei et al. NeurIPS 2022：从标准 few-shot 与 CoT 的机制对照、条件生成概率分解，到 PaLM/GSM8K 规模效应与严格消融；配原创 SVG、交互格式实验、证据台账和可运行 Python 断言。",
     "paper": "https://arxiv.org/abs/2201.11903",
     "illustration": "chain-of-thought",
-    "topic": "chain-of-thought"
+    "topic": "chain-of-thought",
+    "cover": {
+      "src": "assets/01-prompt-comparison.svg",
+      "caption": "展示中间推理步骤与直接回答的区别"
+    }
   },
   {
     "slug": "pca",
@@ -814,7 +958,11 @@
     "summary": "从二维点云的最大方差直觉出发，完整推导中心化、特征方程、SVD 与正交重建的等价性，结合交互投影实验、四点手算、数据泄漏边界及纯 Python 数值测试。",
     "paper": "https://doi.org/10.1080/14786440109462720",
     "illustration": "pca",
-    "topic": "dimensionality-reduction"
+    "topic": "dimensionality-reduction",
+    "cover": {
+      "src": "assets/03-projection.svg",
+      "caption": "将数据投影到主要变化方向"
+    }
   },
   {
     "slug": "linear-regression",
@@ -836,7 +984,11 @@
     "summary": "从四点教学样本出发，逐步推导一元 OLS 闭式解、矩阵正规方程与正交投影，结合五幅独立 SVG、斜率截距交互、原生 MathML、可运行 Python 断言，辨析 BLUE、异方差、R² 与数值稳定性。",
     "paper": "https://www.itl.nist.gov/div898/handbook/pmd/section1/pmd141.htm",
     "illustration": "linear-regression",
-    "topic": "linear-models"
+    "topic": "linear-models",
+    "cover": {
+      "src": "assets/line-vs-mean.svg",
+      "caption": "线性预测与恒定均值预测的对照"
+    }
   },
   {
     "slug": "svd",
@@ -858,7 +1010,11 @@
     "summary": "以单位圆映射椭圆建立几何直觉，逐步推导薄 SVD、特征值关系、秩一分解与 Eckart–Young 最优截断，辅以能量滑块、PCA、伪逆、随机化算法和 NumPy 断言。",
     "paper": "https://doi.org/10.1007/BF02288367",
     "illustration": "svd",
-    "topic": "linear-algebra"
+    "topic": "linear-algebra",
+    "cover": {
+      "src": "assets/01-geometry.svg",
+      "caption": "矩阵如何将圆形空间拉伸成椭圆"
+    }
   },
   {
     "slug": "rnn",
@@ -880,7 +1036,11 @@
     "summary": "以 Elman 1990 为起点，从时间反馈、时序 XOR、状态方程、BPTT 与梯度消失/爆炸渐进解析 RNN；含 12 节正文、4 幅原创独立 SVG、离线 MathML、互动数值演示、纯 Python 梯度校验与论文证据台账。",
     "paper": "https://doi.org/10.1207/S15516709COG1402_1",
     "illustration": "rnn",
-    "topic": "recurrent-networks"
+    "topic": "recurrent-networks",
+    "cover": {
+      "src": "assets/unroll.svg",
+      "caption": "按时间展开循环神经网络的状态链"
+    }
   },
   {
     "slug": "xgboost",
@@ -902,7 +1062,11 @@
     "summary": "以 Chen 与 Guestrin KDD 2016 原论文为证据，渐进推导二阶树目标、叶子权重和分裂增益，图解稀疏缺失值方向、加权分位、排序列块与磁盘 IO，并附阈值/正则化交互和确定性 Python 测试。",
     "paper": "https://arxiv.org/abs/1603.02754",
     "illustration": "xgboost",
-    "topic": "trees-ensembles"
+    "topic": "trees-ensembles",
+    "cover": {
+      "src": "assets/03-gain.svg",
+      "caption": "二阶分裂增益如何指导树的生长"
+    }
   },
   {
     "slug": "naive-bayes",
@@ -924,7 +1088,11 @@
     "summary": "以 McCallum 与 Nigam 1998 的文本事件模型比较为主线，推导贝叶斯判别、条件独立、Multinomial/Bernoulli 似然、加法平滑与对数域计算；结合论文证据、六幅机制图、交互比较及纯 Python 可复验算例。",
     "paper": "https://www.cse.iitb.ac.in/~soumen/readings/papers/McCallumN1998event.pdf",
     "illustration": "naive-bayes",
-    "topic": "probabilistic-models"
+    "topic": "probabilistic-models",
+    "cover": {
+      "src": "assets/naive-bayes-01.svg",
+      "caption": "条件独立假设简化类别概率计算"
+    }
   },
   {
     "slug": "qlora",
@@ -947,7 +1115,11 @@
     "summary": "以 QLoRA NeurIPS 2023 为主线，拆解冻结主干的 NF4 存储、BF16 计算、双重量化 0.373 bit/参数、分页优化器和 MMLU 证据；附六幅 SVG、MathML 公式、交互内存账本与纯 Python 验证。",
     "paper": "https://arxiv.org/abs/2305.14314",
     "illustration": "qlora",
-    "topic": "quantized-finetuning"
+    "topic": "quantized-finetuning",
+    "cover": {
+      "src": "assets/02-compute-path.svg",
+      "caption": "量化权重与低秩适配器的计算路径"
+    }
   },
   {
     "slug": "decision-tree",
@@ -971,7 +1143,11 @@
     "summary": "以原始 CART、ID3 与 C4.5 文献为脉络，渐进图解熵、Gini、连续阈值、回归叶与代价复杂度剪枝，配六幅原创机制图、MathML 推导、交互阈值实验及纯 Python 可验证断言。",
     "paper": "https://doi.org/10.1007/BF00116251",
     "illustration": "decision-tree",
-    "topic": "trees-ensembles"
+    "topic": "trees-ensembles",
+    "cover": {
+      "src": "assets/01-rule-path.svg",
+      "caption": "多个条件判断如何组成决策树"
+    }
   },
   {
     "slug": "embeddings",
@@ -997,7 +1173,11 @@
     "summary": "沿 Word2Vec、GloVe、BERT、SBERT、SimCSE 与 E5 的原论文主线，拆解 Embedding lookup、上下文表示、掩码池化、对比损失与检索系统，配七幅原创 SVG、原生 MathML、互动角度实验和可测的纯 Python 示例。",
     "paper": "https://aclanthology.org/D19-1410/",
     "illustration": "embedding",
-    "topic": "representation"
+    "topic": "representation",
+    "cover": {
+      "src": "assets/01-discrete-dense.svg",
+      "caption": "离散标记怎样进入连续语义空间"
+    }
   },
   {
     "slug": "bpe",
@@ -1020,7 +1200,11 @@
     "summary": "以 Gage 1994 与 Sennrich et al. ACL 2016 为证据，图解罕见词困境、带词频的贪心子词合并、训练与推理的规则分离、GPT-2 byte-level 变体和 WordPiece/Unigram 差异；含六幅独立 SVG、四个离线 MathML 公式、交互式合并实验与确定性 Python 测试。",
     "paper": "https://aclanthology.org/P16-1162/",
     "illustration": "bpe",
-    "topic": "tokenization"
+    "topic": "tokenization",
+    "cover": {
+      "src": "assets/03-merge.svg",
+      "caption": "高频子词对逐步合并为 Token"
+    }
   },
   {
     "slug": "mcts",
@@ -1042,7 +1226,11 @@
     "summary": "从有限预算下的树搜索困境出发，拆解选择、扩展、模拟和回传，推导 UCB1/UCT，交互比较探索系数，解释双人博弈回传，并区分经典 MCTS 与 AlphaZero 的 PUCT。",
     "paper": "https://aima.cs.berkeley.edu/~russell/classes/cs294/s11/readings/Kocsis%2BSzepesvari%3A2006.pdf",
     "illustration": "mcts",
-    "topic": "planning-search"
+    "topic": "planning-search",
+    "cover": {
+      "src": "assets/01-selective-tree.svg",
+      "caption": "选择性搜索避免遍历整棵决策树"
+    }
   },
   {
     "slug": "reinforce",
@@ -1065,7 +1253,11 @@
     "summary": "从两动作概率学习切入，以 Williams 1992 原文为证据推导 score-function 梯度、伯努利 logit、原始 eligibility 规则，再区分现代 reward-to-go 与 baseline，配五幅机制图、精确枚举交互及可复现 Python 测试。",
     "paper": "https://doi.org/10.1007/BF00992696",
     "illustration": "reinforce",
-    "topic": "policy-gradient"
+    "topic": "policy-gradient",
+    "cover": {
+      "src": "assets/02-score-function.svg",
+      "caption": "用整段回报加权策略梯度"
+    }
   },
   {
     "slug": "noisynet",
@@ -1090,7 +1282,11 @@
     "summary": "精读 Fortunato et al. ICLR 2018：图解参数噪声的时间一致性、可学习 μ/σ、因子化高斯采样及重参数化梯度，区分 NoisyNet-DQN、Dueling 与 A3C，核验 Atari-57 Table 1。含六幅独立 SVG、MathML、双动作交互与标准库 Python 断言。",
     "paper": "https://arxiv.org/abs/1706.10295",
     "illustration": "noisynet",
-    "topic": "exploration-noise"
+    "topic": "exploration-noise",
+    "cover": {
+      "src": "assets/02-noisy-linear.svg",
+      "caption": "在线性层参数上加噪声以探索"
+    }
   },
   {
     "slug": "a3c",
@@ -1113,7 +1309,11 @@
     "summary": "精读 Mnih et al. ICML 2016：从经验相关性到多线程异步参数更新，推导 n-step Return、Advantage、策略梯度与熵正则，解析共享 RMSProp 和 57 款 Atari 的原论文数据。含 5 幅独立 SVG、6 组离线 MathML、交互算例、Python 确定性测试及 16 条证据。",
     "paper": "https://proceedings.mlr.press/v48/mniha16.html",
     "illustration": "a3c",
-    "topic": "asynchronous-parallel"
+    "topic": "asynchronous-parallel",
+    "cover": {
+      "src": "assets/02-async-workers.svg",
+      "caption": "多个异步工作者共同训练策略"
+    }
   },
   {
     "slug": "importance-sampling",
@@ -1136,7 +1336,11 @@
     "summary": "以 Kahn–Marshall 1953 为历史起点，从稀有事件与换测度推导无偏性、方差、最优提议分布、SNIS/ESS 和离策略比率；包含五幅独立 SVG、离线 MathML、解析交互以及 Python 确定性检验。",
     "paper": "https://doi.org/10.1287/opre.1.5.263",
     "illustration": "importance-sampling",
-    "topic": "importance-sampling"
+    "topic": "importance-sampling",
+    "cover": {
+      "src": "assets/02-proposal.svg",
+      "caption": "提议分布与目标分布之间的重加权"
+    }
   },
   {
     "slug": "gae",
@@ -1160,7 +1364,11 @@
     "summary": "精读 Schulman et al. ICLR 2016：从延迟信用分配与 γ-just 定义推导 TD residual、k-step 优势与指数加权的 GAE(γ,λ)，解释反向递推、terminal/truncation、reward shaping、原论文 TRPO 及 MuJoCo 实验；附五幅独立 SVG、原生 MathML、λ 交互与 Python 数值核验。",
     "paper": "https://arxiv.org/abs/1506.02438",
     "illustration": "gae",
-    "topic": "advantage-estimation"
+    "topic": "advantage-estimation",
+    "cover": {
+      "src": "assets/lambda-weights.svg",
+      "caption": "用 λ 混合多步优势估计"
+    }
   },
   {
     "slug": "sentencepiece",
@@ -1182,7 +1390,11 @@
     "summary": "精读 Kudo 与 Richardson EMNLP 2018 原论文，使用五幅独立 SVG、四组原生 MathML、路径概率交互和 Python 数学测试解析从原始语料训练、空格转义、BPE、Unigram 到可逆解码的机制；按 KFTT 原文表格核查 BLEU 与性能数据。",
     "paper": "https://aclanthology.org/D18-2012/",
     "illustration": "sentencepiece",
-    "topic": "tokenization"
+    "topic": "tokenization",
+    "cover": {
+      "src": "assets/whitespace.svg",
+      "caption": "空格如何作为子词编码的一部分"
+    }
   },
   {
     "slug": "react",
@@ -1205,7 +1417,11 @@
     "summary": "精读 ICLR 2023 ReAct：扩展动作空间、Thought/Action/Observation 机制与 MathML 推导，核验 HotpotQA、FEVER、ALFWorld、WebShop 原论文数字；以五幅独立图解、交互式失败检索恢复和确定性 Python 控制器辨析提示范式与现代 Agent 工程边界。",
     "paper": "https://arxiv.org/abs/2210.03629",
     "illustration": "react",
-    "topic": "react"
+    "topic": "react",
+    "cover": {
+      "src": "assets/01-loop.svg",
+      "caption": "思考、调用工具与观察结果形成循环"
+    }
   },
   {
     "slug": "moe",
@@ -1232,7 +1448,11 @@
     "summary": "以 Shazeer et al. ICLR 2017 为核心，渐进推导稀疏路由、Noisy Top-K、Importance/Load、容量和专家并行，区分 Switch、GShard、Mixtral 与 DeepSeekMoE；配七幅 SVG、八组原生 MathML、交互实验和 Python 数值测试。",
     "paper": "https://arxiv.org/abs/1701.06538",
     "illustration": "moe",
-    "topic": "moe"
+    "topic": "moe",
+    "cover": {
+      "src": "assets/02-router.svg",
+      "caption": "路由器如何为 Token 选择专家"
+    }
   },
   {
     "slug": "bert",
@@ -1256,7 +1476,11 @@
     "summary": "精读 Devlin et al. NAACL 2019：从因果注意力与双向上下文的矛盾出发，逐层图解 Encoder、输入三重嵌入、MLM 15%/80-10-10、NSP、任务微调及原论文消融；含六幅独立 SVG、原生 MathML、交互式遮蔽实验、证据账本与纯 Python 测试，并区分 RoBERTa 的后续研究。",
     "paper": "https://aclanthology.org/N19-1423/",
     "illustration": "bert",
-    "topic": "pretraining"
+    "topic": "pretraining",
+    "cover": {
+      "src": "assets/01-attention-masks.svg",
+      "caption": "双向注意力与单向遮罩的差别"
+    }
   },
   {
     "slug": "td3",
@@ -1279,7 +1503,11 @@
     "summary": "精读 Fujimoto 等 ICML 2018：从 DDPG 的函数逼近高估风险出发，推导 clipped double Q、延迟 Actor 更新与目标策略平滑；含 5 幅独立 SVG、5 组原生 MathML、双 Q 交互实验、原论文 Table 1/2 与确定性 Python 断言。",
     "paper": "https://proceedings.mlr.press/v80/fujimoto18a.html",
     "illustration": "td3",
-    "topic": "off-policy-control"
+    "topic": "off-policy-control",
+    "cover": {
+      "src": "assets/02-twin-critics.svg",
+      "caption": "双 Critic 如何降低价值高估"
+    }
   },
   {
     "slug": "wordpiece",
@@ -1303,7 +1531,11 @@
     "summary": "追溯 Schuster & Nakajima 2012、GNMT 2016 与 BERT 2018，严格区分未公开的原始词表训练器、Hugging Face pair-score 教学重建和 BERT 官方 MaxMatch 编码；包含 14 节深度解读、七幅独立 SVG、四组 MathML、双交互实验与纯 Python 断言，并对照 Fast WordPiece 2021。",
     "paper": "https://research.google/pubs/japanese-and-korean-voice-search/",
     "illustration": "wordpiece",
-    "topic": "tokenization"
+    "topic": "tokenization",
+    "cover": {
+      "src": "assets/04-maxmatch.svg",
+      "caption": "最长匹配将词语切成子词片段"
+    }
   },
   {
     "slug": "logsumexp-softmax-taylor",
@@ -1326,7 +1558,11 @@
     "summary": "沿苏剑林 2026 年 LogSumExp / Softmax 展开思路，推导中心矩、四阶累积量和三阶 Softmax 校正，再构建前缀状态形式的一阶 Attention；含五幅独立 SVG、交互误差实验、原生 MathML 和可运行的 Python 数值验证，严格区分 GDN 论文与教学近似。",
     "paper": "https://spaces.ac.cn/archives/11814",
     "illustration": "softmax-taylor",
-    "topic": "numerical-stability"
+    "topic": "numerical-stability",
+    "cover": {
+      "src": "assets/02-cumulant-expansion.svg",
+      "caption": "LogSumExp 的展开怎样近似 Softmax"
+    }
   },
   {
     "slug": "deltanet",
@@ -1350,7 +1586,11 @@
     "summary": "精读 Yang et al. NeurIPS 2024：从普通线性注意力的记忆干扰出发，推导 Delta Rule 误差修正、矩阵转移与 WY 伪值表示，图解 Chunkwise 并行和现代 DeltaNet Block，审计 340M/1.3B 实验及局限；附四幅独立 SVG、离线 MathML、写入强度交互、Python 断言与 15 条证据账本。",
     "paper": "https://proceedings.neurips.cc/paper_files/paper/2024/hash/d13a3eae72366e61dfdc7eea82eeb685-Abstract-Conference.html",
     "illustration": "deltanet",
-    "topic": "efficient-attention"
+    "topic": "efficient-attention",
+    "cover": {
+      "src": "assets/01-replace-vs-accumulate.svg",
+      "caption": "Delta Rule 让记忆能被纠错更新"
+    }
   },
   {
     "slug": "neural-gating",
@@ -1374,7 +1614,11 @@
     "summary": "跨论文精读神经网络门控机制：从 sigmoid 乘法门与互补插值出发，区分 LSTM 1997/2000、GRU 更新门、Highway 直通路径、GLU 与 SwiGLU 变体，包含六幅独立 SVG、原生 MathML、交互式混合演算和标准库数值校验。",
     "paper": "https://doi.org/10.1162/neco.1997.9.8.1735",
     "illustration": "neural-gating",
-    "topic": "gating-mechanisms"
+    "topic": "gating-mechanisms",
+    "cover": {
+      "src": "assets/01-gate-core.svg",
+      "caption": "门控决定保留还是更新信息"
+    }
   },
   {
     "slug": "mobilenet",
@@ -1399,7 +1643,11 @@
     "summary": "基于 MobileNet V1 原论文逐步推导 Depthwise/Pointwise 计算量、参数与 α/ρ 缩放；复核 ImageNet 70.6%/569M/4.2M 实验，交互探索计算账本，并对比 V2 逆残差线性瓶颈、V3 硬件感知 NAS 与 V4 UIB。含五幅独立 SVG、MathML、纯 Python 验证和论文证据台账。",
     "paper": "https://arxiv.org/abs/1704.04861",
     "illustration": "mobilenet",
-    "topic": "convolutional-vision"
+    "topic": "convolutional-vision",
+    "cover": {
+      "src": "assets/01-split.svg",
+      "caption": "可分离卷积将空间与通道计算拆开"
+    }
   },
   {
     "slug": "swiglu",
@@ -1426,7 +1674,11 @@
     "summary": "精读 Shazeer 2020《GLU Variants Improve Transformer》：从两矩阵 FFN 到 SiLU 门控与三矩阵结构，推导 2/3 参数预算，核验 T5/C4 log-perplexity 与 GEGLU 对照，配六幅独立 SVG、MathML、交互标量门控与纯 Python 梯度/参数检查；明确区分 PaLM、LLaMA 后续实践。",
     "paper": "https://arxiv.org/abs/2002.05202",
     "illustration": "swiglu",
-    "topic": "gating-mechanisms"
+    "topic": "gating-mechanisms",
+    "cover": {
+      "src": "assets/02-gate-multiplication.svg",
+      "caption": "门控分支与线性分支相乘"
+    }
   },
   {
     "slug": "knn",
@@ -1450,7 +1702,11 @@
     ],
     "summary": "精读 Cover & Hart (1967) 最近邻分类理论：从 10 点教学数据的 1-NN / k-NN 决策翻转，逐步解释距离度量、特征标准化、投票与距离加权、回归、渐近错误率界、高维诅咒以及 KD/Ball Tree 与 ANN 的边界；提供 5 幅独立 SVG、5 组原生 MathML、交互式 k 与权重实验、来源证据清单和确定性 Python 测试。",
     "paper": "https://doi.org/10.1109/TIT.1967.1053964",
-    "illustration": "knn"
+    "illustration": "knn",
+    "cover": {
+      "src": "assets/knn-neighborhood.svg",
+      "caption": "最近的几个邻居如何确定分类"
+    }
   },
   {
     "slug": "roc-auc",
@@ -1474,7 +1730,11 @@
     "summary": "精读 Fawcett 2006、Hanley–McNeil 1982、Davis–Goadrich 2006，从混淆矩阵、阈值 ROC、积分面积与成对排序、并列得分、类别基率和 PR/AP 区别到阈值决策、校准与不确定性；包含五幅独立 SVG、原生 MathML、交互阈值实验、证据账本及 Python 确定性测试。",
     "paper": "https://doi.org/10.1016/j.patrec.2005.10.010",
     "illustration": "roc-auc",
-    "topic": "classification-metrics-roc"
+    "topic": "classification-metrics-roc",
+    "cover": {
+      "src": "assets/02-roc-curve.svg",
+      "caption": "阈值变化如何描出 ROC 曲线"
+    }
   },
   {
     "slug": "k-means",
@@ -1498,7 +1758,11 @@
     ],
     "summary": "从二维点云到 Lloyd 的分配—更新交替最小化，推导平方误差与均值更新、完整手算四点示例、k-means++ D² 初始化和 O(nkdT) 计算成本；以五幅可独立查看的 SVG、原生 MathML、交互迭代、纯标准库 Python 测试和原论文证据解释聚类的能力与边界。",
     "paper": "https://doi.org/10.1109/TIT.1982.1056489",
-    "illustration": "k-means"
+    "illustration": "k-means",
+    "cover": {
+      "src": "assets/lloyd-steps.svg",
+      "caption": "分配样本与移动质心交替进行"
+    }
   },
   {
     "slug": "bellman-equations",
@@ -1524,7 +1788,11 @@
     "summary": "以 Bellman 1952 动态规划论文和 Sutton & Barto 强化学习教材为核心，从折扣回报与四种 Bellman 方程推导最优决策、矩阵策略评估与 γ 收缩固定点；通过六幅原创机制图、八组原生 MathML、可交互的一状态 MDP、确定性 Python 测试连接动态规划、TD 与 DQN，并明确 γ=1、终止/截断及函数逼近的适用边界。",
     "paper": "https://doi.org/10.1073/pnas.38.8.716",
     "illustration": "bellman",
-    "topic": "value-learning"
+    "topic": "value-learning",
+    "cover": {
+      "src": "assets/return-decomposition.svg",
+      "caption": "一步奖励与未来价值如何组成回报"
+    }
   },
   {
     "slug": "b-plus-tree",
@@ -1550,7 +1818,11 @@
     ],
     "summary": "以 Bayer–McCreight B-tree 工作与数据库系统实现为脉络，严谨区分 B-tree 和 B+ tree；通过六幅独立 SVG、原生 MathML、分裂/合并示例、可交互页遍历和纯 Python 插入与范围扫描验证，理解页式索引的扇出、复杂度、删除边界以及 PostgreSQL 等现实实现的差异。",
     "paper": "https://doi.org/10.1007/BF00288683",
-    "illustration": "b-plus-tree"
+    "illustration": "b-plus-tree",
+    "cover": {
+      "src": "assets/01-page-layout.svg",
+      "caption": "索引页与叶子页组成 B+ 树层级"
+    }
   },
   {
     "slug": "rearrangement-inequalities",
@@ -1573,6 +1845,10 @@
     "summary": "以苏剑林《重排不等式及其推广》为线索，重建局部交换证明、双随机矩阵与迹不等式的谱桥梁，区分对称特征值版和一般奇异值版；通过三序列均衡反例、半正定三矩阵迹负值反例及36种排列交互/纯 Python 断言核对适用边界。",
     "paper": "https://spaces.ac.cn/archives/11910",
     "illustration": "rearrangement",
-    "topic": "rearrangement-inequalities"
+    "topic": "rearrangement-inequalities",
+    "cover": {
+      "src": "assets/rearrange-pairs.svg",
+      "caption": "同序配对与乘积和之间的关系"
+    }
   }
 ]

@@ -220,6 +220,12 @@ cd _site && python -m http.server 8000
 4. 论文证据和浏览器检查通过后，手动将注册条目的 `status` 改为 `published`，更新实际发布日期、摘要、阅读时长等数据。提交 PR；PR 会自动验证但**不会部署**。
 5. PR 合并到 `main` 后，Actions 重新构建并部署。首页、知识地图、二级主题分组、归档、`posts.json`、RSS 和 Sitemap 自动更新。`draft` 从线上构建完全排除。
 
+## 文章封面：每篇文章展示不同的机制图解
+
+首页精选、文章检索列表与分类卡片统一使用该文章自己的 SVG 图解，不再复用 `Observe → Derive → Verify` 通用封面。封面选取保存在 `content/posts.json` 对应文章的 `cover.src` 和 `cover.caption` 中，链接到文章已有 `assets/*.svg`，避免另造与正文脱节的素材。
+
+发布新文章前，先挑选最能直观解释论文核心机制、在手机卡片尺寸下仍清楚的 SVG，并写一条**独一无二、描述图意**的中文简短说明。没有封面的已发布文章会被构建校验拒绝。具体规则和质量检查见 [`AGENTS.md`](AGENTS.md) 的 **Card cover design contract**；`Agents.md` 只做大小写兼容入口。
+
 ## 数学公式渲染规范
 
 论文中的关键公式优先使用浏览器原生 **MathML Core**，不再以 Unicode 字符串拼凑分式、求和及上下标。新增 [Math Typesetting](skills/olah-style-paper-posts/references/math-typesetting.md) 规范覆盖离线数学排版、公式无障碍、手机端键盘横向滚动、SVG 命名空间隔离与 Playwright QA；静态校验器与浏览器检查自动验证这些约束。对应更新源于 [Olah-style-posts](https://github.com/1998x-stack/Olah-style-posts) 并同步至四份 Agent Skill 镜像。
