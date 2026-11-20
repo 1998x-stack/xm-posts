@@ -1,5 +1,4 @@
 """Deterministic unit tests for the teaching decision policy."""
-import math
 import unittest
 
 from jev_decision_policy import (
