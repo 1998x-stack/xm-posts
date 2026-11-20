@@ -1154,5 +1154,27 @@
     "summary": "精读 Fujimoto 等 ICML 2018：从 DDPG 的函数逼近高估风险出发，推导 clipped double Q、延迟 Actor 更新与目标策略平滑；含 5 幅独立 SVG、5 组原生 MathML、双 Q 交互实验、原论文 Table 1/2 与确定性 Python 断言。",
     "paper": "https://proceedings.mlr.press/v80/fujimoto18a.html",
     "illustration": "td3"
+  },
+  {
+    "slug": "rearrangement-inequalities",
+    "title": "Understanding Rearrangement Inequalities",
+    "subtitle": "从同序配对、von Neumann 迹不等式到多序列最小值为何困难？",
+    "category": "foundations",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 25,
+    "tags": [
+      "Rearrangement Inequalities",
+      "Matrix Trace Inequalities",
+      "von Neumann",
+      "Doubly Stochastic Matrices",
+      "Singular Values",
+      "Three-dimensional Assignment",
+      "Math"
+    ],
+    "summary": "以苏剑林《重排不等式及其推广》为线索，重建局部交换证明、双随机矩阵与迹不等式的谱桥梁，区分对称特征值版和一般奇异值版；通过三序列均衡反例、半正定三矩阵迹负值反例及36种排列交互/纯 Python 断言核对适用边界。",
+    "paper": "https://spaces.ac.cn/archives/11910",
+    "illustration": "rearrangement"
   }
 ]
