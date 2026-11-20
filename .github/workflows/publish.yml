@@ -58,7 +58,7 @@ jobs:
         run: echo "PDF_FONT_SIGNATURE=$(dpkg-query -W -f='${Package}=${Version};' fonts-noto-cjk fonts-stix)" >> "$GITHUB_ENV"
       - name: Restore incremental PDF cache
         id: pdf-cache
-        uses: actions/cache/restore$v4
+        uses: actions/cache/restore@v4
         continue-on-error: true
         with:
           path: .pdf-cache
@@ -70,7 +70,7 @@ jobs:
       - name: Validate final site with complete PDF downloads
         run: python scripts/validate_site.py
       - name: Save validated PDF cache
-        uses: actions/cache/save$v4
+        uses: actions/cache/save@v4
         continue-on-error: true
         with:
           path: .pdf-cache
