@@ -167,5 +167,5 @@ def test_unique_article_specific_cover_manifest_and_rendering(tmp_path):
     assert home.select_one('.hero-feature .feature-art--cover img')
     for p in published:
         thumb = home.select_one(f'.index-card a[href="posts/{p["category"]}/{p["slug"]}/"] img')
-        assert thumb and thumb['src'] == 'posts/' + p['category'] + '/' + p['slug'] + '/' + p['cover']['src']
+        assert thumb and thumb['src'].removeprefix('./') == 'posts/' + p['category'] + '/' + p['slug'] + '/' + p['cover']['src']
     assert 'Observe → Derive → Verify' not in home.get_text()
