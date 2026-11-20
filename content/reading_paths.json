@@ -1,0 +1,278 @@
+[
+  {
+    "id": "path-01",
+    "title": "线性模型与分类评估",
+    "posts": [
+      "linear-regression",
+      "logistic-regression",
+      "roc-auc"
+    ]
+  },
+  {
+    "id": "path-02",
+    "title": "分类模型怎么选择",
+    "posts": [
+      "naive-bayes",
+      "logistic-regression",
+      "svm",
+      "roc-auc"
+    ]
+  },
+  {
+    "id": "path-03",
+    "title": "样本几何与聚类",
+    "posts": [
+      "knn",
+      "k-means",
+      "gmm",
+      "pca"
+    ]
+  },
+  {
+    "id": "path-04",
+    "title": "矩阵分解与降维",
+    "posts": [
+      "svd",
+      "pca",
+      "rearrangement-inequalities"
+    ]
+  },
+  {
+    "id": "path-05",
+    "title": "树模型与集成学习",
+    "posts": [
+      "decision-tree",
+      "xgboost"
+    ]
+  },
+  {
+    "id": "path-06",
+    "title": "卷积视觉网络演进",
+    "posts": [
+      "cnn",
+      "alexnet",
+      "resnet",
+      "mobilenet"
+    ]
+  },
+  {
+    "id": "path-07",
+    "title": "序列建模主线",
+    "posts": [
+      "rnn",
+      "lstm",
+      "seq2seq",
+      "transformer",
+      "multi-head-attention"
+    ]
+  },
+  {
+    "id": "path-08",
+    "title": "注意力与推理内存",
+    "posts": [
+      "transformer",
+      "multi-head-attention",
+      "gqa",
+      "kv-cache",
+      "pagedattention"
+    ]
+  },
+  {
+    "id": "path-09",
+    "title": "Attention 的高效实现",
+    "posts": [
+      "multi-head-attention",
+      "flashattention",
+      "deltanet"
+    ]
+  },
+  {
+    "id": "path-10",
+    "title": "Transformer 组件拆解",
+    "posts": [
+      "transformer",
+      "rope",
+      "pre-ln-vs-post-ln",
+      "neural-gating",
+      "swiglu",
+      "moe"
+    ]
+  },
+  {
+    "id": "path-11",
+    "title": "门控机制的不同用途",
+    "posts": [
+      "lstm",
+      "neural-gating",
+      "swiglu",
+      "moe"
+    ]
+  },
+  {
+    "id": "path-12",
+    "title": "分词与词表构建",
+    "posts": [
+      "bpe",
+      "wordpiece",
+      "sentencepiece",
+      "bert"
+    ]
+  },
+  {
+    "id": "path-13",
+    "title": "词向量到预训练表示",
+    "posts": [
+      "understanding-word2vec",
+      "embeddings",
+      "bert"
+    ]
+  },
+  {
+    "id": "path-14",
+    "title": "从语料构建到计算最优",
+    "posts": [
+      "the-pile",
+      "fineweb",
+      "chinchilla",
+      "gpt-1"
+    ]
+  },
+  {
+    "id": "path-15",
+    "title": "语言模型预训练架构",
+    "posts": [
+      "transformer",
+      "gpt-1",
+      "bert"
+    ]
+  },
+  {
+    "id": "path-16",
+    "title": "参数高效微调",
+    "posts": [
+      "svd",
+      "lora",
+      "qlora"
+    ]
+  },
+  {
+    "id": "path-17",
+    "title": "优化算法与正则化",
+    "posts": [
+      "sgd",
+      "weight-decay",
+      "adam",
+      "adamw"
+    ]
+  },
+  {
+    "id": "path-18",
+    "title": "Softmax 的数值稳定性",
+    "posts": [
+      "logsumexp-softmax-taylor",
+      "logistic-regression",
+      "multi-head-attention"
+    ]
+  },
+  {
+    "id": "path-19",
+    "title": "价值函数与探索",
+    "posts": [
+      "bellman-equations",
+      "dqn",
+      "noisynet"
+    ]
+  },
+  {
+    "id": "path-20",
+    "title": "策略梯度到 PPO",
+    "posts": [
+      "reinforce",
+      "a3c",
+      "gae",
+      "ppo"
+    ]
+  },
+  {
+    "id": "path-21",
+    "title": "人类偏好与策略优化",
+    "posts": [
+      "ppo",
+      "rlhf",
+      "dpo",
+      "grpo"
+    ]
+  },
+  {
+    "id": "path-22",
+    "title": "离策略连续控制",
+    "posts": [
+      "ddpg",
+      "td3",
+      "sac"
+    ]
+  },
+  {
+    "id": "path-23",
+    "title": "采样估计与强化学习",
+    "posts": [
+      "importance-sampling",
+      "gae",
+      "ppo"
+    ]
+  },
+  {
+    "id": "path-24",
+    "title": "树搜索与 AlphaGo",
+    "posts": [
+      "bellman-equations",
+      "mcts",
+      "alphago"
+    ]
+  },
+  {
+    "id": "path-25",
+    "title": "提示推理到 Agent",
+    "posts": [
+      "chain-of-thought",
+      "self-consistency",
+      "react",
+      "swe-agent"
+    ]
+  },
+  {
+    "id": "path-26",
+    "title": "检索式规划与工具使用",
+    "posts": [
+      "mcts",
+      "react",
+      "swe-agent"
+    ]
+  },
+  {
+    "id": "path-27",
+    "title": "门控和状态更新",
+    "posts": [
+      "rnn",
+      "neural-gating",
+      "deltanet"
+    ]
+  },
+  {
+    "id": "path-28",
+    "title": "聚类的硬分配与软分配",
+    "posts": [
+      "k-means",
+      "gmm"
+    ]
+  },
+  {
+    "id": "path-29",
+    "title": "模型评估与模型边界",
+    "posts": [
+      "logistic-regression",
+      "roc-auc",
+      "knn"
+    ]
+  }
+]
