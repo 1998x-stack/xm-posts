@@ -2049,5 +2049,35 @@
       "src": "assets/cover-mixture.svg",
       "caption": "RAG-Sequence 整句共享文档，RAG-Token 逐词混合证据"
     }
+  },
+  {
+    "slug": "model-context-protocol",
+    "category": "agents",
+    "topic": "tool-integration-protocols",
+    "title": "Understanding Model Context Protocol (MCP)",
+    "subtitle": "从 Host、Client、Server 到无状态协议：理解 AI 应用如何标准化连接外部工具与数据。",
+    "summary": "深度拆解 MCP 的架构角色、Tools / Resources / Prompts、JSON-RPC 调用链、STDIO 与 Streamable HTTP、2026-07-28 无状态规范、Function Calling 边界，以及 Prompt Injection、Tool Poisoning、OAuth 令牌受众和人工审批等安全设计。",
+    "published": "2026-11-21",
+    "updated": "2026-11-21",
+    "status": "draft",
+    "reading_minutes": 32,
+    "paper": "https://modelcontextprotocol.io/specification/2026-07-28",
+    "tags": [
+      "MCP",
+      "Model Context Protocol",
+      "Agent Infrastructure",
+      "Tool Interoperability",
+      "Function Calling",
+      "Tool Calling",
+      "JSON-RPC",
+      "Streamable HTTP",
+      "Agent Security",
+      "OAuth",
+      "Tools Resources Prompts"
+    ],
+    "cover": {
+      "src": "assets/architecture.svg",
+      "caption": "Host、Client、Server 与外部系统之间的职责边界"
+    }
   }
 ]
