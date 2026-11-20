@@ -156,7 +156,7 @@ footer{margin-top:4rem;padding-top:1.2rem;border-top:1px solid var(--line);font-
 <div class="warning"><strong>必须划清的边界：</strong>Jev 的类型安全保证输出落在预先声明的结构和答案空间中；它不保证答案符合事实。一个格式完全合法的错误选择，仍然可能触发错误的退款、封禁或工具调用。</div>
 <h3>截至 2026-11-21 的公开版本</h3>
 <p>TypeSafe 当前模型文档列出的最新稳定版本是 <code>jev-1.14.0</code>，<code>jev-latest</code> 指向该版本。1.14 增加了 Box 问题类型；Choice、Score、Noul 仍是本文讨论的核心决策原语。[3]</p>
-<p>TypeSafe 公开了 API、问题类型和训练目标说明，但这些信息不足以重建其完整模型架构、参数规模或训练数据。RLCD（Reinforcement Learning for Calibrated Decisions）是厂商对训练方法的命名；不能仅凭名称推断其具体损失函数、采样算法或内部网络结构。[1][4]</p>
+<p>TypeSafe 公开了 API、问题类型和训练目标说明，但这些信息不足以重建其完整模型架构、参数规模或训练数据。RLCD（Reinforcement Learning for Calibrated Decisions）是厂商对训练方法的命名；不能仅凭名称推断其具体损失函数、采样算法或内部网络结构。[1][4] 发布文章还使用了“cannot hallucinate”的营销表述，但同一文章明确说明其零类型错误图并非经验测量，而是由 schema matching 的结构保证得出。因此，合理的工程解释是“输出类型和结构受约束”，而不是“模型永远不会做出事实错误的判断”。</p>
 </section>
 
 <section id="primitives">
@@ -501,7 +501,7 @@ decision = choose_with_review(
 
 assert decision.action == "review"
 assert abs(decision.risks["route_billing"] - 1.30) &lt; 1e-9</code></pre>
-<p>完整的可运行实现和测试位于文章目录：<a href="jev_decision_policy.py">jev_decision_policy.py</a> 与 <a href="test_jev_decision_policy.py">test_jev_decision_policy.py</a>。它们只使用 Python 标准库。</p>
+<p>完整的可运行实现和测试位于仓库源码：<a href="https://github.com/1998x-stack/xm-posts/blob/main/posts/decision-models/typed-decision-models/jev_decision_policy.py">jev_decision_policy.py</a> 与 <a href="https://github.com/1998x-stack/xm-posts/blob/main/posts/decision-models/typed-decision-models/test_jev_decision_policy.py">test_jev_decision_policy.py</a>。它们只使用 Python 标准库；GitHub Pages 只发布文章和静态资源，不会把 Python 源码作为可执行页面部署。</p>
 <h3>上线前至少验证这些不变量</h3>
 <ol class="checklist">
 <li>概率必须是有限数值、非负，且总和在容差范围内接近 1。</li>
