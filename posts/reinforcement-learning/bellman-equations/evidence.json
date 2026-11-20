@@ -1,0 +1,119 @@
+[
+  {
+    "id": "B01",
+    "claim": "Bellman 1952 establishes dynamic programming for multistage decision problems",
+    "kind": "historical",
+    "source_url": "https://doi.org/10.1073/pnas.38.8.716",
+    "locator": "PNAS 38(8), pp. 716–719",
+    "status": "verified",
+    "notes": "Source claim distinguished from the independently derived classroom MDP; no benchmark metrics asserted."
+  },
+  {
+    "id": "B02",
+    "claim": "Discounted returns satisfy G_t = R_{t+1}+gamma G_{t+1}; state and action values are conditional expectations",
+    "kind": "textbook",
+    "source_url": "https://web.stanford.edu/class/psych209/Readings/SuttonBartoIPRLBook2ndEd.pdf",
+    "locator": "2nd edition §3.3–3.5, Eq. (3.9)–(3.14)",
+    "status": "verified",
+    "notes": "Source claim distinguished from the independently derived classroom MDP; no benchmark metrics asserted."
+  },
+  {
+    "id": "B03",
+    "claim": "Bellman expectation equations sum over policy choices and joint next-state/reward probabilities",
+    "kind": "textbook",
+    "source_url": "https://web.stanford.edu/class/psych209/Readings/SuttonBartoIPRLBook2ndEd.pdf",
+    "locator": "§3.5 Eq. (3.14), Exercise 3.12 (action value)",
+    "status": "verified",
+    "notes": "Source claim distinguished from the independently derived classroom MDP; no benchmark metrics asserted."
+  },
+  {
+    "id": "B04",
+    "claim": "Optimality equations for v* and q* replace policy averages by maximization over legal actions",
+    "kind": "textbook",
+    "source_url": "https://web.stanford.edu/class/psych209/Readings/SuttonBartoIPRLBook2ndEd.pdf",
+    "locator": "§3.8 Eq. (3.16)–(3.17), Figure 3.7",
+    "status": "verified",
+    "notes": "Source claim distinguished from the independently derived classroom MDP; no benchmark metrics asserted."
+  },
+  {
+    "id": "B05",
+    "claim": "Finite MDP Bellman optimality equations have a unique value solution for discounted problems",
+    "kind": "textbook",
+    "source_url": "https://web.stanford.edu/class/psych209/Readings/SuttonBartoIPRLBook2ndEd.pdf",
+    "locator": "§3.8, paragraphs following Figure 3.7",
+    "status": "verified",
+    "notes": "Source claim distinguished from the independently derived classroom MDP; no benchmark metrics asserted."
+  },
+  {
+    "id": "B06",
+    "claim": "Policy evaluation, policy iteration, and value iteration rely on Bellman backups",
+    "kind": "textbook",
+    "source_url": "https://web.stanford.edu/class/psych209/Readings/SuttonBartoIPRLBook2ndEd.pdf",
+    "locator": "Chapter 4, §§4.1–4.4",
+    "status": "verified",
+    "notes": "Source claim distinguished from the independently derived classroom MDP; no benchmark metrics asserted."
+  },
+  {
+    "id": "B07",
+    "claim": "Discounted fixed-policy value satisfies v = r + gamma P v and (I-gamma P) inverse formulation",
+    "kind": "theory",
+    "source_url": "https://gradml.mit.edu/reinforcement/value_bellman/",
+    "locator": "Policy Iteration, matrix equation for x^pi",
+    "status": "verified",
+    "notes": "Source claim distinguished from the independently derived classroom MDP; no benchmark metrics asserted."
+  },
+  {
+    "id": "B08",
+    "claim": "Bellman optimality operator is a gamma contraction under the sup norm for discounted finite MDPs",
+    "kind": "theory",
+    "source_url": "https://gradml.mit.edu/reinforcement/value_bellman/",
+    "locator": "Value Iteration, contraction argument",
+    "status": "verified",
+    "notes": "Source claim distinguished from the independently derived classroom MDP; no benchmark metrics asserted."
+  },
+  {
+    "id": "B09",
+    "claim": "A single-state stop-vs-loop teaching MDP has Vpi=(1−0.7p)/(1−gamma p) and V*=max(1,0.3/(1−gamma))",
+    "kind": "toy-derivation",
+    "source_url": "https://gradml.mit.edu/reinforcement/value_bellman/",
+    "locator": "Independent example applying Bellman operator; arithmetic checked by mini_bellman.py",
+    "status": "derived",
+    "notes": "Source claim distinguished from the independently derived classroom MDP; no benchmark metrics asserted."
+  },
+  {
+    "id": "B10",
+    "claim": "Tabular Q-learning updates action-value estimates toward a sampled max-next-action target",
+    "kind": "historical-algorithm",
+    "source_url": "https://doi.org/10.1007/BF00992698",
+    "locator": "Watkins & Dayan 1992, algorithm and theorem scope",
+    "status": "verified",
+    "notes": "Source claim distinguished from the independently derived classroom MDP; no benchmark metrics asserted."
+  },
+  {
+    "id": "B11",
+    "claim": "DQN uses neural network Q estimates, replay and a target network",
+    "kind": "later-method",
+    "source_url": "https://storage.googleapis.com/deepmind-media/dqn/DQNNaturePaper.pdf",
+    "locator": "Mnih et al. 2015, Methods and Algorithm 1",
+    "status": "verified",
+    "notes": "Source claim distinguished from the independently derived classroom MDP; no benchmark metrics asserted."
+  },
+  {
+    "id": "B12",
+    "claim": "All six diagrams are newly authored conceptual teaching visualizations, not copied from source figures",
+    "kind": "illustration",
+    "source_url": "https://web.stanford.edu/class/psych209/Readings/SuttonBartoIPRLBook2ndEd.pdf",
+    "locator": "Independent diagrams informed by §§3.5–3.8",
+    "status": "illustrative",
+    "notes": "Source claim distinguished from the independently derived classroom MDP; no benchmark metrics asserted."
+  },
+  {
+    "id": "B13",
+    "claim": "Timed truncation and true termination have different bootstrap semantics in standard continuing formulation",
+    "kind": "implementation-caveat",
+    "source_url": "https://web.stanford.edu/class/psych209/Readings/SuttonBartoIPRLBook2ndEd.pdf",
+    "locator": "§3.4 episodic vs continuing tasks; implementation caveat not paper experiment",
+    "status": "derived",
+    "notes": "Source claim distinguished from the independently derived classroom MDP; no benchmark metrics asserted."
+  }
+]
