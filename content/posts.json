@@ -923,5 +923,29 @@
     "summary": "从两动作概率学习切入，以 Williams 1992 原文为证据推导 score-function 梯度、伯努利 logit、原始 eligibility 规则，再区分现代 reward-to-go 与 baseline，配五幅机制图、精确枚举交互及可复现 Python 测试。",
     "paper": "https://doi.org/10.1007/BF00992696",
     "illustration": "reinforce"
+  },
+  {
+    "slug": "noisynet",
+    "title": "Understanding NoisyNet",
+    "subtitle": "为什么可学习的参数噪声能带来更连贯的强化学习探索？",
+    "category": "reinforcement-learning",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 35,
+    "tags": [
+      "NoisyNet",
+      "Noisy Networks for Exploration",
+      "Exploration",
+      "Parameter Space Noise",
+      "Factorised Gaussian Noise",
+      "NoisyLinear",
+      "DQN",
+      "Dueling",
+      "A3C"
+    ],
+    "summary": "精读 Fortunato et al. ICLR 2018：图解参数噪声的时间一致性、可学习 μ/σ、因子化高斯采样及重参数化梯度，区分 NoisyNet-DQN、Dueling 与 A3C，核验 Atari-57 Table 1。含六幅独立 SVG、MathML、双动作交互与标准库 Python 断言。",
+    "paper": "https://arxiv.org/abs/1706.10295",
+    "illustration": "noisynet"
   }
 ]

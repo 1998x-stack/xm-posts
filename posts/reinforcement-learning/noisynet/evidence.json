@@ -1,0 +1,173 @@
+[
+  {
+    "id": "N01",
+    "claim": "Parameter-space noise induces coherent state-dependent exploratory policies",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/pdf/1706.10295",
+    "locator": "§1 Introduction, p.2",
+    "status": "verified",
+    "notes": "Contrasts action-step dithering with perturbations fixed over multiple states."
+  },
+  {
+    "id": "N02",
+    "claim": "Learnable weight and bias means/scales parameterize noisy linear layer",
+    "kind": "equation",
+    "source_url": "https://arxiv.org/pdf/1706.10295",
+    "locator": "§3 Eq. (8)–(9), p.4",
+    "status": "verified",
+    "notes": "Shapes q×p and q; epsilon is not a learned parameter."
+  },
+  {
+    "id": "N03",
+    "claim": "Independent Gaussian uses pq+q random variables per linear layer",
+    "kind": "equation",
+    "source_url": "https://arxiv.org/pdf/1706.10295",
+    "locator": "§3(a), p.4",
+    "status": "verified",
+    "notes": "Weights each have noise, biases too."
+  },
+  {
+    "id": "N04",
+    "claim": "Factorised Gaussian uses p+q random variables with f(z)=sgn(z)sqrt(abs(z))",
+    "kind": "equation",
+    "source_url": "https://arxiv.org/pdf/1706.10295",
+    "locator": "§3(b), Eq. (10)–(11), p.5",
+    "status": "verified",
+    "notes": "Input and output independent Gaussian vectors."
+  },
+  {
+    "id": "N05",
+    "claim": "Expected noisy loss gradient uses reparameterisation and one-sample MC estimator",
+    "kind": "equation",
+    "source_url": "https://arxiv.org/pdf/1706.10295",
+    "locator": "§3 Eq. (12)–(13), p.5",
+    "status": "verified",
+    "notes": "Learns mu and sigma by RL gradient descent."
+  },
+  {
+    "id": "N06",
+    "claim": "Factorised sigma initialized at sigma0/sqrt(p), sigma0=0.5; independent sigma at 0.017",
+    "kind": "implementation",
+    "source_url": "https://arxiv.org/pdf/1706.10295",
+    "locator": "§3.2, p.6",
+    "status": "verified",
+    "notes": "Separate initialization conventions."
+  },
+  {
+    "id": "N07",
+    "claim": "DQN and Dueling replace epsilon-greedy with greedy actions under sampled noisy Q",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/pdf/1706.10295",
+    "locator": "§3.1 Deep Q-Networks and Dueling, p.5",
+    "status": "verified",
+    "notes": "Still retain replay and target networks."
+  },
+  {
+    "id": "N08",
+    "claim": "DQN online noise fixed for replay batch, resampled after optimisation; online and target noises independent",
+    "kind": "implementation",
+    "source_url": "https://arxiv.org/pdf/1706.10295",
+    "locator": "§3.1 Eq. (14), p.5",
+    "status": "verified",
+    "notes": "Action uses another independent online noise sample."
+  },
+  {
+    "id": "N09",
+    "claim": "NoisyNet-Dueling uses online-selected action and target-evaluated Q value",
+    "kind": "equation",
+    "source_url": "https://arxiv.org/pdf/1706.10295",
+    "locator": "§3.1 Eq. (15)–(16), p.6",
+    "status": "verified",
+    "notes": "Double DQN-style target."
+  },
+  {
+    "id": "N10",
+    "claim": "NoisyNet-A3C removes entropy bonus, uses independent Gaussian noise, maintains sample across rollout",
+    "kind": "implementation",
+    "source_url": "https://arxiv.org/pdf/1706.10295",
+    "locator": "§3.1 Eq. (17), p.6",
+    "status": "verified",
+    "notes": "A3C continues sampling actions from stochastic policy."
+  },
+  {
+    "id": "N11",
+    "claim": "Evaluation covers 57 Atari games with DQN 200M and A3C 320M frames",
+    "kind": "experiment",
+    "source_url": "https://arxiv.org/pdf/1706.10295",
+    "locator": "§4.1, p.7",
+    "status": "verified",
+    "notes": "Baseline and NoisyNet variants aligned per algorithm."
+  },
+  {
+    "id": "N12",
+    "claim": "HNS is normalized using human and random per-game scores",
+    "kind": "equation",
+    "source_url": "https://arxiv.org/pdf/1706.10295",
+    "locator": "§4.1 Eq. (18), p.7",
+    "status": "verified",
+    "notes": "Cross-game means and medians."
+  },
+  {
+    "id": "N13",
+    "claim": "Table 1 DQN mean 319 to 379 and median 83 to 123",
+    "kind": "experiment",
+    "source_url": "https://arxiv.org/pdf/1706.10295",
+    "locator": "§4.1 Table 1, p.8",
+    "status": "verified",
+    "notes": "48% relative median improvement."
+  },
+  {
+    "id": "N14",
+    "claim": "Table 1 Dueling mean 524 to 633 and median 132 to 172",
+    "kind": "experiment",
+    "source_url": "https://arxiv.org/pdf/1706.10295",
+    "locator": "§4.1 Table 1, p.8",
+    "status": "verified",
+    "notes": "30% relative median improvement."
+  },
+  {
+    "id": "N15",
+    "claim": "Table 1 A3C mean 293 to 347 and median 80 to 94",
+    "kind": "experiment",
+    "source_url": "https://arxiv.org/pdf/1706.10295",
+    "locator": "§4.1 Table 1, p.8",
+    "status": "verified",
+    "notes": "18% relative median improvement, rounded."
+  },
+  {
+    "id": "N16",
+    "claim": "Figure 3 noise scale of final layer decreases but penultimate varies by game",
+    "kind": "experiment",
+    "source_url": "https://arxiv.org/pdf/1706.10295",
+    "locator": "§4.2 Figure 3, p.9",
+    "status": "verified",
+    "notes": "No universal decay of sigma."
+  },
+  {
+    "id": "N17",
+    "claim": "Authors note benefits may include optimization as well as exploration",
+    "kind": "limitation",
+    "source_url": "https://arxiv.org/pdf/1706.10295",
+    "locator": "§5 Conclusion, p.9",
+    "status": "verified",
+    "notes": "Avoid attributing all gain causally only to exploration."
+  },
+  {
+    "id": "N18",
+    "claim": "Toy action-value lab, sampling count and gradient calculations are deterministic teaching examples",
+    "kind": "toy",
+    "source_url": "https://arxiv.org/pdf/1706.10295",
+    "locator": "Article §9, §13 and mini_noisynet.py",
+    "status": "derived",
+    "notes": "Not a full Atari reproduction."
+  },
+  {
+    "id": "N19",
+    "claim": "Six independently authored standalone SVGs illustrate mechanisms and paper table",
+    "kind": "illustration",
+    "source_url": "https://arxiv.org/pdf/1706.10295",
+    "locator": "Article Figures 1–6 and assets",
+    "status": "illustrative",
+    "notes": "Original diagrams; not paper figure reproductions."
+  }
+]
