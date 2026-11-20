@@ -136,5 +136,25 @@
     "summary": "以同题四条回答为直觉起点，图解组内优势、PPO clipped objective、参考 KL、token mask 与 DeepSeekMath 原始实验；区分 DAPO、Dr. GRPO 等后续变体。",
     "paper": "https://arxiv.org/abs/2402.03300",
     "illustration": "grpo"
+  },
+  {
+    "slug": "rlhf",
+    "title": "Understanding RLHF",
+    "subtitle": "从偏好比较到奖励模型：为什么让人满意的答案需要另一种训练目标？",
+    "category": "training",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 32,
+    "tags": [
+      "RLHF",
+      "Reward Modeling",
+      "PPO",
+      "KL Regularization",
+      "Alignment"
+    ],
+    "summary": "以 InstructGPT 为主案例，渐进图解 SFT、偏好数据、Bradley–Terry 奖励模型、PPO 与参考 KL，解释 PPO-ptx 和局限，附两项交互实验、最小数学断言与论文证据。",
+    "paper": "https://arxiv.org/abs/2203.02155",
+    "illustration": "rlhf"
   }
 ]

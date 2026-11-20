@@ -14,11 +14,12 @@
 | **Understanding Transformer** | 为什么用 Self-Attention 替代循环结构？ | [`posts/architectures/transformer/`](posts/architectures/transformer/index.html) | [Vaswani et al.](https://arxiv.org/abs/1706.03762) |
 | **Understanding Pre-LN vs Post-LN** | LayerNorm 改动为何影响残差梯度与 warm-up？ | [`posts/architectures/pre-ln-vs-post-ln/`](posts/architectures/pre-ln-vs-post-ln/index.html) | [Xiong et al. (ICML 2020)](https://proceedings.mlr.press/v119/xiong20b.html) |
 | **Understanding SVM** | 为什么分对了仍需最大间隔？ | [`posts/classical-ml/svm/`](posts/classical-ml/svm/index.html) | [Cortes & Vapnik (1995)](https://doi.org/10.1007/BF00994018) |
+| **Understanding RLHF** | 为什么示范微调还需要人类偏好与策略优化？ | [`posts/training/rlhf/`](posts/training/rlhf/index.html) | [Ouyang et al. (2022)](https://arxiv.org/abs/2203.02155) |
 | **Understanding GRPO** | 为什么不需要 Critic 也能构造策略优势？ | [`posts/training/grpo/`](posts/training/grpo/index.html) | [Shao et al. (2024)](https://arxiv.org/abs/2402.03300) |
 | **Understanding Word2Vec** | 为什么上下文预测能产生词向量？ | [`posts/foundations/understanding-word2vec/`](posts/foundations/understanding-word2vec/index.html) | [Mikolov et al. (2013)](https://arxiv.org/abs/1301.3781) · [NeurIPS 2013](https://arxiv.org/abs/1310.4546) |
 | **Understanding AdamW** | 为什么 Adam 的 L₂ 与 Weight Decay 不等价？ | [`posts/foundations/adamw/`](posts/foundations/adamw/index.html) | [Loshchilov & Hutter (ICLR 2019)](https://arxiv.org/abs/1711.05101) |
 
-Pre-LN vs Post-LN 具有 12 节解读、5 幅独立 SVG、交互式平移实验和纯 Python 的 Jacobian 数值检查；ResNet 具有 11 节解读与 10 幅独立 SVG；Transformer 具有 16 节解读与 13 幅独立 SVG，另有最小 PyTorch Attention 示例；SVM 具有 12 节机制推导、6 幅独立 SVG、可调 RBF 相似度矩阵和纯 Python 一维解析示例；Word2Vec 具有 12 节精读、5 幅内嵌原创图、7 份独立 SVG、SGNS 训练器和数值梯度校验。AdamW 具有 14 节渐进推导、6 幅独立 SVG、二维预条件器交互实验与纯 Python Adam/AdamW 代码断言。GRPO 具有 11 节深度解读、4 幅独立 SVG、可交互优势示例和 Python 断言测试。文章在发布前经过静态内容核验、浏览器布局与交互检查；教学简化、原论文和后续变体需明确区分。
+Pre-LN vs Post-LN 具有 12 节解读、5 幅独立 SVG、交互式平移实验和纯 Python 的 Jacobian 数值检查；ResNet 具有 11 节解读与 10 幅独立 SVG；Transformer 具有 16 节解读与 13 幅独立 SVG，另有最小 PyTorch Attention 示例；SVM 具有 12 节机制推导、6 幅独立 SVG、可调 RBF 相似度矩阵和纯 Python 一维解析示例；Word2Vec 具有 12 节精读、5 幅内嵌原创图、7 份独立 SVG、SGNS 训练器和数值梯度校验。AdamW 具有 14 节渐进推导、6 幅独立 SVG、二维预条件器交互实验与纯 Python Adam/AdamW 代码断言。GRPO 具有 11 节深度解读、4 幅独立 SVG、可交互优势示例和 Python 断言测试。RLHF 从 SFT、奖励模型与 PPO 出发，包含 12 节推导、4 幅机制图、2 个交互实验和最小数学断言。文章在发布前经过静态内容核验、浏览器布局与交互检查；教学简化、原论文和后续变体需明确区分。
 
 ## 内容分类
 
