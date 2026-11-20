@@ -11,3 +11,5 @@
 - [Understanding DPO](dpo/index.html) — Rafailov et al. (NeurIPS 2023)，隐式奖励、成对偏好、KL 正则化与离线对齐。
 
 相关子主题：Preference Optimization / RLHF。DPO 属于训练与对齐，不另建同义的顶层类别。
+
+- [Understanding Chinchilla](chinchilla/index.html) — Hoffmann et al. (NeurIPS 2022)：固定训练算力、参数/token 比、IsoFLOP 和三种 scaling-law 估计；属于 Pretraining → Scaling Laws / Compute-Optimal Training。

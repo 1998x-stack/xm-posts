@@ -447,5 +447,26 @@
     "summary": "从局部感受野、共享核、空间形状和梯度累积，到 1998 原始 LeNet-5 的部分连接、可学习池化与 RBF 输出；配八幅独立机制图、交互滑窗、MathML 推导及纯 Python 数值验证。",
     "paper": "https://doi.org/10.1109/5.726791",
     "illustration": "cnn"
+  },
+  {
+    "slug": "chinchilla",
+    "title": "Understanding Chinchilla",
+    "subtitle": "固定训练预算下，参数量与数据量怎样分配？从 IsoFLOP 到 Scaling Laws",
+    "category": "training",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 32,
+    "tags": [
+      "Chinchilla",
+      "Compute-Optimal Training",
+      "Scaling Laws",
+      "Pretraining",
+      "IsoFLOP",
+      "Training Compute"
+    ],
+    "summary": "以 Hoffmann et al. (NeurIPS 2022) 为主线，拆解 6ND 预算约束、三种经验缩放方法、幂律损失解析推导、70B/1.4T 验证、部署成本边界，并提供五幅机制图、MathML 公式、交互计算器与确定性数学测试。",
+    "paper": "https://arxiv.org/abs/2203.15556",
+    "illustration": "chinchilla"
   }
 ]
