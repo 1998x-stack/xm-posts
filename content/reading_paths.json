@@ -348,5 +348,15 @@
       "agent-memory-components",
       "harness-engineering"
     ]
+  },
+  {
+    "id": "path-38",
+    "title": "从 Agent 行动机制到系统评测与可靠性",
+    "posts": [
+      "react",
+      "agent-evaluation",
+      "swe-agent",
+      "agent-memory-components"
+    ]
   }
 ]
