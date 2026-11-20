@@ -1,5 +1,15 @@
 [
   {
+    "id": "path-37",
+    "title": "从模型评审到偏好对齐",
+    "posts": [
+      "llm-as-a-judge",
+      "rlhf",
+      "dpo",
+      "grpo"
+    ]
+  },
+  {
     "id": "path-01",
     "title": "线性模型与分类评估",
     "posts": [
