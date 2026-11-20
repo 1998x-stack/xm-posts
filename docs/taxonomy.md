@@ -31,7 +31,11 @@
 4. 占位目录必须使用精确的注册 slug。新增 Topic 优先写分类元数据，再添加 `_topics/` 的 README；单篇新文章通常不值得新增一级分类。若新领域横跨多个现有分类、拥有独立的方法论与多条可持续研究线，则可以新增一级分类，但必须先写清边界并规划稳定 Topic。
 5. Draft 必须继续以 `status: draft` 保持离线，不要将规划中的 README 当作 `published` 条目。
 
-## 2026-11 新增：Knowledge Representation & Semantic Technologies\n\n新增一级分类用于承载显式符号知识与形式语义研究。现有 `foundations / representation` 主要讨论学习型向量表示，`architectures / graph-neural-networks` 讨论神经网络上的消息传递，`retrieval-rag` 讨论检索与生成应用；它们都不能完整覆盖概念定义、公理、语义 Web 标准、知识图谱 Schema、逻辑推理和本体生命周期。新分类规划五条稳定 Topic：Ontology Engineering、Semantic Web Standards、Knowledge Graphs、Logical Reasoning、Ontology Learning & Alignment。首篇正式文章为 `posts/knowledge-representation/ontology/`。\n\n## 2026-11 分类占位整合
+## 2026-11 新增：Knowledge Representation & Semantic Technologies
+
+新增一级分类用于承载显式符号知识与形式语义研究。现有 `foundations / representation` 主要讨论学习型向量表示，`architectures / graph-neural-networks` 讨论神经网络上的消息传递，`retrieval-rag` 讨论检索与生成应用；它们都不能完整覆盖概念定义、公理、语义 Web 标准、知识图谱 Schema、逻辑推理和本体生命周期。新分类规划五条稳定 Topic：Ontology Engineering、Semantic Web Standards、Knowledge Graphs、Logical Reasoning、Ontology Learning & Alignment。首篇正式文章为 `posts/knowledge-representation/ontology/`。
+
+## 2026-11 分类占位整合
 
 | 原占位目录（未注册 ID） | 归并到已注册的主 topic |
 | --- | --- |
