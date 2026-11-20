@@ -34,7 +34,8 @@
 | 经典机器学习 | [Logistic Regression](posts/classical-ml/logistic-regression/index.html) | [K-Means](posts/classical-ml/k-means/index.html) · [SVM](posts/classical-ml/svm/index.html) |
 | 神经网络架构 | [ResNet](posts/architectures/resnet/index.html) | [Transformer](posts/architectures/transformer/index.html) · [Multi-Head Attention](posts/architectures/multi-head-attention/index.html) |
 | 训练与优化 | [SGD](posts/foundations/sgd/index.html) | [AdamW](posts/foundations/adamw/index.html) · [LoRA](posts/training/lora/index.html) |
-| 强化学习与智能体 | [Bellman Equations](posts/reinforcement-learning/bellman-equations/index.html) | [MCTS](posts/reinforcement-learning/mcts/index.html) · [ReAct](posts/agents/react/index.html) · [Function Calling](posts/agents/function-calling/index.html) |
+| 强化学习 | [Bellman Equations](posts/reinforcement-learning/bellman-equations/index.html) | [MCTS](posts/reinforcement-learning/mcts/index.html) |
+| Agent 工程化 | [ReAct](posts/agents/react/index.html) | [Function Calling](posts/agents/function-calling/index.html) · [SWE-agent](posts/agents/swe-agent/index.html) · [Agent Memory](posts/agents/agent-memory-components/index.html) · [Harness Engineering](posts/agents/harness-engineering/index.html) |
 | LLM 推理与系统 | [KV Cache](posts/inference/kv-cache/index.html) | [GQA](posts/architectures/gqa/index.html) · [FlashAttention](posts/systems/flashattention/index.html) |
 
 **完整且权威的文章清单是 [`content/posts.json`](content/posts.json)**。新文章通过发布门禁后自动进入网站归档与 RSS；不要根据 README 的示例表格统计文章数量。
@@ -46,12 +47,14 @@
 - **Foundations / Classical ML**：数学、优化、表示学习、分词与经典机器学习。
 - **Architectures**：CNN、RNN、Transformer、Attention、MoE、SSM 等模型结构。
 - **Training / Reinforcement Learning**：预训练、对齐、PEFT、价值与策略学习及搜索。
-- **Reasoning / Agents & Tool Use**：推理策略、工具调用、规划和智能体工作流。
+- **Reasoning / Agents & Tool Use**：推理策略、工具调用、规划、Agent Memory、Harness Engineering 与可验证智能体工作流。
 - **Retrieval & RAG / Inference**：向量检索、增强生成、解码、KV Cache、请求调度与 Serving。
 - **Systems / Datasets / Evaluation / Multimodal**：算子与 GPU、数据、评测和多模态。
 - **Storage & Indexing**：B+ Tree、存储页、LSM、事务与索引结构。
 
 以上仅是导航概览。**分类、稳定 slug 和二级主题的唯一数据源是 [`content/categories.json`](content/categories.json)**；每篇文章在 `content/posts.json` 中只能有一个主 `category` 和 `topic`，跨领域关系使用 `tags`。详细约定见 [`docs/taxonomy.md`](docs/taxonomy.md)。
+
+**分类决策示例**：Function Calling 归入 `agents → tool-calling`，不另建一级分类；Harness Engineering 则作为独立 Agent 工程主题，与工具调用通过阅读路径关联。
 
 `_topics/` 下的 README 是规划占位，不会作为正式文章发布。分类或文章 slug 一旦对外公开，原则上保持稳定。
 

@@ -340,5 +340,16 @@
       "rlhf",
       "dpo"
     ]
+  },
+  {
+    "id": "path-37",
+    "title": "从工具调用到可验证的软件工程 Agent",
+    "posts": [
+      "react",
+      "function-calling",
+      "swe-agent",
+      "agent-memory-components",
+      "harness-engineering"
+    ]
   }
 ]

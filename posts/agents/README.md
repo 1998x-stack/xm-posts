@@ -1,12 +1,13 @@
 # 智能体与工具使用 / Agents & Tool Use
 
-本分类专注模型与外界交互的行动闭环：ReAct、Planning、Tool Calling、Memory、Software Engineering Agents & ACI、Agent Evaluation。
+本分类专注模型与外界交互的行动闭环：ReAct、Planning、Tool Calling、Memory、Software Engineering Agents & ACI、Harness Engineering、Agent Evaluation。
 
 ## 正式文章
 
 - [ReAct](react/) — Thought / Action / Observation 交错；理解模型如何在推理与外部观察之间更新计划。
 - [Function Calling](function-calling/) — 从工具声明、JSON Schema、调用 ID 到应用侧执行、权限验证、结果回传与端到端评测。
 - [Software Engineering Agents & ACI](swe-agent/) — SWE-agent：代码搜索、编辑、错误护栏、上下文管理与软件修复评测。
+- [Harness Engineering](harness-engineering/) — 从 Codex 与 Claude 工程实践理解 Agent Runtime、上下文交接、工具、安全、独立评估与维护治理。
 
 ## 专题占位
 

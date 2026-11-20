@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 340" role="img" aria-labelledby="h1-title h1-desc">
+<title id="h1-title">Model, Harness, Environment 三层系统边界</title>
+<desc id="h1-desc">模型提供推理能力，Harness 管理上下文、工具、状态、安全和验证，环境提供代码仓库、命令、测试和运行时反馈；两条反馈路径让系统迭代。</desc>
+<rect width="900" height="340" rx="22" fill="#f5f8f5"/>
+<g font-family="system-ui,-apple-system,Segoe UI,PingFang SC,sans-serif">
+<text x="32" y="38" fill="#526d69" font-size="14" font-weight="700" letter-spacing="2">THE UNIT OF ANALYSIS IS THE COMPOSED SYSTEM</text>
+<rect x="36" y="80" width="220" height="174" rx="16" fill="#e7f0fa" stroke="#9bb8d1" stroke-width="2"/>
+<text x="146" y="121" text-anchor="middle" fill="#315f83" font-size="23" font-weight="750">Foundation Model</text>
+<text x="146" y="158" text-anchor="middle" fill="#466879" font-size="16">理解 · 推理 · 生成</text>
+<text x="146" y="187" text-anchor="middle" fill="#466879" font-size="14">latent capability</text>
+<text x="146" y="220" text-anchor="middle" fill="#466879" font-size="13">不是完整的软件工程系统</text>
+<rect x="340" y="61" width="220" height="212" rx="18" fill="#e5f3eb" stroke="#4b9c82" stroke-width="3"/>
+<text x="450" y="103" text-anchor="middle" fill="#226d5b" font-size="26" font-weight="800">Harness</text>
+<text x="450" y="139" text-anchor="middle" fill="#376e63" font-size="15">Context · Tools · State</text>
+<text x="450" y="165" text-anchor="middle" fill="#376e63" font-size="15">Safety · Observability</text>
+<text x="450" y="191" text-anchor="middle" fill="#376e63" font-size="15">Verification · Recovery</text>
+<text x="450" y="235" text-anchor="middle" fill="#226d5b" font-size="13" font-weight="700">把能力变成可执行流程</text>
+<rect x="644" y="80" width="220" height="174" rx="16" fill="#fff0e5" stroke="#d7a47d" stroke-width="2"/>
+<text x="754" y="121" text-anchor="middle" fill="#9b5e36" font-size="23" font-weight="750">Environment</text>
+<text x="754" y="158" text-anchor="middle" fill="#8c674f" font-size="16">Repository · Shell</text>
+<text x="754" y="187" text-anchor="middle" fill="#8c674f" font-size="16">Tests · Browser · Logs</text>
+<text x="754" y="220" text-anchor="middle" fill="#8c674f" font-size="13">真实状态与可观测结果</text>
+<path d="M265 166H330 M320 157L330 166L320 175" stroke="#438a7d" stroke-width="3" fill="none" stroke-linecap="round"/>
+<path d="M565 166H634 M624 157L634 166L624 175" stroke="#438a7d" stroke-width="3" fill="none" stroke-linecap="round"/>
+<path d="M754 263V300H450V282" stroke="#c47e50" stroke-width="2.5" fill="none" stroke-dasharray="6 5"/>
+<path d="M441 291L450 282L459 291" stroke="#c47e50" stroke-width="2.5" fill="none"/>
+<text x="600" y="326" fill="#8a664c" font-size="13" text-anchor="middle">执行结果、测试与日志回流</text>
+</g></svg>
