@@ -1,0 +1,92 @@
+[
+  {
+    "id": "AW01",
+    "claim": "Standard SGD can equate direct per-step decay and L2 penalty when coefficient is rescaled by learning rate",
+    "kind": "paper-proposition",
+    "source_url": "https://arxiv.org/abs/1711.05101",
+    "locator": "§2 Proposition 1; Appendix A, equations (5)–(6)",
+    "status": "verified",
+    "notes": "Paper's decay lambda per step differs from modern library coupled weight decay coefficient."
+  },
+  {
+    "id": "AW02",
+    "claim": "For adaptive diagonal preconditioning that is not a scalar multiple of identity, general L2 regularization cannot reproduce decoupled decay",
+    "kind": "paper-proposition",
+    "source_url": "https://arxiv.org/abs/1711.05101",
+    "locator": "§2 Proposition 2; Appendix A, equations (7)–(8)",
+    "status": "verified",
+    "notes": "The two-coordinate fixed preconditioner is a pedagogical derivation, not an exact Adam optimizer trajectory."
+  },
+  {
+    "id": "AW03",
+    "claim": "Original Algorithm 2 updates Adam moments with task gradient while adding a distinct eta_t lambda theta term for AdamW",
+    "kind": "paper-algorithm",
+    "source_url": "https://ar5iv.labs.arxiv.org/html/1711.05101",
+    "locator": "§2 Algorithm 2, lines 6–12",
+    "status": "verified",
+    "notes": "Interpret highlighted terms as alternatives; original eta_t lambda_paper is not modern lr_t lambda_impl without coefficient conversion."
+  },
+  {
+    "id": "AW04",
+    "claim": "ResNet 26 2x64d on CIFAR-10 at 100 epochs evaluates three schedules",
+    "kind": "experiment",
+    "source_url": "https://ar5iv.labs.arxiv.org/html/1711.05101",
+    "locator": "§4.1; Figure 1 caption",
+    "status": "verified",
+    "notes": "Fixed, step-drop, cosine; no numeric values copied from heatmaps."
+  },
+  {
+    "id": "AW05",
+    "claim": "CIFAR-10 100-epoch hyperparameter searches show more separable good regions for AdamW",
+    "kind": "experiment",
+    "source_url": "https://ar5iv.labs.arxiv.org/html/1711.05101",
+    "locator": "§4.2; Figure 2 caption",
+    "status": "verified",
+    "notes": "Diagram 05 is non-empirical schematic and not an extraction or reproduction of Figure 2."
+  },
+  {
+    "id": "AW06",
+    "claim": "Longer-run generalization comparison studies ResNet 26 2x96d on CIFAR-10 to 1800 epochs",
+    "kind": "experiment",
+    "source_url": "https://ar5iv.labs.arxiv.org/html/1711.05101",
+    "locator": "§4.3; Figure 3",
+    "status": "verified",
+    "notes": "Original paper reports similar-training-loss comparisons; no result directly reproduced here."
+  },
+  {
+    "id": "AW07",
+    "claim": "The authors report 15 percent relative test error improvement at alpha=0.001 on CIFAR-10 Top-1 and ImageNet32x32 Top-5",
+    "kind": "experiment",
+    "source_url": "https://ar5iv.labs.arxiv.org/html/1711.05101",
+    "locator": "§4.4, paragraph after Figure 4; Figure 4 caption",
+    "status": "verified",
+    "notes": "Relative test error, not percentage point accuracy gain; original paper settings only."
+  },
+  {
+    "id": "AW08",
+    "claim": "PyTorch AdamW does not accumulate weight decay in the first or second moment",
+    "kind": "modern-implementation",
+    "source_url": "https://docs.pytorch.org/docs/stable/generated/torch.optim.AdamW",
+    "locator": "Algorithm description",
+    "status": "verified",
+    "notes": "Documentation uses current learning rate and weight_decay coefficient; do not identify numeric coefficients with original paper."
+  },
+  {
+    "id": "AW09",
+    "claim": "In a fixed diagonal preconditioner toy example with theta=(1,1), alpha=0.1, lambda=0.1 and s=(1,5), coupled and decoupled second coordinates equal 0.998 and 0.990",
+    "kind": "toy-derivation",
+    "source_url": "https://arxiv.org/abs/1711.05101",
+    "locator": "Independently derived illustration from §2 Proposition 2",
+    "status": "derived",
+    "notes": "Exact arithmetic; not a historical benchmark."
+  },
+  {
+    "id": "AW10",
+    "claim": "Paper says broader task generalization tests remain necessary",
+    "kind": "paper-limitation",
+    "source_url": "https://ar5iv.labs.arxiv.org/html/1711.05101",
+    "locator": "§5 Conclusion",
+    "status": "verified",
+    "notes": "Do not imply universal gain for language models."
+  }
+]

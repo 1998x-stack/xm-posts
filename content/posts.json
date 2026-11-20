@@ -55,6 +55,109 @@
     "illustration": "svm"
   },
   {
+    "slug": "understanding-word2vec",
+    "title": "Understanding Word2Vec",
+    "subtitle": "词，如何找到自己的位置？从上下文预测到语义空间",
+    "category": "foundations",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 32,
+    "tags": [
+      "Word2Vec",
+      "Word Embeddings",
+      "CBOW",
+      "Skip-gram",
+      "Negative Sampling",
+      "SGNS"
+    ],
+    "summary": "从词窗自监督出发，图解 CBOW 与 Skip-gram，推导负采样损失和梯度，并用可运行的 NumPy SGNS 验证实现。",
+    "paper": "https://arxiv.org/abs/1301.3781",
+    "illustration": "word2vec"
+  },
+  {
+    "slug": "adamw",
+    "title": "Understanding AdamW",
+    "subtitle": "为什么 Adam 中的 L₂ 正则化，不等于真正的 Weight Decay？",
+    "category": "foundations",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 29,
+    "tags": [
+      "AdamW",
+      "Optimization",
+      "Decoupled Weight Decay",
+      "L2 Regularization",
+      "Adaptive Optimizers"
+    ],
+    "summary": "从 SGD 的 L₂ 等价推导出发，逐坐标追踪 Adam 动量和衰减的两条路径，对照 ICLR 2019 原论文实验、现代 PyTorch 语义，并用可交互的二维例子与确定性代码验证差异。",
+    "paper": "https://arxiv.org/abs/1711.05101",
+    "illustration": "adamw"
+  },
+  {
+    "slug": "pre-ln-vs-post-ln",
+    "title": "Understanding Pre-LN vs Post-LN",
+    "subtitle": "LayerNorm 放在哪里，为什么改变 Transformer 的训练？",
+    "category": "architectures",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 28,
+    "tags": [
+      "Pre-LN",
+      "Post-LN",
+      "LayerNorm",
+      "Residual Connection",
+      "Optimization",
+      "Transformer"
+    ],
+    "summary": "从恒等捷径与 LayerNorm 放置出发，推导局部梯度 Jacobian、核对 warm-up 论文证据，并用可交互数值实验理解 Pre-LN、Post-LN 与后续 DeepNorm、Peri-LN 设计。",
+    "paper": "https://proceedings.mlr.press/v119/xiong20b.html",
+    "illustration": "normalization"
+  },
+  {
+    "slug": "grpo",
+    "title": "Understanding GRPO",
+    "subtitle": "从组内相对奖励到 PPO 裁剪：不用 Critic 如何训练推理模型？",
+    "category": "training",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 30,
+    "tags": [
+      "GRPO",
+      "Group Relative Policy Optimization",
+      "PPO",
+      "RLHF",
+      "RLVR",
+      "Post-Training"
+    ],
+    "summary": "以同题四条回答为直觉起点，图解组内优势、PPO clipped objective、参考 KL、token mask 与 DeepSeekMath 原始实验；区分 DAPO、Dr. GRPO 等后续变体。",
+    "paper": "https://arxiv.org/abs/2402.03300",
+    "illustration": "grpo"
+  },
+  {
+    "slug": "rlhf",
+    "title": "Understanding RLHF",
+    "subtitle": "从偏好比较到奖励模型：为什么让人满意的答案需要另一种训练目标？",
+    "category": "training",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 32,
+    "tags": [
+      "RLHF",
+      "Reward Modeling",
+      "PPO",
+      "KL Regularization",
+      "Alignment"
+    ],
+    "summary": "以 InstructGPT 为主案例，渐进图解 SFT、偏好数据、Bradley–Terry 奖励模型、PPO 与参考 KL，解释 PPO-ptx 和局限，附两项交互实验、最小数学断言与论文证据。",
+    "paper": "https://arxiv.org/abs/2203.02155",
+    "illustration": "rlhf"
+  },
+  {
     "slug": "ppo",
     "title": "Understanding PPO",
     "subtitle": "为什么同一批经验能学多轮，却不能任意改写策略？",
