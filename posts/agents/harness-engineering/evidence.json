@@ -2,11 +2,11 @@
   {
     "id": "E01",
     "kind": "engineering-report",
-    "claim": "OpenAI 报告其 Codex agent-first 内部项目在约五个月内发展到约一百万行代码、约 1,500 个 PR，并估计构建时间约为手工方式的十分之一。",
+    "claim": "OpenAI 报告其 Codex agent-first 内部项目在约五个月内发展到约一百万行代码、约 1,500 个 PR，三名工程师阶段平均每人每天约 3.5 个 PR，并估计构建时间约为手工方式的十分之一；团队称产品代码、测试、CI、文档和内部工具均由 Codex 生成。",
     "source_url": "https://openai.com/index/harness-engineering/",
     "locator": "§1, paragraphs describing repository scale, PR throughput and estimated time",
     "status": "verified",
-    "notes": "这是 OpenAI 对内部项目的工程自述，不是独立控制实验或可外推的生产率保证。"
+    "notes": "这是 OpenAI 对内部项目的工程自述，不是独立控制实验或可外推的生产率保证；团队后续规模增长到七名工程师。"
   },
   {
     "id": "E02",
@@ -133,5 +133,14 @@
     "locator": "Article §03–04; synthesis of source frameworks",
     "status": "derived",
     "notes": "本文综合两篇预印本的分析单位，不声称两篇论文共享同一标准。"
+  },
+  {
+    "id": "E16",
+    "kind": "engineering-guidance",
+    "claim": "Anthropic Agent Skills 将能力封装为包含 SKILL.md、脚本和资源的目录，并使用渐进式披露按需加载额外上下文。",
+    "source_url": "https://www.anthropic.com/research/equipping-agents-for-the-real-world-with-agent-skills",
+    "locator": "§1 The anatomy of a skill; progressive disclosure",
+    "status": "verified",
+    "notes": "用于解释 Harness 的 extensibility surface；Skill 结构不是唯一可用的扩展机制。"
   }
 ]
