@@ -12,7 +12,9 @@
 |---|---|---|---|
 | **Understanding The Pile** | 为什么 22 种语料混合能增强跨领域文本建模？ | [`posts/datasets/the-pile/`](posts/datasets/the-pile/index.html) | [Gao et al. (2020)](https://arxiv.org/abs/2101.00027) |
 | **Understanding FlashAttention** | Attention 的 FLOPs 没变，为什么 GPU 仍能提速？ | [`posts/systems/flashattention/`](posts/systems/flashattention/index.html) | [Dao et al. (2022)](https://arxiv.org/abs/2205.14135) |
+| **Understanding AlexNet** | 为什么深层 CNN 能在 2012 ImageNet 上突破？卷积、ReLU、双 GPU 与真实集成指标 | [`posts/architectures/alexnet/`](posts/architectures/alexnet/index.html) | [Krizhevsky et al. (NeurIPS 2012)](https://papers.nips.cc/paper_files/paper/2012/file/c399862d3b9d6b76c8436e924a68c45b-Paper.pdf) |
 | **Understanding ResNet** | 网络越深，为什么训练反而可能更难？ | [`posts/architectures/resnet/`](posts/architectures/resnet/index.html) | [He et al.](https://arxiv.org/abs/1512.03385) |
+| **Understanding LSTM** | 为什么一千步前的线索仍可能影响当前输出？ | [`posts/architectures/lstm/`](posts/architectures/lstm/index.html) | [Hochreiter & Schmidhuber (1997)](https://doi.org/10.1162/neco.1997.9.8.1735) |
 | **Understanding RoPE** | 为什么旋转 Q/K 就能编码相对位置？ | [`posts/architectures/rope/`](posts/architectures/rope/index.html) | [Su et al., RoFormer](https://arxiv.org/abs/2104.09864) |
 | **Understanding Transformer** | 为什么用 Self-Attention 替代循环结构？ | [`posts/architectures/transformer/`](posts/architectures/transformer/index.html) | [Vaswani et al.](https://arxiv.org/abs/1706.03762) |
 | **Understanding Pre-LN vs Post-LN** | LayerNorm 改动为何影响残差梯度与 warm-up？ | [`posts/architectures/pre-ln-vs-post-ln/`](posts/architectures/pre-ln-vs-post-ln/index.html) | [Xiong et al. (ICML 2020)](https://proceedings.mlr.press/v119/xiong20b.html) |
@@ -41,7 +43,7 @@ The Pile 的 22 个来源按原论文 Table 1 给出有效采样权重，配五�
 |---|---|---|
 | 基础理论 | `posts/foundations/` | Adam、Word2Vec、词嵌入、优化器（AdamW）、正则化、表示学习 |
 | **经典机器学习** | `posts/classical-ml/` | SVM、核方法、线性与树模型 |
-| **模型架构** | `posts/architectures/` | ResNet、Transformer、Normalization & Residual Paths、状态空间模型 |
+| **模型架构** | `posts/architectures/` | AlexNet / CNN、ResNet、Transformer、Normalization & Residual Paths、状态空间模型 |
 | **强化学习** | `posts/reinforcement-learning/` | Policy Gradient、Actor–Critic、GAE、PPO/TRPO 与序贯决策 |
 | **数据与语料** | `posts/datasets/` | 预训练语料、数据清洗/去重、混合采样、污染检查与治理 |
 | 训练与对齐 | `posts/training/` | 预训练、微调、偏好对齐、DPO 与 RLHF与 PPO / GRPO 等强化学习策略优化 |
@@ -49,6 +51,10 @@ The Pile 的 22 个来源按原论文 Table 1 给出有效采样权重，配五�
 | 系统与 Kernel | `posts/systems/` | GPU、Attention Kernels、算子、并行与性能分析 |
 | 多模态 | `posts/multimodal/` | Vision/Audio/Language 与跨模态交互 |
 | 评测与复现 | `posts/evaluation/` | Benchmark、消融、复现协议 |
+
+AlexNet 归入 `architectures` 的 **Convolutional Neural Networks & Vision** 主题，而不新建视觉顶层目录；后续 VGG、Inception、ResNet 可形成连贯的 CNN 历史线。原论文的 15.3% Top-5 test error 来自七模型集成，绝非单模型结果。
+
+LSTM 归入 `architectures` 的 **Recurrent Networks / LSTM** 二级主题，区分 1997 原始两门版、2000 年遗忘门与现代标准实现。
 
 RoPE 归入 `architectures`，补充 **Positional Encoding** 主题；不为单篇位置编码论文增设顶层分类，后续 ALiBi、PI、YaRN 可以继续沿此脉络整理。
 
