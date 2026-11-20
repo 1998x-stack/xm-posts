@@ -1910,6 +1910,34 @@
     }
   },
   {
+    "slug": "speculative-decoding",
+    "title": "Understanding Speculative Decoding",
+    "subtitle": "小模型先猜，大模型批量验证：为什么更快却仍保持目标采样分布？",
+    "category": "inference",
+    "topic": "speculative-decoding",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 25,
+    "tags": [
+      "Speculative Decoding",
+      "Speculative Sampling",
+      "Inference Latency",
+      "Draft Model",
+      "Acceptance Rejection",
+      "Probability Distributions",
+      "Autoregressive Generation",
+      "KV Cache"
+    ],
+    "summary": "精读 Leviathan 等人 ICML 2023 的推测解码：分解草稿生成、批量验证、首次拒绝与正残差修正，手算三 token 概率质量守恒、α/γ 延迟模型并核对 T5-XXL 原论文 Table 2；包含 3 幅独立 SVG、原生 MathML、交互滑块和纯 Python/pytest 确定性检查。",
+    "paper": "https://proceedings.mlr.press/v202/leviathan23a.html",
+    "illustration": "speculative-decoding",
+    "cover": {
+      "src": "assets/cover-two-timelines.svg",
+      "caption": "小模型提出草稿，目标模型一次并行验证多个候选位置"
+    }
+  },
+  {
     "slug": "rag",
     "title": "Understanding RAG",
     "subtitle": "从 DPR 检索到 RAG-Sequence 和 RAG-Token：两篇文档、两个词算明白",

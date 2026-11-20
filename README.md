@@ -168,7 +168,15 @@ python scripts/render_pdfs.py
 python scripts/validate_site.py
 ```
 
-只检查一篇文章时，先构建再运行 `python scripts/render_pdfs.py --only transformer`；正式发布流程默认为全部正式文章生成 PDF。不要提交自动生成的 `_site/` 或 `article.pdf`。
+只检查一篇文章时，先构建再运行 `python scripts/render_pdfs.py --only transformer`；使用 `--force` 可以忽略缓存重新渲染，`--cache-dir` 可以指定独立缓存目录。正式发布始终向 `_site/` 放入**所有**已发布文章的 PDF，但只对缓存未命中的文章执行 Chromium 渲染。不要提交自动生成的 `_site/`、`.pdf-cache/` 或 `article.pdf`。
+
+**增量 PDF 缓存机制：**
+
+- GitHub Actions 用 `actions/cache` 跨运行恢复 `.pdf-cache/`（包含 manifest 和 PDF 文件）；缓存丢失并不影响正确性，回退到完整渲染。
+- 内容指纹覆盖**构建后的 HTML**、文章资源、页面引用的本地跨文章图片、链接 CSS 及 CSS 依赖、渲染器与依赖版本、实际安装的中文/数学字体版本以及文章公开 URL。因此，编辑首页/归档页通常不触发 PDF 重建，更新打印样式或相关 SVG 会触发受影响文章重建。
+- 命中缓存仍校验 PDF SHA-256、文件大小、页数、正文可检索性，并向本次构建的 HTML 注入原有轻量下载按钮；校验失败自动重渲染。
+- 每个完整构建清除缓存中已取消发布的文章；`--only` 不清理其他文章。只有最终站点校验成功后才尝试保存 GitHub Actions 缓存。
+- 工作流日志中的 `PDF CACHED` / `PDF RENDERED` 和末尾 `cached` / `rendered` 数字可以确认命中率。首次构建仍需渲染所有文章；缓存命中不能替代实际浏览器 QA。
 
 ## GitHub Pages 部署与排查
 

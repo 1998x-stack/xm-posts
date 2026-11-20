@@ -97,5 +97,14 @@
     "locator": "Abstract and architecture section",
     "status": "verified",
     "notes": "V4 published 2024, separate from V1 2017"
+  },
+  {
+    "id": "M12",
+    "claim": "For a hypothetical 3x3 layer M=32,N=64,output 56x56, ordinary convolution needs 57,802,752 MACs, while depthwise uses 903,168 and pointwise 6,422,528, totaling 7,325,696 MACs; scaled channel and spatial sizes are rounded before recomputation.",
+    "kind": "toy-derivation",
+    "source_url": "https://arxiv.org/abs/1704.04861",
+    "locator": "MobileNets V1 Section 3.1 depthwise separable convolution cost, Sections 3.3-3.4 width and resolution multipliers; independent classroom example",
+    "status": "derived",
+    "notes": "MACs are theoretical operations only; do not infer measured on-device latency, energy or equivalence of learned weights."
   }
 ]

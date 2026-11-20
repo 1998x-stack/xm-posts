@@ -7,6 +7,19 @@
 
 /* Keep SVG labels legible on phones by allowing horizontal panning. */
 @media (max-width:700px){figure{overflow-x:auto;scrollbar-width:thin}figure svg,figure .diagram svg{min-width:640px;max-width:none}}
+
+/* Live depthwise vs pointwise MAC accounting; responsive horizontal SVG scroll. */
+.mb-accounting{margin:17px 0;background:#fcfefb;border:1px solid #d0e5dc;padding:12px;border-radius:10px}
+.mb-accounting-scroll{overflow-x:auto;max-width:100%;scrollbar-width:thin}
+.mb-accounting svg{width:100%;min-width:560px;height:auto;display:block}
+.mb-accounting figcaption{font-size:13px;line-height:1.7;color:#537671;margin-top:8px}
+.mb-numbers{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:14px 0}
+.mb-numbers>div{padding:12px;border:1px solid #d9e9df;border-radius:8px;background:#f2f8f4;min-width:0}
+.mb-numbers b{display:block;color:#3f6b65;font-size:12px}
+.mb-numbers output{display:block;color:#1d706a;font:800 17px/1.55 system-ui,sans-serif;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.mb-relative{width:100%;height:16px;accent-color:#16867b}
+.mb-lesson{padding:12px;background:#f0f8f3;color:#326660;border-left:3px solid #1a8479;border-radius:5px;font-size:14px}
+@media(max-width:520px){.mb-numbers{grid-template-columns:1fr}.mb-accounting{padding:7px}.mb-numbers>div{padding:9px}}
 </style></head><body><a class="skip" href="#content">跳转到正文</a><header class="top"><div class="top-inner"><a class="logo" href="../../../">xm<span>.</span>posts</a><nav aria-label="站点导航"><a href="../../../categories/architectures/">模型架构</a><a href="../../../archive/">文章归档</a></nav></div></header>
 <div class="layout"><nav class="toc" aria-label="本文目录"><strong>MOBILENET · PAPER STUDY</strong>
 <a href="#why">受限设备的难题</a><a href="#conv">普通卷积做了两件事</a><a href="#depthwise">Depthwise 与 Pointwise</a><a href="#math">为什么省下约九成计算</a><a href="#network">完整 V1 架构</a><a href="#scaling">宽度与分辨率缩放</a><a href="#experiments">论文实验与局限</a><a href="#evolution">从 V2 到 V4</a><a href="#implementation">可运行的最小验证</a><a href="#engineering">实际部署误区</a><a href="#summary">复盘</a><a href="#references">论文来源</a></nav>
@@ -26,7 +39,8 @@
 <p>Depthwise 只需 <code>k²·M·S</code> 次乘加，Pointwise 只需 <code>M·N·S</code> 次；相加便得到可分离卷积的总成本。</p>
 <div class="math-equation" role="group" aria-label="深度可分离卷积的乘加次数等于核面积乘输入通道乘空间面积，加上输入通道乘输出通道乘空间面积"><div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="深度可分离卷积的乘加次数等于核面积乘输入通道乘空间面积，加上输入通道乘输出通道乘空间面积，公式可横向滚动"><math display="block" aria-label="深度可分离卷积的乘加次数等于核面积乘输入通道乘空间面积，加上输入通道乘输出通道乘空间面积"><mrow><msub><mi>C</mi><mtext>DS</mtext></msub><mo>=</mo><msup><mi>k</mi><mn>2</mn></msup><mi>M</mi><mi>S</mi><mo>+</mo><mi>M</mi><mi>N</mi><mi>S</mi></mrow></math></div><span class="eqno">(2)</span></div><div class="math-equation" role="group" aria-label="深度可分离卷积与标准卷积的成本比等于一除输出通道数，加上一除核面积"><div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="深度可分离卷积与标准卷积的成本比等于一除输出通道数，加上一除核面积，公式可横向滚动"><math display="block" aria-label="深度可分离卷积与标准卷积的成本比等于一除输出通道数，加上一除核面积"><mrow><mfrac><msub><mi>C</mi><mtext>DS</mtext></msub><msub><mi>C</mi><mtext>full</mtext></msub></mfrac><mo>=</mo><mfrac><mn>1</mn><mi>N</mi></mfrac><mo>+</mo><mfrac><mn>1</mn><msup><mi>k</mi><mn>2</mn></msup></mfrac></mrow></math></div><span class="eqno">(3)</span></div>
 <p>分母中出现的是输出通道 N，不是输入通道 M。若 k=3 且 N 足够大，比例逐渐接近 1/9；所以常听见的「约 9 倍」是渐近直觉，不是对任何层都精确成立的常数。</p>
-<div class="widget" aria-label="卷积计算实验"><h3>动手试验：把同一个层拆开</h3><p>教学层固定 <code>k=3, M=32, N=64, H′=W′=56</code>。切换按钮比较 MACs，而不是设备速度。</p><div class="choices" role="group" aria-label="计算方案"><button type="button" data-mode="full" aria-pressed="false">标准卷积</button><button type="button" data-mode="dw" aria-pressed="true">Depthwise + Pointwise</button><button type="button" data-mode="detail" aria-pressed="false">拆分账本</button></div><div class="readout" id="mode-output" aria-live="polite">Depthwise + Pointwise：7,325,696 MACs；约为标准卷积的 12.7%（减少 87.3%）。</div></div>
+<div class="widget" aria-label="卷积计算实验"><h3>动手试验：把同一个层拆开</h3><p>教学层固定 <code>k=3, M=32, N=64, H′=W′=56</code>。切换按钮比较 MACs，而不是设备速度。</p><div class="choices" role="group" aria-label="计算方案"><button type="button" data-mode="full" aria-pressed="false">标准卷积</button><button type="button" data-mode="dw" aria-pressed="true">Depthwise + Pointwise</button><button type="button" data-mode="detail" aria-pressed="false">拆分账本</button></div><div class="readout" id="mode-output" aria-live="polite">Depthwise + Pointwise：7,325,696 MACs；约为标准卷积的 12.7%（减少 87.3%）。</div>
+<p class="mb-lesson">把理论节省转换成一眼能比较的数字：标准卷积需要约 5780 万 MACs，而拆成 Depthwise 和 Pointwise 后只需约 733 万 MACs。原论文的效率论证基于结构和特定实验；这里的示例是计算账本，不是手机真实延迟。</p></div>
 <p>与固定同一输出形状的标准卷积相比，可分离卷积有结构约束：一个输出通道的空间核由共享的逐通道空间模板及 1×1 系数组成，未必能表示任意标准卷积核。它是一种归纳偏置与效率权衡，而不是免费且完全等价的代换。</p></section>
 <section id="network"><h2><small>05</small>MobileNet V1 全网络如何搭建？</h2>
 <p>原论文 Table 1：以普通 <code>3×3 stride 2</code> 卷积为起点，再重复 13 组 Depthwise/Pointwise 对。下采样在首层或指定的 Depthwise 层通过 stride 2 完成；随后是全局平均池化、全连接分类器和 Softmax。逐层计数：1 个首层卷积 + 13×2 个 DW/PW 卷积 = 27 个卷积层；再加 1 个 FC，构成论文所称的 <strong>28 个可学习层</strong>，Softmax 不作为可学习层。[1, §3.2]</p>
@@ -38,7 +52,12 @@
 <h3>Width Multiplier α</h3><p>宽度乘子把每一层输入和输出通道从 M、N 缩成约 αM、αN。Pointwise 的成本因此约随 α² 缩小，但 Depthwise 项只随 α 缩小；所以「所有计算都严格按 α² 变化」是不准确的。实际模型需要对通道数做整数取整。[1, §3.3]</p>
 <h3>Resolution Multiplier ρ</h3><p>分辨率乘子作用于输入图像及内部空间尺寸，理想化面积随 ρ² 变化。卷积核参数并不因为输入变小而自动减少；但空间边界、步幅和实际 shape 都可能使近似值出现偏差。[1, §3.4]</p>
 <div class="math-equation" role="group" aria-label="宽度乘子和分辨率乘子同时生效的深度可分离卷积成本"><div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="宽度乘子和分辨率乘子同时生效的深度可分离卷积成本，公式可横向滚动"><math display="block" aria-label="宽度乘子和分辨率乘子同时生效的深度可分离卷积成本"><mrow><msub><mi>C</mi><mtext>scaled</mtext></msub><mo>=</mo><msup><mi>ρ</mi><mn>2</mn></msup><mi>S</mi><mo>(</mo><msup><mi>k</mi><mn>2</mn></msup><mi>α</mi><mi>M</mi><mo>+</mo><msup><mi>α</mi><mn>2</mn></msup><mi>M</mi><mi>N</mi><mo>)</mo></mrow></math></div><span class="eqno">(4)</span></div>
-<div class="widget"><h3>交互：逐层精确计算取整后的 MACs</h3><p>固定 k=3、基准 M=32、N=64、输出空间边长 56；拖动两个滑块。此处对通道与空间边长四舍五入，展示实际整数维度算例，不代表整网实验结果。</p><div class="sliders"><div><label for="alpha">宽度 α：<output id="alpha-out">1.00</output></label><input id="alpha" type="range" min="0.25" max="1" step="0.25" value="1"></div><div><label for="rho">分辨率 ρ：<output id="rho-out">1.00</output></label><input id="rho" type="range" min="0.5" max="1" step="0.125" value="1"></div></div><div id="scale-output" class="readout" aria-live="polite">M=32, N=64, S=56×56。该层可分离卷积 7,325,696 MACs。</div></div></section>
+<div class="widget"><h3>交互：逐层精确计算取整后的 MACs</h3><p>固定 k=3、基准 M=32、N=64、输出空间边长 56；拖动两个滑块。此处对通道与空间边长四舍五入，展示实际整数维度算例，不代表整网实验结果。</p><div class="sliders"><div><label for="alpha">宽度 α：<output id="alpha-out">1.00</output></label><input id="alpha" type="range" min="0.25" max="1" step="0.25" value="1"></div><div><label for="rho">分辨率 ρ：<output id="rho-out">1.00</output></label><input id="rho" type="range" min="0.5" max="1" step="0.125" value="1"></div></div><div id="scale-output" class="readout" aria-live="polite">M=32, N=64, S=56×56。该层可分离卷积 7,325,696 MACs（基准的 100.0%）。</div>
+<div class="mb-numbers"><div><b>Depthwise · k² M S²</b><output id="mb-dw-macs">903,168</output></div><div><b>Pointwise · M N S²</b><output id="mb-pw-macs">6,422,528</output></div><div><b>同形状普通卷积</b><output id="mb-full-macs">57,802,752</output></div></div>
+<label for="mb-relative">可分离 / 普通 MAC 比：<output id="mb-ratio">12.7%</output></label><progress id="mb-relative" class="mb-relative" max="1" value="0.1267361111">12.7%</progress>
+<figure class="mb-accounting"><div class="mb-accounting-scroll"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 253" role="img" aria-labelledby="mb-cost-title mb-cost-desc"><title id="mb-cost-title">当前宽度与分辨率设置下普通卷积和深度可分离卷积的计算量对照</title><desc id="mb-cost-desc">横条都使用当前同形状普通卷积的 MAC 次数作为满刻度；第二行由 Depthwise 和 Pointwise 两段构成。</desc><rect width="720" height="253" rx="10" fill="#fbfdfa"/><text x="26" y="33" font-size="18" font-weight="700" fill="#2b6560">用同一条尺度比较 MACs，而不是用颜色猜测</text><text x="25" y="92" font-size="15" fill="#4d6d67">普通卷积</text><text x="25" y="164" font-size="15" fill="#4d6d67">DW + PW</text><rect x="156" y="64" width="514" height="35" rx="5" fill="#e8f0eb"/><rect id="mb-ordinary-bar" x="156" y="64" width="514" height="35" rx="5" fill="#c98a64"/><rect x="156" y="136" width="514" height="35" rx="5" fill="#e8f0eb"/><rect id="mb-dw-bar" x="156" y="136" width="8.03" height="35" fill="#317e86"/><rect id="mb-pw-bar" x="164.03" y="136" width="57.08" height="35" fill="#75b5a6"/><text id="mb-full-label" x="158" y="116" fill="#ac6743" font-size="14">57,802,752 MACs</text><text id="mb-combined-label" x="158" y="190" fill="#2a7268" font-size="14">7,325,696 MACs（12.7%）</text><g font-size="12" fill="#4f706a"><text x="26" y="221">深青：Depthwise（空间滤波） · 浅青：Pointwise（通道混合）</text><text x="26" y="240">每次比较的满刻度随当前整数维度更新；不同设置之间不共用绝对横轴</text></g></svg></div><figcaption>下调 α 时，DW 成本约随 α 缩小，而 PW 约随 α² 缩小；下调 ρ 时，两者都约随 ρ² 缩小。这里每次先取整 M、N、边长，再重新精确计数。</figcaption></figure>
+<p class="mb-lesson" id="mb-cost-explanation">Depthwise 占可分离计算的 12.3%，Pointwise 占 87.7%。MACs 是理论乘加数，不是实际设备延迟、内存访问或耗电量。</p>
+</div></section>
 <section id="experiments"><h2><small>07</small>原论文如何证明这个权衡值得？</h2>
 <p>下面只引用 MobileNet V1 的 2017 年原论文 ImageNet 分类实验。原文的「Accuracy」在该实验设置中为 Top-1；计算量使用 Million Mult-Adds，参数量是百万个可学习参数。<strong>请勿与新训练配方、其他预处理或者不同硬件上的结果混为一谈。</strong>[1, Tables 4–7]</p>
 <div class="tablewrap"><table><thead><tr><th>模型 / 输入</th><th>ImageNet Top-1</th><th>Mult-Adds</th><th>参数</th><th>原始证据</th></tr></thead><tbody><tr><td>标准卷积版 MobileNet</td><td>71.7%</td><td>4,866M</td><td>29.3M</td><td>Table 4</td></tr><tr><td>V1 α=1.0, 224²</td><td>70.6%</td><td>569M</td><td>4.2M</td><td>Table 4/6</td></tr><tr><td>V1 α=0.75, 224²</td><td>68.4%</td><td>325M</td><td>2.6M</td><td>Table 6</td></tr><tr><td>V1 α=0.5, 224²</td><td>63.7%</td><td>149M</td><td>1.3M</td><td>Table 6</td></tr><tr><td>V1 α=1.0, 160²</td><td>67.2%</td><td>290M</td><td>4.2M</td><td>Table 7</td></tr></tbody></table></div>
@@ -64,35 +83,53 @@ print(round(full / separable, 2))  # 7.89</code></pre>
 <div class="note">定量报告应同时提供：模型版本、宽度/输入分辨率、参数量、MAC 计数约定、实际设备与推理框架、预热/批量设置、延迟分位数、准确率数据集与评测流程。</div></section>
 <section id="summary"><h2><small>11</small>检查自己是否真正理解</h2><details><summary>为什么 Depthwise 不能直接取代 Pointwise？</summary><p>Depthwise 对每个输入通道独立滤波，不进行跨通道组合；Pointwise 才能学到新的通道特征。</p></details><details><summary>为什么把分辨率减半不会把参数量降成 1/4？</summary><p>卷积核的参数只由核大小、输入/输出通道决定；分辨率减小的是被卷积的空间位置个数，主要降低 MACs 与激活开销。</p></details><details><summary>为什么 V2 的「linear」不等于全网线性？</summary><p>线性只描述瓶颈末端投影不再加 ReLU；扩张及 Depthwise 位置仍有非线性，块之间也有可选的残差路径。</p></details><p><strong>一句话：</strong>MobileNet 最值得学习的不是某一个 ImageNet 数字，而是如何把 CNN 的计算拆成可分配、可量化、可沿硬件约束重新设计的部分。</p></section>
 <section id="references"><h2><small>12</small>原始论文与可追溯出处</h2><ol class="references"><li>[1] Howard et al. <a href="https://arxiv.org/abs/1704.04861">MobileNets: Efficient Convolutional Neural Networks for Mobile Vision Applications</a>, 2017. 重点：§3.1–3.4、Table 1–7。</li><li>[2] Sandler et al. <a href="https://arxiv.org/abs/1801.04381">MobileNetV2: Inverted Residuals and Linear Bottlenecks</a>, CVPR 2018. 重点：§3 与 Figure 2。</li><li>[3] Howard et al. <a href="https://arxiv.org/abs/1905.02244">Searching for MobileNetV3</a>, ICCV 2019. 重点：hardware-aware NAS、NetAdapt、SE、h-swish。</li><li>[4] Qin et al. <a href="https://arxiv.org/abs/2404.10518">MobileNetV4 — Universal Models for the Mobile Ecosystem</a>, ECCV 2024. 重点：UIB、Mobile MQA、设备搜索策略。</li></ol><p>实验表格为原论文数值摘录；图解表达与玩具算例是用于理解机制的独立教学构造，不是原论文图像复刻。</p></section>
-<footer class="foot">继续阅读：<a href="../cnn/">CNN</a> · <a href="../resnet/">ResNet</a> · <a href="../alexnet/">AlexNet</a> · <a href="../../../categories/architectures/">模型架构</a></footer>
+<footer class="foot">推荐阅读顺序：<a href="../cnn/">CNN</a>（滑动窗口和共享核）→ <a href="../alexnet/">AlexNet</a>（更深网络和通道分组）→ 本篇 MobileNet（逐通道空间滤波 + 1×1 通道融合）。另见 <a href="../resnet/">ResNet</a> 与 <a href="../../../categories/architectures/">模型架构</a>。</footer>
 </article></main></div>
 <script>
 (function(){
-  var base={k:3,m:32,n:64,h:56,w:56};
-  var full=base.k*base.k*base.m*base.n*base.h*base.w;
-  var depth=base.k*base.k*base.m*base.h*base.w;
-  var point=base.m*base.n*base.h*base.w;
-  var fmt=function(n){return n.toLocaleString("en-US");};
-  var explanations={
-    full:"标准卷积："+fmt(full)+" MACs。一个 k×k×M 核对每个输出通道重复计算。",
-    dw:"Depthwise + Pointwise："+fmt(depth+point)+" MACs；约为标准卷积的 "+((depth+point)/full*100).toFixed(1)+"%（减少 "+((1-(depth+point)/full)*100).toFixed(1)+"%）。",
-    detail:"拆分账本：Depthwise "+fmt(depth)+" + Pointwise "+fmt(point)+" = "+fmt(depth+point)+" MACs。"
-  };
-  document.querySelectorAll("button[data-mode]").forEach(function(button){
-    button.addEventListener("click",function(){
-      document.querySelectorAll("button[data-mode]").forEach(function(x){x.setAttribute("aria-pressed",String(x===button));});
-      document.getElementById("mode-output").textContent=explanations[button.getAttribute("data-mode")];
-    });
-  });
-  var alpha=document.getElementById("alpha"),rho=document.getElementById("rho");
-  function update(){
-    var a=Number(alpha.value),r=Number(rho.value);
-    var m=Math.round(base.m*a),n=Math.round(base.n*a),side=Math.round(base.h*r);
-    var c=(base.k*base.k*m+m*n)*side*side;
-    document.getElementById("alpha-out").textContent=a.toFixed(2);
-    document.getElementById("rho-out").textContent=r.toFixed(3);
-    document.getElementById("scale-output").textContent="M="+m+", N="+n+", S="+side+"×"+side+"。该层可分离卷积 "+fmt(c)+" MACs（基准的 "+(100*c/(depth+point)).toFixed(1)+"%）。";
-  }
-  alpha.addEventListener("input",update);rho.addEventListener("input",update);update();
+"use strict";
+const base={k:3,m:32,n:64,h:56},fmt=n=>n.toLocaleString("en-US"),by=id=>document.getElementById(id);
+function count(m,n,side){
+ const space=side*side;
+ return {dw:base.k*base.k*m*space,pw:m*n*space,full:base.k*base.k*m*n*space};
+}
+const reference=count(32,64,56),baseline=reference.dw+reference.pw;
+if(reference.full!==57802752||baseline!==7325696)throw Error("Incorrect MobileNet MAC arithmetic");
+const explanations={
+ full:"标准卷积："+fmt(reference.full)+" MACs。每个输出核跨越全部 32 个输入通道。",
+ dw:"Depthwise + Pointwise："+fmt(baseline)+" MACs，是标准卷积的 "+(100*baseline/reference.full).toFixed(1)+"%（减少 "+(100*(1-baseline/reference.full)).toFixed(1)+"%）。",
+ detail:"拆分账本：Depthwise "+fmt(reference.dw)+" + Pointwise "+fmt(reference.pw)+" = "+fmt(baseline)+" MACs。"
+};
+const buttons=[...document.querySelectorAll("button[data-mode]")],alpha=by("alpha"),rho=by("rho");
+buttons.forEach(button=>button.addEventListener("click",()=>{
+ buttons.forEach(b=>b.setAttribute("aria-pressed",String(b===button)));
+ by("mode-output").textContent=explanations[button.dataset.mode];
+}));
+function update(){
+ const a=Number(alpha.value),r=Number(rho.value);
+ const m=Math.round(base.m*a),n=Math.round(base.n*a),side=Math.round(base.h*r);
+ const c=count(m,n,side),separable=c.dw+c.pw,ratio=separable/c.full;
+ if(!Number.isFinite(ratio)||!(ratio>0&&ratio<1))throw Error("Invalid MobileNet ratio");
+ by("alpha-out").textContent=a.toFixed(2);
+ by("rho-out").textContent=r.toFixed(3);
+ by("scale-output").textContent="M="+m+", N="+n+", S="+side+"×"+side+
+   "。该层可分离卷积 "+fmt(separable)+" MACs（基准的 "+(100*separable/baseline).toFixed(1)+"%）。";
+ by("mb-dw-macs").textContent=fmt(c.dw);
+ by("mb-pw-macs").textContent=fmt(c.pw);
+ by("mb-full-macs").textContent=fmt(c.full);
+ by("mb-ratio").textContent=(100*ratio).toFixed(1)+"%";
+ by("mb-relative").value=ratio;
+ const dwWidth=514*c.dw/c.full,pwWidth=514*c.pw/c.full;
+ by("mb-dw-bar").setAttribute("width",dwWidth.toFixed(3));
+ by("mb-pw-bar").setAttribute("x",(156+dwWidth).toFixed(3));
+ by("mb-pw-bar").setAttribute("width",pwWidth.toFixed(3));
+ by("mb-full-label").textContent=fmt(c.full)+" MACs";
+ by("mb-combined-label").textContent=fmt(separable)+" MACs（"+(100*ratio).toFixed(1)+"%）";
+ by("mb-cost-explanation").textContent=
+ "当前 Depthwise 占可分离计算的 "+(100*c.dw/separable).toFixed(1)+
+ "%，Pointwise 占 "+(100*c.pw/separable).toFixed(1)+"%。取整后的 M="+m+
+ "、N="+n+"、边长="+side+" 均已经计入。更少 MACs 不等于更少相同比例的实际运行时间。";
+}
+alpha.addEventListener("input",update);rho.addEventListener("input",update);update();
 })();
 </script></body></html>

@@ -58,3 +58,11 @@ Public Pages can reveal anything in the artifact: builders use a strict allowlis
 ## Publication invariants
 
 Each article needs one H1, semantic `<main>`, anchored navigation, captions, accessible SVGs with unique IDs across the document, unbroken local links, primary-paper references, mobile/print layout, accessible interaction and no irrelevant build-process chatter. Preserve original-paper scope and distinguish later variants. QA results and Pages status must be actually observed before claimed.
+
+## Incremental PDF artifacts
+
+`scripts/build_site.py` creates disposable HTML in `_site/`. `scripts/render_pdfs.py` then copies validated PDFs from `.pdf-cache/` where fingerprints match, rendering only cache misses using Chromium. It injects the small PDF download button into built article HTML whether the PDF was cached or rendered; source posts are unchanged. Each published page receives an `article.pdf` in the same directory, while drafts remain excluded.
+
+`scripts/pdf_fingerprint.py` hashes built HTML, article-local assets, local links needed by the printed document (including cross-article related covers and CSS dependencies), PDF renderer source/dependencies, public URL, and installed CJK/math font signature. Homepage-only changes do not cause full re-renders. Changing shared print CSS or the renderer invalidates affected/all PDFs. Cache manifests record SHA-256, byte count and page count, and re-use verifies PDF parseability and extractable text. Invalid entries are re-rendered.
+
+`.github/workflows/publish.yml` restores a versioned GitHub Actions cache after browser QA and font installation, validates the complete PDF-enabled site, then saves the cache on successful runs. A missing/evicted cache is a performance miss only, not a publishing failure. To deliberately regenerate all PDFs, run `python scripts/render_pdfs.py --force` following a clean site build. Never commit `.pdf-cache/` or `_site/`.

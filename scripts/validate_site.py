@@ -3,6 +3,7 @@
 from __future__ import annotations
 from pathlib import Path
 from bs4 import BeautifulSoup
+import argparse
 import importlib.util,json,sys,re
 from urllib.parse import urlparse,urljoin,unquote
 from build_site import ROOT,data,DEFAULT_URL,article_url
@@ -46,7 +47,7 @@ def source_articles(root=ROOT):
         print('ARTICLE OK',p['slug'],result['counts'])
 
 
-def published_site(out:Path,base:str=DEFAULT_URL):
+def published_site(out:Path,base:str=DEFAULT_URL,require_pdfs:bool=False):
     cats,posts=data(ROOT)
     pub=[p for p in posts if p['status']=='published']
     expect=['index.html','archive/index.html','topics/index.html','404.html','sitemap.xml','feed.xml','posts.json','robots.txt']+[f'categories/{c["slug"]}/index.html' for c in cats]+[article_url(p)+'index.html' for p in pub]
@@ -89,10 +90,25 @@ def published_site(out:Path,base:str=DEFAULT_URL):
         if path.parent != out and path.name=='index.html' and 'posts' in path.parts:
             if 'source-code' in path.name:bad.append('never')
     assert not bad,'\n'.join(bad)
+    if require_pdfs:
+        for p in pub:
+            article_dir = out / article_url(p)
+            pdf = article_dir / "article.pdf"
+            assert pdf.is_file() and pdf.stat().st_size >= 4096, f'Missing PDF: {p["slug"]}'
+            assert pdf.open("rb").read(5) == b"%PDF-", f'Invalid PDF header: {p["slug"]}'
+            html = BeautifulSoup((article_dir / "index.html").read_text(encoding="utf-8"), "html.parser")
+            buttons = html.select('a[data-pdf-download]')
+            assert len(buttons) == 1 and buttons[0].get("href") == "article.pdf", (
+                f'Missing or duplicated PDF download button: {p["slug"]}'
+            )
     assert not any(out.rglob('*.py')) and not any(out.rglob('SKILL.md')) and not any(out.rglob('README.md')),'Non-public tooling leaked into site'
     print('SITE OK',len(list(out.rglob('*.html'))),'HTML pages and',len(pub),'posts')
 
 if __name__=='__main__':
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--require-pdfs", action="store_true",
+                        help="Fail if any published article lacks a PDF or download button")
+    args = parser.parse_args()
     check_mirrors(check=True)
     source_articles()
-    published_site(ROOT/'_site')
+    published_site(ROOT/'_site', require_pdfs=args.require_pdfs)

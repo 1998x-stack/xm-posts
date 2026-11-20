@@ -106,5 +106,14 @@
     "locator": "Section 7 Discussion",
     "status": "verified",
     "notes": "Conditional on paper model and training"
+  },
+  {
+    "id": "A13",
+    "claim": "For a 5x5 Conv2 with 96 inputs and 256 outputs, 2 channel groups give 307,200 kernel weights (307,456 including 256 biases) and 223,948,800 theoretical MACs at 27x27; a hypothetical ungrouped same-shape layer doubles kernel weights and MACs.",
+    "kind": "toy-derivation",
+    "source_url": "https://papers.nips.cc/paper_files/paper/2012/file/c399862d3b9d6b76c8436e924a68c45b-Paper.pdf",
+    "locator": "Section 3.5 and Figure 2 for the GPU-connected channel structure; derived independent parameter/MAC arithmetic",
+    "status": "derived",
+    "notes": "The groups=1 case is an artificial architectural control, not a claimed paper ablation. Output size convention 227/no pad and 224/pad2 independently gives 55 spatial positions."
   }
 ]

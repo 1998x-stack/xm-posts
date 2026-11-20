@@ -286,6 +286,16 @@
   },
   {
     "id": "path-31",
+    "title": "自回归解码的延迟与显存",
+    "posts": [
+      "transformer",
+      "kv-cache",
+      "pagedattention",
+      "speculative-decoding"
+    ]
+  },
+  {
+    "id": "path-32",
     "title": "从向量表示到检索增强生成",
     "posts": [
       "embeddings",
