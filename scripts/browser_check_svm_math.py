@@ -48,12 +48,20 @@ def check(html:Path,output:Path)->dict:
             if width==360 and stats["dualCanScroll"]:
                 target=page.locator("#equation-4 .eq-scroll")
                 target.focus()
-                for _ in range(3):page.keyboard.press("ArrowRight")
+                for _ in range(3):
+                    page.keyboard.press("ArrowRight")
+                try:
+                    page.wait_for_function(
+                        "() => document.querySelector('#equation-4 .eq-scroll').scrollLeft > 0",
+                        timeout=1500
+                    )
+                except Exception:
+                    pass
                 after=target.evaluate("(e)=>e.scrollLeft")
                 stats["keyboardScrollLeft"]=after
                 if after<=0:
                     okay=False
-                    errors.append("Formula cannot be scrolled via keyboard")
+                    errors.append("Formula cannot be scrolled via keyboard after keypress and layout settling")
             page.locator("#equation-4").scroll_into_view_if_needed()
             page.screenshot(path=str(output/f"math-{label}.png"),full_page=False)
             report["viewports"][label]={"pass":okay,**stats,"errors":errors}

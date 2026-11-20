@@ -1,5 +1,25 @@
 [
   {
+    "slug": "flashattention",
+    "title": "Understanding FlashAttention",
+    "subtitle": "Attention 的复杂度没变，为什么还能更快？从 HBM/SRAM 到 Online Softmax",
+    "category": "systems",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 32,
+    "tags": [
+      "FlashAttention",
+      "Attention Kernels",
+      "GPU Memory",
+      "Online Softmax",
+      "IO-aware Algorithms"
+    ],
+    "summary": "以 FlashAttention 2022 原论文为主线，分块拆解 HBM/SRAM 数据流、在线 Softmax、反向重计算及理论边界，并辨析 FA2、FA3、FA4 演进与系统实证。",
+    "paper": "https://arxiv.org/abs/2205.14135",
+    "illustration": "flashattention"
+  },
+  {
     "slug": "resnet",
     "title": "Understanding ResNet",
     "subtitle": "为什么网络越深，训练反而可能越困难？",
@@ -280,5 +300,45 @@
     "summary": "从因果 Attention 的单步计算与显存公式出发，图解 Prefill/Decode、MHA/GQA/MQA、PagedAttention、前缀复用，附交互显存计算器和可验证的最小 Python 示例。",
     "paper": "https://arxiv.org/abs/2309.06180",
     "illustration": "kv-cache"
+  },
+  {
+    "slug": "rope",
+    "title": "Understanding RoPE",
+    "subtitle": "位置如何变成旋转？从相对距离到长上下文",
+    "category": "architectures",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 30,
+    "tags": [
+      "RoPE",
+      "Positional Encoding",
+      "Rotary Embedding",
+      "Relative Position",
+      "Long Context"
+    ],
+    "summary": "从二维旋转和矩阵恒等式出发，图解 RoPE 如何将相对位移写入 Q/K 内积，结合交互平移实验、纯 Python 断言、RoFormer 论文证据与 PI、YaRN、LongRoPE 的工程边界。",
+    "paper": "https://arxiv.org/abs/2104.09864",
+    "illustration": "rope"
+  },
+  {
+    "slug": "self-consistency",
+    "title": "Understanding Self-Consistency",
+    "subtitle": "为何多路径思考与答案投票比只相信一次贪心 CoT 更可靠？",
+    "category": "reasoning",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 28,
+    "tags": [
+      "Chain-of-Thought",
+      "Self-Consistency",
+      "Reasoning",
+      "Decoding",
+      "Test-time Compute"
+    ],
+    "summary": "从单条 CoT 的脆弱性出发，图解多路径采样、答案边缘化、投票机制与原论文实验，附交互示例、数学推导及可运行 Python 代码。",
+    "paper": "https://arxiv.org/abs/2203.11171",
+    "illustration": "self-consistency"
   }
 ]

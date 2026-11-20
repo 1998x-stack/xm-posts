@@ -10,10 +10,10 @@ Separate statements by role: primary-paper claim, intuition/metaphor, toy worked
 
 ## Mathematical typesetting
 
-- Use mathematically structured output, preferably native MathML Core, for self-contained offline articles. Fractions, indices, exponents and sum limits should not be long Unicode strings.
-- Number major equations and separate constraints; preserve the precise symbols and mathematical scope.
-- Long expressions must scroll within labeled, keyboard-focusable formula regions at 360px and 390px without page-wide overflow; validate MathML and fraction stacking in real Chromium.
-- Avoid third-party CDN scripts/fonts for mathematical rendering.
+- Render mathematical derivations as native, semantic MathML Core when possible. Do not emulate fractions, sums or indices by long Unicode text.
+- All display formulas have an accessible description, a numbered or named mathematical block and a keyboard-focusable horizontal scroll region on narrow screens.
+- Validate the SVG/MathML boundary, stacked fractions, namespace, offline behavior and actual 1440/768/390/360px layout in Chromium; never hide whole-page overflow.
+- See `skills/olah-style-paper-posts/references/math-typesetting.md` for the portable authoring and QA contract.
 
 ## SVG visual grammar
 

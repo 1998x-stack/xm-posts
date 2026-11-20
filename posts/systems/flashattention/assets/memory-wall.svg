@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 396" width="860" height="396" role="img" aria-labelledby="fa-memory-title fa-memory-desc" data-export="fa-memory.svg" style="font-family:system-ui,-apple-system,'PingFang SC','Microsoft YaHei',sans-serif">
+<title id="fa-memory-title">普通 Attention 与 FlashAttention 的数据流差异</title><desc id="fa-memory-desc">左侧传统实现把分数和概率矩阵写入 HBM；右侧融合内核仅保留 tile 和在线归约状态在 SRAM 中，最终写回输出。</desc>
+<rect x="0" y="0" width="860" height="396" rx="20" fill="#f7faf8"/>
+
+<rect x="24" y="31" width="392" height="326" rx="12" fill="#fff" stroke="#c9deda" stroke-width="1.6"/><rect x="444" y="31" width="392" height="326" rx="12" fill="#fff" stroke="#c9deda" stroke-width="1.6"/>
+<text x="44" y="68" font-size="19" fill="#26454b" font-weight="700" >常规 Attention：多个独立算子</text>
+<text x="464" y="68" font-size="19" fill="#26454b" font-weight="700" >FlashAttention：融合、分块、在线归约</text>
+<rect x="44" y="92" width="350" height="57" rx="12" fill="#e5f4f0" stroke="#c9deda" stroke-width="1.6"/><text x="70" y="116" font-size="18" fill="#1b6f72" font-weight="700" >QKᵀ / √d</text><text x="70" y="138" font-size="14" fill="#29474a"  >产生 N × N 分数矩阵 S</text>
+<path d="M 219 150 L 219 169" fill="none" stroke="#4b817e" stroke-width="2.3"  stroke-linecap="round"/><path d="M 219 169 l -9 -5 l 0 10 z" fill="#4b817e" transform="rotate(90 219 169)"/>
+<rect x="44" y="170" width="350" height="63" rx="12" fill="#fff2e9" stroke="#edc7aa" stroke-width="1.6"/><text x="68" y="197" font-size="18" fill="#ac6846" font-weight="700" >HBM：写入并读回 S</text><text x="68" y="218" font-size="14" fill="#855f4d"  >额外 N² 元素 / head</text>
+<path d="M 219 234 L 219 253" fill="none" stroke="#4b817e" stroke-width="2.3"  stroke-linecap="round"/><path d="M 219 253 l -9 -5 l 0 10 z" fill="#4b817e" transform="rotate(90 219 253)"/>
+<rect x="44" y="254" width="350" height="66" rx="12" fill="#fff2e9" stroke="#edc7aa" stroke-width="1.6"/><text x="68" y="281" font-size="17" fill="#ac6846" font-weight="700" >Softmax → 写入 / 读回 P</text><text x="68" y="304" font-size="14" fill="#29474a"  >再计算 PV，输出 O</text>
+<rect x="464" y="91" width="352" height="63" rx="12" fill="#e5f4f0" stroke="#c9deda" stroke-width="1.6"/><text x="486" y="119" font-size="18" fill="#1b6f72" font-weight="700" >从 HBM 读取 Q、K、V tiles</text><text x="486" y="141" font-size="14" fill="#29474a"  >Qᵢ, Kⱼ, Vⱼ</text>
+<path d="M 641 155 L 641 176" fill="none" stroke="#4b817e" stroke-width="2.3"  stroke-linecap="round"/><path d="M 641 176 l -9 -5 l 0 10 z" fill="#4b817e" transform="rotate(90 641 176)"/>
+<rect x="464" y="177" width="352" height="83" rx="12" fill="#eae7fa" stroke="#c5bce8" stroke-width="1.6"/><text x="486" y="204" font-size="18" fill="#6657a6" font-weight="700" >SRAM / Registers</text><text x="486" y="225" font-size="16" fill="#29474a"  >局部 Sᵢⱼ → online softmax</text><text x="486" y="246" font-size="14" fill="#29474a"  >逐块更新 mᵢ、ℓᵢ、accᵢ</text>
+<path d="M 641 261 L 641 282" fill="none" stroke="#4b817e" stroke-width="2.3"  stroke-linecap="round"/><path d="M 641 282 l -9 -5 l 0 10 z" fill="#4b817e" transform="rotate(90 641 282)"/>
+<rect x="464" y="283" width="352" height="52" rx="12" fill="#e5f4f0" stroke="#c9deda" stroke-width="1.6"/><text x="486" y="313" font-size="17" fill="#1b6f72" font-weight="700" >HBM：写回最终 O（N × dᵥ）</text>
+<text x="44" y="377" font-size="15" fill="#647d7b"  >瓶颈不是只看 FLOPs，而是查看昂贵的全局内存往返。</text>
+</svg>

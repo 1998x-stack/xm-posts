@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><meta name="theme-color" content="#faf9f5"><meta name="description" content="FlashAttention 原理深度图解：HBM/SRAM、IO-aware tiling、在线 Softmax 的精确推导、因果 mask、反向重计算，以及 FlashAttention 2/3/4 的演进。"><title>Understanding FlashAttention — IO-aware Attention 深度图解</title><style>
+:root{color-scheme:light;--bg:#faf9f5;--paper:#fff;--ink:#243c40;--soft:#607678;--line:#dce8e2;--sea:#167b79;--sea-light:#e6f5ee;--orange:#c7834c;--orange-light:#fff2e7;--violet:#7a68b4}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.93 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;-webkit-font-smoothing:antialiased}
+a{color:var(--sea);text-underline-offset:4px}a:hover{color:#a7653a}
+.skip{position:absolute;top:-100px;left:18px;padding:8px 14px;color:white;background:#174b4d;z-index:30}.skip:focus{top:12px}
+:focus-visible{outline:3px solid #da9156;outline-offset:3px}
+.topbar{background:#193e40;color:#eef6ef}.topbar-inner{max-width:1220px;margin:auto;padding:13px 30px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;font-size:13px}.brand{color:white;text-decoration:none;font-weight:820;font-size:19px;letter-spacing:-.05em}.brand span{color:#e4ac7c}.topbar nav{display:flex;gap:22px;flex-wrap:wrap}.topbar nav a{color:#d5e6e0;text-decoration:none}.topbar nav a:hover{color:white}
+.layout{max-width:1240px;padding:57px 34px 115px;margin:auto;display:grid;grid-template-columns:212px minmax(0,1fr);gap:70px}
+.toc{position:sticky;top:24px;align-self:start;max-height:calc(100vh - 42px);overflow:auto;padding-right:12px}.toc strong{display:block;font-size:12px;letter-spacing:.13em;color:#a36e48;margin-bottom:15px}.toc a{display:block;text-decoration:none;color:#6f8584;font-size:12px;line-height:1.55;border-left:2px solid transparent;padding:8px 9px}.toc a:hover,.toc a:focus{border-color:var(--sea);background:var(--sea-light);color:var(--sea)}.toc p{border-top:1px solid var(--line);margin-top:16px;padding-top:16px;font-size:12px;line-height:1.7;color:var(--soft)}
+main{min-width:0;max-width:870px}.kicker{color:#ab7650;font-weight:800;letter-spacing:.16em;font-size:12px}
+h1{font-size:clamp(40px,5.2vw,68px);line-height:1.1;letter-spacing:-.058em;margin:19px 0 19px;font-weight:850;overflow-wrap:anywhere}h1 em{font-style:normal;color:var(--sea)}.deck{font-size:22px;color:#577172;line-height:1.65;max-width:795px;margin:0 0 22px}.meta{display:flex;gap:13px 22px;flex-wrap:wrap;color:#758481;font-size:12px}.meta span+span:before{content:"·";margin-right:18px}
+section{margin-top:76px;scroll-margin-top:32px}h2{font-size:30px;line-height:1.4;letter-spacing:-.025em;margin:0 0 24px}h2 .number{color:var(--orange);font-size:15px;letter-spacing:0;vertical-align:middle;margin-right:12px}h3{font-size:21px;line-height:1.4;margin:33px 0 13px}p{margin:15px 0}strong{font-weight:760}.lead{font-size:20px;color:#275e60;font-weight:670;line-height:1.8}
+.figure{margin:30px 0 32px;padding:16px;background:#fff;border:1px solid var(--line);box-shadow:0 14px 34px rgba(29,68,62,.035);border-radius:16px;overflow:hidden}.figure-canvas{width:100%;overflow:hidden}.figure svg{width:100%;height:auto;display:block;margin:auto}.figure figcaption{border-top:1px solid #edf1ee;margin-top:12px;padding-top:12px;color:#687f7c;font-size:13px;line-height:1.8}
+.callout{background:#edf7f2;border-left:4px solid var(--sea);padding:18px 21px;margin:24px 0;color:#315d5d;border-radius:0 10px 10px 0}.callout.warn{background:#fff4e9;border-color:#cf9058;color:#70513e}.callout p:first-child{margin-top:0}.callout p:last-child{margin-bottom:0}
+.eq{background:#ebf6f1;padding:22px 18px;border-radius:13px;color:#17656a;font:500 clamp(17px,2.2vw,23px)/1.75 Georgia,"Times New Roman","STSong",serif;text-align:center;overflow-wrap:anywhere;margin:25px 0}.eq small{display:block;color:#67807c;font:13px/1.8 -apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif;margin-top:9px}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px;margin:20px 0}.tile{background:#fff;border:1px solid var(--line);border-radius:12px;padding:17px}.tile b{display:block;color:#286e6d}.tile p{font-size:14px;color:#647a79;margin:7px 0 0;line-height:1.8}
+.table-scroll{overflow-x:auto;margin:22px 0}table{border-collapse:collapse;width:100%;min-width:610px;font-size:14px;line-height:1.7}th,td{border:1px solid #dfe7e2;text-align:left;vertical-align:top;padding:10px 12px}th{background:#e8f4ef;color:#266867}tr:nth-child(even){background:#fff}
+pre{margin:22px 0;background:#203d42;color:#e3f4ec;padding:22px;border-radius:12px;overflow:auto;tab-size:4;font:13px/1.7 ui-monospace,SFMono-Regular,Consolas,monospace}code{font:0.91em ui-monospace,SFMono-Regular,Consolas,monospace}p code,li code{padding:2px 5px;border-radius:4px;background:#e7eee9;color:#466b6a;overflow-wrap:anywhere}
+ol,ul{padding-left:23px}li{margin:8px 0}.ref-list{font-size:14px;color:#5c7776}.ref-list li{margin:11px 0}
+.widget{background:#fff;border:1px solid var(--line);border-radius:14px;padding:22px;margin:26px 0}.widget h3{margin:0 0 4px}.controls{display:flex;gap:9px;flex-wrap:wrap;margin:17px 0}.controls button{border:1px solid #bedbd2;background:white;color:#216966;cursor:pointer;border-radius:8px;padding:11px 17px;font:700 14px -apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif}.controls button:hover{border-color:#238480}.controls button[aria-pressed="true"]{background:#1d7978;color:white}.readout{background:#f0f7f3;padding:16px 18px;border-radius:9px;color:#2c6465;font-size:15px;min-height:100px}.readout b{color:#186a6b}.readout p{margin:4px 0}.micro{font-size:13px;color:#728581}.mathnote{font-size:14px;color:#617b7a}
+.footer{border-top:1px solid var(--line);padding-top:27px;margin-top:78px;color:#698280;font-size:13px}
+@media(max-width:1000px){.layout{display:block;padding:35px 25px 80px}.toc{position:static;max-height:none;display:flex;gap:5px;flex-wrap:wrap;border-bottom:1px solid var(--line);padding:0 0 21px;margin-bottom:35px}.toc strong{width:100%;margin-bottom:3px}.toc a{border:1px solid #d7e7df;border-radius:6px;padding:4px 8px;font-size:11px;background:#f1f8f3}.toc p{display:none}main{max-width:860px;margin:auto}}
+@media(max-width:570px){body{font-size:15px;line-height:1.9}.layout{padding:28px 15px 75px}.topbar-inner{padding:10px 16px}.topbar nav{gap:12px}.topbar nav a{font-size:12px}h1{font-size:41px}.deck{font-size:18px}.meta span+span:before{display:none}h2{font-size:25px}.lead{font-size:17px}.grid2{grid-template-columns:1fr}.figure{padding:7px}.figure figcaption{padding:10px}.widget{padding:14px}.eq{font-size:17px;padding:14px 9px}section{margin-top:59px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation:none!important;transition:none!important}}
+@media print{body{background:#fff;color:#111}.topbar,.toc,.skip,.controls{display:none!important}.layout{display:block;padding:0;max-width:none}.figure,.widget,.tile{box-shadow:none;break-inside:avoid}section{break-inside:auto;margin-top:35px}a{color:#154d50}h2{break-after:avoid}}
+</style></head>
+<body><a class="skip" href="#article-content">跳转正文</a><header class="topbar"><div class="topbar-inner"><a class="brand" href="../../../">xm<span>.</span>posts</a><nav aria-label="站点导航"><a href="../../../categories/systems/">系统与 Kernel</a><a href="../../../archive/">全部文章</a><a href="https://github.com/1998x-stack/xm-posts">GitHub</a></nav></div></header>
+<div class="layout"><nav class="toc" aria-label="本文目录"><strong>THE ANATOMY OF IO-AWARE ATTENTION</strong><a href="#paradox">01 · IO 悖论</a><a href="#baseline">02 · 公式与维度</a><a href="#tiling">03 · 分块调度</a><a href="#online">04 · 在线 Softmax</a><a href="#forward">05 · 前向 Kernel</a><a href="#backward">06 · 反向重算</a><a href="#complexity">07 · 复杂度</a><a href="#versions">08 · FA1–FA4</a><a href="#code">09 · 最小代码</a><a href="#evidence">10 · 实验证据</a><a href="#boundaries">11 · 工程边界</a><a href="#summary">12 · 要点与文献</a><p>原始论文主线：2022 · 补充截至 2026 的算法发展。</p></nav>
+<main id="article-content"><article><header><div class="kicker">PAPER STUDY · SYSTEMS &amp; GPU KERNELS</div><h1>Understanding <em>FlashAttention</em></h1><p class="deck">Attention 的复杂度没变，为什么还能变快？从 GPU 内存墙出发，用五幅机制图、在线 Softmax 推导与可执行例子理解 IO-aware Attention。</p><div class="meta"><span>主论文 · Dao et al., NeurIPS 2022</span><span>演进 · FA2 / FA3 / FA4</span><span>阅读约 32 分钟</span></div></header>
+<section id="paradox" aria-labelledby="paradox-heading"><h2 id="paradox-heading"><span class="number">01 ·</span>更少的数据搬运，而不是更少的注意力</h2>
+<p class="lead">标准 Attention 的数学式只有一行，实际执行却会让 GPU 在一块巨大的 <code>N × N</code> 矩阵上来回读写。FlashAttention 的突破，不是丢弃一部分 token，也不是把 Softmax 改成近似函数，而是<strong>换一种执行顺序，让中间矩阵不落到昂贵的全局内存。</strong></p>
+<p>设一个 Attention head 有 <code>N</code> 个 token，每个 Query/Key 向量维度为 <code>d</code>，Value 维度为 <code>dᵥ</code>。普通实现先计算每对 token 的相关性，再逐行 Softmax，最后加权求和。数学上完全合理，但如果每一步都是一个独立 GPU kernel，分数矩阵 <code>S</code> 和概率矩阵 <code>P</code> 往往要被写入、读取显存。</p>
+<figure class="figure"><div class="figure-canvas"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 396" width="860" height="396" role="img" aria-labelledby="fa-memory-title fa-memory-desc" data-export="fa-memory.svg" style="font-family:system-ui,-apple-system,'PingFang SC','Microsoft YaHei',sans-serif">
+<title id="fa-memory-title">普通 Attention 与 FlashAttention 的数据流差异</title><desc id="fa-memory-desc">左侧传统实现把分数和概率矩阵写入 HBM；右侧融合内核仅保留 tile 和在线归约状态在 SRAM 中，最终写回输出。</desc>
+<rect x="0" y="0" width="860" height="396" rx="20" fill="#f7faf8"/>
+
+<rect x="24" y="31" width="392" height="326" rx="12" fill="#fff" stroke="#c9deda" stroke-width="1.6"/><rect x="444" y="31" width="392" height="326" rx="12" fill="#fff" stroke="#c9deda" stroke-width="1.6"/>
+<text x="44" y="68" font-size="19" fill="#26454b" font-weight="700" >常规 Attention：多个独立算子</text>
+<text x="464" y="68" font-size="19" fill="#26454b" font-weight="700" >FlashAttention：融合、分块、在线归约</text>
+<rect x="44" y="92" width="350" height="57" rx="12" fill="#e5f4f0" stroke="#c9deda" stroke-width="1.6"/><text x="70" y="116" font-size="18" fill="#1b6f72" font-weight="700" >QKᵀ / √d</text><text x="70" y="138" font-size="14" fill="#29474a"  >产生 N × N 分数矩阵 S</text>
+<path d="M 219 150 L 219 169" fill="none" stroke="#4b817e" stroke-width="2.3"  stroke-linecap="round"/><path d="M 219 169 l -9 -5 l 0 10 z" fill="#4b817e" transform="rotate(90 219 169)"/>
+<rect x="44" y="170" width="350" height="63" rx="12" fill="#fff2e9" stroke="#edc7aa" stroke-width="1.6"/><text x="68" y="197" font-size="18" fill="#ac6846" font-weight="700" >HBM：写入并读回 S</text><text x="68" y="218" font-size="14" fill="#855f4d"  >额外 N² 元素 / head</text>
+<path d="M 219 234 L 219 253" fill="none" stroke="#4b817e" stroke-width="2.3"  stroke-linecap="round"/><path d="M 219 253 l -9 -5 l 0 10 z" fill="#4b817e" transform="rotate(90 219 253)"/>
+<rect x="44" y="254" width="350" height="66" rx="12" fill="#fff2e9" stroke="#edc7aa" stroke-width="1.6"/><text x="68" y="281" font-size="17" fill="#ac6846" font-weight="700" >Softmax → 写入 / 读回 P</text><text x="68" y="304" font-size="14" fill="#29474a"  >再计算 PV，输出 O</text>
+<rect x="464" y="91" width="352" height="63" rx="12" fill="#e5f4f0" stroke="#c9deda" stroke-width="1.6"/><text x="486" y="119" font-size="18" fill="#1b6f72" font-weight="700" >从 HBM 读取 Q、K、V tiles</text><text x="486" y="141" font-size="14" fill="#29474a"  >Qᵢ, Kⱼ, Vⱼ</text>
+<path d="M 641 155 L 641 176" fill="none" stroke="#4b817e" stroke-width="2.3"  stroke-linecap="round"/><path d="M 641 176 l -9 -5 l 0 10 z" fill="#4b817e" transform="rotate(90 641 176)"/>
+<rect x="464" y="177" width="352" height="83" rx="12" fill="#eae7fa" stroke="#c5bce8" stroke-width="1.6"/><text x="486" y="204" font-size="18" fill="#6657a6" font-weight="700" >SRAM / Registers</text><text x="486" y="225" font-size="16" fill="#29474a"  >局部 Sᵢⱼ → online softmax</text><text x="486" y="246" font-size="14" fill="#29474a"  >逐块更新 mᵢ、ℓᵢ、accᵢ</text>
+<path d="M 641 261 L 641 282" fill="none" stroke="#4b817e" stroke-width="2.3"  stroke-linecap="round"/><path d="M 641 282 l -9 -5 l 0 10 z" fill="#4b817e" transform="rotate(90 641 282)"/>
+<rect x="464" y="283" width="352" height="52" rx="12" fill="#e5f4f0" stroke="#c9deda" stroke-width="1.6"/><text x="486" y="313" font-size="17" fill="#1b6f72" font-weight="700" >HBM：写回最终 O（N × dᵥ）</text>
+<text x="44" y="377" font-size="15" fill="#647d7b"  >瓶颈不是只看 FLOPs，而是查看昂贵的全局内存往返。</text>
+</svg></div><figcaption>图 1 · 左边突出传统分阶段算子的显存往返；右边展示将 block score、归约状态与 Value 累加融合到片上存储的思路。这是数据流示意，不是硬件带宽按比例绘制。</figcaption></figure>
+<p>一个可感知的量级：当 <code>N = 4096</code>、每个元素用 FP16 的 2 字节表示时，<strong>单独一张</strong> <code>4096 × 4096</code> 分数矩阵就约为 32 MiB。多头、批量、反向中间张量又会增加工作集；具体峰值由框架和融合策略决定。</p>
+<div class="callout"><p><strong>核心命题：</strong>一次 Attention 的 FLOPs 没有因为 FlashAttention 消失；优化的是 HBM ↔ SRAM 的 IO 以及由此带来的实际执行时间。原论文的算法仍计算完整的 dense Attention（稀疏扩展需单独看）。<a href="https://arxiv.org/abs/2205.14135">[FA1, Abstract / §3]</a></p></div>
+</section>
+<section id="baseline" aria-labelledby="baseline-heading"><h2 id="baseline-heading"><span class="number">02 ·</span>回到原式：到底在算什么？</h2>
+<div class="eq">S = QKᵀ / √d,&nbsp; P = softmax<sub>key</sub>(S + M),&nbsp; O = PV
+<small>Q ∈ ℝ<sup>Nq×d</sup>，K ∈ ℝ<sup>Nk×d</sup>，V ∈ ℝ<sup>Nk×dᵥ</sup>，O ∈ ℝ<sup>Nq×dᵥ</sup>。Softmax 沿每个 Query 对应的 Key 维度进行。</small></div>
+<p><code>M</code> 是可选的加性 Mask：合法位置加 0；不合法位置在概念上加 <code>−∞</code>。在 causal self-attention 中，Query 位置 <code>i</code> 只能看到 <code>j ≤ i</code> 的 Key。分母是这一行所有可见 Key 的指数和，不是单个 tile 的局部和。</p>
+<p>一个常见误解是：把序列拆成若干块，每块独立 Softmax，然后把结果相加就结束了。<strong>这样并不等价</strong>，因为每块使用不同归一化分母。FlashAttention 解决的正是「分块计算但仍共用整行 Softmax 分母」这个问题。</p>
+<div class="grid2"><div class="tile"><b>保持不变</b><p>Q、K、V 的含义、注意力权重定义、因果约束，以及输出的数学目标。</p></div><div class="tile"><b>发生变化</b><p>tile 的读取顺序、局部归约的状态表示、Kernel 融合、反向缓存与重算策略。</p></div></div>
+</section>
+<section id="tiling" aria-labelledby="tiling-heading"><h2 id="tiling-heading"><span class="number">03 ·</span>把注意力矩阵切成小窗格</h2>
+<p>设 Query block 大小为 <code>Bq</code>，Key/Value block 大小为 <code>Bk</code>。内核依次把 <code>Qᵢ</code> 与 <code>Kⱼ, Vⱼ</code> 搬到片上内存，计算一个 <code>Bq × Bk</code> 的局部 score tile，并立即用于更新对应 Query 行的在线归约状态。整个 <code>Nq × Nk</code> 分数矩阵不需要被实体化。</p>
+<figure class="figure"><div class="figure-canvas"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 408" width="860" height="408" role="img" aria-labelledby="fa-grid-title fa-grid-desc" data-export="fa-grid.svg" style="font-family:system-ui,-apple-system,'PingFang SC','Microsoft YaHei',sans-serif">
+<title id="fa-grid-title">因果注意力的块调度</title><desc id="fa-grid-desc">Q 块按行、K/V 块按列进行运算；右上角被未来信息屏蔽；对角块仍需要细粒度掩码。</desc>
+<rect x="0" y="0" width="860" height="408" rx="20" fill="#f7faf8"/>
+
+<text x="46" y="52" font-size="21" fill="#274d4c" font-weight="700" >Query tiles（行） × Key / Value tiles（列）</text>
+<text x="385" y="94" font-size="16" fill="#506b6b" font-weight="700" >K₀</text><text x="481" y="94" font-size="16" fill="#506b6b" font-weight="700" >K₁</text><text x="577" y="94" font-size="16" fill="#506b6b" font-weight="700" >K₂</text><text x="673" y="94" font-size="16" fill="#506b6b" font-weight="700" >K₃</text>
+<text x="288" y="148" font-size="16" fill="#506b6b" font-weight="700" >Q₀</text><text x="288" y="210" font-size="16" fill="#506b6b" font-weight="700" >Q₁</text><text x="288" y="272" font-size="16" fill="#506b6b" font-weight="700" >Q₂</text><text x="288" y="334" font-size="16" fill="#506b6b" font-weight="700" >Q₃</text>
+<rect x="353" y="111" width="82" height="49" rx="6" fill="#fff1de" stroke="#eacda0" stroke-width="1.6"/><text x="364" y="141" font-size="15" fill="#9f6a39" font-weight="700" >对角</text><rect x="449" y="111" width="82" height="49" rx="6" fill="#f2f0ed" stroke="#deded8" stroke-width="1.6"/><text x="460" y="141" font-size="15" fill="#8a8a85" font-weight="700" >MASK</text><rect x="545" y="111" width="82" height="49" rx="6" fill="#f2f0ed" stroke="#deded8" stroke-width="1.6"/><text x="556" y="141" font-size="15" fill="#8a8a85" font-weight="700" >MASK</text><rect x="641" y="111" width="82" height="49" rx="6" fill="#f2f0ed" stroke="#deded8" stroke-width="1.6"/><text x="652" y="141" font-size="15" fill="#8a8a85" font-weight="700" >MASK</text><rect x="353" y="173" width="82" height="49" rx="6" fill="#d9f2eb" stroke="#b8e0d4" stroke-width="1.6"/><text x="364" y="203" font-size="15" fill="#1f7774" font-weight="700" >计算</text><rect x="449" y="173" width="82" height="49" rx="6" fill="#fff1de" stroke="#eacda0" stroke-width="1.6"/><text x="460" y="203" font-size="15" fill="#9f6a39" font-weight="700" >对角</text><rect x="545" y="173" width="82" height="49" rx="6" fill="#f2f0ed" stroke="#deded8" stroke-width="1.6"/><text x="556" y="203" font-size="15" fill="#8a8a85" font-weight="700" >MASK</text><rect x="641" y="173" width="82" height="49" rx="6" fill="#f2f0ed" stroke="#deded8" stroke-width="1.6"/><text x="652" y="203" font-size="15" fill="#8a8a85" font-weight="700" >MASK</text><rect x="353" y="235" width="82" height="49" rx="6" fill="#d9f2eb" stroke="#b8e0d4" stroke-width="1.6"/><text x="364" y="265" font-size="15" fill="#1f7774" font-weight="700" >计算</text><rect x="449" y="235" width="82" height="49" rx="6" fill="#d9f2eb" stroke="#b8e0d4" stroke-width="1.6"/><text x="460" y="265" font-size="15" fill="#1f7774" font-weight="700" >计算</text><rect x="545" y="235" width="82" height="49" rx="6" fill="#fff1de" stroke="#eacda0" stroke-width="1.6"/><text x="556" y="265" font-size="15" fill="#9f6a39" font-weight="700" >对角</text><rect x="641" y="235" width="82" height="49" rx="6" fill="#f2f0ed" stroke="#deded8" stroke-width="1.6"/><text x="652" y="265" font-size="15" fill="#8a8a85" font-weight="700" >MASK</text><rect x="353" y="297" width="82" height="49" rx="6" fill="#d9f2eb" stroke="#b8e0d4" stroke-width="1.6"/><text x="364" y="327" font-size="15" fill="#1f7774" font-weight="700" >计算</text><rect x="449" y="297" width="82" height="49" rx="6" fill="#d9f2eb" stroke="#b8e0d4" stroke-width="1.6"/><text x="460" y="327" font-size="15" fill="#1f7774" font-weight="700" >计算</text><rect x="545" y="297" width="82" height="49" rx="6" fill="#d9f2eb" stroke="#b8e0d4" stroke-width="1.6"/><text x="556" y="327" font-size="15" fill="#1f7774" font-weight="700" >计算</text><rect x="641" y="297" width="82" height="49" rx="6" fill="#fff1de" stroke="#eacda0" stroke-width="1.6"/><text x="652" y="327" font-size="15" fill="#9f6a39" font-weight="700" >对角</text>
+<rect x="35" y="116" width="225" height="204" rx="12" fill="#fff" stroke="#e0e8e4" stroke-width="1.6"/><text x="54" y="147" font-size="16" fill="#1b7774" font-weight="700" >读入 Qᵢ：一个行块</text><text x="54" y="181" font-size="16" fill="#29474a"  >循环访问 Kⱼ / Vⱼ</text><text x="54" y="215" font-size="16" fill="#29474a"  >更新每行 m, ℓ, acc</text><text x="54" y="249" font-size="15" fill="#29474a"  >对角块施加 causal mask</text><text x="54" y="282" font-size="15" fill="#29474a"  >跳过完全屏蔽的 tile</text>
+<rect x="353" y="365" width="27" height="12" rx="12" fill="#d9f2eb" stroke="#c9deda" stroke-width="1.6"/><text x="390" y="376" font-size="13" fill="#29474a"  >有效块</text><rect x="489" y="365" width="27" height="12" rx="12" fill="#fff1de" stroke="#c9deda" stroke-width="1.6"/><text x="526" y="376" font-size="13" fill="#29474a"  >对角局部掩码</text><rect x="666" y="365" width="27" height="12" rx="12" fill="#f2f0ed" stroke="#c9deda" stroke-width="1.6"/><text x="703" y="376" font-size="13" fill="#29474a"  >未来块</text>
+</svg></div><figcaption>图 2 · causal attention 的块级调度。左下角 tile 完全有效，右上角完全被 Mask；对角 tile 还需在 tile 内逐元素施加因果约束。</figcaption></figure>
+<p>这里不是「只算绿色块」的通用要求：<strong>非因果 Attention 所有 tile 都要参与</strong>。图中的三角形来自 causal Mask，而不是 FlashAttention 主动近似丢弃信息。每一个 Query tile 持有独立的 <code>m、ℓ、acc</code> 行状态。</p>
+<p>tile 不应越大越好。更大的 block 能增加矩阵乘工作比例，但也会增加 shared memory、寄存器与线程块资源占用，从而影响 occupancy。最优配置依 GPU 架构、head dimension、序列长度、数据类型与 mask 而变化。</p>
+</section>
+<section id="online" aria-labelledby="online-heading"><h2 id="online-heading"><span class="number">04 ·</span>在线 Softmax：分母可以边走边算吗？</h2>
+<p>先只考虑某一个 Query 行。已经看过的 score 集合为 <code>A</code>，它的运行最大值为 <code>m</code>；指数和为 <code>ℓ</code>；未归一化的 Value 加权和为向量 <code>acc</code>。接下来读取新 tile <code>B</code>，其中每个位置有 score <code>sⱼ</code> 与向量 <code>vⱼ</code>。</p>
+<div class="eq">m′ = max(m, max<sub>j∈B</sub> sⱼ)<small>把新旧两部分统一到一个数值稳定的指数参考点。</small></div>
+<div class="eq">α = exp(m − m′),&nbsp; wⱼ = exp(sⱼ − m′)<br>ℓ′ = αℓ + Σ<sub>j∈B</sub>wⱼ<br>acc′ = αacc + Σ<sub>j∈B</sub>wⱼvⱼ
+<small>初始化 m = −∞、ℓ = 0、acc = 0；对第一块应将 αℓ 视为 0。所有被 Mask 的 score 都不参与集合 B。</small></div>
+<p>关键不是 <code>ℓ′</code> 的更新本身，而是 <strong>旧的加权和也必须乘同一个 <code>α</code></strong>。否则当后续 tile 出现更大的 score 时，历史项和新项不在同一个指数尺度，最终答案会错。</p>
+<figure class="figure"><div class="figure-canvas"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 398" width="860" height="398" role="img" aria-labelledby="fa-online-title fa-online-desc" data-export="fa-online.svg" style="font-family:system-ui,-apple-system,'PingFang SC','Microsoft YaHei',sans-serif">
+<title id="fa-online-title">在线 Softmax 重新缩放的必要性</title><desc id="fa-online-desc">先处理两个分数 1 和 2，再接入第三个分数 0；每个块都维持共享最大值、指数和及加权值和，最终一致。</desc>
+<rect x="0" y="0" width="860" height="398" rx="20" fill="#f7faf8"/>
+
+<text x="36" y="46" font-size="21" fill="#274d4c" font-weight="700" >一个 Query，依次看到三个 Key</text>
+<text x="40" y="83" font-size="14" fill="#607b7c" font-weight="700" >scores</text>
+<rect x="122" y="58" width="101" height="47" rx="7" fill="#e2f4ef" stroke="#b8dbd2" stroke-width="1.6"/><text x="162" y="88" font-size="22" fill="#197b78" font-weight="700" >1</text><rect x="241" y="58" width="101" height="47" rx="7" fill="#e2f4ef" stroke="#b8dbd2" stroke-width="1.6"/><text x="281" y="88" font-size="22" fill="#197b78" font-weight="700" >2</text><rect x="360" y="58" width="101" height="47" rx="7" fill="#fff0df" stroke="#e5be90" stroke-width="1.6"/><text x="400" y="88" font-size="22" fill="#aa7042" font-weight="700" >0</text>
+<text x="40" y="139" font-size="14" fill="#607b7c" font-weight="700" >values</text>
+<rect x="122" y="115" width="101" height="47" rx="7" fill="#e2f4ef" stroke="#b8dbd2" stroke-width="1.6"/><text x="158" y="145" font-size="21" fill="#197b78" font-weight="700" >2</text><rect x="241" y="115" width="101" height="47" rx="7" fill="#e2f4ef" stroke="#b8dbd2" stroke-width="1.6"/><text x="277" y="145" font-size="21" fill="#197b78" font-weight="700" >6</text><rect x="360" y="115" width="101" height="47" rx="7" fill="#fff0df" stroke="#e5be90" stroke-width="1.6"/><text x="396" y="145" font-size="21" fill="#aa7042" font-weight="700" >10</text>
+<rect x="40" y="190" width="376" height="157" rx="12" fill="#fff" stroke="#dae9e4" stroke-width="1.6"/>
+<text x="60" y="218" font-size="18" fill="#176f70" font-weight="700" >Tile 1：处理 (1, 2)</text>
+<text x="60" y="250" font-size="17" fill="#29474a"  >m = 2</text><text x="60" y="279" font-size="16" fill="#29474a"  >ℓ = exp(−1) + 1 ≈ 1.3679</text>
+<text x="60" y="308" font-size="15" fill="#29474a"  >acc = 2 exp(−1) + 6 ≈ 6.7358</text>
+<text x="60" y="330" font-size="15" fill="#176f70" font-weight="700" >o = acc / ℓ ≈ 4.924</text>
+<path d="M 425 260 L 444 260" fill="none" stroke="#4b817e" stroke-width="2.3"  stroke-linecap="round"/><path d="M 444 260 l -9 -5 l 0 10 z" fill="#4b817e" transform="rotate(0 444 260)"/>
+<rect x="446" y="190" width="374" height="157" rx="12" fill="#fff" stroke="#dae9e4" stroke-width="1.6"/>
+<text x="466" y="218" font-size="17" fill="#ac7043" font-weight="700" >Tile 2：接入 score=0, value=10</text>
+<text x="466" y="250" font-size="17" fill="#29474a"  >m′ = max(2, 0) = 2</text>
+<text x="466" y="279" font-size="15" fill="#29474a"  >ℓ′ = ℓ + exp(−2) ≈ 1.5032</text>
+<text x="466" y="308" font-size="15" fill="#29474a"  >acc′ = acc + 10 exp(−2) ≈ 8.0892</text>
+<text x="466" y="330" font-size="15" fill="#176f70" font-weight="700" >o′ = acc′ / ℓ′ ≈ 5.3812</text>
+<text x="42" y="376" font-size="14" fill="#5d7775"  >若新块的最大 score 更大，历史 ℓ 和 acc 必须按 exp(m_old − m_new) 同步缩放。</text>
+</svg></div><figcaption>图 3 · 教学用单 Query 示例。score=(1, 2, 0)，value=(2, 6, 10)；前两个元素一块、最后一个元素一块。图中数值为四舍五入，不是论文 benchmark。</figcaption></figure>
+<div class="widget" aria-label="在线 Softmax 交互示例">
+<h3>跟着两个 tile 算一遍</h3><p class="micro">这只是一个标量 Value 的教学例子。按钮会更新已经见过的 Key 数量、归约状态和输出。</p>
+<div class="controls"><button type="button" id="advance-tile" aria-controls="online-readout" aria-pressed="false">接入第二个 tile</button><button type="button" id="reset-tile" aria-controls="online-readout">回到第一块</button></div>
+<div class="readout" id="online-readout" aria-live="polite"><b>已处理 Tile 1 / 2</b><p>Key：1、2；m = 2；ℓ ≈ 1.3679；acc ≈ 6.7358</p><p>当前输出 acc / ℓ ≈ 4.9242</p></div>
+</div>
+<p>处理所有 tile 后，<code>O = acc / ℓ</code>，与一次性计算这一行的 Softmax 及 <code>PV</code> 在实数代数上相同。浮点计算的舍入误差和精度路径仍可能不同；<strong>“exact attention” 不等于逐位 bitwise 相同</strong>。<a href="https://arxiv.org/abs/2205.14135">[FA1, Algorithm 1 / Theorem 1]</a></p>
+</section>
+<section id="forward" aria-labelledby="forward-heading"><h2 id="forward-heading"><span class="number">05 ·</span>前向 Kernel：如何把这些状态串起来？</h2>
+<p>把一个 Query tile 的多行并排放入同一个线程块。每读取一个 K/V tile，就计算局部 <code>QᵢKⱼᵀ</code>，实施 Mask，进行按行更新。下面是便于推理的抽象伪代码，不是原论文 Algorithm 1 的逐行转录，也不是可直接编译的 CUDA Kernel。</p>
+<pre><code>for Q_tile in Q_tiles:
+    m = -inf             # 每个 query 行一个最大值
+    l = 0                # 每个 query 行一个指数和
+    acc = zeros(Bq, dv) # 未归一化 value 加权和
+    for K_tile, V_tile in KV_tiles:
+        s = Q_tile @ K_tile.T / sqrt(d)
+        s = apply_mask(s)        # 在本 tile 上
+        new_m = max(m, rowmax(s))
+        alpha = exp(m - new_m)  # 初始空状态按 0 处理
+        w = exp(s - new_m[:, None])
+        l = alpha * l + rowsum(w)
+        acc = alpha[:, None] * acc + w @ V_tile
+        m = new_m
+    O_tile = acc / l[:, None]</code></pre>
+<p>关键的排列方式是：<em>score tile 从生成到消费都不离开片上工作集</em>。实际 CUDA 实现会细致区分 global memory、shared memory、寄存器、warp 与线程块；伪代码只表达数值不变量，不能推导真实的加速倍数。</p>
+<p>为什么数值稳定？所有参与指数函数的 score 都减去目前已见数据的最大值，因此不需要直接计算巨大正数的指数。若一行所有位置都被 Mask，必须显式处理空集合；一般 causal self-attention 每行至少含自己，实际高性能内核也可能对边界 tile 做额外分支。</p>
+</section>
+<section id="backward" aria-labelledby="backward-heading"><h2 id="backward-heading"><span class="number">06 ·</span>反向为什么值得重新计算？</h2>
+<p>常规自动求导会倾向保存较多前向中间结果，以换取反向少算一点。FlashAttention 反过来做：不在 HBM 保存 <code>N×N</code> 的概率矩阵，而是保存输出和每行可复用的归一化统计量。反向经过每个 tile 时再根据 <code>Q、K、LSE</code> 恢复局部概率。</p>
+<figure class="figure"><div class="figure-canvas"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 380" width="860" height="380" role="img" aria-labelledby="fa-backward-title fa-backward-desc" data-export="fa-backward.svg" style="font-family:system-ui,-apple-system,'PingFang SC','Microsoft YaHei',sans-serif">
+<title id="fa-backward-title">反向传播时为什么重计算而不是存储 P</title><desc id="fa-backward-desc">前向仅保留输出与每行 logsumexp；反向逐块重算 S 和 P，再消费 dO，累加 dQ、dK、dV。</desc>
+<rect x="0" y="0" width="860" height="380" rx="20" fill="#f7faf8"/>
+
+<rect x="25" y="35" width="810" height="78" rx="12" fill="#e2f4ef" stroke="#c9deda" stroke-width="1.6"/><text x="45" y="66" font-size="20" fill="#167c79" font-weight="700" >Forward</text>
+<text x="180" y="63" font-size="17" fill="#29474a"  >Q, K, V → block scores → online softmax → O</text>
+<text x="180" y="91" font-size="15" fill="#3f7775"  >保存：O 与行级 LSE = m + log(ℓ)；不保存 N×N 的 P</text>
+<path d="M 420 114 L 420 146" fill="none" stroke="#4b817e" stroke-width="2.3"  stroke-linecap="round"/><path d="M 420 146 l -9 -5 l 0 10 z" fill="#4b817e" transform="rotate(90 420 146)"/>
+<rect x="25" y="147" width="810" height="206" rx="12" fill="#fff" stroke="#d7e5e0" stroke-width="1.6"/>
+<text x="44" y="179" font-size="20" fill="#264a4b" font-weight="700" >Backward（tile 内）</text>
+<rect x="45" y="199" width="211" height="101" rx="12" fill="#fff2e8" stroke="#edceaf" stroke-width="1.6"/><text x="61" y="230" font-size="17" fill="#a36d45" font-weight="700" >从 Qᵢ, Kⱼ</text><text x="61" y="253" font-size="16" fill="#29474a"  >重算 Sᵢⱼ</text><text x="61" y="277" font-size="14" fill="#29474a"  >结合 LSE 恢复 Pᵢⱼ</text>
+<path d="M 263 249 L 287 249" fill="none" stroke="#4b817e" stroke-width="2.3"  stroke-linecap="round"/><path d="M 287 249 l -9 -5 l 0 10 z" fill="#4b817e" transform="rotate(0 287 249)"/>
+<rect x="291" y="199" width="238" height="101" rx="12" fill="#eeeafb" stroke="#cdc7eb" stroke-width="1.6"/><text x="306" y="229" font-size="17" fill="#6554a0" font-weight="700" >局部 Pᵢⱼ + dOᵢ</text><text x="306" y="253" font-size="15" fill="#29474a"  >dV ← Pᵀ dO</text><text x="306" y="276" font-size="15" fill="#29474a"  >dP ← dO Vᵀ</text>
+<path d="M 536 249 L 559 249" fill="none" stroke="#4b817e" stroke-width="2.3"  stroke-linecap="round"/><path d="M 559 249 l -9 -5 l 0 10 z" fill="#4b817e" transform="rotate(0 559 249)"/>
+<rect x="562" y="199" width="253" height="101" rx="12" fill="#e2f4ef" stroke="#bbded6" stroke-width="1.6"/><text x="578" y="229" font-size="16" fill="#1c7875" font-weight="700" >dS = P ⊙ (dP − D)</text><text x="578" y="253" font-size="15" fill="#29474a"  >dQ ← dS K / √d</text><text x="578" y="276" font-size="15" fill="#29474a"  >dK ← dSᵀ Q / √d</text>
+<text x="45" y="333" font-size="14" fill="#5a7675"  >每个 tile 的梯度累加到对应 Q/K/V；计算与内存流量的交换是核心权衡。</text>
+</svg></div><figcaption>图 4 · 反向梯度示意。LSE 为每行 logsumexp；只在局部 tile 内重建概率 P。箭头描述计算依赖，不表示 dQ/dK/dV 一定在同一时刻写入 HBM。</figcaption></figure>
+<p>对一行而言，<code>dP = dO Vᵀ</code>，<code>Dᵢ = Σⱼ Pᵢⱼ dPᵢⱼ = Σₜ Oᵢₜ dOᵢₜ</code>。Softmax 的 Jacobian 可简化为：</p>
+<div class="eq">dSᵢⱼ = Pᵢⱼ (dPᵢⱼ − Dᵢ)<br>dQ = (dS K) / √d,&nbsp; dK = (dSᵀ Q) / √d,&nbsp; dV = PᵀdO
+<small>S 已包含 1/√d；这些式子表达未加 dropout 等扩展的标准 Attention backward。</small></div>
+<p>额外的 FLOPs 不一定是坏事：当被节省的是大量 HBM 读写时，「重算便宜的 tile、换掉昂贵的存储」可能让整体更快。具体收益仍依硬件与 shape 而定。<a href="https://arxiv.org/abs/2205.14135">[FA1, §3.2 / Appendix]</a></p>
+</section>
+<section id="complexity" aria-labelledby="complexity-heading"><h2 id="complexity-heading"><span class="number">07 ·</span>复杂度：线性内存，不等于线性时间</h2>
+<div class="table-scroll"><table><thead><tr><th>比较维度</th><th>常规显式 Attention</th><th>FlashAttention v1</th></tr></thead><tbody>
+<tr><td>数学目标</td><td>dense exact softmax attention</td><td>相同的 dense attention</td></tr>
+<tr><td>主计算量</td><td>Θ(N²d)，令 dᵥ≈d</td><td>Θ(N²d)，数量级不变</td></tr>
+<tr><td>显式物化 S、P</td><td>常见分阶段实现会做</td><td>不需要整张 N×N 矩阵</td></tr>
+<tr><td>额外工作存储</td><td>通常 Θ(N²)，不含 Q/K/V/O</td><td>论文 Theorem 1 给出 O(N) 额外存储</td></tr>
+<tr><td>HBM accesses</td><td>论文基线 Θ(Nd + N²)</td><td>在论文假设下 Θ(N²d²/M)</td></tr>
+</tbody></table></div>
+<p class="mathnote"><code>M</code> 表示可用片上 SRAM 容量（按标量元素计）。上表的理论 IO 结果针对原论文所述存储模型及 <code>d ≤ M ≤ Nd</code> 的参数区间；不能直接当成任意 GPU / Attention 变种的带宽预测。<a href="https://arxiv.org/abs/2205.14135">[FA1, Theorems 1–2]</a></p>
+<div class="callout warn"><p><strong>两个经常被混淆的边界：</strong>FlashAttention 不会自动减少模型参数、KV Cache 所占空间，也不会把一次完整序列 Attention 的二次计算量变成线性。PagedAttention 管理的是 Serving 阶段 KV Cache 的分配与访问，它与这里的 Attention kernel IO 优化处于不同层级，可组合但不是同一算法。</p></div>
+</section>
+<section id="versions" aria-labelledby="versions-heading"><h2 id="versions-heading"><span class="number">08 ·</span>FA1 → FA4：同一个数学目标，不同的硬件瓶颈</h2>
+<figure class="figure"><div class="figure-canvas"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 374" width="860" height="374" role="img" aria-labelledby="fa-evolution-title fa-evolution-desc" data-export="fa-evolution.svg" style="font-family:system-ui,-apple-system,'PingFang SC','Microsoft YaHei',sans-serif">
+<title id="fa-evolution-title">FlashAttention 家族演化路线</title><desc id="fa-evolution-desc">2022 到 2026 各版关注的瓶颈由 IO 减少，发展到并行划分，异步流水线以及 Blackwell 的非矩阵乘单元压力。</desc>
+<rect x="0" y="0" width="860" height="374" rx="20" fill="#f7faf8"/>
+
+<path d="M 105 114 L 746 114" fill="none" stroke="#b2d5d0" stroke-width="5"  stroke-linecap="round"/>
+<path d="M 104 116 L 104 151" fill="none" stroke="#176e72" stroke-width="2"  stroke-linecap="round"/><circle cx="104" cy="114" r="11" fill="#176e72" stroke="#fff" stroke-width="3"/><text x="76" y="83" font-size="16" fill="#176e72" font-weight="700" >2022</text><rect x="16" y="160" width="178" height="133" rx="12" fill="#fff" stroke="#d6e3df" stroke-width="1.6"/><text x="39" y="192" font-size="25" fill="#176e72" font-weight="700" >FA1</text><text x="39" y="219" font-size="16" fill="#284c4c" font-weight="700" >IO-aware</text><text x="39" y="245" font-size="13" fill="#597675"  >Tiling + online softmax</text><path d="M 316 116 L 316 151" fill="none" stroke="#176e72" stroke-width="2"  stroke-linecap="round"/><circle cx="316" cy="114" r="11" fill="#176e72" stroke="#fff" stroke-width="3"/><text x="288" y="83" font-size="16" fill="#176e72" font-weight="700" >2023</text><rect x="228" y="160" width="178" height="133" rx="12" fill="#fff" stroke="#d6e3df" stroke-width="1.6"/><text x="251" y="192" font-size="25" fill="#176e72" font-weight="700" >FA2</text><text x="251" y="219" font-size="16" fill="#284c4c" font-weight="700" >Occupancy</text><text x="251" y="245" font-size="13" fill="#597675"  >Warps / CTA 分工</text><path d="M 528 116 L 528 151" fill="none" stroke="#7865b5" stroke-width="2"  stroke-linecap="round"/><circle cx="528" cy="114" r="11" fill="#7865b5" stroke="#fff" stroke-width="3"/><text x="500" y="83" font-size="16" fill="#7865b5" font-weight="700" >2024</text><rect x="440" y="160" width="178" height="133" rx="12" fill="#fff" stroke="#d6e3df" stroke-width="1.6"/><text x="463" y="192" font-size="25" fill="#7865b5" font-weight="700" >FA3</text><text x="463" y="219" font-size="16" fill="#284c4c" font-weight="700" >Hopper</text><text x="463" y="245" font-size="13" fill="#597675"  >异步 WGMMA / TMA</text><path d="M 740 116 L 740 151" fill="none" stroke="#b47c47" stroke-width="2"  stroke-linecap="round"/><circle cx="740" cy="114" r="11" fill="#b47c47" stroke="#fff" stroke-width="3"/><text x="712" y="83" font-size="16" fill="#b47c47" font-weight="700" >2026</text><rect x="652" y="160" width="178" height="133" rx="12" fill="#fff" stroke="#d6e3df" stroke-width="1.6"/><text x="675" y="192" font-size="25" fill="#b47c47" font-weight="700" >FA4</text><text x="675" y="219" font-size="16" fill="#284c4c" font-weight="700" >Blackwell</text><text x="675" y="245" font-size="13" fill="#597675"  >流水线 + 非 MMA 优化</text>
+<text x="45" y="345" font-size="16" fill="#516e6e"  >共同不变量：计算标准 Attention；新的内核实现不断改变数据搬运、调度和精度路径。</text>
+</svg></div><figcaption>图 5 · 版本演化按各自研究聚焦的关键瓶颈组织。并非意味着新版本在所有 GPU、精度和张量形状上都压倒旧版。</figcaption></figure>
+<div class="table-scroll"><table><thead><tr><th>论文</th><th>主要解决什么</th><th>重要限定</th></tr></thead><tbody>
+<tr><td><strong>FA1 / NeurIPS 2022</strong></td><td>IO-aware tiling、在线 Softmax、反向重算</td><td>标准 dense attention 的代数等价</td></tr>
+<tr><td><strong>FA2 / ICLR 2024</strong></td><td>减少非 matmul FLOPs，增加跨 CTA 并行，改进 warp 工作分配</td><td>论文 2023 年预印本，2024 年会议</td></tr>
+<tr><td><strong>FA3 / NeurIPS 2024</strong></td><td>针对 Hopper，通过 TMA、warp specialization 与异步重叠提高利用率，并探索 FP8</td><td>FP8 有其独立的数值精度议题</td></tr>
+<tr><td><strong>FA4 / MLSys 2026</strong></td><td>针对 Blackwell 的异构扩展：更深流水线、非 matmul 优化、Tensor Memory / 2-CTA MMA</td><td>论文性能来自指定 B200/BF16 对照</td></tr>
+</tbody></table></div>
+<p>要区分<strong>算法设计</strong>与<strong>具体库的当前支持</strong>。例如官方 <a href="https://github.com/Dao-AILab/flash-attention">FlashAttention 仓库</a>同时提供若干架构和接口，README 对 FlashAttention-3 的 Hopper Beta 路径、FlashAttention-4 的 CuTeDSL 路径有单独说明。不同硬件、编译器和版本的可用性不能从论文名称推出。</p>
+</section>
+<section id="code" aria-labelledby="code-heading"><h2 id="code-heading"><span class="number">09 ·</span>最小可执行模型：用纯 Python 验证在线归约</h2>
+<p>为了验证数学机制，配套 <a href="https://github.com/1998x-stack/xm-posts/blob/main/posts/systems/flashattention/mini_attention.py">mini_attention.py</a> 只依赖 Python 标准库，包含朴素的按行 Softmax Attention 与 streaming/block 版本；对应 <a href="https://github.com/1998x-stack/xm-posts/blob/main/tests/test_flashattention.py">单元测试</a>覆盖不同 block size、causal Mask 和极端 score 的数值稳定性。</p>
+<pre><code># 对每个 query 行：更新 running max、分母、加权和
+new_m = max(old_m, max(tile_scores))
+alpha = exp(old_m - new_m) if has_prior_tile else 0.0
+weights = [exp(s - new_m) for s in tile_scores]
+new_l = alpha * old_l + sum(weights)
+new_acc = [
+    alpha * old_acc[t] + sum(w * value[t]
+        for w, value in zip(weights, tile_values))
+    for t in range(value_dim)
+]
+output = [x / new_l for x in new_acc]</code></pre>
+<p>从仓库根目录执行 <code>python posts/systems/flashattention/mini_attention.py</code>，或 <code>python -m pytest -q tests/test_flashattention.py</code>。这个示例只验证算法等价，不涉及 GPU、Tensor Core、内核融合或性能；<strong>CPU 小例子通过，不意味着复现论文的 GPU speedup。</strong></p>
+<h3>把公式映射到真实系统</h3>
+<p>在 PyTorch 中，<code>torch.nn.functional.scaled_dot_product_attention</code> 可在满足条件时选择融合后端，但实际 dispatch 依设备、dtype、mask 与版本而定。要比较内核，应显式记录后端、GPU SKU、软件版本、B/H/N/d、causal、dtype、forward/backward、warmup 次数及统计口径，而不是只比较两行 Python 的耗时。</p>
+</section>
+<section id="evidence" aria-labelledby="evidence-heading"><h2 id="evidence-heading"><span class="number">10 ·</span>论文证据：哪些结果能支持什么结论？</h2>
+<p><strong>原论文（NeurIPS 2022）</strong>在 Abstract 中报告：相对所述基线，GPT-2 训练（序列长度 1K）达到约 <strong>3×</strong> 加速；BERT-large（长度 512）相对 MLPerf 1.1 的特定训练记录有 <strong>15%</strong> wall-clock 改善。它们是作者在当时软件、硬件及实验配置下的比较，不是新系统的普遍承诺。<a href="https://proceedings.neurips.cc/paper/2022/hash/67d57c32e20fd0a7a302cb81d36e40d5-Abstract.html">[FA1, Abstract]</a></p>
+<p><strong>FA2（ICLR 2024）</strong>报告在 A100 上训练 GPT 风格模型达到 <strong>225 TFLOPs/s / GPU</strong>、<strong>72% model FLOPs utilization</strong> 的实验情形；这属于整模型训练配置的观察，不能与纯 attention kernel 的峰值 FLOPs 指标混用。<a href="https://proceedings.iclr.cc/paper_files/paper/2024/hash/98ed250b203d1ac6b24bbcf263e3d4a7-Abstract-Conference.html">[FA2, Abstract]</a></p>
+<p><strong>FA4（MLSys 2026）</strong>报告在 B200、BF16 的给定比较中最高达到相对 cuDNN 9.13 <strong>1.3×</strong>、相对 Triton <strong>2.7×</strong> 的加速，并达到 <strong>1613 TFLOPs/s（71% utilization）</strong> 的峰值情形。它们并非所有输入长度或所有 Attention 模式上的普遍倍数。<a href="https://proceedings.mlsys.org/paper_files/paper/2026/hash/ae8b0b5838ba510daff1198474e7b984-Abstract-Conference.html">[FA4, Abstract]</a></p>
+<div class="callout"><p><strong>怎么解读这些数字？</strong>先核对测试对象是单 kernel 还是 end-to-end 训练，再核对 GPU、dtype、batch/head 数、序列长度、前向/反向、比较基线与实现版本。没有统一测试口径，就不要把不同论文的“× 倍”直接排成一张排行榜。</p></div>
+</section>
+<section id="boundaries" aria-labelledby="boundaries-heading"><h2 id="boundaries-heading"><span class="number">11 ·</span>工程边界：何时不会更快？</h2>
+<ul>
+<li><strong>短序列或很小的 batch：</strong>launch、调度和资源利用率可能主导，减少 N² 存储并不自动带来大幅耗时下降。</li>
+<li><strong>长上下文 decode：</strong>单 token Query 与长 KV 的访存模式不同于 prefill；还需要结合 GQA/MQA、KV Cache、分页存储等 Serving 决策。</li>
+<li><strong>数值精度：</strong>FP16/BF16/FP8 以及不同累加方式会产生误差差异；“exact”主要指不采用稀疏/低秩近似来改变目标，而非无限精度或 bitwise 相等。</li>
+<li><strong>Mask 与变长：</strong>causal、padding、sliding window、不同 Q/K 长度会改变有效 tiles 和边界处理；必须依据具体实现确认支持组合。</li>
+<li><strong>反向的代价：</strong>重算会增加局部 FLOPs，是否划算取决于硬件的 compute/memory 平衡以及 block 配置。</li>
+</ul>
+<p>最有价值的性能判断不是“是否安装了 flash-attn”，而是：<strong>对你的工作负载，这个形状的 kernel 是计算受限还是 IO/调度受限？瓶颈被移走后，下一个瓶颈会在哪里出现？</strong></p>
+</section>
+<section id="summary" aria-labelledby="summary-heading"><h2 id="summary-heading"><span class="number">12 ·</span>把 FlashAttention 记成三个不变量</h2>
+<div class="grid2"><div class="tile"><b>1. 数学不变</b><p>仍然计算逐行 Softmax 的完整 attention；切块不意味着独立归一化。</p></div><div class="tile"><b>2. 存储路径变</b><p>中间 S/P 不写整张 HBM 矩阵，借助在线归约与反向重算交换 IO 和 FLOPs。</p></div><div class="tile"><b>3. 硬件目标持续变</b><p>FA2 优化并行划分，FA3 利用 Hopper 异步，FA4 面对 Blackwell 的扩展失衡。</p></div><div class="tile"><b>下一步</b><p>结合 KV Cache、PagedAttention 与 Attention backend dispatch，区分模型、算子和服务系统的性能问题。</p></div></div>
+<h3>参考与进一步阅读</h3>
+<ol class="ref-list">
+<li>Dao et al. <a href="https://arxiv.org/abs/2205.14135">FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness</a>. NeurIPS 2022. 原始算法、Theorems 1–2 与实验。</li>
+<li>Dao. <a href="https://arxiv.org/abs/2307.08691">FlashAttention-2: Faster Attention with Better Parallelism and Work Partitioning</a>. ICLR 2024.</li>
+<li>Shah et al. <a href="https://arxiv.org/abs/2407.08608">FlashAttention-3: Fast and Accurate Attention with Asynchrony and Low-precision</a>. NeurIPS 2024.</li>
+<li>Zadouri et al. <a href="https://arxiv.org/abs/2603.05451">FlashAttention-4: Algorithm and Kernel Pipelining Co-Design for Asymmetric Hardware Scaling</a>. MLSys 2026.</li>
+<li>Dao-AILab. <a href="https://github.com/Dao-AILab/flash-attention">Official flash-attention implementation</a>. 具体安装与支持范围以代码版本为准。</li>
+</ol>
+</section>
+<footer class="footer"><p>与本站 <a href="../../../categories/architectures/">Transformer 架构</a>、<a href="../../../categories/inference/">推理与 Serving</a> 阅读路线相互补充。论文实证与本文教学推导的来源和角色已在相应段落区分。</p></footer></article></main></div>
+<script>
+(function(){
+  'use strict';
+  var more=document.getElementById('advance-tile');
+  var reset=document.getElementById('reset-tile');
+  var out=document.getElementById('online-readout');
+  if(!more||!reset||!out)return;
+  var first={m:2,l:Math.exp(-1)+1,acc:2*Math.exp(-1)+6};
+  var second={m:2,l:first.l+Math.exp(-2),acc:first.acc+10*Math.exp(-2)};
+  function render(next){
+    var v=next?second:first;
+    var n=next?3:2;
+    more.setAttribute('aria-pressed',next?'true':'false');
+    out.innerHTML='<b>已处理 Tile '+(next?'2':'1')+' / 2</b><p>Key：'+(next?'1、2、3':'1、2')+'；m = '+v.m+'；ℓ ≈ '+v.l.toFixed(4)+'；acc ≈ '+v.acc.toFixed(4)+'</p><p>当前输出 acc / ℓ ≈ '+(v.acc/v.l).toFixed(4)+'</p>';
+    more.disabled=next;
+  }
+  more.addEventListener('click',function(){render(true)});
+  reset.addEventListener('click',function(){render(false)});
+})();
+</script></body></html>

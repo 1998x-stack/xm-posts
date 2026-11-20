@@ -1,0 +1,92 @@
+[
+  {
+    "id": "R1",
+    "claim": "RoPE encodes absolute positions through rotations and yields relative position dependence in QK inner products",
+    "kind": "mechanism",
+    "source_url": "https://arxiv.org/abs/2104.09864",
+    "locator": "Abstract; Section 3.2 and 3.3",
+    "status": "verified",
+    "notes": "Identity R(m)^T R(n)=R(n-m) independently derived; article distinguishes score property from whole-model behavior."
+  },
+  {
+    "id": "R2",
+    "claim": "Original Transformer uses positional encodings added to token embeddings",
+    "kind": "historical-baseline",
+    "source_url": "https://arxiv.org/abs/1706.03762",
+    "locator": "Section 3.5",
+    "status": "verified",
+    "notes": "The article also distinguishes no-positional unmasked self-attention from causal attention."
+  },
+  {
+    "id": "R3",
+    "claim": "RoFormer evaluates rotary position embedding on long text classification tasks",
+    "kind": "paper-evidence",
+    "source_url": "https://arxiv.org/abs/2104.09864",
+    "locator": "Abstract and Experiments section",
+    "status": "verified",
+    "notes": "No numerical performance values asserted; model-, task- and benchmark-specific conclusions only."
+  },
+  {
+    "id": "R4",
+    "claim": "Position Interpolation rescales position indices to support longer contexts",
+    "kind": "follow-up-work",
+    "source_url": "https://arxiv.org/abs/2306.15595",
+    "locator": "Method; Abstract",
+    "status": "verified",
+    "notes": "Later work, not part of original RoFormer."
+  },
+  {
+    "id": "R5",
+    "claim": "YaRN uses frequency-aware interpolation and attention scaling for efficient context extension",
+    "kind": "follow-up-work",
+    "source_url": "https://arxiv.org/abs/2309.00071",
+    "locator": "Method; Abstract",
+    "status": "verified",
+    "notes": "Later work; no universal quality guarantee."
+  },
+  {
+    "id": "R6",
+    "claim": "LongRoPE exploits non-uniform interpolation and progressive context extension",
+    "kind": "follow-up-work",
+    "source_url": "https://arxiv.org/abs/2402.13753",
+    "locator": "Abstract; method",
+    "status": "verified",
+    "notes": "Results conditional on experiment; no reproduction claimed."
+  },
+  {
+    "id": "R7",
+    "claim": "Hugging Face Transformers defines multiple RoPE scaling variants in implementation APIs",
+    "kind": "implementation-reference",
+    "source_url": "https://huggingface.co/docs/transformers/main/internal/rope_utils",
+    "locator": "Rotary embeddings utilities: Parameters",
+    "status": "verified",
+    "notes": "Versioned documentation as of 2026-11-20; implementation choices are separate from original paper."
+  },
+  {
+    "id": "R8",
+    "claim": "In the RoFormer paper WMT14 En-De test BLEU is Transformer-base 27.3 and RoFormer 27.5",
+    "kind": "paper-metric",
+    "source_url": "https://arxiv.org/abs/2104.09864",
+    "locator": "Section 4.1, Table 1; WMT 2014 En-De test; BLEU",
+    "status": "verified",
+    "notes": "Original paper reported results under fairseq training setup and beam search; no independent reproduction."
+  },
+  {
+    "id": "R9",
+    "claim": "In RoFormer paper GLUE MRPC validation F1 is BERT 88.9 versus RoFormer 89.5; SST-2 validation accuracy is BERT 93.5 versus RoFormer 90.7",
+    "kind": "paper-metric",
+    "source_url": "https://arxiv.org/abs/2104.09864",
+    "locator": "Section 4.3, Table 2; GLUE validation; F1 for MRPC and accuracy for SST-2",
+    "status": "verified",
+    "notes": "Mixed results: one gain and one drop; no universal superiority claim."
+  },
+  {
+    "id": "R10",
+    "claim": "CAIL2019-SCM RoFormer-512 test accuracy 68.29% and RoFormer-1024 69.79%",
+    "kind": "paper-metric",
+    "source_url": "https://arxiv.org/abs/2104.09864",
+    "locator": "Section 4.5, Table 5; CAIL2019-SCM test accuracy; cutoff lengths 512 vs 1024",
+    "status": "verified",
+    "notes": "Different truncation lengths; not an isolated position-encoding ablation; difference is 1.50 percentage points derived."
+  }
+]
