@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 470" role="img" aria-labelledby="title desc">
+<title id="title">Context Window 预算分配</title><desc id="desc">上下文窗口由系统规则、工具定义、当前目标、检索证据、近期状态、历史摘要、输出预留和安全余量构成。</desc>
+<rect width="960" height="470" rx="22" fill="#f8fbf9"/>
+<text x="480" y="48" text-anchor="middle" font-size="24" font-weight="700" fill="#24484c" font-family="system-ui,sans-serif">A context window is a constrained working set</text>
+<text x="70" y="102" font-size="15" fill="#60797a" font-family="system-ui,sans-serif">可用模型上下文预算（示意）</text>
+<rect x="70" y="125" width="820" height="66" rx="10" fill="#e8eeea"/>
+<g>
+<rect x="70" y="125" width="112" height="66" rx="8" fill="#1b8077"/><rect x="182" y="125" width="118" height="66" fill="#4b91a0"/><rect x="300" y="125" width="104" height="66" fill="#d58a5e"/><rect x="404" y="125" width="190" height="66" fill="#7b6eaf"/><rect x="594" y="125" width="108" height="66" fill="#6b9b8c"/><rect x="702" y="125" width="82" height="66" fill="#b3c3bc"/><rect x="784" y="125" width="106" height="66" rx="8" fill="#d9a16d"/>
+</g>
+<g text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" font-weight="700" fill="#fff">
+<text x="126" y="164">System</text><text x="241" y="164">Tools</text><text x="352" y="164">Goal</text><text x="499" y="164">Retrieval</text><text x="648" y="164">Recent</text><text x="743" y="164">Notes</text><text x="837" y="164">Output</text>
+</g>
+<text x="70" y="230" font-size="14" fill="#5d7777" font-family="system-ui,sans-serif">预算设计要点</text>
+<g font-family="system-ui,'Microsoft YaHei',sans-serif">
+<rect x="70" y="253" width="390" height="72" rx="12" fill="#e7f3ef" stroke="#8cb9ac"/><text x="92" y="282" font-size="18" font-weight="700" fill="#246d65">高优先级 · 稳定核心</text><text x="92" y="306" font-size="14" fill="#476b68">身份、权限、目标、不可丢失约束</text>
+<rect x="500" y="253" width="390" height="72" rx="12" fill="#eaf2f8" stroke="#9ab9cd"/><text x="522" y="282" font-size="18" font-weight="700" fill="#3e7092">按需加载 · 动态证据</text><text x="522" y="306" font-size="14" fill="#536d7b">当前相关文档、日志、数据与工具结果</text>
+<rect x="70" y="348" width="390" height="72" rx="12" fill="#fff0e7" stroke="#d8a27d"/><text x="92" y="377" font-size="18" font-weight="700" fill="#a85e3d">谨慎保留 · 历史状态</text><text x="92" y="401" font-size="14" fill="#775d4d">决策摘要、未完成事项、近期交互</text>
+<rect x="500" y="348" width="390" height="72" rx="12" fill="#f0edfa" stroke="#ada1ce"/><text x="522" y="377" font-size="18" font-weight="700" fill="#6b5b9b">必须预留 · 输出与缓冲</text><text x="522" y="401" font-size="14" fill="#615b78">答案、下一轮工具调用与不确定开销</text>
+</g>
+</svg>
