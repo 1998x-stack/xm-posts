@@ -404,5 +404,26 @@
     "summary": "从普通 RNN 的长期梯度问题出发，精读 1997 年 CEC 与两门结构，厘清 2000 年遗忘门与 2002 年 Peephole 的历史演进，再以现代四门 MathML 公式、6 幅图、交互状态模拟和确定性 Python 断言理解记忆更新。",
     "paper": "https://doi.org/10.1162/neco.1997.9.8.1735",
     "illustration": "lstm"
+  },
+  {
+    "slug": "naive-bayes",
+    "title": "Understanding Naive Bayes",
+    "subtitle": "为什么“天真”的条件独立假设，也能成为有效的分类器？",
+    "category": "classical-ml",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 30,
+    "tags": [
+      "Naive Bayes",
+      "Bayesian Classification",
+      "Multinomial Naive Bayes",
+      "Bernoulli Naive Bayes",
+      "Laplace Smoothing",
+      "Generative Models"
+    ],
+    "summary": "以 McCallum 与 Nigam 1998 的文本事件模型比较为主线，推导贝叶斯判别、条件独立、Multinomial/Bernoulli 似然、加法平滑与对数域计算；结合论文证据、六幅机制图、交互比较及纯 Python 可复验算例。",
+    "paper": "https://www.cse.iitb.ac.in/~soumen/readings/papers/McCallumN1998event.pdf",
+    "illustration": "naive-bayes"
   }
 ]
