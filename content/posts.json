@@ -259,5 +259,26 @@
     "summary": "从普通策略梯度与 TRPO 出发，图解概率比与 clipped surrogate 的符号分支，贯通 GAE、Actor–Critic、原论文 MuJoCo 实验与 RLHF 两种 KL。附交互算例与确定性 Python 测试。",
     "paper": "https://arxiv.org/abs/1707.06347",
     "illustration": "ppo"
+  },
+  {
+    "slug": "kv-cache",
+    "title": "Understanding KV Cache",
+    "subtitle": "从重复计算到显存管理：为什么只生成一个 token，却要记住全部历史？",
+    "category": "inference",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 30,
+    "tags": [
+      "KV Cache",
+      "Autoregressive Decoding",
+      "PagedAttention",
+      "GQA",
+      "Prefix Caching",
+      "LLM Serving"
+    ],
+    "summary": "从因果 Attention 的单步计算与显存公式出发，图解 Prefill/Decode、MHA/GQA/MQA、PagedAttention、前缀复用，附交互显存计算器和可验证的最小 Python 示例。",
+    "paper": "https://arxiv.org/abs/2309.06180",
+    "illustration": "kv-cache"
   }
 ]
