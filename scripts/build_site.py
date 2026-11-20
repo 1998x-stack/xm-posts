@@ -151,7 +151,7 @@ def build_home(categories,posts,base):
         feature_markup=''
 
     subject_cards=''.join(
-        f'''<a class="research-card" href="categories/{H(c['slug'])}/">
+        f'''<a class="research-card" href="./categories/{H(c['slug'])}/">
             <span class="research-card-top"><span class="research-num">{i:02d} / FIELD</span><span class="research-count">{counts[c['slug']]:02d} 篇</span></span>
             <strong>{H(c['title'])}</strong><span class="research-english">{H(c['english'])}</span>
             <span class="research-description">{H(c['description'])}</span>
@@ -242,7 +242,7 @@ def build_home(categories,posts,base):
       <div class="section-header"><div><div class="eyebrow muted">GUIDED READING / LEARNING ROUTES</div><h2 id="paths-title">以问题串起论文，而非孤立记忆</h2></div><p>学习路线只连接已发布的内容；每一步都可以独立阅读。</p></div>
       <div class="route-grid">{''.join(route_cards)}</div>
     </section>
-    <section id="discover" class="container latest" aria-labelledby="index-title">
+    <section id="discover" class="container latest" aria-labelledby="index-title"><span id="latest" class="anchor-alias" aria-hidden="true"></span>
       <div class="section-header"><div><div class="eyebrow muted">COMPLETE ARTICLE INDEX</div><h2 id="index-title">查找你的下一篇研究笔记 <span class="count">{count:02d}</span></h2></div><p>全部已发布文章均可搜索；默认只展开前 8 篇，避免无限滚动。</p></div>
       <div class="browse-controls">
         <label class="search-field" for="search-posts"><span aria-hidden="true">⌕</span><input id="search-posts" type="search" placeholder="搜索论文、模型、关键词或概念" autocomplete="off" data-search-input></label>
