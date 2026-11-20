@@ -124,5 +124,14 @@
     "locator": "Introduction to Boosted Trees - Model Complexity and split score",
     "status": "verified",
     "notes": "Checked with pure-Python deterministic assertions in mini_xgboost.py."
+  },
+  {
+    "id": "X15",
+    "claim": "For four synthetic g values [0.5,0.5,-0.5,-0.5], h=1, cut=2, lambda=1 and gamma=0.1, optimal leaf weights are −1/3,+1/3 and raw gain 1/3, net gain 0.23333.",
+    "kind": "teaching-example",
+    "source_url": "https://www.kdd.org/kdd2016/papers/files/rfp0697-chenAemb.pdf",
+    "locator": "KDD 2016 §2.2 Eq. (5)–(7), independently calculated in Article Section 06",
+    "status": "derived",
+    "notes": "Changing gamma only changes split cost at fixed candidate; this is not a training run or benchmark."
   }
 ]

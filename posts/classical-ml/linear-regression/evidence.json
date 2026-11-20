@@ -79,5 +79,14 @@
     "locator": "score method and R squared definition",
     "status": "verified",
     "notes": "Negative R squared possible out of sample"
+  },
+  {
+    "id": "LR10",
+    "claim": "For four independently constructed points, each signed residual squared is displayed, and their sum matches RSS=0.7 at b=0.9,w=0.9; the constant mean baseline has TSS=4.75.",
+    "kind": "toy-derivation",
+    "source_url": "https://www.itl.nist.gov/div898/handbook/pmd/section1/pmd141.htm",
+    "locator": "Article Section 08; independent arithmetic using (x,y)=(0,1),(1,2),(2,2),(3,4)",
+    "status": "derived",
+    "notes": "Interactive table recalculates each contribution. R²=1−RSS/TSS refers only to the four training points."
   }
 ]
