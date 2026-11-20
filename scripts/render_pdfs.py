@@ -140,7 +140,9 @@ class PdfCache:
             if pages != entry.get("pages"):
                 raise ValueError("page count mismatch")
             return payload, pages
-        except (OSError, ValueError, TypeError, KeyError) as exc:
+        except Exception as exc:
+            # pypdf may raise library-specific parsing errors for damaged
+            # cache bytes. Cache failures must never block fresh rendering.
             print(f"PDF CACHE INVALID {slug}: {exc}; rebuilding", flush=True)
             return None
 
