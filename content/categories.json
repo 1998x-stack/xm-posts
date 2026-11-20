@@ -28,6 +28,10 @@
       {
         "slug": "numerical-stability",
         "title": "Numerical Stability & Mathematical Functions"
+      },
+      {
+        "slug": "rearrangement-inequalities",
+        "title": "Rearrangement Inequalities & Matrix Trace"
       }
     ]
   },
@@ -339,19 +343,19 @@
       },
       {
         "slug": "gpu-kernels",
-        "title": "GPU Kernels & Memory Hierarchy"
+        "title": "GPU Kernel Programming"
       },
       {
         "slug": "compilers",
-        "title": "Compilers & Graph Optimization"
+        "title": "Graph Compilers & Optimization"
       },
       {
         "slug": "communication",
-        "title": "GPU Communication"
+        "title": "GPU Collectives & Interconnects"
       },
       {
         "slug": "performance",
-        "title": "Systems Performance & Benchmarking"
+        "title": "Profiling & Systems Benchmarking"
       },
       {
         "slug": "gpu-memory",
@@ -359,15 +363,15 @@
       },
       {
         "slug": "compiler-kernel-optimization",
-        "title": "Compiler & Kernel Optimization"
+        "title": "Kernel Fusion & Low-level Compiler Optimization"
       },
       {
         "slug": "distributed-communication",
-        "title": "GPU Communication"
+        "title": "Distributed Training Communication"
       },
       {
         "slug": "performance-modeling",
-        "title": "Systems Performance & Benchmarking"
+        "title": "Roofline & Performance Modeling"
       }
     ]
   },

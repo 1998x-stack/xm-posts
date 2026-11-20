@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 385" role="img" aria-labelledby="ri-t-title ri-t-desc">
+<title id="ri-t-title">离散排列与矩阵迹之间的双随机桥梁</title><desc id="ri-t-desc">左侧是排序向量的配对；中部是正交基的重叠系数平方构成双随机矩阵；右侧是这些系数形成的凸组合，并得到迹不等式。</desc>
+<rect x="1" y="1" width="898" height="383" rx="15" fill="#fbfdfb" stroke="#d5e5db"/>
+<text x="450" y="42" text-anchor="middle" font-family="sans-serif" font-size="24" font-weight="700" fill="#25474e">从「谁配给谁」，到「特征向量如何重叠」</text>
+<g font-family="sans-serif"><rect x="27" y="78" width="244" height="250" rx="14" fill="#e8f3ef" stroke="#cee3db"/><rect x="330" y="78" width="244" height="250" rx="14" fill="#e9f1fa" stroke="#d4e4ef"/><rect x="633" y="78" width="240" height="250" rx="14" fill="#f8f0e9" stroke="#ebdccc"/>
+<g font-size="18" fill="#2c5459" font-weight="700" text-anchor="middle"><text x="149" y="112">标量排列</text><text x="452" y="112">正交重叠 P</text><text x="754" y="112">极值落在排列顶点</text></g>
+<g font-size="19" text-anchor="middle" fill="#315f60"><text x="149" y="154">a₁ ↔ b₁</text><text x="149" y="187">a₂ ↔ b₂</text><text x="149" y="220">a₃ ↔ b₃</text></g>
+<g font-size="22" text-anchor="middle" fill="#3b6b94"><text x="451" y="149">[ q₁₁²  q₁₂²  q₁₃² ]</text><text x="451" y="182">[ q₂₁²  q₂₂²  q₂₃² ]</text><text x="451" y="215">[ q₃₁²  q₃₂²  q₃₃² ]</text></g>
+<g font-size="16" text-anchor="middle" fill="#5d7780"><text x="452" y="248">每行之和 = 1</text><text x="452" y="272">每列之和 = 1</text></g>
+<g font-size="20" text-anchor="middle" fill="#946b54"><text x="754" y="151">反序下界</text><text x="754" y="190">≤ tr(AB) ≤</text><text x="754" y="229">同序上界</text></g>
+<g stroke="#7e9e9d" stroke-width="3" fill="none"><path d="M277 199H320"/><path d="M580 199H622"/></g><g fill="#7e9e9d"><path d="M320 199l-12 -7v14z"/><path d="M622 199l-12 -7v14z"/></g>
+<text x="450" y="350" font-family="sans-serif" font-size="16" text-anchor="middle" fill="#647e7d">P 是正交矩阵元素逐项平方后的权重矩阵；每个排列顶点都可以实现</text>
+</g></svg>

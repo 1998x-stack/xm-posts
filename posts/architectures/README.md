@@ -24,7 +24,7 @@ RoPE 位于 `posts/architectures/rope/`，主题为 **Positional Encoding**；�
 ## Gating & Multiplicative Interactions
 
 - [Understanding Neural Gating](neural-gating/index.html)：从 LSTM/GRU 到 Highway、GLU、SwiGLU 的跨论文门控机制，区分可学习的 sigmoid 保留门与非概率的乘性 FFN 门。
-- [专题规划与术语边界](_topics/gating-multiplicative-interactions/README.md)：控制信息流而非独立建一级分类；与 Attention、MoE Routing 进行方法学区分。
+- [专题规划与术语边界](_topics/gating-mechanisms/README.md)：控制信息流而非独立建一级分类；与 Attention、MoE Routing 进行方法学区分。
 
 ## Recurrent Networks / LSTM
 
@@ -72,3 +72,5 @@ RoPE 位于 `posts/architectures/rope/`，主题为 **Positional Encoding**；�
 
 - [Understanding SwiGLU](swiglu/index.html)：Shazeer 2020 的三投影 FFN、SiLU 门控、GEGLU/ReGLU 对照、T5 证据与现代 PaLM/LLaMA。
 - 与 [Understanding Neural Gating](neural-gating/index.html) 共享现有 `gating-mechanisms` 二级主题，不重复增设一级分类。
+
+分类占位统一沿用 `content/categories.json` 中的稳定 slug：MobileNet 使用 `_topics/efficient-mobile-cnn/`，Neural Gating 与 SwiGLU 统一使用 `_topics/gating-mechanisms/`。
