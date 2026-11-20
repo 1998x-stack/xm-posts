@@ -17,6 +17,8 @@ def test_mathml_blocks_have_fraction_and_limits():
     assert soup.select("#equation-4 munderover")
     assert soup.select("#equation-6 .eq-condition math")
     assert soup.select("#equation-7 munder")
+    assert all(x.get("tabindex")=="0" and x.get("role")=="region"
+               for x in soup.select(".eq-condition"))
     assert not soup.select("span.eq")
     assert not soup.select("svg math"), "MathML cannot be embedded into SVG text labels"
 
