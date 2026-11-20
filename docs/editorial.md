@@ -8,6 +8,13 @@ A post should answer one reader misconception: why depth degrades optimization i
 
 Separate statements by role: primary-paper claim, intuition/metaphor, toy worked example, independently derived equation, modern alternative implementation and unresolved claim. Original experiment metrics must retain their model variant, dataset, split, evaluation protocol and figure/table/section locator. The per-article `evidence.json` should name meaningful sources and verification status. Do not imply a minimal attention module replicates a machine-translation system.
 
+## Mathematical typesetting
+
+- Render mathematical derivations as native, semantic MathML Core when possible. Do not emulate fractions, sums or indices by long Unicode text.
+- All display formulas have an accessible description, a numbered or named mathematical block and a keyboard-focusable horizontal scroll region on narrow screens.
+- Validate the SVG/MathML boundary, stacked fractions, namespace, offline behavior and actual 1440/768/390/360px layout in Chromium; never hide whole-page overflow.
+- See `skills/olah-style-paper-posts/references/math-typesetting.md` for the portable authoring and QA contract.
+
 ## SVG visual grammar
 
 Each figure answers a single question. Keep a consistent conceptual color role across related diagrams, label inputs, transformations, outputs, tensors and arrows, avoid decorative lines that imply incorrect computational topology. SVG must include `viewBox` plus accessible `<title>`/description, and marker/clip-path IDs must be **unique across all SVGs in one HTML document**; prefer `arrow-f03` over repeated `arrow`. Export `.svg` individually to `assets/` and inspect them standalone. Diagrams are independently drawn from model computations; never copy reference artwork without permission.
