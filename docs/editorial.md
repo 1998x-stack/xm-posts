@@ -10,11 +10,10 @@ Separate statements by role: primary-paper claim, intuition/metaphor, toy worked
 
 ## Mathematical typesetting
 
-- Render mathematical derivations as actual mathematical structure. Prefer native MathML Core for offline self-contained articles: fractions, sub- and superscripts, operator limits, and inline symbols. Fully bundled third-party renderers are an alternative only with suitable licenses.
-- Do not represent substantial formulas as long Unicode strings formatted like a paragraph (for example, `Σᵢ` or `||w||²`). Preserve the mathematical structure, variable definitions, and correct limits/normalization.
-- Number major display equations and separate the main optimization target from its constraints. Provide accessible descriptions for each formula.
-- In 360px and 390px layouts, make long equations internally scrollable inside keyboard-focusable regions; do not hide terms or induce whole-page horizontal overflow. Verify fraction geometry and formula scrolling in real Chromium.
-- Avoid network/CDN dependencies for formula fonts or JavaScript.
+- Use mathematically structured output, preferably native MathML Core, for self-contained offline articles. Fractions, indices, exponents and sum limits must typeset as mathematics rather than as long Unicode strings.
+- Number important display equations and separate constraints; keep explicit symbols, variable definitions and source scope.
+- Long expressions should scroll inside labeled, keyboard-focusable formula regions at 360px and 390px without causing page-wide horizontal overflow. Validate actual MathML geometry and fraction stacking in Chromium.
+- Avoid CDN scripts/fonts; alternative renderers must be bundled and licensed.
 
 ## SVG visual grammar
 

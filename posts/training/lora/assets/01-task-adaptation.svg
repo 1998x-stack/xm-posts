@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 300" role="img" aria-labelledby="lora-f01-title lora-f01-desc"><title id="lora-f01-title">每个任务一份完整微调权重与共享主干的对比</title><desc id="lora-f01-desc">左侧每个任务保存一个大型模型副本，右侧多个任务共享预训练模型并分别保存轻量 A、B 权重。</desc><rect width="800" height="300" rx="14" fill="#f9fbf8"/><g font-family="system-ui,-apple-system,'PingFang SC','Microsoft YaHei',sans-serif">
+<text x="28" y="34" font-size="15" fill="#a6674c" font-weight="700">FULL FINE-TUNING</text><text x="432" y="34" font-size="15" fill="#197f78" font-weight="700">LOW-RANK ADAPTATION</text>
+<path d="M400 58 L400 282" stroke="#d1e0dd" stroke-width="2" fill="none" stroke-linecap="round"/>
+<rect x="40" y="60" width="335" height="76" rx="10" fill="#f5ddd2" stroke="none"/><text x="66" y="90" font-size="16" fill="#25414a" >任务 A</text><text x="66" y="117" font-size="19" fill="#8b523b" font-weight="700">整份 W_A（大）</text>
+<rect x="40" y="154" width="335" height="76" rx="10" fill="#f5ddd2" stroke="none"/><text x="66" y="184" font-size="16" fill="#25414a" >任务 B</text><text x="66" y="211" font-size="19" fill="#8b523b" font-weight="700">整份 W_B（大）</text>
+<rect x="442" y="60" width="312" height="66" rx="10" fill="#dcefeb" stroke="none"/><text x="468" y="87" font-size="21" fill="#176f6c" font-weight="700">共享预训练 W₀</text><text x="468" y="108" font-size="13" fill="#526e70" >冻结 · 所有任务复用</text>
+<path d="M598 127 L598 145" stroke="#64818a" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M515 145 L683 145" stroke="#64818a" stroke-width="3" fill="none" stroke-linecap="round"/>
+<path d="M515 145 L515 159" stroke="#64818a" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M683 145 L683 159" stroke="#64818a" stroke-width="3" fill="none" stroke-linecap="round"/>
+<rect x="442" y="161" width="140" height="67" rx="10" fill="#f6e5cd" stroke="none"/><rect x="614" y="161" width="140" height="67" rx="10" fill="#e8e6f8" stroke="none"/>
+<text x="460" y="187" font-size="14" fill="#25414a" >任务 A</text><text x="460" y="211" font-size="17" fill="#8c642e" font-weight="700">A_A, B_A</text>
+<text x="631" y="187" font-size="14" fill="#25414a" >任务 B</text><text x="631" y="211" font-size="17" fill="#6660a0" font-weight="700">A_B, B_B</text>
+<text x="46" y="270" font-size="15" fill="#6e7b7c" >任务越多，完整副本成本越高</text><text x="445" y="270" font-size="15" fill="#6e7b7c" >任务专属部分只保存低秩更新</text>
+</g></svg>

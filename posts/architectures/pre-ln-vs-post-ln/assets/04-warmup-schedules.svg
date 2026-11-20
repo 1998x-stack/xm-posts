@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Pre-LN 在特定论文实验中可以不进行 warm-up；此图仅示学习率日程，不是性能或收敛曲线。" viewBox="0 0 960 380"><title>线性 warm-up 的训练日程示意</title><desc>Pre-LN 在特定论文实验中可以不进行 warm-up；此图仅示学习率日程，不是性能或收敛曲线。</desc><rect width="960" height="380" rx="18" fill="#fbfdfb"/>
+<text x="38" y="44" font-family="system-ui,'PingFang SC',sans-serif" font-size="23" fill="#30555d" font-weight="750">两种训练日程，不是实测训练曲线</text>
+<path d="M110 304L901 304" fill="none" stroke="#93acae" stroke-width="3" stroke-linecap="round" /><path d="M110 304L110 83" fill="none" stroke="#93acae" stroke-width="3" stroke-linecap="round" />
+<text x="20" y="99" font-family="system-ui,'PingFang SC',sans-serif" font-size="19" fill="#294954" font-weight="500">学习率</text><text x="813" y="338" font-family="system-ui,'PingFang SC',sans-serif" font-size="19" fill="#294954" font-weight="500">优化步数</text>
+<path d="M110 304 L365 103 L832 103" stroke="#b56c47" stroke-width="6" fill="none" stroke-linecap="round" />
+<path d="M110 144 L832 144" stroke="#197f86" stroke-width="6" fill="none" stroke-linecap="round" stroke-dasharray="11 8"/>
+<path d="M365 304L365 95" fill="none" stroke="#d9deda" stroke-width="2" stroke-linecap="round" stroke-dasharray="6 8"/>
+<text x="306" y="340" font-family="system-ui,'PingFang SC',sans-serif" font-size="17" fill="#ad6041" font-weight="700">T_warmup</text>
+<text x="559" y="93" font-family="system-ui,'PingFang SC',sans-serif" font-size="18" fill="#ab6245" font-weight="720">Post-LN 常配 warm-up（示意）</text>
+<text x="562" y="173" font-family="system-ui,'PingFang SC',sans-serif" font-size="18" fill="#1a7b82" font-weight="720">Pre-LN 的无 warm-up 配置（示意）</text>
+<text x="112" y="372" font-family="system-ui,'PingFang SC',sans-serif" font-size="16" fill="#698185" font-weight="500">是否需要 warm-up 仍依赖规模、优化器、初始化与训练配方。</text>
+</svg>

@@ -19,8 +19,9 @@
 | **Understanding Word2Vec** | 为什么上下文预测能产生词向量？ | [`posts/foundations/understanding-word2vec/`](posts/foundations/understanding-word2vec/index.html) | [Mikolov et al. (2013)](https://arxiv.org/abs/1301.3781) · [NeurIPS 2013](https://arxiv.org/abs/1310.4546) |
 | **Understanding Adam** | 梯度为什么需要方向和平方尺度的两份记忆？ | [`posts/foundations/adam/`](posts/foundations/adam/index.html) | [Kingma & Ba (2015)](https://arxiv.org/abs/1412.6980) |
 | **Understanding AdamW** | 为什么 Adam 的 L₂ 与 Weight Decay 不等价？ | [`posts/foundations/adamw/`](posts/foundations/adamw/index.html) | [Loshchilov & Hutter (ICLR 2019)](https://arxiv.org/abs/1711.05101) |
+| **Understanding LoRA** | 为什么低秩矩阵足以适配部分下游任务？ | [`posts/training/lora/`](posts/training/lora/index.html) | [Hu et al. (ICLR 2022)](https://arxiv.org/abs/2106.09685) |
 
-Pre-LN vs Post-LN 具有 12 节解读、5 幅独立 SVG、交互式平移实验和纯 Python 的 Jacobian 数值检查；ResNet 具有 11 节解读与 10 幅独立 SVG；Transformer 具有 16 节解读与 13 幅独立 SVG，另有最小 PyTorch Attention 示例；SVM 具有 12 节机制推导、6 幅独立 SVG、可调 RBF 相似度矩阵和纯 Python 一维解析示例，另采用离线原生 MathML 排版公式、上下标、求和范围与分式；Word2Vec 具有 12 节精读、5 幅内嵌原创图、7 份独立 SVG、SGNS 训练器和数值梯度校验。AdamW 具有 14 节渐进推导、6 幅独立 SVG、二维预条件器交互实验与纯 Python Adam/AdamW 代码断言。GRPO 具有 11 节深度解读、4 幅独立 SVG、可交互优势示例和 Python 断言测试。RLHF 从 SFT、奖励模型与 PPO 出发，包含 12 节推导、4 幅机制图、2 个交互实验和最小数学断言；Adam 具有 14 节机制讲解、7 幅独立 SVG、时间步交互及含 AdamW/AMSGrad 分支的纯 Python 最小实现与单元测试。文章在发布前经过静态内容核验、浏览器布局与交互检查；教学简化、原论文和后续变体需明确区分。
+Pre-LN vs Post-LN 具有 12 节解读、5 幅独立 SVG、交互式平移实验和纯 Python 的 Jacobian 数值检查；ResNet 具有 11 节解读与 10 幅独立 SVG；Transformer 具有 16 节解读与 13 幅独立 SVG，另有最小 PyTorch Attention 示例；SVM 具有 12 节机制推导、6 幅独立 SVG、可调 RBF 相似度矩阵和纯 Python 一维解析示例，另采用离线原生 MathML 排版分式、上下标与求和范围；Word2Vec 具有 12 节精读、5 幅内嵌原创图、7 份独立 SVG、SGNS 训练器和数值梯度校验。AdamW 具有 14 节渐进推导、6 幅独立 SVG、二维预条件器交互实验与纯 Python Adam/AdamW 代码断言。GRPO 具有 11 节深度解读、4 幅独立 SVG、可交互优势示例和 Python 断言测试。RLHF 从 SFT、奖励模型与 PPO 出发，包含 12 节推导、4 幅机制图、2 个交互实验和最小数学断言；Adam 具有 14 节机制讲解、7 幅独立 SVG、时间步交互及含 AdamW/AMSGrad 分支的纯 Python 最小实现与单元测试。LoRA 具有 12 节论文精读、6 幅独立 SVG、rank 参数预算交互与纯 Python 合并等价性算例。文章在发布前经过静态内容核验、浏览器布局与交互检查；教学简化、原论文和后续变体需明确区分。
 
 ## 内容分类
 
@@ -52,6 +53,7 @@ xm-posts/
 │   ├── classical-ml/svm/          # SVM: HTML、SVG、代码与证据
 │   ├── foundations/adam/         # Adam: HTML、SVG、Python 优化器与证据
 │   ├── foundations/understanding-word2vec/  # Word2Vec: HTML、SVG、SGNS 与证据
+│   ├── training/lora/                # LoRA: HTML、6 SVG、代码与证据
 │   ├── architectures/
 │   │   ├── pre-ln-vs-post-ln/    # LN 放置、残差路径、证据与数值示例
 │   │   ├── resnet/

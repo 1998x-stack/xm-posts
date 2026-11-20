@@ -3,9 +3,10 @@
     "slug": "foundations",
     "title": "基础理论",
     "english": "Foundations",
-    "description": "从优化、表示学习和数学直觉出发，建立理解现代模型的共同语言。",
+    "description": "从优化器、正则化、词嵌入、表示学习与数学直觉出发，建立理解现代模型训练的共同语言。",
     "topics": [
-      "Optimization",
+      "Optimization & Optimizers",
+      "Optimization & Regularization",
       "Representation",
       "Math",
       "Word Embeddings"
@@ -26,22 +27,25 @@
     "slug": "architectures",
     "title": "模型架构",
     "english": "Architectures",
-    "description": "拆开网络的信息路径：从 ResNet 的残差学习到 Transformer 的注意力结构。",
+    "description": "拆开模型的信息路径：ResNet 残差学习、Transformer 注意力、归一化布局与深层架构稳定性。",
     "topics": [
       "ResNet",
       "Transformer",
-      "State Space"
+      "State Space",
+      "Normalization & Residual Paths"
     ]
   },
   {
     "slug": "training",
     "title": "训练与对齐",
     "english": "Training & Alignment",
-    "description": "预训练、微调、对齐目标与优化策略的可验证拆解。",
+    "description": "预训练、微调、偏好对齐，以及 PPO / GRPO 等后训练强化学习与策略优化的可验证拆解。",
     "topics": [
       "Pretraining",
       "Fine-tuning",
-      "Alignment"
+      "PEFT / LoRA",
+      "Preference Alignment",
+      "RL / Policy Optimization"
     ]
   },
   {
