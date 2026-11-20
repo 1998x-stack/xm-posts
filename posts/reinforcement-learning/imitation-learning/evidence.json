@@ -78,7 +78,7 @@
     "source_url": "https://pubmed.ncbi.nlm.nih.gov/36279336/",
     "locator": "Zheng et al., TNNLS 2024; survey taxonomy, synthesized with primary papers",
     "status": "derived",
-    "notes": "A repository-oriented conceptual synthesis; axes are not mutually exclusive algorithm classes."
+    "notes": "Repository-oriented conceptual synthesis; axes are not mutually exclusive. DAgger is a data-aggregation/update procedure, not a policy representation."
   },
   {
     "id": "IL10",
