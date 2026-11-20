@@ -115,5 +115,14 @@
     "locator": "This article, Section 9 and mini_sac.py",
     "status": "derived",
     "notes": "Does not produce benchmark metrics"
+  },
+  {
+    "id": "S14",
+    "claim": "The modern soft Bellman target numeric ledger distinguishes target Q minimum, alpha log-density term, terminal mask, and reward",
+    "kind": "toy-derivation",
+    "source_url": "https://arxiv.org/abs/1812.05905",
+    "locator": "Section 4.2; this article's soft target ledger",
+    "status": "derived",
+    "notes": "Fixed sample Q1=3 Q2=2.5 log density=-.7 reward=1 gamma=.9; pedagogical, not a continuous-control run."
   }
 ]
