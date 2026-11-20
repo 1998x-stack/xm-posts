@@ -1,0 +1,146 @@
+[
+  {
+    "id": "B01",
+    "claim": "BERT 双向 Transformer encoder；预训练后对各下游任务独立微调",
+    "kind": "paper-claim",
+    "source_url": "https://aclanthology.org/N19-1423/",
+    "locator": "§1; §3 Figure 1",
+    "status": "verified",
+    "notes": "标明历史模型/任务版本"
+  },
+  {
+    "id": "B02",
+    "claim": "Base L12 H768 A12 110M；Large L24 H1024 A16 340M；FFN 4H",
+    "kind": "paper-claim",
+    "source_url": "https://aclanthology.org/N19-1423/",
+    "locator": "§3 Model Architecture, footnote 3",
+    "status": "verified",
+    "notes": "标明历史模型/任务版本"
+  },
+  {
+    "id": "B03",
+    "claim": "30k WordPiece、CLS SEP、A/B segment 与 token/segment/position embeddings",
+    "kind": "paper-claim",
+    "source_url": "https://aclanthology.org/N19-1423/",
+    "locator": "§3 Input/Output Representations; Figure 2",
+    "status": "verified",
+    "notes": "标明历史模型/任务版本"
+  },
+  {
+    "id": "B04",
+    "claim": "从候选 WordPiece 位置选 15%，被选中位置 80/10/10 替换且目标标签不变",
+    "kind": "paper-claim",
+    "source_url": "https://aclanthology.org/N19-1423/",
+    "locator": "§3.1 Task #1; Appendix A.1",
+    "status": "verified",
+    "notes": "标明历史模型/任务版本"
+  },
+  {
+    "id": "B05",
+    "claim": "MLM 交叉熵仅对被选中位置求均值",
+    "kind": "derived",
+    "source_url": "https://aclanthology.org/N19-1423/",
+    "locator": "§3.1 Task #1",
+    "status": "derived",
+    "notes": "教学推导，不是原论文独立实验结果"
+  },
+  {
+    "id": "B06",
+    "claim": "NSP 50% 真后续片段与 50% 随机片段；CLS 二分类",
+    "kind": "paper-claim",
+    "source_url": "https://aclanthology.org/N19-1423/",
+    "locator": "§3.1 Task #2; Appendix A.2",
+    "status": "verified",
+    "notes": "标明历史模型/任务版本"
+  },
+  {
+    "id": "B07",
+    "claim": "两个预训练目标的均值似然之和，转换为最小化 NLL 表达",
+    "kind": "derived",
+    "source_url": "https://aclanthology.org/N19-1423/",
+    "locator": "Appendix A.2",
+    "status": "derived",
+    "notes": "教学推导，不是原论文独立实验结果"
+  },
+  {
+    "id": "B08",
+    "claim": "BookCorpus 800M + English Wikipedia 2500M words，1M steps，batch256，LR1e-4，10k warmup",
+    "kind": "paper-claim",
+    "source_url": "https://aclanthology.org/N19-1423/",
+    "locator": "Appendix A.2",
+    "status": "verified",
+    "notes": "标明历史模型/任务版本"
+  },
+  {
+    "id": "B09",
+    "claim": "90% 步长128，剩下10%长度512，dropout .1 和 GELU",
+    "kind": "paper-claim",
+    "source_url": "https://aclanthology.org/N19-1423/",
+    "locator": "Appendix A.2",
+    "status": "verified",
+    "notes": "标明历史模型/任务版本"
+  },
+  {
+    "id": "B10",
+    "claim": "下游 CLS 分类、token 标注、SQuAD 起止位置与不同微调超参数",
+    "kind": "paper-claim",
+    "source_url": "https://aclanthology.org/N19-1423/",
+    "locator": "§3.2; §4.2; Appendix A.3/A.5",
+    "status": "verified",
+    "notes": "标明历史模型/任务版本"
+  },
+  {
+    "id": "B11",
+    "claim": "GLUE test 80.5，MNLI accuracy 86.7%",
+    "kind": "experiment",
+    "source_url": "https://aclanthology.org/N19-1423/",
+    "locator": "Abstract; Table 1",
+    "status": "verified",
+    "notes": "标明历史模型/任务版本"
+  },
+  {
+    "id": "B12",
+    "claim": "SQuAD 1.1 Test F1 93.2 对应 ensemble+TriviaQA；SQuAD 2.0 Test F1 83.1 对应 large single",
+    "kind": "experiment",
+    "source_url": "https://aclanthology.org/N19-1423/",
+    "locator": "Table 2; Table 3",
+    "status": "verified",
+    "notes": "标明历史模型/任务版本"
+  },
+  {
+    "id": "B13",
+    "claim": "Table5 BERT Base Dev QNLI 88.4/84.9/84.3；SQuAD F1 88.5/87.9/77.8",
+    "kind": "experiment",
+    "source_url": "https://aclanthology.org/N19-1423/",
+    "locator": "Table 5 p.4178",
+    "status": "verified",
+    "notes": "标明历史模型/任务版本"
+  },
+  {
+    "id": "B14",
+    "claim": "RoBERTa 调整数据、训练与动态 masking 等并移除 NSP",
+    "kind": "later-work",
+    "source_url": "https://arxiv.org/abs/1907.11692",
+    "locator": "§1–4",
+    "status": "verified",
+    "notes": "标明历史模型/任务版本"
+  },
+  {
+    "id": "B15",
+    "claim": "全体位置预计 12% MASK + 1.5% 随机 + 1.5% 保持原词",
+    "kind": "toy-derivation",
+    "source_url": "https://aclanthology.org/N19-1423/",
+    "locator": "§3.1 15% × 80/10/10",
+    "status": "derived",
+    "notes": "教学推导，不是原论文独立实验结果"
+  },
+  {
+    "id": "B16",
+    "claim": "缩放点积注意力公式及 mask 概念是 Transformer 基础",
+    "kind": "derived",
+    "source_url": "https://arxiv.org/abs/1706.03762",
+    "locator": "§3.2",
+    "status": "derived",
+    "notes": "教学推导，不是原论文独立实验结果"
+  }
+]
