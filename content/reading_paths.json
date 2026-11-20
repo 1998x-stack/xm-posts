@@ -200,6 +200,7 @@
     "posts": [
       "ppo",
       "rlhf",
+      "reward-hacking",
       "dpo",
       "grpo"
     ]
@@ -326,6 +327,16 @@
       "embeddings",
       "bert",
       "rag"
+    ]
+  },
+  {
+    "id": "path-36",
+    "title": "从奖励代理到智能体评价器",
+    "posts": [
+      "rlhf",
+      "reward-hacking",
+      "react",
+      "swe-agent"
     ]
   }
 ]
