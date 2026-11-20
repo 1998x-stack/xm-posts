@@ -9,7 +9,8 @@
 ## 已发布的长文
 
 | Post | 解释的问题 | 文章源码 | 核心资料 |
-|---|---|---|---|
+|---|---|---|
+| **Understanding AlphaGo** | 为什么策略网络与价值网络能引导树搜索，避免只靠遍历下围棋？ | [`posts/reinforcement-learning/alphago/`](posts/reinforcement-learning/alphago/index.html) | [Silver et al. (Nature 2016)](https://doi.org/10.1038/nature16961) |
 | **Understanding The Pile** | 为什么 22 种语料混合能增强跨领域文本建模？ | [`posts/datasets/the-pile/`](posts/datasets/the-pile/index.html) | [Gao et al. (2020)](https://arxiv.org/abs/2101.00027) |
 | **Understanding Chinchilla** | 在固定训练 FLOPs 下，参数量与训练 tokens 如何均衡？ | [`posts/training/chinchilla/`](posts/training/chinchilla/index.html) | [Hoffmann et al. (NeurIPS 2022)](https://arxiv.org/abs/2203.15556) |
 | **Understanding FineWeb** | 跨快照去重越强，为什么训练效果反而可能更差？ | [`posts/datasets/fineweb/`](posts/datasets/fineweb/index.html) | [Penedo et al. (NeurIPS 2024)](https://arxiv.org/abs/2406.17557) |
@@ -26,6 +27,7 @@
 | **Understanding DPO** | 为什么偏好对可以直接训练策略而无需显式奖励模型？ | [`posts/training/dpo/`](posts/training/dpo/index.html) | [Rafailov et al. (NeurIPS 2023)](https://arxiv.org/abs/2305.18290) |
 | **Understanding Linear Regression** | 为什么最小平方残差意味着正交投影？闭式解、梯度下降和统计推断需要哪些边界？ | [`posts/classical-ml/linear-regression/`](posts/classical-ml/linear-regression/index.html) | [NIST: Least Squares](https://www.itl.nist.gov/div898/handbook/pmd/section1/pmd141.htm) · [Berkeley: Gauss–Markov](https://eml.berkeley.edu/sst/regression.html) |
 | **Understanding Naive Bayes** | 条件独立怎么帮助分类？多项式、伯努利、平滑与校准有什么本质区别？ | [`posts/classical-ml/naive-bayes/`](posts/classical-ml/naive-bayes/index.html) | [McCallum & Nigam (1998)](https://www.cse.iitb.ac.in/~soumen/readings/papers/McCallumN1998event.pdf) |
+| **Understanding Decision Tree** | 为什么一连串简单判断能成为分类与回归模型？从 ID3、CART 与 C4.5 到剪枝 | [`posts/classical-ml/decision-tree/`](posts/classical-ml/decision-tree/index.html) | [Quinlan (1986)](https://doi.org/10.1007/BF00116251) · [Breiman et al. (1984)](https://www.routledge.com/Classification-and-Regression-Trees/Breiman-Friedman-Stone-Olshen/p/book/9780412048418) |
 | **Understanding SVM** | 为什么分对了仍需最大间隔？ | [`posts/classical-ml/svm/`](posts/classical-ml/svm/index.html) | [Cortes & Vapnik (1995)](https://doi.org/10.1007/BF00994018) |
 | **Understanding XGBoost** | 为什么提升树可以二阶优化并扩展到海量稀疏数据？ | [`posts/classical-ml/xgboost/`](posts/classical-ml/xgboost/index.html) | [Chen & Guestrin (KDD 2016)](https://arxiv.org/abs/1603.02754) |
 | **Understanding PCA** | 最大方差为何等价于最小平方重建误差？ | [`posts/classical-ml/pca/`](posts/classical-ml/pca/index.html) | [Pearson (1901)](https://doi.org/10.1080/14786440109462720) · [Hotelling (1933)](https://www.scienceopen.com/document?vid=a0c9b352-1645-4706-9d7c-a76e6534a1b5) |
@@ -38,6 +40,7 @@
 | **Understanding RLHF** | 为什么示范微调还需要人类偏好与策略优化？ | [`posts/training/rlhf/`](posts/training/rlhf/index.html) | [Ouyang et al. (2022)](https://arxiv.org/abs/2203.02155) |
 | **Understanding GRPO** | 为什么不需要 Critic 也能构造策略优势？ | [`posts/training/grpo/`](posts/training/grpo/index.html) | [Shao et al. (2024)](https://arxiv.org/abs/2402.03300) |
 | **Understanding Word2Vec** | 为什么上下文预测能产生词向量？ | [`posts/foundations/understanding-word2vec/`](posts/foundations/understanding-word2vec/index.html) | [Mikolov et al. (2013)](https://arxiv.org/abs/1301.3781) · [NeurIPS 2013](https://arxiv.org/abs/1310.4546) |
+| **Understanding Embeddings** | 为什么词的编号能够变成可比较的语义向量？从 Word2Vec 到对比检索 | [`posts/foundations/embeddings/`](posts/foundations/embeddings/index.html) | [Word2Vec](https://arxiv.org/abs/1301.3781) · [SBERT](https://aclanthology.org/D19-1410/) · [SimCSE](https://aclanthology.org/2021.emnlp-main.552/) |
 | **Understanding SGD** | 为什么带噪梯度也能驱动大规模学习？ | [`posts/foundations/sgd/`](posts/foundations/sgd/index.html) | [Bottou (2010)](https://bottou.org/papers/bottou-2010) |
 | **Understanding Adam** | 梯度为什么需要方向和平方尺度的两份记忆？ | [`posts/foundations/adam/`](posts/foundations/adam/index.html) | [Kingma & Ba (2015)](https://arxiv.org/abs/1412.6980) |
 | **Understanding AdamW** | 为什么 Adam 的 L₂ 与 Weight Decay 不等价？ | [`posts/foundations/adamw/`](posts/foundations/adamw/index.html) | [Loshchilov & Hutter (ICLR 2019)](https://arxiv.org/abs/1711.05101) |
@@ -70,7 +73,7 @@ The Pile 的 22 个来源按原论文 Table 1 给出有效采样权重，配五�
 
 | 分类 | 路径 | 范围 |
 |---|---|---|
-| 基础理论 | `posts/foundations/` | Adam、Word2Vec、词嵌入、优化器（AdamW）、正则化、表示学习 |
+| 基础理论 | `posts/foundations/` | Adam、Word2Vec、BPE / Tokenization、词嵌入、优化器（AdamW）、正则化、表示学习 |
 | **经典机器学习** | `posts/classical-ml/` | SVM、核方法、线性模型、XGBoost 与树集成、PCA 与无监督降维 |
 | **模型架构** | `posts/architectures/` | RNN / LSTM、AlexNet / CNN、ResNet、Seq2Seq、Transformer、Normalization & Residual Paths、状态空间模型 |
 | **强化学习** | `posts/reinforcement-learning/` | Policy Gradient、Actor–Critic、Off-policy Replay、SAC / Maximum Entropy、PPO/TRPO 与序贯决策 |
@@ -98,6 +101,8 @@ RoPE 归入 `architectures`，补充 **Positional Encoding** 主题；不为单�
 AdamW 继续使用 `foundations` 中的 **Optimization & Regularization** 主题，不为单篇优化器论文新建顶层分类；未来 Adam、SGD 和学习率调度可共享该主题。各类别均有 `README.md` 占位；占位**不会作为文章上线**。`content/categories.json` 是分类单一数据源，`content/posts.json` 是文章元数据和发布状态的单一数据源。增加新文章不用手动编辑首页、Sitemap 或 RSS。
 
 XGBoost 归入 `classical-ml` 既有 **Trees & Ensembles** 主题，不新建顶层分类；KDD 2016 原论文与当前 `hist` 方法分开描述。文章包含 14 节、6 幅独立 SVG、7 组原生 MathML 公式、交互式阈值/正则化实验和确定性 Python 单元测试。
+
+BPE 放在 `foundations` → **Tokenization & Subword Units**（新增二级专题，沿用现有一级分类），而不是再新增一级目录；对应 `posts/foundations/bpe/` 包含原论文证据、六幅独立 SVG、交互训练/编码演示、MathML 与纯 Python 回归测试。明确区分 Gage 1994、Sennrich et al. ACL 2016 与 GPT-2 byte-level BPE。
 
 ## 仓库结构
 
