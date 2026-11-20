@@ -78,9 +78,15 @@ def category_pill(c, rel, count, active=False):
 
 def post_card(p,rel,ordinal=0):
     path=rel+article_url(p)
-    icon='residual' if p['slug']=='resnet' else 'attention'
-    poster=(f'<div class="figure-abstract figure-{icon}" aria-hidden="true"><span class="accent-label">FIG. {ordinal or 1:02d}</span>'
-            + ('<span class="math-mark">H(x) = x + F(x)</span><span class="pathline pathline-a"></span><span class="pathline pathline-b"></span><span class="pathline pathline-c"></span>' if icon=='residual' else '<span class="math-mark">softmax(QKᵀ / √dₖ)V</span><span class="attention-dots">● · ● · ● · ● · ●</span>')+'</div>')
+    if p['slug'] == 'resnet':
+        icon, art = 'residual', '<span class="math-mark">H(x) = x + F(x)</span><span class="pathline pathline-a"></span><span class="pathline pathline-b"></span><span class="pathline pathline-c"></span>'
+    elif p['slug'] == 'transformer':
+        icon, art = 'attention', '<span class="math-mark">softmax(QKᵀ / √dₖ)V</span><span class="attention-dots">● · ● · ● · ● · ●</span>'
+    elif p['slug'] == 'svm':
+        icon, art = 'margin', '<span class="math-mark">margin = 2 / ||w||</span><span class="svm-boundary svm-left"></span><span class="svm-boundary svm-center"></span><span class="svm-boundary svm-right"></span><span class="svm-point point-blue"></span><span class="svm-point point-orange"></span>'
+    else:
+        icon, art = 'generic', '<span class="math-mark">Observe → Derive → Verify</span>'
+    poster=f'<div class="figure-abstract figure-{icon}" aria-hidden="true"><span class="accent-label">FIG. {ordinal or 1:02d}</span>{art}</div>'
     return f'''<article class="post-card" data-post-card data-search="{H((p['title']+' '+p['summary']+' '+' '.join(p['tags'])).lower(),quote=True)}" data-category="{H(p['category'])}">
 <a class="card-hit" href="{path}" aria-label="阅读 {H(p['title'],quote=True)}">{poster}</a>
 <div class="card-body"><div class="card-topline"><span>MODEL STUDY / {H(p['category']).upper()}</span><span>{H(p['published'])}</span></div>
