@@ -1,8 +1,11 @@
 from pathlib import Path
 
 import pytest
+import sys
 
-from posts.agents.loop_engineering.loop_engine import Verdict, run_loop
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "posts" / "agents" / "loop-engineering"))
+from loop_engine import Verdict, run_loop
 
 
 def test_loop_retries_with_verifier_feedback_then_completes(tmp_path: Path):
