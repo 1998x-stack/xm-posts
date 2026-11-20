@@ -1,0 +1,101 @@
+[
+  {
+    "id": "E01",
+    "kind": "definition",
+    "claim": "Loop Engineering is an emerging practitioner label for systems that trigger agent runs, discover work, and stop on machine-checkable conditions.",
+    "source_url": "https://arxiv.org/abs/2608.21884",
+    "locator": "Abstract; §1",
+    "status": "verified",
+    "notes": "Lulla et al. (2026), exploratory preprint; do not present as a mature standardized discipline."
+  },
+  {
+    "id": "E02",
+    "kind": "survey_and_mining",
+    "claim": "The study reports mining 36,710 repositories and confirming autonomous loops in 217 of 256 repositories matched by its heuristics.",
+    "source_url": "https://arxiv.org/abs/2608.21884",
+    "locator": "Abstract; study summary",
+    "status": "verified",
+    "notes": "Exploratory repository-mining evidence; heuristic selection limits generalization and does not establish causal productivity gains."
+  },
+  {
+    "id": "E03",
+    "kind": "limitation",
+    "claim": "The paper reports that almost none of the identified repositories committed the persistent state files prescribed in practitioner discourse, and proposes rather than reports a controlled study.",
+    "source_url": "https://arxiv.org/abs/2608.21884",
+    "locator": "Abstract",
+    "status": "verified",
+    "notes": "Important evidence gap: configuration is more visible in repositories than runtime state."
+  },
+  {
+    "id": "E04",
+    "kind": "engineering",
+    "claim": "The Codex agent loop alternates model inference and tool execution until the model returns a terminal assistant message.",
+    "source_url": "https://openai.com/index/unrolling-the-codex-agent-loop/",
+    "locator": "The agent loop",
+    "status": "verified",
+    "notes": "Official engineering description of an inner agent loop, not a claim that this alone implements outer loop engineering."
+  },
+  {
+    "id": "E05",
+    "kind": "engineering",
+    "claim": "Anthropic's long-running agent harness uses an initializer agent and incremental coding sessions that leave progress artifacts for the next context window.",
+    "source_url": "https://www.anthropic.com/research/effective-harnesses-for-long-running-agents",
+    "locator": "The long-running agent problem; initializer and coding agent",
+    "status": "verified",
+    "notes": "Official engineering case study, published 2025-11-26."
+  },
+  {
+    "id": "E06",
+    "kind": "engineering",
+    "claim": "OpenAI's iterative repair cookbook structures a closed-loop workflow as review, repair, and validation, feeding validation findings into later passes.",
+    "source_url": "https://developers.openai.com/cookbook/examples/codex/build_iterative_repair_loops_with_codex",
+    "locator": "Introduction; Review / Repair / Validate",
+    "status": "verified",
+    "notes": "Practical engineering example; not a controlled benchmark."
+  },
+  {
+    "id": "E07",
+    "kind": "foundation",
+    "claim": "ReAct interleaves reasoning traces and environment actions so observations can update the next step.",
+    "source_url": "https://arxiv.org/abs/2210.03629",
+    "locator": "§2; Figure 1",
+    "status": "verified",
+    "notes": "Foundational inner-loop mechanism; it does not itself specify external scheduling, persistent task state, or organization-level governance."
+  },
+  {
+    "id": "E08",
+    "kind": "foundation",
+    "claim": "Reflexion turns feedback into verbal reflections stored in episodic memory to influence later attempts without updating model weights.",
+    "source_url": "https://arxiv.org/abs/2303.11366",
+    "locator": "Abstract; §1",
+    "status": "verified",
+    "notes": "A learning-from-feedback mechanism that can be composed into a larger loop."
+  },
+  {
+    "id": "E09",
+    "kind": "foundation",
+    "claim": "Self-Refine alternates feedback and refinement using the same model as generator, feedback provider, and refiner.",
+    "source_url": "https://arxiv.org/abs/2303.17651",
+    "locator": "Abstract; §1",
+    "status": "verified",
+    "notes": "Single-task iterative refinement; distinct from externally triggered long-running orchestration."
+  },
+  {
+    "id": "E10",
+    "kind": "derivation",
+    "claim": "Under the simplified assumption of independent attempts with constant per-attempt success probability p, the chance of at least one success in n attempts is 1-(1-p)^n.",
+    "source_url": "https://arxiv.org/abs/2608.21884",
+    "locator": "Independent teaching derivation; not an equation from the cited paper",
+    "status": "illustrative",
+    "notes": "The article explicitly states the simplifying assumption and does not treat the plotted values as measured agent performance."
+  },
+  {
+    "id": "E11",
+    "kind": "implementation",
+    "claim": "The accompanying Python controller demonstrates atomic JSON state writes, verifier-gated completion, retry feedback, explicit attempt budgets, and human escalation.",
+    "source_url": "https://github.com/1998x-stack/xm-posts/blob/main/posts/agents/loop-engineering/loop_engine.py",
+    "locator": "run_loop; _save; _load",
+    "status": "illustrative",
+    "notes": "Teaching implementation, not a production workflow engine; does not implement distributed locking, leases, exactly-once side effects, or a security sandbox."
+  }
+]
