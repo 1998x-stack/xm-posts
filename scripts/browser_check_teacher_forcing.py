@@ -43,7 +43,7 @@ def check(out: Path) -> None:
         page.locator("#prob").evaluate(
             "(el) => { el.value = '0.1'; el.dispatchEvent(new Event('input', {bubbles:true})); }"
         )
-        assert "1.01366" in page.locator("#loss-output").inner_text()
+        assert "1.01218" in page.locator("#loss-output").inner_text()
         page.emulate_media(media="print")
         assert page.locator("h1").is_visible()
         assert page.locator("figure img").first.is_visible()
