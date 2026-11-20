@@ -27,3 +27,7 @@
 - [Understanding BPE](bpe/index.html)：带词频的贪心子词合并、原论文实验与 byte-level 变体；含六幅机制图、交互分词实验、MathML 与纯 Python 验证。
 
 - [Understanding Importance Sampling](importance-sampling/index.html)：稀有事件、换测度、方差缩减、SNIS、ESS 与离策略评价。
+
+- [Understanding WordPiece](wordpiece/index.html)：从 2012 语音搜索、GNMT 到 BERT MaxMatch 编码，区分教学评分与原始未开源实现；含七幅独立 SVG、四组 MathML、双交互实验和测试。专题：`Tokenization & Subword Units`。
+
+- [Understanding LogSumExp & Softmax Taylor Expansion](logsumexp-softmax-taylor/index.html)：中心化 LSE/Softmax 的泰勒展开、误差与 Attention 线性化；所属二级主题 `Softmax, LogSumExp & Numerical Approximation`。

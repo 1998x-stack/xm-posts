@@ -1,0 +1,83 @@
+[
+  {
+    "id": "LSE-01",
+    "claim": "The source essay is titled LogSumExp和Softmax的泰勒展开, published 2026-07-13, motivated by The Key to Going Linear.",
+    "kind": "source-provenance",
+    "source_url": "https://spaces.ac.cn/archives/11814",
+    "locator": "Title; introduction visible in indexed site listing",
+    "status": "verified",
+    "notes": "The source website blocked direct full-page retrieval (403); source title, date and introduction confirmed via its public index. Mathematical derivations below independently checked."
+  },
+  {
+    "id": "LSE-02",
+    "claim": "LogSumExp shift equivariance and Softmax shift invariance.",
+    "kind": "derivation",
+    "source_url": "https://spaces.ac.cn/archives/11814",
+    "locator": "Article opening notation; derivation in post §01 and code",
+    "status": "derived",
+    "notes": "Exact algebra for finite real logits; choose max shift for stable implementations."
+  },
+  {
+    "id": "LSE-03",
+    "claim": "Centered LogSumExp expansion has coefficients m2/2, m3/6, (m4-3m2²)/24.",
+    "kind": "derivation",
+    "source_url": "https://spaces.ac.cn/archives/11814",
+    "locator": "Post §03, Eq.3; mini_softmax_taylor.py",
+    "status": "derived",
+    "notes": "For x=mu*1+lambda*delta, lambda→0, fixed delta."
+  },
+  {
+    "id": "LSE-04",
+    "claim": "Gradient of LSE equals Softmax and Hessian is diag(p)-p p^T.",
+    "kind": "derivation",
+    "source_url": "https://arxiv.org/abs/2607.07706",
+    "locator": "Post §04, Eq.4; direct differentiation",
+    "status": "derived",
+    "notes": "No empirical model claim."
+  },
+  {
+    "id": "LSE-05",
+    "claim": "Softmax Taylor coefficients through third order preserve weight sum, not positivity.",
+    "kind": "derivation",
+    "source_url": "https://spaces.ac.cn/archives/11814",
+    "locator": "Post §05, Eq.5 and JS numerical widget",
+    "status": "derived",
+    "notes": "Local normalized Taylor series differs from exponent-truncation Taylor Softmax."
+  },
+  {
+    "id": "LSE-06",
+    "claim": "Attention under uniform-logit first-order expansion admits prefix sums of k,v,kv^T.",
+    "kind": "derivation",
+    "source_url": "https://spaces.ac.cn/archives/11814",
+    "locator": "Post §08–09, Eq.7–8; code approx_attention",
+    "status": "derived",
+    "notes": "Only causal valid prefix; standard scaling 1/sqrt(d); model quality not claimed."
+  },
+  {
+    "id": "LSE-07",
+    "claim": "Kuzina et al study frozen-backbone linearization and distinguish gated accumulation and delta-style key-dependent rank-1 projections.",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/abs/2607.07706",
+    "locator": "Abstract, Sections 1 and 3",
+    "status": "verified",
+    "notes": "Do not equate the teaching-level vanilla formula with Gated DeltaNet or inherit benchmark results."
+  },
+  {
+    "id": "LSE-08",
+    "claim": "Exponent Taylor Softmax is a different approximation family.",
+    "kind": "context",
+    "source_url": "https://spaces.ac.cn/archives/10145",
+    "locator": "Taylor Softmax discussion",
+    "status": "verified",
+    "notes": "Mathematical distinction is explicit in post §06."
+  },
+  {
+    "id": "LSE-09",
+    "claim": "Five explanatory diagrams and illustrative slider data are not measured paper results.",
+    "kind": "illustration",
+    "source_url": "https://spaces.ac.cn/archives/11814",
+    "locator": "Post figs 01–05 and §07",
+    "status": "illustrative",
+    "notes": "Independent SVG artwork and deterministic toy example."
+  }
+]

@@ -8,7 +8,7 @@ Create evidence-grounded, pedagogically progressive, illustrated technical artic
 
 ## 2. Know your boundaries
 
-- **Source of truth** for categories: `content/categories.json`; for post publication, cards, RSS and sitemap: `content/posts.json`.
+- **Source of truth** for categories and stable second-level topic IDs: `content/categories.json` (`topics: [{slug,title}]`); for post publication, explicit `category` + `topic`, cards, RSS and sitemap: `content/posts.json`.
 - **Source of truth** for article HTML and assets: `posts/<category>/<slug>/index.html`, `assets/*.svg`, `evidence.json`; optional minimal code lives beside the article.
 - **Source of truth** for skill: `skills/olah-style-paper-posts/`; four mirrored copies in `.claude/skills/`, `.pi/skills/`, `.agent/skills/`, `.opencode/skills/` must be byte-identical.
 - **Source of truth** for static site logic: `scripts/build_site.py`, `site/assets/`; generated `_site/` is disposable and must never be committed.
@@ -23,7 +23,7 @@ Never edit the four agent mirrors directly. Change canonical skill, then `python
 3. **Mathematics.** State variable definitions and shape changes, masks, and normalization placement. Label toy examples, inference-time choices, and later model variants separately.
 4. **SVG.** `viewBox`, accessible `<title>`/label, unique IDs **across the whole HTML document** (do not reuse `id="arrow"` in 13 SVGs), readable font sizes, unambiguous color roles; extract and inspect standalone SVGs in the browser.
 5. **HTML/CSS/JS.** One `h1`, semantic `<main>`, `nav`, figure captions, accessible controls, keyboard focus, small-screen/print/reduced-motion support, no CDN or unnecessary network dependency. Default state must explain without running JS.
-6. **QA.** Run source validator, site builder, link checker, tests and actual Playwright at 1440/768/390/360px. Test a real interaction, inspect errors/overflow and ensure keyboard use. Do not call skipped checks 'passed'.
+6. **QA.** Run source validator, site builder, cross-page fragment/link checker, tests and actual Playwright at 1440/768/390/360px. Test a real interaction, inspect errors/overflow and ensure keyboard use. Do not call skipped checks 'passed'.
 7. **Release.** Publish a branch/PR, review diff & CI; only then merge and verify `main`, Pages run and reachable URLs. Do not assert production deployment merely because a workflow exists.
 
 Read the full process in `skills/olah-style-paper-posts/references/{paper-extraction,narrative-architecture,evidence-and-citation,html-design-system,svg-production,implementation-and-interactivity,browser-qa,publishing}.md`.
@@ -32,6 +32,7 @@ Read the full process in `skills/olah-style-paper-posts/references/{paper-extrac
 
 ```bash
 python scripts/new_post.py inference understanding-kv-cache \
+  --topic kv-cache \
   --title 'Understanding KV Cache' \
   --subtitle '为什么缓存可以改善自回归推理？' \
   --paper 'https://arxiv.org/...'
@@ -39,7 +40,7 @@ python scripts/new_post.py inference understanding-kv-cache \
 
 This creates **draft** metadata. Replace the template with an actual, referenced explanation; create independent SVGs and evidence; run required QA; update `reading_minutes`, `summary`, `tags`, `published` and finally `status` from `draft` to `published`. Never change state solely because a file exists. Never create fake placeholder posts in `content/posts.json` with `status: published`.
 
-For new categories, add an entry to `content/categories.json` and a `posts/<category>/README.md` placeholder. Do not hand-edit the generated site indexes or hardcode new post cards.
+For new categories, add an entry to `content/categories.json` and a `posts/<category>/README.md` placeholder. Every post must use exactly one registered second-level `topic` slug; use tags for cross-domain concepts. Generated `/topics/` and category `#topic-<slug>` anchors are public links, so preserve slug stability. Do not hand-edit the generated site indexes or hardcode new post cards.
 
 ## 5. How to validate
 

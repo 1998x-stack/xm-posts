@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 390" role="img" aria-labelledby="lse-f5-title lse-f5-desc"><title id="lse-f5-title">小扰动与大 logit 差距对近似的影响</title><desc id="lse-f5-desc">平坦概率区域一阶近似较合理；尖锐分布中高阶项更明显且截断可能出现负概率。</desc><rect x="1" y="1" width="958" height="388" rx="22" fill="#f9fcf9" stroke="#d9e7df"/>
+<g font-family="system-ui,-apple-system,'PingFang SC',sans-serif"><text x="44" y="56" font-size="24" fill="#24444b" font-weight="800">一阶是局部近似，不是新的全局 Softmax</text>
+<rect x="46" y="91" width="404" height="237" rx="12" fill="#eaf6f0" stroke="#b9d8cc" stroke-width="1.5"/><rect x="506" y="91" width="408" height="237" rx="12" fill="#fff0e7" stroke="#efcebb" stroke-width="1.5"/>
+<text x="67" y="129" font-size="20" fill="#287a70" font-weight="800">小 logit 差距</text>
+<text x="524" y="129" font-size="20" fill="#b16c4b" font-weight="800">大 logit 差距</text>
+<rect x="81" y="160" width="83" height="20" rx="4" fill="#398a80"/><rect x="549" y="160" width="16" height="20" rx="4" fill="#d08c60"/><rect x="81" y="193" width="94" height="20" rx="4" fill="#398a80"/><rect x="549" y="193" width="25" height="20" rx="4" fill="#d08c60"/><rect x="81" y="226" width="105" height="20" rx="4" fill="#398a80"/><rect x="549" y="226" width="54" height="20" rx="4" fill="#d08c60"/><rect x="81" y="259" width="114" height="20" rx="4" fill="#398a80"/><rect x="549" y="259" width="280" height="20" rx="4" fill="#d08c60"/>
+<text x="242" y="192" font-size="16" fill="#527b76" >近似 = 局部敏感度</text><text x="242" y="225" font-size="16" fill="#527b76" >较接近真实概率</text>
+<text x="595" y="310" font-size="17" fill="#9c6343" >可能产生负权重或偏离很大</text>
+<text x="66" y="310" font-size="16" fill="#527b76" >误差通常随扰动阶数下降</text>
+</g></svg>

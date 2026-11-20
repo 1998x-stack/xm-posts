@@ -1,0 +1,101 @@
+[
+  {
+    "id": "M1",
+    "claim": "MobileNetV1 uses a per-input-channel depthwise spatial filter followed by 1x1 pointwise channel mixing",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/html/1704.04861v1",
+    "locator": "Section 3.1, Equations 3-5, Figure 2",
+    "status": "verified",
+    "notes": "Depthwise alone never mixes input channels"
+  },
+  {
+    "id": "M2",
+    "claim": "The cost ratio is 1/N + 1/k^2 for equal output spatial shape",
+    "kind": "derivation",
+    "source_url": "https://arxiv.org/html/1704.04861v1",
+    "locator": "Section 3.1, Equations 2 and 5, ratio following Equation 5",
+    "status": "verified",
+    "notes": "Counts MACs; no claim of identical hardware latency"
+  },
+  {
+    "id": "M3",
+    "claim": "MobileNetV1 uses BN and ReLU after its DW/PW convs; first convolution is conventional",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/html/1704.04861v1",
+    "locator": "Section 3.2, Figure 3 and Table 1",
+    "status": "verified",
+    "notes": "Except final classification FC"
+  },
+  {
+    "id": "M4",
+    "claim": "In original V1 architecture 1x1 pointwise conv accounts for 94.86% Mult-Adds and 74.59% parameters",
+    "kind": "experiment",
+    "source_url": "https://arxiv.org/html/1704.04861v1",
+    "locator": "Table 2",
+    "status": "verified",
+    "notes": "DW 3x3: 3.06% MACs and 1.06% parameters"
+  },
+  {
+    "id": "M5",
+    "claim": "Width multiplier alpha reduces channels and resolution multiplier rho reduces spatial area",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/html/1704.04861v1",
+    "locator": "Sections 3.3–3.4, Equations 6–7",
+    "status": "verified",
+    "notes": "Quadratic alpha effect approximate because depthwise term linear"
+  },
+  {
+    "id": "M6",
+    "claim": "Original 1.0 MobileNet-224 gives ImageNet 70.6% accuracy, 569M Mult-Adds, 4.2M parameters",
+    "kind": "experiment",
+    "source_url": "https://arxiv.org/html/1704.04861v1",
+    "locator": "Tables 4, 6, 8",
+    "status": "verified",
+    "notes": "Original paper ImageNet classification; not modern retraining"
+  },
+  {
+    "id": "M7",
+    "claim": "Full conv variant is 71.7% 4866M 29.3M; 0.75 MobileNet-224 is 68.4% 325M 2.6M",
+    "kind": "experiment",
+    "source_url": "https://arxiv.org/html/1704.04861v1",
+    "locator": "Tables 4 and 6",
+    "status": "verified",
+    "notes": "Original training settings"
+  },
+  {
+    "id": "M8",
+    "claim": "A narrower V1 0.75 224 variant beat shallower V1 at roughly matched MACs",
+    "kind": "experiment",
+    "source_url": "https://arxiv.org/html/1704.04861v1",
+    "locator": "Table 5",
+    "status": "verified",
+    "notes": "68.4% 325M versus 65.3% 307M; only this comparison"
+  },
+  {
+    "id": "M9",
+    "claim": "V2 uses inverted residuals and linear bottlenecks with shortcut between narrow features when shapes permit",
+    "kind": "later-variant",
+    "source_url": "https://arxiv.org/abs/1801.04381",
+    "locator": "Section 3 and Figure 2",
+    "status": "verified",
+    "notes": "V2 not original V1; ReLU6 in expansion/depthwise"
+  },
+  {
+    "id": "M10",
+    "claim": "V3 combines hardware-aware NAS, NetAdapt, SE, and h-swish",
+    "kind": "later-variant",
+    "source_url": "https://arxiv.org/abs/1905.02244",
+    "locator": "Abstract and Sections 3–5",
+    "status": "verified",
+    "notes": "Device-specific latency consideration"
+  },
+  {
+    "id": "M11",
+    "claim": "V4 introduces universal inverted bottleneck and Mobile MQA for multiple mobile accelerators",
+    "kind": "later-variant",
+    "source_url": "https://arxiv.org/abs/2404.10518",
+    "locator": "Abstract and architecture section",
+    "status": "verified",
+    "notes": "V4 published 2024, separate from V1 2017"
+  }
+]

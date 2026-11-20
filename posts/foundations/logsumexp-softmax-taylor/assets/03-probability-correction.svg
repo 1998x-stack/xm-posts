@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 390" role="img" aria-labelledby="lse-f3-title lse-f3-desc"><title id="lse-f3-title">Softmax 概率的逐阶修正</title><desc id="lse-f3-desc">均匀分布为零阶，线性项搬移概率质量，二阶项减去总体二阶矩保证和为一。</desc><rect x="1" y="1" width="958" height="388" rx="22" fill="#f9fcf9" stroke="#d9e7df"/>
+<g font-family="system-ui,-apple-system,'PingFang SC',sans-serif"><text x="42" y="54" font-size="23" fill="#24444b" font-weight="750">概率不是对 exp(x) 单独截断；分母也必须一起展开</text>
+<rect x="42" y="92" width="273" height="228" rx="12" fill="#e7f3ed" stroke="#b9d8cc" stroke-width="1.5"/><rect x="343" y="92" width="273" height="228" rx="12" fill="#eef2fc" stroke="#c7d2ec" stroke-width="1.5"/><rect x="644" y="92" width="273" height="228" rx="12" fill="#fcf0e6" stroke="#edceb6" stroke-width="1.5"/>
+<text x="62" y="131" font-size="19" fill="#287b71" font-weight="800">① 均匀基线</text><text x="68" y="179" font-size="30" fill="#28434a" >1 / n</text><text x="62" y="219" font-size="16" fill="#57726f" >每个位置先分到同样概率</text>
+<text x="363" y="131" font-size="19" fill="#5a71ac" font-weight="800">② 线性修正</text><text x="369" y="179" font-size="30" fill="#28434a" >δᵢ / n</text><text x="363" y="219" font-size="16" fill="#57718a" >相对均值高：概率上升</text>
+<text x="664" y="131" font-size="19" fill="#ae774c" font-weight="800">③ 二次修正</text><text x="665" y="179" font-size="22" fill="#28434a" >(δᵢ² − m₂) / 2n</text><text x="664" y="219" font-size="16" fill="#896849" >中心化后总和仍为零</text>
+<line x1="318" y1="201" x2="324" y2="201" stroke="#387f7b" stroke-width="3.5"/><path d="M322 192 L336 201 L322 210 Z" fill="#387f7b"/><line x1="619" y1="201" x2="626" y2="201" stroke="#387f7b" stroke-width="3.5"/><path d="M624 192 L638 201 L624 210 Z" fill="#387f7b"/>
+<text x="45" y="350" font-size="18" fill="#956346" font-weight="600">注意：截断后 Σ pᵢ = 1，但不保证每个 pᵢ ≥ 0。</text>
+</g></svg>

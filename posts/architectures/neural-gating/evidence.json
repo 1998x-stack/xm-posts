@@ -1,0 +1,74 @@
+[
+  {
+    "id": "GATE-LSTM-1997",
+    "kind": "original-architecture",
+    "claim": "1997 LSTM used a constant-error-carousel memory self connection and multiplicative input/output gates, not the later adaptive forget gate.",
+    "source_url": "https://doi.org/10.1162/neco.1997.9.8.1735",
+    "locator": "Sections 3–4, Figure 1",
+    "status": "verified",
+    "notes": "本文区分论文原式、现代习惯约定与独立教学简化；未复刻论文实验表格。"
+  },
+  {
+    "id": "GATE-LSTM-2000",
+    "kind": "later-extension",
+    "claim": "The adaptive forget gate for continual prediction was introduced after the original 1997 LSTM.",
+    "source_url": "https://doi.org/10.1162/089976600300015015",
+    "locator": "Abstract; mechanism",
+    "status": "verified",
+    "notes": "本文区分论文原式、现代习惯约定与独立教学简化；未复刻论文实验表格。"
+  },
+  {
+    "id": "GATE-GRU-2014",
+    "kind": "original-architecture",
+    "claim": "Cho et al. introduce gated recurrence with update and reset gates in their RNN Encoder–Decoder.",
+    "source_url": "https://aclanthology.org/D14-1179/",
+    "locator": "Section 2.3, recurrent hidden units",
+    "status": "verified",
+    "notes": "本文区分论文原式、现代习惯约定与独立教学简化；未复刻论文实验表格。"
+  },
+  {
+    "id": "GATE-HIGHWAY-2015",
+    "kind": "original-architecture",
+    "claim": "Highway networks use transform/carry gating to let information flow directly across depth.",
+    "source_url": "https://papers.nips.cc/paper_files/paper/2015/hash/215a71a12769b056c3c32e7299f1c5ed-Abstract.html",
+    "locator": "Section 2, equations for H, T, C",
+    "status": "verified",
+    "notes": "本文区分论文原式、现代习惯约定与独立教学简化；未复刻论文实验表格。"
+  },
+  {
+    "id": "GATE-GLU-2017",
+    "kind": "original-architecture",
+    "claim": "Dauphin et al. apply gated linear units in convolutional language models.",
+    "source_url": "https://proceedings.mlr.press/v70/dauphin17a.html",
+    "locator": "Section 3, GLU definition",
+    "status": "verified",
+    "notes": "本文区分论文原式、现代习惯约定与独立教学简化；未复刻论文实验表格。"
+  },
+  {
+    "id": "GATE-SWIGLU-2020",
+    "kind": "later-variant",
+    "claim": "Shazeer compares GLU variants such as GEGLU and SwiGLU in Transformer feed-forward sublayers.",
+    "source_url": "https://arxiv.org/abs/2002.05202",
+    "locator": "Sections 2–3",
+    "status": "verified",
+    "notes": "本文区分论文原式、现代习惯约定与独立教学简化；未复刻论文实验表格。"
+  },
+  {
+    "id": "GATE-GAU-2022",
+    "kind": "related-work",
+    "claim": "Hua et al. describe gated attention unit in Transformer Quality in Linear Time.",
+    "source_url": "https://proceedings.mlr.press/v162/hua22a.html",
+    "locator": "GAU proposal and abstract",
+    "status": "verified",
+    "notes": "本文区分论文原式、现代习惯约定与独立教学简化；未复刻论文实验表格。"
+  },
+  {
+    "id": "GATE-MATH-TOY",
+    "kind": "toy-derivation",
+    "claim": "Scalar interpolation, parameter-count approximation and finite-difference derivative checks are independently derived examples, not paper results.",
+    "source_url": "https://arxiv.org/abs/2002.05202",
+    "locator": "Equations of GLU variants; algebraic derivation",
+    "status": "derived",
+    "notes": "本文区分论文原式、现代习惯约定与独立教学简化；未复刻论文实验表格。"
+  }
+]
