@@ -132,6 +132,10 @@
       {
         "slug": "gating-mechanisms",
         "title": "Gating & Multiplicative Interactions"
+      },
+      {
+        "slug": "generative-adversarial-networks",
+        "title": "Generative Adversarial Networks (GAN)"
       }
     ]
   },
