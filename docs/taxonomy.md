@@ -18,7 +18,7 @@
 | `systems` | GPU 内存、算子、编译、通信、性能分析及底层优化 | 服务请求、token 调度、端到端 serving 归 `inference` |
 | `storage-indexing` | B+ Tree、LSM Tree、页与缓冲区管理、事务恢复、MVCC | 数据库磁盘/索引结构归此类；向量语义召回归 `retrieval-rag`，GPU 算子实现归 `systems` |
 | `retrieval-rag` | 向量/ANN、稀疏混合检索、重排序、RAG、证据落地 | Agent 任务计划与工具执行归 `agents`，embedding 基础表征归 `foundations` |
-| `agents` | ReAct、规划、工具调用、记忆、软件工程 Agent、Agent-Computer Interface、Harness Engineering 与端到端评测 | 纯推理策略归 `reasoning`；检索方法归 `retrieval-rag`；Harness 研究模型外部的 Agent Runtime 与工程闭环 |
+| `agents` | ReAct、规划、工具调用、记忆、软件工程 Agent、Agent-Computer Interface、Harness Engineering、Loop Engineering 与端到端评测 | 纯推理策略归 `reasoning`；检索方法归 `retrieval-rag`；Harness 研究模型外部的 Agent Runtime，Loop 研究跨运行的触发、验证、持久化与终止 |
 | `multimodal` | 视觉/语言/音频的跨模态建模与对齐 | 通用单模态 CNN 架构仍可归 `architectures` |
 | `evaluation` | 模型/任务 Benchmark、ROC/PR、消融与复现 | 训练数据质量、污染事实与许可证归 `datasets` |
 
@@ -60,3 +60,12 @@
 - ReAct 主要解释推理—行动—观察循环；SWE-agent / ACI 主要研究操作接口；Agent Memory 主要研究跨会话知识；Harness Engineering 将这些能力置于完整任务生命周期中进行系统设计。
 - Harness 与 Evaluation Harness 必须区分：前者使模型能够行动，后者运行任务并测量结果。
 - 当前专题文献仍在快速演进；对预印本提出的子系统分类，应标注来源和研究状态，不把它们描述为已统一的行业标准。
+
+
+## Loop Engineering 专题边界
+
+- **主分类：** `agents`；**二级专题：** `loop-engineering`。
+- 研究 Agent 运行之间的外层工作循环：事件 / 日程触发、任务发现与去重、上下文投影、隔离执行、独立验证、持久状态、预算、停止条件与人工升级。
+- 不新增一级分类。Loop Engineering 依赖 Harness 提供的工具、权限、沙箱和观测能力，但重点是跨运行的任务生命周期；Harness 主要描述单次运行时及其执行环境。
+- 与 ReAct（单次 Thought–Action–Observation）、Planning（计划生成与更新）、Memory（状态与经验保存）和 Agent Evaluation（任务结果测量）有关联但不等价。
+- 2026 年 Loop Engineering 文献仍处于探索阶段。引用仓库挖掘比例时必须说明启发式筛选分母；不能把观察性采用数据写成因果效率提升，也不能把预印本提出的构件称为统一行业标准。
