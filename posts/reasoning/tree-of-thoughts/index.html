@@ -1,0 +1,435 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light">
+<meta name="description" content="精读 Yao et al. NeurIPS 2023 Tree of Thoughts：从 CoT 的线性生成到思维树搜索，讲清 Thought、State、Value、BFS、DFS、Game of 24、原论文证据、推理成本与工程边界。">
+<link rel="canonical" href="https://1998x-stack.github.io/xm-posts/posts/reasoning/tree-of-thoughts/">
+<title>Understanding Tree of Thoughts · xm-posts</title>
+<style>
+:root{--bg:#f7f9f6;--paper:#fffefb;--ink:#203f46;--muted:#5b7074;--teal:#187e75;--border:#d6e1de;--orange:#b46744;--purple:#7566a8;--green:#287b68}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.85 system-ui,-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}
+a{color:#146f75;text-underline-offset:4px}
+a:hover{color:#9d5940}
+a:focus-visible,button:focus-visible,[tabindex]:focus-visible{outline:3px solid #cf8649;outline-offset:3px}
+.skip{position:absolute;left:12px;top:-100px;padding:7px 12px;background:#123f48;color:#fff;z-index:9}
+.skip:focus{top:10px}
+.bar{background:var(--paper);border-bottom:1px solid var(--border)}
+.barin{max-width:1240px;margin:auto;min-height:64px;padding:10px 22px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.brand{font-size:21px;text-decoration:none;color:var(--ink);font-weight:850;letter-spacing:-.04em}
+.brand b{color:var(--orange)}
+.links{font-size:13px;display:flex;gap:20px;flex-wrap:wrap}
+.page{max-width:1240px;margin:auto;padding:56px 22px 96px;display:grid;grid-template-columns:236px minmax(0,830px);gap:54px}
+.toc{align-self:start;position:sticky;top:24px;max-height:92vh;overflow-y:auto;font-size:12px}
+.toc>strong{font-size:11px;letter-spacing:.15em;color:#758d8e}
+.toc a{display:block;color:#58767a;text-decoration:none;padding:6px 9px;border-left:2px solid var(--border)}
+.toc a:hover{color:var(--teal);border-color:var(--teal)}
+main,article{min-width:0}
+header .eyebrow{font:700 12px system-ui;letter-spacing:.15em;color:var(--teal)}
+h1{font-size:clamp(40px,5.6vw,68px);line-height:1.08;letter-spacing:-.06em;margin:14px 0 20px}
+h2{font-size:clamp(25px,3vw,35px);line-height:1.35;letter-spacing:-.035em;margin:0 0 20px}
+h3{font-size:20px;line-height:1.4;margin:23px 0 12px}
+.dek{font-size:21px;line-height:1.68;color:#4a676a}
+.meta{display:flex;gap:14px;flex-wrap:wrap;border-top:1px solid var(--border);font-size:12px;color:#728587;padding-top:18px;margin:26px 0 62px}
+section{margin-bottom:74px;scroll-margin-top:24px}
+p{margin:0 0 18px;color:#415a61}
+strong{color:#24484c}
+.lead{font-size:19px;color:#284a50}
+.figure{margin:26px 0 30px;padding:12px;border:1px solid var(--border);border-radius:13px;background:#fff;box-shadow:0 14px 40px #1f59550b}
+.figure svg{display:block;width:100%;height:auto;font-family:system-ui,-apple-system,"PingFang SC",sans-serif}
+.figure figcaption{font-size:13px;color:var(--muted);line-height:1.7;padding:10px 5px 0}
+.panel{border:1px solid var(--border);border-radius:13px;padding:20px 22px;background:white;margin:23px 0}
+.panel h3{margin-top:0}
+.twocol{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.mini{border-left:3px solid var(--teal);background:#edf6f1;padding:15px 18px;border-radius:3px;margin:18px 0}
+.note{border-left-color:var(--orange);background:#fff3eb}
+.purple{border-left-color:var(--purple);background:#f3f0fa}
+.math-equation{min-width:0;max-width:100%;border:1px solid var(--border);background:#eff6f2;border-radius:10px;padding:13px 15px;margin:22px 0}
+.math-scroll{min-width:0;max-width:100%;overflow-x:auto;overflow-y:hidden}
+.math-scroll math[display=block]{display:block;width:max-content;min-width:100%;font-size:1.18rem;font-family:"Cambria Math","STIX Two Math",serif}
+.math-caption{color:#587477;font-size:12px;margin-top:6px}
+.table-scroll{max-width:100%;overflow-x:auto;border:1px solid var(--border);border-radius:10px;margin:22px 0}
+table{border-collapse:collapse;min-width:610px;width:100%;font-size:14px}
+th,td{padding:11px 13px;border-bottom:1px solid var(--border);text-align:left;vertical-align:top}
+th{background:#edf4f1;color:#294e50}
+tr:last-child td{border-bottom:0}
+.controls{display:flex;gap:9px;flex-wrap:wrap;margin:15px 0}
+.controls button{font:650 14px system-ui;border:1px solid #2a817b;background:#fff;color:#226a68;border-radius:8px;padding:10px 15px;cursor:pointer}
+.controls button[aria-pressed=true]{background:#187e75;color:#fff}
+.demo-display{background:#eff7f3;border:1px solid var(--border);padding:17px;border-radius:9px;min-height:112px}
+.demo-display p{margin:5px 0}
+.code-scroll{max-width:100%;overflow-x:auto;border-radius:10px}
+pre{display:block;white-space:pre;min-width:max-content;margin:0;font:13px/1.75 ui-monospace,SFMono-Regular,Consolas,monospace;background:#1f3940;color:#e2f2ed;padding:21px}
+code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace}
+.tag{display:inline-block;padding:3px 8px;border-radius:999px;background:#e8f1ed;color:#386e64;font-size:12px;margin:2px}
+.foot{border-top:1px solid var(--border);padding-top:16px;font-size:13px}
+.foot a{margin-right:14px}
+@media(max-width:940px){.page{display:block;max-width:880px;padding:38px 20px 75px}.toc{position:static;max-height:none;margin-bottom:34px;background:white;border:1px solid var(--border);padding:12px;border-radius:10px}.toc a{display:inline-block;border:none;padding:7px}}
+@media(max-width:520px){body{font-size:16px}.barin{padding:12px 15px}.links{gap:10px}.page{padding:27px 15px 65px}.dek{font-size:18px}.twocol{grid-template-columns:1fr}.figure{padding:8px}.panel{padding:15px}section{margin-bottom:58px}.figure svg{width:100%;max-width:100%}.math-equation{padding:10px}.controls button{flex:1 1 auto}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+@media print{body{background:white}.bar,.toc,.skip,.controls{display:none!important}.page{display:block;max-width:none;padding:0}.figure{break-inside:avoid;box-shadow:none}.math-scroll{overflow:visible}.code-scroll{overflow:visible}pre{white-space:pre-wrap;min-width:0;overflow-wrap:anywhere;font-size:9pt}.panel{break-inside:avoid}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">跳至正文</a>
+<header class="bar"><div class="barin"><a class="brand" href="../../../">xm<b>.</b>posts</a><nav class="links" aria-label="站点导航"><a href="../../../">首页</a><a href="../../../categories/reasoning/">推理策略</a><a href="../../../topics/">知识地图</a><a href="../../../archive/">文章归档</a></nav></div></header>
+<div class="page">
+<nav class="toc" aria-label="本文目录"><strong>ON THIS PAGE</strong>
+<a href="#problem">01 · 从一道题理解问题</a><a href="#paradigms">02 · CoT 到 ToT 的变化</a><a href="#formal">03 · 状态、思维与搜索</a><a href="#four-questions">04 · 四个设计模块</a><a href="#game24">05 · Game of 24 逐步走查</a><a href="#interactive">06 · 交互：BFS 与 DFS</a><a href="#search">07 · BFS、Beam 与 DFS</a><a href="#evaluation">08 · 状态评估与剪枝风险</a><a href="#evidence">09 · 三类任务的论文证据</a><a href="#comparison">10 · 与相邻方法的边界</a><a href="#engineering">11 · 成本、预算与工程实现</a><a href="#code">12 · 可执行的精确算术核验</a><a href="#limitations">13 · 局限与改进方向</a><a href="#takeaways">14 · 总结与相关阅读</a><a href="#references">15 · 参考资料</a>
+</nav>
+<main id="main"><article>
+<header>
+<div class="eyebrow">PAPER STUDY · REASONING & TEST-TIME COMPUTE</div>
+<h1>Understanding<br>Tree of Thoughts</h1>
+<p class="dek">当模型走错第一步时，为什么不能停下来换一条路？从线性生成到显式搜索，理解大语言模型如何提出候选思维、评估中间状态、保留希望最大的分支，并在必要时回溯。</p>
+<div class="meta"><span>Yao et al. · NeurIPS 2023</span><span>arXiv:2305.10601</span><span>阅读约 35 分钟</span><span>主题：推理搜索与测试时计算</span></div>
+</header>
+
+<section id="problem">
+<h2>01 · 从一道题理解问题：第一步走错，后面再努力也没用</h2>
+<p class="lead">先不要把 Tree of Thoughts 想成一套复杂的提示词。我们先看一道看似简单、却很容易让语言模型走进死胡同的题目。</p>
+<p>给定四个数字 <strong>4、9、10、13</strong>，每个数字必须且只能使用一次，只允许使用加、减、乘、除和括号，最终得到 24。一个有效解是：</p>
+<div class="math-equation" role="group" aria-label="Game of 24 的一条有效解"><div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="二十四点解答公式，可横向滚动"><math display="block" aria-label="十三减九乘以十减四等于二十四"><mrow><mo>(</mo><mn>13</mn><mo>−</mo><mn>9</mn><mo>)</mo><mo>×</mo><mo>(</mo><mn>10</mn><mo>−</mo><mn>4</mn><mo>)</mo><mo>=</mo><mn>24</mn></mrow></math></div></div>
+<p>把这个答案拆成三次可验证的中间操作：</p>
+<div class="panel"><p><strong>第 1 步：</strong>13 − 9 = 4，剩余数字变成 {4, 4, 10}。</p><p><strong>第 2 步：</strong>10 − 4 = 6，剩余数字变成 {4, 6}。</p><p><strong>第 3 步：</strong>4 × 6 = 24，得到目标。</p></div>
+<p>关键在于：第一步并不唯一。模型也可能先生成 4 + 9 = 13、10 − 4 = 6、13 − 10 = 3 等候选操作。它们都像是合理的局部动作，但只有部分分支能在后续步骤中到达 24。</p>
+<p>如果模型一开始只沿着一条链生成，错误的早期选择会不断影响后续输出。传统 CoT 可以让模型把步骤写出来，却没有默认提供一个独立的机制来保留其他分支、比较它们的前景，再回到先前的分叉点。</p>
+<figure class="figure"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 570" role="img" aria-labelledby="tot-game24-title tot-game24-desc">
+<title id="tot-game24-title">Game of 24 中的思维树搜索轨迹</title>
+<desc id="tot-game24-desc">从数字 4、9、10、13 开始，比较不同第一步。选中 13 减 9 得 4，再算 10 减 4 得 6，最后 4 乘 6 得 24；其他分支被评估后暂缓或剪枝。</desc>
+<rect width="960" height="570" rx="18" fill="#fbfcfa"/>
+<g font-family="system-ui,-apple-system,'PingFang SC',sans-serif" fill="#203f46">
+<text x="480" y="34" font-size="19" text-anchor="middle" font-weight="700">输入状态 s₀：{4, 9, 10, 13} · 目标：24</text>
+<rect x="355" y="54" width="250" height="56" rx="12" fill="#e4edf5" stroke="#7594ae" stroke-width="2"/><text x="480" y="88" font-size="19" text-anchor="middle" font-weight="700">4 · 9 · 10 · 13</text>
+<path d="M480 110 L178 166 M480 110 L480 166 M480 110 L782 166" fill="none" stroke="#6b8985" stroke-width="2.5"/>
+<rect x="56" y="168" width="244" height="70" rx="12" fill="#e1f1e9" stroke="#39877c" stroke-width="2"/><text x="178" y="197" font-size="18" text-anchor="middle" font-weight="700">13 − 9 = 4</text><text x="178" y="220" font-size="14" text-anchor="middle" fill="#52716e">剩余：{4, 4, 10}</text>
+<rect x="358" y="168" width="244" height="70" rx="12" fill="#fff7e6" stroke="#c49a43" stroke-width="1.8"/><text x="480" y="197" font-size="18" text-anchor="middle" font-weight="700">4 + 9 = 13</text><text x="480" y="220" font-size="14" text-anchor="middle" fill="#806b3e">剩余：{10, 13, 13}</text>
+<rect x="660" y="168" width="244" height="70" rx="12" fill="#fff0e8" stroke="#c17b57" stroke-width="1.8"/><text x="782" y="197" font-size="18" text-anchor="middle" font-weight="700">13 − 10 = 3</text><text x="782" y="220" font-size="14" text-anchor="middle" fill="#8c624e">剩余：{3, 4, 9}</text>
+<g font-size="14" font-weight="700"><rect x="128" y="246" width="100" height="28" rx="14" fill="#d4eee3"/><text x="178" y="265" text-anchor="middle" fill="#286b5e">保留 · maybe</text><rect x="430" y="246" width="100" height="28" rx="14" fill="#fff0c8"/><text x="480" y="265" text-anchor="middle" fill="#806b3e">继续评估</text><rect x="732" y="246" width="100" height="28" rx="14" fill="#f8ded2"/><text x="782" y="265" text-anchor="middle" fill="#92583f">低优先级</text></g>
+<path d="M178 238 V304" stroke="#39877c" stroke-width="3" fill="none"/><path d="M170 294 L178 306 L186 294" stroke="#39877c" stroke-width="3" fill="none"/>
+<rect x="56" y="308" width="244" height="70" rx="12" fill="#e1f1e9" stroke="#39877c" stroke-width="2"/><text x="178" y="337" font-size="18" text-anchor="middle" font-weight="700">10 − 4 = 6</text><text x="178" y="360" font-size="14" text-anchor="middle" fill="#52716e">剩余：{4, 6}</text>
+<text x="480" y="337" text-anchor="middle" font-size="15" fill="#8b7650">其他状态暂不展开</text>
+<path d="M178 378 V432" stroke="#39877c" stroke-width="3" fill="none"/><path d="M170 422 L178 434 L186 422" stroke="#39877c" stroke-width="3" fill="none"/>
+<rect x="56" y="436" width="244" height="68" rx="12" fill="#d6eee3" stroke="#247b68" stroke-width="2.5"/><text x="178" y="465" font-size="20" text-anchor="middle" font-weight="700">4 × 6 = 24</text><text x="178" y="488" font-size="14" text-anchor="middle" fill="#286b5e">目标状态 · 成功</text>
+<rect x="348" y="432" width="556" height="80" rx="12" fill="#f1f5f3" stroke="#d1ddda"/><text x="376" y="462" font-size="16" font-weight="700">关键：每一步不是只生成一个 token</text><text x="376" y="490" font-size="15" fill="#526b6e">模型生成候选状态，评估器判断前景，搜索控制器决定扩展哪一支。</text>
+<text x="480" y="548" font-size="13" text-anchor="middle" fill="#6b8081">教学轨迹：展示一条可验证的成功路径；候选分支与评估标签为解释性简化，并非论文原始日志。</text>
+</g></svg><figcaption>图 1 · 一个教学化的 Game of 24 思维树：同一个输入产生多个候选中间状态；搜索器优先扩展可行分支。图中分支和标签用于解释机制，并非论文原始模型日志。</figcaption></figure>
+<div class="mini"><strong>先记住一句话：</strong>ToT 不只是要求模型「多想几遍」，而是把中间推理状态显式保存下来，并让搜索策略决定下一步探索哪里。</div>
+</section>
+
+<section id="paradigms">
+<h2>02 · 从 CoT 到 ToT：真正改变的是推理过程的组织方式</h2>
+<p>要理解 ToT，需要先区分三种常被混在一起的操作：沿一条路径继续生成、生成多条完整路径后投票、在中间步骤就分支并评估。</p>
+<figure class="figure"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 410" role="img" aria-labelledby="tot-paradigms-title tot-paradigms-desc">
+<title id="tot-paradigms-title">四种大语言模型推理组织方式</title>
+<desc id="tot-paradigms-desc">输入输出直接映射、单条思维链、多条完整思维链投票，以及在中间状态分支和评估的思维树。</desc>
+<rect width="960" height="410" rx="18" fill="#fbfcfa"/>
+<g font-family="system-ui,-apple-system,'PingFang SC',sans-serif" fill="#203f46">
+<g transform="translate(18 18)"><rect width="222" height="374" rx="14" fill="#f2f5f4" stroke="#d1ddda"/><text x="111" y="34" text-anchor="middle" font-size="19" font-weight="700">IO：直接映射</text><rect x="48" y="80" width="126" height="52" rx="10" fill="#e4edf5" stroke="#7594ae"/><text x="111" y="111" text-anchor="middle" font-size="17">输入问题</text><path d="M111 132 V218" stroke="#547c79" stroke-width="3" fill="none"/><path d="M103 208 L111 220 L119 208" fill="none" stroke="#547c79" stroke-width="3"/><rect x="48" y="222" width="126" height="52" rx="10" fill="#fff0e8" stroke="#c17b57"/><text x="111" y="253" text-anchor="middle" font-size="17">最终答案</text><text x="111" y="322" text-anchor="middle" font-size="14" fill="#657a7d">没有显式中间状态</text></g>
+<g transform="translate(258 18)"><rect width="222" height="374" rx="14" fill="#f2f5f4" stroke="#d1ddda"/><text x="111" y="34" text-anchor="middle" font-size="19" font-weight="700">CoT：单条链</text><rect x="48" y="70" width="126" height="44" rx="9" fill="#e4edf5" stroke="#7594ae"/><text x="111" y="98" text-anchor="middle" font-size="16">输入问题</text><path d="M111 114 V143 M111 190 V215 M111 262 V287" stroke="#547c79" stroke-width="2.5"/><g fill="#e5f2ec" stroke="#39877c"><rect x="48" y="144" width="126" height="45" rx="9"/><rect x="48" y="216" width="126" height="45" rx="9"/></g><text x="111" y="173" text-anchor="middle" font-size="16">Thought 1</text><text x="111" y="245" text-anchor="middle" font-size="16">Thought 2</text><rect x="48" y="288" width="126" height="44" rx="9" fill="#fff0e8" stroke="#c17b57"/><text x="111" y="316" text-anchor="middle" font-size="16">答案</text><text x="111" y="360" text-anchor="middle" font-size="14" fill="#657a7d">中间步骤继续向前生成</text></g>
+<g transform="translate(498 18)"><rect width="222" height="374" rx="14" fill="#f2f5f4" stroke="#d1ddda"/><text x="111" y="34" text-anchor="middle" font-size="19" font-weight="700">CoT-SC：多链投票</text><rect x="48" y="63" width="126" height="42" rx="9" fill="#e4edf5" stroke="#7594ae"/><text x="111" y="90" text-anchor="middle" font-size="16">输入问题</text><path d="M111 105 L42 144 M111 105 V144 M111 105 L180 144" stroke="#547c79" stroke-width="2.5" fill="none"/><g fill="#e5f2ec" stroke="#39877c"><rect x="4" y="146" width="76" height="72" rx="8"/><rect x="73" y="146" width="76" height="72" rx="8"/><rect x="142" y="146" width="76" height="72" rx="8"/></g><g font-size="13" text-anchor="middle"><text x="42" y="175">链 A</text><text x="42" y="198">答案 24</text><text x="111" y="175">链 B</text><text x="111" y="198">答案 24</text><text x="180" y="175">链 C</text><text x="180" y="198">答案 18</text></g><path d="M42 218 L111 256 M111 218 V256 M180 218 L111 256" stroke="#547c79" stroke-width="2.5" fill="none"/><rect x="48" y="258" width="126" height="44" rx="9" fill="#fff4d9" stroke="#c49a43"/><text x="111" y="286" text-anchor="middle" font-size="16">答案投票</text><text x="111" y="337" text-anchor="middle" font-size="14" fill="#657a7d">通常在完整路径后聚合</text></g>
+<g transform="translate(738 18)"><rect width="204" height="374" rx="14" fill="#edf6f1" stroke="#83b4a5" stroke-width="1.5"/><text x="102" y="34" text-anchor="middle" font-size="19" font-weight="700">ToT：思维树</text><rect x="38" y="62" width="128" height="40" rx="9" fill="#e4edf5" stroke="#7594ae"/><text x="102" y="88" text-anchor="middle" font-size="15">输入问题</text><path d="M102 102 L38 150 M102 102 L102 150 M102 102 L166 150" stroke="#547c79" stroke-width="2.5" fill="none"/><g fill="#dff0e8" stroke="#39877c"><rect x="4" y="152" width="68" height="42" rx="8"/><rect x="68" y="152" width="68" height="42" rx="8"/><rect x="132" y="152" width="68" height="42" rx="8"/></g><g font-size="14" text-anchor="middle"><text x="38" y="178">状态 A</text><text x="102" y="178">状态 B</text><text x="166" y="178">状态 C</text></g><path d="M38 194 L38 230 M102 194 L102 230" stroke="#547c79" stroke-width="2.5"/><rect x="4" y="232" width="68" height="40" rx="8" fill="#cce8dc" stroke="#39877c"/><rect x="68" y="232" width="68" height="40" rx="8" fill="#fff0e8" stroke="#c17b57"/><text x="38" y="257" font-size="14" text-anchor="middle">继续</text><text x="102" y="257" font-size="14" text-anchor="middle">剪枝</text><rect x="28" y="303" width="148" height="38" rx="9" fill="#fff4d9" stroke="#c49a43"/><text x="102" y="328" font-size="15" text-anchor="middle">评估 · 选择 · 回溯</text><text x="102" y="365" text-anchor="middle" font-size="13" fill="#52716e">中途控制搜索方向</text></g>
+</g></svg><figcaption>图 2 · IO、CoT、CoT-SC 与 ToT 的结构差异。ToT 的关键不是节点画成树，而是每个中间状态都可以被评估、选择和重新访问。</figcaption></figure>
+<h3>2.1 Chain-of-Thought：把答案拆成步骤，但通常仍是一条链</h3>
+<p>CoT 将复杂问题的回答分解成若干连续的中间思维。设输入为 x，中间步骤为 z₁,…,zₜ，最终答案为 y。模型按条件上下文逐步生成：</p>
+<div class="math-equation" role="group" aria-label="Chain of Thought 的条件生成分解"><div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="CoT 概率公式，可横向滚动"><math display="block" aria-label="每个思维步骤依赖输入和之前的思维，最后生成答案"><mrow><mi>p</mi><mo>(</mo><msub><mi>z</mi><mi>t</mi></msub><mo>|</mo><mi>x</mi><mo>,</mo><msub><mi>z</mi><mrow><mn>1</mn><mo>:</mo><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>)</mo><mo>,</mo><mspace width="0.6em"/><mi>p</mi><mo>(</mo><mi>y</mi><mo>|</mo><mi>x</mi><mo>,</mo><msub><mi>z</mi><mrow><mn>1</mn><mo>:</mo><mi>T</mi></mrow></msub><mo>)</mo></mrow></math></div></div>
+<p>这不是说 CoT 不能产生多种可能，而是说一次采样通常只沿着已经生成的前缀继续向前。生成了错误的中间式后，后面的 token 需要在这个错误上下文里继续工作。</p>
+<h3>2.2 Self-Consistency：多条完整链，最后汇总答案</h3>
+<p>Self-Consistency 从同一个问题采样 k 条推理链，然后按最终答案进行边缘化或多数投票。它让模型有机会通过不同路径到达答案，但通常不会在每条链的中间状态上进行显式的局部比较和回溯。</p>
+<p>例如，100 条 CoT 样本可能有 37 条回答 24、29 条回答 18、34 条回答 20。Self-Consistency 可以用票数选出 24；但它并没有天然告诉我们「哪一个第一步最值得继续扩展」。</p>
+<h3>2.3 Tree of Thoughts：让搜索发生在中间状态</h3>
+<p>ToT 把推理单元从 token 或整条回答提升为有语义的 thought。每个 thought 是当前问题的一段中间解；多个 thought 连接成状态树。系统可以在某个深度同时保留多个候选状态，对它们评分，再选择哪些状态继续生成。</p>
+<div class="mini note"><strong>概念边界：</strong>ToT 是一种组织 LLM 推理与搜索的框架，不是新的 Transformer 网络层，也不意味着模型参数被重新训练。原论文使用现成语言模型，通过推理时的生成、评估和搜索流程增强问题求解。</div>
+</section>
+
+<section id="formal">
+<h2>03 · 形式化：什么是 Thought、State、Value 和 Search？</h2>
+<p>论文把问题求解写成一棵搜索树。输入问题记作 x；已经生成的中间思维序列记作 z₁,…,zₜ。一个节点不是单独的一句话，而是当前问题及到目前为止的部分解：</p>
+<div class="math-equation" role="group" aria-label="ToT 状态定义"><div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="状态定义公式，可横向滚动"><math display="block" aria-label="状态 s t 等于输入 x 与到 t 为止的思维序列组成的部分解"><mrow><msub><mi>s</mi><mi>t</mi></msub><mo>=</mo><mo>[</mo><mi>x</mi><mo>,</mo><msub><mi>z</mi><mrow><mn>1</mn><mo>:</mo><mi>t</mi></mrow></msub><mo>]</mo></mrow></math></div></div>
+<p>在 Game of 24 中，状态可以包含「已经使用的算式」以及「尚未使用的数字」。在填字游戏中，状态可以包含已经填入的单词和由此产生的字母约束。在创意写作中，状态可以是一个段落规划。</p>
+<p>因此，thought 的粒度必须跟任务结构匹配：太大，模型很难生成多样候选；太小，评估器又无法判断它对最终目标有没有帮助。</p>
+<div class="table-scroll"><table><thead><tr><th>概念</th><th>含义</th><th>Game of 24 例子</th></tr></thead><tbody>
+<tr><td>Input x</td><td>原始任务</td><td>4、9、10、13，目标 24</td></tr>
+<tr><td>Thought z</td><td>一个有意义的中间步骤</td><td>13 − 9 = 4</td></tr>
+<tr><td>State s</td><td>输入与历史步骤组成的部分解</td><td>已做 13 − 9 = 4，剩余 {4,4,10}</td></tr>
+<tr><td>Generator G</td><td>根据状态提出下一步候选</td><td>提议 10 − 4、4 + 10 等</td></tr>
+<tr><td>Evaluator V</td><td>估计状态继续求解的前景</td><td>sure / maybe / impossible</td></tr>
+<tr><td>Search A</td><td>决定保留和扩展哪些状态</td><td>BFS 保留前 b 个状态</td></tr>
+</tbody></table></div>
+<p>用函数表示，思维生成器接收模型、当前状态和候选数量，返回下一步候选；状态评估器则为一个或多个候选状态提供价值判断：</p>
+<div class="math-equation" role="group" aria-label="ToT 生成器与评估器"><div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="生成器与评估器公式，可横向滚动"><math display="block" aria-label="G 接收模型状态和 k 生成候选；V 接收状态集合并评估"><mrow><mi>G</mi><mo>(</mo><msub><mi>p</mi><mi>θ</mi></msub><mo>,</mo><mi>s</mi><mo>,</mo><mi>k</mi><mo>)</mo><mo>→</mo><mo>{</mo><msup><mi>z</mi><mrow><mn>1</mn><mo>:</mo><mi>k</mi></mrow></msup><mo>}</mo><mo>,</mo><mspace width="1em"/><mi>V</mi><mo>(</mo><msub><mi>p</mi><mi>θ</mi></msub><mo>,</mo><mi>S</mi><mo>)</mo><mo>→</mo><msub><mi>v</mi><mi>s</mi></msub></mrow></math></div></div>
+<p>这里的 V 不一定是训练好的价值网络。原论文使用语言模型本身，通过专门的提示词来评估状态；可以逐个独立评分，也可以把多个状态放在一起，让模型进行比较和投票。</p>
+</section>
+
+<section id="four-questions">
+<h2>04 · 四个设计模块：如何把一个任务变成可搜索的问题？</h2>
+<h3>4.1 Thought Decomposition：先确定每个节点代表什么</h3>
+<p>不同任务的 thought 粒度不同。Game of 24 的 thought 是一行算式；Mini Crosswords 的 thought 是某个线索的候选单词；Creative Writing 的 thought 则是一段写作规划。论文的一个重要设计原则是：thought 既要小到足以生成多样候选，也要大到足以评估它的前景。</p>
+<h3>4.2 Thought Generation：提出候选，而不是只续写一个答案</h3>
+<p>论文讨论了两种生成方式。第一种是 sample：从当前状态独立采样多个 thought，适合创意空间较丰富的任务。第二种是 propose：在同一上下文里让模型连续提出不同候选，适合算式或单词这种结构受限、容易重复的任务。</p>
+<div class="twocol"><div class="panel"><h3>Sample</h3><p>给定一个写作任务，独立采样 Plan A、Plan B、Plan C。多样性是主要目标。</p></div><div class="panel"><h3>Propose</h3><p>给定剩余数字，连续提出多个下一步算式。候选之间共享上下文，减少重复。</p></div></div>
+<h3>4.3 State Evaluation：判断「这条路还有没有希望」</h3>
+<p>评估器不是简单判断当前步骤是否正确。它要估计的是：<strong>从当前部分解继续向前，是否仍然可能达到目标？</strong> 原论文用两类策略：独立价值评估（如 sure / maybe / impossible 或数值评分），以及在多个状态之间进行投票。</p>
+<h3>4.4 Search Algorithm：把生成和评估变成真正的控制流</h3>
+<p>如果只有生成和评分，没有搜索策略，系统仍不知道什么时候扩展、什么时候保留、什么时候停止。原论文实现了 BFS 与 DFS；后续系统可以换成 Beam Search、A* 或 MCTS，但不能把这些算法都误称为原论文的默认实现。</p>
+</section>
+
+<section id="game24">
+<h2>05 · Game of 24：逐步走查一棵思维树</h2>
+<p>我们用前面的数字说明搜索器实际做了什么。根状态是 {4, 9, 10, 13}。生成器提出多个第一步；评估器根据「剩余数字是否仍有机会凑成 24」给出启发式判断。</p>
+<p>第一层候选中，13 − 9 = 4 会得到 {4,4,10}。这是一个可继续探索的状态：10 − 4 = 6 后，剩下 {4,6}，下一步即可相乘得到 24。其他候选不一定立刻错误，但可能需要更多步骤、价值较低，或被评估为不可能。</p>
+<p>注意，评估器输出的 sure / maybe / impossible 是启发式，不是数学证明。一个模型可能低估一条实际可行的分支，也可能高估一条最终走不通的分支。真实系统应尽可能把确定性约束交给代码或外部验证器。</p>
+<div class="panel">
+<h3>把论文算法映射到这个例子</h3>
+<div class="table-scroll"><table><thead><tr><th>阶段</th><th>ToT 动作</th><th>状态变化</th></tr></thead><tbody>
+<tr><td>Generate</td><td>提出第一步候选</td><td>根状态展开为多个子状态</td></tr>
+<tr><td>Evaluate</td><td>评估候选可行性</td><td>给每个状态分配 sure / maybe / impossible</td></tr>
+<tr><td>Select</td><td>按价值保留候选</td><td>将前 b 个状态放入下一轮 frontier</td></tr>
+<tr><td>Expand</td><td>继续生成后续算式</td><td>13−9=4 → 10−4=6</td></tr>
+<tr><td>Verify</td><td>检查最终答案</td><td>4×6=24，且每个输入数字使用一次</td></tr>
+</tbody></table></div>
+</div>
+</section>
+
+<section id="interactive">
+<h2>06 · 交互：切换 BFS、DFS 与回溯视角</h2>
+<p>下面是一个固定教学轨迹，不会调用外部模型。它帮助你观察：BFS 为什么逐层保留状态，DFS 为什么可以快速深入，以及遇到死路时为什么需要回溯。</p>
+<div class="panel">
+<div class="controls" role="group" aria-label="选择搜索视角">
+<button type="button" data-mode="bfs" aria-pressed="true">BFS：逐层保留</button>
+<button type="button" data-mode="dfs" aria-pressed="false">DFS：沿分支深入</button>
+<button type="button" data-mode="backtrack" aria-pressed="false">展示回溯</button>
+</div>
+<div class="demo-display" aria-live="polite" aria-atomic="true">
+<h3 id="demo-heading">BFS：在同一深度比较多个候选</h3>
+<p id="demo-copy">根状态 {4,9,10,13} 先生成若干第一步。评估器比较候选状态，搜索器保留前 b 个，而不是只相信第一个生成结果。</p>
+<p id="demo-state"><strong>当前 frontier：</strong> {13−9=4}、{4+9=13}、{10−4=6} …</p>
+</div>
+<p class="math-caption">切换按钮会更新上方状态说明。静态默认内容同样描述了一个完整可理解的搜索场景。</p>
+</div>
+</section>
+
+<section id="search">
+<h2>07 · BFS、Beam Search 与 DFS：搜索策略如何改变探索顺序？</h2>
+<figure class="figure"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 440" role="img" aria-labelledby="tot-search-title tot-search-desc">
+<title id="tot-search-title">BFS 与 DFS 在 ToT 中的搜索差异</title>
+<desc id="tot-search-desc">BFS 逐层扩展候选并保留最优宽度，DFS 沿一条高分路径深入，失败后回溯到父节点并探索下一个候选。</desc>
+<rect width="960" height="440" rx="18" fill="#fbfcfa"/>
+<g font-family="system-ui,-apple-system,'PingFang SC',sans-serif" fill="#203f46">
+<rect x="18" y="18" width="450" height="400" rx="14" fill="#f0f6f3" stroke="#cbded6"/><rect x="492" y="18" width="450" height="400" rx="14" fill="#f4f5f8" stroke="#d6d8e2"/>
+<text x="243" y="52" text-anchor="middle" font-size="21" font-weight="700">BFS · 逐层搜索</text><text x="717" y="52" text-anchor="middle" font-size="21" font-weight="700">DFS · 深入与回溯</text>
+<rect x="177" y="75" width="132" height="42" rx="9" fill="#e4edf5" stroke="#7594ae"/><text x="243" y="102" font-size="16" text-anchor="middle">根状态</text>
+<path d="M243 117 L103 160 M243 117 L243 160 M243 117 L383 160" stroke="#66847f" stroke-width="2.4" fill="none"/>
+<g fill="#dff0e8" stroke="#39877c"><rect x="50" y="162" width="106" height="42" rx="9"/><rect x="190" y="162" width="106" height="42" rx="9"/><rect x="330" y="162" width="106" height="42" rx="9"/></g><g font-size="15" text-anchor="middle"><text x="103" y="188">候选 A</text><text x="243" y="188">候选 B</text><text x="383" y="188">候选 C</text></g>
+<path d="M103 204 L103 250 M243 204 L243 250 M383 204 L383 250" stroke="#66847f" stroke-width="2.2"/>
+<g fill="#eaf3ee" stroke="#6c9c8e"><rect x="50" y="252" width="106" height="40" rx="8"/><rect x="190" y="252" width="106" height="40" rx="8"/><rect x="330" y="252" width="106" height="40" rx="8"/></g><g font-size="14" text-anchor="middle"><text x="103" y="277">A-1</text><text x="243" y="277">B-1</text><text x="383" y="277">C-1</text></g>
+<rect x="65" y="312" width="356" height="50" rx="9" fill="#fff3d7" stroke="#c49a43"/><text x="243" y="333" text-anchor="middle" font-size="16" font-weight="700">评估全部候选状态</text><text x="243" y="351" text-anchor="middle" font-size="13">保留分数最高的 b 个，进入下一层</text>
+<text x="243" y="392" text-anchor="middle" font-size="14" fill="#5b7774">优点：比较同一深度的多条路径</text>
+<rect x="651" y="75" width="132" height="42" rx="9" fill="#e4edf5" stroke="#7594ae"/><text x="717" y="102" font-size="16" text-anchor="middle">根状态</text>
+<path d="M717 117 L717 151" stroke="#66847f" stroke-width="2.4"/>
+<rect x="651" y="153" width="132" height="42" rx="9" fill="#dff0e8" stroke="#39877c"/><text x="717" y="180" font-size="16" text-anchor="middle">候选 A</text>
+<path d="M717 195 L717 229" stroke="#66847f" stroke-width="2.4"/>
+<rect x="651" y="231" width="132" height="42" rx="9" fill="#fff0e8" stroke="#c17b57"/><text x="717" y="258" font-size="16" text-anchor="middle">后继状态 A1</text>
+<path d="M717 273 L717 304" stroke="#c17b57" stroke-width="2.4"/>
+<rect x="651" y="306" width="132" height="38" rx="9" fill="#f8ded2" stroke="#c17b57"/><text x="717" y="331" font-size="15" text-anchor="middle">判定不可行</text>
+<path d="M651 325 C590 325 590 175 651 175" stroke="#b46744" stroke-width="2.5" stroke-dasharray="6 5" fill="none"/><text x="557" y="249" font-size="14" fill="#a15d43" text-anchor="middle">回溯</text>
+<path d="M783 175 L846 175" stroke="#39877c" stroke-width="2.4"/><rect x="842" y="153" width="80" height="42" rx="8" fill="#d6eee3" stroke="#39877c"/><text x="882" y="179" font-size="14" text-anchor="middle">候选 B</text>
+<text x="717" y="392" text-anchor="middle" font-size="14" fill="#5b7774">优点：较快深入；失败后回到分叉点</text>
+</g></svg><figcaption>图 3 · BFS 逐层扩展并维护一个候选前沿；DFS 优先深入某个候选，发现不可行后回溯。原论文的 BFS 通过宽度上限 b 保留有限个状态，因此更接近带宽度截断的分层搜索，而不是无界穷举 BFS。</figcaption></figure>
+<h3>7.1 BFS：让同一深度的候选公平竞争</h3>
+<p>令 Sₜ₋₁ 为上一层保留的状态集合。每个状态生成候选后，得到新候选集合 S′ₜ；评估器为它们打分，再保留价值最高的 b 个：</p>
+<div class="math-equation" role="group" aria-label="ToT BFS 的候选筛选公式"><div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="BFS top b 公式，可横向滚动"><math display="block" aria-label="S t 等于从 S t 撇中选出价值最高的 b 个状态"><mrow><msub><mi>S</mi><mi>t</mi></msub><mo>=</mo><munder><mi>Top</mi><mi>b</mi></munder><mo>(</mo><msup><mi>S</mi><mo>′</mo></msup><msub><mi>t</mi></msub><mo>,</mo><mi>V</mi><mo>)</mo></mrow></math></div></div>
+<p>当 b=1 时，系统每层只保留一个最优状态，容易退化成贪心搜索；当 b 增大时，更多替代路径可以活下来，但生成和评估成本也随之增加。论文 Game of 24 和 Creative Writing 使用 BFS；Game of 24 的宽度 b=5。</p>
+<h3>7.2 DFS：沿着最有希望的路线深入，失败后回头</h3>
+<p>DFS 会先对候选排序，然后沿最有希望的状态递归深入。如果状态评估低于阈值，或者已经达到终止深度，就停止当前分支，并回到父状态探索下一个候选。这种机制特别适合深度不固定、局部约束会逐步收紧的任务。</p>
+<h3>7.3 Beam Search 是不是 ToT？</h3>
+<p>不完全是。Beam Search 是一种搜索策略：每层保留分数最高的 b 个部分序列。ToT 是更上层的框架，规定了 thought 的语义粒度、候选生成、状态评估和搜索控制。ToT 可以采用 beam-like 的宽度截断，但不能把框架本身等同于 Beam Search。</p>
+</section>
+
+<section id="evaluation">
+<h2>08 · 状态评估与剪枝风险：模型自己给自己打分，可靠吗？</h2>
+<p>ToT 的评估器可以采用独立打分或候选投票。独立打分时，模型判断一个状态是否有希望；投票时，模型比较一组状态并选择更值得探索的一个。前者适合有明显可行性线索的任务，后者适合很难定义绝对分数、但能相对比较质量的任务。</p>
+<div class="twocol"><div class="panel"><h3>独立价值评估</h3><p>问题：从这个状态继续走，能否达到目标？</p><p><span class="tag">sure</span><span class="tag">maybe</span><span class="tag">impossible</span></p><p>适合有明确约束或可进行短程 lookahead 的任务。</p></div><div class="panel"><h3>跨状态投票</h3><p>问题：当前这几个候选里，哪个更值得继续？</p><p><span class="tag">候选 A</span><span class="tag">候选 B</span><span class="tag">候选 C</span></p><p>适合开放式任务，例如比较多个写作规划的连贯性。</p></div></div>
+<p>一个常见误区是把 LLM 评估分数当作客观概率。比如模型给某状态打 8 分，不代表它有 80% 的成功概率；不同任务、不同 prompt、不同深度的分数未必可比。它首先是搜索启发式，而不是经过校准的概率模型。</p>
+<p>剪枝尤其危险：一旦把正确路径误判为 impossible，后续就再也没有机会发现它。原论文的 Mini Crosswords 实验中，某些实际可行的词会被模型误判为不可能；移除剪枝虽然能找回部分正确状态，但整体表现反而下降。这说明评估器既不能过度乐观，也不能过度自信地剪枝。</p>
+<div class="mini note"><strong>工程建议：</strong>把「能否满足硬约束」和「哪条路线更有希望」拆开。前者优先交给程序、约束求解器、测试或环境反馈；后者再由 LLM 提供语义启发式。硬约束验证不应完全依赖同一个生成模型的自我评价。</div>
+</section>
+
+<section id="evidence">
+<h2>09 · 三类任务的原论文证据：ToT 不只会解算术题</h2>
+<p>论文在 NeurIPS 2023 使用 GPT-4 Chat Completion，默认温度为 0.7，实验时间为 2023 年 5 月 5 日至 16 日。下面的结果属于论文历史实验设置，不代表当前模型的性能，也不是本次重新运行得到的数据。</p>
+<figure class="figure"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 430" role="img" aria-labelledby="tot-results-title tot-results-desc">
+<title id="tot-results-title">Game of 24 原论文成功率对比</title>
+<desc id="tot-results-desc">IO 7.3%，CoT 4%，CoT 自一致性 9%，ToT 宽度 1 为 45%，ToT 宽度 5 为 74%，CoT 最佳一百条为 49%。</desc>
+<rect width="960" height="430" rx="18" fill="#fbfcfa"/>
+<g font-family="system-ui,-apple-system,'PingFang SC',sans-serif" fill="#203f46">
+<text x="480" y="36" text-anchor="middle" font-size="20" font-weight="700">Game of 24 · 100 道困难题的成功率</text>
+<path d="M100 86 V335 H900" fill="none" stroke="#9badaa" stroke-width="2"/>
+<g font-size="13" fill="#60777a"><text x="80" y="339" text-anchor="end">0</text><text x="80" y="279" text-anchor="end">20</text><text x="80" y="219" text-anchor="end">40</text><text x="80" y="159" text-anchor="end">60</text><text x="80" y="99" text-anchor="end">80%</text></g>
+<g stroke="#dce4e1" stroke-dasharray="4 5"><path d="M100 275 H900"/><path d="M100 215 H900"/><path d="M100 155 H900"/><path d="M100 95 H900"/></g>
+<g><rect x="142" y="313" width="78" height="22" rx="5" fill="#9eb8b1"/><rect x="266" y="323" width="78" height="12" rx="5" fill="#9eb8b1"/><rect x="390" y="308" width="78" height="27" rx="5" fill="#9eb8b1"/><rect x="514" y="200" width="78" height="135" rx="5" fill="#64a494"/><rect x="638" y="113" width="78" height="222" rx="5" fill="#247b68"/><rect x="762" y="188" width="78" height="147" rx="5" fill="#8b9fc0"/></g>
+<g font-size="16" font-weight="700" text-anchor="middle"><text x="181" y="302">7.3%</text><text x="305" y="312">4.0%</text><text x="429" y="297">9.0%</text><text x="553" y="189">45%</text><text x="677" y="102">74%</text><text x="801" y="177">49%</text></g>
+<g font-size="14" text-anchor="middle"><text x="181" y="360">IO</text><text x="305" y="360">CoT</text><text x="429" y="360">CoT-SC</text><text x="553" y="360">ToT b=1</text><text x="677" y="360">ToT b=5</text><text x="801" y="360">CoT best 100</text></g>
+<rect x="138" y="386" width="704" height="28" rx="8" fill="#edf3f0"/><text x="490" y="405" text-anchor="middle" font-size="13" fill="#536e6f">原论文 Table 2；GPT-4，4nums.com 按人类求解时间排序的第 901–1000 题；非本次复现</text>
+</g></svg><figcaption>图 4 · Game of 24 的成功率。ToT 在 b=5 时达到 74%；CoT Best-of-100 达到 49%。原论文 Table 2；测试集是 4nums.com 按人类解题时间排序的第 901–1000 道题。</figcaption></figure>
+<h3>9.1 Game of 24：中间步骤的分支比盲目采样更重要</h3>
+<p>论文从 4nums.com 的 1,362 道题中选取按人类求解时间排序的第 901–1000 道较难题目，共 100 道。成功的定义非常严格：必须得到一个等于 24 的有效算式，并且四个输入数字各使用一次。ToT 在每个节点生成候选算式，使用 sure / maybe / impossible 评估，BFS 每层保留 b=5 个状态，并对每个候选进行三次价值采样。</p>
+<p>结果显示，ToT b=1 为 45%，b=5 为 74%。CoT Best-of-100 为 49%，而 CoT-SC（100 条路径多数投票）为 9%。要注意 Best-of-100 是 oracle 风格的事后最优上界比较，不是普通部署时可直接获得的答案选择器；它与多数投票也不是同一个指标。</p>
+<p>错误分析发现，约 60% 的 CoT 样本在生成第一步后就已经失败，说明问题不只是最终答案格式错误，而是早期思维步骤把后续搜索空间压缩到了不利区域。</p>
+<h3>9.2 Creative Writing：先选规划，再选最终文本</h3>
+<p>创意写作任务要求生成四段连贯文本，每段分别以给定句子结尾。ToT 先生成五个写作计划并投票选出一个，再基于该计划生成五篇文本并再次投票。自动连贯性评分中，ToT 平均为 7.56，IO 为 6.19，CoT 为 6.93（满分 10）。人工比较中，100 对样本里有 41 对更偏好 ToT，21 对更偏好 CoT，38 对认为二者相近。这里说明的是论文所设任务上的偏好结果，不等于通用写作质量的普遍提升。</p>
+<h3>9.3 Mini Crosswords：DFS、约束传播和回溯</h3>
+<p>Mini Crosswords 是 5×5 的填字任务，包含 10 条横纵线索。ToT 使用 DFS，逐步填词，并把已填字母转化为其他线索的约束；如果某个剩余线索被判断为无法填入，就剪掉当前子树并回溯。论文报告 ToT 的字母级正确率为 78%，词级正确率为 60%，完整游戏成功率为 20%（4/20）；IO 与 CoT 的词级成功率分别为 14% 和 15.6%，完整游戏均仅解决 0 或 1 题。</p>
+<p>这个实验也暴露出评估器的缺点：模型可能把罕见或过时词汇误判为拼写错误，导致错误剪枝。使用 oracle best state 时，完整解题可达 7/20；去掉剪枝时完整解题率反而下降至 5%。因此搜索效果不仅取决于候选数量，也取决于评估器是否保留了真正可行的路径。</p>
+<div class="table-scroll"><table><thead><tr><th>任务</th><th>Thought 粒度</th><th>搜索策略</th><th>评估方式</th><th>论文结果摘要</th></tr></thead><tbody>
+<tr><td>Game of 24</td><td>中间算式</td><td>BFS，b=5</td><td>独立价值标签，多次采样</td><td>成功率 74%</td></tr>
+<tr><td>Creative Writing</td><td>段落规划</td><td>BFS，b=1</td><td>候选投票</td><td>GPT-4 连贯性评分 7.56</td></tr>
+<tr><td>Mini Crosswords</td><td>候选单词</td><td>DFS + 回溯</td><td>线索可行性评估</td><td>词级 60%，完整游戏 4/20</td></tr>
+</tbody></table></div>
+</section>
+
+<section id="comparison">
+<h2>10 · 与 CoT、Self-Consistency、MCTS、RAP、ReAct 的边界</h2>
+<div class="table-scroll"><table><thead><tr><th>方法</th><th>核心搜索/控制对象</th><th>主要机制</th><th>与 ToT 的关系</th></tr></thead><tbody>
+<tr><td>CoT</td><td>一条中间推理链</td><td>按上下文连续生成 thought</td><td>ToT 可以把它看作宽度为 1 的受限情形</td></tr>
+<tr><td>Self-Consistency</td><td>多条完整推理路径</td><td>采样后聚合最终答案</td><td>有多样性，但通常没有中间状态搜索</td></tr>
+<tr><td>ToT</td><td>部分解构成的状态树</td><td>候选生成、状态评估、搜索和回溯</td><td>本篇核心框架</td></tr>
+<tr><td>MCTS</td><td>决策树节点与访问统计</td><td>选择、扩展、模拟、回传；平衡探索与利用</td><td>可作为更高级的搜索策略，但不是原论文的默认算法</td></tr>
+<tr><td>RAP</td><td>推理路径与世界状态</td><td>LLM 同时承担世界模型与推理代理，结合 MCTS</td><td>与 ToT 同属测试时规划方向，但引入更明确的世界模型/奖励规划</td></tr>
+<tr><td>ReAct</td><td>Thought、Action、Observation 轨迹</td><td>推理与外部工具/环境行动交替</td><td>重点是与环境交互，不等同于离线思维树搜索</td></tr>
+</tbody></table></div>
+<p>一个很重要的历史细节：ToT 原论文在搜索算法部分明确将 A* 和 MCTS 列为后续可探索方向，而论文实际使用的是 BFS 与 DFS。2023 年的 RAP（Reasoning via Planning）则将 LLM 同时作为 world model 与 reasoning agent，并结合 MCTS 做战略搜索。不要把后续 RAP 的 MCTS 设计倒灌成 ToT 原论文的实现。</p>
+<p>同样，ReAct 主要让模型在 Thought 与 Action 之间交替，通过工具或环境观察更新计划；ToT 的重点是对部分解进行分支搜索。真实 Agent 可以把两者结合：在一个规划节点中调用工具获得 observation，再把观察写入新状态，继续搜索。</p>
+</section>
+
+<section id="engineering">
+<h2>11 · 成本、预算与工程实现：搜索越宽，账单也可能越大</h2>
+<p>ToT 把更多计算从训练阶段转移到了推理阶段。对每个状态，系统可能要生成 k 个候选；然后还要对候选进行评估，必要时重复采样以减少评分噪声。因此不能只看成功率，也要统计 token、模型调用、延迟和验证成本。</p>
+<h3>11.1 一个粗略的搜索规模估计</h3>
+<p>设最大深度为 T、每个状态生成 k 个候选、BFS 每层保留 b 个状态。若不做剪枝，完整树的节点数随深度呈指数增长；有宽度限制时，候选生成量大致被限制在 O(Tbk) 量级（首层和终止层会有边界差异）。这只是节点规模估计，不等于 API 请求次数，因为一个 prompt 可以返回多个候选，多个状态也可以批量评估。</p>
+<div class="math-equation" role="group" aria-label="搜索预算近似公式"><div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="ToT 搜索候选规模公式，可横向滚动"><math display="block" aria-label="每层候选规模约为 b 乘 k，总候选量约为 T 乘 b 乘 k"><mrow><msub><mi>N</mi><mtext>candidate</mtext></msub><mo>≈</mo><mi>T</mi><mo>·</mo><mi>b</mi><mo>·</mo><mi>k</mi></mrow></math></div></div>
+<p>若每个候选状态评估 r 次，评分样本量还会近似按 r 倍增加。实际成本取决于 prompt 长度、上下文重复、批处理、缓存、候选去重、停止条件，以及生成器和评估器是否使用同一模型。</p>
+<h3>11.2 工程系统建议拆成六个部件</h3>
+<div class="panel"><p><strong>Task Adapter</strong>：定义状态、目标、硬约束与终止条件。</p><p><strong>Thought Generator</strong>：从当前状态生成候选，控制多样性与候选数量。</p><p><strong>State Evaluator</strong>：评估候选状态，可结合 LLM、规则、执行结果和外部模型。</p><p><strong>Search Controller</strong>：管理 frontier、深度、beam width、阈值与回溯栈。</p><p><strong>Verifier</strong>：独立检查最终结果是否满足硬约束。</p><p><strong>Trace & Budget Manager</strong>：记录状态树、模型调用、token、耗时和剪枝原因。</p></div>
+<h3>11.3 一个稳健的停止条件</h3>
+<p>不要只靠「模型说已经完成」。更可靠的策略是：达到最大深度、预算耗尽、目标被外部验证器确认、frontier 为空，或连续多轮没有产生有价值的新状态时停止。对于高风险行动，最终动作还应经过权限、约束和人工确认。</p>
+</section>
+
+<section id="code">
+<h2>12 · 可执行的精确算术核验：让硬约束不再只靠模型自评</h2>
+<p>下面的 Python 示例是一个独立的教学辅助程序：用 Fraction 做精确有理数运算，枚举四个数字的配对和四则运算，找到一个合法的 24 点表达式。它不是原论文的 LLM ToT 复现，也不使用 GPT-4；它展示的是如何把确定性算术验证从语言模型中分离出来。</p>
+<div class="code-scroll"><pre><code>from fractions import Fraction
+from itertools import combinations
+
+
+def solve_game24(numbers):
+    if len(numbers) != 4:
+        raise ValueError("Game of 24 expects exactly four numbers")
+
+    items = [(Fraction(n), str(n)) for n in numbers]
+
+    def search(state):
+        if len(state) == 1:
+            value, expression = state[0]
+            return [] if value == 24 else None
+
+        for i, j in combinations(range(len(state)), 2):
+            a, expr_a = state[i]
+            b, expr_b = state[j]
+            rest = [v for k, v in enumerate(state) if k not in (i, j)]
+
+            candidates = [
+                (a + b, f"({expr_a} + {expr_b})"),
+                (a - b, f"({expr_a} - {expr_b})"),
+                (b - a, f"({expr_b} - {expr_a})"),
+                (a * b, f"({expr_a} * {expr_b})"),
+            ]
+            if b != 0:
+                candidates.append((a / b, f"({expr_a} / {expr_b})"))
+            if a != 0:
+                candidates.append((b / a, f"({expr_b} / {expr_a})"))
+
+            for value, expression in candidates:
+                result = search(rest + [(value, expression)])
+                if result is not None:
+                    return [expression] + result
+
+        return None
+
+    return search(items)
+
+
+if __name__ == "__main__":
+    answer = solve_game24([4, 9, 10, 13])
+    print(answer)</code></pre></div>
+<p>这个小程序的价值不是「让搜索替代 LLM」，而是演示一种混合系统思路：模型可以负责提出有意义的候选思维，程序负责检查数字是否重复使用、运算是否合法、最终值是否精确等硬约束。对于可形式化的任务，确定性验证器通常比让模型自己判断更可靠。</p>
+<p>仓库同时提供独立测试，验证样例可解、无解输入返回 None，以及精确算术不会把浮点误差当成成功。测试通过只说明这个小型算术程序满足断言，不代表复现了论文的 74% 指标。</p>
+</section>
+
+<section id="limitations">
+<h2>13 · 局限与改进方向：树越大不代表推理越聪明</h2>
+<h3>13.1 评估器会犯错，错误剪枝不可逆</h3><p>若模型把正确分支判为不可能，搜索器可能永远不会访问它。可以用更保守的剪枝阈值、延迟剪枝、保留少量低分探索槽位，以及外部约束验证来降低风险。</p>
+<h3>13.2 状态之间可能高度重复</h3><p>不同 thought 文本可能表达同一个实际状态。没有状态规范化和去重时，搜索预算会被近似重复的节点浪费。对算术、代码、规划任务，可以把结构化状态做 canonicalization；对自然语言任务，则需要语义相似度或任务特定的去重规则。</p>
+<h3>13.3 评价分数未必可跨深度比较</h3><p>一个浅层状态的 8 分和深层状态的 8 分不一定意味着相同成功概率。可采用深度条件化评分、成对比较、校准集、多个评估器集成，或将模型评价与可验证的环境反馈结合。</p>
+<h3>13.4 计算预算需要动态分配</h3><p>不是每个状态都值得生成相同数量的候选。对不确定性高、潜在价值大的节点分配更多样本；对明显不可行或重复的节点尽早停止。可以把候选多样性、评估方差、剩余深度和调用成本纳入预算控制。</p>
+<h3>13.5 搜索成功不等于现实行动安全</h3><p>ToT 的可读状态树有助于审查，但并不能自动保证事实正确、目标合理或行动安全。接入浏览器、代码执行、支付或现实环境时，需要独立权限控制、工具沙箱、动作验证和必要的人工确认。</p>
+<div class="mini purple"><strong>研究启发：</strong>ToT 最有价值的遗产之一，是把「推理质量」从单条生成文本，扩展为生成策略、状态表示、价值估计、搜索控制和验证器共同决定的系统问题。后续研究不应只追求更宽的树，还要研究更可信的状态、校准的评估和更经济的搜索。</div>
+</section>
+
+<section id="takeaways">
+<h2>14 · 总结：用五句话记住 Tree of Thoughts</h2>
+<div class="panel"><p><strong>1.</strong> CoT 让模型沿着一条中间推理链继续生成。</p><p><strong>2.</strong> Self-Consistency 采样多条完整链，再聚合答案。</p><p><strong>3.</strong> ToT 把中间 thought 组织成状态树，在生成过程中进行评估和搜索。</p><p><strong>4.</strong> BFS 适合有限深度、可以逐层比较的任务；DFS 适合深度不定、约束逐渐收紧且需要回溯的任务。</p><p><strong>5.</strong> ToT 用额外推理预算换取搜索能力；评估器误差、剪枝风险和调用成本必须一起设计。</p></div>
+<h3>相关阅读路径</h3>
+<p>建议按以下顺序学习：先理解单条思维链，再理解多路径答案聚合，然后学习 ToT 的中间状态搜索，最后连接到传统 MCTS 和具有外部工具反馈的 Agent。</p>
+<p><a href="../chain-of-thought/">Chain-of-Thought Prompting</a> · <a href="../self-consistency/">Self-Consistency</a> · <a href="../../reinforcement-learning/mcts/">Monte Carlo Tree Search</a> · <a href="../../agents/react/">ReAct</a></p>
+</section>
+
+<section id="references">
+<h2>15 · 论文与资料</h2>
+<ol>
+<li>Shunyu Yao et al. (2023). <a href="https://arxiv.org/abs/2305.10601">Tree of Thoughts: Deliberate Problem Solving with Large Language Models</a>. NeurIPS 2023. <a href="https://proceedings.neurips.cc/paper_files/paper/2023/file/271db9922b8d1f4dd7aaef84ed5ac703-Paper-Conference.pdf">论文 PDF</a>.</li>
+<li>官方实现：<a href="https://github.com/princeton-nlp/tree-of-thought-llm">princeton-nlp/tree-of-thought-llm</a>。代码、提示词和论文实验轨迹。</li>
+<li>Jason Wei et al. (2022). <a href="https://arxiv.org/abs/2201.11903">Chain-of-Thought Prompting Elicits Reasoning in Large Language Models</a>.</li>
+<li>Xuezhi Wang et al. (2022). <a href="https://arxiv.org/abs/2203.11171">Self-Consistency Improves Chain of Thought Reasoning in Language Models</a>.</li>
+<li>Shibo Hao et al. (2023). <a href="https://arxiv.org/abs/2305.14992">Reasoning with Language Model is Planning with World Model</a>. RAP, an MCTS-based planning framework.</li>
+<li>Shunyu Yao et al. (2023). <a href="https://arxiv.org/abs/2210.03629">ReAct: Synergizing Reasoning and Acting in Language Models</a>.</li>
+<li>Peter E. Hart, Nils J. Nilsson, Bertram Raphael (1968). <a href="https://doi.org/10.1109/TSSC.1968.300136">A Formal Basis for the Heuristic Determination of Minimum Cost Paths</a>. A* search.</li>
+</ol>
+<p class="foot">本文的图示、教学算例和代码均为独立构建。原论文的历史实验数值均标注了模型、任务、样本范围和表格位置；教学代码不应被误认为论文基准复现。</p>
+</section>
+</article></main></div>
+<script>
+(function(){
+  const states={
+    bfs:{
+      title:"BFS：在同一深度比较多个候选",
+      copy:"根状态 {4,9,10,13} 先生成若干第一步。评估器比较候选状态，搜索器保留前 b 个，而不是只相信第一个生成结果。",
+      state:"当前 frontier：{13−9=4}、{4+9=13}、{10−4=6} …"
+    },
+    dfs:{
+      title:"DFS：沿着当前最有希望的分支深入",
+      copy:"先扩展 13−9=4，再扩展 10−4=6，最后到达 4×6=24。DFS 不需要先把同一层所有候选全部展开。",
+      state:"当前路径：{4,9,10,13} → {4,4,10} → {4,6} → {24}"
+    },
+    backtrack:{
+      title:"回溯：发现死路后返回最近的分叉点",
+      copy:"假设分支 A 的后继状态被验证为不可行，DFS 会撤销这条路径上的临时选择，回到父状态，再尝试下一个候选 B。",
+      state:"控制流：候选 A → 不可行 → 回到父状态 → 尝试候选 B"
+    }
+  };
+  const buttons=[...document.querySelectorAll("[data-mode]")];
+  function show(mode){
+    const s=states[mode];
+    document.getElementById("demo-heading").textContent=s.title;
+    document.getElementById("demo-copy").textContent=s.copy;
+    document.getElementById("demo-state").textContent=s.state;
+    buttons.forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.mode===mode)));
+  }
+  buttons.forEach(button=>button.addEventListener("click",()=>show(button.dataset.mode)));
+})();
+</script>
+</body>
+</html>
