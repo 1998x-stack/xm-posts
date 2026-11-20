@@ -1303,5 +1303,29 @@
     "paper": "https://doi.org/10.1162/neco.1997.9.8.1735",
     "illustration": "neural-gating",
     "topic": "gating-mechanisms"
+  },
+  {
+    "slug": "mobilenet",
+    "title": "Understanding MobileNet",
+    "subtitle": "从 Depthwise Separable Convolution 到 V2/V3/V4：把移动视觉的计算账本拆开",
+    "category": "architectures",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 33,
+    "tags": [
+      "MobileNet",
+      "MobileNetV1",
+      "MobileNetV2",
+      "MobileNetV3",
+      "MobileNetV4",
+      "Efficient & Mobile CNNs",
+      "Depthwise Separable Convolution",
+      "Inverted Residual",
+      "Edge AI"
+    ],
+    "summary": "基于 MobileNet V1 原论文逐步推导 Depthwise/Pointwise 计算量、参数与 α/ρ 缩放；复核 ImageNet 70.6%/569M/4.2M 实验，交互探索计算账本，并对比 V2 逆残差线性瓶颈、V3 硬件感知 NAS 与 V4 UIB。含五幅独立 SVG、MathML、纯 Python 验证和论文证据台账。",
+    "paper": "https://arxiv.org/abs/1704.04861",
+    "illustration": "mobilenet"
   }
 ]

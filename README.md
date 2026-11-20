@@ -268,3 +268,7 @@ TD3 归入 `reinforcement-learning` → **Continuous Control / Off-policy Actor�
 
 
 Neural Gating 位于 `posts/architectures/neural-gating/`，归入 **Architectures → Gating & Multiplicative Interactions** 二级主题（不新增一级分类）。以 LSTM 原始/现代门控、GRU、Highway、GLU 与 SwiGLU 的论文谱系为主线，含 14 节机制解读、6 幅独立 SVG、9 组原生 MathML、交互状态插值及 Python 断言；相关史实与教学算例在 `evidence.json` 中分开标记。
+
+## MobileNet / Efficient & Mobile CNNs
+
+MobileNet 归入 `architectures` → **Convolutional Neural Networks & Vision** → **Efficient & Mobile CNNs**，无需新建一级分类。文章 [`Understanding MobileNet`](posts/architectures/mobilenet/index.html) 位于 `posts/architectures/mobilenet/`，以 2017 原论文为主线，区分 V2 逆残差、V3 NAS/SE 与 V4 UIB/Mobile MQA。包含五幅 SVG、MathML、交互成本分析、Python 验证及证据台账。
