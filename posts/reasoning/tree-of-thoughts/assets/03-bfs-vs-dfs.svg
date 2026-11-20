@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 440" role="img" aria-labelledby="tot-search-title tot-search-desc">
+<title id="tot-search-title">BFS 与 DFS 在 ToT 中的搜索差异</title>
+<desc id="tot-search-desc">BFS 逐层扩展候选并保留最优宽度，DFS 沿一条高分路径深入，失败后回溯到父节点并探索下一个候选。</desc>
+<rect width="960" height="440" rx="18" fill="#fbfcfa"/>
+<g font-family="system-ui,-apple-system,'PingFang SC',sans-serif" fill="#203f46">
+<rect x="18" y="18" width="450" height="400" rx="14" fill="#f0f6f3" stroke="#cbded6"/><rect x="492" y="18" width="450" height="400" rx="14" fill="#f4f5f8" stroke="#d6d8e2"/>
+<text x="243" y="52" text-anchor="middle" font-size="21" font-weight="700">BFS · 逐层搜索</text><text x="717" y="52" text-anchor="middle" font-size="21" font-weight="700">DFS · 深入与回溯</text>
+<rect x="177" y="75" width="132" height="42" rx="9" fill="#e4edf5" stroke="#7594ae"/><text x="243" y="102" font-size="16" text-anchor="middle">根状态</text>
+<path d="M243 117 L103 160 M243 117 L243 160 M243 117 L383 160" stroke="#66847f" stroke-width="2.4" fill="none"/>
+<g fill="#dff0e8" stroke="#39877c"><rect x="50" y="162" width="106" height="42" rx="9"/><rect x="190" y="162" width="106" height="42" rx="9"/><rect x="330" y="162" width="106" height="42" rx="9"/></g><g font-size="15" text-anchor="middle"><text x="103" y="188">候选 A</text><text x="243" y="188">候选 B</text><text x="383" y="188">候选 C</text></g>
+<path d="M103 204 L103 250 M243 204 L243 250 M383 204 L383 250" stroke="#66847f" stroke-width="2.2"/>
+<g fill="#eaf3ee" stroke="#6c9c8e"><rect x="50" y="252" width="106" height="40" rx="8"/><rect x="190" y="252" width="106" height="40" rx="8"/><rect x="330" y="252" width="106" height="40" rx="8"/></g><g font-size="14" text-anchor="middle"><text x="103" y="277">A-1</text><text x="243" y="277">B-1</text><text x="383" y="277">C-1</text></g>
+<rect x="65" y="312" width="356" height="50" rx="9" fill="#fff3d7" stroke="#c49a43"/><text x="243" y="333" text-anchor="middle" font-size="16" font-weight="700">评估全部候选状态</text><text x="243" y="351" text-anchor="middle" font-size="13">保留分数最高的 b 个，进入下一层</text>
+<text x="243" y="392" text-anchor="middle" font-size="14" fill="#5b7774">优点：比较同一深度的多条路径</text>
+<rect x="651" y="75" width="132" height="42" rx="9" fill="#e4edf5" stroke="#7594ae"/><text x="717" y="102" font-size="16" text-anchor="middle">根状态</text>
+<path d="M717 117 L717 151" stroke="#66847f" stroke-width="2.4"/>
+<rect x="651" y="153" width="132" height="42" rx="9" fill="#dff0e8" stroke="#39877c"/><text x="717" y="180" font-size="16" text-anchor="middle">候选 A</text>
+<path d="M717 195 L717 229" stroke="#66847f" stroke-width="2.4"/>
+<rect x="651" y="231" width="132" height="42" rx="9" fill="#fff0e8" stroke="#c17b57"/><text x="717" y="258" font-size="16" text-anchor="middle">后继状态 A1</text>
+<path d="M717 273 L717 304" stroke="#c17b57" stroke-width="2.4"/>
+<rect x="651" y="306" width="132" height="38" rx="9" fill="#f8ded2" stroke="#c17b57"/><text x="717" y="331" font-size="15" text-anchor="middle">判定不可行</text>
+<path d="M651 325 C590 325 590 175 651 175" stroke="#b46744" stroke-width="2.5" stroke-dasharray="6 5" fill="none"/><text x="557" y="249" font-size="14" fill="#a15d43" text-anchor="middle">回溯</text>
+<path d="M783 175 L846 175" stroke="#39877c" stroke-width="2.4"/><rect x="842" y="153" width="80" height="42" rx="8" fill="#d6eee3" stroke="#39877c"/><text x="882" y="179" font-size="14" text-anchor="middle">候选 B</text>
+<text x="717" y="392" text-anchor="middle" font-size="14" fill="#5b7774">优点：较快深入；失败后回到分叉点</text>
+</g></svg>
