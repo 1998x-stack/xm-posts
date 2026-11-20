@@ -134,3 +134,14 @@ The teaching *method* is inspired by Christopher Olah and Harvard NLP. All artic
 - Every published standalone article must provide valid `@media print { ... }` and `@media (prefers-reduced-motion: reduce) { ... }`. `@media(print)` is invalid and silently drops print rules.
 - Keep long equations, code and wide diagrams inside explicit keyboard-focusable scroll regions where applicable; never suppress page-level overflow with `overflow-x:hidden`. Use `min-width:0` on grid and flex children, allow long headings and references to wrap, and keep mobile illustrations readable by local scrolling when required.
 - Run `python scripts/validate_site.py` and Chromium checks at 360px, 390px, tablet, desktop and print. The static layout contract in `check_article_layout` prevents duplicate doctypes, skipped heading ranks and absent print/reduced-motion coverage; actual viewport overflow requires browser QA.
+
+## Incremental downloadable PDF contract
+
+The published HTML downloads are **pre-rendered** during the GitHub Pages workflow, never generated on a reader's click. Keep the existing fixed, unobtrusive PDF download button and article-specific print CSS.
+
+1. After `scripts/build_site.py`, run `scripts/render_pdfs.py`. A full build must populate `_site/posts/<category>/<slug>/article.pdf` for **every published** post, including unchanged posts restored from cache. Drafts never receive PDFs.
+2. PDF cache identity must cover built article HTML (including related-reading cards), local assets referenced directly or from CSS, related-post cover assets, print styles, renderer behavior/dependencies, font environment, and public URL. Do **not** invalidate on homepage/archive-only changes, and never rely solely on `updated` metadata or Git diff paths.
+3. Cache files are expendable and **untrusted**: verify matching fingerprints, PDF hashes, byte size, page counts and extractable text; if missing, corrupt, or from an incompatible renderer, regenerate rather than publishing stale/broken files. Cache manifests cannot be considered evidence of a CI pass.
+4. Rendering and injecting the download control are **separate operations**. Cache hits must inject exactly one accessible download link into the *built* HTML only, preserving the source article and print layout.
+5. Restore `.pdf-cache/` from GitHub Actions cache, save it **after** final site validation, and ignore it in Git. Use unique immutable run keys with a versioned restore prefix. No cache must be necessary for a correct build. On full builds prune unpublished entries; `--only` must not erase unrelated entries.
+6. When modifying the PDF pipeline, run `pytest tests/test_pdf_cache.py tests/test_pdf_export.py` plus the entire repository quality gate and at least one real PDF browser export in CI. Review logs for `PDF CACHED` versus `PDF RENDERED` and verify the published PDF download URL after Pages deployment. To force a full regeneration: `python scripts/render_pdfs.py --force`.
