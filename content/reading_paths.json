@@ -348,5 +348,14 @@
       "agent-memory-components",
       "harness-engineering"
     ]
+  },
+  {
+    "id": "path-38",
+    "title": "从二维视觉到三维神经场景表示",
+    "posts": [
+      "cnn",
+      "resnet",
+      "nerf"
+    ]
   }
 ]
