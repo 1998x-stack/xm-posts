@@ -255,11 +255,11 @@ pre{padding:18px 20px;background:#223e45;color:#e7f3ea;border-radius:10px;overfl
 <section id="math">
 <h2>09 · 重试的数学：多跑几轮，成功概率一定更高吗？</h2>
 <p>先构造一个简单模型，帮助理解为什么重试可能提高成功概率，也为什么预算仍然必要。</p>
-<p>假设每次尝试相互独立，并且每次尝试成功概率都相同，记为 \(p\)。单次失败概率是 \(1-p\)。连续 n 次都失败的概率是 \((1-p)^n\)，因此至少成功一次的概率为：</p>
+<p>假设每次尝试相互独立，并且每次尝试成功概率都相同，记为 <math class="math-inline" aria-label="p"><mi>p</mi></math>。单次失败概率是 \(1-p\)。连续 n 次都失败的概率是 <math class="math-inline" aria-label="一减 p 的 n 次方"><msup><mrow><mo>(</mo><mn>1</mn><mo>−</mo><mi>p</mi><mo>)</mo></mrow><mi>n</mi></msup></math>，因此至少成功一次的概率为：</p>
 <div class="math-wrap"><div class="math-scroll" tabindex="0" role="region" aria-label="n 次独立尝试至少成功一次的概率公式"><math display="block" aria-label="P 成功于 n 次以内等于一减去一减 p 的 n 次方"><mrow><mi>P</mi><mo>(</mo><mtext>success by n</mtext><mo>)</mo><mo>=</mo><mn>1</mn><mo>−</mo><msup><mrow><mo>(</mo><mn>1</mn><mo>−</mo><mi>p</mi><mo>)</mo></mrow><mi>n</mi></msup></mrow></math></div></div>
 <p>例如，假设 <math class="math-inline" aria-label="p 等于零点三零"><mi>p</mi><mo>=</mo><mn>0.30</mn></math>，则 1、2、3、4 次尝试的累计成功概率分别约为 30%、51%、65.7%、76.0%。</p>
 <figure class="figure"><div class="figure-scroll"><img src="assets/07-retry-economics.svg" alt="每次尝试成功概率为百分之三十时，尝试次数增加带来的累计成功概率"></div><figcaption>图 7 · 教学算例：假设每次尝试独立且成功概率恒定为 0.30；这些数值不是任何 Agent Benchmark 的实测结果。</figcaption></figure>
-<p>但是，Agent 的真实重试通常不满足独立同分布假设：下一轮会看到上一轮失败反馈，成功概率可能上升；也可能因为上下文污染、错误方向和资源耗尽而下降。更一般地，如果第 k 次尝试在此前失败条件下的成功概率是 \(p_k\)，则：</p>
+<p>但是，Agent 的真实重试通常不满足独立同分布假设：下一轮会看到上一轮失败反馈，成功概率可能上升；也可能因为上下文污染、错误方向和资源耗尽而下降。更一般地，如果第 k 次尝试在此前失败条件下的成功概率是 <math class="math-inline" aria-label="p 下标 k"><msub><mi>p</mi><mi>k</mi></msub></math>，则：</p>
 <div class="math-wrap"><div class="math-scroll" tabindex="0" role="region" aria-label="条件成功概率的累计公式"><math display="block" aria-label="累计成功概率等于一减去每一轮条件失败概率的乘积"><mrow><mi>P</mi><mo>(</mo><mtext>success by n</mtext><mo>)</mo><mo>=</mo><mn>1</mn><mo>−</mo><munderover><mo>∏</mo><mrow><mi>k</mi><mo>=</mo><mn>1</mn></mrow><mi>n</mi></munderover><mo>(</mo><mn>1</mn><mo>−</mo><msub><mi>p</mi><mi>k</mi></msub><mo>)</mo></mrow></math></div></div>
 <h3>9.1 把成本和风险加入目标函数</h3>
 <p>设成功带来的收益为 R，每轮平均成本为 c，风险成本随重试次数 n 增加为 r(n)，风险权重为 λ。简化后的期望效用可以写成：</p>
