@@ -1,0 +1,380 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="从多视角照片、相机射线和五维场景函数出发，理解 NeRF 的 MLP、位置编码、体渲染、分层采样、原论文证据与后续神经渲染方法。">
+<meta name="color-scheme" content="light">
+<link rel="canonical" href="https://1998x-stack.github.io/xm-posts/posts/architectures/nerf/">
+<title>Understanding NeRF · xm-posts</title>
+<style>
+:root{--canvas:#f6f8f5;--paper:#fffefa;--ink:#29434b;--muted:#647d80;--line:#d9e7e1;--teal:#116f6b;--terra:#b56b3e;--blue:#3e7594;--violet:#7566a7;--soft:#edf6f1}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--canvas);color:var(--ink);font:17px/1.9 system-ui,-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}
+a{color:var(--teal);text-underline-offset:4px}
+a:hover{color:#a55d37}
+a:focus-visible,button:focus-visible,input:focus-visible,[tabindex]:focus-visible{outline:3px solid #d58c53;outline-offset:3px}
+.skip{position:absolute;top:-90px;left:12px;background:#163c40;color:white;padding:11px;z-index:10}
+.skip:focus{top:8px}
+.site-head{background:var(--paper);border-bottom:1px solid var(--line)}
+.site-inner{max-width:1240px;margin:auto;padding:13px 24px;display:flex;gap:18px;justify-content:space-between;align-items:center;flex-wrap:wrap}
+.brand{font-size:22px;font-weight:850;letter-spacing:-.05em;text-decoration:none;color:var(--ink)}
+.brand b{color:var(--terra)}
+.site-links{display:flex;gap:15px;font-size:13px;flex-wrap:wrap}
+.layout{max-width:1240px;margin:auto;display:grid;grid-template-columns:215px minmax(0,840px);gap:50px;padding:58px 24px 90px}
+.toc{align-self:start;position:sticky;top:15px;max-height:95vh;overflow:auto}
+.toc strong{display:block;font-size:12px;color:var(--teal);letter-spacing:.1em;margin:0 0 12px}
+.toc a{display:block;border-left:2px solid var(--line);padding:6px 11px;text-decoration:none;color:#668083;font-size:12px;line-height:1.55}
+.toc a:hover{background:#e8f2ed;border-color:var(--teal)}
+main,article{min-width:0}
+.eyebrow{font-size:12px;font-weight:800;color:var(--teal);letter-spacing:.14em}
+h1{font-size:clamp(42px,5.2vw,70px);line-height:1.09;letter-spacing:-.055em;overflow-wrap:anywhere;margin:17px 0 22px}
+h1 em{font-style:normal;color:var(--teal)}
+.dek{font-size:23px;line-height:1.63;color:#4b6a6e}
+.meta{display:flex;gap:13px 22px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:14px;margin:24px 0;font-size:12px;color:#70888a}
+.insight{border:1px solid #bfdcd0;background:#edf7f0;border-radius:13px;padding:18px 22px;font-size:17px}
+section{margin-top:68px;scroll-margin-top:24px}
+h2{font-size:clamp(25px,3vw,33px);line-height:1.35;letter-spacing:-.03em;margin:0 0 22px}
+h3{font-size:20px;line-height:1.4;margin:29px 0 11px}
+p{margin:0 0 18px;color:#3b5961}
+.lead{font-size:19px;color:#285e5c}
+strong{color:#245e5d}
+ul,ol{padding-left:22px}
+li{margin:8px 0}
+figure{margin:25px 0 30px;border:1px solid #d8e5df;background:#fff;border-radius:13px;padding:10px 10px 0;max-width:100%;min-width:0}
+figure img{display:block;width:100%;height:auto;max-width:100%;border-radius:7px}
+figcaption{padding:13px 8px 15px;border-top:1px solid #e9f0eb;font-size:13px;color:#607b7e;line-height:1.7}
+.figure-title{font-size:11px;color:var(--teal);font-weight:800;letter-spacing:.09em;padding:4px 5px 9px}
+.eq{display:flex;align-items:center;max-width:100%;min-width:0;gap:10px;background:#eaf3ee;border-radius:10px;padding:14px 12px;margin:24px 0}
+.math-scroll{flex:1;min-width:0;overflow-x:auto;overflow-y:hidden}
+.math-scroll math[display=block]{min-width:100%;width:max-content;font-family:"STIX Two Math","Cambria Math",serif;font-size:1.16rem}
+.eq-num{flex:none;font-size:12px;color:#668383}
+.callout{background:#fff5e8;border-left:4px solid #d89a59;padding:15px 20px;margin:23px 0;font-size:15px}
+.note{background:#eef3f7;border-left:4px solid var(--blue);padding:14px 18px;margin:22px 0;font-size:15px}
+.tablewrap{max-width:100%;overflow-x:auto;margin:22px 0;border-radius:10px}
+table{min-width:620px;width:100%;border-collapse:collapse;font-size:14px;background:#fff}
+th,td{border:1px solid var(--line);padding:11px 12px;text-align:left;vertical-align:top}
+th{background:#eaf5ef}
+.two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin:21px 0}
+.two>div{min-width:0;background:#fff;border:1px solid var(--line);border-radius:12px;padding:15px}
+.experiment{border:1px solid #bddad0;border-radius:14px;background:#fff;padding:21px;margin:28px 0}
+.experiment h3{margin-top:0}
+.controls{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:18px 0}
+.controls label{font-size:14px;font-weight:700;color:#315b5b}
+.controls input{flex:1;min-width:160px;accent-color:var(--teal)}
+.controls button{border:1px solid #9ecdc2;background:#fff;color:var(--teal);cursor:pointer;padding:9px 14px;border-radius:8px;font:650 14px system-ui,sans-serif}
+.controls button:hover{background:#edf7f1}
+.demo-grid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:14px;margin-top:15px}
+.demo-panel{min-width:0;background:#f7faf8;border:1px solid var(--line);border-radius:11px;padding:14px}
+.demo-panel h4{margin:0 0 10px;font-size:14px;color:#315b5b}
+.swatch{width:100%;height:54px;border:1px solid #b7c9c4;border-radius:8px;background:rgb(191,209,218)}
+.rgb-readout{font:12px/1.7 ui-monospace,Consolas,monospace;color:#526d70;margin:9px 0 0}
+.weight-row{display:grid;grid-template-columns:48px minmax(0,1fr) 48px;gap:8px;align-items:center;margin:8px 0;font-size:12px;color:#526d70}
+.weight-track{height:11px;background:#e4ece8;border-radius:20px;overflow:hidden}
+.weight-fill{display:block;height:100%;min-width:2px;background:var(--teal);border-radius:20px;transition:width .18s ease}
+.readout{background:#edf7f1;border-radius:9px;padding:13px 16px;color:#275e5d;margin:15px 0 0;font-size:14px}
+pre{background:#213f46;color:#f2f7f5;padding:18px;border-radius:10px;overflow:auto;max-width:100%;font:13px/1.75 ui-monospace,Consolas,monospace;white-space:pre}
+code{font-family:ui-monospace,Consolas,monospace;font-size:.9em}
+.sources{font-size:14px}
+.sources li{margin:12px 0;overflow-wrap:anywhere}
+.mini{font-size:14px;color:var(--muted)}
+.foot{border-top:1px solid var(--line);margin-top:70px;padding:26px 0;color:#698185;font-size:13px}
+@media(max-width:960px){.layout{display:block;max-width:870px;padding-top:34px}.toc{position:static;max-height:none;display:flex;gap:6px;flex-wrap:wrap;margin-bottom:30px}.toc strong{width:100%}.toc a{border:1px solid var(--line);border-radius:6px;padding:5px 9px}}
+@media(max-width:600px){body{font-size:16px}.site-inner{padding:10px 14px}.site-links{gap:9px}.layout{padding:26px 13px 72px}h1{font-size:clamp(37px,11vw,46px)}.dek{font-size:19px}.two,.demo-grid{grid-template-columns:1fr}section{margin-top:54px}figure{padding:6px 5px 0}.experiment{padding:13px}.eq{padding:10px 6px;gap:4px}.math-scroll math[display=block]{font-size:1rem}.controls{align-items:stretch}.controls button{width:100%}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+@media print{body{background:#fff;font-size:11pt}.site-head,.toc,.skip,.controls{display:none!important}.layout{display:block;padding:0}.experiment{break-inside:avoid}.demo-grid{grid-template-columns:1fr 1fr}.figure-title{color:#444}.eq{break-inside:avoid}.math-scroll{overflow:visible}pre{background:#f2f5f3;color:#1a3439;white-space:pre-wrap;overflow-wrap:anywhere}section{margin-top:23px}h2,h3{break-after:avoid}figure{break-inside:avoid}.swatch{print-color-adjust:exact;-webkit-print-color-adjust:exact}}
+</style>
+</head>
+<body>
+<a class="skip" href="#content">跳转文章正文</a>
+<header class="site-head"><div class="site-inner">
+<a class="brand" href="../../../">xm<b>.</b>posts</a>
+<nav class="site-links" aria-label="站点导航"><a href="../../../categories/architectures/">模型架构</a><a href="../../../topics/">知识地图</a><a href="../../../archive/">文章归档</a></nav>
+</div></header>
+<div class="layout">
+<nav class="toc" aria-label="文章目录">
+<strong>NEURAL RADIANCE FIELDS</strong>
+<a href="#problem">01 · 从照片到新视角</a>
+<a href="#representation">02 · 连续五维场景函数</a>
+<a href="#ray">03 · Camera Ray 与采样</a>
+<a href="#mlp">04 · MLP 输出什么</a>
+<a href="#encoding">05 · 位置编码</a>
+<a href="#rendering">06 · 可微体渲染</a>
+<a href="#hierarchy">07 · 分层采样</a>
+<a href="#training">08 · 训练闭环</a>
+<a href="#evidence">09 · 原论文实验</a>
+<a href="#limits">10 · 适用边界</a>
+<a href="#evolution">11 · 后续方法</a>
+<a href="#code">12 · 最小代码</a>
+<a href="#summary">13 · 核心心智模型</a>
+<a href="#references">14 · 参考文献</a>
+</nav>
+<main id="content"><article>
+<header>
+<div class="eyebrow">3D VISION / NEURAL RENDERING / ECCV 2020</div>
+<h1>Understanding <em>NeRF</em></h1>
+<p class="dek">给你几十张从不同角度拍摄的照片，能不能学出一个<strong>连续的三维场景</strong>，再从一台从未出现过的相机位置生成新图像？NeRF 用一个神经网络回答这个问题。</p>
+<div class="meta"><span>核心论文：Mildenhall et al. · ECCV 2020</span><span>Neural Radiance Fields</span><span>约 28 分钟</span></div>
+<div class="insight"><strong>先记住一句话：</strong>NeRF 不直接预测一张新照片，也不先生成一个显式网格；它学习一个可查询的场景函数。给定空间位置和观察方向，网络返回该处的颜色与密度，再沿相机射线把这些信息合成为像素。</div>
+<figure><div class="figure-title">FIGURE 01 · FROM PHOTOS TO A CONTINUOUS SCENE</div><img src="assets/01-scene-pipeline.svg" alt="多张带有相机位姿的场景照片输入神经辐射场，网络沿新相机射线查询三维点并通过体渲染生成新视角图像"><figcaption>整个任务可以拆成三件事：知道照片是从哪里拍的；学会查询任意三维位置的场景属性；把目标相机看到的射线样本合成为像素。</figcaption></figure>
+</header>
+
+<section id="problem">
+<h2>01 · 从照片到一台从未存在过的相机</h2>
+<p>先想象你围绕一张桌子拍摄了 40 张照片。每张照片都只记录一个相机位置看到的二维投影：桌面挡住了什么、椅子在画面中的位置、灯光如何反射。你希望把相机移动到两张照片之间的一个新位置，得到一张自然的新画面。</p>
+<p>传统思路可能是先恢复三角网格、贴图或体素，再用图形学渲染。但这些表示需要显式描述几何表面或离散空间。NeRF 的关键转变是：<strong>把场景本身看成一个连续函数</strong>，让神经网络回答“这个位置、从这个方向看过去，应该是什么颜色？这里有多大概率挡住光线？”</p>
+<div class="two">
+<div><h3>输入不是只有 RGB</h3><p>除了多张图像，还需要每张图对应的相机内参、外参（相机位姿）以及场景的近远边界。没有可靠的相机几何，像素就无法正确投到三维射线上。</p></div>
+<div><h3>输出不是一张完整 3D 网格</h3><p>网络可以在任意连续坐标处被查询。渲染时只对目标相机真正经过的射线采样，不必提前把整个空间切成固定体素。</p></div>
+</div>
+<p class="lead">因此，NeRF 的问题不是“如何把照片拼起来”，而是“如何学习一个能同时解释所有已观测视角的场景函数”。</p>
+</section>
+
+<section id="representation">
+<h2>02 · NeRF 学的是一个连续五维场景函数</h2>
+<p>对空间中的一个点，记它的位置为 <code>x=(x,y,z)</code>。同一个点从不同方向看，颜色可能不同：例如金属表面的高光会随相机移动。因此还要提供观察方向 <code>d</code>。论文用球坐标角度 <code>(θ,φ)</code> 描述方向，实际网络中用三维单位向量表示。</p>
+<div class="eq" role="group" aria-label="NeRF 场景函数"><span class="eq-num">(1)</span><div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="场景函数公式，可横向滚动"><math display="block" aria-label="F theta 输入空间位置 x 和观察方向 d，输出方向相关颜色 c 和仅依赖位置的密度 sigma"><mrow><msub><mi>F</mi><mi>Θ</mi></msub><mo>(</mo><mi mathvariant="bold">x</mi><mo>,</mo><mi mathvariant="bold">d</mi><mo>)</mo><mo>=</mo><mo>(</mo><mi mathvariant="bold">c</mi><mo>(</mo><mi mathvariant="bold">x</mi><mo>,</mo><mi mathvariant="bold">d</mi><mo>)</mo><mo>,</mo><mi>σ</mi><mo>(</mo><mi mathvariant="bold">x</mi><mo>)</mo><mo>)</mo></mrow></math></div></div>
+<p>这里有两个输出，含义不要混淆：</p>
+<ul>
+<li><strong>密度 σ(x)：</strong>描述射线穿过这个位置时被吸收/终止的强度。它只依赖空间位置，不随着观察方向改变。</li>
+<li><strong>颜色 c(x,d)：</strong>描述从方向 d 观察位置 x 时的 RGB 辐射。它允许表达镜面反射等视角相关外观。</li>
+</ul>
+<figure><div class="figure-title">FIGURE 02 · ONE POINT, TWO KINDS OF OUTPUT</div><img src="assets/02-five-dimensional-field.svg" alt="三维位置与观察方向一起进入 NeRF 网络，密度分支只依赖位置，RGB 分支同时依赖位置和观察方向"><figcaption>把几何稳定性与外观方向性拆开：同一个空间点的密度应保持一致，而高光颜色可以随着观察方向变化。</figcaption></figure>
+<div class="callout"><strong>一个容易误解的细节：</strong>“5D”指 3 个空间坐标加 2 个方向自由度。实现中方向通常编码为 3D 单位向量，所以网络实际接收的是 3+3 个数值分量，但方向仍只有两个独立自由度。</div>
+<p>NeRF 不是直接输出“这里是一个三角形面片”。它输出的是连续空间中的体密度和方向相关辐射；表面感、遮挡和像素颜色，是通过沿射线积分后表现出来的。</p>
+</section>
+
+<section id="ray">
+<h2>03 · 从一个像素，反向发射一条 Camera Ray</h2>
+<p>现在固定目标相机上的一个像素。相机内参告诉我们像素对应的成像方向；相机外参把这个方向从相机坐标系转换到世界坐标系。于是我们得到一条从相机中心出发的射线。</p>
+<div class="eq" role="group" aria-label="相机射线公式"><span class="eq-num">(2)</span><div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="相机射线公式，可横向滚动"><math display="block" aria-label="r t 等于相机原点 o 加 t 乘方向 d"><mrow><mi mathvariant="bold">r</mi><mo>(</mo><mi>t</mi><mo>)</mo><mo>=</mo><mi mathvariant="bold">o</mi><mo>+</mo><mi>t</mi><mi mathvariant="bold">d</mi></mrow></math></div></div>
+<p><code>o</code> 是相机中心，<code>d</code> 是单位方向，<code>t</code> 是沿射线移动的距离。我们只在近端 <code>tₙ</code> 与远端 <code>t_f</code> 之间查询场景。对这条射线采样得到一串三维位置 <code>x_i=r(t_i)</code>，每个位置都送入 NeRF 查询颜色与密度。</p>
+<figure><div class="figure-title">FIGURE 03 · CAMERA RAY AND DEPTH SAMPLES</div><img src="assets/03-camera-ray.svg" alt="从相机中心穿过目标像素的射线，在近端与远端之间采样多个三维位置，并标记相邻采样距离 delta"><figcaption>一个像素对应一条射线；一张图像有多少像素，就需要渲染多少条射线。每条射线又要查询多个深度位置，因此采样数直接影响计算量。</figcaption></figure>
+<p>训练时，论文将每条射线的近远区间分成若干段，并在每段内随机取一点（stratified sampling）。这样不会让网络永远只看到固定网格上的坐标，也能在训练过程中覆盖连续空间。</p>
+</section>
+
+<section id="mlp">
+<h2>04 · MLP 每次查询，究竟输出什么？</h2>
+<p>原始 NeRF 不是 CNN。它用一个全连接 MLP 表示每个场景：位置编码后的空间坐标先经过 8 层、每层 256 个通道的 ReLU 全连接层，得到密度 σ 和一个 256 维特征；再把该特征与位置编码后的观察方向拼接，经过一个 128 通道的 ReLU 层，输出 RGB。</p>
+<div class="two">
+<div><h3>空间分支</h3><p><strong>输入：</strong>位置编码 γ(x)。</p><p><strong>输出：</strong>密度 σ(x) 与中间特征 h(x)。</p><p><strong>意义：</strong>同一位置无论从哪个视角被查询，密度都相同。</p></div>
+<div><h3>外观分支</h3><p><strong>输入：</strong>h(x) 与方向编码 γ(d)。</p><p><strong>输出：</strong>颜色 c(x,d)。</p><p><strong>意义：</strong>让网络能够表达镜面高光等方向相关的辐射变化。</p></div>
+</div>
+<p>论文的消融实验专门移除了 view dependence：没有方向输入时，模型难以复现推土机履带上的镜面反射。这说明方向不是一个可有可无的装饰参数，而是外观建模的一部分。</p>
+</section>
+
+<section id="encoding">
+<h2>05 · Positional Encoding：让 MLP 看见细节</h2>
+<p>如果把原始坐标直接交给普通 MLP，网络往往先学会平滑、低频的变化，却不容易拟合细密纹理、尖锐边缘和高频几何。NeRF 在坐标进入 MLP 之前，先把每个标量映射到一组不同频率的正弦、余弦特征。</p>
+<div class="eq" role="group" aria-label="正弦位置编码公式"><span class="eq-num">(3)</span><div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="位置编码公式，可横向滚动"><math display="block" aria-label="gamma p 包含从频率 2 的零次方到 2 的 L 减一次方的正弦和余弦"><mrow><mi>γ</mi><mo>(</mo><mi>p</mi><mo>)</mo><mo>=</mo><mo>(</mo><mi>sin</mi><mo>(</mo><msup><mn>2</mn><mn>0</mn></msup><mi>π</mi><mi>p</mi><mo>)</mo><mo>,</mo><mi>cos</mi><mo>(</mo><msup><mn>2</mn><mn>0</mn></msup><mi>π</mi><mi>p</mi><mo>)</mo><mo>,</mo><mo>…</mo><mo>,</mo><mi>sin</mi><mo>(</mo><msup><mn>2</mn><mrow><mi>L</mi><mo>−</mo><mn>1</mn></mrow></msup><mi>π</mi><mi>p</mi><mo>)</mo><mo>,</mo><mi>cos</mi><mo>(</mo><msup><mn>2</mn><mrow><mi>L</mi><mo>−</mo><mn>1</mn></mrow></msup><mi>π</mi><mi>p</mi><mo>)</mo><mo>)</mo></mrow></math></div></div>
+<p>低频分量描述缓慢变化，高频分量让模型能够表达更细的变化。原论文对位置 x 使用 <strong>L=10</strong>，对观察方向 d 使用 <strong>L=4</strong>。注意：它和 Transformer 的正弦位置编码形式相似，但目的不同——Transformer 的位置编码告诉模型 token 在序列中的位置；NeRF 的编码是把连续空间坐标展开成更容易拟合高频函数的特征。</p>
+<figure><div class="figure-title">FIGURE 04 · FREQUENCIES TURN COORDINATES INTO FEATURES</div><img src="assets/06-positional-encoding.svg" alt="低频正弦波平滑变化，高频正弦波具有更多振荡；位置编码将不同频率的正余弦特征拼接供 MLP 使用"><figcaption>位置编码不是额外的三维几何信息，而是改变坐标的表示方式，让有限容量的 MLP 更容易拟合快速变化的纹理和形状。</figcaption></figure>
+</section>
+
+<section id="rendering">
+<h2>06 · Volume Rendering：前面的雾会挡住后面的颜色</h2>
+<p>现在每个采样点都有颜色 cᵢ 和密度 σᵢ。问题变成：怎样把沿射线的一串三维属性合成为一个二维像素？关键不只是把颜色平均，而是考虑<strong>前面的样本已经挡住了多少光</strong>。</p>
+<p>连续形式中，透射率 T(t) 表示光线从射线起点走到 t、尚未被前方粒子吸收的比例。体渲染把每个位置的密度和颜色，按剩余透射率加权后积分：</p>
+<div class="eq" role="group" aria-label="连续体渲染积分"><span class="eq-num">(4)</span><div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="连续体渲染积分公式，可横向滚动"><math display="block" aria-label="射线颜色等于从近端到远端积分，透射率乘密度乘方向相关颜色"><mrow><mi>C</mi><mo>(</mo><mi mathvariant="bold">r</mi><mo>)</mo><mo>=</mo><msubsup><mo>∫</mo><msub><mi>t</mi><mi>n</mi></msub><msub><mi>t</mi><mi>f</mi></msub></msubsup><mi>T</mi><mo>(</mo><mi>t</mi><mo>)</mo><mi>σ</mi><mo>(</mo><mi mathvariant="bold">r</mi><mo>(</mo><mi>t</mi><mo>)</mo><mo>)</mo><mi mathvariant="bold">c</mi><mo>(</mo><mi mathvariant="bold">r</mi><mo>(</mo><mi>t</mi><mo>)</mo><mo>,</mo><mi mathvariant="bold">d</mi><mo>)</mo><mi>d</mi><mi>t</mi></mrow></math></div></div>
+<p>实际计算必须离散化。相邻采样点间距为 δᵢ=tᵢ₊₁−tᵢ。密度 σᵢ 与距离 δᵢ 一起决定该区间的 alpha：</p>
+<div class="eq" role="group" aria-label="离散 alpha 与权重公式"><span class="eq-num">(5)</span><div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="alpha 透射率和样本权重公式，可横向滚动"><math display="block" aria-label="alpha i 等于一减 exp 负 sigma i delta i，T i 是此前未被遮挡的比例，w i 等于 T i alpha i"><mrow><msub><mi>α</mi><mi>i</mi></msub><mo>=</mo><mn>1</mn><mo>−</mo><mi>exp</mi><mo>(</mo><mo>−</mo><msub><mi>σ</mi><mi>i</mi></msub><msub><mi>δ</mi><mi>i</mi></msub><mo>)</mo><mo>,</mo><mspace width="1em"/><msub><mi>T</mi><mi>i</mi></msub><mo>=</mo><munderover><mo>∏</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mrow><mi>i</mi><mo>−</mo><mn>1</mn></mrow></munderover><mo>(</mo><mn>1</mn><mo>−</mo><msub><mi>α</mi><mi>j</mi></msub><mo>)</mo><mo>,</mo><mspace width="1em"/><msub><mi>w</mi><mi>i</mi></msub><mo>=</mo><msub><mi>T</mi><mi>i</mi></msub><msub><mi>α</mi><mi>i</mi></msub></mrow></math></div></div>
+<p><code>αᵢ</code> 是当前小区间的遮挡/吸收比例；<code>Tᵢ</code> 是到达它之前还剩下多少光；<code>wᵢ</code> 才是该样本最终对像素颜色的贡献权重。越靠前、密度越大的样本，通常越容易压低后方样本的权重。</p>
+<p>最终颜色可以写成样本颜色的加权和，再加上没有被任何样本吸收的背景：</p>
+<div class="eq" role="group" aria-label="离散体渲染颜色公式"><span class="eq-num">(6)</span><div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="体渲染颜色合成公式，可横向滚动"><math display="block" aria-label="C hat 等于样本权重乘样本颜色之和，加上最终透射率乘背景颜色"><mrow><mover><mi>C</mi><mo>^</mo></mover><mo>(</mo><mi mathvariant="bold">r</mi><mo>)</mo><mo>=</mo><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>N</mi></munderover><msub><mi>w</mi><mi>i</mi></msub><msub><mi mathvariant="bold">c</mi><mi>i</mi></msub><mo>+</mo><msub><mi>T</mi><mrow><mi>N</mi><mo>+</mo><mn>1</mn></mrow></msub><msub><mi mathvariant="bold">c</mi><mi>bg</mi></msub></mrow></math></div></div>
+<figure><div class="figure-title">FIGURE 05 · FRONT-TO-BACK COMPOSITING</div><img src="assets/04-volume-compositing.svg" alt="五个射线样本从前到后进行 alpha 合成，前方样本消耗透射率，样本权重与颜色共同决定最终像素"><figcaption>体渲染可以理解为一层层半透明颜色的前向合成，但每层 alpha 由密度与采样间距共同决定。</figcaption></figure>
+
+<div class="experiment" id="render-demo">
+<h3>交互实验：密度变大，后面的颜色还看得见吗？</h3>
+<p class="mini">固定五个采样点的颜色和间距，只改变所有样本的密度倍率。观察每个点的贡献权重，以及最终像素 RGB 如何变化。这个数值实验是帮助理解体渲染的教学算例，不是论文数据。</p>
+<div class="controls">
+<label for="density-scale">整体密度倍率：<output id="density-value" aria-live="polite">1.00×</output></label>
+<input id="density-scale" type="range" min="0.25" max="3" step="0.25" value="1">
+<button id="boost-density" type="button">提高一次密度</button>
+</div>
+<div class="demo-grid">
+<div class="demo-panel"><h4>合成后的像素颜色</h4><div class="swatch" id="rendered-swatch" aria-label="合成像素颜色"></div><p class="rgb-readout" id="rendered-rgb">RGB (191, 209, 218) · #BFD1DA</p></div>
+<div class="demo-panel"><h4>每个采样点的颜色贡献权重</h4>
+<div class="weight-row"><span>样本 1</span><span class="weight-track"><span class="weight-fill" id="weight-1" style="width:3.7%"></span></span><span id="value-1">0.037</span></div>
+<div class="weight-row"><span>样本 2</span><span class="weight-track"><span class="weight-fill" id="weight-2" style="width:8.1%"></span></span><span id="value-2">0.081</span></div>
+<div class="weight-row"><span>样本 3</span><span class="weight-track"><span class="weight-fill" id="weight-3" style="width:22.9%"></span></span><span id="value-3">0.229</span></div>
+<div class="weight-row"><span>样本 4</span><span class="weight-track"><span class="weight-fill" id="weight-4" style="width:7.7%"></span></span><span id="value-4">0.077</span></div>
+<div class="weight-row"><span>样本 5</span><span class="weight-track"><span class="weight-fill" id="weight-5" style="width:1.7%"></span></span><span id="value-5">0.017</span></div>
+<p class="rgb-readout" id="residual-value">背景剩余透射率：0.560</p>
+</div>
+</div>
+<p class="readout" id="render-explanation" aria-live="polite">当前倍率为 1.00×。样本 3 的贡献最大；其前方样本已经消耗了一部分透射率，最后仍有约 56% 的光到达背景。</p>
+</div>
+</section>
+
+<section id="hierarchy">
+<h2>07 · Hierarchical Sampling：把计算预算花在重要位置</h2>
+<p>如果每条射线都均匀采样很多点，会反复查询大量空空间；如果采样太少，又可能跳过物体表面和细节。原始 NeRF 用 coarse-to-fine 两级采样缓解这个问题。</p>
+<ol>
+<li><strong>Coarse：</strong>先在近远区间内分层均匀取样，得到粗略的颜色、密度与权重。</li>
+<li><strong>构造分布：</strong>把粗网络的权重归一化，形成沿射线的分段概率密度函数（PDF）。</li>
+<li><strong>Fine：</strong>从这个分布中抽取额外位置，与初始样本合并后交给 fine 网络，重新进行体渲染。</li>
+</ol>
+<figure><div class="figure-title">FIGURE 06 · COARSE-TO-FINE RAY SAMPLING</div><img src="assets/05-hierarchical-sampling.svg" alt="粗网络先均匀采样并估计射线权重，细网络再依据权重分布将更多采样点放到可见表面附近"><figcaption>粗网络并不是先生成一个低分辨率三维模型；它先估计“哪些深度位置更可能影响最终像素”，再把额外查询集中到这些区域。</figcaption></figure>
+<p>原论文实验中，coarse 网络使用 <strong>N<sub>c</sub>=64</strong> 个样本，fine 阶段再增加 <strong>N<sub>f</sub>=128</strong> 个样本。这个配置是论文中的实验设置，不是所有现代 NeRF 实现必须照搬的固定参数。</p>
+</section>
+
+<section id="training">
+<h2>08 · 训练闭环：让所有相机看到同一个场景</h2>
+<p>NeRF 的训练目标很直观：从训练图像中抽取一批像素射线，使用当前网络渲染这些射线，再把渲染颜色与真实像素颜色比较。因为体渲染公式可微，误差可以沿着颜色权重、密度和 MLP 参数反向传播。</p>
+<div class="eq" role="group" aria-label="原始 NeRF 的 coarse fine 双分支训练损失"><span class="eq-num">(7)</span><div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="训练损失公式，可横向滚动"><math display="block" aria-label="损失对每条射线累加 coarse 渲染和 fine 渲染相对真实颜色的平方误差"><mrow><mi>ℒ</mi><mo>=</mo><munderover><mo>∑</mo><mrow><mi mathvariant="script">r</mi><mo>∈</mo><mi mathvariant="script">R</mi></mrow><mo></mo></munderover><mo>[</mo><msubsup><mo>‖</mo><mrow><msub><mi>C</mi><mi>c</mi></msub><mo>^</mo><mo>(</mo><mi mathvariant="script">r</mi><mo>)</mo><mo>−</mo><mi>C</mi><mo>(</mo><mi mathvariant="script">r</mi><mo>)</mo></mrow><mn>2</mn></msubsup><mo>+</mo><msubsup><mo>‖</mo><mrow><msub><mi>C</mi><mi>f</mi></msub><mo>^</mo><mo>(</mo><mi mathvariant="script">r</mi><mo>)</mo><mo>−</mo><mi>C</mi><mo>(</mo><mi mathvariant="script">r</mi><mo>)</mo></mrow><mn>2</mn></msubsup><mo>]</mo></mrow></math></div></div>
+<p>为什么 coarse 和 fine 都要算损失？因为 coarse 网络的权重分布负责引导 fine 阶段在哪里增加样本；同时约束 coarse 输出，也能让这个采样分布在训练中保持有用。</p>
+<div class="two">
+<div><h3>原论文的数据条件</h3><p>每个场景单独训练。需要 RGB 图像、相机内参/位姿和场景边界；合成数据使用已知参数，真实数据使用 COLMAP 估计相机参数。</p></div>
+<div><h3>原论文训练规模</h3><p>每批随机抽取 4096 条射线；单场景通常训练 100k–300k 次迭代，在单张 NVIDIA V100 上约 1–2 天。这个数字只描述 2020 年论文的原始配置。</p></div>
+</div>
+<div class="note"><strong>训练目标与泛化范围要分开：</strong>原始 NeRF 的经典设定是针对每个场景优化一套网络。它并不是拿一张照片就能立即对任意新场景泛化的通用识别器。后续方法才逐步探索跨场景先验、预训练和更快的表示。</div>
+</section>
+
+<section id="evidence">
+<h2>09 · 原论文实验：哪些结论有数据支持？</h2>
+<p>原论文 Table 1 在多个新视角合成基准上比较 PSNR、SSIM 和 LPIPS。PSNR/SSIM 越高越好，LPIPS 越低越好。下面只列出用于说明结论的关键行，数值来自论文 Table 1，而不是重新运行实验。</p>
+<div class="tablewrap"><table>
+<thead><tr><th>数据集</th><th>方法</th><th>PSNR ↑</th><th>SSIM ↑</th><th>LPIPS ↓</th></tr></thead>
+<tbody>
+<tr><td rowspan="3">Realistic Synthetic 360°</td><td><strong>NeRF</strong></td><td>31.01</td><td>0.947</td><td>0.081</td></tr>
+<tr><td>LLFF</td><td>24.88</td><td>0.911</td><td>0.114</td></tr>
+<tr><td>SRN</td><td>22.26</td><td>0.846</td><td>0.170</td></tr>
+<tr><td rowspan="2">Real Forward-Facing</td><td><strong>NeRF</strong></td><td>26.50</td><td>0.811</td><td>0.250</td></tr>
+<tr><td>LLFF</td><td>24.13</td><td>0.798</td><td><strong>0.212</strong></td></tr>
+</tbody>
+</table></div>
+<p class="mini">原论文 Table 1，Realistic Synthetic 360° 与 Real Forward-Facing 两组结果。Real Forward-Facing 上，NeRF 的 PSNR/SSIM 更高，但 LLFF 的 LPIPS 更低；不同指标衡量不同性质，不能只摘取其中一个指标宣布全面胜出。</p>
+<h3>消融实验告诉我们什么？</h3>
+<p>在 Realistic Synthetic 360° 的 Table 2 中，完整模型的 PSNR/SSIM/LPIPS 为 <strong>31.01 / 0.947 / 0.081</strong>；移除位置编码后变为 <strong>28.77 / 0.924 / 0.108</strong>。移除视角相关颜色和分层采样也会降低表现。它支持的结论是：位置编码、方向相关外观和重要性采样共同构成了原始方法的关键设计，而不是说其中任一组件在所有数据集上都能独立保证最好结果。</p>
+<p>实验规模也值得记住：论文的 Realistic Synthetic 360° 数据集包含 8 个复杂合成物体，每个场景 100 张训练图像、200 张测试图像，分辨率为 800×800；Real Forward-Facing 包含 8 个真实场景，每个场景 20–62 张图像，并留出 1/8 测试图像。</p>
+</section>
+
+<section id="limits">
+<h2>10 · NeRF 的边界：它不是万能的三维扫描仪</h2>
+<ul>
+<li><strong>相机参数很重要：</strong>相机位姿或内参不准，射线就会落在错误的位置，多视角监督无法正确对齐。原始方法依赖已知或预估的相机参数。</li>
+<li><strong>静态场景假设：</strong>如果物体在不同照片之间移动，模型可能把运动误解释成模糊几何或不一致的密度。动态场景需要额外的时间/运动表示。</li>
+<li><strong>观察覆盖不足：</strong>被遮挡或从未拍摄到的区域缺少约束；网络可以给出一个平滑的猜测，但不代表它恢复了真实几何。</li>
+<li><strong>查询昂贵：</strong>每条射线需要多次 MLP 查询，训练与渲染都可能很慢。分层采样减少了无效查询，但没有消除逐点网络评估的基本成本。</li>
+<li><strong>不是直接可编辑的网格：</strong>场景知识主要编码在网络参数中。若下游任务需要碰撞检测、CAD 编辑或明确拓扑，通常还要额外提取几何并处理表面质量。</li>
+</ul>
+<p>因此，NeRF 的强项是从多视角图像中学习连续外观和生成新视角；它并不自动解决相机标定、动态物体、完整几何恢复和实时渲染等所有问题。</p>
+</section>
+
+<section id="evolution">
+<h2>11 · 从 NeRF 到后续方法：同一个目标，不同的表示和计算路径</h2>
+<p>NeRF 之后的研究大致沿着三条路线推进：减少采样带来的混叠；降低神经场查询成本；或者干脆换一种更适合实时渲染的场景表示。</p>
+<figure><div class="figure-title">FIGURE 07 · FOUR MILESTONES, DIFFERENT BOTTLENECKS</div><img src="assets/07-method-lineage.svg" alt="NeRF、Mip-NeRF、Instant-NGP 和 3D Gaussian Splatting 的时间线与各自解决的表示或渲染瓶颈"><figcaption>不要把这些方法看成同一个网络不断换名字：它们保留了新视角合成这一任务目标，但表示、采样和渲染算法有明显差异。</figcaption></figure>
+<div class="tablewrap"><table>
+<thead><tr><th>方法</th><th>主要变化</th><th>主要解决的问题</th></tr></thead>
+<tbody>
+<tr><td><strong>NeRF · 2020</strong></td><td>连续 5D MLP 场景函数 + 体渲染</td><td>从稀疏多视角图像学习高质量新视角</td></tr>
+<tr><td><strong>Mip-NeRF · 2021</strong></td><td>圆锥台像素足迹 + Integrated Positional Encoding</td><td>多尺度观察下的 aliasing 与模糊</td></tr>
+<tr><td><strong>Instant-NGP · 2022</strong></td><td>多分辨率可训练哈希特征 + 小 MLP + 融合 CUDA kernel</td><td>降低神经图形基元的训练和查询成本</td></tr>
+<tr><td><strong>3D Gaussian Splatting · 2023</strong></td><td>显式各向异性 3D Gaussians + 可见性感知 splatting</td><td>高质量实时新视角渲染</td></tr>
+</tbody>
+</table></div>
+<p>其中 3D Gaussian Splatting（3DGS）尤其需要单独理解：它不是把 NeRF 的 MLP 换成另一种 MLP，而是直接用一组可优化的三维高斯椭球表示场景，并通过快速 splatting/rasterization 渲染。它与 NeRF 解决相近任务，但数据结构与渲染路径不同。</p>
+<p>截至 2026 年的综述也指出，3DGS 已成为新视角合成的重要主流框架；与此同时，NeRF 及其隐式/混合神经场变体仍在特定表示和应用场景中持续发展。因此，学习 NeRF 仍然重要：它提供了理解连续场景函数、可微体渲染和后续神经场方法的基础。</p>
+</section>
+
+<section id="code">
+<h2>12 · 用一段代码验证体渲染的核心不变量</h2>
+<p>下面的纯 Python 函数只实现一条射线的前向 alpha 合成。它不是完整 NeRF：没有相机模型、MLP、位置编码、训练循环或分层采样。它的价值是把论文中的一个关键公式变成可以运行和测试的数值过程。</p>
+<pre tabindex="0" role="region" aria-label="Python 体渲染代码，可横向滚动"><code>from math import expm1
+
+def render_ray(samples, background=(1.0, 1.0, 1.0)):
+    rgb = [0.0, 0.0, 0.0]
+    transmittance = 1.0
+    weights = []
+
+    for sigma, color, delta in samples:  # near -> far
+        alpha = -expm1(-sigma * delta)
+        weight = transmittance * alpha
+        weights.append(weight)
+
+        for channel in range(3):
+            rgb[channel] += weight * color[channel]
+
+        transmittance *= 1.0 - alpha
+
+    pixel = tuple(
+        rgb[c] + transmittance * background[c]
+        for c in range(3)
+    )
+    return pixel, weights, transmittance</code></pre>
+<p>仓库中的完整示例增加了输入范围检查和数值断言，位于 <code>posts/architectures/nerf/volume_rendering.py</code>；对应测试位于 <code>tests/test_nerf_volume_rendering.py</code>。测试覆盖零密度背景、前景遮挡、权重质量守恒和非法输入。</p>
+<div class="callout"><strong>应该验证的守恒关系：</strong>所有样本的颜色权重之和，加上最终剩余透射率，应等于 1。也就是说，每条射线的可见贡献要么来自某个采样区间，要么来自背景，不能凭空多出或丢失颜色质量。</div>
+</section>
+
+<section id="summary">
+<h2>13 · 把整篇论文压缩成四个心智模型</h2>
+<div class="two">
+<div><h3>① 场景是一张可查询的函数</h3><p>位置告诉网络“在哪里”，方向告诉网络“从哪边看”。网络返回密度与方向相关颜色。</p></div>
+<div><h3>② 像素是一条射线的积分</h3><p>一个像素不是一个三维点。它是沿相机射线采样后，通过透射率和密度加权合成的结果。</p></div>
+<div><h3>③ 位置编码补足高频表达</h3><p>多尺度正余弦特征帮助 MLP 表达细节；这和 Transformer 的 token 顺序编码不是同一个目的。</p></div>
+<div><h3>④ 分层采样节省查询预算</h3><p>粗网络先估计哪里重要，细网络再把额外采样放到高权重区域，而不是把计算平均浪费在空空间。</p></div>
+</div>
+<p class="lead">理解 NeRF，真正需要掌握的不是“神经网络把照片变成 3D”这句口号，而是<strong>连续表示 → 射线查询 → 可微体渲染 → 多视角误差反传</strong>这条完整因果链。</p>
+</section>
+
+<section id="references">
+<h2>14 · 参考文献与进一步阅读</h2>
+<ol class="sources">
+<li><strong>原始论文：</strong>Ben Mildenhall, Pratul P. Srinivasan, Matthew Tancik, Jonathan T. Barron, Ravi Ramamoorthi, Ren Ng. <a href="https://arxiv.org/abs/2003.08934" target="_blank" rel="noopener">NeRF: Representing Scenes as Neural Radiance Fields for View Synthesis</a>. ECCV 2020. 重点阅读 Sections 3–6、Equations 1–6、Tables 1–2。</li>
+<li><strong>抗锯齿扩展：</strong>Jonathan T. Barron et al. <a href="https://openaccess.thecvf.com/content/ICCV2021/html/Barron_Mip-NeRF_A_Multiscale_Representation_for_Anti-Aliasing_Neural_Radiance_Fields_ICCV_2021_paper.html" target="_blank" rel="noopener">Mip-NeRF: A Multiscale Representation for Anti-Aliasing Neural Radiance Fields</a>. ICCV 2021。</li>
+<li><strong>高效神经图形基元：</strong>Thomas Müller et al. <a href="https://research.nvidia.com/publication/2022-07_instant-neural-graphics-primitives-multiresolution-hash-encoding" target="_blank" rel="noopener">Instant Neural Graphics Primitives with a Multiresolution Hash Encoding</a>. SIGGRAPH 2022。</li>
+<li><strong>显式高斯表示：</strong>Bernhard Kerbl et al. <a href="https://doi.org/10.1145/3592433" target="_blank" rel="noopener">3D Gaussian Splatting for Real-Time Radiance Field Rendering</a>. ACM Transactions on Graphics, 2023。</li>
+<li><strong>工程解释与实现：</strong><a href="https://docs.nerf.studio/nerfology/methods/nerf.html" target="_blank" rel="noopener">Nerfstudio · NeRF</a>。适合继续理解采样器、场表示、体渲染组件和常见输入假设。</li>
+<li><strong>领域综述：</strong>Kyle Gao et al. <a href="https://doi.org/10.26599/CVM.2026.9450535" target="_blank" rel="noopener">Neural radiance fields in 3D vision: A comprehensive review</a>. Computational Visual Media, 2026。</li>
+</ol>
+</section>
+<footer class="foot">继续沿着模型架构与三维场景表示专题阅读，比较不同方法如何在表示能力、采样成本和实时渲染之间做取舍。</footer>
+</article></main>
+</div>
+<script>
+(function(){
+  var slider=document.getElementById("density-scale");
+  var boost=document.getElementById("boost-density");
+  if(!slider||!boost)return;
+  var sigma=[0.15,0.35,1.20,0.50,0.12];
+  var colors=[[0.90,0.30,0.20],[0.95,0.65,0.25],[0.20,0.65,0.85],[0.25,0.55,0.80],[0.80,0.30,0.60]];
+  var delta=0.25;
+  var background=[1,1,1];
+  function update(){
+    var scale=Number(slider.value);
+    var trans=1;
+    var rgb=[0,0,0];
+    var weights=[];
+    for(var i=0;i<sigma.length;i++){
+      var alpha=1-Math.exp(-sigma[i]*scale*delta);
+      var weight=trans*alpha;
+      weights.push(weight);
+      for(var c=0;c<3;c++)rgb[c]+=weight*colors[i][c];
+      trans*=1-alpha;
+    }
+    for(var c=0;c<3;c++)rgb[c]+=trans*background[c];
+    var bytes=rgb.map(function(v){return Math.max(0,Math.min(255,Math.round(v*255)));});
+    var hex="#"+bytes.map(function(v){return v.toString(16).padStart(2,"0");}).join("").toUpperCase();
+    document.getElementById("density-value").textContent=scale.toFixed(2)+"×";
+    document.getElementById("rendered-swatch").style.backgroundColor="rgb("+bytes.join(",")+")";
+    document.getElementById("rendered-rgb").textContent="RGB ("+bytes.join(", ")+") · "+hex;
+    for(var j=0;j<weights.length;j++){
+      document.getElementById("weight-"+(j+1)).style.width=(weights[j]*100).toFixed(1)+"%";
+      document.getElementById("value-"+(j+1)).textContent=weights[j].toFixed(3);
+    }
+    document.getElementById("residual-value").textContent="背景剩余透射率："+trans.toFixed(3);
+    var largest=weights.indexOf(Math.max.apply(null,weights))+1;
+    document.getElementById("render-explanation").textContent="当前倍率为 "+scale.toFixed(2)+"×。样本 "+largest+" 的颜色贡献最大；所有样本权重之和为 "+(1-trans).toFixed(3)+"，仍有 "+trans.toFixed(3)+" 的光到达背景。";
+  }
+  slider.addEventListener("input",update);
+  boost.addEventListener("click",function(){
+    slider.value=String(Math.min(3,Number(slider.value)+0.25));
+    update();
+  });
+  update();
+})();
+</script>
+</body>
+</html>
