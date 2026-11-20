@@ -79,7 +79,7 @@
     "slug": "architectures",
     "title": "模型架构",
     "english": "Architectures",
-    "description": "拆开模型的信息路径：CNN、循环网络、Transformer、MoE、状态空间模型、图神经网络、高效注意力与长上下文架构，明确结构变化与工程实现的边界。",
+    "description": "拆开模型的信息路径：CNN、循环网络、Transformer、MoE、状态空间模型、图神经网络、高效注意力与长上下文架构，并延伸到神经场与三维场景表示，明确结构变化与工程实现的边界。",
     "topics": [
       {
         "slug": "efficient-mobile-cnn",
@@ -140,6 +140,10 @@
       {
         "slug": "generative-adversarial-networks",
         "title": "Generative Adversarial Networks (GAN)"
+      },
+      {
+        "slug": "neural-rendering-3d-vision",
+        "title": "Neural Rendering & 3D Scene Representations"
       }
     ]
   },
