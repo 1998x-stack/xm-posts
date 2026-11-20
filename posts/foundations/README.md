@@ -8,8 +8,7 @@
 
 ## 已发布文章
 
-- [Understanding SentencePiece](sentencepiece/index.html)：原始文本、可见空格、BPE/Unigram、动态规划、子词采样、原论文实验与 Python 核验；Tokenization & Subword Modeling 二级主题。
-
+- [Understanding SentencePiece](sentencepiece/index.html)：原始文本、可见空格、BPE/Unigram、Viterbi、子词采样与论文实验；归入 `Tokenization & Subword Units` 二级专题。
 
 - [Understanding Word2Vec](understanding-word2vec/index.html)：从自监督词窗到 CBOW / Skip-gram、Negative Sampling 和词向量几何。配套 `assets/`、`evidence.json`、`code/train_sgns.py` 与测试。
 

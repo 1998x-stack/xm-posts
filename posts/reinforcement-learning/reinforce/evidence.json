@@ -1,0 +1,119 @@
+[
+  {
+    "id": "R01",
+    "claim": "1992 Williams introduced REINFORCE as a family of stochastic weight updates for connectionist networks",
+    "kind": "paper-claim",
+    "source_url": "https://doi.org/10.1007/BF00992696",
+    "locator": "Abstract, Sections 1 and 4",
+    "status": "verified",
+    "notes": "Not a modern deep RL benchmark paper."
+  },
+  {
+    "id": "R02",
+    "claim": "General form Delta w_ij=alpha_ij(r-b_ij)e_ij; e_ij is the score derivative",
+    "kind": "equation",
+    "source_url": "https://gwern.net/doc/reinforcement-learning/model-free/1992-williams.pdf",
+    "locator": "Page 234, Section 4, Theorem 1",
+    "status": "verified",
+    "notes": "Baseline conditionally independent of sampled unit output."
+  },
+  {
+    "id": "R03",
+    "claim": "When alpha is shared, expected REINFORCE update equals alpha times gradient of expected reinforcement",
+    "kind": "theorem",
+    "source_url": "https://gwern.net/doc/reinforcement-learning/model-free/1992-williams.pdf",
+    "locator": "Page 234, Theorem 1; Appendix A",
+    "status": "verified",
+    "notes": "Requires hypotheses of theorem, not guarantee of monotonic improvement for every sample."
+  },
+  {
+    "id": "R04",
+    "claim": "For Bernoulli logistic units the score derivative is (y_i-p_i)x_j",
+    "kind": "equation",
+    "source_url": "https://gwern.net/doc/reinforcement-learning/model-free/1992-williams.pdf",
+    "locator": "Page 235, Equations (6)–(8)",
+    "status": "verified",
+    "notes": "Special case of original network."
+  },
+  {
+    "id": "R05",
+    "claim": "Original episodic REINFORCE uses terminal reinforcement and eligibility summed through time",
+    "kind": "paper-claim",
+    "source_url": "https://gwern.net/doc/reinforcement-learning/model-free/1992-williams.pdf",
+    "locator": "Section 5, Equation (11), Theorem 2",
+    "status": "verified",
+    "notes": "Distinguish from modern reward-to-go with dense rewards."
+  },
+  {
+    "id": "R06",
+    "claim": "Action independent baseline leaves expected policy gradient unchanged",
+    "kind": "derivation",
+    "source_url": "https://spinningup.openai.com/en/latest/spinningup/rl_intro3.html",
+    "locator": "Baselines in Policy Gradients",
+    "status": "verified",
+    "notes": "Baseline must not use the sampled action; stop gradients through baseline on actor objective."
+  },
+  {
+    "id": "R07",
+    "claim": "Trajectory log probability permits likelihood ratio gradient without differentiating environment transitions",
+    "kind": "derivation",
+    "source_url": "https://spinningup.openai.com/en/latest/spinningup/rl_intro3.html",
+    "locator": "Deriving the Simplest Policy Gradient",
+    "status": "verified",
+    "notes": "For a finite horizon undiscounted return and theta-independent environment."
+  },
+  {
+    "id": "R08",
+    "claim": "Reward-to-go drops rewards from the past in modern VPG derivation",
+    "kind": "modern-implementation",
+    "source_url": "https://spinningup.openai.com/en/latest/spinningup/rl_intro3.html",
+    "locator": "Don't Let the Past Distract You",
+    "status": "verified",
+    "notes": "Monte Carlo return; not bootstrapping."
+  },
+  {
+    "id": "R09",
+    "claim": "Policy gradient theorem with function approximation formalizes a larger family after Williams",
+    "kind": "historical",
+    "source_url": "https://proceedings.neurips.cc/paper_files/paper/1999/hash/464d828b85b0bed98e80ade0a5c43b0f-Abstract.html",
+    "locator": "Abstract, NeurIPS 1999",
+    "status": "verified",
+    "notes": "Do not attribute this theorem to Williams Eq. 11."
+  },
+  {
+    "id": "R10",
+    "claim": "Original paper discusses lack of general convergence theory and false optima",
+    "kind": "limitation",
+    "source_url": "https://gwern.net/doc/reinforcement-learning/model-free/1992-williams.pdf",
+    "locator": "Section 9 Conclusion",
+    "status": "verified",
+    "notes": "Do not claim unconditional convergence."
+  },
+  {
+    "id": "R11",
+    "claim": "Two-action bandit with p=.35, r1=2, r0=0 has exact gradient .455 and zero-variance scalar baseline 1.3",
+    "kind": "toy-derivation",
+    "source_url": "https://doi.org/10.1007/BF00992696",
+    "locator": "This article's algebra and mini_reinforce.py",
+    "status": "derived",
+    "notes": "Independent teaching calculation; not an original paper result."
+  },
+  {
+    "id": "R12",
+    "claim": "Baseline choice can increase variance even while leaving expected gradient invariant",
+    "kind": "toy-derivation",
+    "source_url": "https://spinningup.openai.com/en/latest/spinningup/rl_intro3.html",
+    "locator": "Article's exact two-action variance comparison",
+    "status": "derived",
+    "notes": "Zero variance arises only in the deterministic two-action toy."
+  },
+  {
+    "id": "R13",
+    "claim": "All article diagrams are independently composed conceptual illustrations",
+    "kind": "illustration",
+    "source_url": "https://doi.org/10.1007/BF00992696",
+    "locator": "Article Figures 1–5",
+    "status": "illustrative",
+    "notes": "Not reproduced figures, experiment curves, or model schematics from paper."
+  }
+]

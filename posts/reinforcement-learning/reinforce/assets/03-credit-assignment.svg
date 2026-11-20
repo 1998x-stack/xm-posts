@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="rf-03-title rf-03-desc" viewBox="0 0 800 320" width="800" height="320"><title id="rf-03-title">延迟奖励的信用分配</title><desc id="rf-03-desc">一段三步轨迹的每个动作只需考虑其后产生的奖励；早期奖励不会归因给后期动作。</desc><rect width="800" height="320" rx="18" fill="#f9fbf9"/><g font-family="system-ui,-apple-system,'PingFang SC','Microsoft YaHei',sans-serif">
+<text x="84" y="47" text-anchor="middle" font-size="16" font-weight="600" fill="#667d7a">时间</text>
+<path d="M100 155 H721" stroke="#a5c5b9" stroke-width="5" fill="none" stroke-linecap="round" />
+<rect x="52" y="96" width="170" height="105" rx="12" fill="#eaf4f1" stroke="#d7e5df" stroke-width="2"/><text x="137" y="135" text-anchor="middle" font-size="22" font-weight="600" fill="#24786b">t = 0</text><text x="137" y="166" text-anchor="middle" font-size="18" font-weight="600" fill="#24786b">r₀ = +1</text>
+<rect x="315" y="96" width="170" height="105" rx="12" fill="#fff0e7" stroke="#ebd3c1" stroke-width="2"/><text x="400" y="135" text-anchor="middle" font-size="22" font-weight="600" fill="#ad6d40">t = 1</text><text x="400" y="166" text-anchor="middle" font-size="18" font-weight="600" fill="#ad6d40">r₁ = 0</text>
+<rect x="578" y="96" width="170" height="105" rx="12" fill="#eeeffa" stroke="#dad8ef" stroke-width="2"/><text x="663" y="135" text-anchor="middle" font-size="22" font-weight="600" fill="#7064a5">t = 2</text><text x="663" y="166" text-anchor="middle" font-size="18" font-weight="600" fill="#7064a5">r₂ = +3</text>
+<text x="137" y="250" text-anchor="middle" font-size="20" font-weight="600" fill="#24786b">G₀ = 4</text><text x="400" y="250" text-anchor="middle" font-size="20" font-weight="600" fill="#ad6d40">G₁ = 3</text><text x="663" y="250" text-anchor="middle" font-size="20" font-weight="600" fill="#7064a5">G₂ = 3</text>
+<text x="400" y="298" text-anchor="middle" font-size="16" font-weight="500" fill="#5b7676">γ = 1，无折扣示例 · Gₜ 仅包括 t 及其之后的奖励</text>
+</g></svg>

@@ -17,3 +17,14 @@
 - [Understanding GPT-1](gpt-1/index.html) — Radford et al. (2018)：自回归预训练、任务输入转换、联合微调与消融分析。
 
 - [Understanding QLoRA](qlora/index.html) — Dettmers et al. (NeurIPS 2023)；NF4、Double Quantization、Paged Optimizers 与 MMLU 原论文证据。二级主题：PEFT / LoRA → Quantized Fine-tuning。
+
+## 专题规划占位（非文章）
+
+训练与对齐负责模型参数更新与跨设备训练机制。并行算法及精度训练归本类；NCCL、GPU kernel 与底层网络通信性能归 `systems`。
+
+- [Distributed Training](_topics/distributed-training/README.md)
+- [Training Parallelism](_topics/training-parallelism/README.md)
+- [Mixed Precision](_topics/mixed-precision/README.md)
+- [Checkpointing](_topics/checkpointing/README.md)
+
+上述 `_topics/` 是研究路线占位目录，正式文章仍遵循 `posts/training/<slug>/index.html`；只有 `content/posts.json` 中的 `published` 文章才会被发布。
