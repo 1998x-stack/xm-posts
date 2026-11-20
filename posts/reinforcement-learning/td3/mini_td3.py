@@ -69,7 +69,7 @@ def check() -> None:
     assert clipped_double_target(-2, 1, -4, 3, False) == -6
     assert math.isclose(target_action(.9, .8, .5, -1, 1), 1.0)
     assert math.isclose(target_action(-.8, -.8, .5, -1, 1), -1.0)
-    assert twin_critic_mse([2, 4], [3, 1], [3, 3]) == (.5, 2.0)
+    assert twin_critic_mse([2, 4], [3, 1], [3, 3]) == (1.0, 2.0)
     assert [policy_and_target_update(t, 2) for t in range(1, 7)] == [False, True] * 3
     assert math.isclose(polyak(10, 0, .005), .05)
     s, phi, h = 2., .2, 1e-6
