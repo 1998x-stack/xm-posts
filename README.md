@@ -293,3 +293,7 @@ MobileNet 归入 `architectures` → **Convolutional Neural Networks & Vision** 
 [Understanding Logistic Regression](posts/classical-ml/logistic-regression/index.html)：归入现有 `classical-ml → linear-models`，贯通 Berkson（1944）/Cox（1958）/Nelder–Wedderburn（1972）、Sigmoid / Log-Odds、Bernoulli 最大似然与 BCE、凸优化和 L2、Softmax。配套七幅独立 SVG、11 组原生 MathML、阈值交互实验、证据台账和纯 Python 梯度有限差分测试。
 
 - [Understanding Weight Decay](posts/foundations/weight-decay/) — Weight Decay、L₂/SGD 等价、AdamW 解耦、MathML、SVG、交互与测试。
+
+## Bellman 方程 · Reinforcement Learning / Value-based Learning
+
+- [Understanding Bellman Equations](posts/reinforcement-learning/bellman-equations/)：以 Bellman 1952 年动态规划论文和 Sutton & Barto 第二版为依据，区分状态价值与动作价值的期望/最优性方程，推导折扣收缩映射，配六幅 SVG、原生 MathML、交互式价值迭代与确定性 Python 数值测试。复用 `reinforcement-learning → value-learning` 现有二级主题，无需新建分类。
