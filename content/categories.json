@@ -3,11 +3,12 @@
     "slug": "foundations",
     "title": "基础理论",
     "english": "Foundations",
-    "description": "从线性代数、矩阵分解、优化器、正则化、词嵌入、表示学习与数学直觉出发，建立理解现代模型训练的共同语言。",
+    "description": "从线性代数、矩阵分解、优化器、词嵌入与表示学习，到 BPE 子词与 Tokenization，建立理解现代模型训练与输入表示的共同语言。",
     "topics": [
       "Optimization & Optimizers",
       "Optimization & Regularization",
       "Representation",
+      "Tokenization & Subword Units",
       "Math",
       "Word Embeddings",
       "Linear Algebra & Matrix Factorization"
