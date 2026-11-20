@@ -29,7 +29,10 @@ def check_html(tmp_path, fragment):
 def test_valid_structured_math(tmp_path):
     result = check_html(tmp_path, VALID_MATH)
     assert result["pass"], result["failures"]
-    assert result["counts"]["mathml"] == 1
+    # The source article can already contain native MathML (e.g. after a site-wide migration).
+    # Assert the injected fixture contributes exactly one *additional* MathML element.
+    baseline = validator.validate(SOURCE)
+    assert result["counts"]["mathml"] == baseline["counts"]["mathml"] + 1
 
 def test_math_in_svg_rejected(tmp_path):
     html = SOURCE.read_text(encoding="utf-8")

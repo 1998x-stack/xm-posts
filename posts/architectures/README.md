@@ -35,3 +35,19 @@ RoPE 位于 `posts/architectures/rope/`，主题为 **Positional Encoding**；�
 
 - [Understanding GQA](gqa/index.html)：以 EMNLP 2023 原论文为主线，解释 MHA / GQA / MQA 头共享、Checkpoint mean-pooling + uptraining、KV Cache 成本与 T5-XXL 结果；提供交互演算、原生 MathML、独立 SVG、数值测试与证据账本。
 - 研究主题属于注意力架构；KV Cache 的内存分配、页表和在线调度延伸至 `inference`，无需新建顶层分类。
+
+## 专题规划占位（非文章）
+
+`architectures` 研究模型信息流与结构算法：MoE、State Space Models、Efficient Attention、Long-context。FlashAttention 等特定 GPU kernel 优化应与 `systems` 双向链接而不重复归档。
+
+- [Mixture of Experts (MoE)](_topics/moe/README.md)
+- [State Space Models](_topics/state-space-models/README.md)
+- [Efficient Attention](_topics/efficient-attention/README.md)
+- [Long-context Architectures](_topics/long-context-architectures/README.md)
+
+上述 `_topics/` 是研究路线占位目录，正式文章仍遵循 `posts/architectures/<slug>/index.html`；只有 `content/posts.json` 中的 `published` 文章才会被发布。
+
+## Mixture of Experts (MoE)
+
+- [Understanding Mixture of Experts (MoE)](moe/index.html)：精读 ICLR 2017 的 LSTM+稀疏专家结构，拆解 Noisy Top-K、Importance/Load、容量约束与 Expert Parallelism；区分 GShard、Switch、Mixtral 与 DeepSeekMoE。
+- 复用现有 `Mixture of Experts (MoE)` 二级专题和 [`_topics/moe` 研究规划](_topics/moe/README.md)，不增设重复分类。

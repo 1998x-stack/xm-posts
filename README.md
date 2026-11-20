@@ -9,11 +9,14 @@
 ## 已发布的长文
 
 | Post | 解释的问题 | 文章源码 | 核心资料 |
-|---|---|---|
+|---|---|---|---|
+| **Understanding SentencePiece** | 原始文字如何编码为子词 ID？BPE、Unigram、归一化与解码边界 | [`posts/foundations/sentencepiece/`](posts/foundations/sentencepiece/index.html) | [Kudo & Richardson (EMNLP 2018)](https://aclanthology.org/D18-2012/) |
+| **Understanding GAE** | 一步 TD 与全轨迹回报之间，如何权衡偏差与方差？ | [`posts/reinforcement-learning/gae/`](posts/reinforcement-learning/gae/index.html) | [Schulman et al. (ICLR 2016)](https://arxiv.org/abs/1506.02438) |
 | **Understanding AlphaGo** | 15 幅 SVG 解析 AlphaGo：19×19×48 特征、APV-MCTS、虚拟损失与 BayesElo 消融 | [`posts/reinforcement-learning/alphago/`](posts/reinforcement-learning/alphago/index.html) | [Silver et al. (Nature 2016)](https://doi.org/10.1038/nature16961) |
 | **Understanding The Pile** | 为什么 22 种语料混合能增强跨领域文本建模？ | [`posts/datasets/the-pile/`](posts/datasets/the-pile/index.html) | [Gao et al. (2020)](https://arxiv.org/abs/2101.00027) |
 | **Understanding Chinchilla** | 在固定训练 FLOPs 下，参数量与训练 tokens 如何均衡？ | [`posts/training/chinchilla/`](posts/training/chinchilla/index.html) | [Hoffmann et al. (NeurIPS 2022)](https://arxiv.org/abs/2203.15556) |
 | **Understanding FineWeb** | 跨快照去重越强，为什么训练效果反而可能更差？ | [`posts/datasets/fineweb/`](posts/datasets/fineweb/index.html) | [Penedo et al. (NeurIPS 2024)](https://arxiv.org/abs/2406.17557) |
+| **Understanding Multi-Head Attention** | 为什么多个 Q/K/V 投影比单个注意力汇总更有表达空间？ | [`posts/architectures/multi-head-attention/`](posts/architectures/multi-head-attention/index.html) | [Vaswani et al. (NeurIPS 2017)](https://arxiv.org/abs/1706.03762) |
 | **Understanding GQA** | 为什么共享 KV Head 能降低 Decode 带宽又保留 Query 多头？ | [`posts/architectures/gqa/`](posts/architectures/gqa/index.html) | [Ainslie et al. (EMNLP 2023)](https://aclanthology.org/2023.emnlp-main.298/) |
 | **Understanding FlashAttention** | Attention 的 FLOPs 没变，为什么 GPU 仍能提速？ | [`posts/systems/flashattention/`](posts/systems/flashattention/index.html) | [Dao et al. (2022)](https://arxiv.org/abs/2205.14135) |
 | **Understanding AlexNet** | 为什么深层 CNN 能在 2012 ImageNet 上突破？卷积、ReLU、双 GPU 与真实集成指标 | [`posts/architectures/alexnet/`](posts/architectures/alexnet/index.html) | [Krizhevsky et al. (NeurIPS 2012)](https://papers.nips.cc/paper_files/paper/2012/file/c399862d3b9d6b76c8436e924a68c45b-Paper.pdf) |
@@ -34,16 +37,24 @@
 | **Understanding Chain-of-Thought Prompting** | Few-shot 的中间推理步骤如何改变复杂任务表现？ | [`posts/reasoning/chain-of-thought/`](posts/reasoning/chain-of-thought/index.html) | [Wei et al. (NeurIPS 2022)](https://arxiv.org/abs/2201.11903) |
 | **Understanding Self-Consistency** | 多路径采样与最终答案投票为何有效？ | [`posts/reasoning/self-consistency/`](posts/reasoning/self-consistency/index.html) | [Wang et al. (2022; ICLR 2023)](https://arxiv.org/abs/2203.11171) |
 | **Understanding MCTS** | 为什么不用搜完整棵树，也能优先探索有价值的决策？UCT、Monte Carlo Rollout 与 PUCT | [`posts/reinforcement-learning/mcts/`](posts/reinforcement-learning/mcts/index.html) | [Kocsis & Szepesvári (ECML 2006)](https://aima.cs.berkeley.edu/~russell/classes/cs294/s11/readings/Kocsis%2BSzepesvari%3A2006.pdf) |
+| **Understanding A3C** | 异步并行 Actor–Critic 如何用 n-step Advantage 与熵正则替代 Replay？ | [`posts/reinforcement-learning/a3c/`](posts/reinforcement-learning/a3c/index.html) | [Mnih et al. (ICML 2016)](https://proceedings.mlr.press/v48/mniha16.html) |
 | **Understanding DQN** | 为什么像素与奖励足以驱动动作价值学习？ | [`posts/reinforcement-learning/dqn/`](posts/reinforcement-learning/dqn/index.html) | [Mnih et al. (Nature 2015)](https://doi.org/10.1038/nature14236) |
+| **Understanding NoisyNet** | 为什么可学习的参数噪声能带来更连贯的探索？ | [`posts/reinforcement-learning/noisynet/`](posts/reinforcement-learning/noisynet/index.html) | [Fortunato et al. (ICLR 2018)](https://arxiv.org/abs/1706.10295) |
+| **Understanding REINFORCE** | 为什么无法对环境求导，也能从随机行动与奖励中估计策略梯度？ | [`posts/reinforcement-learning/reinforce/`](posts/reinforcement-learning/reinforce/index.html) | [Williams (Machine Learning 1992)](https://doi.org/10.1007/BF00992696) |
 | **Understanding PPO** | 为什么能复用同一批轨迹又避免过大更新？ | [`posts/reinforcement-learning/ppo/`](posts/reinforcement-learning/ppo/index.html) | [Schulman et al. (2017)](https://arxiv.org/abs/1707.06347) |
 | **Understanding SAC** | 为什么旧经验可复用，还要用最大熵保留探索？ | [`posts/reinforcement-learning/sac/`](posts/reinforcement-learning/sac/index.html) | [Haarnoja et al. (ICML 2018)](https://proceedings.mlr.press/v80/haarnoja18b.html) |
 | **Understanding RLHF** | 为什么示范微调还需要人类偏好与策略优化？ | [`posts/training/rlhf/`](posts/training/rlhf/index.html) | [Ouyang et al. (2022)](https://arxiv.org/abs/2203.02155) |
 | **Understanding GRPO** | 为什么不需要 Critic 也能构造策略优势？ | [`posts/training/grpo/`](posts/training/grpo/index.html) | [Shao et al. (2024)](https://arxiv.org/abs/2402.03300) |
 | **Understanding Word2Vec** | 为什么上下文预测能产生词向量？ | [`posts/foundations/understanding-word2vec/`](posts/foundations/understanding-word2vec/index.html) | [Mikolov et al. (2013)](https://arxiv.org/abs/1301.3781) · [NeurIPS 2013](https://arxiv.org/abs/1310.4546) |
 | **Understanding Embeddings** | 为什么词的编号能够变成可比较的语义向量？从 Word2Vec 到对比检索 | [`posts/foundations/embeddings/`](posts/foundations/embeddings/index.html) | [Word2Vec](https://arxiv.org/abs/1301.3781) · [SBERT](https://aclanthology.org/D19-1410/) · [SimCSE](https://aclanthology.org/2021.emnlp-main.552/) |
+| **Understanding Importance Sampling** | 为什么故意改变抽样分布，仍可无偏估计目标概率？稀有事件、SNIS、ESS 与 Off-policy | [`posts/foundations/importance-sampling/`](posts/foundations/importance-sampling/index.html) | [Kahn & Marshall (1953)](https://doi.org/10.1287/opre.1.5.263) · [Owen (2013)](https://artowen.su.domains/mc/Ch-var-is.pdf) |
 | **Understanding SGD** | 为什么带噪梯度也能驱动大规模学习？ | [`posts/foundations/sgd/`](posts/foundations/sgd/index.html) | [Bottou (2010)](https://bottou.org/papers/bottou-2010) |
 | **Understanding Adam** | 梯度为什么需要方向和平方尺度的两份记忆？ | [`posts/foundations/adam/`](posts/foundations/adam/index.html) | [Kingma & Ba (2015)](https://arxiv.org/abs/1412.6980) |
 | **Understanding AdamW** | 为什么 Adam 的 L₂ 与 Weight Decay 不等价？ | [`posts/foundations/adamw/`](posts/foundations/adamw/index.html) | [Loshchilov & Hutter (ICLR 2019)](https://arxiv.org/abs/1711.05101) |
+| **Understanding PagedAttention** | 为什么 KV Cache 需要像操作系统一样分页？从 Block Table 到 vLLM Serving | [`posts/inference/pagedattention/`](posts/inference/pagedattention/index.html) | [研究出处](https://arxiv.org/abs/2309.06180) |
+| **Understanding DDPG** | 连续动作如何学习？从确定性策略梯度到双目标网络与经验回放 | [`posts/reinforcement-learning/ddpg/`](posts/reinforcement-learning/ddpg/index.html) | [研究出处](https://arxiv.org/abs/1509.02971) |
+| **Understanding CNN** | 为什么一个小核在整张图上滑动，就能学习视觉结构？ | [`posts/architectures/cnn/`](posts/architectures/cnn/index.html) | [研究出处](https://doi.org/10.1109/5.726791) |
+| **Understanding SVD** | 矩阵如何把空间拉伸成椭圆？从奇异值到最优低秩近似、PCA 与伪逆 | [`posts/foundations/svd/`](posts/foundations/svd/index.html) | [研究出处](https://doi.org/10.1007/BF02288367) |
 | **Understanding KV Cache** | 自回归 Decode 为什么要保存历史 K/V？ | [`posts/inference/kv-cache/`](posts/inference/kv-cache/index.html) | [Kwon et al. (SOSP 2023)](https://doi.org/10.1145/3600006.3613165) |
 | **Understanding GPT-1** | 为什么预测下一个 token 能迁移到多种语言理解任务？ | [`posts/training/gpt-1/`](posts/training/gpt-1/index.html) | [Radford et al. (2018)](https://cdn.openai.com/research-covers/language-unsupervised/language_understanding_paper.pdf) |
 | **Understanding QLoRA** | 为什么 65B 模型可以在一张 48GB GPU 上微调？NF4、双重量化与 Paged Optimizers | [`posts/training/qlora/`](posts/training/qlora/index.html) | [Dettmers et al. (NeurIPS 2023)](https://arxiv.org/abs/2305.14314) |
@@ -73,16 +84,21 @@ The Pile 的 22 个来源按原论文 Table 1 给出有效采样权重，配五�
 
 | 分类 | 路径 | 范围 |
 |---|---|---|
-| 基础理论 | `posts/foundations/` | Adam、Word2Vec、BPE / Tokenization、词嵌入、优化器（AdamW）、正则化、表示学习 |
-| **经典机器学习** | `posts/classical-ml/` | SVM、核方法、线性模型、XGBoost 与树集成、PCA 与无监督降维 |
-| **模型架构** | `posts/architectures/` | RNN / LSTM、AlexNet / CNN、ResNet、Seq2Seq、Transformer、Normalization & Residual Paths、状态空间模型 |
-| **强化学习** | `posts/reinforcement-learning/` | Policy Gradient、Actor–Critic、Off-policy Replay、SAC / Maximum Entropy、PPO/TRPO 与序贯决策 |
-| **数据与语料** | `posts/datasets/` | 预训练语料、数据清洗/去重、混合采样、污染检查与治理 |
-| 训练与对齐 | `posts/training/` | 预训练（Scaling Laws / Compute-Optimal Training）、微调、偏好对齐、DPO 与 RLHF与 PPO / GRPO 等强化学习策略优化 |
-| 推理与 Serving | `posts/inference/` | KV Cache、PagedAttention、Prefix Caching、Decode、在线 Serving |
-| 系统与 Kernel | `posts/systems/` | GPU、Attention Kernels、算子、并行与性能分析 |
-| 多模态 | `posts/multimodal/` | Vision/Audio/Language 与跨模态交互 |
-| 评测与复现 | `posts/evaluation/` | Benchmark、消融、复现协议 |
+| 基础理论 | `posts/foundations/` | 优化器、正则化、Embedding、Tokenization / BPE、数学基础 |
+| 经典机器学习 | `posts/classical-ml/` | SVM、概率模型、树与集成、降维和线性模型 |
+| 模型架构 | `posts/architectures/` | CNN、RNN、Transformer、MoE、状态空间、高效注意力与长上下文架构 |
+| 强化学习 | `posts/reinforcement-learning/` | Policy Gradient、Actor–Critic、Replay、MCTS、连续控制 |
+| 数据与语料 | `posts/datasets/` | 预训练语料、清洗、混合采样、污染与数据治理 |
+| 训练与对齐 | `posts/training/` | 预训练、微调、RLHF、分布式训练、Training Parallelism、Mixed Precision、Checkpointing |
+| 推理策略与测试时计算 | `posts/reasoning/` | CoT、Self-Consistency、搜索、验证、Test-time Scaling |
+| 推理与 Serving | `posts/inference/` | 请求调度、Continuous Batching、KV Cache、Speculative Decoding、Prefill/Decode |
+| 系统与 Kernel | `posts/systems/` | GPU、内存层级、CUDA/Triton、编译、Collective Communication、性能建模 |
+| **检索与 RAG（新增）** | `posts/retrieval-rag/` | Embedding Retrieval、ANN、Reranking、RAG、Grounding、Hybrid Search |
+| **智能体与工具使用（新增）** | `posts/agents/` | ReAct、Planning、Tool Calling、Memory、Agent Evaluation |
+| 多模态 | `posts/multimodal/` | Vision / Audio / Language 与跨模态融合 |
+| 评测与复现 | `posts/evaluation/` | Benchmark、消融、复现实验协议 |
+
+**分类与目录规则：** `content/categories.json` 是一级分类和二级 Topic 的唯一来源。新分类通过 `posts/<category>/README.md` 建立实体占位；研究专题通过 `posts/<category>/_topics/<topic>/README.md` 建立非发布占位。正式文章始终位于 `posts/<category>/<article-slug>/`，由 `content/posts.json` 注册和管理发布状态。
 
 Linear Regression 使用现有 `classical-ml` → **Linear Models** 分类，不为单篇线性模型新增顶层分类；与后续 Logistic Regression、Ridge/Lasso 构成同一学习路径。其基础历史跨越 Legendre 与 Gauss，证据采用 NIST 和 Berkeley 等方法资料，而非误称一篇现代原论文。
 
@@ -94,6 +110,8 @@ LSTM 归入 `architectures` 的 **Recurrent Networks / LSTM** 二级主题，区
 
 Seq2Seq 归入 `architectures`，补充 **Sequence-to-Sequence / Encoder–Decoder** 二级主题；无需为一篇论文新建一级分类，后续 RNN、LSTM、Attention 与机器翻译架构可延伸此主题。
 
+MHA 归入 `architectures` 下新增的 **Attention Mechanisms & Multi-Head Attention** 二级专题，不另设一级分类；与 Transformer 机制总览和 GQA 的 Head Sharing 文章相互链接。文章对应 Vaswani et al. 2017 §3.2、Table 3，含六幅 SVG、原生 MathML、交互与确定性数值自检。
+
 GQA 归入 `architectures` 下新增的 **Attention Head Sharing** 专题，不新增一级分类；它对 KV Cache 的推理开销有直接影响，相关实现与 Serving 主题仍归入 `inference`。
 
 RoPE 归入 `architectures`，补充 **Positional Encoding** 主题；不为单篇位置编码论文增设顶层分类，后续 ALiBi、PI、YaRN 可以继续沿此脉络整理。
@@ -103,6 +121,8 @@ AdamW 继续使用 `foundations` 中的 **Optimization & Regularization** 主题
 XGBoost 归入 `classical-ml` 既有 **Trees & Ensembles** 主题，不新建顶层分类；KDD 2016 原论文与当前 `hist` 方法分开描述。文章包含 14 节、6 幅独立 SVG、7 组原生 MathML 公式、交互式阈值/正则化实验和确定性 Python 单元测试。
 
 BPE 放在 `foundations` → **Tokenization & Subword Units**（新增二级专题，沿用现有一级分类），而不是再新增一级目录；对应 `posts/foundations/bpe/` 包含原论文证据、六幅独立 SVG、交互训练/编码演示、MathML 与纯 Python 回归测试。明确区分 Gage 1994、Sennrich et al. ACL 2016 与 GPT-2 byte-level BPE。
+
+SentencePiece 继续归入 `foundations` → **Tokenization & Subword Units**，与 BPE 共享已有二级专题；包含 Unigram 动态规划、子词采样、原生 MathML、五幅 SVG 与原论文实证核验。
 
 ## 仓库结构
 
@@ -135,8 +155,15 @@ xm-posts/
 │   │       ├── assets/*.svg
 │   │       ├── mini_attention.py
 │   │       └── evidence.json
+│   ├── retrieval-rag/
+│   │   ├── README.md             # 检索与 RAG 一级分类占位
+│   │   └── _topics/*/README.md   # 六个二级主题规划占位（不发布）
+│   ├── agents/
+│   │   ├── README.md             # Agent 一级分类占位
+│   │   └── _topics/*/README.md   # 五个二级主题规划占位（不发布）
 │   └── {foundations,reinforcement-learning,training,inference,systems,multimodal,evaluation}/
-│       └── README.md             # 占位与投稿约定，不发布
+│       ├── README.md            # 分类占位与投稿约定
+│       └── _topics/*/README.md  # 规划中的二级主题，不是文章
 ├── skills/olah-style-paper-posts/ # Skill 正本；SKILL / references / assets / scripts
 ├── .claude/skills/olah-style-paper-posts/  # 完整 Skill 镜像
 ├── .pi/skills/olah-style-paper-posts/      # 完整 Skill 镜像
@@ -231,3 +258,11 @@ python scripts/sync_skills.py --check
 协作请先阅读 [`AGENTS.md`](AGENTS.md)、[`docs/editorial.md`](docs/editorial.md) 和 [`CONTRIBUTING.md`](CONTRIBUTING.md)。除非明确核验并添加仓库许可证，否则不要推断第三方论文、图像、代码享有与本站相同的再分发许可。
 
 QLoRA 归入 Training → PEFT / LoRA → Quantized Fine-tuning / QLoRA，不新建顶层分类；提供 12 节机制解读、6 幅 SVG、MathML、权重显存交互与论文证据表。
+
+GAE 归入 `reinforcement-learning` 下已有的 **Policy Gradient / Actor–Critic** 主题，不新增顶层分类；文章包含 14 节、五幅独立 SVG、原生 MathML、λ 交互、终止/截断算例和确定性 Python 验证，明确区分 2016 GAE + TRPO 与后续 GAE + PPO。
+
+### Agents & Tool Use — ReAct
+
+ReAct（Yao et al., ICLR 2023）收录于 `posts/agents/react/`：解释 Thought / Action / Observation 的闭环、论文实验口径、MathML 形式化、可交互轨迹与有限状态 Python 验证。该目录属于 `Agents & Tool Use`，不同于 `reasoning` 的 CoT 与 Self-Consistency；专题规划位于 `posts/agents/_topics/react/`，不单独发布。
+
+MoE 复用 `Architectures → Mixture of Experts (MoE)` 已有二级研究主题，不新增重复分类。[Understanding MoE](posts/architectures/moe/index.html) 以 Shazeer et al. 2017 为主线，区分 GShard、Switch、Mixtral 与 DeepSeekMoE，提供七幅独立 SVG、八组 MathML、路由容量交互与 `tests/test_moe.py` 数值验证。

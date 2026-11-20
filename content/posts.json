@@ -1,5 +1,27 @@
 [
   {
+    "slug": "multi-head-attention",
+    "title": "Understanding Multi-Head Attention",
+    "subtitle": "为什么一个 Attention 不够？从独立 Q/K/V 投影、因果 Mask 到原论文 Head 消融",
+    "category": "architectures",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 28,
+    "tags": [
+      "Multi-Head Attention",
+      "MHA",
+      "Scaled Dot-Product Attention",
+      "QKV",
+      "Causal Mask",
+      "Attention Mechanisms",
+      "Transformer"
+    ],
+    "summary": "精读 Vaswani et al. NeurIPS 2017 §3.2 与 Table 3：从单头信息汇总、独立 Q/K/V 投影、Softmax 缩放和掩码，逐步推导多头张量形状、参数量与复杂度；包含六幅独立 SVG、六组 MathML、两组交互实验、原论文 Head 数消融证据及确定性 Python 数值实现，并厘清 MHA、MQA、GQA 的关系。",
+    "paper": "https://arxiv.org/abs/1706.03762",
+    "illustration": "attention"
+  },
+  {
     "slug": "alphago",
     "title": "Understanding AlphaGo",
     "subtitle": "策略网络、价值网络和 Monte Carlo Tree Search 如何协同打破围棋的搜索墙？",
@@ -905,5 +927,187 @@
     "summary": "从有限预算下的树搜索困境出发，拆解选择、扩展、模拟和回传，推导 UCB1/UCT，交互比较探索系数，解释双人博弈回传，并区分经典 MCTS 与 AlphaZero 的 PUCT。",
     "paper": "https://aima.cs.berkeley.edu/~russell/classes/cs294/s11/readings/Kocsis%2BSzepesvari%3A2006.pdf",
     "illustration": "mcts"
+  },
+  {
+    "slug": "reinforce",
+    "title": "Understanding REINFORCE",
+    "subtitle": "为什么不需要对环境求导，就能从随机行动和回报中学习？",
+    "category": "reinforcement-learning",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 26,
+    "tags": [
+      "REINFORCE",
+      "Policy Gradient",
+      "Score Function",
+      "Monte Carlo",
+      "Variance Reduction",
+      "Baseline",
+      "Williams 1992"
+    ],
+    "summary": "从两动作概率学习切入，以 Williams 1992 原文为证据推导 score-function 梯度、伯努利 logit、原始 eligibility 规则，再区分现代 reward-to-go 与 baseline，配五幅机制图、精确枚举交互及可复现 Python 测试。",
+    "paper": "https://doi.org/10.1007/BF00992696",
+    "illustration": "reinforce"
+  },
+  {
+    "slug": "noisynet",
+    "title": "Understanding NoisyNet",
+    "subtitle": "为什么可学习的参数噪声能带来更连贯的强化学习探索？",
+    "category": "reinforcement-learning",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 35,
+    "tags": [
+      "NoisyNet",
+      "Noisy Networks for Exploration",
+      "Exploration",
+      "Parameter Space Noise",
+      "Factorised Gaussian Noise",
+      "NoisyLinear",
+      "DQN",
+      "Dueling",
+      "A3C"
+    ],
+    "summary": "精读 Fortunato et al. ICLR 2018：图解参数噪声的时间一致性、可学习 μ/σ、因子化高斯采样及重参数化梯度，区分 NoisyNet-DQN、Dueling 与 A3C，核验 Atari-57 Table 1。含六幅独立 SVG、MathML、双动作交互与标准库 Python 断言。",
+    "paper": "https://arxiv.org/abs/1706.10295",
+    "illustration": "noisynet"
+  },
+  {
+    "slug": "a3c",
+    "title": "Understanding A3C",
+    "subtitle": "不存 Replay Buffer，多个异步 Actor 为什么能让策略稳定学习？",
+    "category": "reinforcement-learning",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 36,
+    "tags": [
+      "A3C",
+      "Asynchronous & Parallel RL",
+      "Actor–Critic",
+      "Policy Gradient",
+      "n-step Returns",
+      "Entropy Regularization",
+      "Shared RMSProp"
+    ],
+    "summary": "精读 Mnih et al. ICML 2016：从经验相关性到多线程异步参数更新，推导 n-step Return、Advantage、策略梯度与熵正则，解析共享 RMSProp 和 57 款 Atari 的原论文数据。含 5 幅独立 SVG、6 组离线 MathML、交互算例、Python 确定性测试及 16 条证据。",
+    "paper": "https://proceedings.mlr.press/v48/mniha16.html",
+    "illustration": "a3c"
+  },
+  {
+    "slug": "importance-sampling",
+    "title": "Understanding Importance Sampling",
+    "subtitle": "换一种分布抽样，为什么仍能估计原来的概率？从稀有事件到离策略学习",
+    "category": "foundations",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 31,
+    "tags": [
+      "Importance Sampling",
+      "Monte Carlo & Importance Sampling",
+      "Variance Reduction",
+      "Rare Event Simulation",
+      "Self-normalized IS",
+      "Effective Sample Size",
+      "Off-policy Evaluation & Importance Sampling"
+    ],
+    "summary": "以 Kahn–Marshall 1953 为历史起点，从稀有事件与换测度推导无偏性、方差、最优提议分布、SNIS/ESS 和离策略比率；包含五幅独立 SVG、离线 MathML、解析交互以及 Python 确定性检验。",
+    "paper": "https://doi.org/10.1287/opre.1.5.263",
+    "illustration": "importance-sampling"
+  },
+  {
+    "slug": "gae",
+    "title": "Understanding GAE",
+    "subtitle": "为什么同一条轨迹的优势，既需要短期 TD，又需要远期真实奖励？",
+    "category": "reinforcement-learning",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 32,
+    "tags": [
+      "GAE",
+      "Generalized Advantage Estimation",
+      "Policy Gradient",
+      "Actor–Critic",
+      "TD Residual",
+      "Bias–Variance Tradeoff",
+      "TRPO",
+      "PPO"
+    ],
+    "summary": "精读 Schulman et al. ICLR 2016：从延迟信用分配与 γ-just 定义推导 TD residual、k-step 优势与指数加权的 GAE(γ,λ)，解释反向递推、terminal/truncation、reward shaping、原论文 TRPO 及 MuJoCo 实验；附五幅独立 SVG、原生 MathML、λ 交互与 Python 数值核验。",
+    "paper": "https://arxiv.org/abs/1506.02438",
+    "illustration": "gae"
+  },
+  {
+    "slug": "sentencepiece",
+    "title": "Understanding SentencePiece",
+    "subtitle": "从原始 Unicode 文本到 Token ID：空格标记、BPE、Unigram 和可逆性边界",
+    "category": "foundations",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 24,
+    "tags": [
+      "SentencePiece",
+      "Tokenization & Subword Units",
+      "BPE",
+      "Unigram Language Model",
+      "Subword Regularization",
+      "Unicode Normalization"
+    ],
+    "summary": "精读 Kudo 与 Richardson EMNLP 2018 原论文，使用五幅独立 SVG、四组原生 MathML、路径概率交互和 Python 数学测试解析从原始语料训练、空格转义、BPE、Unigram 到可逆解码的机制；按 KFTT 原文表格核查 BLEU 与性能数据。",
+    "paper": "https://aclanthology.org/D18-2012/",
+    "illustration": "sentencepiece"
+  },
+  {
+    "slug": "react",
+    "title": "Understanding ReAct",
+    "subtitle": "从 Thought → Action → Observation：语言模型如何边推理、边调用工具、边修正计划？",
+    "category": "agents",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 32,
+    "tags": [
+      "ReAct",
+      "Reasoning and Acting",
+      "Tool Use",
+      "Agentic Reasoning",
+      "Chain-of-Thought",
+      "ALFWorld",
+      "WebShop"
+    ],
+    "summary": "精读 ICLR 2023 ReAct：扩展动作空间、Thought/Action/Observation 机制与 MathML 推导，核验 HotpotQA、FEVER、ALFWorld、WebShop 原论文数字；以五幅独立图解、交互式失败检索恢复和确定性 Python 控制器辨析提示范式与现代 Agent 工程边界。",
+    "paper": "https://arxiv.org/abs/2210.03629",
+    "illustration": "react"
+  },
+  {
+    "slug": "moe",
+    "title": "Understanding Mixture of Experts (MoE)",
+    "subtitle": "为什么只执行少量专家，就能扩展模型参数容量？",
+    "category": "architectures",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 35,
+    "tags": [
+      "MoE",
+      "Mixture of Experts",
+      "Sparse Gating",
+      "Top-K",
+      "Conditional Computation",
+      "Load Balancing",
+      "Expert Parallelism",
+      "Switch Transformer",
+      "GShard",
+      "Mixtral",
+      "DeepSeekMoE"
+    ],
+    "summary": "以 Shazeer et al. ICLR 2017 为核心，渐进推导稀疏路由、Noisy Top-K、Importance/Load、容量和专家并行，区分 Switch、GShard、Mixtral 与 DeepSeekMoE；配七幅 SVG、八组原生 MathML、交互实验和 Python 数值测试。",
+    "paper": "https://arxiv.org/abs/1701.06538",
+    "illustration": "moe"
   }
 ]

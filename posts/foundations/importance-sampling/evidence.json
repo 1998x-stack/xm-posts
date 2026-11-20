@@ -1,0 +1,110 @@
+[
+  {
+    "id": "IS-01",
+    "claim": "Importance sampling appears among 1953 Monte Carlo efficiency methods",
+    "kind": "paper-claim",
+    "source_url": "https://doi.org/10.1287/opre.1.5.263",
+    "locator": "Abstract, pp.263–278",
+    "status": "verified",
+    "notes": "Historical source; do not attribute teaching numbers to this paper"
+  },
+  {
+    "id": "IS-02",
+    "claim": "Change of measure rewrites expectations using p/q",
+    "kind": "math",
+    "source_url": "https://artowen.su.domains/mc/Ch-var-is.pdf",
+    "locator": "Owen Chapter 9, basic importance sampling",
+    "status": "verified",
+    "notes": "Finite/discrete form in Eq. 1"
+  },
+  {
+    "id": "IS-03",
+    "claim": "Ordinary IS is unbiased subject to support and integrability",
+    "kind": "math",
+    "source_url": "https://mathworld.wolfram.com/ImportanceSampling.html",
+    "locator": "Definition paragraph",
+    "status": "verified",
+    "notes": "Does not guarantee variance reduction"
+  },
+  {
+    "id": "IS-04",
+    "claim": "IS variance depends on second moment and choice of q",
+    "kind": "derivation",
+    "source_url": "https://www.deeplearningbook.org/contents/monte_carlo.html",
+    "locator": "Chapter 17.2",
+    "status": "derived",
+    "notes": "Equation 3, iid samples"
+  },
+  {
+    "id": "IS-05",
+    "claim": "Variance minimizing proposal proportional to |f|p",
+    "kind": "derivation",
+    "source_url": "https://artowen.su.domains/mc/Ch-var-is.pdf",
+    "locator": "Chapter 9, choice of proposal",
+    "status": "derived",
+    "notes": "Zero variance requires f nonnegative, practical normalizer unknown"
+  },
+  {
+    "id": "IS-06",
+    "claim": "Self-normalized IS is a generally biased finite sample ratio estimator",
+    "kind": "method",
+    "source_url": "https://artowen.su.domains/mc/Ch-var-is.pdf",
+    "locator": "Chapter 9, self normalization",
+    "status": "verified",
+    "notes": "Require nonzero denominator"
+  },
+  {
+    "id": "IS-07",
+    "claim": "ESS describes weight concentration rather than arbitrary estimator RMSE",
+    "kind": "method",
+    "source_url": "https://www.deeplearningbook.org/contents/monte_carlo.html",
+    "locator": "Importance sampling diagnostics",
+    "status": "derived",
+    "notes": "Qualification in article"
+  },
+  {
+    "id": "IS-08",
+    "claim": "Analytic example has var 0.0099 vs 0.0004 (24.75x)",
+    "kind": "toy-derivation",
+    "source_url": "https://www.deeplearningbook.org/contents/monte_carlo.html",
+    "locator": "Own Eq.8 and test_importance_sampling.py",
+    "status": "derived",
+    "notes": "Exact toy math, NOT a paper result"
+  },
+  {
+    "id": "IS-09",
+    "claim": "Off-policy trajectory IS is product of action probability ratios under shared dynamics",
+    "kind": "rl-method",
+    "source_url": "https://link.springer.com/article/10.1007/s10994-020-05938-9",
+    "locator": "Section 2, Eq.7",
+    "status": "verified",
+    "notes": "Does not apply to arbitrary state-action marginals"
+  },
+  {
+    "id": "IS-10",
+    "claim": "Ordinary and weighted IS differ in off-policy MC prediction",
+    "kind": "rl-method",
+    "source_url": "https://web.stanford.edu/class/psych209/Readings/SuttonBartoIPRLBook2ndEd.pdf",
+    "locator": "Chapter 5.5",
+    "status": "verified",
+    "notes": "Later RL literature"
+  },
+  {
+    "id": "IS-11",
+    "claim": "Per-decision IS used in off-policy evaluation",
+    "kind": "rl-method",
+    "source_url": "https://web.eecs.umich.edu/~baveja/Papers/OffPolicy.pdf",
+    "locator": "Precup et al. ICML 2000",
+    "status": "verified",
+    "notes": "Not Kahn & Marshall 1953"
+  },
+  {
+    "id": "IS-12",
+    "claim": "Five diagrams are independent teaching constructions",
+    "kind": "illustration",
+    "source_url": "https://doi.org/10.1287/opre.1.5.263",
+    "locator": "Article figs 1–5",
+    "status": "illustrative",
+    "notes": "Not copies of source figures"
+  }
+]
