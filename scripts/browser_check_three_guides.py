@@ -46,7 +46,7 @@ def check_logistic(page):
     page.locator('[data-preset="reverse"]').click()
     assert page.locator("#lr-live-score").inner_text() == "-1.000"
     assert page.locator("#lr-live-probability").inner_text() == "0.2689"
-    assert float(page.locator("#lr-probability-meter").input_value()) < 0.3
+    assert float(page.locator("#lr-probability-meter").evaluate("(el) => el.value")) < 0.3
 
 
 def check_roc(page):
