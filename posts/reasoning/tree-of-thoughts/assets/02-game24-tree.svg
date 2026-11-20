@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 570" role="img" aria-labelledby="tot-game24-title tot-game24-desc">
+<title id="tot-game24-title">Game of 24 中的思维树搜索轨迹</title>
+<desc id="tot-game24-desc">从数字 4、9、10、13 开始，比较不同第一步。选中 13 减 9 得 4，再算 10 减 4 得 6，最后 4 乘 6 得 24；其他分支被评估后暂缓或剪枝。</desc>
+<rect width="960" height="570" rx="18" fill="#fbfcfa"/>
+<g font-family="system-ui,-apple-system,'PingFang SC',sans-serif" fill="#203f46">
+<text x="480" y="34" font-size="19" text-anchor="middle" font-weight="700">输入状态 s₀：{4, 9, 10, 13} · 目标：24</text>
+<rect x="355" y="54" width="250" height="56" rx="12" fill="#e4edf5" stroke="#7594ae" stroke-width="2"/><text x="480" y="88" font-size="19" text-anchor="middle" font-weight="700">4 · 9 · 10 · 13</text>
+<path d="M480 110 L178 166 M480 110 L480 166 M480 110 L782 166" fill="none" stroke="#6b8985" stroke-width="2.5"/>
+<rect x="56" y="168" width="244" height="70" rx="12" fill="#e1f1e9" stroke="#39877c" stroke-width="2"/><text x="178" y="197" font-size="18" text-anchor="middle" font-weight="700">13 − 9 = 4</text><text x="178" y="220" font-size="14" text-anchor="middle" fill="#52716e">剩余：{4, 4, 10}</text>
+<rect x="358" y="168" width="244" height="70" rx="12" fill="#fff7e6" stroke="#c49a43" stroke-width="1.8"/><text x="480" y="197" font-size="18" text-anchor="middle" font-weight="700">4 + 9 = 13</text><text x="480" y="220" font-size="14" text-anchor="middle" fill="#806b3e">剩余：{10, 13, 13}</text>
+<rect x="660" y="168" width="244" height="70" rx="12" fill="#fff0e8" stroke="#c17b57" stroke-width="1.8"/><text x="782" y="197" font-size="18" text-anchor="middle" font-weight="700">13 − 10 = 3</text><text x="782" y="220" font-size="14" text-anchor="middle" fill="#8c624e">剩余：{3, 4, 9}</text>
+<g font-size="14" font-weight="700"><rect x="128" y="246" width="100" height="28" rx="14" fill="#d4eee3"/><text x="178" y="265" text-anchor="middle" fill="#286b5e">保留 · maybe</text><rect x="430" y="246" width="100" height="28" rx="14" fill="#fff0c8"/><text x="480" y="265" text-anchor="middle" fill="#806b3e">继续评估</text><rect x="732" y="246" width="100" height="28" rx="14" fill="#f8ded2"/><text x="782" y="265" text-anchor="middle" fill="#92583f">低优先级</text></g>
+<path d="M178 238 V304" stroke="#39877c" stroke-width="3" fill="none"/><path d="M170 294 L178 306 L186 294" stroke="#39877c" stroke-width="3" fill="none"/>
+<rect x="56" y="308" width="244" height="70" rx="12" fill="#e1f1e9" stroke="#39877c" stroke-width="2"/><text x="178" y="337" font-size="18" text-anchor="middle" font-weight="700">10 − 4 = 6</text><text x="178" y="360" font-size="14" text-anchor="middle" fill="#52716e">剩余：{4, 6}</text>
+<text x="480" y="337" text-anchor="middle" font-size="15" fill="#8b7650">其他状态暂不展开</text>
+<path d="M178 378 V432" stroke="#39877c" stroke-width="3" fill="none"/><path d="M170 422 L178 434 L186 422" stroke="#39877c" stroke-width="3" fill="none"/>
+<rect x="56" y="436" width="244" height="68" rx="12" fill="#d6eee3" stroke="#247b68" stroke-width="2.5"/><text x="178" y="465" font-size="20" text-anchor="middle" font-weight="700">4 × 6 = 24</text><text x="178" y="488" font-size="14" text-anchor="middle" fill="#286b5e">目标状态 · 成功</text>
+<rect x="348" y="432" width="556" height="80" rx="12" fill="#f1f5f3" stroke="#d1ddda"/><text x="376" y="462" font-size="16" font-weight="700">关键：每一步不是只生成一个 token</text><text x="376" y="490" font-size="15" fill="#526b6e">模型生成候选状态，评估器判断前景，搜索控制器决定扩展哪一支。</text>
+<text x="480" y="548" font-size="13" text-anchor="middle" fill="#6b8081">教学轨迹：展示一条可验证的成功路径；候选分支与评估标签为解释性简化，并非论文原始日志。</text>
+</g></svg>
