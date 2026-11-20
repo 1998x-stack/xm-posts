@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 350" role="img" aria-labelledby="clip-fig2-title clip-fig2-desc">
+<title id="clip-fig2-title">一个 batch 中的图文相似度矩阵</title>
+<desc id="clip-fig2-desc">四张图片与四段文本组成十六种候选配对，主对角线四个格子是原始匹配，其余十二个格子作为 batch 内负样本。</desc>
+<rect x="18" y="18" width="864" height="314" rx="18" fill="#f7f8f5"/>
+<text x="52" y="55" fill="#526d70" font-size="17" font-weight="700">N = 4 时，模型要在 N² = 16 种配对中找回 4 个真实匹配</text>
+<text x="270" y="94" text-anchor="middle" fill="#526d70" font-size="14">文本 T₁</text><text x="370" y="94" text-anchor="middle" fill="#526d70" font-size="14">文本 T₂</text><text x="470" y="94" text-anchor="middle" fill="#526d70" font-size="14">文本 T₃</text><text x="570" y="94" text-anchor="middle" fill="#526d70" font-size="14">文本 T₄</text>
+<text x="112" y="145" text-anchor="middle" fill="#526d70" font-size="14">图像 I₁</text><text x="112" y="205" text-anchor="middle" fill="#526d70" font-size="14">图像 I₂</text><text x="112" y="265" text-anchor="middle" fill="#526d70" font-size="14">图像 I₃</text><text x="112" y="325" text-anchor="middle" fill="#526d70" font-size="14">图像 I₄</text>
+<g stroke="#fff" stroke-width="3" font-size="17" font-weight="700" text-anchor="middle">
+<rect x="220" y="108" width="100" height="48" rx="7" fill="#bfe3d0"/><text x="270" y="138" fill="#245f4b">+</text>
+<rect x="320" y="108" width="100" height="48" rx="7" fill="#f3dfd7"/><text x="370" y="138" fill="#8c5c4b">−</text>
+<rect x="420" y="108" width="100" height="48" rx="7" fill="#f3dfd7"/><text x="470" y="138" fill="#8c5c4b">−</text>
+<rect x="520" y="108" width="100" height="48" rx="7" fill="#f3dfd7"/><text x="570" y="138" fill="#8c5c4b">−</text>
+<rect x="220" y="168" width="100" height="48" rx="7" fill="#f3dfd7"/><text x="270" y="198" fill="#8c5c4b">−</text>
+<rect x="320" y="168" width="100" height="48" rx="7" fill="#bfe3d0"/><text x="370" y="198" fill="#245f4b">+</text>
+<rect x="420" y="168" width="100" height="48" rx="7" fill="#f3dfd7"/><text x="470" y="198" fill="#8c5c4b">−</text>
+<rect x="520" y="168" width="100" height="48" rx="7" fill="#f3dfd7"/><text x="570" y="198" fill="#8c5c4b">−</text>
+<rect x="220" y="228" width="100" height="48" rx="7" fill="#f3dfd7"/><text x="270" y="258" fill="#8c5c4b">−</text>
+<rect x="320" y="228" width="100" height="48" rx="7" fill="#f3dfd7"/><text x="370" y="258" fill="#8c5c4b">−</text>
+<rect x="420" y="228" width="100" height="48" rx="7" fill="#bfe3d0"/><text x="470" y="258" fill="#245f4b">+</text>
+<rect x="520" y="228" width="100" height="48" rx="7" fill="#f3dfd7"/><text x="570" y="258" fill="#8c5c4b">−</text>
+<rect x="220" y="288" width="100" height="36" rx="7" fill="#f3dfd7"/><text x="270" y="313" fill="#8c5c4b">−</text>
+<rect x="320" y="288" width="100" height="36" rx="7" fill="#f3dfd7"/><text x="370" y="313" fill="#8c5c4b">−</text>
+<rect x="420" y="288" width="100" height="36" rx="7" fill="#f3dfd7"/><text x="470" y="313" fill="#8c5c4b">−</text>
+<rect x="520" y="288" width="100" height="36" rx="7" fill="#bfe3d0"/><text x="570" y="313" fill="#245f4b">+</text>
+</g>
+<rect x="670" y="120" width="176" height="68" rx="12" fill="#e1f1e8" stroke="#80b69a"/><text x="758" y="148" text-anchor="middle" fill="#245f4b" font-size="17" font-weight="700">4 个正样本</text><text x="758" y="171" text-anchor="middle" fill="#34745d" font-size="13">真实图文配对</text>
+<rect x="670" y="205" width="176" height="68" rx="12" fill="#f7e8e1" stroke="#d7a18c"/><text x="758" y="233" text-anchor="middle" fill="#8c5c4b" font-size="17" font-weight="700">12 个负样本</text><text x="758" y="256" text-anchor="middle" fill="#986d5f" font-size="13">batch 内错配组合</text>
+</svg>

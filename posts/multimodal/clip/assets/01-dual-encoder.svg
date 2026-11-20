@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 360" role="img" aria-labelledby="clip-fig1-title clip-fig1-desc">
+<title id="clip-fig1-title">CLIP 的双编码器与共享向量空间</title>
+<desc id="clip-fig1-desc">图像和文本分别经过各自编码器与线性投影，归一化后进入同一个多模态向量空间；匹配的图文向量被拉近。</desc>
+<defs><marker id="clip1-arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0 0 L9 3 L0 6 Z" fill="#527a7b"/></marker></defs>
+<rect x="18" y="18" width="864" height="324" rx="20" fill="#f5f8f5"/>
+<text x="48" y="53" fill="#526d70" font-size="17" font-weight="700">两种输入 · 两条独立编码路径 · 一个可比较的空间</text>
+<rect x="48" y="92" width="145" height="86" rx="13" fill="#e7f0ff" stroke="#91afd9" stroke-width="2"/>
+<rect x="65" y="108" width="52" height="42" rx="6" fill="#c5d8f4"/>
+<circle cx="79" cy="121" r="8" fill="#e4a75c"/><path d="M68 145 L86 129 L99 140 L110 126 L117 145Z" fill="#6c9d83"/>
+<text x="135" y="125" text-anchor="middle" fill="#294c70" font-size="15" font-weight="700">图像</text><text x="135" y="148" text-anchor="middle" fill="#456784" font-size="12">xᵢ</text>
+<path d="M193 135 H236" stroke="#527a7b" stroke-width="3" marker-end="url(#clip1-arrow)"/>
+<rect x="245" y="96" width="170" height="78" rx="13" fill="#dce9ff" stroke="#86a8d8" stroke-width="2"/>
+<text x="330" y="126" text-anchor="middle" fill="#294c70" font-size="17" font-weight="700">Image Encoder</text><text x="330" y="150" text-anchor="middle" fill="#456784" font-size="13">ResNet / ViT</text>
+<path d="M415 135 H456" stroke="#527a7b" stroke-width="3" marker-end="url(#clip1-arrow)"/>
+<rect x="465" y="96" width="142" height="78" rx="13" fill="#fff0df" stroke="#d9a06a" stroke-width="2"/>
+<text x="536" y="126" text-anchor="middle" fill="#85512d" font-size="16" font-weight="700">线性投影</text><text x="536" y="150" text-anchor="middle" fill="#956642" font-size="13">+ L2 归一化</text>
+<path d="M607 135 H660" stroke="#527a7b" stroke-width="3" marker-end="url(#clip1-arrow)"/>
+<rect x="670" y="91" width="180" height="88" rx="14" fill="#dff2e8" stroke="#73aa91" stroke-width="2"/>
+<text x="760" y="121" text-anchor="middle" fill="#245f4b" font-size="16" font-weight="700">共享向量空间</text><text x="760" y="148" text-anchor="middle" fill="#34745d" font-size="15">zᵢᴵ · zᵢᵀ</text>
+<rect x="48" y="224" width="145" height="76" rx="13" fill="#fff0e7" stroke="#d8a27f" stroke-width="2"/>
+<text x="120" y="254" text-anchor="middle" fill="#805337" font-size="16" font-weight="700">文本</text><text x="120" y="278" text-anchor="middle" fill="#956642" font-size="13">“a photo of a dog”</text>
+<path d="M193 262 H236" stroke="#527a7b" stroke-width="3" marker-end="url(#clip1-arrow)"/>
+<rect x="245" y="223" width="170" height="78" rx="13" fill="#ffeadb" stroke="#d69a6d" stroke-width="2"/>
+<text x="330" y="253" text-anchor="middle" fill="#805337" font-size="17" font-weight="700">Text Encoder</text><text x="330" y="277" text-anchor="middle" fill="#956642" font-size="13">Transformer</text>
+<path d="M415 262 H456" stroke="#527a7b" stroke-width="3" marker-end="url(#clip1-arrow)"/>
+<rect x="465" y="223" width="142" height="78" rx="13" fill="#fff0df" stroke="#d9a06a" stroke-width="2"/>
+<text x="536" y="253" text-anchor="middle" fill="#85512d" font-size="16" font-weight="700">线性投影</text><text x="536" y="277" text-anchor="middle" fill="#956642" font-size="13">+ L2 归一化</text>
+<path d="M607 262 H638 Q652 262 652 246 V179" fill="none" stroke="#527a7b" stroke-width="3" marker-end="url(#clip1-arrow)"/>
+<path d="M760 179 V198" stroke="#73aa91" stroke-width="2" stroke-dasharray="5 5"/>
+<text x="760" y="220" text-anchor="middle" fill="#34745d" font-size="13">匹配的图文</text>
+<text x="760" y="238" text-anchor="middle" fill="#34745d" font-size="13">相似度更高</text>
+</svg>

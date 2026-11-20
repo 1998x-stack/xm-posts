@@ -348,5 +348,13 @@
       "agent-memory-components",
       "harness-engineering"
     ]
+  },
+  {
+    "id": "path-38",
+    "title": "从语义向量到跨模态图文对齐",
+    "posts": [
+      "embeddings",
+      "clip"
+    ]
   }
 ]

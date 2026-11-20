@@ -81,8 +81,12 @@ def run(output:Path, site:Path):
                         category.select_option('')
                         search=page.locator('[data-search-input]')
                         search.fill('ResNet')
-                        shown=page.locator('[data-post-card]:visible').count()
-                        assert shown==1,f'expected 1 matching ResNet, got {shown}'
+                        # Search results grow as new articles mention existing concepts; validate matches, not a frozen count.
+                        matching=page.locator('[data-post-card]:visible')
+                        shown=matching.count()
+                        search_tokens=[(matching.nth(i).get_attribute('data-search') or '').lower() for i in range(shown)]
+                        assert shown>=1,'search should return at least one ResNet-related article'
+                        assert all('resnet' in tokens for tokens in search_tokens),'search returned a card without the ResNet token'
                         search.fill('no-article-matches-this')
                         assert page.locator('[data-no-results]').is_visible()
                         search.fill('')

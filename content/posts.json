@@ -2116,5 +2116,35 @@
       "src": "assets/03-llm-rejection-pipeline.svg",
       "caption": "同一提示生成多个回答，经奖励模型排序后保留高分样本并用于 SFT"
     }
+  },
+  {
+    "slug": "clip",
+    "title": "Understanding CLIP",
+    "subtitle": "双编码器如何把图像与文本映射到同一语义空间，并通过对比学习实现零样本分类？",
+    "category": "multimodal",
+    "topic": "vision-language",
+    "status": "published",
+    "published": "2026-11-21",
+    "updated": "2026-11-21",
+    "reading_minutes": 26,
+    "tags": [
+      "CLIP",
+      "Contrastive Language–Image Pre-training",
+      "Vision–Language Models",
+      "Contrastive Learning",
+      "Image–Text Alignment",
+      "Zero-shot Learning",
+      "Multimodal Representation Learning",
+      "Prompt Engineering",
+      "Vision Transformer",
+      "Dual Encoder"
+    ],
+    "summary": "从双编码器与共享嵌入空间入手，推导 N×N 图文相似度矩阵、双向交叉熵与零样本分类；核对 WIT 数据、ViT/ResNet 配置、prompt 设计、ImageNet 结果和模型偏差，并提供交互实验与纯 Python 确定性测试。",
+    "paper": "https://arxiv.org/abs/2103.00020",
+    "illustration": "clip",
+    "cover": {
+      "src": "assets/01-dual-encoder.svg",
+      "caption": "图像与文本分别编码，再投影到同一向量空间进行相似度比较"
+    }
   }
 ]
