@@ -1,0 +1,110 @@
+[
+  {
+    "id": "P01",
+    "claim": "PPO uses sampled on-policy trajectories followed by several minibatch optimization epochs",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/pdf/1707.06347",
+    "locator": "Sections 1,5, Algorithm 1",
+    "status": "verified",
+    "notes": "No indefinite cross-iteration experience replay"
+  },
+  {
+    "id": "P02",
+    "claim": "Policy gradient and TRPO KL constraint precede the surrogate",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/pdf/1707.06347",
+    "locator": "Section 2, Equations (1)–(4)",
+    "status": "verified",
+    "notes": "Average KL bound belongs to TRPO, not PPO-Clip"
+  },
+  {
+    "id": "P03",
+    "claim": "Importance ratio and clipped surrogate use a per-sample minimum",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/pdf/1707.06347",
+    "locator": "Section 3, Equations (6)–(7); Figure 1",
+    "status": "verified",
+    "notes": "Figure caption distinguishes positive and negative advantage"
+  },
+  {
+    "id": "P04",
+    "claim": "PPO-Penalty uses a KL term with adaptive coefficient",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/pdf/1707.06347",
+    "locator": "Section 4, Equation (8)",
+    "status": "verified",
+    "notes": "Alternative method"
+  },
+  {
+    "id": "P05",
+    "claim": "Actor-Critic objective includes value loss and optional entropy term",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/pdf/1707.06347",
+    "locator": "Section 5, Equation (9); Algorithm 1",
+    "status": "verified",
+    "notes": "Robotics experiments use separate policy/value networks without entropy bonus"
+  },
+  {
+    "id": "P06",
+    "claim": "Truncated GAE uses TD residuals discounted by gamma lambda",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/pdf/1707.06347",
+    "locator": "Section 5, Equations (11)–(12)",
+    "status": "verified",
+    "notes": "Terminals and bootstrap explained as implementation details"
+  },
+  {
+    "id": "P07",
+    "claim": "Table 1 reports -0.39,0.76,0.82,0.70,0.74,0.71 for selected configurations",
+    "kind": "experiment",
+    "source_url": "https://arxiv.org/pdf/1707.06347",
+    "locator": "Section 6.1, Table 1",
+    "status": "verified",
+    "notes": "7 MuJoCo tasks, 1M steps, 3 seeds, last-100-episode reward normalized over 21 runs; partial rows"
+  },
+  {
+    "id": "P08",
+    "claim": "Figure 3 compares continuous control methods; Atari also reported",
+    "kind": "experiment",
+    "source_url": "https://arxiv.org/pdf/1707.06347",
+    "locator": "Sections 6.2 and 6.4, Figure 3",
+    "status": "verified",
+    "notes": "No claims of independent benchmark replication"
+  },
+  {
+    "id": "P09",
+    "claim": "Approximate KL early stopping is used in Spinning Up PPO implementation",
+    "kind": "modern-implementation",
+    "source_url": "https://spinningup.openai.com/en/latest/algorithms/ppo.html",
+    "locator": "OpenAI Spinning Up PPO documentation; Key Equations",
+    "status": "verified",
+    "notes": "Additional practical protection, not strict Eq 7 guarantee"
+  },
+  {
+    "id": "P10",
+    "claim": "TRL logs reference policy KL separately from PPO approximate KL",
+    "kind": "modern-implementation",
+    "source_url": "https://huggingface.co/docs/trl/main/ppo_trainer",
+    "locator": "TRL PPO Trainer; Explanation of logged metrics",
+    "status": "verified",
+    "notes": "Reference policy is separate from per-iteration behavior policy"
+  },
+  {
+    "id": "P11",
+    "claim": "The sign-dependent clipped loss and terminal-masked GAE are tested with a deterministic toy example",
+    "kind": "toy-derivation",
+    "source_url": "https://arxiv.org/pdf/1707.06347",
+    "locator": "This article and mini_ppo.py",
+    "status": "derived",
+    "notes": "Not an RL training loop"
+  },
+  {
+    "id": "P12",
+    "claim": "All six teaching illustrations were designed from equations and are not copied paper assets",
+    "kind": "illustration",
+    "source_url": "https://arxiv.org/pdf/1707.06347",
+    "locator": "Independent diagram storyboard based on Sections 2–5",
+    "status": "illustrative",
+    "notes": "Intentionally not historical chart reproductions"
+  }
+]

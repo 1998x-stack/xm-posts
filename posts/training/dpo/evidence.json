@@ -1,0 +1,128 @@
+[
+  {
+    "id": "D01",
+    "claim": "Original RLHF pipeline SFT, preference reward model, RL",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/html/2305.18290",
+    "locator": "§3, phases and Eq. (1)–(3)",
+    "status": "verified",
+    "notes": "Checked against named source and version"
+  },
+  {
+    "id": "D02",
+    "claim": "KL regularized objective and role of beta",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/html/2305.18290",
+    "locator": "§3 Eq. (3); §4 Eq. (4)",
+    "status": "verified",
+    "notes": "Checked against named source and version"
+  },
+  {
+    "id": "D03",
+    "claim": "Closed form optimal policy proportional to reference probability times exp(reward/beta)",
+    "kind": "derivation",
+    "source_url": "https://arxiv.org/html/2305.18290",
+    "locator": "§4 Eq. (4); Appendix A.1 Eq. (11)–(15)",
+    "status": "verified",
+    "notes": "Checked against named source and version"
+  },
+  {
+    "id": "D04",
+    "claim": "Reward equals beta policy/reference log-ratio plus beta log Z(x)",
+    "kind": "derivation",
+    "source_url": "https://arxiv.org/html/2305.18290",
+    "locator": "§4 Eq. (5)–(7); Appendix A.2",
+    "status": "verified",
+    "notes": "Checked against named source and version"
+  },
+  {
+    "id": "D05",
+    "claim": "Rewards differing by prompt-only baseline form preference equivalent class",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/html/2305.18290",
+    "locator": "§5.1 Definition 1, Lemmas 1–2, Theorem 1",
+    "status": "verified",
+    "notes": "Checked against named source and version"
+  },
+  {
+    "id": "D06",
+    "claim": "DPO gradient uses sigmoid(-beta margin) and opposing chosen/rejected log probability gradients",
+    "kind": "derivation",
+    "source_url": "https://arxiv.org/html/2305.18290",
+    "locator": "Appendix A.4 Eq. (21)–(23)",
+    "status": "verified",
+    "notes": "Checked against named source and version"
+  },
+  {
+    "id": "D07",
+    "claim": "Sentiment experiment reports DPO stronger reward-KL frontier than PPO baselines",
+    "kind": "experiment",
+    "source_url": "https://arxiv.org/html/2305.18290",
+    "locator": "§6.1 Fig. 2 and evaluation protocol",
+    "status": "verified",
+    "notes": "Checked against named source and version"
+  },
+  {
+    "id": "D08",
+    "claim": "TLDR GPT4-judged win rates 61 percent DPO and 57 percent PPO at temperature zero",
+    "kind": "experiment",
+    "source_url": "https://arxiv.org/html/2305.18290",
+    "locator": "§6.2 Fig. 2, GPT-J SFT, TL;DR test",
+    "status": "verified",
+    "notes": "Checked against named source and version"
+  },
+  {
+    "id": "D09",
+    "claim": "Human comparison for DPO vs PPO temp 0 reports 58 percent, with 272 respondents",
+    "kind": "experiment",
+    "source_url": "https://arxiv.org/html/2305.18290",
+    "locator": "§6.4 Table 2; sampled TL;DR preference study",
+    "status": "verified",
+    "notes": "Checked against named source and version"
+  },
+  {
+    "id": "D10",
+    "claim": "Out of distribution CNN/DailyMail DPO 0.36 vs PPO 0.26 at temperature 0",
+    "kind": "experiment",
+    "source_url": "https://arxiv.org/html/2305.18290",
+    "locator": "§6.3 Table 1; GPT-4 judgments",
+    "status": "verified",
+    "notes": "Checked against named source and version"
+  },
+  {
+    "id": "D11",
+    "claim": "TRL supports chosen/rejected data format and implicit reward metrics",
+    "kind": "modern-implementation",
+    "source_url": "https://huggingface.co/docs/trl/main/dpo_trainer",
+    "locator": "Looking deeper; dataset formats; Logged metrics",
+    "status": "verified",
+    "notes": "Checked against named source and version"
+  },
+  {
+    "id": "D12",
+    "claim": "Robust DPO addresses noisy flipped preference labels",
+    "kind": "later-research",
+    "source_url": "https://proceedings.mlr.press/v235/ray-chowdhury24a.html",
+    "locator": "ICML 2024 abstract",
+    "status": "verified",
+    "notes": "Checked against named source and version"
+  },
+  {
+    "id": "D13",
+    "claim": "Length and quality can be entangled under DPO",
+    "kind": "later-research",
+    "source_url": "https://arxiv.org/abs/2403.19159",
+    "locator": "Abstract; 2024 follow-up",
+    "status": "verified",
+    "notes": "Checked against named source and version"
+  },
+  {
+    "id": "D14",
+    "claim": "Beta widget uses margin 0.8 and the exact sigmoid/softplus formula",
+    "kind": "toy-derivation",
+    "source_url": "https://arxiv.org/html/2305.18290",
+    "locator": "Derived from Eq. (7), no benchmark claim",
+    "status": "derived",
+    "notes": "Independently calculated educational example"
+  }
+]

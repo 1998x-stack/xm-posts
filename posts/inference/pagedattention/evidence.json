@@ -1,0 +1,128 @@
+[
+  {
+    "id": "PA01",
+    "claim": "KV cache grows dynamically and contiguous reservation causes memory waste",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/abs/2309.06180",
+    "locator": "§3 Memory Challenges in LLM Serving",
+    "status": "verified",
+    "notes": "Primary source; no universal percentage asserted"
+  },
+  {
+    "id": "PA02",
+    "claim": "Logical-to-physical block mapping through a block table enables non-contiguous KV storage",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/abs/2309.06180",
+    "locator": "§4.1 PagedAttention",
+    "status": "verified",
+    "notes": "Distinguish token blocks from GPU thread blocks"
+  },
+  {
+    "id": "PA03",
+    "claim": "Allocating blocks on demand limits unused token slots to final block for a non-shared sequence",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/abs/2309.06180",
+    "locator": "§4.2 KV Cache Manager",
+    "status": "verified",
+    "notes": "Excludes metadata and backend-specific overhead"
+  },
+  {
+    "id": "PA04",
+    "claim": "Physical blocks can be shared with reference counts and Copy-on-Write",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/abs/2309.06180",
+    "locator": "§4.4 Memory Sharing",
+    "status": "verified",
+    "notes": "Original paper mechanism; modern APC is separate"
+  },
+  {
+    "id": "PA05",
+    "claim": "Scheduler and block management coordinate, with recomputation or swapping under pressure",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/abs/2309.06180",
+    "locator": "§4.5 Scheduling and Preemption",
+    "status": "verified",
+    "notes": "Original system; vLLM V1 details may differ"
+  },
+  {
+    "id": "PA06",
+    "claim": "vLLM showed 2–4x serving throughput improvement under evaluated model/trace/baseline settings",
+    "kind": "experiment",
+    "source_url": "https://doi.org/10.1145/3600006.3613165",
+    "locator": "Abstract and §6 End-to-end Evaluation",
+    "status": "verified",
+    "notes": "Not a general guaranteed speedup"
+  },
+  {
+    "id": "PA07",
+    "claim": "PagedAttention kernel had 20–26% higher latency than FasterTransformer attention kernel in microbenchmark",
+    "kind": "experiment",
+    "source_url": "https://arxiv.org/abs/2309.06180",
+    "locator": "§7.1, Fig. 18(a)",
+    "status": "verified",
+    "notes": "Kernel-only, not end-to-end latency"
+  },
+  {
+    "id": "PA08",
+    "claim": "Paper studies block sizes with ShareGPT and Alpaca traces and uses 16 as default in evaluated system",
+    "kind": "experiment",
+    "source_url": "https://arxiv.org/abs/2309.06180",
+    "locator": "§7.2, Fig. 18(b)",
+    "status": "verified",
+    "notes": "Version-specific configuration, not all 2026 backends"
+  },
+  {
+    "id": "PA09",
+    "claim": "KV bytes/token = 2 * layers * kv_heads * head_dim * dtype bytes",
+    "kind": "derived",
+    "source_url": "https://arxiv.org/abs/2309.06180",
+    "locator": "Derived from K/V tensors, §2/§3",
+    "status": "derived",
+    "notes": "128 KiB for illustrative 32x8x128 FP16; 512 MiB at 4096 tokens"
+  },
+  {
+    "id": "PA10",
+    "claim": "Modern vLLM APC uses block hashing and cache eviction",
+    "kind": "modern-implementation",
+    "source_url": "https://docs.vllm.ai/en/v0.9.2/design/automatic_prefix_caching.html",
+    "locator": "Hash-based KV block caching design",
+    "status": "verified",
+    "notes": "Separate from SOSP 2023 original design"
+  },
+  {
+    "id": "PA11",
+    "claim": "vLLM paged attention kernels fetch KV from mapped physical blocks",
+    "kind": "modern-implementation",
+    "source_url": "https://docs.vllm.ai/en/latest/design/paged_attention/",
+    "locator": "Paged Attention / Key & Value sections",
+    "status": "verified",
+    "notes": "Backend- and version-specific kernel detail"
+  },
+  {
+    "id": "PA12",
+    "claim": "Toy page simulator preserves logical order, CoW and refcounts",
+    "kind": "toy-example",
+    "source_url": "https://github.com/1998x-stack/xm-posts",
+    "locator": "mini_paged_cache.py and tests/test_pagedattention.py",
+    "status": "derived",
+    "notes": "Mechanism simulator, not actual vLLM benchmark"
+  },
+  {
+    "id": "PA13",
+    "claim": "On ShareGPT trace, the original vLLM evaluation sustains 1.7–2.7× higher request rates than Orca (Oracle) at similar latency",
+    "kind": "experiment",
+    "source_url": "https://arxiv.org/abs/2309.06180",
+    "locator": "§6.2 Basic Sampling; Fig. 12 and Fig. 13",
+    "status": "verified",
+    "notes": "Experiment-specific request arrival rate, not an isolated kernel speedup"
+  },
+  {
+    "id": "PA14",
+    "claim": "On Alpaca trace, KV block sharing saved 6.1–9.8% under parallel sampling and 37.6–55.2% under beam search",
+    "kind": "experiment",
+    "source_url": "https://arxiv.org/abs/2309.06180",
+    "locator": "§6.3 Parallel Sampling and Beam Search; Fig. 15",
+    "status": "verified",
+    "notes": "Memory savings are number of blocks saved compared with independent copies; task-specific"
+  }
+]
