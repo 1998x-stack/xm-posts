@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="color-scheme" content="light">
 <meta name="description" content="精读 Yao et al. NeurIPS 2023 Tree of Thoughts：从 CoT 的线性生成到思维树搜索，讲清 Thought、State、Value、BFS、DFS、Game of 24、原论文证据、推理成本与工程边界。">
-<link rel="canonical" href="https://1998x-stack.github.io/xm-posts/posts/reasoning/tree-of-thoughts/">
 <title>Understanding Tree of Thoughts · xm-posts</title>
 <style>
 :root{--bg:#f7f9f6;--paper:#fffefb;--ink:#203f46;--muted:#5b7074;--teal:#187e75;--border:#d6e1de;--orange:#b46744;--purple:#7566a8;--green:#287b68}
@@ -241,7 +240,7 @@ code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace}
 </g></svg><figcaption>图 3 · BFS 逐层扩展并维护一个候选前沿；DFS 优先深入某个候选，发现不可行后回溯。原论文的 BFS 通过宽度上限 b 保留有限个状态，因此更接近带宽度截断的分层搜索，而不是无界穷举 BFS。</figcaption></figure>
 <h3>7.1 BFS：让同一深度的候选公平竞争</h3>
 <p>令 Sₜ₋₁ 为上一层保留的状态集合。每个状态生成候选后，得到新候选集合 S′ₜ；评估器为它们打分，再保留价值最高的 b 个：</p>
-<div class="math-equation" role="group" aria-label="ToT BFS 的候选筛选公式"><div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="BFS top b 公式，可横向滚动"><math display="block" aria-label="S t 等于从 S t 撇中选出价值最高的 b 个状态"><mrow><msub><mi>S</mi><mi>t</mi></msub><mo>=</mo><munder><mi>Top</mi><mi>b</mi></munder><mo>(</mo><msup><mi>S</mi><mo>′</mo></msup><msub><mi>t</mi></msub><mo>,</mo><mi>V</mi><mo>)</mo></mrow></math></div></div>
+<div class="math-equation" role="group" aria-label="ToT BFS 的候选筛选公式"><div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="BFS top b 公式，可横向滚动"><math display="block" aria-label="S t 等于从 S t 撇中选出价值最高的 b 个状态"><mrow><msub><mi>S</mi><mi>t</mi></msub><mo>=</mo><munder><mi>Top</mi><mi>b</mi></munder><mo>(</mo><msub><msup><mi>S</mi><mo>′</mo></msup><mi>t</mi></msub><mo>,</mo><mi>V</mi><mo>)</mo></mrow></math></div></div>
 <p>当 b=1 时，系统每层只保留一个最优状态，容易退化成贪心搜索；当 b 增大时，更多替代路径可以活下来，但生成和评估成本也随之增加。论文 Game of 24 和 Creative Writing 使用 BFS；Game of 24 的宽度 b=5。</p>
 <h3>7.2 DFS：沿着最有希望的路线深入，失败后回头</h3>
 <p>DFS 会先对候选排序，然后沿最有希望的状态递归深入。如果状态评估低于阈值，或者已经达到终止深度，就停止当前分支，并回到父状态探索下一个候选。这种机制特别适合深度不固定、局部约束会逐步收紧的任务。</p>
