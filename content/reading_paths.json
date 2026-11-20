@@ -348,5 +348,18 @@
       "agent-memory-components",
       "harness-engineering"
     ]
+  },
+  {
+    "id": "path-38",
+    "title": "从策略优化到 Agentic RL",
+    "posts": [
+      "bellman-equations",
+      "gae",
+      "ppo",
+      "grpo",
+      "react",
+      "agentic-rl",
+      "swe-agent"
+    ]
   }
 ]
