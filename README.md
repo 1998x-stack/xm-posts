@@ -72,7 +72,7 @@ The Pile 的 22 个来源按原论文 Table 1 给出有效采样权重，配五�
 
 | 分类 | 路径 | 范围 |
 |---|---|---|
-| 基础理论 | `posts/foundations/` | Adam、Word2Vec、词嵌入、优化器（AdamW）、正则化、表示学习 |
+| 基础理论 | `posts/foundations/` | Adam、Word2Vec、BPE / Tokenization、词嵌入、优化器（AdamW）、正则化、表示学习 |
 | **经典机器学习** | `posts/classical-ml/` | SVM、核方法、线性模型、XGBoost 与树集成、PCA 与无监督降维 |
 | **模型架构** | `posts/architectures/` | RNN / LSTM、AlexNet / CNN、ResNet、Seq2Seq、Transformer、Normalization & Residual Paths、状态空间模型 |
 | **强化学习** | `posts/reinforcement-learning/` | Policy Gradient、Actor–Critic、Off-policy Replay、SAC / Maximum Entropy、PPO/TRPO 与序贯决策 |
@@ -100,6 +100,8 @@ RoPE 归入 `architectures`，补充 **Positional Encoding** 主题；不为单�
 AdamW 继续使用 `foundations` 中的 **Optimization & Regularization** 主题，不为单篇优化器论文新建顶层分类；未来 Adam、SGD 和学习率调度可共享该主题。各类别均有 `README.md` 占位；占位**不会作为文章上线**。`content/categories.json` 是分类单一数据源，`content/posts.json` 是文章元数据和发布状态的单一数据源。增加新文章不用手动编辑首页、Sitemap 或 RSS。
 
 XGBoost 归入 `classical-ml` 既有 **Trees & Ensembles** 主题，不新建顶层分类；KDD 2016 原论文与当前 `hist` 方法分开描述。文章包含 14 节、6 幅独立 SVG、7 组原生 MathML 公式、交互式阈值/正则化实验和确定性 Python 单元测试。
+
+BPE 放在 `foundations` → **Tokenization & Subword Units**（新增二级专题，沿用现有一级分类），而不是再新增一级目录；对应 `posts/foundations/bpe/` 包含原论文证据、六幅独立 SVG、交互训练/编码演示、MathML 与纯 Python 回归测试。明确区分 Gage 1994、Sennrich et al. ACL 2016 与 GPT-2 byte-level BPE。
 
 ## 仓库结构
 
