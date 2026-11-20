@@ -35,7 +35,7 @@
     "slug": "classical-ml",
     "title": "经典机器学习",
     "english": "Classical Machine Learning",
-    "description": "从最大间隔与核技巧，到朴素贝叶斯概率分类、线性模型、树模型和集成方法，梳理经典学习算法的数学机制与论文证据。",
+    "description": "从最大间隔与核技巧，到实例学习、最近邻、朴素贝叶斯概率分类、线性模型、树模型和集成方法，梳理经典学习算法的数学机制与论文证据。",
     "topics": [
       {
         "slug": "linear-models",
@@ -44,6 +44,10 @@
       {
         "slug": "probabilistic-models",
         "title": "Probabilistic Models"
+      },
+      {
+        "slug": "mixture-models-density-estimation",
+        "title": "Mixture Models & Density Estimation"
       },
       {
         "slug": "margin-kernels",
@@ -56,6 +60,10 @@
       {
         "slug": "dimensionality-reduction",
         "title": "Dimensionality Reduction"
+      },
+      {
+        "slug": "nearest-neighbors",
+        "title": "Instance-based Learning & Nearest Neighbors"
       }
     ]
   },
@@ -65,7 +73,10 @@
     "english": "Architectures",
     "description": "拆开模型的信息路径：CNN、循环网络、Transformer、MoE、状态空间模型、高效注意力与长上下文架构，明确结构变化与工程实现的边界。",
     "topics": [
-      "Efficient & Mobile CNNs",
+      {
+        "slug": "efficient-mobile-cnn",
+        "title": "Efficient & Mobile CNNs"
+      },
       {
         "slug": "convolutional-vision",
         "title": "Convolutional Networks & Vision"

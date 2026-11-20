@@ -1,0 +1,119 @@
+[
+  {
+    "id": "SW01",
+    "claim": "2020 paper defines bias-free FFN variants with SiLU(xW) ⊗ xV followed by W2",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/abs/2002.05202",
+    "locator": "§2 Eq.(5)-(6)",
+    "status": "verified",
+    "notes": "Original paper uses Swish_1; SiLU naming is modern equivalent"
+  },
+  {
+    "id": "SW02",
+    "claim": "Traditional T5 baseline FFN omits biases",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/abs/2002.05202",
+    "locator": "§1 Eq.(1)-(2)",
+    "status": "verified",
+    "notes": "Do not generalize to all FFNs"
+  },
+  {
+    "id": "SW03",
+    "claim": "Gate variants include GLU, Bilinear, ReGLU, GEGLU, SwiGLU",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/abs/2002.05202",
+    "locator": "§2 Eq.(4)-(6)",
+    "status": "verified",
+    "notes": "Distinguish activation applied to gate from value projection"
+  },
+  {
+    "id": "SW04",
+    "claim": "Gated hidden width reduced by factor 2/3 when matching parameter and computation costs",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/abs/2002.05202",
+    "locator": "§2 after Eq.(6)",
+    "status": "verified",
+    "notes": "Ignoring bias terms and implementation overhead"
+  },
+  {
+    "id": "SW05",
+    "claim": "T5 encoder and decoder both have 12 layers; dmodel=768; conventional dff=3072, gated dff=2048",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/abs/2002.05202",
+    "locator": "§3.1",
+    "status": "verified",
+    "notes": "Original 2020 setup, not LLaMA"
+  },
+  {
+    "id": "SW06",
+    "claim": "Full pretraining C4 heldout log-perplexity at 524288 steps: ReLU 1.677, GEGLU 1.633, SwiGLU 1.636",
+    "kind": "paper-result",
+    "source_url": "https://arxiv.org/abs/2002.05202",
+    "locator": "Table 1",
+    "status": "verified",
+    "notes": "Lower better; matched parameter and compute budget"
+  },
+  {
+    "id": "SW07",
+    "claim": "At 65536 steps short-run mean and std: ReLU 1.997(0.005), GEGLU 1.942(0.004), SwiGLU 1.944(0.010)",
+    "kind": "paper-result",
+    "source_url": "https://arxiv.org/abs/2002.05202",
+    "locator": "Table 1 & §3.2",
+    "status": "verified",
+    "notes": "Parentheses denote inter-run variability from four short runs; no std for long run"
+  },
+  {
+    "id": "SW08",
+    "claim": "Pretraining uses span-corruption objective on C4, batch 128, input 512 output 114, Adafactor; no dropout during pretraining",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/abs/2002.05202",
+    "locator": "§3.2",
+    "status": "verified",
+    "notes": "Paper changed dropout relative to T5 reference"
+  },
+  {
+    "id": "SW09",
+    "claim": "Fine-tuning mixture uses SQuAD, GLUE, SuperGLUE dev scores; task-specific outcomes are noisy",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/abs/2002.05202",
+    "locator": "§3.3 Tables 2-4",
+    "status": "verified",
+    "notes": "Cannot conclude SwiGLU wins every benchmark"
+  },
+  {
+    "id": "SW10",
+    "claim": "PaLM uses SwiGLU for MLP intermediate activations",
+    "kind": "later-architecture",
+    "source_url": "https://jmlr.org/papers/v24/22-1144.html",
+    "locator": "§2 Model / SwiGLU Activation",
+    "status": "verified",
+    "notes": "2022 model not part of 2020 experiments"
+  },
+  {
+    "id": "SW11",
+    "claim": "LLaMA uses SwiGLU with intermediate width 2/3 of 4d",
+    "kind": "later-architecture",
+    "source_url": "https://arxiv.org/abs/2302.13971",
+    "locator": "§2.2 Architecture / SwiGLU activation",
+    "status": "verified",
+    "notes": "LLaMA incorporates RMSNorm and RoPE as separate modifications"
+  },
+  {
+    "id": "SW12",
+    "claim": "Gate nonlinearity can be negative or exceed 1, unlike sigmoid-only intuition",
+    "kind": "independent-derivation",
+    "source_url": "https://arxiv.org/abs/2002.05202",
+    "locator": "§2 Eq.(5)-(6)",
+    "status": "verified",
+    "notes": "Follows from z sigmoid(z); demonstration not experimentally established model behavior"
+  },
+  {
+    "id": "SW13",
+    "claim": "Two d×m projections vs three d×m' projections yields matched weight counts for m'=2m/3",
+    "kind": "independent-derivation",
+    "source_url": "https://arxiv.org/abs/2002.05202",
+    "locator": "§2 after Eq.(6)",
+    "status": "verified",
+    "notes": "Matrix dimensions assumed bias-free"
+  }
+]

@@ -10,6 +10,7 @@
 
 | Post | 解释的问题 | 文章源码 | 核心资料 |
 |---|---|---|---|
+| **Understanding GMM** | 为什么隐变量无法观察，仍能通过软责任估计多峰密度？EM、协方差与 BIC | [`posts/classical-ml/gmm/`](posts/classical-ml/gmm/index.html) | [Dempster et al. (1977)](https://doi.org/10.1111/j.2517-6161.1977.tb01600.x) · [Bishop §9.2](https://www.microsoft.com/en-us/research/wp-content/uploads/2006/01/Bishop-Pattern-Recognition-and-Machine-Learning-2006.pdf) |
 | **Understanding SentencePiece** | 原始文字如何编码为子词 ID？BPE、Unigram、归一化与解码边界 | [`posts/foundations/sentencepiece/`](posts/foundations/sentencepiece/index.html) | [Kudo & Richardson (EMNLP 2018)](https://aclanthology.org/D18-2012/) |
 | **Understanding GAE** | 一步 TD 与全轨迹回报之间，如何权衡偏差与方差？ | [`posts/reinforcement-learning/gae/`](posts/reinforcement-learning/gae/index.html) | [Schulman et al. (ICLR 2016)](https://arxiv.org/abs/1506.02438) |
 | **Understanding AlphaGo** | 15 幅 SVG 解析 AlphaGo：19×19×48 特征、APV-MCTS、虚拟损失与 BayesElo 消融 | [`posts/reinforcement-learning/alphago/`](posts/reinforcement-learning/alphago/index.html) | [Silver et al. (Nature 2016)](https://doi.org/10.1038/nature16961) |
@@ -31,6 +32,7 @@
 | **Understanding DPO** | 为什么偏好对可以直接训练策略而无需显式奖励模型？ | [`posts/training/dpo/`](posts/training/dpo/index.html) | [Rafailov et al. (NeurIPS 2023)](https://arxiv.org/abs/2305.18290) |
 | **Understanding Linear Regression** | 为什么最小平方残差意味着正交投影？闭式解、梯度下降和统计推断需要哪些边界？ | [`posts/classical-ml/linear-regression/`](posts/classical-ml/linear-regression/index.html) | [NIST: Least Squares](https://www.itl.nist.gov/div898/handbook/pmd/section1/pmd141.htm) · [Berkeley: Gauss–Markov](https://eml.berkeley.edu/sst/regression.html) |
 | **Understanding Naive Bayes** | 条件独立怎么帮助分类？多项式、伯努利、平滑与校准有什么本质区别？ | [`posts/classical-ml/naive-bayes/`](posts/classical-ml/naive-bayes/index.html) | [McCallum & Nigam (1998)](https://www.cse.iitb.ac.in/~soumen/readings/papers/McCallumN1998event.pdf) |
+| **Understanding KNN** | 为什么只记住样本，也能通过邻居的距离、数量与投票完成分类？ | [`posts/classical-ml/knn/`](posts/classical-ml/knn/index.html) | [Cover & Hart (IEEE 1967)](https://doi.org/10.1109/TIT.1967.1053964) |
 | **Understanding Decision Tree** | 为什么一连串简单判断能成为分类与回归模型？从 ID3、CART 与 C4.5 到剪枝 | [`posts/classical-ml/decision-tree/`](posts/classical-ml/decision-tree/index.html) | [Quinlan (1986)](https://doi.org/10.1007/BF00116251) · [Breiman et al. (1984)](https://www.routledge.com/Classification-and-Regression-Trees/Breiman-Friedman-Stone-Olshen/p/book/9780412048418) |
 | **Understanding SVM** | 为什么分对了仍需最大间隔？ | [`posts/classical-ml/svm/`](posts/classical-ml/svm/index.html) | [Cortes & Vapnik (1995)](https://doi.org/10.1007/BF00994018) |
 | **Understanding XGBoost** | 为什么提升树可以二阶优化并扩展到海量稀疏数据？ | [`posts/classical-ml/xgboost/`](posts/classical-ml/xgboost/index.html) | [Chen & Guestrin (KDD 2016)](https://arxiv.org/abs/1603.02754) |
@@ -272,6 +274,11 @@ Neural Gating 位于 `posts/architectures/neural-gating/`，归入 **Architectur
 ## MobileNet / Efficient & Mobile CNNs
 
 MobileNet 归入 `architectures` → **Convolutional Neural Networks & Vision** → **Efficient & Mobile CNNs**，无需新建一级分类。文章 [`Understanding MobileNet`](posts/architectures/mobilenet/index.html) 位于 `posts/architectures/mobilenet/`，以 2017 原论文为主线，区分 V2 逆残差、V3 NAS/SE 与 V4 UIB/Mobile MQA。包含五幅 SVG、MathML、交互成本分析、Python 验证及证据台账。
+
+
+## SwiGLU · Gated FFN
+
+- [Understanding SwiGLU](posts/architectures/swiglu/index.html)：精读 Shazeer (2020) 的 SiLU 门控、三矩阵参数匹配、T5 实证与现代 LLM 使用；归入已有 `architectures/gating-mechanisms` 二级主题。
 
 ### Logistic Regression — 经典机器学习 / Linear Models
 

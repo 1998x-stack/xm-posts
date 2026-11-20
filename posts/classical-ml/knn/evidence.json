@@ -1,0 +1,92 @@
+[
+  {
+    "id": "KNN01",
+    "claim": "Cover and Hart (1967) defines nearest neighbor as class label of closest labeled sample",
+    "kind": "paper-claim",
+    "source_url": "https://doi.org/10.1109/TIT.1967.1053964",
+    "locator": "Abstract; Section II, Eq. (1)",
+    "status": "verified",
+    "notes": "Original paper is primarily about 1-NN, not modern default k=5"
+  },
+  {
+    "id": "KNN02",
+    "claim": "Under paper's asymptotic regularity setting, the 1-NN risk R is bounded by 2 times the Bayes risk R*",
+    "kind": "paper-claim",
+    "source_url": "https://doi.org/10.1109/TIT.1967.1053964",
+    "locator": "Abstract; Section VI, risk bound",
+    "status": "verified",
+    "notes": "Asymptotic bound; not a finite-sample accuracy guarantee"
+  },
+  {
+    "id": "KNN03",
+    "claim": "Cover and Hart credit Fix and Hodges for earlier k_n-nearest-neighbor majority rules",
+    "kind": "paper-claim",
+    "source_url": "https://gwern.net/doc/ai/nn/retrieval/1967-cover.pdf",
+    "locator": "Page 22 (PDF page 2), historical discussion preceding Section II",
+    "status": "verified",
+    "notes": "Historical provenance attributed in original paper"
+  },
+  {
+    "id": "KNN04",
+    "claim": "Cover and Hart's admissibility argument for the 1-NN decision rule does not establish universal superiority of k=1",
+    "kind": "paper-claim",
+    "source_url": "https://doi.org/10.1109/TIT.1967.1053964",
+    "locator": "Section III, Figure 1, Example (2)",
+    "status": "verified",
+    "notes": "Article explicitly distinguishes admissibility from practical validation choice"
+  },
+  {
+    "id": "KNN05",
+    "claim": "KNeighborsClassifier supports uniform and inverse-distance vote weights",
+    "kind": "modern-implementation",
+    "source_url": "https://scikit-learn.org/stable/modules/generated/sklearn.neighbors.KNeighborsClassifier.html",
+    "locator": "weights parameter",
+    "status": "verified",
+    "notes": "Article's 1/(d+epsilon) convention is independently defined for toy"
+  },
+  {
+    "id": "KNN06",
+    "claim": "Scikit-learn neighbor search supports brute, KDTree and BallTree approaches and notes curse of dimensionality",
+    "kind": "modern-implementation",
+    "source_url": "https://scikit-learn.org/stable/modules/neighbors.html",
+    "locator": "Nearest neighbor algorithms; Computational complexity",
+    "status": "verified",
+    "notes": "No universal speedup claimed for trees"
+  },
+  {
+    "id": "KNN07",
+    "claim": "Scaling input features is important for distance-based KNN under Euclidean metric",
+    "kind": "modern-implementation",
+    "source_url": "https://scikit-learn.org/stable/auto_examples/neighbors/plot_classification.html",
+    "locator": "Example explanatory text preceding pipeline",
+    "status": "verified",
+    "notes": "Fit scaler only on training folds is a separate proper evaluation practice"
+  },
+  {
+    "id": "KNN08",
+    "claim": "Choice of k and L1/L2 distance should be validated on held-out data or cross-validation",
+    "kind": "pedagogy",
+    "source_url": "https://cs231n.github.io/classification/",
+    "locator": "kNN classifier and cross-validation discussion",
+    "status": "verified",
+    "notes": "No historical benchmark figures copied"
+  },
+  {
+    "id": "KNN09",
+    "claim": "In the ten-point toy at x=(4.4,4.1), k=1 votes A and k=3 votes B",
+    "kind": "toy-derivation",
+    "source_url": "https://github.com/1998x-stack/xm-posts/blob/main/posts/classical-ml/knn/mini_knn.py",
+    "locator": "Deterministic ten-point fixture, asserts and tests/test_knn_toy.py",
+    "status": "derived",
+    "notes": "Toy coordinates are article-original, not Cover-Hart experiments"
+  },
+  {
+    "id": "KNN10",
+    "claim": "The toy k=3 inverse-distance vote sums are A approximately 0.71247 and B approximately 1.16852",
+    "kind": "toy-derivation",
+    "source_url": "https://github.com/1998x-stack/xm-posts/blob/main/posts/classical-ml/knn/mini_knn.py",
+    "locator": "toy_vote_scores and Python assertions",
+    "status": "derived",
+    "notes": "Uses epsilon=1e-9; numbers computed independently"
+  }
+]
