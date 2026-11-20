@@ -640,5 +640,26 @@
     "summary": "精读 Wei et al. NeurIPS 2022：从标准 few-shot 与 CoT 的机制对照、条件生成概率分解，到 PaLM/GSM8K 规模效应与严格消融；配原创 SVG、交互格式实验、证据台账和可运行 Python 断言。",
     "paper": "https://arxiv.org/abs/2201.11903",
     "illustration": "chain-of-thought"
+  },
+  {
+    "slug": "pca",
+    "title": "Understanding PCA",
+    "subtitle": "为什么最大方差的方向，恰好使重建误差最小？",
+    "category": "classical-ml",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 31,
+    "tags": [
+      "PCA",
+      "Principal Component Analysis",
+      "Unsupervised Learning",
+      "Dimensionality Reduction",
+      "SVD",
+      "Covariance"
+    ],
+    "summary": "从二维点云的最大方差直觉出发，完整推导中心化、特征方程、SVD 与正交重建的等价性，结合交互投影实验、四点手算、数据泄漏边界及纯 Python 数值测试。",
+    "paper": "https://doi.org/10.1080/14786440109462720",
+    "illustration": "pca"
   }
 ]
