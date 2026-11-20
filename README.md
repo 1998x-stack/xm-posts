@@ -280,6 +280,14 @@ MobileNet 归入 `architectures` → **Convolutional Neural Networks & Vision** 
 
 - [Understanding SwiGLU](posts/architectures/swiglu/index.html)：精读 Shazeer (2020) 的 SiLU 门控、三矩阵参数匹配、T5 实证与现代 LLM 使用；归入已有 `architectures/gating-mechanisms` 二级主题。
 
+### Classification Evaluation / ROC-AUC
+
+- **Understanding ROC-AUC**：从混淆矩阵、阈值扫描与成对排序推导 ROC-AUC，并比较 PR / AP、基率、校准及实际工作点。源文件：[`posts/evaluation/roc-auc/`](posts/evaluation/roc-auc/index.html)；Fawcett (2006), https://doi.org/10.1016/j.patrec.2005.10.010。
+
+## K-Means / Clustering & Unsupervised Learning
+
+[Understanding K-Means](posts/classical-ml/k-means/index.html) — 归入 `classical-ml / clustering`：从 Lloyd 交替最小化、平方距离与均值最优性，到 k-means++ 的 D² 初始化、四点完整手算、五幅 SVG、原生 MathML、交互实验与可运行 Python 样例。聚类体系采用已有 Classical ML 一级类，新增 `Clustering & Unsupervised Learning` 二级主题。
+
 ### Logistic Regression — 经典机器学习 / Linear Models
 
 [Understanding Logistic Regression](posts/classical-ml/logistic-regression/index.html)：归入现有 `classical-ml → linear-models`，贯通 Berkson（1944）/Cox（1958）/Nelder–Wedderburn（1972）、Sigmoid / Log-Odds、Bernoulli 最大似然与 BCE、凸优化和 L2、Softmax。配套七幅独立 SVG、11 组原生 MathML、阈值交互实验、证据台账和纯 Python 梯度有限差分测试。
