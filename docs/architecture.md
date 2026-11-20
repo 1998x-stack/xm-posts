@@ -17,6 +17,10 @@ flowchart LR
 
 `_site/` is disposable and ignored by Git. All category pages, the archive, homepage cards, JSON search index, RSS and sitemap are derived from manifests, not manually maintained. Original paper articles remain self-contained HTML reading artifacts with independent SVG/code sources alongside them.
 
+## Reasoning and inference taxonomy
+
+`reasoning` covers answer-quality algorithms (CoT, Self-Consistency, test-time search/verification); `inference` covers serving infrastructure (KV Cache, batching, latency/throughput). Both share the manifest-driven publishing pipeline.
+
 ## Path layout and routing
 
 - GitHub Pages target: `https://1998x-stack.github.io/xm-posts/`.

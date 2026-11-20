@@ -320,5 +320,25 @@
     "summary": "从二维旋转和矩阵恒等式出发，图解 RoPE 如何将相对位移写入 Q/K 内积，结合交互平移实验、纯 Python 断言、RoFormer 论文证据与 PI、YaRN、LongRoPE 的工程边界。",
     "paper": "https://arxiv.org/abs/2104.09864",
     "illustration": "rope"
+  },
+  {
+    "slug": "self-consistency",
+    "title": "Understanding Self-Consistency",
+    "subtitle": "为何多路径思考与答案投票比只相信一次贪心 CoT 更可靠？",
+    "category": "reasoning",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 28,
+    "tags": [
+      "Chain-of-Thought",
+      "Self-Consistency",
+      "Reasoning",
+      "Decoding",
+      "Test-time Compute"
+    ],
+    "summary": "从单条 CoT 的脆弱性出发，图解多路径采样、答案边缘化、投票机制与原论文实验，附交互示例、数学推导及可运行 Python 代码。",
+    "paper": "https://arxiv.org/abs/2203.11171",
+    "illustration": "self-consistency"
   }
 ]

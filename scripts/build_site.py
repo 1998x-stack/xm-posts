@@ -86,6 +86,8 @@ def post_card(p,rel,ordinal=0):
         icon, art = 'generic', '<span class="math-mark">θ ← θ − α·Adam(g) − α·λθ</span>'
     elif p['slug'] == 'rope':
         icon, art = 'generic', '<span class="math-mark">R(m)ᵀR(n) = R(n−m)</span>'
+    elif p['slug'] == 'self-consistency':
+        icon, art = 'consistency', '<span class="math-mark">argmaxₐ Σᵢ 𝟙[aᵢ = a]</span><span class="attention-dots">10 · 13 · 10 · 10 → 10</span>'
     elif p['slug'] == 'svm':
         icon, art = 'margin', '<span class="math-mark">margin = 2 / ||w||</span><span class="svm-boundary svm-left"></span><span class="svm-boundary svm-center"></span><span class="svm-boundary svm-right"></span><span class="svm-point point-blue"></span><span class="svm-point point-orange"></span>'
     elif p['slug'] == 'lora':
