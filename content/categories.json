@@ -37,7 +37,8 @@
       "State Space",
       "Normalization & Residual Paths",
       "Positional Encoding",
-      "Recurrent Networks / LSTM"
+      "Recurrent Networks / LSTM",
+      "Attention Head Sharing"
     ]
   },
   {
@@ -52,7 +53,9 @@
       "Value-based RL",
       "Deep Q-Learning",
       "Off-policy & Experience Replay",
-      "Maximum Entropy RL"
+      "Maximum Entropy RL",
+      "Continuous Control",
+      "Off-policy Actor–Critic"
     ]
   },
   {

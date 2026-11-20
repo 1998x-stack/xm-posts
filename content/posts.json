@@ -260,6 +260,27 @@
     "illustration": "pagedattention"
   },
   {
+    "slug": "ddpg",
+    "title": "Understanding DDPG",
+    "subtitle": "连续动作如何学习？从确定性策略梯度到双目标网络与经验回放",
+    "category": "reinforcement-learning",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 32,
+    "tags": [
+      "DDPG",
+      "Deterministic Policy Gradient",
+      "Continuous Control",
+      "Off-policy Actor–Critic",
+      "Replay Buffer",
+      "Target Networks"
+    ],
+    "summary": "以 Lillicrap 等 ICLR 2016 原论文为证据，从连续动作枚举困境推导确定性 Actor 梯度、Critic Bellman 目标、经验回放、Polyak 双目标网络与 OU 探索，配五幅结构图、可交互 TD 目标算例、纯 Python 梯度核验和论文实验对照，并辨析 TD3/SAC 演进。",
+    "paper": "https://arxiv.org/abs/1509.02971",
+    "illustration": "ddpg"
+  },
+  {
     "slug": "ppo",
     "title": "Understanding PPO",
     "subtitle": "为什么同一批经验能学多轮，却不能任意改写策略？",
@@ -576,6 +597,28 @@
     "summary": "以 ICML 2018 SAC 原论文为主线，逐步理解离策略 Replay、最大熵 Soft Bellman、随机 Actor 和双 Critic，区分独立 V 原版与后续无 V/自动温度版本；配六幅机制图、α 交互、MathML、纯 Python 检验和证据台账。",
     "paper": "https://proceedings.mlr.press/v80/haarnoja18b.html",
     "illustration": "sac"
+  },
+  {
+    "slug": "gqa",
+    "title": "Understanding GQA",
+    "subtitle": "为什么减少 Key/Value Head 能显著降低 Decode 带宽，却保留多个 Query Head？",
+    "category": "architectures",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 34,
+    "tags": [
+      "GQA",
+      "Grouped-Query Attention",
+      "MQA",
+      "MHA",
+      "KV Cache",
+      "Checkpoint Uptraining",
+      "Attention Head Sharing"
+    ],
+    "summary": "精读 Ainslie et al. (EMNLP 2023)：图解 MHA/GQA/MQA 的共享结构、KV Cache 显存比例、MHA 权重均值池化与 5% 继续训练；核对 T5-XXL 数据，附交互组数实验、MathML 和纯 Python 断言。",
+    "paper": "https://aclanthology.org/2023.emnlp-main.298/",
+    "illustration": "gqa"
   },
   {
     "slug": "naive-bayes",
