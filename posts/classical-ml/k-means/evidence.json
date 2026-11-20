@@ -88,5 +88,14 @@
     "locator": "init parameter / greedy k-means++ description",
     "status": "verified",
     "notes": "Separate modern implementation from theoretical result."
+  },
+  {
+    "id": "KM11",
+    "claim": "At each step of the four-point Lloyd example, the displayed J equals the sum of (x_i - center_assigned_i)^2 over all points.",
+    "kind": "toy-derivation",
+    "source_url": "https://doi.org/10.1109/TIT.1982.1056489",
+    "locator": "Article Section 06; deterministic four-point Lloyd states and runtime per-point assertion",
+    "status": "derived",
+    "notes": "Per-point error table is recomputed from assigned center each step; not a clustering accuracy claim."
   }
 ]
