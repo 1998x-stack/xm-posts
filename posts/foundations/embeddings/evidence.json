@@ -1,0 +1,137 @@
+[
+  {
+    "id": "EMB01",
+    "claim": "Token IDs select a trainable embedding matrix row; shape [B,T] becomes [B,T,d]",
+    "kind": "derived",
+    "source_url": "https://aclanthology.org/N19-1423/",
+    "locator": "BERT §3; general lookup shape",
+    "status": "derived",
+    "notes": "V=50,000/d=768 memory is an independent toy calculation"
+  },
+  {
+    "id": "EMB02",
+    "claim": "CBOW and Skip-gram predict center words and context words in opposite directions",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/abs/1301.3781",
+    "locator": "§2–3 Model architectures",
+    "status": "verified",
+    "notes": "Distinguish model from Negative Sampling later paper"
+  },
+  {
+    "id": "EMB03",
+    "claim": "Skip-gram Negative Sampling uses observed positive context pairs and sampled negative words",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/abs/1310.4546",
+    "locator": "§2.2 Eq. (4)",
+    "status": "verified",
+    "notes": "Presented formula is for a single target-context pair"
+  },
+  {
+    "id": "EMB04",
+    "claim": "GloVe fits a weighted least-squares log co-occurrence objective",
+    "kind": "paper-claim",
+    "source_url": "https://aclanthology.org/D14-1162/",
+    "locator": "§3 Eq. (8)",
+    "status": "verified",
+    "notes": "Apply log only to positive co-occurrence counts"
+  },
+  {
+    "id": "EMB05",
+    "claim": "Original BERT combines token, segment and position embeddings",
+    "kind": "paper-claim",
+    "source_url": "https://aclanthology.org/N19-1423/",
+    "locator": "§3 Model Architecture; Figure 2",
+    "status": "verified",
+    "notes": "Not claimed universal to all Transformers"
+  },
+  {
+    "id": "EMB06",
+    "claim": "A contextualized token hidden state can depend on neighboring tokens",
+    "kind": "derived",
+    "source_url": "https://aclanthology.org/N19-1423/",
+    "locator": "§3 bidirectional encoder",
+    "status": "derived",
+    "notes": "Bank illustration is not a measured training example"
+  },
+  {
+    "id": "EMB07",
+    "claim": "SBERT uses siamese/triplet structures to learn independently comparable sentence embeddings",
+    "kind": "paper-claim",
+    "source_url": "https://aclanthology.org/D19-1410/",
+    "locator": "§3 Model; Figures 1 and 2",
+    "status": "verified",
+    "notes": "Bi-encoder distinct from cross-encoder"
+  },
+  {
+    "id": "EMB08",
+    "claim": "SBERT compares CLS, mean and max pooling, with MEAN default in original setup",
+    "kind": "paper-claim",
+    "source_url": "https://aclanthology.org/D19-1410/",
+    "locator": "§3 Model, first paragraph",
+    "status": "verified",
+    "notes": "Pooling varies by model release/configuration"
+  },
+  {
+    "id": "EMB09",
+    "claim": "SimCSE unsupervised positives arise from two dropout passes of the same sentence",
+    "kind": "paper-claim",
+    "source_url": "https://aclanthology.org/2021.emnlp-main.552/",
+    "locator": "§1 and §3, Fig. 1(a)",
+    "status": "verified",
+    "notes": "Different dropout masks; no original text corruption required"
+  },
+  {
+    "id": "EMB10",
+    "claim": "Supervised SimCSE uses NLI entailment pairs and contradiction hard negatives",
+    "kind": "paper-claim",
+    "source_url": "https://aclanthology.org/2021.emnlp-main.552/",
+    "locator": "§1 and §3, Fig. 1(b)",
+    "status": "verified",
+    "notes": "Applies to supervised variant"
+  },
+  {
+    "id": "EMB11",
+    "claim": "E5 uses weakly supervised contrastive pretraining for text vectors",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/abs/2212.03533",
+    "locator": "Abstract; method section",
+    "status": "verified",
+    "notes": "Do not infer universal results across unknown RAG benchmarks"
+  },
+  {
+    "id": "EMB12",
+    "claim": "E5-base-v2 usage requires query/passage input prefixes for retrieval",
+    "kind": "implementation",
+    "source_url": "https://huggingface.co/intfloat/e5-base-v2",
+    "locator": "Model card Usage and FAQ",
+    "status": "verified",
+    "notes": "Specific model card contract; not every embedding model"
+  },
+  {
+    "id": "EMB13",
+    "claim": "Masked mean, cosine, and unit-vector squared-distance identities are mathematical consequences of definitions",
+    "kind": "toy-derivation",
+    "source_url": "https://aclanthology.org/D19-1410/",
+    "locator": "Independent worked algebra in article, SBERT §3 for embedding comparison",
+    "status": "derived",
+    "notes": "Require nonzero vectors and nonempty mask"
+  },
+  {
+    "id": "EMB14",
+    "claim": "All SVG images are explanatory conceptual models rather than recorded experimental points",
+    "kind": "illustrative",
+    "source_url": "https://aclanthology.org/D19-1410/",
+    "locator": "Independent pedagogical graphics",
+    "status": "illustrative",
+    "notes": "No borrowed paper figures or claimed numerical reproduction"
+  },
+  {
+    "id": "EMB15",
+    "claim": "STS metrics and retrieval metrics measure different evaluation protocols",
+    "kind": "derived",
+    "source_url": "https://aclanthology.org/D19-1410/",
+    "locator": "§4 STS; §7 computational efficiency",
+    "status": "derived",
+    "notes": "No head-to-head cross-paper performance claim"
+  }
+]

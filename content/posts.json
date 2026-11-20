@@ -811,5 +811,30 @@
     "summary": "以原始 CART、ID3 与 C4.5 文献为脉络，渐进图解熵、Gini、连续阈值、回归叶与代价复杂度剪枝，配六幅原创机制图、MathML 推导、交互阈值实验及纯 Python 可验证断言。",
     "paper": "https://doi.org/10.1007/BF00116251",
     "illustration": "decision-tree"
+  },
+  {
+    "slug": "embeddings",
+    "title": "Understanding Embeddings",
+    "subtitle": "从离散 token 到连续语义空间：查表、对比学习、句向量与语义检索",
+    "category": "foundations",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 32,
+    "tags": [
+      "Embedding",
+      "Representation Learning",
+      "Word2Vec",
+      "GloVe",
+      "BERT",
+      "Sentence-BERT",
+      "SimCSE",
+      "Contrastive Learning",
+      "Semantic Search",
+      "RAG"
+    ],
+    "summary": "沿 Word2Vec、GloVe、BERT、SBERT、SimCSE 与 E5 的原论文主线，拆解 Embedding lookup、上下文表示、掩码池化、对比损失与检索系统，配七幅原创 SVG、原生 MathML、互动角度实验和可测的纯 Python 示例。",
+    "paper": "https://aclanthology.org/D19-1410/",
+    "illustration": "embedding"
   }
 ]
