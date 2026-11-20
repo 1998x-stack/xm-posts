@@ -1,0 +1,119 @@
+[
+  {
+    "id": "SP01",
+    "claim": "Raw sentence training without language-specific pretokenization, with BPE and Unigram",
+    "kind": "paper-claim",
+    "source_url": "https://aclanthology.org/D18-2012/",
+    "locator": "Abstract; Section 1",
+    "status": "verified",
+    "notes": ""
+  },
+  {
+    "id": "SP02",
+    "claim": "Four components are Normalizer, Trainer, Encoder, Decoder",
+    "kind": "architecture",
+    "source_url": "https://aclanthology.org/D18-2012/",
+    "locator": "Section 2",
+    "status": "verified",
+    "notes": ""
+  },
+  {
+    "id": "SP03",
+    "claim": "Vocabulary size and reserved special IDs are managed by the library",
+    "kind": "implementation",
+    "source_url": "https://aclanthology.org/D18-2012/",
+    "locator": "Sections 3.3-3.4",
+    "status": "verified",
+    "notes": ""
+  },
+  {
+    "id": "SP04",
+    "claim": "Decoder reconstructs normalized text with escaped U+2581 whitespace marker",
+    "kind": "equation",
+    "source_url": "https://aclanthology.org/D18-2012/",
+    "locator": "Section 3.1",
+    "status": "verified",
+    "notes": ""
+  },
+  {
+    "id": "SP05",
+    "claim": "BPE segmentation uses heap-based optimization and O(N log N) paper complexity",
+    "kind": "algorithm",
+    "source_url": "https://aclanthology.org/D18-2012/",
+    "locator": "Section 3.2",
+    "status": "verified",
+    "notes": ""
+  },
+  {
+    "id": "SP06",
+    "claim": "Unigram candidate path scoring and Viterbi dynamic programming underpin subword segmentation",
+    "kind": "algorithm",
+    "source_url": "https://aclanthology.org/P18-1007/",
+    "locator": "Section 3",
+    "status": "verified",
+    "notes": ""
+  },
+  {
+    "id": "SP07",
+    "claim": "Training can sample alternate Unigram subword segmentations",
+    "kind": "algorithm",
+    "source_url": "https://aclanthology.org/P18-1007/",
+    "locator": "Abstract and Section 3",
+    "status": "verified",
+    "notes": ""
+  },
+  {
+    "id": "SP08",
+    "claim": "Official library has vocab_size, character_coverage, model_type, byte_fallback parameters",
+    "kind": "modern-implementation",
+    "source_url": "https://google.github.io/sentencepiece/doc/options/",
+    "locator": "Training options",
+    "status": "verified",
+    "notes": ""
+  },
+  {
+    "id": "SP09",
+    "claim": "KFTT Table 1 BLEU for ja-en baseline/raw/pretoken is 28.24/29.55/29.85; en-ja is 20.06/21.62/20.86",
+    "kind": "experiment",
+    "source_url": "https://aclanthology.org/D18-2012.pdf",
+    "locator": "Section 4.1 Table 1",
+    "status": "verified",
+    "notes": ""
+  },
+  {
+    "id": "SP09B",
+    "claim": "Japanese raw segmentation Table 2 216.2 vs 5.9 sec implies about 36.6x, differing from ~380x in prose",
+    "kind": "derived",
+    "source_url": "https://aclanthology.org/D18-2012.pdf",
+    "locator": "Section 4.2 Table 2 and prose",
+    "status": "derived",
+    "notes": "Explicit source prose/table discrepancy; table ratio calculated independently"
+  },
+  {
+    "id": "SP10",
+    "claim": "Normalizing Unicode and whitespace can change the original text; rules can be configured",
+    "kind": "modern-implementation",
+    "source_url": "https://github.com/google/sentencepiece/blob/master/doc/normalization.md",
+    "locator": "Normalization documentation",
+    "status": "verified",
+    "notes": ""
+  },
+  {
+    "id": "SP11",
+    "claim": "BPE-Dropout was published later and is distinct from 2018 Unigram sampling",
+    "kind": "later-work",
+    "source_url": "https://arxiv.org/abs/1910.13267",
+    "locator": "Abstract",
+    "status": "verified",
+    "notes": ""
+  },
+  {
+    "id": "SP12",
+    "claim": "aba toy example and alpha reweighting numerical values are independent teaching constructions",
+    "kind": "toy-derived",
+    "source_url": "https://aclanthology.org/P18-1007/",
+    "locator": "Unigram path scoring principle",
+    "status": "derived",
+    "notes": "Not historical experimental evidence"
+  }
+]
