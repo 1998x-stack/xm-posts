@@ -1,0 +1,128 @@
+[
+  {
+    "id": "X01",
+    "claim": "Additive regression trees, model representation and complexity Ω(f)=γT+λ/2 Σw²",
+    "kind": "paper-claim",
+    "source_url": "https://www.kdd.org/kdd2016/papers/files/rfp0697-chenAemb.pdf",
+    "locator": "§2.1, Eq. (1)–(2)",
+    "status": "verified",
+    "notes": "Paper edition: ACM KDD 2016; article distinguishes historical measurements and modern variants."
+  },
+  {
+    "id": "X02",
+    "claim": "Second-order Taylor approximation with gradients and Hessians",
+    "kind": "paper-claim",
+    "source_url": "https://www.kdd.org/kdd2016/papers/files/rfp0697-chenAemb.pdf",
+    "locator": "§2.2, Eq. (3)–(4)",
+    "status": "verified",
+    "notes": "Paper edition: ACM KDD 2016; article distinguishes historical measurements and modern variants."
+  },
+  {
+    "id": "X03",
+    "claim": "Optimal leaf weight w*=-G/(H+λ) and structure score",
+    "kind": "paper-claim",
+    "source_url": "https://www.kdd.org/kdd2016/papers/files/rfp0697-chenAemb.pdf",
+    "locator": "§2.2, Eq. (5)–(6)",
+    "status": "verified",
+    "notes": "Paper edition: ACM KDD 2016; article distinguishes historical measurements and modern variants."
+  },
+  {
+    "id": "X04",
+    "claim": "Regularized split gain subtracts γ for extra leaf complexity",
+    "kind": "paper-claim",
+    "source_url": "https://www.kdd.org/kdd2016/papers/files/rfp0697-chenAemb.pdf",
+    "locator": "§2.2, Eq. (7)",
+    "status": "verified",
+    "notes": "Paper edition: ACM KDD 2016; article distinguishes historical measurements and modern variants."
+  },
+  {
+    "id": "X05",
+    "claim": "Shrinkage and column subsampling are supported overfitting controls",
+    "kind": "paper-claim",
+    "source_url": "https://www.kdd.org/kdd2016/papers/files/rfp0697-chenAemb.pdf",
+    "locator": "§2.3",
+    "status": "verified",
+    "notes": "Paper edition: ACM KDD 2016; article distinguishes historical measurements and modern variants."
+  },
+  {
+    "id": "X06",
+    "claim": "Exact greedy and global/local approximate candidates are distinct algorithms",
+    "kind": "paper-claim",
+    "source_url": "https://www.kdd.org/kdd2016/papers/files/rfp0697-chenAemb.pdf",
+    "locator": "§3.1–3.2, Algorithms 1–2",
+    "status": "verified",
+    "notes": "Paper edition: ACM KDD 2016; article distinguishes historical measurements and modern variants."
+  },
+  {
+    "id": "X07",
+    "claim": "Weighted quantile sketch supports weighted quantile proposals and merge/prune guarantees",
+    "kind": "paper-claim",
+    "source_url": "https://www.kdd.org/kdd2016/papers/files/rfp0697-chenAemb.pdf",
+    "locator": "§3.3; supplementary reference",
+    "status": "verified",
+    "notes": "Paper edition: ACM KDD 2016; article distinguishes historical measurements and modern variants."
+  },
+  {
+    "id": "X08",
+    "claim": "Sparsity aware split scoring chooses a learned missing-value default direction",
+    "kind": "paper-claim",
+    "source_url": "https://www.kdd.org/kdd2016/papers/files/rfp0697-chenAemb.pdf",
+    "locator": "§3.4, Algorithm 3, Fig. 4",
+    "status": "verified",
+    "notes": "Paper edition: ACM KDD 2016; article distinguishes historical measurements and modern variants."
+  },
+  {
+    "id": "X09",
+    "claim": "Allstate-10K sparsity-aware algorithm is reported more than 50 times faster than basic algorithm",
+    "kind": "paper-measurement",
+    "source_url": "https://www.kdd.org/kdd2016/papers/files/rfp0697-chenAemb.pdf",
+    "locator": "§3.4, Fig. 5; Allstate-10K",
+    "status": "verified",
+    "notes": "Paper edition: ACM KDD 2016; article distinguishes historical measurements and modern variants."
+  },
+  {
+    "id": "X10",
+    "claim": "Column blocks, cache access patterns and out-of-core compression/sharding are part of the system",
+    "kind": "paper-claim",
+    "source_url": "https://www.kdd.org/kdd2016/papers/files/rfp0697-chenAemb.pdf",
+    "locator": "§4.1–4.3, Fig. 6–9",
+    "status": "verified",
+    "notes": "Paper edition: ACM KDD 2016; article distinguishes historical measurements and modern variants."
+  },
+  {
+    "id": "X11",
+    "claim": "Criteo out-of-core benchmark reports approximately 3x compression improvement, further 2x with sharding and 1.7B examples",
+    "kind": "paper-measurement",
+    "source_url": "https://www.kdd.org/kdd2016/papers/files/rfp0697-chenAemb.pdf",
+    "locator": "§6.5, Fig. 11; AWS c3.8xlarge with 2 SSD",
+    "status": "verified",
+    "notes": "Paper edition: ACM KDD 2016; article distinguishes historical measurements and modern variants."
+  },
+  {
+    "id": "X12",
+    "claim": "Distributed comparison is an EC2/Criteo historical result, not a current universal speed guarantee",
+    "kind": "paper-measurement",
+    "source_url": "https://www.kdd.org/kdd2016/papers/files/rfp0697-chenAemb.pdf",
+    "locator": "§6.6, Fig. 12",
+    "status": "verified",
+    "notes": "Paper edition: ACM KDD 2016; article distinguishes historical measurements and modern variants."
+  },
+  {
+    "id": "X13",
+    "claim": "Modern tree_method=hist documentation is distinct from paper global/local approximate proposal.",
+    "kind": "modern-documentation",
+    "source_url": "https://xgboost.readthedocs.io/en/stable/treemethod.html",
+    "locator": "Tree Methods",
+    "status": "verified",
+    "notes": "Modern documentation, not original paper."
+  },
+  {
+    "id": "X14",
+    "claim": "Toy split values and assertions are worked examples, not reproduced benchmark metrics.",
+    "kind": "teaching-example",
+    "source_url": "https://xgboost.readthedocs.io/en/stable/tutorials/model.html",
+    "locator": "Introduction to Boosted Trees - Model Complexity and split score",
+    "status": "verified",
+    "notes": "Checked with pure-Python deterministic assertions in mini_xgboost.py."
+  }
+]
