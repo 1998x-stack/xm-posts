@@ -2049,5 +2049,37 @@
       "src": "assets/cover-mixture.svg",
       "caption": "RAG-Sequence 整句共享文档，RAG-Token 逐词混合证据"
     }
+  },
+  {
+    "slug": "context-engineering",
+    "title": "Context Engineering：构建可靠 AI Agent 的上下文工程",
+    "subtitle": "从 Prompt、RAG 与 Memory 到 Harness：理解模型每一步应该看到什么，以及信息如何被检索、压缩、组装、更新和验证",
+    "category": "agents",
+    "topic": "context-engineering",
+    "status": "published",
+    "published": "2026-11-21",
+    "updated": "2026-11-21",
+    "reading_minutes": 35,
+    "tags": [
+      "Context Engineering",
+      "Context Management",
+      "Agent Memory",
+      "Context Window",
+      "RAG",
+      "Just-in-Time Retrieval",
+      "Compaction",
+      "Long-horizon Agents",
+      "Harness Engineering",
+      "Anthropic Engineering",
+      "OpenAI Engineering",
+      "Tool Use"
+    ],
+    "summary": "系统梳理 AI Agent 的上下文生命周期：从目标定义、RAG 与 Just-in-Time Retrieval，到信息过滤、Token 预算、Session Trimming、Summarization、Compaction、分层 Memory、Dreaming 与 Harness Engineering；结合 Anthropic、OpenAI 和学术综述，提供原创 SVG、MathML 推导、交互式 Token 预算实验、安全边界与可落地架构。",
+    "paper": "https://arxiv.org/abs/2507.13334",
+    "illustration": "context-engineering",
+    "cover": {
+      "src": "assets/01-context-lifecycle.svg",
+      "caption": "从目标定义、检索、处理、组装到执行与持久化的上下文生命周期"
+    }
   }
 ]
