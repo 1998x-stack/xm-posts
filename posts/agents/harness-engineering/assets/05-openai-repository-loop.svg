@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 350" role="img" aria-labelledby="h5-title h5-desc">
+<title id="h5-title">OpenAI Codex 的仓库知识与可观测性闭环</title>
+<desc id="h5-desc">AGENTS.md 作为入口地图指向结构化 docs，架构和质量规则由 linter 与结构测试执行，agent 在隔离 worktree 中操作应用并读取浏览器、日志和指标，再把修复与清理结果写回仓库。</desc>
+<rect width="900" height="350" rx="20" fill="#f6f8f5"/>
+<g font-family="system-ui,-apple-system,Segoe UI,PingFang SC,sans-serif">
+<rect x="36" y="53" width="195" height="100" rx="13" fill="#e7eff9" stroke="#a7bfd6" stroke-width="2"/>
+<text x="133" y="91" text-anchor="middle" fill="#315f83" font-size="20" font-weight="750">AGENTS.md</text><text x="133" y="121" text-anchor="middle" fill="#4d6b77" font-size="13">入口地图 / 指引</text>
+<rect x="274" y="53" width="195" height="100" rx="13" fill="#e4f3eb" stroke="#91bca7" stroke-width="2"/>
+<text x="371" y="91" text-anchor="middle" fill="#236c59" font-size="20" font-weight="750">docs/</text><text x="371" y="121" text-anchor="middle" fill="#4d7065" font-size="13">架构 / 计划 / 规范</text>
+<rect x="512" y="53" width="164" height="100" rx="13" fill="#fff0e4" stroke="#d8a17b" stroke-width="2"/>
+<text x="594" y="91" text-anchor="middle" fill="#9b6039" font-size="20" font-weight="750">CI + Linters</text><text x="594" y="121" text-anchor="middle" fill="#8b674f" font-size="13">机械约束</text>
+<rect x="720" y="53" width="144" height="100" rx="13" fill="#f1ebfa" stroke="#b7a9d7" stroke-width="2"/>
+<text x="792" y="91" text-anchor="middle" fill="#65548c" font-size="20" font-weight="750">Agent</text><text x="792" y="121" text-anchor="middle" fill="#6c6484" font-size="13">执行 / 修改</text>
+<g stroke="#548e7e" stroke-width="2.5" fill="none"><path d="M232 103H265 M255 94L265 103L255 112 M470 103H503 M493 94L503 103L493 112 M677 103H711 M701 94L711 103L701 112"/></g>
+<rect x="207" y="217" width="486" height="84" rx="14" fill="#fff" stroke="#b9d4c8" stroke-width="2"/>
+<text x="450" y="250" text-anchor="middle" fill="#2c6c5c" font-size="19" font-weight="750">Isolated Worktree + Observable App</text>
+<text x="450" y="277" text-anchor="middle" fill="#55766d" font-size="14">Browser / DOM / Screenshot / Logs / Metrics / Traces</text>
+<path d="M792 154V186H693V259H702 M702 250L693 259L702 268" fill="none" stroke="#c17b4d" stroke-width="2.5"/>
+<path d="M207 259H118V187H133V162" fill="none" stroke="#c17b4d" stroke-width="2.5" stroke-dasharray="6 5"/>
+<text x="450" y="329" text-anchor="middle" fill="#607c75" font-size="13">反馈、修复、文档与质量规则持续回写</text>
+</g></svg>
