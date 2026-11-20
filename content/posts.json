@@ -20,7 +20,8 @@
     ],
     "summary": "精读 Dempster–Laird–Rubin (1977) EM 方法与 Bishop PRML §9.2 的 GMM：从隐变量生成过程、软后验责任和对数似然出发，推导 E/M 步的均值、权重、协方差更新；配四幅可独立打开的原创 SVG、六组原生 MathML、固定参数后验交互、BIC 与协方差选型，以及纯 Python 数值不变量测试。",
     "paper": "https://doi.org/10.1111/j.2517-6161.1977.tb01600.x",
-    "illustration": "gmm"
+    "illustration": "gmm",
+    "topic": "mixture-models-density-estimation"
   },
   {
     "slug": "multi-head-attention",
