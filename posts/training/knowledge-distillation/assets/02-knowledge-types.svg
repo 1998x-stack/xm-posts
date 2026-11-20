@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 470" role="img" aria-labelledby="types-title types-desc">
+<title id="types-title">输出、特征和关系三种知识蒸馏信号</title>
+<desc id="types-desc">三个并列面板分别展示教师和学生的输出概率对齐、中间隐藏特征对齐、以及多个样本两两关系矩阵对齐。</desc>
+<rect width="960" height="470" rx="18" fill="#fbfdfa"/>
+<g transform="translate(26 28)"><rect width="290" height="390" rx="14" fill="#f9eee4" stroke="#e0c3a6"/>
+<text x="145" y="38" text-anchor="middle" font-size="18" font-weight="800" fill="#895e3e">01 · Response / Logit</text><text x="145" y="63" text-anchor="middle" font-size="12" fill="#8b725c">输出概率是否接近？</text>
+<rect x="30" y="94" width="96" height="54" rx="8" fill="#fff" stroke="#d4ae8a"/><text x="78" y="127" text-anchor="middle" font-size="14" fill="#865d3e">Teacher</text>
+<rect x="164" y="94" width="96" height="54" rx="8" fill="#fff" stroke="#d4ae8a"/><text x="212" y="127" text-anchor="middle" font-size="14" fill="#865d3e">Student</text>
+<path d="M78 148 V176 H212 V148" stroke="#b77b4d" stroke-width="2.5" fill="none"/><path d="M205 167 L212 176 L219 167" stroke="#b77b4d" stroke-width="2.5" fill="none"/>
+<g fill="#c17c52"><rect x="42" y="209" width="168" height="18" rx="4"/><rect x="42" y="239" width="104" height="18" rx="4" opacity=".8"/><rect x="42" y="269" width="48" height="18" rx="4" opacity=".6"/></g>
+<g font-size="11" fill="#755d48"><text x="42" y="203">教师 soft targets</text><text x="42" y="311">KL / Cross-Entropy</text></g><text x="145" y="355" text-anchor="middle" font-size="12" fill="#765e49">适合 logits 可访问的任务</text></g>
+<g transform="translate(335 28)"><rect width="290" height="390" rx="14" fill="#e8f2ed" stroke="#b9d8ca"/>
+<text x="145" y="38" text-anchor="middle" font-size="18" font-weight="800" fill="#2d6c61">02 · Feature</text><text x="145" y="63" text-anchor="middle" font-size="12" fill="#5e7d75">中间表示是否对齐？</text>
+<rect x="30" y="94" width="96" height="54" rx="8" fill="#fff" stroke="#a8cdbd"/><text x="78" y="127" text-anchor="middle" font-size="14" fill="#2d6c61">Teacher</text>
+<rect x="164" y="94" width="96" height="54" rx="8" fill="#fff" stroke="#a8cdbd"/><text x="212" y="127" text-anchor="middle" font-size="14" fill="#2d6c61">Student</text>
+<g fill="#398b7d"><rect x="40" y="185" width="44" height="35" rx="4"/><rect x="90" y="185" width="44" height="35" rx="4" opacity=".8"/><rect x="140" y="185" width="44" height="35" rx="4" opacity=".65"/><rect x="190" y="185" width="44" height="35" rx="4" opacity=".5"/></g>
+<path d="M78 148 V173 H145 V185 M212 148 V173 H145" fill="none" stroke="#438a7e" stroke-width="2.5"/>
+<rect x="55" y="248" width="180" height="43" rx="8" fill="#fff" stroke="#a8cdbd"/><text x="145" y="275" text-anchor="middle" font-size="13" fill="#316e64">MSE / Cosine / Attention</text><text x="145" y="355" text-anchor="middle" font-size="12" fill="#52756e">需要层映射与维度对齐</text></g>
+<g transform="translate(644 28)"><rect width="290" height="390" rx="14" fill="#eeebf7" stroke="#cec5e4"/>
+<text x="145" y="38" text-anchor="middle" font-size="18" font-weight="800" fill="#5d5288">03 · Relation</text><text x="145" y="63" text-anchor="middle" font-size="12" fill="#716990">样本之间的关系是否保留？</text>
+<g transform="translate(45 104)"><rect width="88" height="88" rx="6" fill="#fff" stroke="#c9c0e1"/><g fill="#8b7bb9"><rect x="8" y="8" width="21" height="21"/><rect x="34" y="8" width="21" height="21" opacity=".8"/><rect x="60" y="8" width="20" height="21" opacity=".3"/><rect x="8" y="34" width="21" height="21" opacity=".8"/><rect x="34" y="34" width="21" height="21"/><rect x="60" y="34" width="20" height="21" opacity=".4"/><rect x="8" y="60" width="21" height="20" opacity=".3"/><rect x="34" y="60" width="21" height="20" opacity=".4"/><rect x="60" y="60" width="20" height="20"/></g></g>
+<text x="89" y="211" text-anchor="middle" font-size="11" fill="#685e8c">Teacher R</text><path d="M142 148 H173" stroke="#8878b6" stroke-width="2.5"/><path d="M165 140 L174 148 L165 156" fill="none" stroke="#8878b6" stroke-width="2.5"/>
+<g transform="translate(184 104)"><rect width="88" height="88" rx="6" fill="#fff" stroke="#c9c0e1"/><g fill="#8b7bb9"><rect x="8" y="8" width="21" height="21"/><rect x="34" y="8" width="21" height="21" opacity=".7"/><rect x="60" y="8" width="20" height="21" opacity=".35"/><rect x="8" y="34" width="21" height="21" opacity=".7"/><rect x="34" y="34" width="21" height="21"/><rect x="60" y="34" width="20" height="21" opacity=".45"/><rect x="8" y="60" width="21" height="20" opacity=".35"/><rect x="34" y="60" width="21" height="20" opacity=".45"/><rect x="60" y="60" width="20" height="20"/></g></g>
+<text x="228" y="211" text-anchor="middle" font-size="11" fill="#685e8c">Student R</text><rect x="49" y="248" width="192" height="43" rx="8" fill="#fff" stroke="#c9c0e1"/><text x="145" y="275" text-anchor="middle" font-size="13" fill="#63588a">Distance / Angle / Graph</text><text x="145" y="355" text-anchor="middle" font-size="12" fill="#716990">适合保留样本几何结构</text></g>
+<text x="480" y="451" text-anchor="middle" font-size="12" fill="#6e8580">三类信号可以组合；具体损失与层映射由任务和模型结构决定。</text>
+</svg>

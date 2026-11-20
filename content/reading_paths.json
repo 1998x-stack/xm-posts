@@ -392,5 +392,15 @@
       "harness-engineering",
       "loop-engineering"
     ]
+  },
+  {
+    "id": "path-41",
+    "title": "预训练模型的知识迁移与高效适配",
+    "posts": [
+      "bert",
+      "knowledge-distillation",
+      "lora",
+      "qlora"
+    ]
   }
 ]

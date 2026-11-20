@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 330" role="img" aria-labelledby="temp-svg-title temp-svg-desc">
+<title id="temp-svg-title">温度缩放让教师概率分布变得平滑</title>
+<desc id="temp-svg-desc">同一组三类 logits 在温度一、二和四下的堆叠概率条形图，随着温度提高，非最大类别的概率增加。</desc>
+<rect width="820" height="330" rx="18" fill="#fbfdfa"/>
+<text x="32" y="39" font-size="17" font-weight="800" fill="#2d625d">固定 logits：[2.2, 1.2, −0.2]</text>
+<g font-size="12" fill="#55736e">
+<rect x="34" y="57" width="12" height="12" rx="2" fill="#287b72"/><text x="53" y="68">猫</text>
+<rect x="103" y="57" width="12" height="12" rx="2" fill="#c17c52"/><text x="122" y="68">狗</text>
+<rect x="172" y="57" width="12" height="12" rx="2" fill="#7868a9"/><text x="191" y="68">狐狸</text>
+</g>
+<g font-size="14" font-weight="800" fill="#426a64"><text x="34" y="112">T = 1</text><text x="34" y="197">T = 2</text><text x="34" y="282">T = 4</text></g>
+<g fill="#e8eee9"><rect x="126" y="84" width="480" height="40" rx="6"/><rect x="126" y="169" width="480" height="40" rx="6"/><rect x="126" y="254" width="480" height="40" rx="6"/></g>
+<g>
+<rect x="126" y="84" width="329.1" height="40" rx="6" fill="#287b72"/><rect x="455.1" y="84" width="121.1" height="40" fill="#c17c52"/><rect x="576.2" y="84" width="29.8" height="40" rx="4" fill="#7868a9"/>
+<rect x="126" y="169" width="251.6" height="40" rx="6" fill="#287b72"/><rect x="377.6" y="169" width="152.6" height="40" fill="#c17c52"/><rect x="530.2" y="169" width="75.8" height="40" rx="4" fill="#7868a9"/>
+<rect x="126" y="254" width="206.2" height="40" rx="6" fill="#287b72"/><rect x="332.2" y="254" width="160.6" height="40" fill="#c17c52"/><rect x="492.8" y="254" width="113.2" height="40" rx="4" fill="#7868a9"/>
+</g>
+<g font-size="12" font-weight="700" fill="#315d58"><text x="628" y="109">68.6 / 25.2 / 6.2%</text><text x="628" y="194">52.4 / 31.8 / 15.8%</text><text x="628" y="279">43.0 / 33.5 / 23.6%</text></g>
+<text x="126" y="316" font-size="11" fill="#708780">每行总长度均为 100%；数值顺序为猫 / 狗 / 狐狸。</text>
+</svg>
