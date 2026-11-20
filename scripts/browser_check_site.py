@@ -55,6 +55,19 @@ def run(output:Path, site:Path):
                     report['viewports'][label]={**result,'pass':okay,'errors':errors,'http_errors':status}
                     if not okay:report['pass']=False
                     if label=='desktop':
+                        total=page.locator('[data-post-card]').count()
+                        assert page.locator('[data-post-card]:visible').count()==min(8,total)
+                        more=page.locator('[data-load-more]')
+                        if total>8:
+                            assert more.is_visible()
+                            more.click()
+                            assert page.locator('[data-post-card]:visible').count()==min(16,total)
+                        category=page.locator('[data-category-filter]')
+                        category.select_option('architectures')
+                        visible=page.locator('[data-post-card]:visible')
+                        assert visible.count()>=1
+                        assert all(visible.nth(i).get_attribute('data-category')=='architectures' for i in range(visible.count()))
+                        category.select_option('')
                         search=page.locator('[data-search-input]')
                         search.fill('ResNet')
                         shown=page.locator('[data-post-card]:visible').count()
@@ -84,6 +97,14 @@ def run(output:Path, site:Path):
                             page.set_content(offline_html(site,site/'index.html'))
                         assert page.locator('[data-post-card]').count()>=2
                         report['navigation']={'search':'passed','category':'passed','article':'passed','back_to_home':'passed'}
+                    if label=='narrow':
+                        toggle=page.locator('[data-menu-toggle]')
+                        assert toggle.is_visible()
+                        toggle.click()
+                        assert toggle.get_attribute('aria-expanded')=='true'
+                        assert page.locator('#site-nav').is_visible()
+                        page.keyboard.press('Escape')
+                        assert toggle.get_attribute('aria-expanded')=='false'
                     page.close()
                 browser.close()
         finally:server.shutdown();server.server_close()
