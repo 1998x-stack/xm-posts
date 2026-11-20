@@ -1,0 +1,137 @@
+[
+  {
+    "id": "E01",
+    "kind": "engineering-report",
+    "claim": "OpenAI 报告其 Codex agent-first 内部项目在约五个月内发展到约一百万行代码、约 1,500 个 PR，并估计构建时间约为手工方式的十分之一。",
+    "source_url": "https://openai.com/index/harness-engineering/",
+    "locator": "§1, paragraphs describing repository scale, PR throughput and estimated time",
+    "status": "verified",
+    "notes": "这是 OpenAI 对内部项目的工程自述，不是独立控制实验或可外推的生产率保证。"
+  },
+  {
+    "id": "E02",
+    "kind": "architecture",
+    "claim": "OpenAI 将 AGENTS.md 作为知识库入口地图，深层知识放入结构化 docs/，并通过 progressive disclosure 与机械校验维护。",
+    "source_url": "https://openai.com/index/harness-engineering/",
+    "locator": "§4 We made repository knowledge the system of record",
+    "status": "verified",
+    "notes": "本文对实践的归纳；不是所有仓库都必须使用相同目录结构。"
+  },
+  {
+    "id": "E03",
+    "kind": "engineering",
+    "claim": "OpenAI 使用 worktree 隔离、Chrome DevTools Protocol、浏览器快照、日志、指标和 trace 提升 Agent 对应用的可观察性。",
+    "source_url": "https://openai.com/index/harness-engineering/",
+    "locator": "§3 Increasing application legibility",
+    "status": "verified",
+    "notes": "按原文所述的内部工程实践总结。"
+  },
+  {
+    "id": "E04",
+    "kind": "engineering",
+    "claim": "OpenAI 通过分层依赖规则、自定义 linter、结构测试和周期性清理任务约束架构漂移与维护熵。",
+    "source_url": "https://openai.com/index/harness-engineering/",
+    "locator": "§5 Enforcing architecture and taste; §9 Entropy and garbage collection",
+    "status": "verified",
+    "notes": "文中举例为 Types → Config → Repo → Service → Runtime → UI；不是通用唯一分层标准。"
+  },
+  {
+    "id": "E05",
+    "kind": "engineering-report",
+    "claim": "Anthropic 2025 长任务 Harness 使用 initializer agent 建立 init.sh、功能清单、进度文件和初始 Git commit，后续 coding agent 增量实现并留下结构化交接。",
+    "source_url": "https://www.anthropic.com/research/effective-harnesses-for-long-running-agents",
+    "locator": "§1–3 The long-running agent problem; Environment management; Getting up to speed",
+    "status": "verified",
+    "notes": "Anthropic 内部实验经验，主要针对长时间全栈 Web 应用构建。"
+  },
+  {
+    "id": "E06",
+    "kind": "engineering-report",
+    "claim": "Anthropic 2026 Harness 将 Planner、Generator、Evaluator 分离，并用 sprint contract、Playwright 和 rubric 形成独立反馈回路。",
+    "source_url": "https://www.anthropic.com/research/harness-design-long-running-apps",
+    "locator": "§3 Scaling to full-stack coding; The architecture",
+    "status": "verified",
+    "notes": "这是特定产品构建实验中的架构，不代表所有 Agent 任务都需要三个角色。"
+  },
+  {
+    "id": "E07",
+    "kind": "quantitative-report",
+    "claim": "Anthropic 报告 Retro game maker 的 solo 运行约 20 分钟、9 美元，full harness 约 6 小时、200 美元；后续 DAW Harness 约 3 小时 50 分钟、124.70 美元。",
+    "source_url": "https://www.anthropic.com/research/harness-design-long-running-apps",
+    "locator": "§3 Running the harness; Results from the updated harness",
+    "status": "verified",
+    "notes": "具体模型、提示、任务和内部 token 成本的个案，不是普适质量或成本基准。"
+  },
+  {
+    "id": "E08",
+    "kind": "method",
+    "claim": "Anthropic 区分 context compaction 与 context reset，并报告模型能力变化会改变 reset 和 sprint decomposition 的必要性。",
+    "source_url": "https://www.anthropic.com/research/harness-design-long-running-apps",
+    "locator": "§1 Why naive implementations fall short; §3 Scaling to full-stack coding; §4 Iterating on the harness",
+    "status": "verified",
+    "notes": "模型版本差异是原文实验观察；不应外推为所有模型的固定行为。"
+  },
+  {
+    "id": "E09",
+    "kind": "evaluation-framework",
+    "claim": "Anthropic 将 Agent eval 拆为 task、trial、grader、transcript、outcome，并区分 agent harness 与 evaluation harness。",
+    "source_url": "https://www.anthropic.com/research/demystifying-evals-for-ai-agents",
+    "locator": "§2 The structure of an evaluation",
+    "status": "verified",
+    "notes": "采用 Anthropic 原文术语，本文中文解释为教学归纳。"
+  },
+  {
+    "id": "E10",
+    "kind": "research-preprint",
+    "claim": "Zhong 与 Zhu 提出 AI Harness Engineering 的十一项运行时职责、H0–H3 支持阶梯和 trace-based evaluation。",
+    "source_url": "https://arxiv.org/abs/2605.13357",
+    "locator": "Abstract; §2 The AI Harness Engineering; §3 A controlled harness ladder",
+    "status": "verified",
+    "notes": "arXiv 研究预印本；是作者提出的研究框架，不代表已形成行业标准。"
+  },
+  {
+    "id": "E11",
+    "kind": "research-preprint",
+    "claim": "Barbaste 等对 11 个 Agent 系统进行源码比较，并提出七个 Harness 子系统及两个跨切面。",
+    "source_url": "https://arxiv.org/abs/2609.00006",
+    "locator": "Abstract; §2.3 The Seven Subsystems",
+    "status": "verified",
+    "notes": "2026 年 7 月 arXiv 研究预印本；本文将其作为一个架构分析框架使用。"
+  },
+  {
+    "id": "E12",
+    "kind": "research-paper",
+    "claim": "SWE-agent 研究 Agent-Computer Interface 对软件工程任务的影响。",
+    "source_url": "https://arxiv.org/abs/2405.15793",
+    "locator": "Abstract; §2–3",
+    "status": "verified",
+    "notes": "NeurIPS 2024；本文只用于说明 ACI 与 Harness 的边界。"
+  },
+  {
+    "id": "E13",
+    "kind": "research-paper",
+    "claim": "ReAct 将语言模型推理与行动交替组织，并通过环境观察更新后续决策。",
+    "source_url": "https://arxiv.org/abs/2210.03629",
+    "locator": "Abstract; method",
+    "status": "verified",
+    "notes": "ICLR 2023；本文用作 Agent Loop 的先修概念。"
+  },
+  {
+    "id": "E14",
+    "kind": "pedagogy",
+    "claim": "交互实验 H_demo = C × T × V × S × (1 − E) 用于演示多个运行时环节的瓶颈效应。",
+    "source_url": "https://arxiv.org/abs/2605.13357",
+    "locator": "Article §09; original equation authored for pedagogy",
+    "status": "illustrative",
+    "notes": "本文自定义的教学指数，不是论文指标、概率估计或实测模型。"
+  },
+  {
+    "id": "E15",
+    "kind": "synthesis",
+    "claim": "七个子系统与十一项职责可以分别视为架构分解视角与运行时责任视角。",
+    "source_url": "https://arxiv.org/abs/2609.00006",
+    "locator": "Article §03–04; synthesis of source frameworks",
+    "status": "derived",
+    "notes": "本文综合两篇预印本的分析单位，不声称两篇论文共享同一标准。"
+  }
+]
