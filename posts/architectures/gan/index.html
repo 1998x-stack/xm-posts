@@ -33,12 +33,26 @@ pre{background:#193c43;color:#e8f5ef;padding:18px;border-radius:12px;font:12px/1
 <p class="summary"><strong>一句话先理解：</strong>GAN 不要求直接算出生成样本的概率密度，而让生成器根据判别器的反馈调整其输出分布，争取让真实与生成样本越来越难区分。</p></header>
 <section class="chapter" id="motivation" aria-labelledby="motivation-h"><h2 id="motivation-h"><small>01</small>生成模型究竟在学什么？</h2><p class="lead">给你许多猫的照片，让模型产生一张<strong>训练集中没有出现过</strong>、却看起来像猫的新图像。我们要学的不是“猫 / 非猫”的分类边界，而是数据可能长什么样的整体规律。</p>
 <p>抽象成一个最小的三类别问题：真实世界中 A、B、C 的出现概率分别为 60%、30%、10%。最初的生成器却让 C 占了 65%。即使它能画出“样本”，其出现频率也明显不对。<strong>生成建模要改变样本出现的分布</strong>。</p>
-<figure class="diagram"><div class="figtag">FIG. 01</div><img src="assets/02-two-distributions.svg" alt="真实概率 A六成B三成C一成；生成器起始时明显偏向C。" decoding="async" loading="lazy"><figcaption>这是一道人工构造的离散概率习题，并非原论文里的实验图。GAN 通常面对连续高维数据，但三类玩具例子足以解释它的核心博弈。</figcaption></figure>
+<figure class="diagram"><div class="figtag">FIG. 01</div><svg class="embedded-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 415" role="img" aria-labelledby="gan-fig1-title gan-fig1-desc">
+<title id="gan-fig1-title">三类别真实与生成分布的差异</title>
+<desc id="gan-fig1-desc">真实概率 A 0.60、B 0.30、C 0.10；生成概率 A 0.15、B 0.20、C 0.65。每对柱子的差异显示生成器尚未学会目标分布。</desc>
+<rect width="960" height="415" rx="20" fill="#fbfcf8"/>
+<g font-family="system-ui,'PingFang SC',sans-serif">
+<text x="48" y="51" fill="#25494d" font-size="26" font-weight="750">从离散小例子看“学一个分布”</text>
+<text x="48" y="83" fill="#5d7571" font-size="18">A、B、C 是教学用的三种样本类型，不是论文实验结果</text>
+<rect x="52" y="115" width="19" height="19" rx="3" fill="#2d857e"/><text x="81" y="131" font-size="18" fill="#3d6661">真实 p_data</text>
+<rect x="267" y="115" width="19" height="19" rx="3" fill="#cc835d"/><text x="297" y="131" font-size="18" fill="#855d44">生成 p_g</text>
+<line x1="130" x2="862" y1="343" y2="343" stroke="#b6cdc1" stroke-width="2"/>
+<g fill="#2d857e"><rect x="202" y="170" width="51" height="173" rx="6"/><rect x="432" y="256" width="51" height="87" rx="6"/><rect x="662" y="314" width="51" height="29" rx="6"/></g>
+<g fill="#cc835d"><rect x="261" y="300" width="51" height="43" rx="6"/><rect x="491" y="285" width="51" height="58" rx="6"/><rect x="721" y="155" width="51" height="188" rx="6"/></g>
+<g font-size="19" font-weight="750" text-anchor="middle"><text x="227" y="158" fill="#286d67">.60</text><text x="457" y="244" fill="#286d67">.30</text><text x="687" y="302" fill="#286d67">.10</text><text x="286" y="290" fill="#ab633f">.15</text><text x="516" y="274" fill="#ab633f">.20</text><text x="746" y="144" fill="#ab633f">.65</text></g>
+<g font-size="20" text-anchor="middle" fill="#4d6e67"><text x="257" y="376">类别 A</text><text x="487" y="376">类别 B</text><text x="717" y="376">类别 C</text></g>
+</g></svg><figcaption>这是一道人工构造的离散概率习题，并非原论文里的实验图。GAN 通常面对连续高维数据，但三类玩具例子足以解释它的核心博弈。</figcaption></figure>
 <p>传统显式密度模型（例如 <a href="../../classical-ml/gmm/">GMM</a>）通常尝试写出可计算的概率密度；GAN 通过<strong>生成样本与一个判别器的反馈</strong>学习，不要求直接计算生成分布在某个样本处的可解析密度。</p></section>
 <section class="chapter" id="two-networks" aria-labelledby="two-networks-h"><h2 id="two-networks-h"><small>02</small>G 与 D：两个网络怎样相互教会对方？</h2><p><strong>生成器 G</strong>把噪声向量 z（如来自正态分布）变成一个样本 x̃ = G(z)。噪声不是标签，而是给 G 的不同输入；<strong>判别器 D</strong>读入样本 x，输出其来自真实数据而非生成器的概率估计，值在 0 到 1 之间。</p>
-<figure class="diagram"><div class="figtag">FIG. 02</div><svg class="embedded-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 420" role="img" aria-labelledby="title desc">
-<title id="title">GAN 的生成器与判别器双网络回路</title>
-<desc id="desc">噪声经过生成器形成合成样本，真实与合成样本共同送入判别器；判别器更新分类边界，生成器根据判别器信号更新。</desc>
+<figure class="diagram"><div class="figtag">FIG. 02</div><svg class="embedded-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 420" role="img" aria-labelledby="gan-fig2-title gan-fig2-desc">
+<title id="gan-fig2-title">GAN 的生成器与判别器双网络回路</title>
+<desc id="gan-fig2-desc">噪声经过生成器形成合成样本，真实与合成样本共同送入判别器；判别器更新分类边界，生成器根据判别器信号更新。</desc>
 <rect width="960" height="420" rx="20" fill="#fbfcf8"/>
 <g font-family="system-ui,'PingFang SC',sans-serif">
 <text x="44" y="52" font-size="27" font-weight="750" fill="#24494c">两个网络 · 两种任务 · 一条反馈回路</text>
@@ -69,7 +83,21 @@ pre{background:#193c43;color:#e8f5ef;padding:18px;border-radius:12px;font:12px/1
 <section class="chapter" id="best-response" aria-labelledby="best-response-h"><h2 id="best-response-h"><small>04</small>为什么最优判别器是一个比值？</h2><p>先假设 G 暂时不变，且 D 有足够表达能力。对于某个固定的样本位置 x，D 要最大化 <strong>a log d + b log(1 − d)</strong>，其中 a = p<sub>data</sub>(x)、b = p<sub>g</sub>(x)、d = D(x)。对 d 求导并令它为零，就有 a/d − b/(1−d) = 0。</p>
 <div class="equation" role="group" aria-label="固定生成器时，理论最优判别器"><div class="math-scroll" role="region" tabindex="0" aria-label="固定生成器时，理论最优判别器，公式区域可横向滚动"><math display="block" aria-label="固定生成器时，理论最优判别器"><mrow><msup><mi>D</mi><mo>*</mo></msup><mo>(</mo><mi>x</mi><mo>)</mo><mo>=</mo><mfrac><mrow><msub><mi>p</mi><mtext>data</mtext></msub><mo>(</mo><mi>x</mi><mo>)</mo></mrow><mrow><msub><mi>p</mi><mtext>data</mtext></msub><mo>(</mo><mi>x</mi><mo>)</mo><mo>+</mo><msub><mi>p</mi><mi>g</mi></msub><mo>(</mo><mi>x</mi><mo>)</mo></mrow></mfrac></mrow></math></div></div>
 <p>例如类别 A 的真实概率是 0.60，生成概率是 0.15，于是 D*(A) = 0.60 / 0.75 = <strong>80%</strong>。B 为 60%；C 仅约 13.3%。这不是模型实测精度，而是给定两个分布后推出来的<strong>理想最优值</strong>。</p>
-<figure class="diagram"><div class="figtag">FIG. 03</div><img src="assets/03-best-response.svg" alt="三种类别的理论最优判别器输出分别是百分之八十、六十与十三点三。" decoding="async" loading="lazy"><figcaption>这个比值只在分母大于 0 的位置定义；两侧概率都为 0 的位置不影响期望目标。真实神经网络 D 不一定能达到 D*。</figcaption></figure></section>
+<figure class="diagram"><div class="figtag">FIG. 03</div><svg class="embedded-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 418" role="img" aria-labelledby="gan-fig3-title gan-fig3-desc">
+<title id="gan-fig3-title">最优判别器 D 星的三个具体输出</title>
+<desc id="gan-fig3-desc">D星等于真实密度除以真实与生成密度之和。类别 A 为80%，B 为60%，C 为13.3%，说明判断取决于两侧相对概率。</desc>
+<rect width="960" height="418" rx="20" fill="#fbfcf8"/>
+<g font-family="system-ui,'PingFang SC',sans-serif">
+<text x="47" y="49" fill="#264b50" font-size="27" font-weight="750">判别器不是“记住真假”，而是比较两种来源</text>
+<text x="47" y="86" fill="#4e7471" font-size="20">D*(x) = p_data(x) / (p_data(x) + p_g(x))</text>
+<rect x="47" y="119" width="866" height="245" rx="16" fill="#eff6f1" stroke="#c7ded3"/>
+<g fill="#315b5a" font-weight="700" font-size="20"><text x="79" y="159">样本</text><text x="235" y="159">真实 / 生成</text><text x="570" y="159">D* 认为真实的概率</text></g>
+<g font-size="22" fill="#335c5b"><text x="82" y="223">A</text><text x="235" y="223">.60 / .15</text><text x="82" y="281">B</text><text x="235" y="281">.30 / .20</text><text x="82" y="339">C</text><text x="235" y="339">.10 / .65</text></g>
+<g fill="#d8e6dd"><rect x="570" y="202" width="235" height="23" rx="5"/><rect x="570" y="260" width="235" height="23" rx="5"/><rect x="570" y="318" width="235" height="23" rx="5"/></g>
+<g fill="#2d857e"><rect x="570" y="202" width="188" height="23" rx="5"/><rect x="570" y="260" width="141" height="23" rx="5"/><rect x="570" y="318" width="31.3" height="23" rx="5"/></g>
+<g font-size="20" font-weight="750" fill="#266c65"><text x="819" y="221">80%</text><text x="819" y="279">60%</text><text x="819" y="337">13.3%</text></g>
+<text x="47" y="395" font-size="17" fill="#56756e">p_g = p_data 时，所有有概率质量的类别对应 D* = 50%。</text>
+</g></svg><figcaption>这个比值只在分母大于 0 的位置定义；两侧概率都为 0 的位置不影响期望目标。真实神经网络 D 不一定能达到 D*。</figcaption></figure></section>
 <section class="chapter" id="experiment" aria-labelledby="experiment-h"><h2 id="experiment-h"><small>05</small>互动：移动生成分布，观察 D* 如何改变</h2><p>现在让生成概率从起点 q = (0.15, 0.20, 0.65) 缓慢靠近真实分布 p = (0.60, 0.30, 0.10)。设置 t ∈ [0,1]，使 p<sub>g</sub>(t) = (1−t)q + tp。<strong>这是人为设计的插值轨迹，不是 GAN 真实训练算法或训练结果</strong>。</p>
 <div class="lab" aria-label="三类别最优判别器互动计算器">
 <label for="gan-t">生成分布朝真实分布靠近的程度 <output id="gan-t-out" for="gan-t">0%</output></label>
@@ -124,7 +152,25 @@ for param in D.parameters():
 <p>与神经网络训练不同，本文的 <a href="https://github.com/1998x-stack/xm-posts/blob/main/posts/architectures/gan/demo.py">标准库 Python 数值小实验</a> 直接检验三类别 D*、JSD 和理论恒等式。它无需安装 torch，也不声称学出了图像。运行：<code>python posts/architectures/gan/demo.py</code>。</p></section>
 <section class="chapter" id="saturation" aria-labelledby="saturation-h"><h2 id="saturation-h"><small>08</small>为什么很多实现不让 G 直接最小化原式？</h2><p>如果 D 已把伪样本识别得很准，D(G(z)) 接近 0，原始 minimax 中 G 所最小化的 log(1−D(G(z))) 可能提供很弱的局部梯度。2014 年论文 §3 提出改用<strong>非饱和（non-saturating）</strong>生成器目标：最大化 log D(G(z))，实现中相当于最小化 −log D(G(z))。</p>
 <p>令 s 是 D 对伪样本输出的 logit，D = sigmoid(s)。针对同一个 s，可严格推出：minimax 损失对 s 的导数是 −D；非饱和损失对 s 的导数是 −(1−D)。假设 D = 0.01，两个局部导数的绝对值是 <strong>0.01 与 0.99</strong>。</p>
-<figure class="diagram"><div class="figtag">FIG. 04</div><img src="assets/04-generator-gradients.svg" alt="minimax生成器损失与非饱和损失在假样本判真概率为百分之一时的局部梯度对比。" decoding="async" loading="lazy"><figcaption>只比较对于判别器 logit 的导数；生成器整体梯度还要乘 D、G 的雅可比，不能从这幅图保证完整训练不发生梯度问题。</figcaption></figure>
+<figure class="diagram"><div class="figtag">FIG. 04</div><svg class="embedded-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 408" role="img" aria-labelledby="gan-fig4-title gan-fig4-desc">
+<title id="gan-fig4-title">GAN 生成器两种训练损失的局部梯度比较</title>
+<desc id="gan-fig4-desc">当判别器给伪样本的真实概率为0.01时，minimax 的判别器 logit 导数大小为0.01，非饱和生成器损失导数大小为0.99。</desc>
+<rect width="960" height="408" rx="20" fill="#fbfcf8"/>
+<g font-family="system-ui,'PingFang SC',sans-serif">
+<text x="46" y="49" fill="#254b4f" font-size="26" font-weight="750">D 准确识破伪样本时，G 得到多少学习信号？</text>
+<text x="46" y="87" fill="#5f7771" font-size="18">令 D(G(z)) = 0.01；横条比较生成器损失对 D 的 logit s 的局部导数绝对值</text>
+<rect x="49" y="119" width="863" height="105" rx="13" fill="#f0f5f0" stroke="#d0dfd5"/>
+<text x="72" y="153" fill="#3b6864" font-size="22" font-weight="750">Minimax</text><text x="72" y="183" fill="#5a7570" font-size="18">log(1 − D)</text>
+<rect x="342" y="163" width="486" height="25" rx="6" fill="#d7e5db"/>
+<rect x="342" y="163" width="5" height="25" rx="2" fill="#c98058"/>
+<text x="841" y="184" fill="#b26f4b" font-size="23" font-weight="750">0.01</text>
+<rect x="49" y="235" width="863" height="108" rx="13" fill="#fff0e6" stroke="#eacbb3"/>
+<text x="72" y="267" fill="#965b3f" font-size="22" font-weight="750">Non-saturating</text><text x="72" y="299" fill="#936347" font-size="18">−log D</text>
+<rect x="342" y="281" width="486" height="25" rx="6" fill="#e3d7c9"/>
+<rect x="342" y="281" width="481" height="25" rx="6" fill="#28857c"/>
+<text x="841" y="303" fill="#256c66" font-size="23" font-weight="750">0.99</text>
+<text x="47" y="385" fill="#536f6a" font-size="17">局部导数不等于 G 的整体参数梯度；这个对照也不是训练稳定性的保证。</text>
+</g></svg><figcaption>只比较对于判别器 logit 的导数；生成器整体梯度还要乘 D、G 的雅可比，不能从这幅图保证完整训练不发生梯度问题。</figcaption></figure>
 <div class="note"><strong>目标不能混用：</strong>原论文的 minimax 博弈用于推导最优解与 JSD；non-saturating 是另一个具有相同理想固定点的训练目标，不能把它的所有训练动态直接等同于原始 minimax。</div></section>
 <section class="chapter" id="limits" aria-labelledby="limits-h"><h2 id="limits-h"><small>09</small>GAN 在实践中为什么仍然难训？</h2><div class="table-scroll"><table><thead><tr><th>问题</th><th>实际发生了什么</th><th>阅读 / 调试时要看什么</th></tr></thead><tbody>
 <tr><td>模式坍塌（mode collapse）</td><td>G 只生成少数几种样本，缺少多样性。</td><td>同时观察覆盖度与多样性，不能只看少数漂亮样本。</td></tr>
