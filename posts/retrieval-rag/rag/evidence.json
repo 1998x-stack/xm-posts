@@ -1,0 +1,101 @@
+[
+  {
+    "id": "R01",
+    "kind": "method",
+    "claim": "Original RAG combines dense retrieval with a pretrained seq2seq generator.",
+    "source_url": "https://papers.neurips.cc/paper_files/paper/2020/file/6b493230205f780e1bc26945df7481e5-Paper.pdf",
+    "locator": "§1–2, Figure 1",
+    "status": "verified",
+    "notes": "2020 implementation with DPR and BART"
+  },
+  {
+    "id": "R02",
+    "kind": "method",
+    "claim": "RAG-Sequence marginalizes a document shared across the complete output sequence.",
+    "source_url": "https://papers.neurips.cc/paper_files/paper/2020/file/6b493230205f780e1bc26945df7481e5-Paper.pdf",
+    "locator": "§2.1, RAG-Sequence equation",
+    "status": "verified",
+    "notes": "Top-K approximation"
+  },
+  {
+    "id": "R03",
+    "kind": "method",
+    "claim": "RAG-Token marginalizes retrieved documents independently at each output position.",
+    "source_url": "https://papers.neurips.cc/paper_files/paper/2020/file/6b493230205f780e1bc26945df7481e5-Paper.pdf",
+    "locator": "§2.1, RAG-Token equation",
+    "status": "verified",
+    "notes": "Same document pool, not a new search per output token"
+  },
+  {
+    "id": "R04",
+    "kind": "method",
+    "claim": "DPR uses a bi-encoder and maximum inner product for document retrieval.",
+    "source_url": "https://papers.neurips.cc/paper_files/paper/2020/file/6b493230205f780e1bc26945df7481e5-Paper.pdf",
+    "locator": "§2.2",
+    "status": "verified",
+    "notes": "Query and document embeddings"
+  },
+  {
+    "id": "R05",
+    "kind": "method",
+    "claim": "Generator is BART-large with query and passage concatenated as context.",
+    "source_url": "https://papers.neurips.cc/paper_files/paper/2020/file/6b493230205f780e1bc26945df7481e5-Paper.pdf",
+    "locator": "§2.3",
+    "status": "verified",
+    "notes": "Historical model configuration"
+  },
+  {
+    "id": "R06",
+    "kind": "training",
+    "claim": "Document encoder and index remain fixed while query encoder and BART are fine-tuned.",
+    "source_url": "https://papers.neurips.cc/paper_files/paper/2020/file/6b493230205f780e1bc26945df7481e5-Paper.pdf",
+    "locator": "§2.4",
+    "status": "verified",
+    "notes": "Joint fine-tuning does not update document embeddings each step"
+  },
+  {
+    "id": "R07",
+    "kind": "decoding",
+    "claim": "RAG-Token uses conventional autoregressive beam search; RAG-Sequence requires per-document beams.",
+    "source_url": "https://papers.neurips.cc/paper_files/paper/2020/file/6b493230205f780e1bc26945df7481e5-Paper.pdf",
+    "locator": "§2.5",
+    "status": "verified",
+    "notes": "Approximate decoding"
+  },
+  {
+    "id": "R08",
+    "kind": "dataset",
+    "claim": "The original study uses 2018-12 Wikipedia split to roughly 21 million 100-word chunks.",
+    "source_url": "https://papers.neurips.cc/paper_files/paper/2020/file/6b493230205f780e1bc26945df7481e5-Paper.pdf",
+    "locator": "§3",
+    "status": "verified",
+    "notes": "Original corpus setup only"
+  },
+  {
+    "id": "R09",
+    "kind": "results",
+    "claim": "Experiments cover open-domain QA, MS-MARCO, Jeopardy question generation and FEVER.",
+    "source_url": "https://papers.neurips.cc/paper_files/paper/2020/file/6b493230205f780e1bc26945df7481e5-Paper.pdf",
+    "locator": "§3–4",
+    "status": "verified",
+    "notes": "Avoid misrepresenting historical performance as modern"
+  },
+  {
+    "id": "R10",
+    "kind": "pedagogy",
+    "claim": "Toy two-document marginalization returns 0.226 versus 0.310 for a chosen two-token answer.",
+    "source_url": "https://papers.neurips.cc/paper_files/paper/2020/file/6b493230205f780e1bc26945df7481e5-Paper.pdf",
+    "locator": "Article §5–6",
+    "status": "derived",
+    "notes": "Arithmetic built for this post, not a benchmark"
+  },
+  {
+    "id": "R11",
+    "kind": "illustration",
+    "claim": "The three diagrams are original explanatory figures.",
+    "source_url": "https://papers.neurips.cc/paper_files/paper/2020/file/6b493230205f780e1bc26945df7481e5-Paper.pdf",
+    "locator": "Article figures 1–3",
+    "status": "illustrative",
+    "notes": "No third-party figure assets"
+  }
+]
