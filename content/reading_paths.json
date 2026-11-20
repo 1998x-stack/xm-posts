@@ -348,5 +348,16 @@
       "agent-memory-components",
       "harness-engineering"
     ]
+  },
+  {
+    "id": "path-38",
+    "title": "从 Agent Memory 到 Context Engineering 与 Harness",
+    "posts": [
+      "react",
+      "swe-agent",
+      "agent-memory-components",
+      "context-engineering",
+      "harness-engineering"
+    ]
   }
 ]
