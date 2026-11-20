@@ -69,7 +69,7 @@ const update=()=>{
   "；解耦衰减在 θ₂ 上始终减少 "+deltaDecoupled.toFixed(5)+"。";
  get("aw-coupled-two-bar").setAttribute("width",(380/scale).toFixed(3));
  get("aw-coupled-two-label").textContent=deltaCoupled.toFixed(5);
- get("aw-table-c1").textContent=".99"==="x"?"":(1-.01).toFixed(5);
+ get("aw-table-c1").textContent=(1-.01).toFixed(5);
  get("aw-table-c2").textContent=coupled.toFixed(5);
  get("aw-table-cdrop").textContent=deltaCoupled.toFixed(5);
  get("aw-table-d1").textContent=decoupled.toFixed(5);
