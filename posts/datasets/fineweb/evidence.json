@@ -1,0 +1,173 @@
+[
+  {
+    "id": "F01",
+    "claim": "FineWeb 15T GPT-2 tokens from 96 Common Crawl snapshots",
+    "kind": "paper-claim",
+    "source_url": "https://papers.nips.cc/paper_files/paper/2024/file/370df50ccfdf8bde18f8f9c2d9151bda-Paper-Datasets_and_Benchmarks_Track.pdf",
+    "locator": "Abstract; §3.7",
+    "status": "verified",
+    "notes": "Original 2024 paper dataset size; not a timeless live count"
+  },
+  {
+    "id": "F02",
+    "claim": "WARC text extraction with trafilatura compared to WET: about 200B vs 254B tokens on 2019-18",
+    "kind": "experiment",
+    "source_url": "https://papers.nips.cc/paper_files/paper/2024/file/370df50ccfdf8bde18f8f9c2d9151bda-Paper-Datasets_and_Benchmarks_Track.pdf",
+    "locator": "§3.2, Fig.1",
+    "status": "verified",
+    "notes": "Data volumes differ; compared with controlled training"
+  },
+  {
+    "id": "F03",
+    "claim": "Base filters: adult URL blocklist, fastText English score ≥0.65, MassiveText quality; ~36T tokens",
+    "kind": "paper-claim",
+    "source_url": "https://papers.nips.cc/paper_files/paper/2024/file/370df50ccfdf8bde18f8f9c2d9151bda-Paper-Datasets_and_Benchmarks_Track.pdf",
+    "locator": "§3.3, Fig.2",
+    "status": "verified",
+    "notes": "English-focused, GPT-2 tokenizer"
+  },
+  {
+    "id": "F04",
+    "claim": "MinHash uses 5-word shingles, 112 hash functions, 14 bands of 8; transitive duplicate clustering",
+    "kind": "algorithm",
+    "source_url": "https://papers.nips.cc/paper_files/paper/2024/file/370df50ccfdf8bde18f8f9c2d9151bda-Paper-Datasets_and_Benchmarks_Track.pdf",
+    "locator": "§3.4, p.5",
+    "status": "verified",
+    "notes": "Target around 75% similarity; not deterministic exact Jaccard cutoff"
+  },
+  {
+    "id": "F05",
+    "claim": "Global across-snapshot MinHash yields 4T tokens but weak benchmark performance",
+    "kind": "experiment",
+    "source_url": "https://papers.nips.cc/paper_files/paper/2024/file/370df50ccfdf8bde18f8f9c2d9151bda-Paper-Datasets_and_Benchmarks_Track.pdf",
+    "locator": "§3.4, Fig.3",
+    "status": "verified",
+    "notes": "Ablation result specific to its ordering and data"
+  },
+  {
+    "id": "F06",
+    "claim": "2013-48 audit: ~31B originally retained vs 171B originally removed after within-dump dedup",
+    "kind": "experiment",
+    "source_url": "https://papers.nips.cc/paper_files/paper/2024/file/370df50ccfdf8bde18f8f9c2d9151bda-Paper-Datasets_and_Benchmarks_Track.pdf",
+    "locator": "§3.4, Fig.4",
+    "status": "verified",
+    "notes": "The originally removed slice performed better for its isolated training experiment"
+  },
+  {
+    "id": "F07",
+    "claim": "Per-crawl MinHash yields ~20T tokens, matches RefinedWeb performance in matched setup",
+    "kind": "experiment",
+    "source_url": "https://papers.nips.cc/paper_files/paper/2024/file/370df50ccfdf8bde18f8f9c2d9151bda-Paper-Datasets_and_Benchmarks_Track.pdf",
+    "locator": "§3.4, Fig.5",
+    "status": "verified",
+    "notes": "Do not generalize to all data distributions"
+  },
+  {
+    "id": "F08",
+    "claim": "Three custom filters thresholds ≤.12 terminal punctuation lines, ≥.1 duplicate chars, ≥.67 short lines",
+    "kind": "algorithm",
+    "source_url": "https://papers.nips.cc/paper_files/paper/2024/file/370df50ccfdf8bde18f8f9c2d9151bda-Paper-Datasets_and_Benchmarks_Track.pdf",
+    "locator": "§3.6, Fig.7",
+    "status": "verified",
+    "notes": "Independent percent removed 10.14, 12.47, 3.73"
+  },
+  {
+    "id": "F09",
+    "claim": "Combined custom filters remove ~22% tokens and improve aggregate accuracy ~1 percentage point in 28B ablation",
+    "kind": "experiment",
+    "source_url": "https://papers.nips.cc/paper_files/paper/2024/file/370df50ccfdf8bde18f8f9c2d9151bda-Paper-Datasets_and_Benchmarks_Track.pdf",
+    "locator": "§3.6, Fig.7",
+    "status": "verified",
+    "notes": "Overlapping filter sets; cannot sum independent removal rates"
+  },
+  {
+    "id": "F10",
+    "claim": "Final FineWeb is 15T tokens after WARC extraction, base, per-dump dedup, C4 subset and custom filtering",
+    "kind": "paper-claim",
+    "source_url": "https://papers.nips.cc/paper_files/paper/2024/file/370df50ccfdf8bde18f8f9c2d9151bda-Paper-Datasets_and_Benchmarks_Track.pdf",
+    "locator": "§3.7, Fig.9",
+    "status": "verified",
+    "notes": "Paper also anonymized emails and public IPs for public release"
+  },
+  {
+    "id": "F11",
+    "claim": "FineWeb-Edu scored 460k docs with Llama-3-70B-Instruct; 410k train and 50k validation",
+    "kind": "paper-claim",
+    "source_url": "https://papers.nips.cc/paper_files/paper/2024/file/370df50ccfdf8bde18f8f9c2d9151bda-Paper-Datasets_and_Benchmarks_Track.pdf",
+    "locator": "§4, Appendix F.1",
+    "status": "verified",
+    "notes": "Use formal paper numbers instead of preliminary blog's approximate counts"
+  },
+  {
+    "id": "F12",
+    "claim": "Frozen Snowflake encoder with linear regression; threshold 3, 82% F1 against teacher-generated labels",
+    "kind": "experiment",
+    "source_url": "https://papers.nips.cc/paper_files/paper/2024/file/370df50ccfdf8bde18f8f9c2d9151bda-Paper-Datasets_and_Benchmarks_Track.pdf",
+    "locator": "§4, Appendix F.2",
+    "status": "verified",
+    "notes": "Validation treats pseudo-labels as ground truth, not human gold"
+  },
+  {
+    "id": "F13",
+    "claim": "FineWeb-Edu 1.3T tokens; alternative threshold-2 release has 5.4T tokens",
+    "kind": "paper-claim",
+    "source_url": "https://huggingfacefw-blogpost-fineweb-v1.static.hf.space/index.html",
+    "locator": "FineWeb-Edu section, final paragraphs",
+    "status": "verified",
+    "notes": "Report variant and threshold separately"
+  },
+  {
+    "id": "F14",
+    "claim": "FineWeb-Edu classifier run used 6000 H100 hours",
+    "kind": "experiment",
+    "source_url": "https://papers.nips.cc/paper_files/paper/2024/file/370df50ccfdf8bde18f8f9c2d9151bda-Paper-Datasets_and_Benchmarks_Track.pdf",
+    "locator": "§4, p.8",
+    "status": "verified",
+    "notes": "Paper-specific reported preprocessing cost"
+  },
+  {
+    "id": "F15",
+    "claim": "At 1.71B params and 350B tokens, MMLU 33→37%; ARC 46→57% with FineWeb-Edu",
+    "kind": "experiment",
+    "source_url": "https://papers.nips.cc/paper_files/paper/2024/file/370df50ccfdf8bde18f8f9c2d9151bda-Paper-Datasets_and_Benchmarks_Track.pdf",
+    "locator": "§4, Figs.10–11",
+    "status": "verified",
+    "notes": "Approximate endpoints from paper prose, not replayed runs"
+  },
+  {
+    "id": "F16",
+    "claim": "FineWeb better covers broad web; Edu favors Wikipedia, science and programming on Paloma domains",
+    "kind": "experiment",
+    "source_url": "https://papers.nips.cc/paper_files/paper/2024/file/370df50ccfdf8bde18f8f9c2d9151bda-Paper-Datasets_and_Benchmarks_Track.pdf",
+    "locator": "§4.2, Fig.12",
+    "status": "verified",
+    "notes": "Decontamination intentionally omitted in described domain-fit diagnostic"
+  },
+  {
+    "id": "F17",
+    "claim": "Edu topic skew and FineWeb biases described in original paper",
+    "kind": "paper-claim",
+    "source_url": "https://papers.nips.cc/paper_files/paper/2024/file/370df50ccfdf8bde18f8f9c2d9151bda-Paper-Datasets_and_Benchmarks_Track.pdf",
+    "locator": "§4.1, Fig.18; §5, Appendix G",
+    "status": "verified",
+    "notes": "Quality filtering changes thematic representation"
+  },
+  {
+    "id": "F18",
+    "claim": "Ideal independent banding P_hit(J)=1−(1−J^r)^b with b=14 r=8",
+    "kind": "derivation",
+    "source_url": "https://papers.nips.cc/paper_files/paper/2024/file/370df50ccfdf8bde18f8f9c2d9151bda-Paper-Datasets_and_Benchmarks_Track.pdf",
+    "locator": "§3.4 uses 14x8; probability independently derived from LSH assumptions",
+    "status": "derived",
+    "notes": "Toy probability; not measured recall/false-positive rate"
+  },
+  {
+    "id": "F19",
+    "claim": "Threshold toy [0,2,3,4,5,1,3,2] returns 4 of 8 for score≥3",
+    "kind": "toy-example",
+    "source_url": "https://papers.nips.cc/paper_files/paper/2024/file/370df50ccfdf8bde18f8f9c2d9151bda-Paper-Datasets_and_Benchmarks_Track.pdf",
+    "locator": "§4 explains threshold; input and output are independently constructed",
+    "status": "illustrative",
+    "notes": "No relation to actual FineWeb-Edu distribution"
+  }
+]

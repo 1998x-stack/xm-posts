@@ -531,5 +531,28 @@
     "summary": "以 Mnih et al. Nature 2015 为核心，逐步拆解 Q-learning 自举目标、回放缓存、双网络延迟同步、卷积架构与 Atari 证据；提供六幅机制图、可调 TD 目标和纯 Python 数学检验，并区分 2013 DQN、Double DQN 等后续工作。",
     "paper": "https://doi.org/10.1038/nature14236",
     "illustration": "dqn"
+  },
+  {
+    "slug": "fineweb",
+    "title": "Understanding FineWeb",
+    "subtitle": "为什么跨快照去重更彻底，预训练数据却可能更差？",
+    "category": "datasets",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 32,
+    "tags": [
+      "FineWeb",
+      "FineWeb-Edu",
+      "Data Curation",
+      "Common Crawl",
+      "MinHash",
+      "Data Deduplication",
+      "Pretraining Data",
+      "Quality Filtering"
+    ],
+    "summary": "以 FineWeb NeurIPS 2024 论文为主线，拆解 96 个 Common Crawl 快照、WARC 正文提取、逐快照 MinHash、质量过滤和教育数据蒸馏；含六幅机制图、可交互阈值实验、原文证据及教学数值测试。",
+    "paper": "https://arxiv.org/abs/2406.17557",
+    "illustration": "fineweb"
   }
 ]
