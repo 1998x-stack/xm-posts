@@ -115,5 +115,14 @@
     "locator": "Sections I/II backprop and shared weights",
     "status": "derived",
     "notes": "Only one-channel valid stride-one formula shown; numerical check in minimal code."
+  },
+  {
+    "id": "CNN-14",
+    "claim": "Applying the 3x3 teaching kernel with rows [1,0,-1] to the fixed 5x5 matrix at valid stride 1 yields the complete output map [[-1,0,1],[-1,2,0],[1,0,-1]]; each output is nine input-kernel products summed using shared weights.",
+    "kind": "toy-derivation",
+    "source_url": "https://doi.org/10.1109/5.726791",
+    "locator": "Independent arithmetic in article Section 03, informed by the 1998 paper's Section II on local receptive fields and shared weights",
+    "status": "derived",
+    "notes": "Fixed illustrative cross-correlation, not historical paper measurement or trained LeNet weights."
   }
 ]
