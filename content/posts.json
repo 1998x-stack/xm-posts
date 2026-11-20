@@ -238,5 +238,26 @@
     "summary": "从连续 KV 缓存的碎片和预留浪费出发，逐步推导逻辑块与物理块映射、Decode 扩容、CoW 共享、分页 Attention Kernel 与调度策略，并用交互模拟、代码及 SOSP 2023 实验辨析吞吐收益和边界。",
     "paper": "https://arxiv.org/abs/2309.06180",
     "illustration": "pagedattention"
+  },
+  {
+    "slug": "ppo",
+    "title": "Understanding PPO",
+    "subtitle": "为什么同一批经验能学多轮，却不能任意改写策略？",
+    "category": "reinforcement-learning",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 34,
+    "tags": [
+      "PPO",
+      "Policy Gradient",
+      "Actor–Critic",
+      "GAE",
+      "Reinforcement Learning",
+      "RLHF"
+    ],
+    "summary": "从普通策略梯度与 TRPO 出发，图解概率比与 clipped surrogate 的符号分支，贯通 GAE、Actor–Critic、原论文 MuJoCo 实验与 RLHF 两种 KL。附交互算例与确定性 Python 测试。",
+    "paper": "https://arxiv.org/abs/1707.06347",
+    "illustration": "ppo"
   }
 ]
