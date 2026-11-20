@@ -1,0 +1,119 @@
+[
+  {
+    "id": "E01",
+    "kind": "method",
+    "claim": "固定模型，研究 ACI 的动作集合、反馈格式与设计原则",
+    "source_url": "https://proceedings.neurips.cc/paper_files/paper/2024/file/5a7c947568c1b1328ccc5230172e1e7c-Paper-Conference.pdf",
+    "locator": "§1–2, Figure 1",
+    "status": "verified",
+    "notes": "NeurIPS 2024 camera-ready; historical claim only"
+  },
+  {
+    "id": "E02",
+    "kind": "method",
+    "claim": "专用搜索 find_file/search_file/search_dir 与简洁结果",
+    "source_url": "https://proceedings.neurips.cc/paper_files/paper/2024/file/5a7c947568c1b1328ccc5230172e1e7c-Paper-Conference.pdf",
+    "locator": "§3, p.4",
+    "status": "verified",
+    "notes": "NeurIPS 2024 camera-ready; historical claim only"
+  },
+  {
+    "id": "E03",
+    "kind": "method",
+    "claim": "open 查看约 100 行、带行号与上下文；支持滚动与 goto",
+    "source_url": "https://proceedings.neurips.cc/paper_files/paper/2024/file/5a7c947568c1b1328ccc5230172e1e7c-Paper-Conference.pdf",
+    "locator": "§3, Figure 3",
+    "status": "verified",
+    "notes": "NeurIPS 2024 camera-ready; historical claim only"
+  },
+  {
+    "id": "E04",
+    "kind": "method",
+    "claim": "edit按行修改，lint拒绝引入相关语法错误的编辑",
+    "source_url": "https://proceedings.neurips.cc/paper_files/paper/2024/file/5a7c947568c1b1328ccc5230172e1e7c-Paper-Conference.pdf",
+    "locator": "§3, Figure 6",
+    "status": "verified",
+    "notes": "NeurIPS 2024 camera-ready; historical claim only"
+  },
+  {
+    "id": "E05",
+    "kind": "method",
+    "claim": "历史中最近五次观察保留，较早观察压缩",
+    "source_url": "https://proceedings.neurips.cc/paper_files/paper/2024/file/5a7c947568c1b1328ccc5230172e1e7c-Paper-Conference.pdf",
+    "locator": "§3, Table 3",
+    "status": "verified",
+    "notes": "NeurIPS 2024 camera-ready; historical claim only"
+  },
+  {
+    "id": "E06",
+    "kind": "setup",
+    "claim": "SWE-bench 2294 题、Lite 300 题；GPT-4 Turbo 1106 preview",
+    "source_url": "https://proceedings.neurips.cc/paper_files/paper/2024/file/5a7c947568c1b1328ccc5230172e1e7c-Paper-Conference.pdf",
+    "locator": "§4",
+    "status": "verified",
+    "notes": "NeurIPS 2024 camera-ready; historical claim only"
+  },
+  {
+    "id": "E07",
+    "kind": "result",
+    "claim": "SWE-agent GPT-4 Turbo 全量286/2294=12.47%，Lite54/300=18.0%",
+    "source_url": "https://proceedings.neurips.cc/paper_files/paper/2024/file/5a7c947568c1b1328ccc5230172e1e7c-Paper-Conference.pdf",
+    "locator": "§5, Table 1",
+    "status": "verified",
+    "notes": "NeurIPS 2024 camera-ready; historical claim only"
+  },
+  {
+    "id": "E08",
+    "kind": "result",
+    "claim": "GPT-4 Turbo RAG全量1.31% Lite2.67%，Shell-only Lite11.0%",
+    "source_url": "https://proceedings.neurips.cc/paper_files/paper/2024/file/5a7c947568c1b1328ccc5230172e1e7c-Paper-Conference.pdf",
+    "locator": "Table 1",
+    "status": "verified",
+    "notes": "NeurIPS 2024 camera-ready; historical claim only"
+  },
+  {
+    "id": "E09",
+    "kind": "ablation",
+    "claim": "完整18%，无lint15%，无edit10.3%，迭代搜索12%，全文件12.7%，全历史15%",
+    "source_url": "https://proceedings.neurips.cc/paper_files/paper/2024/file/5a7c947568c1b1328ccc5230172e1e7c-Paper-Conference.pdf",
+    "locator": "Table 3",
+    "status": "verified",
+    "notes": "NeurIPS 2024 camera-ready; historical claim only"
+  },
+  {
+    "id": "E10",
+    "kind": "result",
+    "claim": "HumanEvalFix Python87.7%，JavaScript89.7%，Java87.9%",
+    "source_url": "https://proceedings.neurips.cc/paper_files/paper/2024/file/5a7c947568c1b1328ccc5230172e1e7c-Paper-Conference.pdf",
+    "locator": "Table 2",
+    "status": "verified",
+    "notes": "NeurIPS 2024 camera-ready; historical claim only"
+  },
+  {
+    "id": "E11",
+    "kind": "limitations",
+    "claim": "主要失败包括错误实现、过窄实现与编辑恢复失败",
+    "source_url": "https://proceedings.neurips.cc/paper_files/paper/2024/file/5a7c947568c1b1328ccc5230172e1e7c-Paper-Conference.pdf",
+    "locator": "§5.2, Figure 8",
+    "status": "verified",
+    "notes": "NeurIPS 2024 camera-ready; historical claim only"
+  },
+  {
+    "id": "E12",
+    "kind": "pedagogy",
+    "claim": "mean 函数、文件名、交互轨迹和全部SVG为教学构造",
+    "source_url": "https://arxiv.org/abs/2405.15793",
+    "locator": "Article teaching example",
+    "status": "illustrative",
+    "notes": "Not model output or benchmark reproduction"
+  },
+  {
+    "id": "E13",
+    "kind": "engineering",
+    "claim": "隔离、审查、权限与防提示注入是补充工程建议",
+    "source_url": "https://arxiv.org/abs/2405.15793",
+    "locator": "Outside experimental scope",
+    "status": "illustrative",
+    "notes": "Not a claim of quantified 2024 study"
+  }
+]

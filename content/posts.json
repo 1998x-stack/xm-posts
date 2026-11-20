@@ -1850,5 +1850,31 @@
       "src": "assets/rearrange-pairs.svg",
       "caption": "同序配对与乘积和之间的关系"
     }
+  },
+  {
+    "slug": "swe-agent",
+    "title": "Understanding SWE-agent",
+    "subtitle": "为什么给大模型设计好用的代码工具，比只让它写更多代码更重要？从 Bug 修复到 Agent-Computer Interface",
+    "category": "agents",
+    "topic": "software-engineering-agents",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 24,
+    "tags": [
+      "SWE-agent",
+      "Agent-Computer Interface",
+      "ACI",
+      "Software Engineering Agent",
+      "SWE-bench",
+      "Tool Use",
+      "Code Editing",
+      "Linting",
+      "Context Management",
+      "ReAct"
+    ],
+    "summary": "从平均值 Bug 的定位、查看、编辑、语法检查与测试出发，逐步图解 NeurIPS 2024 SWE-agent 的 ACI 设计，核验 SWE-bench 12.47% / Lite 18.0% 与 Table 3 消融；提供五幅独立 SVG、MathML、交互式教学轨迹及可测试的 Python 示例，厘清论文结论与工程边界。",
+    "paper": "https://arxiv.org/abs/2405.15793",
+    "illustration": "swe-agent"
   }
 ]
