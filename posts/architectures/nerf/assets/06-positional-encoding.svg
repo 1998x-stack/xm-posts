@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 390" role="img" aria-labelledby="title desc">
+<title id="title">位置编码将连续坐标映射为多频率特征</title>
+<desc id="desc">低频正弦波平滑，高频正弦波快速振荡，多个频率的正余弦值被拼接为 MLP 输入。</desc>
+<rect x="1" y="1" width="1198" height="388" rx="22" fill="#f8fbf9" stroke="#d9e7e1" stroke-width="2"/>
+<text x="40" y="48" font-size="22" font-weight="750" fill="#29434b" font-family="system-ui,'PingFang SC',sans-serif">同一个坐标，用多种频率重新表达</text>
+<g font-family="system-ui,'PingFang SC',sans-serif">
+<text x="66" y="112" font-size="17" font-weight="700" fill="#315b5b">低频：缓慢变化</text>
+<line x1="250" y1="132" x2="670" y2="132" stroke="#c7d8d1" stroke-width="1.5"/>
+<path d="M250 132 C285 42 355 42 390 132 S495 222 530 132 S635 42 670 132" fill="none" stroke="#3e8c83" stroke-width="4"/>
+<text x="66" y="222" font-size="17" font-weight="700" fill="#315b5b">高频：细节变化</text>
+<line x1="250" y1="242" x2="670" y2="242" stroke="#c7d8d1" stroke-width="1.5"/>
+<path d="M250 242 C260 172 270 172 280 242 S300 312 310 242 S330 172 340 242 S360 312 370 242 S390 172 400 242 S420 312 430 242 S450 172 460 242 S480 312 490 242 S510 172 520 242 S540 312 550 242 S570 172 580 242 S600 312 610 242 S630 172 640 242 S660 312 670 242" fill="none" stroke="#c47a42" stroke-width="3.5"/>
+<rect x="730" y="94" width="410" height="205" rx="16" fill="#fffefa" stroke="#cddfd8" stroke-width="2"/>
+<text x="935" y="132" text-anchor="middle" font-size="18" font-weight="750" fill="#315b5b">位置编码 γ(p)</text>
+<g fill="#e5f0eb" stroke="#9ebfb3"><rect x="765" y="159" width="72" height="45" rx="7"/><rect x="845" y="159" width="72" height="45" rx="7"/><rect x="925" y="159" width="72" height="45" rx="7"/><rect x="1005" y="159" width="72" height="45" rx="7"/></g>
+<g font-size="14" fill="#315b5b" text-anchor="middle"><text x="801" y="187">sin ω₁p</text><text x="881" y="187">cos ω₁p</text><text x="961" y="187">sin ω₂p</text><text x="1041" y="187">cos ω₂p</text></g>
+<text x="935" y="239" text-anchor="middle" font-size="16" fill="#647d80">… 多组频率拼接 …</text>
+<path d="M935 259 L935 280" stroke="#4f817d" stroke-width="3"/>
+<text x="935" y="322" text-anchor="middle" font-size="17" font-weight="750" fill="#1c6967">送入 MLP</text>
+</g>
+</svg>
