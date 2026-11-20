@@ -1,5 +1,27 @@
 [
   {
+    "slug": "multi-head-attention",
+    "title": "Understanding Multi-Head Attention",
+    "subtitle": "为什么一个 Attention 不够？从独立 Q/K/V 投影、因果 Mask 到原论文 Head 消融",
+    "category": "architectures",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 28,
+    "tags": [
+      "Multi-Head Attention",
+      "MHA",
+      "Scaled Dot-Product Attention",
+      "QKV",
+      "Causal Mask",
+      "Attention Mechanisms",
+      "Transformer"
+    ],
+    "summary": "精读 Vaswani et al. NeurIPS 2017 §3.2 与 Table 3：从单头信息汇总、独立 Q/K/V 投影、Softmax 缩放和掩码，逐步推导多头张量形状、参数量与复杂度；包含六幅独立 SVG、六组 MathML、两组交互实验、原论文 Head 数消融证据及确定性 Python 数值实现，并厘清 MHA、MQA、GQA 的关系。",
+    "paper": "https://arxiv.org/abs/1706.03762",
+    "illustration": "attention"
+  },
+  {
     "slug": "alphago",
     "title": "Understanding AlphaGo",
     "subtitle": "策略网络、价值网络和 Monte Carlo Tree Search 如何协同打破围棋的搜索墙？",
@@ -1035,5 +1057,27 @@
     "summary": "精读 Kudo 与 Richardson EMNLP 2018 原论文，使用五幅独立 SVG、四组原生 MathML、路径概率交互和 Python 数学测试解析从原始语料训练、空格转义、BPE、Unigram 到可逆解码的机制；按 KFTT 原文表格核查 BLEU 与性能数据。",
     "paper": "https://aclanthology.org/D18-2012/",
     "illustration": "sentencepiece"
+  },
+  {
+    "slug": "react",
+    "title": "Understanding ReAct",
+    "subtitle": "从 Thought → Action → Observation：语言模型如何边推理、边调用工具、边修正计划？",
+    "category": "agents",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 32,
+    "tags": [
+      "ReAct",
+      "Reasoning and Acting",
+      "Tool Use",
+      "Agentic Reasoning",
+      "Chain-of-Thought",
+      "ALFWorld",
+      "WebShop"
+    ],
+    "summary": "精读 ICLR 2023 ReAct：扩展动作空间、Thought/Action/Observation 机制与 MathML 推导，核验 HotpotQA、FEVER、ALFWorld、WebShop 原论文数字；以五幅独立图解、交互式失败检索恢复和确定性 Python 控制器辨析提示范式与现代 Agent 工程边界。",
+    "paper": "https://arxiv.org/abs/2210.03629",
+    "illustration": "react"
   }
 ]
