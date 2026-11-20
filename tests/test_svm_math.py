@@ -18,6 +18,7 @@ def test_mathml_blocks_have_fraction_and_limits():
     assert soup.select("#equation-6 .eq-condition math")
     assert soup.select("#equation-7 munder")
     assert not soup.select("span.eq")
+    assert not soup.select("svg math"), "MathML cannot be embedded into SVG text labels"
 
 def test_display_math_accessibility_and_offline_rendering():
     soup=BeautifulSoup(FILE.read_text(encoding="utf-8"),"html.parser")
