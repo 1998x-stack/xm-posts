@@ -269,3 +269,6 @@ ReAct（Yao et al., ICLR 2023）收录于 `posts/agents/react/`：解释 Thought
 MoE 复用 `Architectures → Mixture of Experts (MoE)` 已有二级研究主题，不新增重复分类。[Understanding MoE](posts/architectures/moe/index.html) 以 Shazeer et al. 2017 为主线，区分 GShard、Switch、Mixtral 与 DeepSeekMoE，提供七幅独立 SVG、八组 MathML、路由容量交互与 `tests/test_moe.py` 数值验证。
 
 BERT 归入现有 `Training → Pretraining`，新增二级专题 **Bidirectional Encoder Pretraining / BERT**，不新增顶层类别。文章包含六幅机制 SVG、五组 MathML、MLM 交互、论文消融与标准库不变量测试。
+
+
+TD3 归入 `reinforcement-learning` → **Continuous Control / Off-policy Actor–Critic** 既有分类，不新建一级或重复二级分类；论文精读位于 [`posts/reinforcement-learning/td3/`](posts/reinforcement-learning/td3/index.html)。内容以 Fujimoto et al. ICML 2018 为准，包含 16 节机制解释、五幅独立 SVG、五组原生 MathML、交互式 clipped double-Q 算例、Table 1 与 Table 2 分指标实验对照、纯 Python 数学核验及证据台账。
