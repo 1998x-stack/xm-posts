@@ -1,5 +1,25 @@
 [
   {
+    "slug": "flashattention",
+    "title": "Understanding FlashAttention",
+    "subtitle": "Attention 的复杂度没变，为什么还能更快？从 HBM/SRAM 到 Online Softmax",
+    "category": "systems",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 32,
+    "tags": [
+      "FlashAttention",
+      "Attention Kernels",
+      "GPU Memory",
+      "Online Softmax",
+      "IO-aware Algorithms"
+    ],
+    "summary": "以 FlashAttention 2022 原论文为主线，分块拆解 HBM/SRAM 数据流、在线 Softmax、反向重计算及理论边界，并辨析 FA2、FA3、FA4 演进与系统实证。",
+    "paper": "https://arxiv.org/abs/2205.14135",
+    "illustration": "flashattention"
+  },
+  {
     "slug": "resnet",
     "title": "Understanding ResNet",
     "subtitle": "为什么网络越深，训练反而可能越困难？",
@@ -179,23 +199,23 @@
     "illustration": "adam"
   },
   {
-    "slug": "flashattention",
-    "title": "Understanding FlashAttention",
-    "subtitle": "Attention 的复杂度没变，为什么还能更快？从 HBM/SRAM 到 Online Softmax",
-    "category": "systems",
+    "slug": "lora",
+    "title": "Understanding LoRA",
+    "subtitle": "为什么只学两个低秩矩阵，就能高效适配大模型？",
+    "category": "training",
     "status": "published",
     "published": "2026-11-20",
     "updated": "2026-11-20",
-    "reading_minutes": 32,
+    "reading_minutes": 31,
     "tags": [
-      "FlashAttention",
-      "Attention Kernels",
-      "GPU Memory",
-      "Online Softmax",
-      "IO-aware Algorithms"
+      "LoRA",
+      "PEFT",
+      "Fine-tuning",
+      "Low-Rank Adaptation",
+      "Adapter Merging"
     ],
-    "summary": "以 FlashAttention 2022 原论文为主线，分块拆解 HBM/SRAM 数据流、在线 Softmax、反向重计算及理论边界，并辨析 FA2、FA3、FA4 演进与系统实证。",
-    "paper": "https://arxiv.org/abs/2205.14135",
-    "illustration": "flashattention"
+    "summary": "从冻结主干与低秩增量出发，推导矩阵形状、初始化梯度和 rank 参数预算，核对 GPT-3 原论文实验，并解释推理合并及 QLoRA 等后续方法。",
+    "paper": "https://arxiv.org/abs/2106.09685",
+    "illustration": "lowrank"
   }
 ]
