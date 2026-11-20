@@ -68,7 +68,7 @@ jobs:
       - name: Restore cached PDFs and render only changed posts
         run: python scripts/render_pdfs.py
       - name: Validate final site with complete PDF downloads
-        run: python scripts/validate_site.py
+        run: python scripts/validate_site.py --require-pdfs
       - name: Save validated PDF cache
         uses: actions/cache/save@v4
         continue-on-error: true
