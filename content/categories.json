@@ -35,7 +35,7 @@
     "slug": "classical-ml",
     "title": "经典机器学习",
     "english": "Classical Machine Learning",
-    "description": "从最大间隔与核技巧，到朴素贝叶斯概率分类与 GMM 混合密度估计、线性模型、树模型和集成方法，梳理经典学习算法的数学机制与论文证据。",
+    "description": "从最大间隔与核技巧，到实例学习、最近邻、朴素贝叶斯概率分类、线性模型、树模型和集成方法，梳理经典学习算法的数学机制与论文证据。",
     "topics": [
       {
         "slug": "linear-models",
@@ -60,6 +60,10 @@
       {
         "slug": "dimensionality-reduction",
         "title": "Dimensionality Reduction"
+      },
+      {
+        "slug": "nearest-neighbors",
+        "title": "Instance-based Learning & Nearest Neighbors"
       }
     ]
   },

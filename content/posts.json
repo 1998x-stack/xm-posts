@@ -1381,6 +1381,30 @@
     "topic": "gating-mechanisms"
   },
   {
+    "slug": "knn",
+    "title": "Understanding KNN",
+    "subtitle": "为什么只记住样本、查找附近的邻居，也能完成分类与回归？从 Cover–Hart 理论到高维检索。",
+    "category": "classical-ml",
+    "topic": "nearest-neighbors",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 27,
+    "tags": [
+      "KNN",
+      "k-Nearest Neighbors",
+      "Nearest Neighbor Classification",
+      "Instance-based Learning & Nearest Neighbors",
+      "Distance Metrics",
+      "Lazy Learning",
+      "KNN Regression",
+      "Curse of Dimensionality"
+    ],
+    "summary": "精读 Cover & Hart (1967) 最近邻分类理论：从 10 点教学数据的 1-NN / k-NN 决策翻转，逐步解释距离度量、特征标准化、投票与距离加权、回归、渐近错误率界、高维诅咒以及 KD/Ball Tree 与 ANN 的边界；提供 5 幅独立 SVG、5 组原生 MathML、交互式 k 与权重实验、来源证据清单和确定性 Python 测试。",
+    "paper": "https://doi.org/10.1109/TIT.1967.1053964",
+    "illustration": "knn"
+  },
+  {
     "slug": "roc-auc",
     "title": "Understanding ROC-AUC",
     "subtitle": "从阈值曲线到正负样本对的排序概率：正确使用分类评测指标",
