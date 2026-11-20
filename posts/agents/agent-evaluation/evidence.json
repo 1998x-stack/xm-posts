@@ -19,30 +19,30 @@
   },
   {
     "id": "A03",
-    "claim": "The initial GAIA benchmark contains 466 questions; its paper reports 92% human performance and 15% for GPT-4 equipped with plugins.",
-    "kind": "historical-benchmark-result",
+    "claim": "The initial GAIA benchmark contains 466 questions and emphasizes multi-step general assistant tasks with verifiable answers.",
+    "kind": "benchmark-description",
     "source_url": "https://arxiv.org/abs/2311.12983",
     "locator": "Abstract and §1",
     "status": "verified",
-    "notes": "These are results from the paper's original experimental setting and must not be presented as current model rankings."
+    "notes": "Dataset-size and design fact; no historical model score is reproduced in the article."
   },
   {
     "id": "A04",
-    "claim": "WebArena includes realistic websites across e-commerce, social forums, collaborative software development, and content management; the paper reports 14.41% success for its best GPT-4-based agent and 78.24% for humans.",
-    "kind": "historical-benchmark-result",
+    "claim": "WebArena includes realistic websites across e-commerce, social forums, collaborative software development, and content management, targeting long-horizon web interaction.",
+    "kind": "benchmark-description",
     "source_url": "https://proceedings.iclr.cc/paper_files/paper/2024/hash/4410c0711e9154a7a2d26f9b3816d1ef-Abstract-Conference.html",
     "locator": "Abstract",
     "status": "verified",
-    "notes": "Results are tied to the paper's 2024 setup; not comparable directly to unrelated benchmarks."
+    "notes": "The article avoids reproducing historical model-versus-human percentages without a split-specific scorecard."
   },
   {
     "id": "A05",
-    "claim": "The initial OSWorld benchmark contains 369 computer tasks across real web and desktop applications and reports over 72.36% human success and 12.24% for the best model in the paper's evaluation.",
-    "kind": "historical-benchmark-result",
+    "claim": "The initial OSWorld benchmark contains 369 computer tasks across real web and desktop applications.",
+    "kind": "benchmark-description",
     "source_url": "https://proceedings.neurips.cc/paper_files/paper/2024/hash/5d413e48f84dc61244b6be550f1cd8f5-Abstract-Datasets_and_Benchmarks_Track.html",
     "locator": "Abstract",
     "status": "verified",
-    "notes": "These are the paper's reported results, not the current OSWorld-Verified leaderboard."
+    "notes": "The article avoids reproducing historical model-versus-human percentages without a split-specific scorecard."
   },
   {
     "id": "A06",
@@ -52,15 +52,6 @@
     "locator": "Abstract",
     "status": "verified",
     "notes": "The article describes the original tau-bench paper and distinguishes its historical results from current extensions."
-  },
-  {
-    "id": "A07",
-    "claim": "The tau-bench paper reports GPT-4o success below 50% and retail Pass^8 below 25% in its experimental setting.",
-    "kind": "historical-benchmark-result",
-    "source_url": "https://arxiv.org/abs/2406.12045",
-    "locator": "Abstract",
-    "status": "verified",
-    "notes": "Not a current universal model performance statement."
   },
   {
     "id": "A08",
