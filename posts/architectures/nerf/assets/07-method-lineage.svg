@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 420" role="img" aria-labelledby="title desc">
+<title id="title">NeRF 到 Mip-NeRF、Instant-NGP 和 3D Gaussian Splatting 的方法演进</title>
+<desc id="desc">四个时间节点展示连续 MLP 场景函数、抗锯齿圆锥台、哈希网格加速和显式三维高斯光栅化的不同技术路线。</desc>
+<rect x="1" y="1" width="1198" height="418" rx="22" fill="#f8fbf9" stroke="#d9e7e1" stroke-width="2"/>
+<text x="40" y="48" font-size="22" font-weight="750" fill="#29434b" font-family="system-ui,'PingFang SC',sans-serif">任务相近，表示和渲染路径却在变化</text>
+<line x1="112" y1="164" x2="1085" y2="164" stroke="#8eb2a7" stroke-width="4"/>
+<g>
+<circle cx="150" cy="164" r="18" fill="#3e8c83" stroke="#fff" stroke-width="4"/>
+<circle cx="455" cy="164" r="18" fill="#c47a42" stroke="#fff" stroke-width="4"/>
+<circle cx="755" cy="164" r="18" fill="#3e7594" stroke="#fff" stroke-width="4"/>
+<circle cx="1050" cy="164" r="18" fill="#7566a7" stroke="#fff" stroke-width="4"/>
+</g>
+<g font-family="system-ui,'PingFang SC',sans-serif">
+<rect x="42" y="78" width="216" height="62" rx="12" fill="#e3f0ea" stroke="#b6d3c7"/><text x="150" y="105" text-anchor="middle" font-size="18" font-weight="750" fill="#276a63">NeRF · 2020</text><text x="150" y="127" text-anchor="middle" font-size="14" fill="#526f70">连续 5D MLP + 体渲染</text>
+<rect x="347" y="78" width="216" height="62" rx="12" fill="#f8eadc" stroke="#dfb78f"/><text x="455" y="105" text-anchor="middle" font-size="18" font-weight="750" fill="#935d35">Mip-NeRF · 2021</text><text x="455" y="127" text-anchor="middle" font-size="14" fill="#805c3f">圆锥台 + 积分位置编码</text>
+<rect x="647" y="78" width="216" height="62" rx="12" fill="#e3edf5" stroke="#b6cad9"/><text x="755" y="105" text-anchor="middle" font-size="18" font-weight="750" fill="#3e6d8b">Instant-NGP · 2022</text><text x="755" y="127" text-anchor="middle" font-size="14" fill="#456c84">多分辨率哈希特征 + 小 MLP</text>
+<rect x="942" y="78" width="216" height="62" rx="12" fill="#ece8f5" stroke="#c8bedf"/><text x="1050" y="105" text-anchor="middle" font-size="18" font-weight="750" fill="#65588f">3DGS · 2023</text><text x="1050" y="127" text-anchor="middle" font-size="14" fill="#665c85">显式高斯 + splatting</text>
+<text x="150" y="218" text-anchor="middle" font-size="15" font-weight="700" fill="#315b5b">建立连续场</text><text x="150" y="247" text-anchor="middle" font-size="14" fill="#647d80">表达几何与视角相关外观</text>
+<text x="455" y="218" text-anchor="middle" font-size="15" font-weight="700" fill="#315b5b">减少混叠</text><text x="455" y="247" text-anchor="middle" font-size="14" fill="#647d80">考虑像素在空间中的足迹</text>
+<text x="755" y="218" text-anchor="middle" font-size="15" font-weight="700" fill="#315b5b">降低查询成本</text><text x="755" y="247" text-anchor="middle" font-size="14" fill="#647d80">改进编码和 GPU 执行</text>
+<text x="1050" y="218" text-anchor="middle" font-size="15" font-weight="700" fill="#315b5b">转向显式基元</text><text x="1050" y="247" text-anchor="middle" font-size="14" fill="#647d80">快速可见性与光栅化</text>
+</g>
+<rect x="70" y="300" width="1060" height="70" rx="13" fill="#fffefa" stroke="#d9e7e1"/>
+<text x="600" y="330" text-anchor="middle" font-size="17" font-weight="750" fill="#315b5b" font-family="system-ui">NeRF 是连续神经场；3D Gaussian Splatting 是另一种显式场景表示</text>
+<text x="600" y="354" text-anchor="middle" font-size="14" fill="#647d80" font-family="system-ui">不要把同一任务目标误写成同一个网络架构的连续版本</text>
+</svg>
