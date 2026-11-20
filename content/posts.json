@@ -745,5 +745,26 @@
     "summary": "以 Chen 与 Guestrin KDD 2016 原论文为证据，渐进推导二阶树目标、叶子权重和分裂增益，图解稀疏缺失值方向、加权分位、排序列块与磁盘 IO，并附阈值/正则化交互和确定性 Python 测试。",
     "paper": "https://arxiv.org/abs/1603.02754",
     "illustration": "xgboost"
+  },
+  {
+    "slug": "naive-bayes",
+    "title": "Understanding Naive Bayes",
+    "subtitle": "为什么“天真”的条件独立假设，也能成为有效的分类器？",
+    "category": "classical-ml",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 30,
+    "tags": [
+      "Naive Bayes",
+      "Bayesian Classification",
+      "Multinomial Naive Bayes",
+      "Bernoulli Naive Bayes",
+      "Laplace Smoothing",
+      "Generative Models"
+    ],
+    "summary": "以 McCallum 与 Nigam 1998 的文本事件模型比较为主线，推导贝叶斯判别、条件独立、Multinomial/Bernoulli 似然、加法平滑与对数域计算；结合论文证据、六幅机制图、交互比较及纯 Python 可复验算例。",
+    "paper": "https://www.cse.iitb.ac.in/~soumen/readings/papers/McCallumN1998event.pdf",
+    "illustration": "naive-bayes"
   }
 ]
