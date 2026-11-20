@@ -724,5 +724,26 @@
     "summary": "以 Elman 1990 为起点，从时间反馈、时序 XOR、状态方程、BPTT 与梯度消失/爆炸渐进解析 RNN；含 12 节正文、4 幅原创独立 SVG、离线 MathML、互动数值演示、纯 Python 梯度校验与论文证据台账。",
     "paper": "https://doi.org/10.1207/S15516709COG1402_1",
     "illustration": "rnn"
+  },
+  {
+    "slug": "xgboost",
+    "title": "Understanding XGBoost",
+    "subtitle": "从二阶梯度、分裂增益到稀疏感知与可扩展树提升系统",
+    "category": "classical-ml",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 34,
+    "tags": [
+      "XGBoost",
+      "Gradient Boosting",
+      "Second-order Optimization",
+      "Split Gain",
+      "Sparsity-aware",
+      "Weighted Quantile Sketch"
+    ],
+    "summary": "以 Chen 与 Guestrin KDD 2016 原论文为证据，渐进推导二阶树目标、叶子权重和分裂增益，图解稀疏缺失值方向、加权分位、排序列块与磁盘 IO，并附阈值/正则化交互和确定性 Python 测试。",
+    "paper": "https://arxiv.org/abs/1603.02754",
+    "illustration": "xgboost"
   }
 ]
