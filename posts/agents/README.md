@@ -10,6 +10,7 @@
 - [Tool Calling](_topics/tool-calling/README.md) — 研究规划占位；尚非正式 Post。
 - [Memory](_topics/memory/README.md) — 研究规划占位；尚非正式 Post。
 - [Agent Evaluation](_topics/agent-evaluation/README.md) — 研究规划占位；尚非正式 Post。
+- [Loop Engineering](_topics/loop-engineering/README.md) — 新增二级专题：触发、任务发现、独立验证、持久状态、预算与停止策略；正式文章见 [Understanding Loop Engineering](loop-engineering/)。
 
 ## 分类边界与发布约定
 
