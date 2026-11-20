@@ -73,7 +73,7 @@ pre code{background:transparent;padding:0;color:inherit;font-size:inherit;white-
 .control-row label{font-size:14px;font-weight:750;color:#385e5b}
 input[type=range]{width:min(340px,100%);accent-color:var(--teal)}
 .output-pill{display:inline-block;padding:5px 10px;border-radius:20px;background:#eaf4f0;color:#2c7168;font-weight:800;font-size:13px;font-variant-numeric:tabular-nums}
-.demo button{border:1px solid #bad4cb;background:#fff;color:#3f7069;border-radius:7px;padding:9px 13px;font:700 13px inherit;cursor:pointer}
+.demo button{border:1px solid #bad4cb;background:#fff;color:#3f7069;border-radius:7px;padding:9px 13px;font:700 13px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;cursor:pointer}
 .demo button[aria-pressed=true]{background:#287c72;color:#fff;border-color:#287c72}
 .demo button:hover{border-color:var(--teal)}
 .demo-table{width:100%;min-width:0;border-collapse:collapse;font-size:13px;margin:12px 0}
@@ -153,7 +153,7 @@ input[type=range]{width:min(340px,100%);accent-color:var(--teal)}
 <p class="math-title">条件一：构造一个处处覆盖目标的包络</p>
 <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="包络条件公式，可横向滚动">
 <math display="block" aria-label="对所有 x，p(x) 小于等于 M 乘 q(x)">
-<mrow><mi>p</mi><mo>(</mo><mi>x</mi><mo>)</mo><mo>≤</mo><mi>M</mi><mi>q</mi><mo>(</mo><mi>x</mi><mo>)</mo><mo>,</mo><mspace width="1em"/><mi>M</mi><mo>≥</mo><msup><mi>sup</mi><mo></mo></msup><mfrac><mi>p</mi><mi>q</mi></mfrac></mrow>
+<mrow><mi>p</mi><mo>(</mo><mi>x</mi><mo>)</mo><mo>≤</mo><mi>M</mi><mi>q</mi><mo>(</mo><mi>x</mi><mo>)</mo><mo>,</mo><mspace width="1em"/><mi>M</mi><mo>≥</mo><msub><mi>sup</mi><mi>x</mi></msub><mfrac><mi>p</mi><mi>q</mi></mfrac></mrow>
 </math>
 </div>
 <p class="math-note">M 是一个常数上界。图中的 Mq(x) 必须在每个 x 处都不低于 p(x)，而不是只在峰值附近覆盖。</p>
@@ -215,7 +215,7 @@ input[type=range]{width:min(340px,100%);accent-color:var(--teal)}
 <div class="math-card">
 <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="条件分布证明，可横向滚动">
 <math display="block" aria-label="P X 属于 A 给定接受，等于积分 A 上 p(x) dx">
-<mrow><mi>P</mi><mo>(</mo><mi>X</mi><mo>∈</mo><mi>A</mi><mo>|</mo><mi>accept</mi><mo>)</mo><mo>=</mo><mfrac><mrow><mo>∫</mo><msub><mi>A</mi><mrow></mrow></msub><mi>p</mi><mo>(</mo><mi>x</mi><mo>)</mo><mi>d</mi><mi>x</mi></mrow><mrow><mn>1</mn><mo>/</mo><mi>M</mi></mrow></mfrac><mo>·</mo><mfrac><mn>1</mn><mi>M</mi></mfrac><mo>=</mo><mo>∫</mo><mi>A</mi><mi>p</mi><mo>(</mo><mi>x</mi><mo>)</mo><mi>d</mi><mi>x</mi></mrow>
+<mrow><mi>P</mi><mo>(</mo><mi>X</mi><mo>∈</mo><mi>A</mi><mo>|</mo><mi>accept</mi><mo>)</mo><mo>=</mo><mfrac><mrow><msub><mo>∫</mo><mi>A</mi></msub><mi>p</mi><mo>(</mo><mi>x</mi><mo>)</mo><mi>d</mi><mi>x</mi></mrow><mrow><mn>1</mn><mo>/</mo><mi>M</mi></mrow></mfrac><mo>·</mo><mfrac><mn>1</mn><mi>M</mi></mfrac><mo>=</mo><mo>∫</mo><mi>A</mi><mi>p</mi><mo>(</mo><mi>x</mi><mo>)</mo><mi>d</mi><mi>x</mi></mrow>
 </math>
 </div>
 <p class="math-note">接受事件发生后，样本在任意集合 A 上的概率与目标分布完全一致。这就是“拒绝后仍然无偏”的核心原因。</p>
@@ -321,7 +321,7 @@ input[type=range]{width:min(340px,100%);accent-color:var(--teal)}
 <div class="math-card">
 <div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="拒绝采样微调目标公式，可横向滚动">
 <math display="block" aria-label="L RSFT 等于负的保留数据上答案 token 对数概率之和">
-<mrow><msub><mi>L</mi><mtext>RSFT</mtext></msub><mo>(</mo><mi>θ</mi><mo>)</mo><mo>=</mo><mo>−</mo><msub><mi>E</mi><mrow><mo>(</mo><mi>x</mi><mo>,</mo><mi>y</mi><mo>)</mo><mo>∼</mo><msub><mi>D</mi><mtext>keep</mtext></msub></mrow></msub><mo>[</mo><munderover><mo>∑</mo><mrow><mi>t</mi><mo>=</mo><mn>1</mn></mrow><mi>T</mi></munderover><mi>log</mi><msub><mi>π</mi><mi>θ</mi></msub><mo>(</mo><msub><mi>y</mi><mi>t</mi></msub><mo>|</mo><mi>x</mi><mo>,</mo><msub><mi>y</mi><mo>&lt;</mo><mi>t</mi></msub><mo>)</mo><mo>]</mo></mrow>
+<mrow><msub><mi>L</mi><mtext>RSFT</mtext></msub><mo>(</mo><mi>θ</mi><mo>)</mo><mo>=</mo><mo>−</mo><msub><mi>E</mi><mrow><mo>(</mo><mi>x</mi><mo>,</mo><mi>y</mi><mo>)</mo><mo>∼</mo><msub><mi>D</mi><mtext>keep</mtext></msub></mrow></msub><mo>[</mo><munderover><mo>∑</mo><mrow><mi>t</mi><mo>=</mo><mn>1</mn></mrow><mi>T</mi></munderover><mi>log</mi><msub><mi>π</mi><mi>θ</mi></msub><mo>(</mo><msub><mi>y</mi><mi>t</mi></msub><mo>|</mo><mi>x</mi><mo>,</mo><msub><mi>y</mi><mrow><mo>&lt;</mo><mi>t</mi></mrow></msub><mo>)</mo><mo>]</mo></mrow>
 </math>
 </div>
 <p class="math-note">这一步仍然是最大似然 / 交叉熵训练，不是 PPO 式的策略梯度更新。不同实现会采用 token mask、样本权重和长度归一化等细节。</p>
@@ -570,7 +570,7 @@ def test_best_of_n_is_a_separate_ranking_step():
 <p><strong>最重要的边界：</strong>奖励筛选是对精确拒绝采样思想的工程化借用，不应在没有密度比、包络和接受概率的情况下，把 Top-K 排序说成严格的概率采样算法。</p>
 </div>
 <p>读论文时，可以按顺序问四个问题：候选从哪个分布生成？用什么信号判断候选好坏？筛选规则是精确接受概率还是排序启发式？保留结果只用于当前推理，还是会进一步更新模型？回答这四个问题，通常就能看清一篇工作中的“拒绝采样”究竟承担了什么角色。</p>
-<p class="footer-note">下一步阅读建议：先看 <a href="../importance-sampling/">Importance Sampling</a> 理解采样分布与目标分布的差异，再看 <a href="./">Rejection Sampling</a>，然后沿着 <a href="./">RLHF</a>、<a href="./">DPO</a> 和 <a href="./">GRPO</a> 理解筛选样本如何进入不同的对齐目标。</p>
+<p class="footer-note">下一步阅读建议：先看 <a href="../../foundations/importance-sampling/">Importance Sampling</a> 理解采样分布与目标分布的差异，再看 <a href="./">Rejection Sampling</a>，然后沿着 <a href="../rlhf/">RLHF</a>、<a href="../dpo/">DPO</a> 和 <a href="../grpo/">GRPO</a> 理解筛选样本如何进入不同的对齐目标。</p>
 </section>
 
 <section id="references" aria-labelledby="references-title">
