@@ -37,7 +37,7 @@
 <p>特别关注第三个按钮：负优势下 r=1.5，把一个差动作变得更可能发生，未裁剪项为 −3，裁剪项为 −2.4。<strong>min 仍选择 −3</strong>，因此不会把这类有害改变「截断到安全」。</p>
 <h3 id="ppo-kl-lab-heading">多走几步：目标不再增加，KL 却还在增长</h3>
 <p>假设同一状态只有 A、B 两个动作，<strong>旧策略各 50%</strong>，一批教学样本分别包含 A（Â=+1）、B（Â=−1）各一条。令新策略 A 的概率为 p、B 为 1−p；ε 固定为 0.2。我们比较<strong>两个样本的平均 clipped surrogate</strong> 与 <strong>KL(old∥new)</strong>，后者只是衡量策略变化的一个指标，并非裁剪目标强制的硬约束。</p>
-<figure class="batch7-figure"><img src="assets/clip-vs-kl-lab.svg" alt="动作 A 的新策略概率从 0.60 到 0.90 时，PPO clipped surrogate 不变，但 KL 从 0.020 增到 0.511" loading="lazy"><figcaption>同一批样本的代理目标有平台，不代表整张策略分布被固定住。</figcaption></figure>
+<figure class="batch7-figure"><img src="assets/clip-vs-kl-lab.svg" alt="动作 A 的新策略概率从 0.60 到 0.90 时，PPO clipped surrogate 不变，但 KL 从 0.020 增到 0.511"><figcaption>同一批样本的代理目标有平台，不代表整张策略分布被固定住。</figcaption></figure>
 <div class="batch7-lab" aria-labelledby="ppo-kl-lab-heading">
 <label for="ppo-policy-slider">新策略 p(A)：<output id="ppo-policy-value" for="ppo-policy-slider">0.90</output>（旧策略固定为 0.50）</label>
 <input type="range" id="ppo-policy-slider" min="0.50" max="0.95" step="0.05" value="0.90">
