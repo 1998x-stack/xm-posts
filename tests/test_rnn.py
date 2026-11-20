@@ -46,6 +46,27 @@ def test_narrow_mobile_has_no_document_overflow():
             viewport: innerWidth,
             htmlWidth: document.documentElement.scrollWidth,
             bodyWidth: document.body.scrollWidth,
+            culprits: (() => {
+                const items=[];
+                const nodes=[...document.querySelectorAll('body *')];
+                for(const el of nodes) {
+                    const saved=el.style.display;
+                    el.style.display='none';
+                    const now=document.documentElement.scrollWidth;
+                    el.style.display=saved;
+                    if(now<=361) {
+                        let depth=0,p=el.parentElement;
+                        while(p){depth++;p=p.parentElement;}
+                        const r=el.getBoundingClientRect();
+                        items.push({tag:el.tagName.toLowerCase(),
+                            id:el.id||'',
+                            cls:typeof el.className==='string'?el.className:'',
+                            text:(el.innerText||'').slice(0,25),
+                            depth,right:Math.round(r.right),newWidth:now});
+                    }
+                }
+                return items.sort((a,b)=>b.depth-a.depth).slice(0,12);
+            })(),
             offenders: [...document.querySelectorAll('body *')].map(e => {
                 const r=e.getBoundingClientRect();
                 const css=getComputedStyle(e);
