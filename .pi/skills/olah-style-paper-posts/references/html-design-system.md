@@ -28,6 +28,10 @@ The article is a book chapter, **not** a software landing page. Prefer generous 
 - Figures have meaningful SVG `<title>`, `<desc>`, `role="img"`/labels, and figcaption.
 - Interactive controls are native and keyboard operable, with focus-visible and live state changes.
 
+## Mathematical typesetting
+
+For any substantial formula, read [math-typesetting.md](math-typesetting.md). Prefer native MathML with real `mfrac`, `msub`, `munderover` and accessible labels, rather than Unicode-only faux equations. Wrap long display math in a named `tabindex="0"` region with `overflow-x:auto` and keep the equation visible under print emulation. MathML must stay outside SVG `<text>` to preserve the SVG namespace and standalone exports.
+
 ## Typography, spacing and width
 
 | Token | Default | Reason |
@@ -49,7 +53,7 @@ The article is a book chapter, **not** a software landing page. Prefer generous 
 ## Responsive and print
 
 - At <=900px: stack sidebar above article; TOC collapses to details or horizontal nav.
-- At <=480px: page padding >=16px; heading with `clamp`, SVG viewBox preserved; horizontal scroll only **inside** explicit wide-code containers.
+- At <=480px: page padding >=16px; heading with `clamp`, SVG viewBox preserved; horizontal scroll only **inside** explicit wide-code or math containers.
 - At 360px and 390px viewport: `document.documentElement.scrollWidth <= innerWidth`; avoid tiny text in SVG; if graph is too dense, provide a simplified mobile figure or per-stage breakdown.
 - `@media (prefers-reduced-motion: reduce)`: disable transitions and auto-scroll.
 - `@media print`: remove interactive controls and sticky nav; ensure no clipped important figures, readable links and print-friendly contrast.

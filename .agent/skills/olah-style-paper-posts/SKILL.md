@@ -33,10 +33,10 @@ Produce a private article map: `reader misconception → concrete problem → mi
 Write a diagram storyboard with one question per figure, 2–5 progressive states for complex mechanisms, consistent color meaning and explicit tensor shapes. Readers must be able to understand the figure caption without hovering.
 
 ### Gate 2 — Draft technical truth before illustrations
-For each mechanism, record: inputs and shapes, transformation, outputs, precise equation, masking/normalization conventions, train-vs-infer differences and version scope. In text, separate **paper claim**, **intuition**, **toy demo**, **modern variant**, **engineering choice**, **open issue**. Cross-check all reported results against the source (table/section/figure and version), see [evidence-and-citation.md](references/evidence-and-citation.md).
+For each mechanism, record: inputs and shapes, transformation, outputs, precise equation, masking/normalization conventions, train-vs-infer differences and version scope. Keep a traceable LaTeX/MathML expression, confirm indices, operator limits and assumptions against the paper; a formula that looks attractive but differs algebraically is a failure. In text, separate **paper claim**, **intuition**, **toy demo**, **modern variant**, **engineering choice**, **open issue**. Cross-check all reported results against the source (table/section/figure and version), see [evidence-and-citation.md](references/evidence-and-citation.md).
 
 ### Gate 3 — Implement semantic HTML + CSS
-Start with `assets/templates/article.html` and `assets/css/article.css`. Follow [html-design-system.md](references/html-design-system.md): semantic `<main><article>`, navigable `nav`, one H1, ordered H2, native buttons/controls, visible focus, mobile/print/reduced-motion CSS. Inline external assets in a release export only when needed. Do not auto-inject build-system notes or conspicuous format claims into the article.
+Start with `assets/templates/article.html` and `assets/css/article.css`. For math-heavy posts, first follow [math-typesetting.md](references/math-typesetting.md): native offline MathML Core, real fractions/scripts/limits, numbered display equations, accessible inline math, internal keyboard-scrollable formula areas and no MathML inside SVG. Follow [html-design-system.md](references/html-design-system.md): semantic `<main><article>`, navigable `nav`, one H1, ordered H2, native buttons/controls, visible focus, mobile/print/reduced-motion CSS. Inline external assets in a release export only when needed. Do not auto-inject build-system notes or conspicuous format claims into the article.
 
 ### Gate 4 — Draw SVG, extract, render and compare
 Use standalone SVG with `viewBox`, `<title>`, accessible description and unique IDs. Follow [svg-production.md](references/svg-production.md). Preserve semantic color identities; use font-safe Chinese/English labels, avoid illegible nodes. The diagram's topology must match model computation, not merely look plausible.
@@ -56,7 +56,7 @@ python skills/olah-style-paper-posts/scripts/browser_check.py posts/architecture
 python -m pytest -q
 ```
 
-Install tooling first (`pip install -r requirements-dev.txt && python -m playwright install chromium`). Browser QA must inspect 1440px desktop, 390px/360px mobile, screenshot, scroll overflow, JavaScript errors, broken images/links, SVG render, keyboard focus and at least one live interaction per article. Report skips as **not verified**, never as passing. See [browser-qa.md](references/browser-qa.md) and [scorecard.md](references/scorecard.md).
+Install tooling first (`pip install -r requirements-dev.txt && python -m playwright install chromium`). Browser QA must inspect 1440px desktop, 390px/360px mobile, screenshot, scroll overflow, JavaScript errors, broken images/links, SVG render, keyboard focus and at least one live interaction per article. Report skips as **not verified**, never as passing. For articles containing MathML, also inspect namespace, nonzero geometry, stacked fractions, no SVG-nested math and mobile formula scrolling as documented in [math-typesetting.md](references/math-typesetting.md). See [browser-qa.md](references/browser-qa.md) and [scorecard.md](references/scorecard.md).
 
 ### Gate 7 — Package, publish, verify
 Remove creation-process metadata, preserve source citations, and record the final HTML/SVG/code filenames. When publishing, use a branch/PR or approved target branch, run CI, inspect diff, then verify remote files/merge status. Do not claim a GitHub Pages site is live before checking it. See [publishing.md](references/publishing.md).
@@ -67,6 +67,7 @@ Remove creation-process metadata, preserve source citations, and record the fina
 - Never copy Colah's diagram assets or text; use independently drafted illustrations; attribute stylistic inspiration in project docs.
 - Never confuse the original architecture with later variants (e.g. Transformer post-LN vs pre-LN; ResNet v1 vs v2).
 - Keep all diagrams interpretable without JavaScript. Interactivity is progressive enhancement.
+- Never fake complex mathematical typesetting with Unicode-only strings or rely on CDN math scripts; treat mathematical semantics, offline rendering, accessible labels and mobile overflow as quality gates.
 - In final article, do not render these production notes (nor close paraphrases):
   - `原创图解 · 单文件离线 HTML · SVG 矢量图 · 页面适配手机阅读与浏览器打印。文章中的教学简化已单独注明，历史实验指标均标注来源。`
   - `用直觉 → 图示 → 数学 → 工程实现，理解残差网络 · 参考 Colah 风格，非原文翻译`
@@ -80,6 +81,7 @@ Remove creation-process metadata, preserve source citations, and record the fina
 | Paper decomposition | `references/paper-extraction.md` |
 | Claims, experiments and license | `references/evidence-and-citation.md` |
 | Semantic HTML / exact CSS tokens | `references/html-design-system.md` |
+| Mathematical formula markup, offline rendering and QA | `references/math-typesetting.md` |
 | SVG design, extraction and render checks | `references/svg-production.md` |
 | Executable code and widgets | `references/implementation-and-interactivity.md` |
 | Playwright browser protocol | `references/browser-qa.md` |
