@@ -200,6 +200,7 @@
     "posts": [
       "ppo",
       "rlhf",
+      "rejection-sampling",
       "dpo",
       "grpo"
     ]
@@ -326,6 +327,16 @@
       "embeddings",
       "bert",
       "rag"
+    ]
+  },
+  {
+    "id": "path-36",
+    "title": "从概率采样到奖励筛选",
+    "posts": [
+      "importance-sampling",
+      "rejection-sampling",
+      "rlhf",
+      "dpo"
     ]
   }
 ]

@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 370" role="img" aria-labelledby="rs-fig3-title rs-fig3-desc">
+<title id="rs-fig3-title">LLM 中的奖励筛选与拒绝采样微调</title>
+<desc id="rs-fig3-desc">提示输入当前策略生成多个候选，奖励模型打分后按规则保留高质量回答，再通过监督微调更新策略。</desc>
+<rect width="960" height="370" rx="18" fill="#f7faf9"/>
+<g font-family="Arial, PingFang SC, Microsoft YaHei, sans-serif">
+<rect x="25" y="112" width="140" height="112" rx="13" fill="#e9f4f0" stroke="#b6d8cd" stroke-width="2"/>
+<text x="95" y="151" font-size="19" font-weight="700" text-anchor="middle" fill="#28635e">Prompt</text><text x="95" y="181" font-size="15" text-anchor="middle" fill="#547271">用户问题 x</text>
+<path d="M166 168 H205" stroke="#789b97" stroke-width="3" fill="none"/><path d="M196 160 L206 168 L196 176" fill="none" stroke="#789b97" stroke-width="3"/>
+<rect x="210" y="112" width="150" height="112" rx="13" fill="#eef1fa" stroke="#c7cce4" stroke-width="2"/>
+<text x="285" y="151" font-size="19" font-weight="700" text-anchor="middle" fill="#5e6290">Policy πθ</text><text x="285" y="181" font-size="15" text-anchor="middle" fill="#696e8e">采样 K 次</text>
+<path d="M361 168 H397" stroke="#789b97" stroke-width="3" fill="none"/><path d="M388 160 L398 168 L388 176" fill="none" stroke="#789b97" stroke-width="3"/>
+<rect x="402" y="50" width="200" height="235" rx="13" fill="#fff" stroke="#d9e5e1" stroke-width="2"/>
+<text x="502" y="80" font-size="17" font-weight="700" text-anchor="middle" fill="#49656a">候选回答</text>
+<rect x="423" y="99" width="158" height="43" rx="8" fill="#eef7f3"/><text x="502" y="126" font-size="15" text-anchor="middle" fill="#35645d">y₁ · 回答 A</text>
+<rect x="423" y="151" width="158" height="43" rx="8" fill="#fbf1e8"/><text x="502" y="178" font-size="15" text-anchor="middle" fill="#956744">y₂ · 回答 B</text>
+<rect x="423" y="203" width="158" height="43" rx="8" fill="#eef7f3"/><text x="502" y="230" font-size="15" text-anchor="middle" fill="#35645d">… yK</text>
+<path d="M603 168 H638" stroke="#789b97" stroke-width="3" fill="none"/><path d="M629 160 L639 168 L629 176" fill="none" stroke="#789b97" stroke-width="3"/>
+<rect x="643" y="112" width="145" height="112" rx="13" fill="#fff3e8" stroke="#e4c6a6" stroke-width="2"/>
+<text x="715" y="151" font-size="18" font-weight="700" text-anchor="middle" fill="#99633d">Reward Model</text><text x="715" y="181" font-size="15" text-anchor="middle" fill="#8a715e">rφ(x, y)</text>
+<path d="M789 168 H822" stroke="#789b97" stroke-width="3" fill="none"/><path d="M813 160 L823 168 L813 176" fill="none" stroke="#789b97" stroke-width="3"/>
+<rect x="827" y="112" width="110" height="112" rx="13" fill="#e9f4f0" stroke="#b6d8cd" stroke-width="2"/>
+<text x="882" y="151" font-size="17" font-weight="700" text-anchor="middle" fill="#28635e">筛选</text><text x="882" y="181" font-size="14" text-anchor="middle" fill="#547271">Top-K / 阈值</text>
+<path d="M882 226 V300 H285 V229" stroke="#8b79aa" stroke-width="2.5" fill="none" stroke-dasharray="7 6"/>
+<rect x="390" y="296" width="205" height="52" rx="10" fill="#f1edf8" stroke="#d3c9e2"/>
+<text x="492" y="318" font-size="16" text-anchor="middle" font-weight="700" fill="#655b87">SFT on selected</text><text x="492" y="338" font-size="13" text-anchor="middle" fill="#746d91">更新策略参数 θ</text>
+</g>
+</svg>
