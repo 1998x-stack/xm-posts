@@ -10,7 +10,7 @@ from bs4 import BeautifulSoup
 LEGACY_MATH_MIGRATIONS = ["pre-ln-vs-post-ln","resnet","rope","transformer","adam","adamw","sgd","understanding-word2vec","kv-cache","pagedattention","self-consistency","ppo","flashattention","dpo","grpo","lora","rlhf"]
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/'scripts'))
-from build_site import data,build,build_home,build_feed,DEFAULT_URL,article_url
+from build_site import data,build,build_home,build_feed,DEFAULT_URL,article_url,HOME_PAGE_SIZE
 
 def test_all_published_articles_have_semantic_math():
     categories,posts=data(ROOT)
@@ -50,11 +50,12 @@ def test_site_study_routes_paper_sources_and_article_metadata(tmp_path):
     build(ROOT,out,DEFAULT_URL)
     home=BeautifulSoup((out/'index.html').read_text(encoding='utf-8'),'html.parser')
     cards=home.select('[data-post-card]')
-    assert len(cards)==len(published)
+    assert len(cards)==min(HOME_PAGE_SIZE,len(published))
     assert len(home.select('#reading-paths .learning-card'))>=4
     for link in home.select('#reading-paths a'):
         assert (out/link['href'].rstrip('/')/'index.html').is_file(),link
-    assert len(home.select('[data-post-card] .paper-source'))==len(published)
+    assert len(home.select('[data-post-card] .paper-source'))==len(cards)
+    assert all(img.get('loading')=='lazy' for img in home.select('.index-card img'))
     for p in published:
         path=out/article_url(p)/'index.html'
         assert path.exists(),p['slug']
@@ -79,11 +80,14 @@ def test_readme_links_to_complete_generated_article_inventory():
 
     home=build_home(categories,posts,DEFAULT_URL)
     feed=build_feed(categories,posts,DEFAULT_URL)
+    published=sorted([p for p in posts if p['status']=='published'],key=lambda p:(p['published'],p['slug']),reverse=True)
+    first_page={article_url(p) for p in published[:HOME_PAGE_SIZE]}
+    visible_links={a['href'] for a in BeautifulSoup(home,'html.parser').select('.index-main h3 a')}
+    assert visible_links==first_page
+    assert 'href="archive/"' in home
     for p in posts:
         if p['status']=='published':
-            path=article_url(p)
-            assert f'href="{path}"' in home,p['slug']
-            assert DEFAULT_URL+path in feed,p['slug']
+            assert DEFAULT_URL+article_url(p) in feed,p['slug']
         else:
             assert DEFAULT_URL+article_url(p) not in feed,p['slug']
 
