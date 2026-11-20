@@ -327,5 +327,15 @@
       "bert",
       "rag"
     ]
+  },
+  {
+    "id": "path-36",
+    "title": "Agent 的上下文生命周期与长期记忆",
+    "posts": [
+      "react",
+      "swe-agent",
+      "agent-memory-components",
+      "context-engineering"
+    ]
   }
 ]
