@@ -40,6 +40,7 @@ jobs:
         run: python scripts/validate_site.py
       - name: Verify actual browser rendering & interactions
         run: |
+          python scripts/browser_check_sixth_batch.py --output reports/sixth-batch
           python scripts/browser_check_fifth_batch.py --output reports/fifth-batch
           python scripts/browser_check_fourth_batch.py --output reports/fourth-batch
           python scripts/browser_check_nb_svm_sgd.py --output reports/nb-svm-sgd
