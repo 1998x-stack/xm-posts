@@ -128,6 +128,7 @@ ex:course a skos:Concept ;
 <p>SHACL 将形状图（shapes graph）与数据图（data graph）分开，验证器会生成报告，说明哪些节点违反了哪些约束。它解决的是数据符合性检查，不应与 OWL 的逻辑开放世界推理混为一谈。<a href="#ref-6">[6]</a></p>
 <pre><code>@prefix sh: &lt;http://www.w3.org/ns/shacl#&gt; .
 @prefix ex: &lt;https://example.org/university#&gt; .
+@prefix xsd: &lt;http://www.w3.org/2001/XMLSchema#&gt; .
 
 ex:StudentShape a sh:NodeShape ;
   sh:targetClass ex:Student ;
