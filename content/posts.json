@@ -199,6 +199,26 @@
     "illustration": "lowrank"
   },
   {
+    "slug": "dpo",
+    "title": "Understanding DPO",
+    "subtitle": "为什么偏好对可以直接训练语言模型，而不需要显式奖励模型与 PPO？",
+    "category": "training",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 34,
+    "tags": [
+      "Direct Preference Optimization",
+      "RLHF",
+      "Preference Alignment",
+      "Bradley–Terry",
+      "KL Regularization"
+    ],
+    "summary": "从成对偏好与 KL 正则化目标出发，推导最优策略、隐式奖励和 DPO log-sigmoid 损失，配合 6 幅机制图、β 交互、最小数值代码与原论文证据。",
+    "paper": "https://arxiv.org/abs/2305.18290",
+    "illustration": "dpo"
+  },
+  {
     "slug": "pagedattention",
     "title": "Understanding PagedAttention",
     "subtitle": "为什么 KV Cache 需要像操作系统一样分页？从 Block Table 到 vLLM Serving",

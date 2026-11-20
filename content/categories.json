@@ -45,7 +45,9 @@
       "Fine-tuning",
       "PEFT / LoRA",
       "Preference Alignment",
-      "RL / Policy Optimization"
+      "RL / Policy Optimization",
+      "Preference Optimization",
+      "RLHF"
     ]
   },
   {
