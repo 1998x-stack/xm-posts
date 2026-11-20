@@ -21,3 +21,18 @@
 .figure-embedding .embedding-eq{display:block;color:#a96b4f;font:650 11px/1.5 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.05em}
 
 .figure-lowrank{background:#e8f2ec}.figure-lowrank .math-mark{color:#246e67}.lowrank-base,.lowrank-a,.lowrank-b,.lowrank-plus{position:absolute;text-align:center;font-weight:800;font-size:16px;line-height:37px;z-index:1;border-radius:5px}.lowrank-base{right:168px;top:64px;width:78px;height:78px;line-height:78px;color:#215c5b;background:#c1e2d5}.lowrank-a{right:91px;top:119px;width:46px;color:#9e5b3b;background:#f8d8c5}.lowrank-b{right:37px;top:119px;width:46px;color:#6759a2;background:#e2dcf7}.lowrank-plus{right:139px;top:119px;color:#7d8881}
+
+/* Editorial learning pathways and original-paper links */
+.learning-paths{padding:74px 0 80px;border-top:1px solid var(--line)}
+.learning-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin-top:31px}
+.learning-card{padding:26px 30px;background:#fffdf9;border:1px solid #e0e9e3;border-radius:12px;box-shadow:0 7px 20px #305d3a06}
+.learning-card .learning-number{font:800 14px/1.6 var(--sans);letter-spacing:.02em;color:#286f6b}
+.learning-card p{font-size:14px;color:#6b7f77;line-height:1.75;margin:8px 0 14px}
+.learning-card ol{padding-left:23px;margin:0;display:grid;gap:10px}
+.learning-card li{font-size:13px;color:#71827c;padding-left:2px}
+.learning-card li a{color:#284f53;font-weight:700;text-decoration:underline;text-decoration-color:#b9d4ca;text-underline-offset:3px}
+.card-actions{display:flex;flex-wrap:wrap;justify-content:end;gap:14px}
+.card-bottom a.paper-source{font-weight:650;color:#6c837c}
+@media(max-width:760px){.learning-paths{padding:46px 0}.learning-grid{grid-template-columns:1fr}}
+@media(max-width:450px){.learning-card{padding:20px}.card-actions{gap:9px}}
+@media print{.learning-card{break-inside:avoid}}
