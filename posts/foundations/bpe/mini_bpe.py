@@ -33,7 +33,7 @@ def train(corpus: dict[str, int], steps: int = 12):
     """
     if not corpus or steps < 0 or any(not w or f <= 0 for w, f in corpus.items()):
         raise ValueError("corpus must be nonempty with positive word frequencies")
-    alphabet = set(END for _ in [0])
+    alphabet = {END}
     alphabet.update(c for word in corpus for c in word)
     states = {w: list(w) + [END] for w in corpus}
     merges: list[tuple[str, str]] = []

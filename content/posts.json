@@ -790,6 +790,29 @@
     "illustration": "qlora"
   },
   {
+    "slug": "decision-tree",
+    "title": "Understanding Decision Tree",
+    "subtitle": "一连串简单的问题，如何组成分类与回归规则？从 ID3、CART 到剪枝",
+    "category": "classical-ml",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 29,
+    "tags": [
+      "Decision Tree",
+      "ID3",
+      "CART",
+      "C4.5",
+      "Information Gain",
+      "Gini Impurity",
+      "Regression Tree",
+      "Pruning"
+    ],
+    "summary": "以原始 CART、ID3 与 C4.5 文献为脉络，渐进图解熵、Gini、连续阈值、回归叶与代价复杂度剪枝，配六幅原创机制图、MathML 推导、交互阈值实验及纯 Python 可验证断言。",
+    "paper": "https://doi.org/10.1007/BF00116251",
+    "illustration": "decision-tree"
+  },
+  {
     "slug": "bpe",
     "title": "Understanding BPE",
     "subtitle": "从字符合并到 Token：语言模型如何构建子词词表？",
