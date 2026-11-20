@@ -1875,6 +1875,10 @@
     ],
     "summary": "从平均值 Bug 的定位、查看、编辑、语法检查与测试出发，逐步图解 NeurIPS 2024 SWE-agent 的 ACI 设计，核验 SWE-bench 12.47% / Lite 18.0% 与 Table 3 消融；提供五幅独立 SVG、MathML、交互式教学轨迹及可测试的 Python 示例，厘清论文结论与工程边界。",
     "paper": "https://arxiv.org/abs/2405.15793",
-    "illustration": "swe-agent"
+    "illustration": "swe-agent",
+    "cover": {
+      "src": "assets/cover-aci.svg",
+      "caption": "SWE-agent 用 ACI 串联代码定位、修改与测试反馈"
+    }
   }
 ]
