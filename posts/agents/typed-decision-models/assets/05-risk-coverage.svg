@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="470" viewBox="0 0 1080 470" role="img" aria-labelledby="jev-rc-title jev-rc-desc">
+<title id="jev-rc-title">选择性预测的风险与覆盖率权衡</title>
+<desc id="jev-rc-desc">随着接受阈值提高，模型自动处理的样本比例下降；在不确定性排序有效时，被接受样本上的风险也会下降。</desc>
+<rect width="1080" height="470" rx="22" fill="#fbfdfb"/>
+<g font-family="system-ui,'PingFang SC','Microsoft YaHei',sans-serif">
+<text x="52" y="54" font-size="23" font-weight="750" fill="#203035">Risk–Coverage trade-off</text>
+<rect x="58" y="78" width="964" height="330" rx="14" fill="#fff" stroke="#dce7e2"/>
+<path d="M145 352 V126 M145 352 H934" stroke="#53676d" stroke-width="2"/>
+<g fill="#53676d" font-size="15"><text x="135" y="379">0</text><text x="520" y="379">0.5</text><text x="920" y="379">1.0</text><text x="540" y="424" text-anchor="middle">Coverage · 自动处理的样本比例</text><text x="93" y="354">0</text><text x="93" y="242">0.5</text><text x="93" y="132">1.0</text><text x="48" y="242" transform="rotate(-90 48 242)" text-anchor="middle">Selective Risk</text></g>
+<path d="M145 352 L934 126" stroke="#aebbb7" stroke-width="3" stroke-dasharray="9 8" fill="none"/>
+<path d="M145 352 C260 302 365 252 480 220 S740 164 934 145" stroke="#147f80" stroke-width="5" fill="none"/>
+<path d="M145 352 C265 318 390 270 515 236 S760 188 934 165" stroke="#6656a6" stroke-width="3" stroke-dasharray="8 7" fill="none"/>
+<g font-size="15"><line x1="660" y1="111" x2="700" y2="111" stroke="#147f80" stroke-width="5"/><text x="710" y="117" fill="#426c69">有效不确定性排序</text><line x1="660" y1="142" x2="700" y2="142" stroke="#6656a6" stroke-width="3" stroke-dasharray="8 7"/><text x="710" y="148" fill="#625b7d">较弱的排序能力</text></g>
+<rect x="177" y="163" width="245" height="62" rx="10" fill="#e9f4f0"/><text x="299" y="188" text-anchor="middle" font-size="15" font-weight="700" fill="#24545a">提高阈值</text><text x="299" y="211" text-anchor="middle" font-size="14" fill="#426c69">更多样本被转交复核</text>
+<rect x="603" y="280" width="310" height="62" rx="10" fill="#f4f1fb"/><text x="758" y="305" text-anchor="middle" font-size="15" font-weight="700" fill="#453b75">覆盖率下降</text><text x="758" y="328" text-anchor="middle" font-size="14" fill="#625b7d">留下的样本应当更容易</text>
+<text x="58" y="456" font-size="14" fill="#53676d">概念示意曲线：不是任何模型或 Jev 的测量结果。实际曲线必须在目标验证集上计算。</text>
+</g>
+</svg>
