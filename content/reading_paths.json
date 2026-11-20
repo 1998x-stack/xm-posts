@@ -338,5 +338,15 @@
       "rlhf",
       "dpo"
     ]
+  },
+  {
+    "id": "path-37",
+    "title": "从单次 Agent 行动到持续自主工程",
+    "posts": [
+      "react",
+      "swe-agent",
+      "agent-memory-components",
+      "loop-engineering"
+    ]
   }
 ]
