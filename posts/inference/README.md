@@ -16,3 +16,15 @@
 后续主题：PagedAttention 详解、连续批处理、Prefix Caching、KV 量化/Offloading、长上下文评测。
 
 发布依据：`content/categories.json` 定义分类；`content/posts.json` 定义正式文章。草稿不会进入站点，`README.md` 不作为文章发布。
+
+## 专题规划占位（非文章）
+
+`inference` 管理请求生命周期、KV Cache、Prefill/Decode、动态 batch、调度及性能指标（TTFT、TPOT、吞吐与延迟）；kernel 和编译细节归 `systems`。
+
+- [Request Scheduling](_topics/request-scheduling/README.md)
+- [Continuous Batching](_topics/continuous-batching/README.md)
+- [Prefix Caching](_topics/prefix-caching/README.md)
+- [Speculative Decoding](_topics/speculative-decoding/README.md)
+- [Prefill / Decode Disaggregation](_topics/prefill-decode-disaggregation/README.md)
+
+上述 `_topics/` 是研究路线占位目录，正式文章仍遵循 `posts/inference/<slug>/index.html`；只有 `content/posts.json` 中的 `published` 文章才会被发布。

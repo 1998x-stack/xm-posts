@@ -34,13 +34,16 @@
 | **Understanding Chain-of-Thought Prompting** | Few-shot 的中间推理步骤如何改变复杂任务表现？ | [`posts/reasoning/chain-of-thought/`](posts/reasoning/chain-of-thought/index.html) | [Wei et al. (NeurIPS 2022)](https://arxiv.org/abs/2201.11903) |
 | **Understanding Self-Consistency** | 多路径采样与最终答案投票为何有效？ | [`posts/reasoning/self-consistency/`](posts/reasoning/self-consistency/index.html) | [Wang et al. (2022; ICLR 2023)](https://arxiv.org/abs/2203.11171) |
 | **Understanding MCTS** | 为什么不用搜完整棵树，也能优先探索有价值的决策？UCT、Monte Carlo Rollout 与 PUCT | [`posts/reinforcement-learning/mcts/`](posts/reinforcement-learning/mcts/index.html) | [Kocsis & Szepesvári (ECML 2006)](https://aima.cs.berkeley.edu/~russell/classes/cs294/s11/readings/Kocsis%2BSzepesvari%3A2006.pdf) |
+| **Understanding A3C** | 异步并行 Actor–Critic 如何用 n-step Advantage 与熵正则替代 Replay？ | [`posts/reinforcement-learning/a3c/`](posts/reinforcement-learning/a3c/index.html) | [Mnih et al. (ICML 2016)](https://proceedings.mlr.press/v48/mniha16.html) |
 | **Understanding DQN** | 为什么像素与奖励足以驱动动作价值学习？ | [`posts/reinforcement-learning/dqn/`](posts/reinforcement-learning/dqn/index.html) | [Mnih et al. (Nature 2015)](https://doi.org/10.1038/nature14236) |
+| **Understanding NoisyNet** | 为什么可学习的参数噪声能带来更连贯的探索？ | [`posts/reinforcement-learning/noisynet/`](posts/reinforcement-learning/noisynet/index.html) | [Fortunato et al. (ICLR 2018)](https://arxiv.org/abs/1706.10295) |
+| **Understanding REINFORCE** | 为什么无法对环境求导，也能从随机行动与奖励中估计策略梯度？ | [`posts/reinforcement-learning/reinforce/`](posts/reinforcement-learning/reinforce/index.html) | [Williams (Machine Learning 1992)](https://doi.org/10.1007/BF00992696) |
 | **Understanding PPO** | 为什么能复用同一批轨迹又避免过大更新？ | [`posts/reinforcement-learning/ppo/`](posts/reinforcement-learning/ppo/index.html) | [Schulman et al. (2017)](https://arxiv.org/abs/1707.06347) |
 | **Understanding SAC** | 为什么旧经验可复用，还要用最大熵保留探索？ | [`posts/reinforcement-learning/sac/`](posts/reinforcement-learning/sac/index.html) | [Haarnoja et al. (ICML 2018)](https://proceedings.mlr.press/v80/haarnoja18b.html) |
 | **Understanding RLHF** | 为什么示范微调还需要人类偏好与策略优化？ | [`posts/training/rlhf/`](posts/training/rlhf/index.html) | [Ouyang et al. (2022)](https://arxiv.org/abs/2203.02155) |
 | **Understanding GRPO** | 为什么不需要 Critic 也能构造策略优势？ | [`posts/training/grpo/`](posts/training/grpo/index.html) | [Shao et al. (2024)](https://arxiv.org/abs/2402.03300) |
+| **Understanding WordPiece** | 词表学习和 BERT MaxMatch 为什么是不同问题？ | [`posts/foundations/wordpiece/`](posts/foundations/wordpiece/index.html) | [Schuster & Nakajima (2012)](https://research.google/pubs/japanese-and-korean-voice-search/) · [BERT tokenizer](https://github.com/google-research/bert/blob/master/tokenization.py) |
 | **Understanding Word2Vec** | 为什么上下文预测能产生词向量？ | [`posts/foundations/understanding-word2vec/`](posts/foundations/understanding-word2vec/index.html) | [Mikolov et al. (2013)](https://arxiv.org/abs/1301.3781) · [NeurIPS 2013](https://arxiv.org/abs/1310.4546) |
-| **Understanding WordPiece** | WordPiece 的词表训练与最长匹配为何需要区分？ | [`posts/foundations/wordpiece/`](posts/foundations/wordpiece/index.html) | [Schuster & Nakajima (2012)](https://research.google/pubs/japanese-and-korean-voice-search/) · [BERT tokenizer](https://github.com/google-research/bert/blob/master/tokenization.py) |
 | **Understanding Embeddings** | 为什么词的编号能够变成可比较的语义向量？从 Word2Vec 到对比检索 | [`posts/foundations/embeddings/`](posts/foundations/embeddings/index.html) | [Word2Vec](https://arxiv.org/abs/1301.3781) · [SBERT](https://aclanthology.org/D19-1410/) · [SimCSE](https://aclanthology.org/2021.emnlp-main.552/) |
 | **Understanding SGD** | 为什么带噪梯度也能驱动大规模学习？ | [`posts/foundations/sgd/`](posts/foundations/sgd/index.html) | [Bottou (2010)](https://bottou.org/papers/bottou-2010) |
 | **Understanding Adam** | 梯度为什么需要方向和平方尺度的两份记忆？ | [`posts/foundations/adam/`](posts/foundations/adam/index.html) | [Kingma & Ba (2015)](https://arxiv.org/abs/1412.6980) |
@@ -78,16 +81,21 @@ The Pile 的 22 个来源按原论文 Table 1 给出有效采样权重，配五�
 
 | 分类 | 路径 | 范围 |
 |---|---|---|
-| 基础理论 | `posts/foundations/` | Adam、Word2Vec、BPE / WordPiece / Tokenization、词嵌入、优化器（AdamW）、正则化、表示学习 |
-| **经典机器学习** | `posts/classical-ml/` | SVM、核方法、线性模型、XGBoost 与树集成、PCA 与无监督降维 |
-| **模型架构** | `posts/architectures/` | RNN / LSTM、AlexNet / CNN、ResNet、Seq2Seq、Transformer、Normalization & Residual Paths、状态空间模型 |
-| **强化学习** | `posts/reinforcement-learning/` | Policy Gradient、Actor–Critic、Off-policy Replay、SAC / Maximum Entropy、PPO/TRPO 与序贯决策 |
-| **数据与语料** | `posts/datasets/` | 预训练语料、数据清洗/去重、混合采样、污染检查与治理 |
-| 训练与对齐 | `posts/training/` | 预训练（Scaling Laws / Compute-Optimal Training）、微调、偏好对齐、DPO 与 RLHF与 PPO / GRPO 等强化学习策略优化 |
-| 推理与 Serving | `posts/inference/` | KV Cache、PagedAttention、Prefix Caching、Decode、在线 Serving |
-| 系统与 Kernel | `posts/systems/` | GPU、Attention Kernels、算子、并行与性能分析 |
-| 多模态 | `posts/multimodal/` | Vision/Audio/Language 与跨模态交互 |
-| 评测与复现 | `posts/evaluation/` | Benchmark、消融、复现协议 |
+| 基础理论 | `posts/foundations/` | 优化器、正则化、Embedding、Tokenization / BPE、数学基础 |
+| 经典机器学习 | `posts/classical-ml/` | SVM、概率模型、树与集成、降维和线性模型 |
+| 模型架构 | `posts/architectures/` | CNN、RNN、Transformer、MoE、状态空间、高效注意力与长上下文架构 |
+| 强化学习 | `posts/reinforcement-learning/` | Policy Gradient、Actor–Critic、Replay、MCTS、连续控制 |
+| 数据与语料 | `posts/datasets/` | 预训练语料、清洗、混合采样、污染与数据治理 |
+| 训练与对齐 | `posts/training/` | 预训练、微调、RLHF、分布式训练、Training Parallelism、Mixed Precision、Checkpointing |
+| 推理策略与测试时计算 | `posts/reasoning/` | CoT、Self-Consistency、搜索、验证、Test-time Scaling |
+| 推理与 Serving | `posts/inference/` | 请求调度、Continuous Batching、KV Cache、Speculative Decoding、Prefill/Decode |
+| 系统与 Kernel | `posts/systems/` | GPU、内存层级、CUDA/Triton、编译、Collective Communication、性能建模 |
+| **检索与 RAG（新增）** | `posts/retrieval-rag/` | Embedding Retrieval、ANN、Reranking、RAG、Grounding、Hybrid Search |
+| **智能体与工具使用（新增）** | `posts/agents/` | ReAct、Planning、Tool Calling、Memory、Agent Evaluation |
+| 多模态 | `posts/multimodal/` | Vision / Audio / Language 与跨模态融合 |
+| 评测与复现 | `posts/evaluation/` | Benchmark、消融、复现实验协议 |
+
+**分类与目录规则：** `content/categories.json` 是一级分类和二级 Topic 的唯一来源。新分类通过 `posts/<category>/README.md` 建立实体占位；研究专题通过 `posts/<category>/_topics/<topic>/README.md` 建立非发布占位。正式文章始终位于 `posts/<category>/<article-slug>/`，由 `content/posts.json` 注册和管理发布状态。
 
 Linear Regression 使用现有 `classical-ml` → **Linear Models** 分类，不为单篇线性模型新增顶层分类；与后续 Logistic Regression、Ridge/Lasso 构成同一学习路径。其基础历史跨越 Legendre 与 Gauss，证据采用 NIST 和 Berkeley 等方法资料，而非误称一篇现代原论文。
 
@@ -142,8 +150,15 @@ xm-posts/
 │   │       ├── assets/*.svg
 │   │       ├── mini_attention.py
 │   │       └── evidence.json
+│   ├── retrieval-rag/
+│   │   ├── README.md             # 检索与 RAG 一级分类占位
+│   │   └── _topics/*/README.md   # 六个二级主题规划占位（不发布）
+│   ├── agents/
+│   │   ├── README.md             # Agent 一级分类占位
+│   │   └── _topics/*/README.md   # 五个二级主题规划占位（不发布）
 │   └── {foundations,reinforcement-learning,training,inference,systems,multimodal,evaluation}/
-│       └── README.md             # 占位与投稿约定，不发布
+│       ├── README.md            # 分类占位与投稿约定
+│       └── _topics/*/README.md  # 规划中的二级主题，不是文章
 ├── skills/olah-style-paper-posts/ # Skill 正本；SKILL / references / assets / scripts
 ├── .claude/skills/olah-style-paper-posts/  # 完整 Skill 镜像
 ├── .pi/skills/olah-style-paper-posts/      # 完整 Skill 镜像
