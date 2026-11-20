@@ -2241,5 +2241,43 @@
       "src": "assets/02-outer-loop.svg",
       "caption": "事件触发后，Agent 通过验证证据决定重试、持久化、人工升级或终止"
     }
+  },
+  {
+    "slug": "knowledge-distillation",
+    "title": "Understanding Knowledge Distillation",
+    "subtitle": "从软目标到推理能力迁移：教师如何把知识教给更小的学生模型？",
+    "category": "training",
+    "status": "published",
+    "published": "2026-11-21",
+    "updated": "2026-11-21",
+    "reading_minutes": 32,
+    "tags": [
+      "Knowledge Distillation",
+      "Model Compression",
+      "Teacher–Student Learning",
+      "Soft Targets",
+      "Logit Distillation",
+      "Feature Distillation",
+      "Relation Distillation",
+      "Sequence-level Distillation",
+      "Reasoning Distillation",
+      "LLM Post-training",
+      "DeepSeek-R1",
+      "GKD",
+      "Dataset Distillation",
+      "Data-free Distillation",
+      "Self-distillation",
+      "Multi-teacher Distillation",
+      "Cross-modal Distillation",
+      "Diffusion Model Distillation"
+    ],
+    "summary": "从 Hinton 软目标与温度缩放出发，推导 KL 蒸馏损失及 T² 梯度校正，比较响应/特征/关系蒸馏、离线/在线与序列级蒸馏；拆解 DistilBERT、TinyBERT、GKD、DeepSeek-R1 与扩散模型轨迹蒸馏，附温度交互实验、可复现 Python 数值验证和证据账本。",
+    "paper": "https://arxiv.org/abs/1503.02531",
+    "illustration": "knowledge-distillation",
+    "topic": "knowledge-distillation",
+    "cover": {
+      "src": "assets/cover-teacher-student.svg",
+      "caption": "教师软目标、特征与关系信号如何迁移到更小的学生模型"
+    }
   }
 ]
