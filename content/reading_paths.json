@@ -338,5 +338,14 @@
       "rlhf",
       "dpo"
     ]
+  },
+  {
+    "id": "path-37",
+    "title": "从二维视觉到三维神经场景表示",
+    "posts": [
+      "cnn",
+      "resnet",
+      "nerf"
+    ]
   }
 ]
