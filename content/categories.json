@@ -451,7 +451,7 @@
     "slug": "evaluation",
     "title": "评测与复现",
     "english": "Evaluation",
-    "description": "实验证据、Benchmark 设计、基线公平性与可重复性。",
+    "description": "研究分类评估的 ROC/AUC、Precision-Recall、类别不平衡、概率校准、Benchmark、消融、统计置信区间及可重复性，区分阈值无关排序指标与实际部署决策。",
     "topics": [
       {
         "slug": "benchmarks",
@@ -464,6 +464,14 @@
       {
         "slug": "ablations",
         "title": "Ablations & Evidence"
+      },
+      {
+        "slug": "classification-metrics-roc",
+        "title": "Classification Metrics & ROC Analysis"
+      },
+      {
+        "slug": "imbalanced-classification-pr",
+        "title": "Imbalanced Classification & PR Analysis"
       }
     ]
   }

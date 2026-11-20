@@ -279,3 +279,7 @@ MobileNet 归入 `architectures` → **Convolutional Neural Networks & Vision** 
 ## SwiGLU · Gated FFN
 
 - [Understanding SwiGLU](posts/architectures/swiglu/index.html)：精读 Shazeer (2020) 的 SiLU 门控、三矩阵参数匹配、T5 实证与现代 LLM 使用；归入已有 `architectures/gating-mechanisms` 二级主题。
+
+### Classification Evaluation / ROC-AUC
+
+- **Understanding ROC-AUC**：从混淆矩阵、阈值扫描与成对排序推导 ROC-AUC，并比较 PR / AP、基率、校准及实际工作点。源文件：[`posts/evaluation/roc-auc/`](posts/evaluation/roc-auc/index.html)；Fawcett (2006), https://doi.org/10.1016/j.patrec.2005.10.010。
