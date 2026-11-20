@@ -83,7 +83,7 @@ def html_page(*,title,description,canonical,body,depth=0,active='home',lang='zh-
 <title>{H(title)}</title></head><body>
 <a class="skip-link" href="#main">跳至正文</a>
 <header class="site-header"><div class="container header-row"><a class="wordmark" href="{rel}" aria-label="xm.posts 首页">xm<span>.</span>posts</a>
-<nav class="top-nav" aria-label="主导航"><a {'aria-current="page"' if active=='home' else ''} href="{rel}">首页</a><a {'aria-current="page"' if active=='archive' else ''} href="{rel}archive/">文章归档</a><a href="{rel}#categories">分类</a><a {'aria-current="page"' if active=='topics' else ''} href="{rel}topics/">知识地图</a><a href="{rel}#reading-paths">学习路径</a><a href="https://github.com/1998x-stack/xm-posts" target="_blank" rel="noopener noreferrer">GitHub ↗</a></nav></div></header>
+<button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav" data-menu-toggle><span aria-hidden="true">☰</span><span class="menu-label">菜单</span></button><nav id="site-nav" class="top-nav" aria-label="主导航"><a {'aria-current="page"' if active=='home' else ''} href="{rel}">首页</a><a {'aria-current="page"' if active=='topics' else ''} href="{rel}topics/">知识地图</a><a href="{rel}#categories">研究领域</a><a href="{rel}#reading-paths">学习路径</a><a href="{rel}#discover">文章索引</a><a {'aria-current="page"' if active=='archive' else ''} href="{rel}archive/">归档</a><a href="https://github.com/1998x-stack/xm-posts" target="_blank" rel="noopener noreferrer">GitHub ↗</a></nav></div></header>
 <main id="main">{body}</main>
 <footer class="site-footer"><div class="container footer-main"><div><a class="wordmark" href="{rel}">xm<span>.</span>posts</a><p>从问题出发，经由图示、数学与实验，真正理解模型。</p></div><div><p class="footer-label">EXPLORE</p><a href="{rel}archive/">所有文章</a><a href="{rel}feed.xml">RSS 订阅</a><a href="https://github.com/1998x-stack/xm-posts">源代码</a></div></div><div class="container legal"><span>© xm-posts · Independent technical notes</span><span>Read deeply. Build carefully.</span></div></footer>
 </body></html>'''
@@ -123,46 +123,142 @@ def post_card(p,rel,ordinal=0,topic_title=None):
 
 
 def build_home(categories,posts,base):
+    """Editorial home: fast routes into the corpus, full local search, no draft links."""
     published=[p for p in posts if p['status']=='published']
     published.sort(key=lambda p:(p['published'],p['slug']),reverse=True)
-    cats=''.join(category_pill(c,'./',sum(p['category']==c['slug'] for p in published)) for c in categories)
-    topic_labels={(c['slug'],t['slug']):t['title'] for c in categories for t in c['topics']}
-    cards=''.join(post_card(p,'./',i+1,topic_labels[(p['category'],p['topic'])]) for i,p in enumerate(published))
+    by_slug={p['slug']:p for p in published}
+    labels=topic_labels(categories)
+    counts={c['slug']:sum(p['category']==c['slug'] for p in published) for c in categories}
+    active=[c for c in categories if counts[c['slug']]]
+    planned=[c for c in categories if not counts[c['slug']]]
     count=len(published)
 
-    by_slug={p['slug']:p for p in published}
-    learning_paths=[
-        ('01 · 经典机器学习与数学直觉','从线性模型、概率假设、间隔到树集成。',['linear-regression','naive-bayes','svm','pca','xgboost']),
-        ('02 · 视觉、序列与 Attention','沿 CNN、残差、循环记忆与序列转换理解 Transformer。',['cnn','resnet','rnn','lstm','seq2seq','transformer']),
-        ('03 · 优化、预训练与微调','理解梯度优化、语言模型训练，以及参数高效适配。',['sgd','adam','adamw','gpt-1','lora','qlora']),
-        ('04 · 数据与计算最优训练','从多来源语料治理走向训练数据与模型规模权衡。',['the-pile','fineweb','chinchilla']),
-        ('05 · 对齐、策略与推理','连接 CoT 采样、偏好目标与强化学习优化。',['chain-of-thought','self-consistency','ppo','rlhf','dpo','grpo']),
-        ('06 · 高效 Attention 与 Serving','从基础注意力进入旋转位置、GPU Kernel 和 KV 内存管理。',['transformer','rope','gqa','flashattention','kv-cache','pagedattention']),
-        ('07 · 深度强化学习','由 DQN 价值学习，走向确定性与随机 Actor–Critic。',['dqn','ddpg','ppo','sac'])
-    ]
-    path_cards=''.join(
-        '<article class="learning-card"><div class="learning-number">'+H(title)+'</div>'
-        +'<p>'+H(description)+'</p><ol>'
-        +''.join('<li><a href="'+article_url(by_slug[slug])+'">'+H(by_slug[slug]['title'])+'</a></li>'
-                 for slug in slugs if slug in by_slug)
-        +'</ol></article>'
-        for title,description,slugs in learning_paths
-        if all(slug in by_slug for slug in slugs)
-    )
-    body=f'''<section class="hero container"><div class="hero-left"><div class="eyebrow"><span class="eyebrow-dot"></span> RESEARCH NOTES · TECHNICAL EXPLAINERS</div>
-<h1>把模型的<span class="marker">「为什么」</span><br>讲到<span class="serif-ital">可计算。</span></h1>
-<p class="hero-text">不从繁复符号开始，而从一个具体困惑开始。沿着原始论文的证据、逐步展开的结构图与可运行代码，理解深度学习的关键思想。</p>
-<div class="hero-actions"><a class="primary-link" href="#latest">开始阅读 <span>↗</span></a><a class="secondary-link" href="archive/">浏览全部 {count} 篇 ↗</a></div>
-</div><div class="hero-visual" aria-hidden="true"><div class="visual-caption">ANATOMY OF AN IDEA <span>№ 001</span></div><div class="visual-model"><div class="diagram-node">Input<br><small>x</small></div><div class="diagram-mid"><span class="thin-line">Identity</span><div class="diagram-box">Transformation<br><small>F(x)</small></div></div><div class="diagram-node out">Output<br><small>x + F(x)</small></div></div><div class="visual-bottom">OBSERVE → FORMALIZE → IMPLEMENT<span>·</span>VERIFY</div></div></section>
-<section id="categories" class="category-band"><div class="container"><div class="section-header"><div><div class="eyebrow muted">EXPLORE BY SUBJECT</div><h2>沿着问题脉络阅读</h2></div><p>一级分类是领域，二级主题是可直达文章的研究路径。<a href="topics/">查看完整知识地图 ↗</a></p></div><div class="category-grid">{cats}</div></div></section>
-<section id="reading-paths" class="container learning-paths"><div class="section-header"><div><div class="eyebrow muted">GUIDED STUDY ROUTES</div><h2>按学习目标，串起论文</h2></div><p>每条路线由已发布文章组成；不是用目录占位凑篇数。</p></div><div class="learning-grid">{path_cards}</div></section>
-<section id="latest" class="container latest"><div class="section-header"><div><div class="eyebrow muted">ESSAYS & VISUAL EXPLANATIONS</div><h2>全部论文解读 <span class="count">{count:02d}</span></h2></div><p>完整文章、可独立查看的 SVG 与论文证据。</p></div>
-<div class="browse-controls"><label class="search-field" for="search-posts"><span aria-hidden="true">⌕</span><input id="search-posts" type="search" placeholder="搜索模型、术语或论文关键词" autocomplete="off" data-search-input></label><span class="visible-count" aria-live="polite" data-visible-count>共 {count} 篇文章</span></div>
-<div class="post-grid" data-post-grid>{cards}</div><p class="empty-result" hidden data-no-results>没有找到匹配的文章，可以尝试其他关键词。</p>
-<div class="section-more"><a href="archive/">查看所有文章与时间索引 <span>↗</span></a></div></section>
-<section class="closing"><div class="container"><div class="eyebrow">AN ONGOING NOTEBOOK</div><h2>每一篇新文章，都是一条可追溯的理解路径。</h2><p>分类会持续扩展。所有正式发布文章都经由代码验证与浏览器检查后自动加入索引。</p><a href="https://github.com/1998x-stack/xm-posts">查看项目与贡献规范 ↗</a></div></section>'''
-    return html_page(title='xm-posts · 深度学习论文图解',description='图解深度学习与 LLM 基础论文：从直觉到结构图、数学与可运行代码，附原论文证据与验证。',canonical=base,body=body)
+    # Editorial starting points are real, already-published essays; the manifest
+    # remains the only source of URLs and metadata. No placeholders are linked.
+    feature=by_slug.get('transformer') or by_slug.get('resnet') or (published[0] if published else None)
+    if feature:
+        feature_markup=f'''<aside class="hero-feature" aria-label="推荐阅读">
+            <div class="feature-top"><span>EDITOR'S STARTING POINT</span><span>01 / GUIDE</span></div>
+            <div class="feature-art" aria-hidden="true"><span class="feature-art-caption">A VIEW INTO THE MODEL</span>
+                <div class="feature-art-core"><span class="feature-art-left">INPUT</span><span class="feature-art-arrow">→</span><span class="feature-art-center">Q · K · V</span><span class="feature-art-arrow">→</span><span class="feature-art-right">CONTEXT</span></div>
+                <span class="feature-art-foot">OBSERVE / DERIVE / VERIFY</span></div>
+            <div class="feature-copy"><span class="feature-kicker">本期精选 · {H(labels[(feature['category'],feature['topic'])])}</span>
+                <h2><a href="{article_url(feature)}">{H(feature['title'])} <span aria-hidden="true">↗</span></a></h2>
+                <p>{H(feature['subtitle'])}</p>
+                <div class="feature-foot"><span>{feature['reading_minutes']} 分钟深度阅读</span><a href="{article_url(feature)}">进入这篇研究笔记 →</a></div>
+            </div></aside>'''
+    else:
+        feature_markup=''
 
+    subject_cards=''.join(
+        f'''<a class="research-card" href="categories/{H(c['slug'])}/">
+            <span class="research-card-top"><span class="research-num">{i:02d} / FIELD</span><span class="research-count">{counts[c['slug']]:02d} 篇</span></span>
+            <strong>{H(c['title'])}</strong><span class="research-english">{H(c['english'])}</span>
+            <span class="research-description">{H(c['description'])}</span>
+            <span class="research-enter">探索领域 <span aria-hidden="true">↗</span></span>
+        </a>''' for i,c in enumerate(sorted(active,key=lambda c:-counts[c['slug']]),1)
+    )
+    planned_links=''.join(
+        f'<a href="categories/{H(c["slug"])}/">{H(c["title"])} <span>规划中 ↗</span></a>'
+        for c in planned
+    )
+
+    learning_paths=[
+        ('从经典机器学习出发','看见线性模型、概率假设、最大间隔与树提升的共同问题。',['linear-regression','logistic-regression','naive-bayes','svm','pca','xgboost']),
+        ('构建模型架构直觉','从卷积与残差，沿序列记忆走向 Attention。',['cnn','resnet','rnn','lstm','seq2seq','transformer']),
+        ('理解优化与高效微调','从梯度与优化器到预训练和参数高效适配。',['sgd','adam','adamw','gpt-1','lora','qlora']),
+        ('追溯数据与计算规律','讨论训练语料、数据治理与计算最优的边界。',['the-pile','fineweb','chinchilla']),
+        ('学习对齐与策略优化','连接偏好反馈、奖励目标与策略梯度。',['reinforce','ppo','rlhf','dpo','grpo']),
+        ('进入高效推理系统','从注意力基础到位置表示、缓存与推理内存。',['transformer','rope','gqa','flashattention','kv-cache','pagedattention']),
+        ('系统理解强化学习','先掌握价值函数，再进入 Actor–Critic 与连续控制。',['dqn','ddpg','td3','sac'])
+    ]
+    route_cards=[]
+    for number,(name,description,slugs) in enumerate(learning_paths,1):
+        available=[by_slug[slug] for slug in slugs if slug in by_slug]
+        if not available:continue
+        steps=''.join(f'<li><a href="{article_url(p)}">{H(p["title"])}</a></li>' for p in available[:3])
+        extra=f'<span class="route-extra">另有 {len(available)-3} 篇已收录</span>' if len(available)>3 else ''
+        route_cards.append(
+            f'<article class="route-card"><div class="route-top"><span>ROUTE {number:02d}</span><span>{len(available)} 篇已收录</span></div>'
+            f'<h3>{H(name)}</h3><p>{H(description)}</p><ol>{steps}</ol>{extra}'
+            f'<a class="route-start" href="{article_url(available[0])}">从第一篇开始 <span aria-hidden="true">↗</span></a></article>'
+        )
+
+    spotlight=[]
+    for slug,eyebrow in [('resnet','架构直觉'),('xgboost','经典机器学习'),('ppo','强化学习')]:
+        if slug not in by_slug:continue
+        p=by_slug[slug]
+        spotlight.append(
+            f'''<article class="spotlight-card"><div class="spotlight-top"><span>{H(eyebrow)}</span><span>{p['reading_minutes']} MIN READ</span></div>
+                <h3><a href="{article_url(p)}">{H(p['title'])}</a></h3>
+                <p>{H(p['subtitle'])}</p>
+                <a class="spotlight-link" href="{article_url(p)}">阅读全文 <span aria-hidden="true">↗</span></a>
+            </article>'''
+        )
+
+    search_cards=[]
+    for i,p in enumerate(published):
+        topic=labels[(p['category'],p['topic'])]
+        category=next(c['title'] for c in categories if c['slug']==p['category'])
+        tokens=' '.join([p['title'],p['subtitle'],p['summary'],p['category'],category,topic,
+                         p['topic'],*p['tags']]).lower()
+        search_cards.append(
+            f'''<article class="index-card post-card" data-post-card data-category="{H(p['category'],quote=True)}" data-search="{H(tokens,quote=True)}">
+            <span class="index-order">{i+1:02d}</span>
+            <div class="index-main"><div class="index-kicker">{H(category)} <span>/</span> {H(topic)}</div>
+                <h3><a href="{article_url(p)}">{H(p['title'])}</a></h3><p>{H(p['subtitle'])}</p>
+                <div class="index-tags"><span>{p['reading_minutes']} 分钟</span><span>{H(p['published'])}</span></div>
+            </div><a class="index-arrow" href="{article_url(p)}" aria-label="阅读 {H(p['title'],quote=True)}">↗</a>
+            </article>'''
+        )
+    options=''.join(
+        f'<option value="{H(c["slug"])}">{H(c["title"])} · {counts[c["slug"]]}</option>' for c in active
+    )
+
+    body=f'''<section class="hero container" aria-labelledby="home-title">
+      <div class="hero-left">
+        <div class="eyebrow"><span class="eyebrow-dot"></span> XM / RESEARCH ATLAS</div>
+        <h1 id="home-title">让复杂的模型，<br>变成<span class="marker">可以推演</span>的直觉。</h1>
+        <p class="hero-text">从一个真正的问题出发，读懂一篇论文。沿着机制图解、逐步推导与可验证的代码，建立能够迁移的理解。</p>
+        <div class="hero-actions"><a class="primary-link" href="#reading-paths">选择一条学习路径 <span aria-hidden="true">↗</span></a><a class="secondary-link" href="#discover">查找具体论文 ↗</a></div>
+        <div class="hero-stats" aria-label="知识库概览"><div><strong>{count}</strong><span>篇研究笔记</span></div><div><strong>{len(active)}</strong><span>个已有内容的领域</span></div><div><strong>{len(route_cards)}</strong><span>条学习路径</span></div></div>
+      </div>{feature_markup}
+    </section>
+    <nav class="entry-strip" aria-label="探索方式"><div class="container entry-grid">
+      <a href="#categories"><span class="entry-index">01 / SUBJECTS</span><strong>按研究领域探索</strong><span>查看不同问题的完整分类 ↗</span></a>
+      <a href="#reading-paths"><span class="entry-index">02 / PATHS</span><strong>按学习顺序阅读</strong><span>沿着关键论文逐步进阶 ↗</span></a>
+      <a href="#discover"><span class="entry-index">03 / INDEX</span><strong>直接查找一篇文章</strong><span>按关键词与主题筛选 ↗</span></a>
+    </div></nav>
+    <section class="container spotlight-section" aria-labelledby="spotlight-title">
+      <div class="section-header"><div><div class="eyebrow muted">SELECTED STARTING POINTS</div><h2 id="spotlight-title">三篇值得作为起点的研究</h2></div><p>不只追最新：先建立能够复用的概念，再深入具体模型。</p></div>
+      <div class="spotlight-grid">{''.join(spotlight)}</div>
+    </section>
+    <section id="categories" class="category-band" aria-labelledby="subjects-title"><div class="container">
+      <div class="section-header"><div><div class="eyebrow muted">FIELDS OF STUDY</div><h2 id="subjects-title">从研究领域进入知识网络</h2></div><p>有内容的领域优先展示；尚在筹备的方向清晰标注。<a href="topics/">完整知识地图 ↗</a></p></div>
+      <div class="research-grid">{subject_cards}</div>
+      {f'<div class="planned-fields"><span>持续建设中的方向</span>{planned_links}</div>' if planned else ''}
+    </div></section>
+    <section id="reading-paths" class="container learning-paths" aria-labelledby="paths-title">
+      <div class="section-header"><div><div class="eyebrow muted">GUIDED READING / LEARNING ROUTES</div><h2 id="paths-title">以问题串起论文，而非孤立记忆</h2></div><p>学习路线只连接已发布的内容；每一步都可以独立阅读。</p></div>
+      <div class="route-grid">{''.join(route_cards)}</div>
+    </section>
+    <section id="discover" class="container latest" aria-labelledby="index-title">
+      <div class="section-header"><div><div class="eyebrow muted">COMPLETE ARTICLE INDEX</div><h2 id="index-title">查找你的下一篇研究笔记 <span class="count">{count:02d}</span></h2></div><p>全部已发布文章均可搜索；默认只展开前 8 篇，避免无限滚动。</p></div>
+      <div class="browse-controls">
+        <label class="search-field" for="search-posts"><span aria-hidden="true">⌕</span><input id="search-posts" type="search" placeholder="搜索论文、模型、关键词或概念" autocomplete="off" data-search-input></label>
+        <label class="filter-field" for="category-filter"><span>研究领域</span><select id="category-filter" data-category-filter><option value="">全部领域</option>{options}</select></label>
+        <span class="visible-count" aria-live="polite" data-visible-count>共 {count} 篇文章</span>
+      </div>
+      <div class="index-list" data-post-grid>{''.join(search_cards)}</div>
+      <p class="empty-result" hidden data-no-results>没有找到匹配的文章。试试更简短的关键词，或清除筛选条件。</p>
+      <div class="index-footer"><button class="load-more" type="button" data-load-more hidden>继续浏览更多文章 ↓</button><a href="archive/">查看完整时间归档 ↗</a></div>
+    </section>
+    <section class="closing"><div class="container"><div class="eyebrow">AN OPEN, TRACEABLE NOTEBOOK</div>
+      <h2>可解释的理解，需要可追溯的证据。</h2>
+      <p>文章连接原始论文、数学推导与代码验证。想按知识体系检索？前往知识地图；想了解内容生产方式？阅读仓库规范。</p>
+      <div class="closing-actions"><a href="topics/">探索知识地图 ↗</a><a href="https://github.com/1998x-stack/xm-posts">查看研究笔记仓库 ↗</a></div>
+    </div></section>'''
+    return html_page(title='xm-posts · 深度学习与机器学习研究图谱',description='深度学习、机器学习、LLM、强化学习与系统技术研究笔记：按领域、学习路径或论文关键词发现原理、图解、推导与可运行代码。',canonical=base,body=body)
 
 def topic_labels(categories):
     return {(c['slug'],t['slug']):t['title'] for c in categories for t in c['topics']}
