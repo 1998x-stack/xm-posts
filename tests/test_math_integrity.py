@@ -44,3 +44,24 @@ def test_deltanet_rank_one_update_uses_time_indexed_key():
         "DeltaNet should use k_t^T in the ordinary, delta-corrected, and "
         "matrix-factored state updates (4 appearances)"
     )
+
+
+
+def test_ppo_squares_are_powers_and_clip_term_is_samplewise():
+    article = ROOT / "posts/reinforcement-learning/ppo/index.html"
+    soup = BeautifulSoup(article.read_text(encoding="utf-8"), "html.parser")
+    maths = soup.find_all("math")
+    gae, objective = maths[4], maths[5]
+    assert any(
+        sup.find("mi", string="γ") and sup.find("mi", string="λ")
+        and sup.find("mn", string="2")
+        for sup in gae.find_all("msup")
+    ), "The GAE expansion must show (γλ)^2, not (γλ)2"
+    assert any(
+        sup.find("mi", string="V") and sup.find("mn", string="2")
+        for sup in objective.find_all("msup")
+    ), "The value regression residual must be squared"
+    assert objective.find("msubsup") is not None, (
+        "The joint objective must average per-timestep ℓ_t^CLIP, "
+        "not re-average the global L^CLIP"
+    )
