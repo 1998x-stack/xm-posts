@@ -103,3 +103,29 @@ def test_second_level_taxonomy_and_deep_links(tmp_path):
     assert 'topics/' in (output/'sitemap.xml').read_text(encoding='utf-8')
     assert DEFAULT_URL in (output/'404.html').read_text(encoding='utf-8')
     published_site(output)
+
+
+def test_home_editorial_discovery_and_manifest_consistency(tmp_path):
+    categories, posts = data(ROOT)
+    output = tmp_path / 'editorial-home'
+    build(ROOT, output, DEFAULT_URL)
+    home = BeautifulSoup((output / 'index.html').read_text(encoding='utf-8'), 'html.parser')
+    published = [p for p in posts if p['status'] == 'published']
+    active = [c for c in categories if any(p['category'] == c['slug'] for p in published)]
+    planned = [c for c in categories if c not in active]
+    assert len(home.select('h1')) == 1
+    assert home.select_one('.hero-feature a[href*="transformer/"]')
+    assert len(home.select('.research-card')) == len(active)
+    assert len(home.select('.planned-fields a')) == len(planned)
+    assert len(home.select('.spotlight-card')) >= 2
+    assert len(home.select('.route-card')) >= 4
+    assert len(home.select('[data-post-card]')) == len(published)
+    assert home.select_one('[data-search-input]')
+    assert len(home.select('[data-category-filter] option')) == len(active) + 1
+    assert home.select_one('[data-load-more]')
+    assert home.select_one('[data-menu-toggle][aria-expanded="false"]')
+    assert home.select_one('#latest') and home.select_one('#discover')
+    indexed = {el.select_one('.index-main h3').get_text(strip=True) for el in home.select('.index-card')}
+    assert indexed == {p['title'] for p in published}
+    # A planned category must not masquerade as a published article collection.
+    assert all(c['slug'] not in {x['data-category'] for x in home.select('[data-post-card]')} for c in planned)
