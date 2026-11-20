@@ -134,4 +134,35 @@ xm-posts/
 ├── content/
 │   ├── categories.json            # 分类与稳定二级主题
 │   └── posts.json                 # 文章元数据、状态、日期与封面
-├── posts/<category>/<slug>/       # index.html、assets
+├── posts/<category>/<slug>/       # index.html、assets/*.svg、evidence.json
+├── site/assets/                   # 网站共享样式、脚本和图标
+├── scripts/                       # 构建、校验、新建文章、Skill 同步
+├── tests/                         # 数学核验、文章、站点、RSS 测试
+├── docs/                          # 架构、分类、编辑、RSS 文档
+├── skills/olah-style-paper-posts/ # Canonical Skill
+├── .claude/skills/                # Agent Skill 镜像
+├── .pi/skills/
+├── .agent/skills/
+├── .opencode/skills/
+├── .github/workflows/publish.yml  # PR 验证与 main 部署
+└── _site/                         # 本地生成，禁止入库
+
+```
+
+只修改 `skills/olah-style-paper-posts/` 正本；更新后执行 `python scripts/sync_skills.py` 同步四份镜像，最后以 `--check` 校验。完整技术说明见 [`docs/architecture.md`](docs/architecture.md)。
+
+## GitHub Pages 部署与排查
+
+[Validate & publish xm-posts](https://github.com/1998x-stack/xm-posts/actions/workflows/publish.yml) 在 PR 上完成测试与浏览器 QA，在 `main` push 后部署经过验证的 `_site/` Artifact。
+
+如果 GitHub Pages 尚未启用且自动初始化失败，请由管理员在 **Settings → Pages → Build and deployment → Source → GitHub Actions** 设置发布源，并重新运行工作流。实际部署以 **Publish GitHub Pages Job 成功 + 公开网址可访问** 为准。
+
+若看到“已提交但网页或 RSS 未变化”，先检查提交是否已在 `main`，再核对 CI 与部署 Job，最后排查浏览器、CDN 与 RSS 阅读器缓存。不要将本地构建成功误认为线上部署成功。
+
+## 贡献、来源与版权边界
+
+协作前请阅读 [`CONTRIBUTING.md`](CONTRIBUTING.md)、[`AGENTS.md`](AGENTS.md) 和 [`docs/editorial.md`](docs/editorial.md)。
+
+项目借鉴 [Christopher Olah](https://colah.github.io/) 与 [The Annotated Transformer](https://nlp.seas.harvard.edu/annotated-transformer/) 的**教学组织方式**，不是其文字、代码或插图的复制品。实验指标须标明论文、模型版本、数据集、实验设置和出处，教学简化不能冒充论文结论。
+
+**许可注意**：不同引用来源可能具有不同的许可条款；未经过核实，不应推断论文图像或第三方代码可自由重新分发。
