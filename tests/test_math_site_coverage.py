@@ -75,3 +75,17 @@ def test_readme_is_complete_for_published_articles():
         if p['status']=='published':
             assert f'posts/{p["category"]}/{p["slug"]}/' in text,p['slug']
     assert 'posts/reasoning/' in text
+
+def test_migrated_math_fractions_and_accents_are_semantically_nested():
+    dpo = (ROOT/'posts/training/dpo/index.html').read_text(encoding='utf-8')
+    word2vec = (ROOT/'posts/foundations/understanding-word2vec/index.html').read_text(encoding='utf-8')
+    for slug in ('adam', 'adamw'):
+        html = (ROOT/'posts/foundations'/slug/'index.html').read_text(encoding='utf-8')
+        assert '<mi>̂</mi>' not in html, slug + ' uses detached accent instead of mover'
+        assert '<mover accent="true">' in html, slug
+    assert '<mi>̂</mi>' not in dpo
+    assert '<msub><mover accent="true"><mi>r</mi>' in dpo
+    assert '<mi>Z</mi><mo>(</mo><mi>x</mi><mo>)</mo></mrow></mfrac>' in dpo
+    assert '<msub><mi>π</mi><mrow><mi>ref</mi></mrow></msub><mo>(</mo><mi>y</mi>' in dpo
+    assert '<mfrac><mi>t</mi><mi>f</mi></mfrac>' not in word2vec
+    assert '<mfrac><mi>t</mi><mrow><mi>f</mi><mo>(</mo><mi>w</mi>' in word2vec
