@@ -237,6 +237,7 @@
     "posts": [
       "chain-of-thought",
       "self-consistency",
+      "tree-of-thoughts",
       "react",
       "swe-agent"
     ]
@@ -326,6 +327,17 @@
       "embeddings",
       "bert",
       "rag"
+    ]
+  },
+  {
+    "id": "path-36",
+    "title": "从线性推理到显式树搜索",
+    "posts": [
+      "chain-of-thought",
+      "self-consistency",
+      "tree-of-thoughts",
+      "mcts",
+      "alphago"
     ]
   }
 ]
