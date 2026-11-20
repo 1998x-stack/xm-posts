@@ -1,0 +1,110 @@
+[
+  {
+    "id": "E01",
+    "kind": "method",
+    "claim": "Few-shot CoT uses question, rationale, answer demonstrations with no parameter updates",
+    "source_url": "https://arxiv.org/abs/2201.11903",
+    "locator": "§1–2, Figure 1",
+    "status": "verified",
+    "notes": "Do not attribute teaching derivations or toy interactions to paper results"
+  },
+  {
+    "id": "E02",
+    "kind": "setup",
+    "claim": "Arithmetic experiments manually compose eight few-shot rationale demonstrations",
+    "source_url": "https://arxiv.org/abs/2201.11903",
+    "locator": "§3.1",
+    "status": "verified",
+    "notes": "Do not attribute teaching derivations or toy interactions to paper results"
+  },
+  {
+    "id": "E03",
+    "kind": "result",
+    "claim": "PaLM 540B GSM8K standard approximately 18%, CoT approximately 57%, values rounded from figure",
+    "source_url": "https://arxiv.org/abs/2201.11903",
+    "locator": "Figure 2",
+    "status": "verified",
+    "notes": "Rounded values read from original figure; not reproduced"
+  },
+  {
+    "id": "E04",
+    "kind": "result",
+    "claim": "Model-scale comparisons across LaMDA, GPT and PaLM show larger benefits on more complex tasks",
+    "source_url": "https://arxiv.org/abs/2201.11903",
+    "locator": "§3.2, Figure 4",
+    "status": "verified",
+    "notes": "Do not attribute teaching derivations or toy interactions to paper results"
+  },
+  {
+    "id": "E05",
+    "kind": "ablation",
+    "claim": "Equation-only, dots-only and reasoning-after-answer controls underperform full CoT on GSM8K",
+    "source_url": "https://arxiv.org/abs/2201.11903",
+    "locator": "§3.3, Figure 5",
+    "status": "verified",
+    "notes": "Do not attribute teaching derivations or toy interactions to paper results"
+  },
+  {
+    "id": "E06",
+    "kind": "ablation",
+    "claim": "LaMDA 137B GSM8K figure approximate 6% standard and 15% CoT",
+    "source_url": "https://arxiv.org/abs/2201.11903",
+    "locator": "Figure 5",
+    "status": "verified",
+    "notes": "Rounded values read from original figure; not reproduced"
+  },
+  {
+    "id": "E07",
+    "kind": "robustness",
+    "claim": "Alternative annotators, concise explanations and example sets show variable but improved results",
+    "source_url": "https://arxiv.org/abs/2201.11903",
+    "locator": "§3.4, Figure 6",
+    "status": "verified",
+    "notes": "Do not attribute teaching derivations or toy interactions to paper results"
+  },
+  {
+    "id": "E08",
+    "kind": "error_analysis",
+    "claim": "Manual LaMDA 137B inspections identify incorrect reasoning and correct answers with invalid chains",
+    "source_url": "https://arxiv.org/abs/2201.11903",
+    "locator": "§3.2, Appendix D",
+    "status": "verified",
+    "notes": "Do not attribute teaching derivations or toy interactions to paper results"
+  },
+  {
+    "id": "E09",
+    "kind": "symbolic",
+    "claim": "CoT supports out-of-domain length-generalization tests on symbolic toy tasks",
+    "source_url": "https://arxiv.org/abs/2201.11903",
+    "locator": "§5, Figure 8",
+    "status": "verified",
+    "notes": "Do not attribute teaching derivations or toy interactions to paper results"
+  },
+  {
+    "id": "E10",
+    "kind": "limitations",
+    "claim": "Text rationale does not establish that the network truly reasons internally; annotation and serving costs remain",
+    "source_url": "https://arxiv.org/abs/2201.11903",
+    "locator": "§6",
+    "status": "verified",
+    "notes": "Do not attribute teaching derivations or toy interactions to paper results"
+  },
+  {
+    "id": "E11",
+    "kind": "analysis",
+    "claim": "Conditional joint factorization and answer marginalization are probability identities, not original optimization equations",
+    "source_url": "https://arxiv.org/abs/2201.11903",
+    "locator": "Independent pedagogical derivation",
+    "status": "illustrative",
+    "notes": "Do not attribute teaching derivations or toy interactions to paper results"
+  },
+  {
+    "id": "E12",
+    "kind": "toy",
+    "claim": "Store, bags, diagrams and interactive toggle are constructed teaching examples, not recorded model outputs",
+    "source_url": "https://arxiv.org/abs/2201.11903",
+    "locator": "Independent educational examples",
+    "status": "illustrative",
+    "notes": "Do not attribute teaching derivations or toy interactions to paper results"
+  }
+]

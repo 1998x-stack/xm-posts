@@ -1,0 +1,92 @@
+[
+  {
+    "id": "P01",
+    "claim": "Pearson 1901 studies best fitting lines and planes to systems of points",
+    "kind": "historical-primary",
+    "source_url": "https://doi.org/10.1080/14786440109462720",
+    "locator": "Title and geometric closest-fit problem",
+    "status": "verified",
+    "notes": "Grounded in linked primary, review or modern documentation."
+  },
+  {
+    "id": "P02",
+    "claim": "Hotelling 1933 develops principal components of complex statistical variables",
+    "kind": "historical-primary",
+    "source_url": "https://www.scienceopen.com/document?vid=a0c9b352-1645-4706-9d7c-a76e6534a1b5",
+    "locator": "Bibliographic title and original reference",
+    "status": "verified",
+    "notes": "Grounded in linked primary, review or modern documentation."
+  },
+  {
+    "id": "P03",
+    "claim": "PCA is a dimensionality reduction technique retaining variance/information",
+    "kind": "review",
+    "source_url": "https://doi.org/10.1098/rsta.2015.0202",
+    "locator": "Abstract and overview",
+    "status": "verified",
+    "notes": "Grounded in linked primary, review or modern documentation."
+  },
+  {
+    "id": "P04",
+    "claim": "Rayleigh quotient maximization yields leading covariance eigenvector",
+    "kind": "derived-math",
+    "source_url": "https://doi.org/10.1098/rsta.2015.0202",
+    "locator": "Standard PCA algebra derived in article",
+    "status": "derived",
+    "notes": "Independent educational derivation; no historical benchmark claimed."
+  },
+  {
+    "id": "P05",
+    "claim": "Orthogonal projection energy decomposition proves minimum squared reconstruction error",
+    "kind": "derived-math",
+    "source_url": "https://doi.org/10.1098/rsta.2015.0202",
+    "locator": "Pythagorean identity; independently derived",
+    "status": "derived",
+    "notes": "Independent educational derivation; no historical benchmark claimed."
+  },
+  {
+    "id": "P06",
+    "claim": "SVD of centered input obtains principal directions and singular-value variances",
+    "kind": "modern-implementation",
+    "source_url": "https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.PCA.html",
+    "locator": "PCA API overview",
+    "status": "verified",
+    "notes": "Grounded in linked primary, review or modern documentation."
+  },
+  {
+    "id": "P07",
+    "claim": "Whitening rescales principal components to unit variance",
+    "kind": "modern-implementation",
+    "source_url": "https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.PCA.html",
+    "locator": "whiten parameter",
+    "status": "verified",
+    "notes": "Grounded in linked primary, review or modern documentation."
+  },
+  {
+    "id": "P08",
+    "claim": "Test data must not be used to fit PCA or preprocessing parameters",
+    "kind": "modern-implementation",
+    "source_url": "https://scikit-learn.org/stable/common_pitfalls.html",
+    "locator": "Data leakage and pipeline sections",
+    "status": "verified",
+    "notes": "Grounded in linked primary, review or modern documentation."
+  },
+  {
+    "id": "P09",
+    "claim": "Four point example has diagonal covariance 8/3,2/3 and first component ratio 80%",
+    "kind": "toy-derivation",
+    "source_url": "https://doi.org/10.1098/rsta.2015.0202",
+    "locator": "Independent example; mini_pca.py and tests/test_pca.py",
+    "status": "derived",
+    "notes": "Independent educational derivation; no historical benchmark claimed."
+  },
+  {
+    "id": "P10",
+    "claim": "Interactive slider conserves projected and residual squared energy",
+    "kind": "toy-derivation",
+    "source_url": "https://doi.org/10.1098/rsta.2015.0202",
+    "locator": "Deterministic synthetic points, per-sample sum-of-squares",
+    "status": "derived",
+    "notes": "Independent educational derivation; no historical benchmark claimed."
+  }
+]

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 350" role="img" aria-labelledby="svd-spectrum-title svd-spectrum-desc" font-family='system-ui,-apple-system,Segoe UI,PingFang SC,sans-serif'><title id="svd-spectrum-title">奇异值的下降次序与截断保留</title><desc id="svd-spectrum-desc">对角矩阵 diag(9,4,2,1) 的奇异值示例，前两个平方和占全部平方和的 97/102。</desc><rect x="1" y="1" width="898" height="348" rx="18" fill="#fbfdfb" stroke="#dceae3"/>
+<text x="450" y="43" text-anchor="middle" font-size="24" font-weight="700" fill="#253e47">哪些方向携带更多的平方能量？</text>
+<g stroke="#d9e5e0" stroke-width="2"><path d="M100 267H812"/><path d="M100 70V267"/></g>
+<g><rect x="161" y="87" width="108" height="180" rx="10" fill="#277f79"/><rect x="330" y="187" width="108" height="80" rx="10" fill="#569d98"/><rect x="499" y="227" width="108" height="40" rx="10" fill="#dfb69f"/><rect x="668" y="247" width="108" height="20" rx="10" fill="#ead6c8"/></g>
+<g font-size="19" font-weight="700" text-anchor="middle"><text x="215" y="76" fill="#277f79">9</text><text x="384" y="176" fill="#277f79">4</text><text x="553" y="215" fill="#ab7554">2</text><text x="722" y="235" fill="#ab7554">1</text></g>
+<g font-size="18" fill="#657981" text-anchor="middle"><text x="215" y="297">σ₁</text><text x="384" y="297">σ₂</text><text x="553" y="297">σ₃</text><text x="722" y="297">σ₄</text></g>
+<text x="450" y="328" text-anchor="middle" fill="#526e74" font-size="17">保留 k = 2：平方能量 97 / 102 ≈ 95.10%，Frobenius 误差 √5</text>
+</svg>

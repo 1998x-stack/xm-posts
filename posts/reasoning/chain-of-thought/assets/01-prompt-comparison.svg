@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 404" role="img" aria-labelledby="cot-fig1-title cot-fig1-desc"><title id="cot-fig1-title">答案演示与过程演示的区别</title><desc id="cot-fig1-desc">同一道多步应用题：直接答案只有输出；链式示例包含拆解与计算再输出。</desc><rect width="900" height="404" rx="16" fill="#fbfcfa"/>
+<text x="228" y="46" text-anchor="middle" font-size="24" fill="#2a5258">STANDARD FEW-SHOT</text><text x="674" y="46" text-anchor="middle" font-size="24" fill="#2a5258">CHAIN-OF-THOUGHT</text>
+<rect x="80" y="76" width="310" height="60" rx="13" fill="#f0f4fa" stroke="#7894af" stroke-width="2"/><text x="235" y="111.94" text-anchor="middle" fill="#21484a" font-size="18" font-weight="600">问题：23 个，使用 20 个，买入 6 个</text>
+<rect x="510" y="76" width="310" height="60" rx="13" fill="#f0f4fa" stroke="#7894af" stroke-width="2"/><text x="665" y="111.94" text-anchor="middle" fill="#21484a" font-size="18" font-weight="600">相同的问题</text>
+<path d="M235 136 L235 190" fill="none" stroke="#557e7b" stroke-width="3" stroke-linecap="round"/><path d="M665 136 L665 174" fill="none" stroke="#557e7b" stroke-width="3" stroke-linecap="round"/>
+<rect x="85" y="190" width="300" height="80" rx="13" fill="#ffece0" stroke="#b96b48" stroke-width="2"/><text x="235" y="235.94" text-anchor="middle" fill="#21484a" font-size="18" font-weight="600">直接输出一个答案</text>
+<rect x="513" y="174" width="304" height="51" rx="13" fill="#e8f3ee" stroke="#33857b" stroke-width="2"/><text x="665" y="205.44" text-anchor="middle" fill="#21484a" font-size="18" font-weight="600">步骤一：23 − 20 = 3</text>
+<path d="M665 225 L665 247" fill="none" stroke="#557e7b" stroke-width="3" stroke-linecap="round"/><rect x="513" y="247" width="304" height="51" rx="13" fill="#e8f3ee" stroke="#33857b" stroke-width="2"/><text x="665" y="278.44" text-anchor="middle" fill="#21484a" font-size="18" font-weight="600">步骤二：3 + 6 = 9</text>
+<path d="M665 298 L665 321" fill="none" stroke="#557e7b" stroke-width="3" stroke-linecap="round"/><rect x="513" y="321" width="304" height="51" rx="13" fill="#e3f4e9" stroke="#33857b" stroke-width="2"/><text x="665" y="352.44" text-anchor="middle" fill="#21484a" font-size="18" font-weight="600">最终答案：9</text>
+<text x="235" y="303" text-anchor="middle" font-size="16" fill="#a15e44">缺少可检查的中间步骤</text><text x="235" y="330" text-anchor="middle" font-size="16" fill="#647477">不能据此推断对或错</text>
+</svg>

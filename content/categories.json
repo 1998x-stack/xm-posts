@@ -3,13 +3,14 @@
     "slug": "foundations",
     "title": "基础理论",
     "english": "Foundations",
-    "description": "从优化器、正则化、词嵌入、表示学习与数学直觉出发，建立理解现代模型训练的共同语言。",
+    "description": "从线性代数、矩阵分解、优化器、正则化、词嵌入、表示学习与数学直觉出发，建立理解现代模型训练的共同语言。",
     "topics": [
       "Optimization & Optimizers",
       "Optimization & Regularization",
       "Representation",
       "Math",
-      "Word Embeddings"
+      "Word Embeddings",
+      "Linear Algebra & Matrix Factorization"
     ]
   },
   {
@@ -20,14 +21,15 @@
     "topics": [
       "SVM & Kernels",
       "Linear Models",
-      "Trees & Ensembles"
+      "Trees & Ensembles",
+      "Unsupervised Learning & Dimensionality Reduction"
     ]
   },
   {
     "slug": "architectures",
     "title": "模型架构",
     "english": "Architectures",
-    "description": "拆开模型的信息路径：RNN 与 LSTM 循环记忆、AlexNet 与 ResNet 的视觉卷积架构、RNN/LSTM Seq2Seq Encoder–Decoder、Attention、Transformer 注意力、归一化布局与深层架构稳定性。",
+    "description": "拆开模型的信息路径：LSTM 循环记忆、AlexNet 与 ResNet 的视觉卷积架构、RNN/LSTM Seq2Seq Encoder–Decoder、Attention、Transformer 注意力、归一化布局与深层架构稳定性。",
     "topics": [
       "Convolutional Neural Networks & Vision",
       "Sequence-to-Sequence / Encoder–Decoder",
@@ -36,18 +38,38 @@
       "State Space",
       "Normalization & Residual Paths",
       "Positional Encoding",
-      "Recurrent Networks / LSTM"
+      "Recurrent Networks / LSTM",
+      "Attention Head Sharing"
     ]
   },
   {
     "slug": "reinforcement-learning",
     "title": "强化学习",
     "english": "Reinforcement Learning",
-    "description": "从策略梯度、价值估计到 PPO、TRPO 与现代偏好优化，拆解序贯决策中的学习信号。",
+    "description": "从 Bellman 方程、DQN 的价值学习与经验回放，到 Policy Gradient、Actor–Critic、GAE 和 PPO，拆解经验回放与最大熵控制等序贯决策的学习信号。",
     "topics": [
       "Policy Gradient",
       "Actor–Critic",
-      "RL Optimization"
+      "RL Optimization",
+      "Value-based RL",
+      "Deep Q-Learning",
+      "Off-policy & Experience Replay",
+      "Maximum Entropy RL",
+      "Continuous Control",
+      "Off-policy Actor–Critic"
+    ]
+  },
+  {
+    "slug": "datasets",
+    "title": "数据与语料",
+    "english": "Datasets & Data Curation",
+    "description": "预训练语料从哪里来？系统研究数据采集、清洗去重、混合采样、数据污染与许可证治理，并用分领域证据衡量数据质量。",
+    "topics": [
+      "Pretraining Corpora",
+      "Data Curation & Filtering",
+      "Dataset Mixing & Sampling",
+      "Data Governance & Licensing",
+      "Data Contamination"
     ]
   },
   {
