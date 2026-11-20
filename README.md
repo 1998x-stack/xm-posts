@@ -16,6 +16,7 @@
 | **Understanding RNN** | 为什么新输入还能携带历史状态，长期依赖又为何难学？ | [`posts/architectures/rnn/`](posts/architectures/rnn/index.html) | [Elman (1990)](https://doi.org/10.1207/S15516709COG1402_1) |
 | **Understanding LSTM** | 为什么一千步前的线索仍可能影响当前输出？ | [`posts/architectures/lstm/`](posts/architectures/lstm/index.html) | [Hochreiter & Schmidhuber (1997)](https://doi.org/10.1162/neco.1997.9.8.1735) |
 | **Understanding RoPE** | 为什么旋转 Q/K 就能编码相对位置？ | [`posts/architectures/rope/`](posts/architectures/rope/index.html) | [Su et al., RoFormer](https://arxiv.org/abs/2104.09864) |
+| **Understanding Seq2Seq** | 从变长输入到变长输出：为什么需要 Encoder–Decoder？ | [`posts/architectures/seq2seq/`](posts/architectures/seq2seq/index.html) | [Sutskever et al. (2014)](https://arxiv.org/abs/1409.3215) |
 | **Understanding Transformer** | 为什么用 Self-Attention 替代循环结构？ | [`posts/architectures/transformer/`](posts/architectures/transformer/index.html) | [Vaswani et al.](https://arxiv.org/abs/1706.03762) |
 | **Understanding Pre-LN vs Post-LN** | LayerNorm 改动为何影响残差梯度与 warm-up？ | [`posts/architectures/pre-ln-vs-post-ln/`](posts/architectures/pre-ln-vs-post-ln/index.html) | [Xiong et al. (ICML 2020)](https://proceedings.mlr.press/v119/xiong20b.html) |
 | **Understanding DPO** | 为什么偏好对可以直接训练策略而无需显式奖励模型？ | [`posts/training/dpo/`](posts/training/dpo/index.html) | [Rafailov et al. (NeurIPS 2023)](https://arxiv.org/abs/2305.18290) |
@@ -43,7 +44,7 @@ PPO 包含 14 节原论文推导、6 幅独立 SVG、交互式裁剪目标演算
 |---|---|---|
 | 基础理论 | `posts/foundations/` | Adam、Word2Vec、词嵌入、优化器（AdamW）、正则化、表示学习 |
 | **经典机器学习** | `posts/classical-ml/` | SVM、核方法、线性与树模型 |
-| **模型架构** | `posts/architectures/` | RNN / LSTM、AlexNet / CNN、ResNet、Transformer、Normalization & Residual Paths、状态空间模型 |
+| **模型架构** | `posts/architectures/` | AlexNet / CNN、ResNet、Seq2Seq、Transformer、Normalization & Residual Paths、状态空间模型 |
 | **强化学习** | `posts/reinforcement-learning/` | Policy Gradient、Actor–Critic、GAE、PPO/TRPO 与序贯决策 |
 | 训练与对齐 | `posts/training/` | 预训练、微调、偏好对齐、DPO 与 RLHF与 PPO / GRPO 等强化学习策略优化 |
 | 推理与 Serving | `posts/inference/` | KV Cache、PagedAttention、Prefix Caching、Decode、在线 Serving |
@@ -56,6 +57,8 @@ AlexNet 归入 `architectures` 的 **Convolutional Neural Networks & Vision** �
 RNN 沿用 `architectures` 下现有 **Recurrent Networks / LSTM** 主题，不重复新增顶层或近义二级分类；以 Elman 1990 为基本模型，串接 LSTM / GRU 与其他序列架构。
 
 LSTM 归入 `architectures` 的 **Recurrent Networks / LSTM** 二级主题，区分 1997 原始两门版、2000 年遗忘门与现代标准实现。
+
+Seq2Seq 归入 `architectures`，补充 **Sequence-to-Sequence / Encoder–Decoder** 二级主题；无需为一篇论文新建一级分类，后续 RNN、LSTM、Attention 与机器翻译架构可延伸此主题。
 
 RoPE 归入 `architectures`，补充 **Positional Encoding** 主题；不为单篇位置编码论文增设顶层分类，后续 ALiBi、PI、YaRN 可以继续沿此脉络整理。
 
