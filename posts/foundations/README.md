@@ -31,3 +31,5 @@
 - [Understanding WordPiece](wordpiece/index.html)：从 2012 语音搜索、GNMT 到 BERT MaxMatch 编码，区分教学评分与原始未开源实现；含七幅独立 SVG、四组 MathML、双交互实验和测试。专题：`Tokenization & Subword Units`。
 
 - [Understanding LogSumExp & Softmax Taylor Expansion](logsumexp-softmax-taylor/index.html)：中心化 LSE/Softmax 的泰勒展开、误差与 Attention 线性化；所属二级主题 `Softmax, LogSumExp & Numerical Approximation`。
+
+- [Understanding Rearrangement Inequalities](rearrangement-inequalities/index.html)：经典重排不等式、von Neumann 迹不等式、双随机矩阵与多序列最小值；3 幅独立 SVG、交互式三序列配对、MathML 与确定性数值检查。二级专题：`Rearrangement Inequalities & Matrix Trace`。
