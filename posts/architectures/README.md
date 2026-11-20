@@ -79,3 +79,8 @@ RoPE 位于 `posts/architectures/rope/`，主题为 **Positional Encoding**；�
 - 与 [Understanding Neural Gating](neural-gating/index.html) 共享现有 `gating-mechanisms` 二级主题，不重复增设一级分类。
 
 分类占位统一沿用 `content/categories.json` 中的稳定 slug：MobileNet 使用 `_topics/efficient-mobile-cnn/`，Neural Gating 与 SwiGLU 统一使用 `_topics/gating-mechanisms/`。
+
+## Generative Adversarial Networks (GAN)
+
+- [Understanding GAN](gan/index.html)：精读 Goodfellow et al. NeurIPS 2014，拆解生成器与判别器、minimax、最优 D*、Jensen–Shannon 散度与 non-saturating loss；四幅原创 SVG、三类别互动分布实验、数值测试和原论文证据。
+- 将 GAN 放在模型架构一级分类下新增 `generative-adversarial-networks` 稳定二级主题；它是一个生成建模训练框架，不等于 DCGAN、WGAN 等后续变体。其二分类判别训练和概率建模分别关联 Logistic Regression 与 GMM。

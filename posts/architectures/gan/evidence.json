@@ -1,0 +1,83 @@
+[
+  {
+    "id": "GAN01",
+    "claim": "The original GAN framework alternates a generator and a discriminator in a two-player minimax objective.",
+    "kind": "primary-paper",
+    "source_url": "https://papers.nips.cc/paper_files/paper/2014/hash/f033ed80deb0234979a61f95710dbe25-Abstract.html",
+    "locator": "Section 3; Equation (1)",
+    "status": "verified",
+    "notes": "2014 original GAN, not DCGAN."
+  },
+  {
+    "id": "GAN02",
+    "claim": "Algorithm 1 trains the discriminator k times and the generator once per outer iteration.",
+    "kind": "primary-paper",
+    "source_url": "https://papers.nips.cc/paper_files/paper/2014/hash/f033ed80deb0234979a61f95710dbe25-Abstract.html",
+    "locator": "Section 3; Algorithm 1",
+    "status": "verified",
+    "notes": "k need not be equal to one."
+  },
+  {
+    "id": "GAN03",
+    "claim": "At fixed G the theoretical best response D*(x) is p_data(x)/(p_data(x)+p_g(x)).",
+    "kind": "primary-paper",
+    "source_url": "https://papers.nips.cc/paper_files/paper/2014/hash/f033ed80deb0234979a61f95710dbe25-Abstract.html",
+    "locator": "Section 4.1; Proposition 1; Equation (2)",
+    "status": "verified",
+    "notes": "Defined where denominator is positive."
+  },
+  {
+    "id": "GAN04",
+    "claim": "With D optimal the value reduces to -log(4)+2 JSD(p_data || p_g); the global optimum matches distributions.",
+    "kind": "primary-paper",
+    "source_url": "https://papers.nips.cc/paper_files/paper/2014/hash/f033ed80deb0234979a61f95710dbe25-Abstract.html",
+    "locator": "Section 4.1; Theorem 1; Equations (4)–(6)",
+    "status": "verified",
+    "notes": "Nonparametric theoretical result, not convergence guarantee."
+  },
+  {
+    "id": "GAN05",
+    "claim": "The paper suggests maximizing log D(G(z)) to avoid weak early generator gradients from log(1-D(G(z))).",
+    "kind": "primary-paper",
+    "source_url": "https://papers.nips.cc/paper_files/paper/2014/hash/f033ed80deb0234979a61f95710dbe25-Abstract.html",
+    "locator": "Section 3, after Equation (1)",
+    "status": "verified",
+    "notes": "Non-saturating alternative, distinct generator objective."
+  },
+  {
+    "id": "GAN06",
+    "claim": "Original networks were multilayer perceptrons and did not require Markov chains to draw samples.",
+    "kind": "primary-paper",
+    "source_url": "https://papers.nips.cc/paper_files/paper/2014/hash/f033ed80deb0234979a61f95710dbe25-Abstract.html",
+    "locator": "Sections 1, 3 and 5",
+    "status": "verified",
+    "notes": "Modern convolutional variants came later."
+  },
+  {
+    "id": "GAN07",
+    "claim": "For toy distributions p=(.6,.3,.1), q=(.15,.2,.65), the ideal D* is (.8,.6,.133333...).",
+    "kind": "toy-derivation",
+    "source_url": "https://papers.nips.cc/paper_files/paper/2014/hash/f033ed80deb0234979a61f95710dbe25-Abstract.html",
+    "locator": "Independent discrete calculation using Section 4.1 Proposition 1",
+    "status": "derived",
+    "notes": "Toy not paper benchmark."
+  },
+  {
+    "id": "GAN08",
+    "claim": "For sigmoid discriminator logit s and D=.01, local generator-loss derivatives are -.01 for minimax and -.99 for non-saturating.",
+    "kind": "toy-derivation",
+    "source_url": "https://papers.nips.cc/paper_files/paper/2014/hash/f033ed80deb0234979a61f95710dbe25-Abstract.html",
+    "locator": "Section 3 objectives; independently differentiated sigmoid",
+    "status": "derived",
+    "notes": "Derivative with respect to discriminator logit, not total G gradient."
+  },
+  {
+    "id": "GAN09",
+    "claim": "GANs may suffer mode collapse or instability and optimality does not guarantee practical convergence.",
+    "kind": "primary-paper",
+    "source_url": "https://papers.nips.cc/paper_files/paper/2014/hash/f033ed80deb0234979a61f95710dbe25-Abstract.html",
+    "locator": "Section 6; discussion",
+    "status": "verified",
+    "notes": "Qualitative limitation, no invented dataset results."
+  }
+]

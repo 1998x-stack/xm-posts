@@ -301,5 +301,21 @@
       "cnn",
       "gnn"
     ]
+  },
+  {
+    "id": "path-33",
+    "title": "从二分类到生成对抗博弈",
+    "posts": [
+      "logistic-regression",
+      "gan"
+    ]
+  },
+  {
+    "id": "path-34",
+    "title": "显式密度与隐式生成",
+    "posts": [
+      "gmm",
+      "gan"
+    ]
   }
 ]

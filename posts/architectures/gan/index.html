@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="color-scheme" content="light">
+<meta name="description" content="GAN 生成对抗网络原论文图解：生成器与判别器、极小极大目标、最优判别器、Jensen–Shannon 散度、非饱和损失和交替训练。">
+<link rel="canonical" href="https://1998x-stack.github.io/xm-posts/posts/architectures/gan/"><title>Understanding GAN · xm-posts</title><style>:root{--bg:#f4f8f4;--paper:#fffefa;--ink:#203e44;--text:#435f60;--muted:#637d79;--line:#d6e5dc;--teal:#2d857e;--orange:#c47d54}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.85 system-ui,-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}
+a{color:#237970;text-underline-offset:3px;overflow-wrap:anywhere}a:focus-visible,button:focus-visible,input:focus-visible,.math-scroll:focus-visible{outline:3px solid #c57955;outline-offset:3px}
+.skip{position:absolute;top:-100px;left:8px;background:#234b4e;color:white;padding:10px;z-index:10}.skip:focus{top:8px}
+.bar-top{background:#fffefb;border-bottom:1px solid var(--line)}.bar-top nav{max-width:1180px;margin:auto;padding:13px 22px;display:flex;gap:20px;flex-wrap:wrap;font-size:13px}.bar-top a{text-decoration:none}
+.layout{max-width:1170px;display:grid;grid-template-columns:232px minmax(0,810px);gap:46px;margin:auto;padding:64px 23px 95px}
+.toc{position:sticky;top:18px;align-self:start;max-height:calc(100vh - 36px);overflow:auto;font-size:13px}.toc strong{display:block;font-size:11px;letter-spacing:.16em;color:#24786e;margin:0 0 15px}.toc a{display:block;text-decoration:none;color:#607b76;padding:9px 10px;border-left:2px solid var(--line);line-height:1.45}.toc a:hover{background:#e9f2e9;border-color:var(--teal)}
+main,article{min-width:0}h1{font-size:clamp(43px,5.5vw,67px);line-height:1.1;letter-spacing:-.055em;margin:15px 0 21px}h1 span{color:#27867e}
+h2{font-size:clamp(27px,3.2vw,35px);line-height:1.35;letter-spacing:-.035em;margin:0 0 20px}h2 small{font-size:14px;letter-spacing:.08em;color:var(--orange);margin-right:10px}
+h3{font-size:21px}.eyebrow{color:#327e70;font-weight:800;letter-spacing:.13em;font-size:12px}.deck{font-size:22px;color:#446a68;line-height:1.7}.meta{display:flex;flex-wrap:wrap;gap:15px;border-top:1px solid var(--line);margin:30px 0 52px;padding-top:16px;color:#637d79;font-size:12px}
+.summary{padding:17px 21px;border-left:4px solid var(--teal);background:#e7f3eb;color:#355e58;margin-bottom:43px}
+section.chapter{margin-bottom:75px;scroll-margin-top:24px}p{color:var(--text);margin:0 0 19px}.lead{font-size:19px;color:#355e5b}strong{color:#214d4c}
+.diagram{border:1px solid var(--line);border-radius:14px;padding:11px;background:var(--paper);margin:29px 0;overflow:hidden}.diagram img,.diagram svg{display:block;width:100%;height:auto;object-fit:contain}.diagram figcaption{border-top:1px solid #e4eee7;padding:11px 8px 4px;color:var(--muted);font-size:13px;line-height:1.65}.figtag{font-size:12px;font-weight:750;color:#b56f48;letter-spacing:.15em;margin:2px 8px 8px}
+.pair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:24px 0}.pair>div{background:#fff;border:1px solid var(--line);border-radius:10px;padding:17px 19px}.pair p{font-size:14px;margin:8px 0 0}
+.equation{max-width:100%;min-width:0;border:1px solid #c8ded0;border-left:4px solid var(--teal);background:#eaf5ed;border-radius:10px;margin:25px 0}.math-scroll{overflow-x:auto;overflow-y:hidden;max-width:100%;padding:20px 14px}.math-scroll math[display="block"]{width:max-content;min-width:100%;font:normal 20px/1.55 "Cambria Math","STIX Two Math","DejaVu Serif",serif;color:#254a4b}
+.note{padding:15px 19px;background:#fff0e5;border-left:3px solid #c47d54;font-size:14px;color:#715d4d;margin:24px 0}
+.table-scroll{overflow-x:auto;max-width:100%}table{width:100%;border-collapse:collapse;min-width:560px;font-size:14px;line-height:1.6;margin:18px 0 23px}td,th{padding:11px 12px;text-align:left;border-bottom:1px solid var(--line);vertical-align:middle}thead th{background:#e3f0e8;color:#355c56}
+.lab{border:1px solid #b6d6c6;background:#f0f7f1;border-radius:14px;padding:19px 20px;margin:26px 0}.lab>label{display:block;font-weight:750;color:#305e59;margin-bottom:12px}.lab input[type="range"]{display:block;accent-color:var(--teal);width:min(100%,540px)}.lab output{color:#a45e3e}.buttons{display:flex;flex-wrap:wrap;gap:10px;margin:15px 0}.buttons button{border:1px solid #94c4b5;border-radius:8px;padding:9px 12px;background:white;color:#235b55;font:inherit;font-size:13px;cursor:pointer}.buttons button:hover{background:#dbefe4}.hint{font-size:13px}.lab-table{min-width:540px;font-variant-numeric:tabular-nums}.bars{display:grid;gap:4px;min-width:110px}.bar{display:block;height:8px;border-radius:4px}.bar.real{background:#2d857e}.bar.fake{background:#ce835b}.readout{padding:13px;background:#fff;border-radius:8px;font-size:14px;font-variant-numeric:tabular-nums;color:#315e59}.steps{padding-left:24px}.steps li{color:var(--text);margin:11px 0}
+pre{background:#193c43;color:#e8f5ef;padding:18px;border-radius:12px;font:12px/1.65 ui-monospace,Consolas,monospace;overflow-x:auto;max-width:100%}code{font-family:ui-monospace,Consolas,monospace}pre code{color:inherit}
+.references li{margin:14px 0;color:var(--text)}.footer{border-top:1px solid var(--line);padding-top:21px;font-size:13px;color:var(--muted)}
+@media(max-width:940px){.layout{display:block;max-width:835px;padding-top:34px}.toc{position:static;max-height:none;display:flex;flex-wrap:wrap;gap:5px;margin-bottom:42px}.toc strong{width:100%}.toc a{border:0;background:#e7f2e9;border-radius:6px;padding:7px 10px}}
+@media(max-width:560px){body{font-size:16px}.bar-top nav{padding:12px 15px}.layout{padding:30px 16px 70px}.deck{font-size:18px}.pair{grid-template-columns:1fr}.lab{padding:13px}.diagram{padding:5px}.math-scroll{padding:17px 10px}.math-scroll math[display="block"]{font-size:18px}section.chapter{margin-bottom:56px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
+@media print{body{background:#fff;font-size:13px}.bar-top,.toc,.skip,.buttons,.lab input{display:none!important}.layout{display:block;max-width:none;padding:0}.chapter,.diagram{break-inside:avoid;margin-bottom:26px!important}.math-scroll{overflow:visible}.math-scroll math[display="block"]{font-size:17px}pre{white-space:pre-wrap}}</style></head>
+<body><a class="skip" href="#content">跳转至正文</a><header class="bar-top"><nav aria-label="站点导航"><a href="../../../">xm.posts</a><a href="../../../categories/architectures/">模型架构</a><a href="../../../topics/">知识地图</a></nav></header>
+<div class="layout"><nav class="toc" aria-label="文章目录"><strong>CONTENTS · GAN</strong><a href="#motivation">01 · 生成模型究竟在学什么？</a><a href="#two-networks">02 · G 与 D：两个网络怎样相互教会对方？</a><a href="#objective">03 · 一条公式，把双方的目标放在一起</a><a href="#best-response">04 · 为什么最优判别器是一个比值？</a><a href="#experiment">05 · 互动：移动生成分布，观察 D* 如何改变</a><a href="#divergence">06 · GAN 的理想均衡与 Jensen–Shannon 散度</a><a href="#training">07 · 一次训练轮次中，参数到底怎样更新？</a><a href="#saturation">08 · 为什么很多实现不让 G 直接最小化原式？</a><a href="#limits">09 · GAN 在实践中为什么仍然难训？</a><a href="#references">10 · 原始论文与进一步阅读</a></nav><main id="content"><article>
+<header><div class="eyebrow">MODEL STUDY / GENERATIVE MODELING / NEURIPS 2014</div><h1>Understanding <span>GAN</span></h1>
+<p class="deck">为什么让一个网络造假、另一个网络辨假，反而能学到真实数据的分布？从三类别小游戏进入 GAN 的两人博弈。</p>
+<div class="meta"><span>Generative Adversarial Networks</span><span>约 26 分钟</span><span>Goodfellow et al. · 2014</span></div>
+<p class="summary"><strong>一句话先理解：</strong>GAN 不要求直接算出生成样本的概率密度，而让生成器根据判别器的反馈调整其输出分布，争取让真实与生成样本越来越难区分。</p></header>
+<section class="chapter" id="motivation" aria-labelledby="motivation-h"><h2 id="motivation-h"><small>01</small>生成模型究竟在学什么？</h2><p class="lead">给你许多猫的照片，让模型产生一张<strong>训练集中没有出现过</strong>、却看起来像猫的新图像。我们要学的不是“猫 / 非猫”的分类边界，而是数据可能长什么样的整体规律。</p>
+<p>抽象成一个最小的三类别问题：真实世界中 A、B、C 的出现概率分别为 60%、30%、10%。最初的生成器却让 C 占了 65%。即使它能画出“样本”，其出现频率也明显不对。<strong>生成建模要改变样本出现的分布</strong>。</p>
+<figure class="diagram"><div class="figtag">FIG. 01</div><svg class="embedded-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 415" role="img" aria-labelledby="gan-fig1-title gan-fig1-desc">
+<title id="gan-fig1-title">三类别真实与生成分布的差异</title>
+<desc id="gan-fig1-desc">真实概率 A 0.60、B 0.30、C 0.10；生成概率 A 0.15、B 0.20、C 0.65。每对柱子的差异显示生成器尚未学会目标分布。</desc>
+<rect width="960" height="415" rx="20" fill="#fbfcf8"/>
+<g font-family="system-ui,'PingFang SC',sans-serif">
+<text x="48" y="51" fill="#25494d" font-size="26" font-weight="750">从离散小例子看“学一个分布”</text>
+<text x="48" y="83" fill="#5d7571" font-size="18">A、B、C 是教学用的三种样本类型，不是论文实验结果</text>
+<rect x="52" y="115" width="19" height="19" rx="3" fill="#2d857e"/><text x="81" y="131" font-size="18" fill="#3d6661">真实 p_data</text>
+<rect x="267" y="115" width="19" height="19" rx="3" fill="#cc835d"/><text x="297" y="131" font-size="18" fill="#855d44">生成 p_g</text>
+<line x1="130" x2="862" y1="343" y2="343" stroke="#b6cdc1" stroke-width="2"/>
+<g fill="#2d857e"><rect x="202" y="170" width="51" height="173" rx="6"/><rect x="432" y="256" width="51" height="87" rx="6"/><rect x="662" y="314" width="51" height="29" rx="6"/></g>
+<g fill="#cc835d"><rect x="261" y="300" width="51" height="43" rx="6"/><rect x="491" y="285" width="51" height="58" rx="6"/><rect x="721" y="155" width="51" height="188" rx="6"/></g>
+<g font-size="19" font-weight="750" text-anchor="middle"><text x="227" y="158" fill="#286d67">.60</text><text x="457" y="244" fill="#286d67">.30</text><text x="687" y="302" fill="#286d67">.10</text><text x="286" y="290" fill="#ab633f">.15</text><text x="516" y="274" fill="#ab633f">.20</text><text x="746" y="144" fill="#ab633f">.65</text></g>
+<g font-size="20" text-anchor="middle" fill="#4d6e67"><text x="257" y="376">类别 A</text><text x="487" y="376">类别 B</text><text x="717" y="376">类别 C</text></g>
+</g></svg><figcaption>这是一道人工构造的离散概率习题，并非原论文里的实验图。GAN 通常面对连续高维数据，但三类玩具例子足以解释它的核心博弈。</figcaption></figure>
+<p>传统显式密度模型（例如 <a href="../../classical-ml/gmm/">GMM</a>）通常尝试写出可计算的概率密度；GAN 通过<strong>生成样本与一个判别器的反馈</strong>学习，不要求直接计算生成分布在某个样本处的可解析密度。</p></section>
+<section class="chapter" id="two-networks" aria-labelledby="two-networks-h"><h2 id="two-networks-h"><small>02</small>G 与 D：两个网络怎样相互教会对方？</h2><p><strong>生成器 G</strong>把噪声向量 z（如来自正态分布）变成一个样本 x̃ = G(z)。噪声不是标签，而是给 G 的不同输入；<strong>判别器 D</strong>读入样本 x，输出其来自真实数据而非生成器的概率估计，值在 0 到 1 之间。</p>
+<figure class="diagram"><div class="figtag">FIG. 02</div><svg class="embedded-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 420" role="img" aria-labelledby="gan-fig2-title gan-fig2-desc">
+<title id="gan-fig2-title">GAN 的生成器与判别器双网络回路</title>
+<desc id="gan-fig2-desc">噪声经过生成器形成合成样本，真实与合成样本共同送入判别器；判别器更新分类边界，生成器根据判别器信号更新。</desc>
+<rect width="960" height="420" rx="20" fill="#fbfcf8"/>
+<g font-family="system-ui,'PingFang SC',sans-serif">
+<text x="44" y="52" font-size="27" font-weight="750" fill="#24494c">两个网络 · 两种任务 · 一条反馈回路</text>
+<rect x="46" y="117" width="175" height="93" rx="15" fill="#e8f2e9" stroke="#a8cdb9" stroke-width="2"/>
+<text x="133" y="152" text-anchor="middle" fill="#245c59" font-size="24" font-weight="750">随机噪声</text><text x="133" y="182" text-anchor="middle" fill="#47716c" font-size="19">z ~ p(z)</text>
+<rect x="293" y="117" width="172" height="93" rx="15" fill="#d6eee9" stroke="#6ba6a0" stroke-width="2"/>
+<text x="379" y="154" font-size="31" font-weight="800" text-anchor="middle" fill="#21736d">G</text><text x="379" y="184" font-size="20" text-anchor="middle" fill="#417069">生成器</text>
+<rect x="534" y="117" width="182" height="93" rx="15" fill="#fbe7dc" stroke="#da9877" stroke-width="2"/>
+<text x="625" y="153" font-size="24" font-weight="750" fill="#986244" text-anchor="middle">合成样本</text><text x="625" y="184" font-size="19" fill="#a36c4d" text-anchor="middle">G(z)</text>
+<rect x="534" y="260" width="182" height="86" rx="15" fill="#e8ecf8" stroke="#9ba9cb" stroke-width="2"/>
+<text x="625" y="295" text-anchor="middle" font-size="24" fill="#535f91" font-weight="750">真实样本</text><text x="625" y="324" text-anchor="middle" font-size="18" fill="#6b7294">x ~ p_data</text>
+<rect x="789" y="173" width="130" height="118" rx="16" fill="#284e56"/>
+<text x="854" y="213" text-anchor="middle" font-size="33" font-weight="800" fill="#fff">D</text><text x="854" y="243" text-anchor="middle" font-size="17" fill="#e6f4f0">是真样本吗？</text>
+<g fill="none" stroke-width="4"><path d="M221 164H286M465 164H528" stroke="#288077"/><path d="M716 164H754Q768 164 768 187V213H781" stroke="#c87750"/><path d="M716 304H755Q768 304 768 277V249H781" stroke="#707ead"/></g>
+<g fill="#288077"><path d="M283 155L293 164L283 173Z"/><path d="M525 155L535 164L525 173Z"/></g>
+<path d="M854 293V381H379V218" stroke="#bf7750" stroke-dasharray="9 8" stroke-width="3" fill="none"/>
+<path d="M370 230L379 215L388 230" fill="none" stroke="#bf7750" stroke-width="3"/>
+<text x="588" y="369" text-anchor="middle" font-size="17" fill="#925e40">更新 G 时：梯度穿过 D，D 的参数不更新</text>
+<text x="46" y="401" font-size="17" fill="#55716d">D 学习区分来源；G 学习让合成样本分布更接近真实数据。</text>
+</g></svg><figcaption>训练 D 时把 G 当前生成的样本当作负例；训练 G 时沿着 D 对输入的梯度调整 G 的参数，但该步骤不更新 D 的参数。</figcaption></figure>
+<div class="pair"><div><strong>训练判别器 D</strong><p>真样本希望打高分（接近 1）；G 产生的样本希望打低分（接近 0）。</p></div><div><strong>训练生成器 G</strong><p>改变 G 的输出，让 D 更愿意把生成样本当成真实样本。</p></div></div>
+<p>不要把 D 理解为永远可靠的“质量评分器”：它只能相对于<strong>当前数据和当前生成器</strong>学习区分。D 的准确率接近 50% 可能意味着双方接近平衡，也可能仅仅因为 D 欠拟合。</p></section>
+<section class="chapter" id="objective" aria-labelledby="objective-h"><h2 id="objective-h"><small>03</small>一条公式，把双方的目标放在一起</h2><p>2014 年 Goodfellow 等人的论文将双方写成一个 minimax（极小极大）博弈：D 尽量<strong>增大</strong>下式，G 尽量<strong>减小</strong>它。</p>
+<div class="equation" role="group" aria-label="原始 GAN 的极小极大价值函数"><div class="math-scroll" role="region" tabindex="0" aria-label="原始 GAN 的极小极大价值函数，公式区域可横向滚动"><math display="block" aria-label="原始 GAN 的极小极大价值函数"><mrow><munder><mo>min</mo><mi>G</mi></munder><munder><mo>max</mo><mi>D</mi></munder><mi>V</mi><mo>(</mo><mi>G</mi><mo>,</mo><mi>D</mi><mo>)</mo><mo>=</mo><msub><mi mathvariant="normal">E</mi><mrow><mi>x</mi><mo>∼</mo><msub><mi>p</mi><mtext>data</mtext></msub></mrow></msub><mo>[</mo><mi>log</mi><mi>D</mi><mo>(</mo><mi>x</mi><mo>)</mo><mo>]</mo><mo>+</mo><msub><mi mathvariant="normal">E</mi><mrow><mi>z</mi><mo>∼</mo><msub><mi>p</mi><mi>z</mi></msub></mrow></msub><mo>[</mo><mi>log</mi><mo>(</mo><mn>1</mn><mo>−</mo><mi>D</mi><mo>(</mo><mi>G</mi><mo>(</mo><mi>z</mi><mo>)</mo><mo>)</mo><mo>)</mo><mo>]</mo></mrow></math></div></div>
+<p>第一项看真实 x：D(x) 越接近 1，log D(x) 越大。第二项看由 z 生成的假样本：D(G(z)) 越接近 0，log(1 − D(G(z))) 越大。两项都照顾到的 D 才算好判别器。</p>
+<p>变量必须区分：<strong>p<sub>data</sub></strong> 是真实数据分布；<strong>p<sub>z</sub></strong> 是事先指定的噪声分布；<strong>p<sub>g</sub></strong> 是把噪声经 G 变换后所得到的生成分布；<strong>D(x)</strong> 是判别器对 x 的输出，而非真实数据的概率密度。</p>
+<div class="note"><strong>容易混淆的符号：</strong>G 不直接选择每一个类别的概率，通常是一张可微神经网络；这里的离散概率仅用来分析 G 所诱导的分布。原始论文中网络采用多层感知机，后来的 DCGAN 等卷积架构属于不同工作。</div></section>
+<section class="chapter" id="best-response" aria-labelledby="best-response-h"><h2 id="best-response-h"><small>04</small>为什么最优判别器是一个比值？</h2><p>先假设 G 暂时不变，且 D 有足够表达能力。对于某个固定的样本位置 x，D 要最大化 <strong>a log d + b log(1 − d)</strong>，其中 a = p<sub>data</sub>(x)、b = p<sub>g</sub>(x)、d = D(x)。对 d 求导并令它为零，就有 a/d − b/(1−d) = 0。</p>
+<div class="equation" role="group" aria-label="固定生成器时，理论最优判别器"><div class="math-scroll" role="region" tabindex="0" aria-label="固定生成器时，理论最优判别器，公式区域可横向滚动"><math display="block" aria-label="固定生成器时，理论最优判别器"><mrow><msup><mi>D</mi><mo>*</mo></msup><mo>(</mo><mi>x</mi><mo>)</mo><mo>=</mo><mfrac><mrow><msub><mi>p</mi><mtext>data</mtext></msub><mo>(</mo><mi>x</mi><mo>)</mo></mrow><mrow><msub><mi>p</mi><mtext>data</mtext></msub><mo>(</mo><mi>x</mi><mo>)</mo><mo>+</mo><msub><mi>p</mi><mi>g</mi></msub><mo>(</mo><mi>x</mi><mo>)</mo></mrow></mfrac></mrow></math></div></div>
+<p>例如类别 A 的真实概率是 0.60，生成概率是 0.15，于是 D*(A) = 0.60 / 0.75 = <strong>80%</strong>。B 为 60%；C 仅约 13.3%。这不是模型实测精度，而是给定两个分布后推出来的<strong>理想最优值</strong>。</p>
+<figure class="diagram"><div class="figtag">FIG. 03</div><svg class="embedded-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 418" role="img" aria-labelledby="gan-fig3-title gan-fig3-desc">
+<title id="gan-fig3-title">最优判别器 D 星的三个具体输出</title>
+<desc id="gan-fig3-desc">D星等于真实密度除以真实与生成密度之和。类别 A 为80%，B 为60%，C 为13.3%，说明判断取决于两侧相对概率。</desc>
+<rect width="960" height="418" rx="20" fill="#fbfcf8"/>
+<g font-family="system-ui,'PingFang SC',sans-serif">
+<text x="47" y="49" fill="#264b50" font-size="27" font-weight="750">判别器不是“记住真假”，而是比较两种来源</text>
+<text x="47" y="86" fill="#4e7471" font-size="20">D*(x) = p_data(x) / (p_data(x) + p_g(x))</text>
+<rect x="47" y="119" width="866" height="245" rx="16" fill="#eff6f1" stroke="#c7ded3"/>
+<g fill="#315b5a" font-weight="700" font-size="20"><text x="79" y="159">样本</text><text x="235" y="159">真实 / 生成</text><text x="570" y="159">D* 认为真实的概率</text></g>
+<g font-size="22" fill="#335c5b"><text x="82" y="223">A</text><text x="235" y="223">.60 / .15</text><text x="82" y="281">B</text><text x="235" y="281">.30 / .20</text><text x="82" y="339">C</text><text x="235" y="339">.10 / .65</text></g>
+<g fill="#d8e6dd"><rect x="570" y="202" width="235" height="23" rx="5"/><rect x="570" y="260" width="235" height="23" rx="5"/><rect x="570" y="318" width="235" height="23" rx="5"/></g>
+<g fill="#2d857e"><rect x="570" y="202" width="188" height="23" rx="5"/><rect x="570" y="260" width="141" height="23" rx="5"/><rect x="570" y="318" width="31.3" height="23" rx="5"/></g>
+<g font-size="20" font-weight="750" fill="#266c65"><text x="819" y="221">80%</text><text x="819" y="279">60%</text><text x="819" y="337">13.3%</text></g>
+<text x="47" y="395" font-size="17" fill="#56756e">p_g = p_data 时，所有有概率质量的类别对应 D* = 50%。</text>
+</g></svg><figcaption>这个比值只在分母大于 0 的位置定义；两侧概率都为 0 的位置不影响期望目标。真实神经网络 D 不一定能达到 D*。</figcaption></figure></section>
+<section class="chapter" id="experiment" aria-labelledby="experiment-h"><h2 id="experiment-h"><small>05</small>互动：移动生成分布，观察 D* 如何改变</h2><p>现在让生成概率从起点 q = (0.15, 0.20, 0.65) 缓慢靠近真实分布 p = (0.60, 0.30, 0.10)。设置 t ∈ [0,1]，使 p<sub>g</sub>(t) = (1−t)q + tp。<strong>这是人为设计的插值轨迹，不是 GAN 真实训练算法或训练结果</strong>。</p>
+<div class="lab" aria-label="三类别最优判别器互动计算器">
+<label for="gan-t">生成分布朝真实分布靠近的程度 <output id="gan-t-out" for="gan-t">0%</output></label>
+<input id="gan-t" type="range" min="0" max="100" step="5" value="0" aria-describedby="gan-hint">
+<div class="buttons"><button type="button" id="gan-start">起点：明显不同</button><button type="button" id="gan-middle">中途：50%</button><button type="button" id="gan-match">终点：完全一致</button></div>
+<p id="gan-hint" class="hint">青色为真实数据概率，赭色为生成器概率。D* 是理论最佳判别器，不是一次实际训练。</p>
+<div class="table-scroll"><table class="lab-table"><thead><tr><th scope="col">类别</th><th scope="col">真实 p</th><th scope="col">生成 p<sub>g</sub></th><th scope="col">两种概率（青 / 橙）</th><th scope="col">D* 判真</th></tr></thead>
+<tbody><tr data-category="0"><th scope="row">A</th><td>0.60</td><td class="q">0.15</td><td><div class="bars"><span class="bar real" style="width:60%"></span><span class="bar fake" style="width:15%"></span></div></td><td class="d">80.0%</td></tr>
+<tr data-category="1"><th scope="row">B</th><td>0.30</td><td class="q">0.20</td><td><div class="bars"><span class="bar real" style="width:30%"></span><span class="bar fake" style="width:20%"></span></div></td><td class="d">60.0%</td></tr>
+<tr data-category="2"><th scope="row">C</th><td>0.10</td><td class="q">0.65</td><td><div class="bars"><span class="bar real" style="width:10%"></span><span class="bar fake" style="width:65%"></span></div></td><td class="d">13.3%</td></tr></tbody></table></div>
+<p class="readout" id="gan-result" role="status" aria-live="polite">JSD(p ‖ p_g) = 0.1900 nats；max_D V(G,D) = −1.0063。生成分布还不匹配。</p>
+</div>
+<p>把滑杆推到 100%：p<sub>g</sub> = p<sub>data</sub>，三个类别 D* 都是 <strong>50%</strong>。这是理想解的性质，不代表现实中只要判别器准确率是 50% 就证明生成器学到了数据分布。</p></section>
+<section class="chapter" id="divergence" aria-labelledby="divergence-h"><h2 id="divergence-h"><small>06</small>GAN 的理想均衡与 Jensen–Shannon 散度</h2><p>把最优 D* 代回 minimax 价值函数，可以得到 Goodfellow 等人 2014 年论文的关键结论：</p>
+<div class="equation" role="group" aria-label="最优判别器下的生成器目标和 Jensen-Shannon 散度关系"><div class="math-scroll" role="region" tabindex="0" aria-label="最优判别器下的生成器目标和 Jensen-Shannon 散度关系，公式区域可横向滚动"><math display="block" aria-label="最优判别器下的生成器目标和 Jensen-Shannon 散度关系"><mrow><mi>C</mi><mo>(</mo><mi>G</mi><mo>)</mo><mo>=</mo><munder><mo>max</mo><mi>D</mi></munder><mi>V</mi><mo>(</mo><mi>G</mi><mo>,</mo><mi>D</mi><mo>)</mo><mo>=</mo><mo>−</mo><mi>log</mi><mn>4</mn><mo>+</mo><mn>2</mn><mo>⋅</mo><msub><mi>D</mi><mtext>JS</mtext></msub><mo>(</mo><msub><mi>p</mi><mtext>data</mtext></msub><mo>‖</mo><msub><mi>p</mi><mi>g</mi></msub><mo>)</mo></mrow></math></div></div>
+<p>JSD 是一种衡量两个概率分布差异的量，非负；只有二者相等时才为 0。令 m = (p<sub>data</sub> + p<sub>g</sub>)/2，JSD = [KL(p<sub>data</sub> ‖ m) + KL(p<sub>g</sub> ‖ m)] / 2。在本页互动演示里，用自然对数计算，所以单位是 <em>nats</em>。</p>
+<div class="pair"><div><strong>p<sub>g</sub> ≠ p<sub>data</sub></strong><p>D* 可利用真实与生成概率的差异；最优价值函数高于 −log 4。</p></div><div><strong>p<sub>g</sub> = p<sub>data</sub></strong><p>D* = 1/2，JSD = 0，C(G) = −log 4 ≈ −1.3863。</p></div></div>
+<p>这里的“全局最优”建立在<strong>无限表达能力、D 确实达到最优</strong>等理论前提之上。它不是对有限网络的非凸交替梯度训练一定收敛的保证。</p></section>
+<section class="chapter" id="training" aria-labelledby="training-h"><h2 id="training-h"><small>07</small>一次训练轮次中，参数到底怎样更新？</h2><p>原论文 <a href="https://papers.nips.cc/paper_files/paper/2014/hash/f033ed80deb0234979a61f95710dbe25-Abstract.html">Algorithm 1</a> 使用交替的小批量随机梯度训练：先做 k 次判别器步骤，再做 1 次生成器步骤。k 是可调的训练参数，并非定义上必须为 1。</p>
+<ol class="steps"><li>抽一批真实 x 与噪声 z，得到 G(z)。</li><li>固定 G，更新 D，使 D(x) 大、D(G(z)) 小；在常见框架实现中，D 步对假样本使用 <code>detach()</code>，不更新 G。</li><li>重新采样噪声，固定 D 的<strong>参数</strong>，但仍通过 D 的输入梯度更新 G，让 D(G(z)) 增大。</li><li>重复交替步骤。训练中的 D 不等于上一节推导的 D*。</li></ol>
+<p>下面的现代 PyTorch 示意采用数值更稳定的 <code>BCEWithLogitsLoss</code>，D 输出未经过 sigmoid 的 logit；它是<strong>现代实现示例</strong>，不是 2014 年原始代码逐行复现。</p>
+<pre><code># 已定义 G、D、opt_g、opt_d、real、sample_z，batch_size = real.size(0)
+import torch
+from torch.nn import functional as F
+
+# 更新 D：G 的这一次前向不参与反向传播
+z = sample_z(real.size(0))
+fake = G(z).detach()
+opt_d.zero_grad()
+loss_d = F.binary_cross_entropy_with_logits(
+    D(real), torch.ones_like(D(real))
+) + F.binary_cross_entropy_with_logits(
+    D(fake), torch.zeros_like(D(fake))
+)
+loss_d.backward()
+opt_d.step()
+
+# 更新 G：冻结 D 的权重，但保留梯度穿过 D 到达 G
+for param in D.parameters():
+    param.requires_grad_(False)
+z = sample_z(real.size(0))
+fake = G(z)
+pred_fake = D(fake)
+loss_g = F.binary_cross_entropy_with_logits(
+    pred_fake, torch.ones_like(pred_fake)
+)
+opt_g.zero_grad()
+loss_g.backward()
+opt_g.step()
+for param in D.parameters():
+    param.requires_grad_(True)</code></pre>
+<p>与神经网络训练不同，本文的 <a href="https://github.com/1998x-stack/xm-posts/blob/main/posts/architectures/gan/demo.py">标准库 Python 数值小实验</a> 直接检验三类别 D*、JSD 和理论恒等式。它无需安装 torch，也不声称学出了图像。运行：<code>python posts/architectures/gan/demo.py</code>。</p></section>
+<section class="chapter" id="saturation" aria-labelledby="saturation-h"><h2 id="saturation-h"><small>08</small>为什么很多实现不让 G 直接最小化原式？</h2><p>如果 D 已把伪样本识别得很准，D(G(z)) 接近 0，原始 minimax 中 G 所最小化的 log(1−D(G(z))) 可能提供很弱的局部梯度。2014 年论文 §3 提出改用<strong>非饱和（non-saturating）</strong>生成器目标：最大化 log D(G(z))，实现中相当于最小化 −log D(G(z))。</p>
+<p>令 s 是 D 对伪样本输出的 logit，D = sigmoid(s)。针对同一个 s，可严格推出：minimax 损失对 s 的导数是 −D；非饱和损失对 s 的导数是 −(1−D)。假设 D = 0.01，两个局部导数的绝对值是 <strong>0.01 与 0.99</strong>。</p>
+<figure class="diagram"><div class="figtag">FIG. 04</div><svg class="embedded-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 408" role="img" aria-labelledby="gan-fig4-title gan-fig4-desc">
+<title id="gan-fig4-title">GAN 生成器两种训练损失的局部梯度比较</title>
+<desc id="gan-fig4-desc">当判别器给伪样本的真实概率为0.01时，minimax 的判别器 logit 导数大小为0.01，非饱和生成器损失导数大小为0.99。</desc>
+<rect width="960" height="408" rx="20" fill="#fbfcf8"/>
+<g font-family="system-ui,'PingFang SC',sans-serif">
+<text x="46" y="49" fill="#254b4f" font-size="26" font-weight="750">D 准确识破伪样本时，G 得到多少学习信号？</text>
+<text x="46" y="87" fill="#5f7771" font-size="18">令 D(G(z)) = 0.01；横条比较生成器损失对 D 的 logit s 的局部导数绝对值</text>
+<rect x="49" y="119" width="863" height="105" rx="13" fill="#f0f5f0" stroke="#d0dfd5"/>
+<text x="72" y="153" fill="#3b6864" font-size="22" font-weight="750">Minimax</text><text x="72" y="183" fill="#5a7570" font-size="18">log(1 − D)</text>
+<rect x="342" y="163" width="486" height="25" rx="6" fill="#d7e5db"/>
+<rect x="342" y="163" width="5" height="25" rx="2" fill="#c98058"/>
+<text x="841" y="184" fill="#b26f4b" font-size="23" font-weight="750">0.01</text>
+<rect x="49" y="235" width="863" height="108" rx="13" fill="#fff0e6" stroke="#eacbb3"/>
+<text x="72" y="267" fill="#965b3f" font-size="22" font-weight="750">Non-saturating</text><text x="72" y="299" fill="#936347" font-size="18">−log D</text>
+<rect x="342" y="281" width="486" height="25" rx="6" fill="#e3d7c9"/>
+<rect x="342" y="281" width="481" height="25" rx="6" fill="#28857c"/>
+<text x="841" y="303" fill="#256c66" font-size="23" font-weight="750">0.99</text>
+<text x="47" y="385" fill="#536f6a" font-size="17">局部导数不等于 G 的整体参数梯度；这个对照也不是训练稳定性的保证。</text>
+</g></svg><figcaption>只比较对于判别器 logit 的导数；生成器整体梯度还要乘 D、G 的雅可比，不能从这幅图保证完整训练不发生梯度问题。</figcaption></figure>
+<div class="note"><strong>目标不能混用：</strong>原论文的 minimax 博弈用于推导最优解与 JSD；non-saturating 是另一个具有相同理想固定点的训练目标，不能把它的所有训练动态直接等同于原始 minimax。</div></section>
+<section class="chapter" id="limits" aria-labelledby="limits-h"><h2 id="limits-h"><small>09</small>GAN 在实践中为什么仍然难训？</h2><div class="table-scroll"><table><thead><tr><th>问题</th><th>实际发生了什么</th><th>阅读 / 调试时要看什么</th></tr></thead><tbody>
+<tr><td>模式坍塌（mode collapse）</td><td>G 只生成少数几种样本，缺少多样性。</td><td>同时观察覆盖度与多样性，不能只看少数漂亮样本。</td></tr>
+<tr><td>双方训练不均衡</td><td>D 或 G 相对过强，梯度可能不再有用。</td><td>分别记录 G、D 的损失及生成样本趋势，避免用单个准确率作结论。</td></tr>
+<tr><td>理想假设未满足</td><td>有限网络、有限数据和有限步优化并不保证达到 D*。</td><td>区分理论固定点与实际非凸训练轨迹。</td></tr>
+<tr><td>生成效果难评测</td><td>逼真度和多样性不一定同步改善。</td><td>分开检查样本质量、覆盖度与偏差。</td></tr></tbody></table></div>
+<p>后来出现了条件 GAN、DCGAN、WGAN 等一系列改进，但它们对条件输入、网络结构或优化目标的改变不属于原始 2014 年算法。初学 GAN 时，先弄懂<strong>二分类反馈、交替更新和分布匹配</strong>，再比较后续改进的出发点。</p></section>
+<section class="chapter" id="references" aria-labelledby="references-h"><h2 id="references-h"><small>10</small>原始论文与进一步阅读</h2><ol class="references"><li><a href="https://papers.nips.cc/paper_files/paper/2014/hash/f033ed80deb0234979a61f95710dbe25-Abstract.html">Goodfellow et al. (2014), <em>Generative Adversarial Nets</em></a>，NeurIPS 2014。重点：§3 Equation (1) 与 Algorithm 1、§4.1 Proposition 1 和 Theorem 1、§6 Discussion。</li>
+<li><a href="https://arxiv.org/abs/1406.2661">Goodfellow et al. (2014), arXiv:1406.2661</a>。可对照原文的符号与版本。</li>
+<li><a href="https://arxiv.org/abs/1701.00160">Goodfellow (2016), <em>NIPS 2016 Tutorial: Generative Adversarial Networks</em></a>。适合进一步了解训练难点与后续研究。</li>
+</ol><p>本文交互演示的概率和图示均为独立教学构造，不能引用为原论文实验指标；关键事实与推导的位置记录在同目录 <a href="https://github.com/1998x-stack/xm-posts/blob/main/posts/architectures/gan/evidence.json">evidence.json</a>。</p></section>
+<footer class="footer"><p>基于 Goodfellow et al. (2014) 的原始 GAN 框架；离散算例仅用于理解理论，后续改进需单独对照其论文。</p><p><a href="../../../categories/architectures/">返回模型架构</a> · <a href="../../../archive/">查看文章归档</a></p></footer>
+</article></main></div><script>(()=>{"use strict";
+const control=document.getElementById("gan-t"),label=document.getElementById("gan-t-out"),result=document.getElementById("gan-result");
+const real=[.6,.3,.1],start=[.15,.2,.65],rows=Array.from(document.querySelectorAll("[data-category]"));
+const kl=(p,q)=>p.reduce((sum,a,i)=>sum+(a===0?0:a*Math.log(a/q[i])),0);
+function draw(){
+ const t=Number(control.value)/100;
+ const fake=real.map((p,i)=>(1-t)*start[i]+t*p);
+ const mid=real.map((p,i)=>(p+fake[i])/2);
+ const jsd=(kl(real,mid)+kl(fake,mid))/2;
+ rows.forEach((row,i)=>{
+  const q=fake[i],d=real[i]/(real[i]+q);
+  row.querySelector(".q").textContent=q.toFixed(2);
+  row.querySelector(".d").textContent=(100*d).toFixed(1)+"%";
+  row.querySelector(".fake").style.width=(100*q).toFixed(1)+"%";
+ });
+ label.textContent=Math.round(t*100)+"%";
+ const value=-Math.log(4)+2*jsd;
+ result.textContent="JSD(p ‖ p_g) = "+jsd.toFixed(4)+" nats；max_D V(G,D) = "+value.toFixed(4)+
+ (t===1?"。两组分布相等，D* 在三类上都是 50%。":"。这些数字是理论最优判别器下的解析值。");
+}
+control.addEventListener("input",draw);
+[["gan-start",0],["gan-middle",50],["gan-match",100]].forEach(([id,value])=>{
+ document.getElementById(id).addEventListener("click",()=>{control.value=String(value);draw();control.focus();});
+});
+draw();
+})();</script></body></html>
