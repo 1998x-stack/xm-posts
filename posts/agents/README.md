@@ -7,6 +7,7 @@
 - [ReAct](react/) — 已有正式论文解读；[专题研究规划](_topics/react/README.md) 仍作为未发布的历史规划记录。
 - [Software Engineering Agents & ACI](swe-agent/) — SWE-agent：代码搜索、编辑、错误护栏、上下文管理与软件修复评测。
 - [Harness Engineering](harness-engineering/) — 从 Codex 与 Claude 工程实践理解 Agent Runtime、上下文交接、工具、安全、独立评估与维护治理。
+- [Loop Engineering](_topics/loop-engineering/README.md) — 外层持续执行专题：触发、任务发现、独立验证、状态持久化、预算与停止策略；正式文章见 [Understanding Loop Engineering](loop-engineering/)。
 - [Planning](_topics/planning/README.md) — 研究规划占位；尚非正式 Post。
 - [Tool Calling](_topics/tool-calling/README.md) — 研究规划占位；尚非正式 Post。
 - [Memory](_topics/memory/README.md) — 研究规划占位；尚非正式 Post。
