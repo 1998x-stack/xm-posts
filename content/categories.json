@@ -455,7 +455,7 @@
     "slug": "agents",
     "title": "智能体与工具使用",
     "english": "Agents & Tool Use",
-    "description": "围绕模型与外部环境交互的闭环，研究 ReAct、任务规划、工具调用、状态与记忆、软件工程智能体与 Agent-Computer Interface，以及端到端的 Agent 评测。",
+    "description": "围绕模型与外部环境交互的闭环，研究 ReAct、任务规划、工具调用、状态与记忆、软件工程智能体、Agent-Computer Interface、Harness Engineering 与端到端评测。",
     "topics": [
       {
         "slug": "react",
@@ -480,6 +480,10 @@
       {
         "slug": "software-engineering-agents",
         "title": "Software Engineering Agents & ACI"
+      },
+      {
+        "slug": "harness-engineering",
+        "title": "Harness Engineering"
       }
     ]
   },
