@@ -11,8 +11,8 @@ from validate_site import source_articles,published_site
 
 def test_manifest_and_taxonomy():
     cats,posts=data(ROOT)
-    assert len(cats)==9
-    assert {'resnet','transformer','svm','ppo'} <= {p['slug'] for p in posts if p['status']=='published'}
+    assert len(cats)>=9 and 'reasoning' in {c['slug'] for c in cats}
+    assert {'resnet','transformer','svm','ppo','self-consistency'} <= {p['slug'] for p in posts if p['status']=='published'}
     for c in cats:assert (ROOT/'posts'/c['slug']/'README.md').is_file()
 
 

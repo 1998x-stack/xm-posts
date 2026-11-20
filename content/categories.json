@@ -63,6 +63,18 @@
     ]
   },
   {
+    "slug": "reasoning",
+    "title": "推理策略与测试时计算",
+    "english": "Reasoning & Test-time Compute",
+    "description": "从 Chain-of-Thought、多路径采样、自一致性到搜索、验证与推理预算，研究如何在测试时提升答案质量。",
+    "topics": [
+      "Chain-of-Thought",
+      "Self-Consistency",
+      "Search & Verification",
+      "Test-time Scaling"
+    ]
+  },
+  {
     "slug": "inference",
     "title": "推理与 Serving",
     "english": "Inference & Serving",
