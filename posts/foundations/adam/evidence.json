@@ -115,5 +115,14 @@
     "locator": "Algorithm 1; independently computed in article",
     "status": "illustrative",
     "notes": "No dataset, benchmark or original paper numerical attribution"
+  },
+  {
+    "id": "A14",
+    "claim": "For gradients [2,-1,0.5,0] and beta1=0.9, beta2=0.999, alpha=0.001, epsilon=1e-8, four sequential Adam steps have bias-corrected moment and parameter values shown in a directly recomputed table and signed SVG. At t=4, despite g4=0, the momentum-derived update is negative and nonzero.",
+    "kind": "toy-derivation",
+    "source_url": "https://arxiv.org/abs/1412.6980",
+    "locator": "Kingma and Ba Algorithm 1; independent four-step arithmetic in Article Section 08",
+    "status": "derived",
+    "notes": "This is a synthetic deterministic sequence with initial theta0=3; it is neither a training benchmark nor an AdamW experiment. v is the uncentered second raw moment, not variance."
   }
 ]
