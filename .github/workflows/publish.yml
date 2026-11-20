@@ -53,6 +53,48 @@ jobs:
           python scripts/ci_metrics.py run --name browser-second -- python scripts/browser_check_second_batch.py --output reports/second-batch
       - name: Check every published article with shared Chromium workers
         run: python scripts/ci_metrics.py run --name browser-all -- python scripts/browser_check_all.py --workers 2
+      - name: Validate Reward Hacking source and interactive lab
+        run: |
+          python scripts/ci_metrics.py run --name reward-hacking-static -- python skills/olah-style-paper-posts/scripts/validate.py posts/training/reward-hacking/index.html
+          python scripts/ci_metrics.py run --name reward-hacking-browser -- python skills/olah-style-paper-posts/scripts/browser_check.py posts/training/reward-hacking/index.html --output reports/reward-hacking
+      - name: Export and independently render Reward Hacking SVGs
+        run: |
+          python skills/olah-style-paper-posts/scripts/extract_svg.py posts/training/reward-hacking/index.html --out reports/reward-hacking/extracted-svg
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          from xml.etree import ElementTree as ET
+          from playwright.sync_api import sync_playwright
+
+          output = Path("reports/reward-hacking/extracted-svg")
+          assets = Path("posts/training/reward-hacking/assets")
+          expected = {"01-proxy-gap.svg", "02-goodhart-curve.svg", "03-rlhf-loop.svg", "04-failure-layers.svg", "05-defense-in-depth.svg"}
+          manifest = json.loads((output / "manifest.json").read_text(encoding="utf-8"))
+          assert {item["file"] for item in manifest} == expected, manifest
+          ns = {"svg": "http://www.w3.org/2000/svg"}
+          chromium_path = Path(os.getenv("CHROMIUM_PATH", "/usr/bin/chromium"))
+          launch_options = {"headless": True, "args": ["--no-sandbox"]}
+          if chromium_path.exists():
+              launch_options["executable_path"] = str(chromium_path)
+          with sync_playwright() as playwright:
+              browser = playwright.chromium.launch(**launch_options)
+              page = browser.new_page(viewport={"width": 1000, "height": 700})
+              for name in sorted(expected):
+                  exported = output / name
+                  original = assets / name
+                  root = ET.parse(exported).getroot()
+                  source = ET.parse(original).getroot()
+                  assert root.get("viewBox") == source.get("viewBox"), name
+                  exported_title = root.find("svg:title", ns)
+                  source_title = source.find("svg:title", ns)
+                  assert exported_title is not None and source_title is not None
+                  assert exported_title.text == source_title.text, name
+                  page.goto(exported.resolve().as_uri(), wait_until="load")
+                  bounds = page.locator("svg").bounding_box()
+                  assert bounds and bounds["width"] > 0 and bounds["height"] > 0, name
+              browser.close()
+          print("Extracted, parsed, and independently rendered all five Reward Hacking SVGs.")
+          PY
       - name: Verify actual generated Pages site in Chromium
         run: python scripts/ci_metrics.py run --name browser-site -- python scripts/browser_check_site.py --output reports/site
       - name: Install Chinese and math fonts for PDF export
