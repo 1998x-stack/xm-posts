@@ -27,13 +27,14 @@
     "slug": "architectures",
     "title": "模型架构",
     "english": "Architectures",
-    "description": "拆开模型的信息路径：ResNet 残差学习、Transformer 注意力、归一化布局与深层架构稳定性。",
+    "description": "拆开模型的信息路径：RNN 循环记忆、ResNet 残差学习、Transformer 注意力、归一化布局与深层架构稳定性。",
     "topics": [
       "ResNet",
       "Transformer",
       "State Space",
       "Normalization & Residual Paths",
-      "Positional Encoding"
+      "Positional Encoding",
+      "Recurrent & Sequence Models"
     ]
   },
   {
