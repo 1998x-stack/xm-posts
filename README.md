@@ -200,3 +200,12 @@ python scripts/validate_site.py
 为避免随着文章数量增加而一次性渲染大量 SVG 缩略图，首页索引每页只创建 **8 张**文章卡片；点击页码、搜索或按研究领域筛选时，通过构建生成的轻量 `posts.json` 检索完整已发布文章，再只创建当前页的 DOM/图片。不开启 JavaScript 时，首页仍展示首批文章并保留归档入口。
 
 时间归档按 **16 篇/页** 在构建时生成独立 HTML：第一页为 `/archive/`，后续为 `/archive/page/2/`、`/archive/page/3/` 等。普通链接、浏览器返回、SEO canonical、站点地图及无 JavaScript 浏览都可正常工作。原有缩略图均为文章专属 SVG，保留 lazy loading；其他分页的图片不会进入当前页面 HTML。该规范与对应测试见 `AGENTS.md`、`tests/test_site.py`、`scripts/browser_check_site.py`。
+
+
+## CI 加速与性能报告
+
+`.github/workflows/publish.yml` 仍执行完整的 pytest、SVG 审计、源文章与站点检查、所有文章的 Playwright 质量检查、专项交互检查、PDF 生成/完整性校验以及部署验收。加速首先来自**复用 Chromium 与受控并行**，而不是减少测试内容：
+
+- 运行 `python scripts/browser_check_all.py --workers 2`：每个 Worker 使用一个 Chromium，覆盖所有已发布文章的桌面、平板、390px/360px、数学公式、SVG、交互和打印检查；失败仍会阻止发布。资源紧张时可用 `--workers 1` 完整串行复验。
+- `scripts/ci_metrics.py` 在每个 CI Job 的 Summary 记录各项测试耗时、PDF 缓存命中/重渲染数、QA 覆盖文章数量和构建包大小；原始指标与截图位于 `reports/` Artifact。缓存失效、时间数据缺失会明确显示，不会伪造优化比例。
+- **计时范围**：Job 内计时不含 GitHub Runner 排队和独立 Pages 部署时间。评估真正提速时请比较多次暖缓存成功部署，不能只使用首次冷缓存数据。
