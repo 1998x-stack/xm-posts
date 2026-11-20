@@ -23,6 +23,7 @@
 | **Understanding DPO** | 为什么偏好对可以直接训练策略而无需显式奖励模型？ | [`posts/training/dpo/`](posts/training/dpo/index.html) | [Rafailov et al. (NeurIPS 2023)](https://arxiv.org/abs/2305.18290) |
 | **Understanding SVM** | 为什么分对了仍需最大间隔？ | [`posts/classical-ml/svm/`](posts/classical-ml/svm/index.html) | [Cortes & Vapnik (1995)](https://doi.org/10.1007/BF00994018) |
 | **Understanding Self-Consistency** | 多路径采样与最终答案投票为何有效？ | [`posts/reasoning/self-consistency/`](posts/reasoning/self-consistency/index.html) | [Wang et al. (2022; ICLR 2023)](https://arxiv.org/abs/2203.11171) |
+| **Understanding DQN** | 为什么像素与奖励足以驱动动作价值学习？ | [`posts/reinforcement-learning/dqn/`](posts/reinforcement-learning/dqn/index.html) | [Mnih et al. (Nature 2015)](https://doi.org/10.1038/nature14236) |
 | **Understanding PPO** | 为什么能复用同一批轨迹又避免过大更新？ | [`posts/reinforcement-learning/ppo/`](posts/reinforcement-learning/ppo/index.html) | [Schulman et al. (2017)](https://arxiv.org/abs/1707.06347) |
 | **Understanding RLHF** | 为什么示范微调还需要人类偏好与策略优化？ | [`posts/training/rlhf/`](posts/training/rlhf/index.html) | [Ouyang et al. (2022)](https://arxiv.org/abs/2203.02155) |
 | **Understanding GRPO** | 为什么不需要 Critic 也能构造策略优势？ | [`posts/training/grpo/`](posts/training/grpo/index.html) | [Shao et al. (2024)](https://arxiv.org/abs/2402.03300) |
@@ -35,6 +36,8 @@
 | **Understanding LoRA** | 为什么低秩矩阵足以适配部分下游任务？ | [`posts/training/lora/`](posts/training/lora/index.html) | [Hu et al. (ICLR 2022)](https://arxiv.org/abs/2106.09685) |
 
 Pre-LN vs Post-LN 具有 12 节解读、5 幅独立 SVG、交互式平移实验和纯 Python 的 Jacobian 数值检查；SGD 具有 14 节渐进推导、7 幅独立 SVG、Mini-batch 抽样交互与纯 Python 随机梯度单元测试；ResNet 具有 11 节解读与 10 幅独立 SVG；Transformer 具有 16 节解读与 13 幅独立 SVG，另有最小 PyTorch Attention 示例；SVM 具有 12 节机制推导、6 幅独立 SVG、可调 RBF 相似度矩阵和纯 Python 一维解析示例，采用离线原生 MathML 排版分式、上下标和求和范围；Word2Vec 具有 12 节精读、5 幅内嵌原创图、7 份独立 SVG、SGNS 训练器和数值梯度校验。AdamW 具有 14 节渐进推导、6 幅独立 SVG、二维预条件器交互实验与纯 Python Adam/AdamW 代码断言。GRPO 具有 11 节深度解读、4 幅独立 SVG、可交互优势示例和 Python 断言测试。RLHF 从 SFT、奖励模型与 PPO 出发，包含 12 节推导、4 幅机制图、2 个交互实验和最小数学断言；Adam 具有 14 节机制讲解、7 幅独立 SVG、时间步交互及含 AdamW/AMSGrad 分支的纯 Python 最小实现与单元测试。LoRA 具有 12 节论文精读、6 幅独立 SVG、rank 参数预算交互与纯 Python 合并等价性算例。DPO 具有 12 节机制推导、6 幅独立 SVG、可调 β 交互与最小 Python 公式检验。KV Cache 具有 13 节解读、6 幅独立 SVG、KV 显存交互计算器与纯 Python 数值一致性测试。RoPE 具有 12 节机制推导、4 幅独立 SVG、平移交互演示、纯 Python 旋转验证与长上下文扩展比较。Self-Consistency 提供 12 节解读、5 幅独立 SVG、答案计票交互、数学推导及可执行 Python 示例。教学简化、原论文和后续变体需明确区分；每篇文章的发布状态以 CI 和浏览器验证结果为准。
+
+DQN 包含 14 节机制讲解、6 幅独立 SVG、TD Target / Huber 交互计算器及纯 Python 不变量测试，以 2015 Nature 版本为主线并明确区分 2013 与后续 Double DQN。
 
 PPO 包含 14 节原论文推导、6 幅独立 SVG、交互式裁剪目标演算、纯标准库数学测试，并单独辨析了 RLHF 的参考模型 KL 与 PPO 的旧策略偏移指标。
 
@@ -51,7 +54,7 @@ The Pile 的 22 个来源按原论文 Table 1 给出有效采样权重，配五�
 | 基础理论 | `posts/foundations/` | Adam、Word2Vec、词嵌入、优化器（AdamW）、正则化、表示学习 |
 | **经典机器学习** | `posts/classical-ml/` | SVM、核方法、线性与树模型 |
 | **模型架构** | `posts/architectures/` | AlexNet / CNN、ResNet、Seq2Seq、Transformer、Normalization & Residual Paths、状态空间模型 |
-| **强化学习** | `posts/reinforcement-learning/` | Policy Gradient、Actor–Critic、GAE、PPO/TRPO 与序贯决策 |
+| **强化学习** | `posts/reinforcement-learning/` | Value-based RL、DQN、Experience Replay、Policy Gradient、Actor–Critic、GAE、PPO/TRPO |
 | **数据与语料** | `posts/datasets/` | 预训练语料、数据清洗/去重、混合采样、污染检查与治理 |
 | 训练与对齐 | `posts/training/` | 预训练（Scaling Laws / Compute-Optimal Training）、微调、偏好对齐、DPO 与 RLHF与 PPO / GRPO 等强化学习策略优化 |
 | 推理与 Serving | `posts/inference/` | KV Cache、PagedAttention、Prefix Caching、Decode、在线 Serving |
