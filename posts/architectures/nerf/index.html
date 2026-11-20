@@ -1,0 +1,408 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="从多视角照片、相机射线和五维场景函数出发，理解 NeRF 的 MLP、位置编码、体渲染、分层采样、原论文证据与后续神经渲染方法。">
+<meta name="color-scheme" content="light">
+<link rel="canonical" href="https://1998x-stack.github.io/xm-posts/posts/architectures/nerf/">
+<title>Understanding NeRF · xm-posts</title>
+<style>
+:root{--canvas:#f6f8f5;--paper:#fffefa;--ink:#29434b;--muted:#647d80;--line:#d9e7e1;--teal:#116f6b;--terra:#b56b3e;--blue:#3e7594;--violet:#7566a7;--soft:#edf6f1}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--canvas);color:var(--ink);font:17px/1.9 system-ui,-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}
+a{color:var(--teal);text-underline-offset:4px}
+a:hover{color:#a55d37}
+a:focus-visible,button:focus-visible,input:focus-visible,[tabindex]:focus-visible{outline:3px solid #d58c53;outline-offset:3px}
+.skip{position:absolute;top:-90px;left:12px;background:#163c40;color:white;padding:11px;z-index:10}
+.skip:focus{top:8px}
+.site-head{background:var(--paper);border-bottom:1px solid var(--line)}
+.site-inner{max-width:1240px;margin:auto;padding:13px 24px;display:flex;gap:18px;justify-content:space-between;align-items:center;flex-wrap:wrap}
+.brand{font-size:22px;font-weight:850;letter-spacing:-.05em;text-decoration:none;color:var(--ink)}
+.brand b{color:var(--terra)}
+.site-links{display:flex;gap:15px;font-size:13px;flex-wrap:wrap}
+.layout{max-width:1240px;margin:auto;display:grid;grid-template-columns:215px minmax(0,840px);gap:50px;padding:58px 24px 90px}
+.toc{align-self:start;position:sticky;top:15px;max-height:95vh;overflow:auto}
+.toc strong{display:block;font-size:12px;color:var(--teal);letter-spacing:.1em;margin:0 0 12px}
+.toc a{display:block;border-left:2px solid var(--line);padding:6px 11px;text-decoration:none;color:#668083;font-size:12px;line-height:1.55}
+.toc a:hover{background:#e8f2ed;border-color:var(--teal)}
+main,article{min-width:0}
+.eyebrow{font-size:12px;font-weight:800;color:var(--teal);letter-spacing:.14em}
+h1{font-size:clamp(42px,5.2vw,70px);line-height:1.09;letter-spacing:-.055em;overflow-wrap:anywhere;margin:17px 0 22px}
+h1 em{font-style:normal;color:var(--teal)}
+.dek{font-size:23px;line-height:1.63;color:#4b6a6e}
+.meta{display:flex;gap:13px 22px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:14px;margin:24px 0;font-size:12px;color:#70888a}
+.insight{border:1px solid #bfdcd0;background:#edf7f0;border-radius:13px;padding:18px 22px;font-size:17px}
+section{margin-top:68px;scroll-margin-top:24px}
+h2{font-size:clamp(25px,3vw,33px);line-height:1.35;letter-spacing:-.03em;margin:0 0 22px}
+h3{font-size:20px;line-height:1.4;margin:29px 0 11px}
+p{margin:0 0 18px;color:#3b5961}
+.lead{font-size:19px;color:#285e5c}
+strong{color:#245e5d}
+ul,ol{padding-left:22px}
+li{margin:8px 0}
+figure{margin:25px 0 30px;border:1px solid #d8e5df;background:#fff;border-radius:13px;padding:10px 10px 0;max-width:100%;min-width:0}
+figure img{display:block;width:100%;height:auto;max-width:100%;border-radius:7px}figure svg{display:block;width:100%;height:auto;max-width:100%}
+figcaption{padding:13px 8px 15px;border-top:1px solid #e9f0eb;font-size:13px;color:#607b7e;line-height:1.7}
+.figure-title{font-size:11px;color:var(--teal);font-weight:800;letter-spacing:.09em;padding:4px 5px 9px}
+.eq{display:flex;align-items:center;max-width:100%;min-width:0;gap:10px;background:#eaf3ee;border-radius:10px;padding:14px 12px;margin:24px 0}
+.math-scroll{flex:1;min-width:0;overflow-x:auto;overflow-y:hidden}
+.math-scroll math[display=block]{min-width:100%;width:max-content;font-family:"STIX Two Math","Cambria Math",serif;font-size:1.16rem}
+.eq-num{flex:none;font-size:12px;color:#668383}
+.callout{background:#fff5e8;border-left:4px solid #d89a59;padding:15px 20px;margin:23px 0;font-size:15px}
+.note{background:#eef3f7;border-left:4px solid var(--blue);padding:14px 18px;margin:22px 0;font-size:15px}
+.tablewrap{max-width:100%;overflow-x:auto;margin:22px 0;border-radius:10px}
+table{min-width:620px;width:100%;border-collapse:collapse;font-size:14px;background:#fff}
+th,td{border:1px solid var(--line);padding:11px 12px;text-align:left;vertical-align:top}
+th{background:#eaf5ef}
+.two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin:21px 0}
+.two>div{min-width:0;background:#fff;border:1px solid var(--line);border-radius:12px;padding:15px}
+.experiment{border:1px solid #bddad0;border-radius:14px;background:#fff;padding:21px;margin:28px 0}
+.experiment h3{margin-top:0}
+.controls{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:18px 0}
+.controls label{font-size:14px;font-weight:700;color:#315b5b}
+.controls input{flex:1;min-width:160px;accent-color:var(--teal)}
+.controls button{border:1px solid #9ecdc2;background:#fff;color:var(--teal);cursor:pointer;padding:9px 14px;border-radius:8px;font:650 14px system-ui,sans-serif}
+.controls button:hover{background:#edf7f1}
+.demo-grid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:14px;margin-top:15px}
+.demo-panel{min-width:0;background:#f7faf8;border:1px solid var(--line);border-radius:11px;padding:14px}
+.demo-panel h4{margin:0 0 10px;font-size:14px;color:#315b5b}
+.swatch{width:100%;height:54px;border:1px solid #b7c9c4;border-radius:8px;background:rgb(191,209,218)}
+.rgb-readout{font:12px/1.7 ui-monospace,Consolas,monospace;color:#526d70;margin:9px 0 0}
+.weight-row{display:grid;grid-template-columns:48px minmax(0,1fr) 48px;gap:8px;align-items:center;margin:8px 0;font-size:12px;color:#526d70}
+.weight-track{height:11px;background:#e4ece8;border-radius:20px;overflow:hidden}
+.weight-fill{display:block;height:100%;min-width:2px;background:var(--teal);border-radius:20px;transition:width .18s ease}
+.readout{background:#edf7f1;border-radius:9px;padding:13px 16px;color:#275e5d;margin:15px 0 0;font-size:14px}
+pre{background:#213f46;color:#f2f7f5;padding:18px;border-radius:10px;overflow:auto;max-width:100%;font:13px/1.75 ui-monospace,Consolas,monospace;white-space:pre}
+code{font-family:ui-monospace,Consolas,monospace;font-size:.9em}
+.sources{font-size:14px}
+.sources li{margin:12px 0;overflow-wrap:anywhere}
+.mini{font-size:14px;color:var(--muted)}
+.foot{border-top:1px solid var(--line);margin-top:70px;padding:26px 0;color:#698185;font-size:13px}
+@media(max-width:960px){.layout{display:block;max-width:870px;padding-top:34px}.toc{position:static;max-height:none;display:flex;gap:6px;flex-wrap:wrap;margin-bottom:30px}.toc strong{width:100%}.toc a{border:1px solid var(--line);border-radius:6px;padding:5px 9px}}
+@media(max-width:600px){body{font-size:16px}.site-inner{padding:10px 14px}.site-links{gap:9px}.layout{padding:26px 13px 72px}h1{font-size:clamp(37px,11vw,46px)}.dek{font-size:19px}.two,.demo-grid{grid-template-columns:1fr}section{margin-top:54px}figure{padding:6px 5px 0}.experiment{padding:13px}.eq{padding:10px 6px;gap:4px}.math-scroll math[display=block]{font-size:1rem}.controls{align-items:stretch}.controls button{width:100%}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+@media print{body{background:#fff;font-size:11pt}.site-head,.toc,.skip,.controls{display:none!important}.layout{display:block;padding:0}.experiment{break-inside:avoid}.demo-grid{grid-template-columns:1fr 1fr}.figure-title{color:#444}.eq{break-inside:avoid}.math-scroll{overflow:visible}pre{background:#f2f5f3;color:#1a3439;white-space:pre-wrap;overflow-wrap:anywhere}section{margin-top:23px}h2,h3{break-after:avoid}figure{break-inside:avoid}.swatch{print-color-adjust:exact;-webkit-print-color-adjust:exact}}
+</style>
+</head>
+<body>
+<a class="skip" href="#content">跳转文章正文</a>
+<header class="site-head"><div class="site-inner">
+<a class="brand" href="../../../">xm<b>.</b>posts</a>
+<nav class="site-links" aria-label="站点导航"><a href="../../../categories/architectures/">模型架构</a><a href="../../../topics/">知识地图</a><a href="../../../archive/">文章归档</a></nav>
+</div></header>
+<div class="layout">
+<nav class="toc" aria-label="文章目录">
+<strong>NEURAL RADIANCE FIELDS</strong>
+<a href="#problem">01 · 从照片到新视角</a>
+<a href="#representation">02 · 连续五维场景函数</a>
+<a href="#ray">03 · Camera Ray 与采样</a>
+<a href="#mlp">04 · MLP 输出什么</a>
+<a href="#encoding">05 · 位置编码</a>
+<a href="#rendering">06 · 可微体渲染</a>
+<a href="#hierarchy">07 · 分层采样</a>
+<a href="#training">08 · 训练闭环</a>
+<a href="#evidence">09 · 原论文实验</a>
+<a href="#limits">10 · 适用边界</a>
+<a href="#evolution">11 · 后续方法</a>
+<a href="#code">12 · 最小代码</a>
+<a href="#summary">13 · 核心心智模型</a>
+<a href="#references">14 · 参考文献</a>
+</nav>
+<main id="content"><article>
+<header>
+<div class="eyebrow">3D VISION / NEURAL RENDERING / ECCV 2020</div>
+<h1>Understanding <em>NeRF</em></h1>
+<p class="dek">给你几十张从不同角度拍摄的照片，能不能学出一个<strong>连续的三维场景</strong>，再从一台从未出现过的相机位置生成新图像？NeRF 用一个神经网络回答这个问题。</p>
+<div class="meta"><span>核心论文：Mildenhall et al. · ECCV 2020</span><span>Neural Radiance Fields</span><span>约 28 分钟</span></div>
+<div class="insight"><strong>先记住一句话：</strong>NeRF 不直接预测一张新照片，也不先生成一个显式网格；它学习一个可查询的场景函数。给定空间位置和观察方向，网络返回该处的颜色与密度，再沿相机射线把这些信息合成为像素。</div>
+<figure><div class="figure-title">FIGURE 01 · FROM PHOTOS TO A CONTINUOUS SCENE</div><img src="data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%201200%20420%22%20role%3D%22img%22%20aria-labelledby%3D%22title%20desc%22%3E%0A%3Ctitle%20id%3D%22title%22%3ENeRF%20%E4%BB%8E%E5%A4%9A%E8%A7%86%E8%A7%92%E7%85%A7%E7%89%87%E5%AD%A6%E4%B9%A0%E8%BF%9E%E7%BB%AD%E5%9C%BA%E6%99%AF%E5%B9%B6%E7%94%9F%E6%88%90%E6%96%B0%E8%A7%86%E8%A7%92%3C%2Ftitle%3E%0A%3Cdesc%20id%3D%22desc%22%3E%E5%B7%A6%E4%BE%A7%E5%A4%9A%E5%BC%A0%E5%B8%A6%E7%9B%B8%E6%9C%BA%E4%BD%8D%E5%A7%BF%E7%9A%84%E8%BE%93%E5%85%A5%E5%9B%BE%E5%83%8F%EF%BC%8C%E4%B8%AD%E5%A4%AE%E8%BF%9E%E7%BB%AD%E7%A5%9E%E7%BB%8F%E5%9C%BA%E4%B8%8E%E5%B0%84%E7%BA%BF%E6%9F%A5%E8%AF%A2%EF%BC%8C%E5%8F%B3%E4%BE%A7%E6%96%B0%E7%9B%B8%E6%9C%BA%E8%A7%86%E8%A7%92%E5%92%8C%E5%90%88%E6%88%90%E5%9B%BE%E5%83%8F%E3%80%82%3C%2Fdesc%3E%0A%3Cdefs%3E%3Cmarker%20id%3D%22arrow%22%20markerWidth%3D%2210%22%20markerHeight%3D%2210%22%20refX%3D%228%22%20refY%3D%225%22%20orient%3D%22auto%22%3E%3Cpath%20d%3D%22M0%200%20L10%205%20L0%2010%20Z%22%20fill%3D%22%234f817d%22%2F%3E%3C%2Fmarker%3E%3C%2Fdefs%3E%0A%3Crect%20x%3D%221%22%20y%3D%221%22%20width%3D%221198%22%20height%3D%22418%22%20rx%3D%2222%22%20fill%3D%22%23f8fbf9%22%20stroke%3D%22%23d9e7e1%22%20stroke-width%3D%222%22%2F%3E%0A%3Ctext%20x%3D%2242%22%20y%3D%2248%22%20font-family%3D%22system-ui%2C'PingFang%20SC'%2Csans-serif%22%20font-size%3D%2222%22%20font-weight%3D%22750%22%20fill%3D%22%2329434b%22%3E%E4%BB%8E%E5%B7%B2%E8%A7%82%E6%B5%8B%E8%A7%86%E8%A7%92%E5%AD%A6%E4%B9%A0%E4%B8%80%E4%B8%AA%E5%8F%AF%E6%9F%A5%E8%AF%A2%E7%9A%84%E5%9C%BA%E6%99%AF%E5%87%BD%E6%95%B0%3C%2Ftext%3E%0A%3Crect%20x%3D%2238%22%20y%3D%2292%22%20width%3D%22292%22%20height%3D%22250%22%20rx%3D%2218%22%20fill%3D%22%23fffefa%22%20stroke%3D%22%23cddfd8%22%20stroke-width%3D%222%22%2F%3E%0A%3Ctext%20x%3D%2264%22%20y%3D%22128%22%20font-family%3D%22system-ui%2C'PingFang%20SC'%2Csans-serif%22%20font-size%3D%2218%22%20font-weight%3D%22750%22%20fill%3D%22%23315b5b%22%3E%E8%BE%93%E5%85%A5%E5%9B%BE%E5%83%8F%20%2B%20%E7%9B%B8%E6%9C%BA%E4%BD%8D%E5%A7%BF%3C%2Ftext%3E%0A%3Cg%20transform%3D%22translate(66%20155)%22%3E%0A%3Crect%20width%3D%22105%22%20height%3D%2274%22%20rx%3D%228%22%20fill%3D%22%23e6f0eb%22%20stroke%3D%22%23a9c8bd%22%2F%3E%3Cpath%20d%3D%22M9%2057%20L36%2027%20L55%2044%20L76%2018%20L97%2057%20Z%22%20fill%3D%22%2378a69a%22%2F%3E%3Ccircle%20cx%3D%2279%22%20cy%3D%2216%22%20r%3D%228%22%20fill%3D%22%23d79a55%22%2F%3E%3Ctext%20x%3D%2252%22%20y%3D%2296%22%20text-anchor%3D%22middle%22%20font-size%3D%2214%22%20fill%3D%22%23536e70%22%20font-family%3D%22system-ui%22%3EView%201%3C%2Ftext%3E%0A%3C%2Fg%3E%0A%3Cg%20transform%3D%22translate(190%20155)%22%3E%0A%3Crect%20width%3D%22105%22%20height%3D%2274%22%20rx%3D%228%22%20fill%3D%22%23eaf0f7%22%20stroke%3D%22%23b7cbd8%22%2F%3E%3Cpath%20d%3D%22M8%2057%20L28%2035%20L48%2049%20L75%2019%20L98%2057%20Z%22%20fill%3D%22%236d91aa%22%2F%3E%3Ccircle%20cx%3D%2279%22%20cy%3D%2217%22%20r%3D%228%22%20fill%3D%22%23d79a55%22%2F%3E%3Ctext%20x%3D%2252%22%20y%3D%2296%22%20text-anchor%3D%22middle%22%20font-size%3D%2214%22%20fill%3D%22%23536e70%22%20font-family%3D%22system-ui%22%3EView%202%3C%2Ftext%3E%0A%3C%2Fg%3E%0A%3Cg%20transform%3D%22translate(66%20267)%22%3E%0A%3Crect%20width%3D%22105%22%20height%3D%2248%22%20rx%3D%227%22%20fill%3D%22%23f7eee6%22%20stroke%3D%22%23dfc7ae%22%2F%3E%3Ctext%20x%3D%2252%22%20y%3D%2230%22%20text-anchor%3D%22middle%22%20font-size%3D%2215%22%20fill%3D%22%238b603b%22%20font-family%3D%22system-ui%22%3EK%2C%20R%2C%20t%3C%2Ftext%3E%0A%3C%2Fg%3E%0A%3Cg%20transform%3D%22translate(190%20267)%22%3E%0A%3Crect%20width%3D%22105%22%20height%3D%2248%22%20rx%3D%227%22%20fill%3D%22%23f7eee6%22%20stroke%3D%22%23dfc7ae%22%2F%3E%3Ctext%20x%3D%2252%22%20y%3D%2230%22%20text-anchor%3D%22middle%22%20font-size%3D%2215%22%20fill%3D%22%238b603b%22%20font-family%3D%22system-ui%22%3EK%2C%20R%2C%20t%3C%2Ftext%3E%0A%3C%2Fg%3E%0A%3Cpath%20d%3D%22M345%20216%20L415%20216%22%20stroke%3D%22%234f817d%22%20stroke-width%3D%224%22%20fill%3D%22none%22%20marker-end%3D%22url(%23arrow)%22%2F%3E%0A%3Crect%20x%3D%22432%22%20y%3D%2292%22%20width%3D%22340%22%20height%3D%22250%22%20rx%3D%2218%22%20fill%3D%22%23edf6f1%22%20stroke%3D%22%23a9cfc2%22%20stroke-width%3D%222%22%2F%3E%0A%3Ctext%20x%3D%22602%22%20y%3D%22130%22%20text-anchor%3D%22middle%22%20font-size%3D%2220%22%20font-weight%3D%22750%22%20fill%3D%22%231c6967%22%20font-family%3D%22system-ui%2C'PingFang%20SC'%2Csans-serif%22%3E%E8%BF%9E%E7%BB%AD%E7%A5%9E%E7%BB%8F%E8%BE%90%E5%B0%84%E5%9C%BA%20F%CE%B8%3C%2Ftext%3E%0A%3Cg%20transform%3D%22translate(472%20158)%22%3E%0A%3Crect%20width%3D%2290%22%20height%3D%2248%22%20rx%3D%229%22%20fill%3D%22%23d9e9e2%22%20stroke%3D%22%239bbdb0%22%2F%3E%3Ctext%20x%3D%2245%22%20y%3D%2229%22%20text-anchor%3D%22middle%22%20font-size%3D%2215%22%20fill%3D%22%23315b5b%22%20font-family%3D%22system-ui%22%3E%E4%BD%8D%E7%BD%AE%20x%3C%2Ftext%3E%0A%3Crect%20x%3D%22105%22%20width%3D%2290%22%20height%3D%2248%22%20rx%3D%229%22%20fill%3D%22%23dce8f1%22%20stroke%3D%22%23a9c1d2%22%2F%3E%3Ctext%20x%3D%22150%22%20y%3D%2229%22%20text-anchor%3D%22middle%22%20font-size%3D%2215%22%20fill%3D%22%23365f7c%22%20font-family%3D%22system-ui%22%3E%E6%96%B9%E5%90%91%20d%3C%2Ftext%3E%0A%3Cpath%20d%3D%22M195%2024%20L225%2024%22%20stroke%3D%22%234f817d%22%20stroke-width%3D%223%22%20marker-end%3D%22url(%23arrow)%22%2F%3E%0A%3Crect%20x%3D%22235%22%20y%3D%22-2%22%20width%3D%2292%22%20height%3D%2252%22%20rx%3D%2210%22%20fill%3D%22%23fffefa%22%20stroke%3D%22%23c7d8d0%22%2F%3E%3Ctext%20x%3D%22281%22%20y%3D%2229%22%20text-anchor%3D%22middle%22%20font-size%3D%2216%22%20font-weight%3D%22700%22%20fill%3D%22%23315b5b%22%20font-family%3D%22system-ui%22%3EMLP%3C%2Ftext%3E%0A%3C%2Fg%3E%0A%3Cpath%20d%3D%22M602%20213%20L602%20245%22%20stroke%3D%22%234f817d%22%20stroke-width%3D%223%22%20marker-end%3D%22url(%23arrow)%22%2F%3E%0A%3Crect%20x%3D%22480%22%20y%3D%22258%22%20width%3D%22120%22%20height%3D%2250%22%20rx%3D%229%22%20fill%3D%22%23f8eadc%22%20stroke%3D%22%23dcb58f%22%2F%3E%3Ctext%20x%3D%22540%22%20y%3D%22289%22%20text-anchor%3D%22middle%22%20font-size%3D%2217%22%20font-weight%3D%22700%22%20fill%3D%22%23935d35%22%20font-family%3D%22system-ui%22%3E%E5%AF%86%E5%BA%A6%20%CF%83(x)%3C%2Ftext%3E%0A%3Crect%20x%3D%22614%22%20y%3D%22258%22%20width%3D%22120%22%20height%3D%2250%22%20rx%3D%229%22%20fill%3D%22%23e3edf5%22%20stroke%3D%22%23b3c9d8%22%2F%3E%3Ctext%20x%3D%22674%22%20y%3D%22289%22%20text-anchor%3D%22middle%22%20font-size%3D%2217%22%20font-weight%3D%22700%22%20fill%3D%22%233e6d8b%22%20font-family%3D%22system-ui%22%3E%E9%A2%9C%E8%89%B2%20c(x%2Cd)%3C%2Ftext%3E%0A%3Cpath%20d%3D%22M788%20216%20L866%20216%22%20stroke%3D%22%234f817d%22%20stroke-width%3D%224%22%20fill%3D%22none%22%20marker-end%3D%22url(%23arrow)%22%2F%3E%0A%3Crect%20x%3D%22882%22%20y%3D%2292%22%20width%3D%22280%22%20height%3D%22250%22%20rx%3D%2218%22%20fill%3D%22%23fffefa%22%20stroke%3D%22%23cddfd8%22%20stroke-width%3D%222%22%2F%3E%0A%3Ctext%20x%3D%221022%22%20y%3D%22130%22%20text-anchor%3D%22middle%22%20font-size%3D%2219%22%20font-weight%3D%22750%22%20fill%3D%22%23315b5b%22%20font-family%3D%22system-ui%2C'PingFang%20SC'%2Csans-serif%22%3E%E6%96%B0%E7%9B%B8%E6%9C%BA%E8%A7%86%E8%A7%92%3C%2Ftext%3E%0A%3Cg%20transform%3D%22translate(922%20154)%22%3E%0A%3Cpath%20d%3D%22M18%2046%20L116%2046%20L164%2093%20L67%2093%20Z%22%20fill%3D%22%23e8f1ec%22%20stroke%3D%22%238eb2a7%22%20stroke-width%3D%222%22%2F%3E%0A%3Cpath%20d%3D%22M67%2093%20L67%20159%20L164%20159%20L164%2093%22%20fill%3D%22%23dbe9e2%22%20stroke%3D%22%238eb2a7%22%20stroke-width%3D%222%22%2F%3E%0A%3Cpath%20d%3D%22M18%2046%20L18%20112%20L67%20159%20L67%2093%22%20fill%3D%22%23c7ddd3%22%20stroke%3D%22%238eb2a7%22%20stroke-width%3D%222%22%2F%3E%0A%3Cpath%20d%3D%22M39%2060%20L80%2060%20L80%2094%20L39%2094%20Z%22%20fill%3D%22%23e5b77d%22%20stroke%3D%22%23c68c4d%22%2F%3E%0A%3Cpath%20d%3D%22M91%20106%20L141%20106%20L141%20143%20L91%20143%20Z%22%20fill%3D%22%237fa6b9%22%20stroke%3D%22%23527f98%22%2F%3E%0A%3C%2Fg%3E%0A%3Ctext%20x%3D%221022%22%20y%3D%22333%22%20text-anchor%3D%22middle%22%20font-size%3D%2214%22%20fill%3D%22%23607b7e%22%20font-family%3D%22system-ui%22%3E%E6%B2%BF%E6%96%B0%E5%B0%84%E7%BA%BF%E9%87%87%E6%A0%B7%E5%B9%B6%E5%90%88%E6%88%90%E5%83%8F%E7%B4%A0%3C%2Ftext%3E%0A%3C%2Fsvg%3E" alt="多张带有相机位姿的场景照片输入神经辐射场，网络沿新相机射线查询三维点并通过体渲染生成新视角图像"><figcaption>整个任务可以拆成三件事：知道照片是从哪里拍的；学会查询任意三维位置的场景属性；把目标相机看到的射线样本合成为像素。</figcaption></figure>
+</header>
+
+<section id="problem">
+<h2>01 · 从照片到一台从未存在过的相机</h2>
+<p>先想象你围绕一张桌子拍摄了 40 张照片。每张照片都只记录一个相机位置看到的二维投影：桌面挡住了什么、椅子在画面中的位置、灯光如何反射。你希望把相机移动到两张照片之间的一个新位置，得到一张自然的新画面。</p>
+<p>传统思路可能是先恢复三角网格、贴图或体素，再用图形学渲染。但这些表示需要显式描述几何表面或离散空间。NeRF 的关键转变是：<strong>把场景本身看成一个连续函数</strong>，让神经网络回答“这个位置、从这个方向看过去，应该是什么颜色？这里有多大概率挡住光线？”</p>
+<div class="two">
+<div><h3>输入不是只有 RGB</h3><p>除了多张图像，还需要每张图对应的相机内参、外参（相机位姿）以及场景的近远边界。没有可靠的相机几何，像素就无法正确投到三维射线上。</p></div>
+<div><h3>输出不是一张完整 3D 网格</h3><p>网络可以在任意连续坐标处被查询。渲染时只对目标相机真正经过的射线采样，不必提前把整个空间切成固定体素。</p></div>
+</div>
+<p class="lead">因此，NeRF 的问题不是“如何把照片拼起来”，而是“如何学习一个能同时解释所有已观测视角的场景函数”。</p>
+</section>
+
+<section id="representation">
+<h2>02 · NeRF 学的是一个连续五维场景函数</h2>
+<p>对空间中的一个点，记它的位置为 <code>x=(x,y,z)</code>。同一个点从不同方向看，颜色可能不同：例如金属表面的高光会随相机移动。因此还要提供观察方向 <code>d</code>。论文用球坐标角度 <code>(θ,φ)</code> 描述方向，实际网络中用三维单位向量表示。</p>
+<div class="eq" role="group" aria-label="NeRF 场景函数"><span class="eq-num">(1)</span><div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="场景函数公式，可横向滚动"><math display="block" aria-label="F theta 输入空间位置 x 和观察方向 d，输出方向相关颜色 c 和仅依赖位置的密度 sigma"><mrow><msub><mi>F</mi><mi>Θ</mi></msub><mo>(</mo><mi mathvariant="bold">x</mi><mo>,</mo><mi mathvariant="bold">d</mi><mo>)</mo><mo>=</mo><mo>(</mo><mi mathvariant="bold">c</mi><mo>(</mo><mi mathvariant="bold">x</mi><mo>,</mo><mi mathvariant="bold">d</mi><mo>)</mo><mo>,</mo><mi>σ</mi><mo>(</mo><mi mathvariant="bold">x</mi><mo>)</mo><mo>)</mo></mrow></math></div></div>
+<p>这里有两个输出，含义不要混淆：</p>
+<ul>
+<li><strong>密度 σ(x)：</strong>描述射线穿过这个位置时被吸收/终止的强度。它只依赖空间位置，不随着观察方向改变。</li>
+<li><strong>颜色 c(x,d)：</strong>描述从方向 d 观察位置 x 时的 RGB 辐射。它允许表达镜面反射等视角相关外观。</li>
+</ul>
+<figure><div class="figure-title">FIGURE 02 · ONE POINT, TWO KINDS OF OUTPUT</div><img src="data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%201200%20460%22%20role%3D%22img%22%20aria-labelledby%3D%22title%20desc%22%3E%0A%3Ctitle%20id%3D%22title%22%3ENeRF%20%E7%9A%84%E4%BA%94%E7%BB%B4%E8%BE%93%E5%85%A5%E4%B8%8E%E4%B8%A4%E4%B8%AA%E8%BE%93%E5%87%BA%E5%88%86%E6%94%AF%3C%2Ftitle%3E%0A%3Cdesc%20id%3D%22desc%22%3E%E4%B8%89%E7%BB%B4%E4%BD%8D%E7%BD%AE%E5%92%8C%E4%BA%8C%E7%BB%B4%E8%A7%82%E5%AF%9F%E6%96%B9%E5%90%91%E8%BF%9B%E5%85%A5%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%EF%BC%8C%E5%AF%86%E5%BA%A6%E5%8F%AA%E4%BE%9D%E8%B5%96%E4%BD%8D%E7%BD%AE%EF%BC%8C%E9%A2%9C%E8%89%B2%E5%90%8C%E6%97%B6%E4%BE%9D%E8%B5%96%E4%BD%8D%E7%BD%AE%E5%92%8C%E6%96%B9%E5%90%91%E3%80%82%3C%2Fdesc%3E%0A%3Cdefs%3E%3Cmarker%20id%3D%22arrow%22%20markerWidth%3D%2210%22%20markerHeight%3D%2210%22%20refX%3D%228%22%20refY%3D%225%22%20orient%3D%22auto%22%3E%3Cpath%20d%3D%22M0%200%20L10%205%20L0%2010%20Z%22%20fill%3D%22%234f817d%22%2F%3E%3C%2Fmarker%3E%3C%2Fdefs%3E%0A%3Crect%20x%3D%221%22%20y%3D%221%22%20width%3D%221198%22%20height%3D%22458%22%20rx%3D%2222%22%20fill%3D%22%23f8fbf9%22%20stroke%3D%22%23d9e7e1%22%20stroke-width%3D%222%22%2F%3E%0A%3Ctext%20x%3D%2240%22%20y%3D%2248%22%20font-size%3D%2222%22%20font-weight%3D%22750%22%20fill%3D%22%2329434b%22%20font-family%3D%22system-ui%2C'PingFang%20SC'%2Csans-serif%22%3E%E4%B8%80%E4%B8%AA%E7%A9%BA%E9%97%B4%E7%82%B9%EF%BC%8C%E4%B8%A4%E4%B8%AA%E4%B8%8D%E5%90%8C%E5%90%AB%E4%B9%89%E7%9A%84%E8%BE%93%E5%87%BA%3C%2Ftext%3E%0A%3Crect%20x%3D%2242%22%20y%3D%22104%22%20width%3D%22250%22%20height%3D%22118%22%20rx%3D%2216%22%20fill%3D%22%23eaf3ee%22%20stroke%3D%22%23b5d2c7%22%20stroke-width%3D%222%22%2F%3E%0A%3Ctext%20x%3D%22167%22%20y%3D%22139%22%20text-anchor%3D%22middle%22%20font-size%3D%2219%22%20font-weight%3D%22750%22%20fill%3D%22%23276a63%22%20font-family%3D%22system-ui%22%3E%E7%A9%BA%E9%97%B4%E4%BD%8D%E7%BD%AE%20x%3C%2Ftext%3E%0A%3Ctext%20x%3D%22167%22%20y%3D%22176%22%20text-anchor%3D%22middle%22%20font-size%3D%2217%22%20fill%3D%22%23315b5b%22%20font-family%3D%22system-ui%22%3E(x%2C%20y%2C%20z)%3C%2Ftext%3E%0A%3Ctext%20x%3D%22167%22%20y%3D%22202%22%20text-anchor%3D%22middle%22%20font-size%3D%2214%22%20fill%3D%22%23647d80%22%20font-family%3D%22system-ui%22%3E3%20%E4%B8%AA%E5%9D%90%E6%A0%87%3C%2Ftext%3E%0A%3Crect%20x%3D%2242%22%20y%3D%22257%22%20width%3D%22250%22%20height%3D%22118%22%20rx%3D%2216%22%20fill%3D%22%23eaf0f7%22%20stroke%3D%22%23bfd0df%22%20stroke-width%3D%222%22%2F%3E%0A%3Ctext%20x%3D%22167%22%20y%3D%22292%22%20text-anchor%3D%22middle%22%20font-size%3D%2219%22%20font-weight%3D%22750%22%20fill%3D%22%233e6d8b%22%20font-family%3D%22system-ui%22%3E%E8%A7%82%E5%AF%9F%E6%96%B9%E5%90%91%20d%3C%2Ftext%3E%0A%3Ctext%20x%3D%22167%22%20y%3D%22329%22%20text-anchor%3D%22middle%22%20font-size%3D%2217%22%20fill%3D%22%23365f7c%22%20font-family%3D%22system-ui%22%3E(%CE%B8%2C%20%CF%86)%20%2F%20unit%20vector%3C%2Ftext%3E%0A%3Ctext%20x%3D%22167%22%20y%3D%22355%22%20text-anchor%3D%22middle%22%20font-size%3D%2214%22%20fill%3D%22%23647d80%22%20font-family%3D%22system-ui%22%3E2%20%E4%B8%AA%E8%87%AA%E7%94%B1%E5%BA%A6%3C%2Ftext%3E%0A%3Cpath%20d%3D%22M304%20163%20L385%20163%20L385%20224%20L456%20224%22%20stroke%3D%22%234f817d%22%20stroke-width%3D%224%22%20fill%3D%22none%22%20marker-end%3D%22url(%23arrow)%22%2F%3E%0A%3Cpath%20d%3D%22M304%20316%20L385%20316%20L385%20253%20L456%20253%22%20stroke%3D%22%234f817d%22%20stroke-width%3D%224%22%20fill%3D%22none%22%20marker-end%3D%22url(%23arrow)%22%2F%3E%0A%3Crect%20x%3D%22472%22%20y%3D%22168%22%20width%3D%22230%22%20height%3D%22142%22%20rx%3D%2218%22%20fill%3D%22%23fffefa%22%20stroke%3D%22%23cddfd8%22%20stroke-width%3D%222%22%2F%3E%0A%3Ctext%20x%3D%22587%22%20y%3D%22207%22%20text-anchor%3D%22middle%22%20font-size%3D%2220%22%20font-weight%3D%22750%22%20fill%3D%22%23315b5b%22%20font-family%3D%22system-ui%22%3EMLP%20F%CE%B8%3C%2Ftext%3E%0A%3Cg%20fill%3D%22%23a9cfc2%22%20stroke%3D%22%235f9488%22%3E%3Ccircle%20cx%3D%22520%22%20cy%3D%22243%22%20r%3D%2210%22%2F%3E%3Ccircle%20cx%3D%22520%22%20cy%3D%22270%22%20r%3D%2210%22%2F%3E%3Ccircle%20cx%3D%22550%22%20cy%3D%22232%22%20r%3D%2210%22%2F%3E%3Ccircle%20cx%3D%22550%22%20cy%3D%22259%22%20r%3D%2210%22%2F%3E%3Ccircle%20cx%3D%22550%22%20cy%3D%22286%22%20r%3D%2210%22%2F%3E%3Ccircle%20cx%3D%22580%22%20cy%3D%22243%22%20r%3D%2210%22%2F%3E%3Ccircle%20cx%3D%22580%22%20cy%3D%22270%22%20r%3D%2210%22%2F%3E%3Ccircle%20cx%3D%22610%22%20cy%3D%22232%22%20r%3D%2210%22%2F%3E%3Ccircle%20cx%3D%22610%22%20cy%3D%22259%22%20r%3D%2210%22%2F%3E%3Ccircle%20cx%3D%22610%22%20cy%3D%22286%22%20r%3D%2210%22%2F%3E%3Ccircle%20cx%3D%22640%22%20cy%3D%22243%22%20r%3D%2210%22%2F%3E%3Ccircle%20cx%3D%22640%22%20cy%3D%22270%22%20r%3D%2210%22%2F%3E%3C%2Fg%3E%0A%3Cpath%20d%3D%22M704%20226%20L772%20226%20L772%20151%20L842%20151%22%20stroke%3D%22%23c47a42%22%20stroke-width%3D%224%22%20fill%3D%22none%22%20marker-end%3D%22url(%23arrow)%22%2F%3E%0A%3Cpath%20d%3D%22M704%20254%20L772%20254%20L772%20330%20L842%20330%22%20stroke%3D%22%23477c9b%22%20stroke-width%3D%224%22%20fill%3D%22none%22%20marker-end%3D%22url(%23arrow)%22%2F%3E%0A%3Crect%20x%3D%22858%22%20y%3D%2295%22%20width%3D%22286%22%20height%3D%22112%22%20rx%3D%2216%22%20fill%3D%22%23f8eadc%22%20stroke%3D%22%23dfb78f%22%20stroke-width%3D%222%22%2F%3E%0A%3Ctext%20x%3D%221001%22%20y%3D%22135%22%20text-anchor%3D%22middle%22%20font-size%3D%2220%22%20font-weight%3D%22750%22%20fill%3D%22%23935d35%22%20font-family%3D%22system-ui%22%3E%E5%AF%86%E5%BA%A6%20%CF%83(x)%3C%2Ftext%3E%0A%3Ctext%20x%3D%221001%22%20y%3D%22172%22%20text-anchor%3D%22middle%22%20font-size%3D%2216%22%20fill%3D%22%23805c3f%22%20font-family%3D%22system-ui%22%3E%E5%8F%AA%E4%BE%9D%E8%B5%96%E4%BD%8D%E7%BD%AE%3C%2Ftext%3E%0A%3Crect%20x%3D%22858%22%20y%3D%22274%22%20width%3D%22286%22%20height%3D%22112%22%20rx%3D%2216%22%20fill%3D%22%23e3edf5%22%20stroke%3D%22%23b6cad9%22%20stroke-width%3D%222%22%2F%3E%0A%3Ctext%20x%3D%221001%22%20y%3D%22314%22%20text-anchor%3D%22middle%22%20font-size%3D%2220%22%20font-weight%3D%22750%22%20fill%3D%22%233e6d8b%22%20font-family%3D%22system-ui%22%3E%E9%A2%9C%E8%89%B2%20c(x%2C%20d)%3C%2Ftext%3E%0A%3Ctext%20x%3D%221001%22%20y%3D%22351%22%20text-anchor%3D%22middle%22%20font-size%3D%2216%22%20fill%3D%22%23456c84%22%20font-family%3D%22system-ui%22%3E%E4%BD%8D%E7%BD%AE%20%2B%20%E8%A7%82%E5%AF%9F%E6%96%B9%E5%90%91%3C%2Ftext%3E%0A%3Crect%20x%3D%22424%22%20y%3D%22394%22%20width%3D%22720%22%20height%3D%2242%22%20rx%3D%2210%22%20fill%3D%22%23edf6f1%22%20stroke%3D%22%23c5ddd3%22%2F%3E%0A%3Ctext%20x%3D%22784%22%20y%3D%22421%22%20text-anchor%3D%22middle%22%20font-size%3D%2215%22%20fill%3D%22%23315b5b%22%20font-family%3D%22system-ui%22%3E%E5%90%8C%E4%B8%80%E4%BD%8D%E7%BD%AE%E4%BF%9D%E6%8C%81%E5%87%A0%E4%BD%95%E5%AF%86%E5%BA%A6%E4%B8%80%E8%87%B4%EF%BC%9B%E5%A4%96%E8%A7%82%E5%8F%AF%E9%9A%8F%E8%A7%82%E5%AF%9F%E6%96%B9%E5%90%91%E6%94%B9%E5%8F%98%3C%2Ftext%3E%0A%3C%2Fsvg%3E" alt="三维位置与观察方向一起进入 NeRF 网络，密度分支只依赖位置，RGB 分支同时依赖位置和观察方向"><figcaption>把几何稳定性与外观方向性拆开：同一个空间点的密度应保持一致，而高光颜色可以随着观察方向变化。</figcaption></figure>
+<div class="callout"><strong>一个容易误解的细节：</strong>“5D”指 3 个空间坐标加 2 个方向自由度。实现中方向通常编码为 3D 单位向量，所以网络实际接收的是 3+3 个数值分量，但方向仍只有两个独立自由度。</div>
+<p>NeRF 不是直接输出“这里是一个三角形面片”。它输出的是连续空间中的体密度和方向相关辐射；表面感、遮挡和像素颜色，是通过沿射线积分后表现出来的。</p>
+</section>
+
+<section id="ray">
+<h2>03 · 从一个像素，反向发射一条 Camera Ray</h2>
+<p>现在固定目标相机上的一个像素。相机内参告诉我们像素对应的成像方向；相机外参把这个方向从相机坐标系转换到世界坐标系。于是我们得到一条从相机中心出发的射线。</p>
+<div class="eq" role="group" aria-label="相机射线公式"><span class="eq-num">(2)</span><div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="相机射线公式，可横向滚动"><math display="block" aria-label="r t 等于相机原点 o 加 t 乘方向 d"><mrow><mi mathvariant="bold">r</mi><mo>(</mo><mi>t</mi><mo>)</mo><mo>=</mo><mi mathvariant="bold">o</mi><mo>+</mo><mi>t</mi><mi mathvariant="bold">d</mi></mrow></math></div></div>
+<p><code>o</code> 是相机中心，<code>d</code> 是单位方向，<code>t</code> 是沿射线移动的距离。我们只在近端 <code>tₙ</code> 与远端 <code>t_f</code> 之间查询场景。对这条射线采样得到一串三维位置 <code>x_i=r(t_i)</code>，每个位置都送入 NeRF 查询颜色与密度。</p>
+<figure><div class="figure-title">FIGURE 03 · CAMERA RAY AND DEPTH SAMPLES</div><img src="data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%201200%20420%22%20role%3D%22img%22%20aria-labelledby%3D%22title%20desc%22%3E%0A%3Ctitle%20id%3D%22title%22%3E%E7%9B%B8%E6%9C%BA%E5%B0%84%E7%BA%BF%E5%92%8C%E6%B7%B1%E5%BA%A6%E9%87%87%E6%A0%B7%3C%2Ftitle%3E%0A%3Cdesc%20id%3D%22desc%22%3E%E7%9B%B8%E6%9C%BA%E4%B8%AD%E5%BF%83%E5%8F%91%E5%87%BA%E4%B8%80%E6%9D%A1%E5%B0%84%E7%BA%BF%E7%A9%BF%E8%BF%87%E5%83%8F%E7%B4%A0%EF%BC%8C%E5%9C%A8%E8%BF%91%E7%AB%AF%E5%92%8C%E8%BF%9C%E7%AB%AF%E4%B9%8B%E9%97%B4%E5%8F%96%E5%A4%9A%E4%B8%AA%E4%B8%89%E7%BB%B4%E9%87%87%E6%A0%B7%E7%82%B9%EF%BC%8C%E5%B9%B6%E8%AE%A1%E7%AE%97%E7%9B%B8%E9%82%BB%E9%87%87%E6%A0%B7%E8%B7%9D%E7%A6%BB%E3%80%82%3C%2Fdesc%3E%0A%3Cdefs%3E%3Cmarker%20id%3D%22arrow%22%20markerWidth%3D%2210%22%20markerHeight%3D%2210%22%20refX%3D%228%22%20refY%3D%225%22%20orient%3D%22auto%22%3E%3Cpath%20d%3D%22M0%200%20L10%205%20L0%2010%20Z%22%20fill%3D%22%234f817d%22%2F%3E%3C%2Fmarker%3E%3C%2Fdefs%3E%0A%3Crect%20x%3D%221%22%20y%3D%221%22%20width%3D%221198%22%20height%3D%22418%22%20rx%3D%2222%22%20fill%3D%22%23f8fbf9%22%20stroke%3D%22%23d9e7e1%22%20stroke-width%3D%222%22%2F%3E%0A%3Ctext%20x%3D%2240%22%20y%3D%2248%22%20font-size%3D%2222%22%20font-weight%3D%22750%22%20fill%3D%22%2329434b%22%20font-family%3D%22system-ui%2C'PingFang%20SC'%2Csans-serif%22%3E%E4%B8%80%E4%B8%AA%E5%83%8F%E7%B4%A0%EF%BC%8C%E5%AF%B9%E5%BA%94%E4%B8%80%E6%9D%A1%E4%BB%8E%E7%9B%B8%E6%9C%BA%E4%B8%AD%E5%BF%83%E5%87%BA%E5%8F%91%E7%9A%84%E5%B0%84%E7%BA%BF%3C%2Ftext%3E%0A%3Cg%20transform%3D%22translate(70%20138)%22%3E%0A%3Cpath%20d%3D%22M0%2040%20L72%200%20L72%2080%20Z%22%20fill%3D%22%23dce9e3%22%20stroke%3D%22%236b9b8d%22%20stroke-width%3D%223%22%2F%3E%0A%3Crect%20x%3D%22-20%22%20y%3D%2225%22%20width%3D%2220%22%20height%3D%2230%22%20rx%3D%224%22%20fill%3D%22%234c7e7a%22%2F%3E%0A%3Ctext%20x%3D%2222%22%20y%3D%22112%22%20text-anchor%3D%22middle%22%20font-size%3D%2216%22%20fill%3D%22%23315b5b%22%20font-family%3D%22system-ui%22%3ECamera%3C%2Ftext%3E%0A%3Ctext%20x%3D%2222%22%20y%3D%22135%22%20text-anchor%3D%22middle%22%20font-size%3D%2214%22%20fill%3D%22%23647d80%22%20font-family%3D%22system-ui%22%3Eorigin%20o%3C%2Ftext%3E%0A%3C%2Fg%3E%0A%3Cpath%20d%3D%22M145%20178%20L1080%20178%22%20stroke%3D%22%234f817d%22%20stroke-width%3D%224%22%20fill%3D%22none%22%20marker-end%3D%22url(%23arrow)%22%2F%3E%0A%3Cpath%20d%3D%22M145%20178%20L1080%2078%22%20stroke%3D%22%23c4d5cf%22%20stroke-width%3D%222%22%20stroke-dasharray%3D%228%207%22%2F%3E%0A%3Cpath%20d%3D%22M145%20178%20L1080%20280%22%20stroke%3D%22%23c4d5cf%22%20stroke-width%3D%222%22%20stroke-dasharray%3D%228%207%22%2F%3E%0A%3Ctext%20x%3D%221090%22%20y%3D%22166%22%20font-size%3D%2217%22%20fill%3D%22%23276a63%22%20font-weight%3D%22750%22%20font-family%3D%22system-ui%22%3Ed%3C%2Ftext%3E%0A%3Cline%20x1%3D%22310%22%20y1%3D%2293%22%20x2%3D%22310%22%20y2%3D%22263%22%20stroke%3D%22%23c47a42%22%20stroke-width%3D%223%22%20stroke-dasharray%3D%227%206%22%2F%3E%0A%3Cline%20x1%3D%221000%22%20y1%3D%2293%22%20x2%3D%221000%22%20y2%3D%22263%22%20stroke%3D%22%237566a7%22%20stroke-width%3D%223%22%20stroke-dasharray%3D%227%206%22%2F%3E%0A%3Ctext%20x%3D%22310%22%20y%3D%2272%22%20text-anchor%3D%22middle%22%20font-size%3D%2216%22%20font-weight%3D%22700%22%20fill%3D%22%23a76535%22%20font-family%3D%22system-ui%22%3Enear%20%C2%B7%20t%E2%82%99%3C%2Ftext%3E%0A%3Ctext%20x%3D%221000%22%20y%3D%2272%22%20text-anchor%3D%22middle%22%20font-size%3D%2216%22%20font-weight%3D%22700%22%20fill%3D%22%237566a7%22%20font-family%3D%22system-ui%22%3Efar%20%C2%B7%20t_f%3C%2Ftext%3E%0A%3Cg%20fill%3D%22%23e3a45e%22%20stroke%3D%22%239d6536%22%20stroke-width%3D%222%22%3E%0A%3Ccircle%20cx%3D%22310%22%20cy%3D%22178%22%20r%3D%2211%22%2F%3E%3Ccircle%20cx%3D%22450%22%20cy%3D%22178%22%20r%3D%2211%22%2F%3E%3Ccircle%20cx%3D%22590%22%20cy%3D%22178%22%20r%3D%2211%22%2F%3E%3Ccircle%20cx%3D%22730%22%20cy%3D%22178%22%20r%3D%2211%22%2F%3E%3Ccircle%20cx%3D%22870%22%20cy%3D%22178%22%20r%3D%2211%22%2F%3E%3Ccircle%20cx%3D%221000%22%20cy%3D%22178%22%20r%3D%2211%22%2F%3E%0A%3C%2Fg%3E%0A%3Cg%20font-size%3D%2214%22%20fill%3D%22%23526d70%22%20font-family%3D%22system-ui%22%20text-anchor%3D%22middle%22%3E%0A%3Ctext%20x%3D%22310%22%20y%3D%22215%22%3Ex%E2%82%81%3C%2Ftext%3E%3Ctext%20x%3D%22450%22%20y%3D%22215%22%3Ex%E2%82%82%3C%2Ftext%3E%3Ctext%20x%3D%22590%22%20y%3D%22215%22%3Ex%E2%82%83%3C%2Ftext%3E%3Ctext%20x%3D%22730%22%20y%3D%22215%22%3Ex%E2%82%84%3C%2Ftext%3E%3Ctext%20x%3D%22870%22%20y%3D%22215%22%3Ex%E2%82%85%3C%2Ftext%3E%3Ctext%20x%3D%221000%22%20y%3D%22215%22%3Ex%E2%82%86%3C%2Ftext%3E%0A%3C%2Fg%3E%0A%3Cpath%20d%3D%22M450%20242%20L590%20242%22%20stroke%3D%22%233e7594%22%20stroke-width%3D%223%22%2F%3E%3Cpath%20d%3D%22M450%20235%20L450%20249%20M590%20235%20L590%20249%22%20stroke%3D%22%233e7594%22%20stroke-width%3D%223%22%2F%3E%0A%3Ctext%20x%3D%22520%22%20y%3D%22270%22%20text-anchor%3D%22middle%22%20font-size%3D%2216%22%20fill%3D%22%233e7594%22%20font-weight%3D%22700%22%20font-family%3D%22system-ui%22%3E%CE%B4%E1%B5%A2%20%3D%20t%E1%B5%A2%E2%82%8A%E2%82%81%20%E2%88%92%20t%E1%B5%A2%3C%2Ftext%3E%0A%3Crect%20x%3D%22290%22%20y%3D%22318%22%20width%3D%22730%22%20height%3D%2254%22%20rx%3D%2212%22%20fill%3D%22%23edf6f1%22%20stroke%3D%22%23c5ddd3%22%2F%3E%0A%3Ctext%20x%3D%22655%22%20y%3D%22352%22%20text-anchor%3D%22middle%22%20font-size%3D%2217%22%20fill%3D%22%23315b5b%22%20font-family%3D%22system-ui%22%3E%E5%9C%A8%E6%AF%8F%E4%B8%AA%E5%83%8F%E7%B4%A0%E7%9A%84%E5%B0%84%E7%BA%BF%E4%B8%8A%EF%BC%8C%E9%87%8D%E5%A4%8D%E6%89%A7%E8%A1%8C%EF%BC%9A%E9%87%87%E6%A0%B7%E4%BD%8D%E7%BD%AE%20%E2%86%92%20%E6%9F%A5%E8%AF%A2%E5%9C%BA%E6%99%AF%20%E2%86%92%20%E5%90%88%E6%88%90%E9%A2%9C%E8%89%B2%3C%2Ftext%3E%0A%3C%2Fsvg%3E" alt="从相机中心穿过目标像素的射线，在近端与远端之间采样多个三维位置，并标记相邻采样距离 delta"><figcaption>一个像素对应一条射线；一张图像有多少像素，就需要渲染多少条射线。每条射线又要查询多个深度位置，因此采样数直接影响计算量。</figcaption></figure>
+<p>训练时，论文将每条射线的近远区间分成若干段，并在每段内随机取一点（stratified sampling）。这样不会让网络永远只看到固定网格上的坐标，也能在训练过程中覆盖连续空间。</p>
+</section>
+
+<section id="mlp">
+<h2>04 · MLP 每次查询，究竟输出什么？</h2>
+<p>原始 NeRF 不是 CNN。它用一个全连接 MLP 表示每个场景：位置编码后的空间坐标先经过 8 层、每层 256 个通道的 ReLU 全连接层，得到密度 σ 和一个 256 维特征；再把该特征与位置编码后的观察方向拼接，经过一个 128 通道的 ReLU 层，输出 RGB。</p>
+<figure><div class="figure-title">FIGURE 03 · THE MLP SPLITS GEOMETRY FROM APPEARANCE</div>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 240" role="img" aria-labelledby="mlp-title mlp-desc">
+<title id="mlp-title">NeRF MLP 的空间主干和方向颜色分支</title>
+<desc id="mlp-desc">位置编码进入空间主干并输出密度和中间特征，中间特征再与方向编码拼接后输出 RGB 颜色。</desc>
+<rect x="1" y="1" width="958" height="238" rx="16" fill="#f8fbf9" stroke="#d9e7e1"/>
+<rect x="25" y="72" width="150" height="94" rx="12" fill="#eaf3ee" stroke="#b5d2c7" stroke-width="2"/>
+<text x="100" y="108" text-anchor="middle" font-size="17" font-weight="700" fill="#276a63" font-family="system-ui">γ(x)</text>
+<text x="100" y="137" text-anchor="middle" font-size="14" fill="#526f70" font-family="system-ui">位置编码</text>
+<path d="M178 119 L235 119" stroke="#4f817d" stroke-width="3" />
+<path d="M225 111 L237 119 L225 127" stroke="#4f817d" stroke-width="3" fill="none"/>
+<rect x="244" y="58" width="240" height="122" rx="12" fill="#fffefa" stroke="#cddfd8" stroke-width="2"/>
+<text x="364" y="91" text-anchor="middle" font-size="17" font-weight="700" fill="#315b5b" font-family="system-ui">8 × 256 ReLU</text>
+<g fill="#a9cfc2" stroke="#5f9488"><circle cx="300" cy="119" r="8"/><circle cx="326" cy="119" r="8"/><circle cx="352" cy="119" r="8"/><circle cx="378" cy="119" r="8"/><circle cx="404" cy="119" r="8"/><circle cx="430" cy="119" r="8"/></g>
+<text x="364" y="158" text-anchor="middle" font-size="14" fill="#647d80" font-family="system-ui">空间主干</text>
+<path d="M487 119 L540 119" stroke="#4f817d" stroke-width="3"/><path d="M530 111 L542 119 L530 127" stroke="#4f817d" stroke-width="3" fill="none"/>
+<rect x="550" y="34" width="155" height="68" rx="11" fill="#f8eadc" stroke="#dfb78f" stroke-width="2"/>
+<text x="627" y="62" text-anchor="middle" font-size="18" font-weight="750" fill="#935d35" font-family="system-ui">σ(x)</text>
+<text x="627" y="84" text-anchor="middle" font-size="13" fill="#805c3f" font-family="system-ui">密度输出</text>
+<rect x="550" y="136" width="155" height="68" rx="11" fill="#eaf0f7" stroke="#bfd0df" stroke-width="2"/>
+<text x="627" y="164" text-anchor="middle" font-size="16" font-weight="750" fill="#3e6d8b" font-family="system-ui">h(x) + γ(d)</text>
+<text x="627" y="186" text-anchor="middle" font-size="13" fill="#456c84" font-family="system-ui">拼接方向特征</text>
+<path d="M708 170 L760 170" stroke="#4f817d" stroke-width="3"/><path d="M750 162 L762 170 L750 178" stroke="#4f817d" stroke-width="3" fill="none"/>
+<rect x="770" y="136" width="160" height="68" rx="11" fill="#e3edf5" stroke="#b6cad9" stroke-width="2"/>
+<text x="850" y="164" text-anchor="middle" font-size="18" font-weight="750" fill="#3e6d8b" font-family="system-ui">RGB c(x,d)</text>
+<text x="850" y="186" text-anchor="middle" font-size="13" fill="#456c84" font-family="system-ui">128 通道 ReLU 后输出</text>
+<path d="M484 119 L518 119 L518 68 L545 68" stroke="#c47a42" stroke-width="2.5" fill="none"/>
+</svg>
+<figcaption>原论文的结构要点：空间主干先预测密度与特征；观察方向只在颜色分支中加入，因此密度不会随着相机角度漂移。</figcaption></figure>
+<div class="two">
+<div><h3>空间分支</h3><p><strong>输入：</strong>位置编码 γ(x)。</p><p><strong>输出：</strong>密度 σ(x) 与中间特征 h(x)。</p><p><strong>意义：</strong>同一位置无论从哪个视角被查询，密度都相同。</p></div>
+<div><h3>外观分支</h3><p><strong>输入：</strong>h(x) 与方向编码 γ(d)。</p><p><strong>输出：</strong>颜色 c(x,d)。</p><p><strong>意义：</strong>让网络能够表达镜面高光等方向相关的辐射变化。</p></div>
+</div>
+<p>论文的消融实验专门移除了 view dependence：没有方向输入时，模型难以复现推土机履带上的镜面反射。这说明方向不是一个可有可无的装饰参数，而是外观建模的一部分。</p>
+</section>
+
+<section id="encoding">
+<h2>05 · Positional Encoding：让 MLP 看见细节</h2>
+<p>如果把原始坐标直接交给普通 MLP，网络往往先学会平滑、低频的变化，却不容易拟合细密纹理、尖锐边缘和高频几何。NeRF 在坐标进入 MLP 之前，先把每个标量映射到一组不同频率的正弦、余弦特征。</p>
+<div class="eq" role="group" aria-label="正弦位置编码公式"><span class="eq-num">(3)</span><div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="位置编码公式，可横向滚动"><math display="block" aria-label="gamma p 包含从频率 2 的零次方到 2 的 L 减一次方的正弦和余弦"><mrow><mi>γ</mi><mo>(</mo><mi>p</mi><mo>)</mo><mo>=</mo><mo>(</mo><mi>sin</mi><mo>(</mo><msup><mn>2</mn><mn>0</mn></msup><mi>π</mi><mi>p</mi><mo>)</mo><mo>,</mo><mi>cos</mi><mo>(</mo><msup><mn>2</mn><mn>0</mn></msup><mi>π</mi><mi>p</mi><mo>)</mo><mo>,</mo><mo>…</mo><mo>,</mo><mi>sin</mi><mo>(</mo><msup><mn>2</mn><mrow><mi>L</mi><mo>−</mo><mn>1</mn></mrow></msup><mi>π</mi><mi>p</mi><mo>)</mo><mo>,</mo><mi>cos</mi><mo>(</mo><msup><mn>2</mn><mrow><mi>L</mi><mo>−</mo><mn>1</mn></mrow></msup><mi>π</mi><mi>p</mi><mo>)</mo><mo>)</mo></mrow></math></div></div>
+<p>低频分量描述缓慢变化，高频分量让模型能够表达更细的变化。原论文对位置 x 使用 <strong>L=10</strong>，对观察方向 d 使用 <strong>L=4</strong>。注意：它和 Transformer 的正弦位置编码形式相似，但目的不同——Transformer 的位置编码告诉模型 token 在序列中的位置；NeRF 的编码是把连续空间坐标展开成更容易拟合高频函数的特征。</p>
+<figure><div class="figure-title">FIGURE 04 · FREQUENCIES TURN COORDINATES INTO FEATURES</div><img src="data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%201200%20390%22%20role%3D%22img%22%20aria-labelledby%3D%22title%20desc%22%3E%0A%3Ctitle%20id%3D%22title%22%3E%E4%BD%8D%E7%BD%AE%E7%BC%96%E7%A0%81%E5%B0%86%E8%BF%9E%E7%BB%AD%E5%9D%90%E6%A0%87%E6%98%A0%E5%B0%84%E4%B8%BA%E5%A4%9A%E9%A2%91%E7%8E%87%E7%89%B9%E5%BE%81%3C%2Ftitle%3E%0A%3Cdesc%20id%3D%22desc%22%3E%E4%BD%8E%E9%A2%91%E6%AD%A3%E5%BC%A6%E6%B3%A2%E5%B9%B3%E6%BB%91%EF%BC%8C%E9%AB%98%E9%A2%91%E6%AD%A3%E5%BC%A6%E6%B3%A2%E5%BF%AB%E9%80%9F%E6%8C%AF%E8%8D%A1%EF%BC%8C%E5%A4%9A%E4%B8%AA%E9%A2%91%E7%8E%87%E7%9A%84%E6%AD%A3%E4%BD%99%E5%BC%A6%E5%80%BC%E8%A2%AB%E6%8B%BC%E6%8E%A5%E4%B8%BA%20MLP%20%E8%BE%93%E5%85%A5%E3%80%82%3C%2Fdesc%3E%0A%3Crect%20x%3D%221%22%20y%3D%221%22%20width%3D%221198%22%20height%3D%22388%22%20rx%3D%2222%22%20fill%3D%22%23f8fbf9%22%20stroke%3D%22%23d9e7e1%22%20stroke-width%3D%222%22%2F%3E%0A%3Ctext%20x%3D%2240%22%20y%3D%2248%22%20font-size%3D%2222%22%20font-weight%3D%22750%22%20fill%3D%22%2329434b%22%20font-family%3D%22system-ui%2C'PingFang%20SC'%2Csans-serif%22%3E%E5%90%8C%E4%B8%80%E4%B8%AA%E5%9D%90%E6%A0%87%EF%BC%8C%E7%94%A8%E5%A4%9A%E7%A7%8D%E9%A2%91%E7%8E%87%E9%87%8D%E6%96%B0%E8%A1%A8%E8%BE%BE%3C%2Ftext%3E%0A%3Cg%20font-family%3D%22system-ui%2C'PingFang%20SC'%2Csans-serif%22%3E%0A%3Ctext%20x%3D%2266%22%20y%3D%22112%22%20font-size%3D%2217%22%20font-weight%3D%22700%22%20fill%3D%22%23315b5b%22%3E%E4%BD%8E%E9%A2%91%EF%BC%9A%E7%BC%93%E6%85%A2%E5%8F%98%E5%8C%96%3C%2Ftext%3E%0A%3Cline%20x1%3D%22250%22%20y1%3D%22132%22%20x2%3D%22670%22%20y2%3D%22132%22%20stroke%3D%22%23c7d8d1%22%20stroke-width%3D%221.5%22%2F%3E%0A%3Cpath%20d%3D%22M250%20132%20C285%2042%20355%2042%20390%20132%20S495%20222%20530%20132%20S635%2042%20670%20132%22%20fill%3D%22none%22%20stroke%3D%22%233e8c83%22%20stroke-width%3D%224%22%2F%3E%0A%3Ctext%20x%3D%2266%22%20y%3D%22222%22%20font-size%3D%2217%22%20font-weight%3D%22700%22%20fill%3D%22%23315b5b%22%3E%E9%AB%98%E9%A2%91%EF%BC%9A%E7%BB%86%E8%8A%82%E5%8F%98%E5%8C%96%3C%2Ftext%3E%0A%3Cline%20x1%3D%22250%22%20y1%3D%22242%22%20x2%3D%22670%22%20y2%3D%22242%22%20stroke%3D%22%23c7d8d1%22%20stroke-width%3D%221.5%22%2F%3E%0A%3Cpath%20d%3D%22M250%20242%20C260%20172%20270%20172%20280%20242%20S300%20312%20310%20242%20S330%20172%20340%20242%20S360%20312%20370%20242%20S390%20172%20400%20242%20S420%20312%20430%20242%20S450%20172%20460%20242%20S480%20312%20490%20242%20S510%20172%20520%20242%20S540%20312%20550%20242%20S570%20172%20580%20242%20S600%20312%20610%20242%20S630%20172%20640%20242%20S660%20312%20670%20242%22%20fill%3D%22none%22%20stroke%3D%22%23c47a42%22%20stroke-width%3D%223.5%22%2F%3E%0A%3Crect%20x%3D%22730%22%20y%3D%2294%22%20width%3D%22410%22%20height%3D%22205%22%20rx%3D%2216%22%20fill%3D%22%23fffefa%22%20stroke%3D%22%23cddfd8%22%20stroke-width%3D%222%22%2F%3E%0A%3Ctext%20x%3D%22935%22%20y%3D%22132%22%20text-anchor%3D%22middle%22%20font-size%3D%2218%22%20font-weight%3D%22750%22%20fill%3D%22%23315b5b%22%3E%E4%BD%8D%E7%BD%AE%E7%BC%96%E7%A0%81%20%CE%B3(p)%3C%2Ftext%3E%0A%3Cg%20fill%3D%22%23e5f0eb%22%20stroke%3D%22%239ebfb3%22%3E%3Crect%20x%3D%22765%22%20y%3D%22159%22%20width%3D%2272%22%20height%3D%2245%22%20rx%3D%227%22%2F%3E%3Crect%20x%3D%22845%22%20y%3D%22159%22%20width%3D%2272%22%20height%3D%2245%22%20rx%3D%227%22%2F%3E%3Crect%20x%3D%22925%22%20y%3D%22159%22%20width%3D%2272%22%20height%3D%2245%22%20rx%3D%227%22%2F%3E%3Crect%20x%3D%221005%22%20y%3D%22159%22%20width%3D%2272%22%20height%3D%2245%22%20rx%3D%227%22%2F%3E%3C%2Fg%3E%0A%3Cg%20font-size%3D%2214%22%20fill%3D%22%23315b5b%22%20text-anchor%3D%22middle%22%3E%3Ctext%20x%3D%22801%22%20y%3D%22187%22%3Esin%20%CF%89%E2%82%81p%3C%2Ftext%3E%3Ctext%20x%3D%22881%22%20y%3D%22187%22%3Ecos%20%CF%89%E2%82%81p%3C%2Ftext%3E%3Ctext%20x%3D%22961%22%20y%3D%22187%22%3Esin%20%CF%89%E2%82%82p%3C%2Ftext%3E%3Ctext%20x%3D%221041%22%20y%3D%22187%22%3Ecos%20%CF%89%E2%82%82p%3C%2Ftext%3E%3C%2Fg%3E%0A%3Ctext%20x%3D%22935%22%20y%3D%22239%22%20text-anchor%3D%22middle%22%20font-size%3D%2216%22%20fill%3D%22%23647d80%22%3E%E2%80%A6%20%E5%A4%9A%E7%BB%84%E9%A2%91%E7%8E%87%E6%8B%BC%E6%8E%A5%20%E2%80%A6%3C%2Ftext%3E%0A%3Cpath%20d%3D%22M935%20259%20L935%20280%22%20stroke%3D%22%234f817d%22%20stroke-width%3D%223%22%2F%3E%0A%3Ctext%20x%3D%22935%22%20y%3D%22322%22%20text-anchor%3D%22middle%22%20font-size%3D%2217%22%20font-weight%3D%22750%22%20fill%3D%22%231c6967%22%3E%E9%80%81%E5%85%A5%20MLP%3C%2Ftext%3E%0A%3C%2Fg%3E%0A%3C%2Fsvg%3E" alt="低频正弦波平滑变化，高频正弦波具有更多振荡；位置编码将不同频率的正余弦特征拼接供 MLP 使用"><figcaption>位置编码不是额外的三维几何信息，而是改变坐标的表示方式，让有限容量的 MLP 更容易拟合快速变化的纹理和形状。</figcaption></figure>
+</section>
+
+<section id="rendering">
+<h2>06 · Volume Rendering：前面的雾会挡住后面的颜色</h2>
+<p>现在每个采样点都有颜色 cᵢ 和密度 σᵢ。问题变成：怎样把沿射线的一串三维属性合成为一个二维像素？关键不只是把颜色平均，而是考虑<strong>前面的样本已经挡住了多少光</strong>。</p>
+<p>连续形式中，透射率 T(t) 表示光线从射线起点走到 t、尚未被前方粒子吸收的比例。体渲染把每个位置的密度和颜色，按剩余透射率加权后积分：</p>
+<div class="eq" role="group" aria-label="连续体渲染积分"><span class="eq-num">(4)</span><div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="连续体渲染积分公式，可横向滚动"><math display="block" aria-label="射线颜色等于从近端到远端积分，透射率乘密度乘方向相关颜色"><mrow><mi>C</mi><mo>(</mo><mi mathvariant="bold">r</mi><mo>)</mo><mo>=</mo><msubsup><mo>∫</mo><msub><mi>t</mi><mi>n</mi></msub><msub><mi>t</mi><mi>f</mi></msub></msubsup><mi>T</mi><mo>(</mo><mi>t</mi><mo>)</mo><mi>σ</mi><mo>(</mo><mi mathvariant="bold">r</mi><mo>(</mo><mi>t</mi><mo>)</mo><mo>)</mo><mi mathvariant="bold">c</mi><mo>(</mo><mi mathvariant="bold">r</mi><mo>(</mo><mi>t</mi><mo>)</mo><mo>,</mo><mi mathvariant="bold">d</mi><mo>)</mo><mi>d</mi><mi>t</mi></mrow></math></div></div>
+<p>实际计算必须离散化。相邻采样点间距为 δᵢ=tᵢ₊₁−tᵢ。密度 σᵢ 与距离 δᵢ 一起决定该区间的 alpha：</p>
+<div class="eq" role="group" aria-label="离散 alpha 与权重公式"><span class="eq-num">(5)</span><div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="alpha 透射率和样本权重公式，可横向滚动"><math display="block" aria-label="alpha i 等于一减 exp 负 sigma i delta i，T i 是此前未被遮挡的比例，w i 等于 T i alpha i"><mrow><msub><mi>α</mi><mi>i</mi></msub><mo>=</mo><mn>1</mn><mo>−</mo><mi>exp</mi><mo>(</mo><mo>−</mo><msub><mi>σ</mi><mi>i</mi></msub><msub><mi>δ</mi><mi>i</mi></msub><mo>)</mo><mo>,</mo><mspace width="1em"/><msub><mi>T</mi><mi>i</mi></msub><mo>=</mo><munderover><mo>∏</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mrow><mi>i</mi><mo>−</mo><mn>1</mn></mrow></munderover><mo>(</mo><mn>1</mn><mo>−</mo><msub><mi>α</mi><mi>j</mi></msub><mo>)</mo><mo>,</mo><mspace width="1em"/><msub><mi>w</mi><mi>i</mi></msub><mo>=</mo><msub><mi>T</mi><mi>i</mi></msub><msub><mi>α</mi><mi>i</mi></msub></mrow></math></div></div>
+<p><code>αᵢ</code> 是当前小区间的遮挡/吸收比例；<code>Tᵢ</code> 是到达它之前还剩下多少光；<code>wᵢ</code> 才是该样本最终对像素颜色的贡献权重。越靠前、密度越大的样本，通常越容易压低后方样本的权重。</p>
+<p>最终颜色可以写成样本颜色的加权和，再加上没有被任何样本吸收的背景：</p>
+<div class="eq" role="group" aria-label="离散体渲染颜色公式"><span class="eq-num">(6)</span><div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="体渲染颜色合成公式，可横向滚动"><math display="block" aria-label="C hat 等于样本权重乘样本颜色之和，加上最终透射率乘背景颜色"><mrow><mover><mi>C</mi><mo>^</mo></mover><mo>(</mo><mi mathvariant="bold">r</mi><mo>)</mo><mo>=</mo><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>N</mi></munderover><msub><mi>w</mi><mi>i</mi></msub><msub><mi mathvariant="bold">c</mi><mi>i</mi></msub><mo>+</mo><msub><mi>T</mi><mrow><mi>N</mi><mo>+</mo><mn>1</mn></mrow></msub><msub><mi mathvariant="bold">c</mi><mi>bg</mi></msub></mrow></math></div></div>
+<figure><div class="figure-title">FIGURE 05 · FRONT-TO-BACK COMPOSITING</div><img src="data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%201200%20460%22%20role%3D%22img%22%20aria-labelledby%3D%22title%20desc%22%3E%0A%3Ctitle%20id%3D%22title%22%3E%E6%B2%BF%E5%B0%84%E7%BA%BF%E7%9A%84%E5%89%8D%E5%90%91%E4%BD%93%E6%B8%B2%E6%9F%93%E5%90%88%E6%88%90%3C%2Ftitle%3E%0A%3Cdesc%20id%3D%22desc%22%3E%E4%BA%94%E4%B8%AA%E9%87%87%E6%A0%B7%E7%82%B9%E4%BB%8E%E8%BF%91%E5%88%B0%E8%BF%9C%E6%8E%92%E5%88%97%EF%BC%8C%E6%AF%8F%E4%B8%AA%E7%82%B9%E7%9A%84%20alpha%20%E5%92%8C%E5%89%8D%E5%90%91%E9%80%8F%E5%B0%84%E7%8E%87%E5%86%B3%E5%AE%9A%E6%9D%83%E9%87%8D%EF%BC%8C%E6%9C%80%E7%BB%88%E4%B8%8E%E8%83%8C%E6%99%AF%E9%A2%9C%E8%89%B2%E5%90%88%E6%88%90%E3%80%82%3C%2Fdesc%3E%0A%3Cdefs%3E%3Cmarker%20id%3D%22arrow%22%20markerWidth%3D%2210%22%20markerHeight%3D%2210%22%20refX%3D%228%22%20refY%3D%225%22%20orient%3D%22auto%22%3E%3Cpath%20d%3D%22M0%200%20L10%205%20L0%2010%20Z%22%20fill%3D%22%234f817d%22%2F%3E%3C%2Fmarker%3E%3C%2Fdefs%3E%0A%3Crect%20x%3D%221%22%20y%3D%221%22%20width%3D%221198%22%20height%3D%22458%22%20rx%3D%2222%22%20fill%3D%22%23f8fbf9%22%20stroke%3D%22%23d9e7e1%22%20stroke-width%3D%222%22%2F%3E%0A%3Ctext%20x%3D%2240%22%20y%3D%2248%22%20font-size%3D%2222%22%20font-weight%3D%22750%22%20fill%3D%22%2329434b%22%20font-family%3D%22system-ui%2C'PingFang%20SC'%2Csans-serif%22%3E%E4%BB%8E%E8%BF%91%E5%88%B0%E8%BF%9C%EF%BC%9A%E6%AF%8F%E4%B8%AA%E6%A0%B7%E6%9C%AC%E9%83%BD%E4%BC%9A%E6%B6%88%E8%80%97%E4%B8%80%E9%83%A8%E5%88%86%E5%89%A9%E4%BD%99%E9%80%8F%E5%B0%84%E7%8E%87%3C%2Ftext%3E%0A%3Ctext%20x%3D%2276%22%20y%3D%22111%22%20font-size%3D%2216%22%20fill%3D%22%23647d80%22%20font-family%3D%22system-ui%22%3ECamera%3C%2Ftext%3E%0A%3Cpath%20d%3D%22M82%20173%20L1070%20173%22%20stroke%3D%22%234f817d%22%20stroke-width%3D%224%22%20marker-end%3D%22url(%23arrow)%22%2F%3E%0A%3Cg%3E%0A%3Ccircle%20cx%3D%22210%22%20cy%3D%22173%22%20r%3D%2220%22%20fill%3D%22%23d68b56%22%20stroke%3D%22%239b6138%22%20stroke-width%3D%222%22%2F%3E%3Ccircle%20cx%3D%22400%22%20cy%3D%22173%22%20r%3D%2220%22%20fill%3D%22%23d5a15e%22%20stroke%3D%22%239b7744%22%20stroke-width%3D%222%22%2F%3E%3Ccircle%20cx%3D%22590%22%20cy%3D%22173%22%20r%3D%2220%22%20fill%3D%22%236c9f9a%22%20stroke%3D%22%233c746e%22%20stroke-width%3D%222%22%2F%3E%3Ccircle%20cx%3D%22780%22%20cy%3D%22173%22%20r%3D%2220%22%20fill%3D%22%234d88a5%22%20stroke%3D%22%2335657f%22%20stroke-width%3D%222%22%2F%3E%3Ccircle%20cx%3D%22970%22%20cy%3D%22173%22%20r%3D%2220%22%20fill%3D%22%238d7eb3%22%20stroke%3D%22%2363558e%22%20stroke-width%3D%222%22%2F%3E%0A%3C%2Fg%3E%0A%3Cg%20font-family%3D%22system-ui%22%20font-size%3D%2215%22%20text-anchor%3D%22middle%22%20fill%3D%22%23315b5b%22%3E%0A%3Ctext%20x%3D%22210%22%20y%3D%22128%22%3Esample%201%3C%2Ftext%3E%3Ctext%20x%3D%22400%22%20y%3D%22128%22%3Esample%202%3C%2Ftext%3E%3Ctext%20x%3D%22590%22%20y%3D%22128%22%3Esample%203%3C%2Ftext%3E%3Ctext%20x%3D%22780%22%20y%3D%22128%22%3Esample%204%3C%2Ftext%3E%3Ctext%20x%3D%22970%22%20y%3D%22128%22%3Esample%205%3C%2Ftext%3E%0A%3C%2Fg%3E%0A%3Cg%20font-family%3D%22system-ui%22%20font-size%3D%2214%22%20text-anchor%3D%22middle%22%3E%0A%3Ctext%20x%3D%22210%22%20y%3D%22221%22%20fill%3D%22%23a76535%22%3E%CE%B1%E2%82%81%3C%2Ftext%3E%3Ctext%20x%3D%22400%22%20y%3D%22221%22%20fill%3D%22%23a76535%22%3E%CE%B1%E2%82%82%3C%2Ftext%3E%3Ctext%20x%3D%22590%22%20y%3D%22221%22%20fill%3D%22%23276a63%22%3E%CE%B1%E2%82%83%3C%2Ftext%3E%3Ctext%20x%3D%22780%22%20y%3D%22221%22%20fill%3D%22%233e6d8b%22%3E%CE%B1%E2%82%84%3C%2Ftext%3E%3Ctext%20x%3D%22970%22%20y%3D%22221%22%20fill%3D%22%237566a7%22%3E%CE%B1%E2%82%85%3C%2Ftext%3E%0A%3C%2Fg%3E%0A%3Crect%20x%3D%2274%22%20y%3D%22257%22%20width%3D%221050%22%20height%3D%2270%22%20rx%3D%2213%22%20fill%3D%22%23fffefa%22%20stroke%3D%22%23d9e7e1%22%2F%3E%0A%3Ctext%20x%3D%2298%22%20y%3D%22285%22%20font-size%3D%2216%22%20font-weight%3D%22700%22%20fill%3D%22%23315b5b%22%20font-family%3D%22system-ui%22%3E%E5%89%8D%E5%90%91%E9%80%8F%E5%B0%84%E7%8E%87%20T%E1%B5%A2%3C%2Ftext%3E%0A%3Cg%20font-family%3D%22system-ui%22%20font-size%3D%2215%22%20text-anchor%3D%22middle%22%20fill%3D%22%23315b5b%22%3E%0A%3Crect%20x%3D%22205%22%20y%3D%22270%22%20width%3D%22130%22%20height%3D%2237%22%20rx%3D%227%22%20fill%3D%22%23d9eee6%22%2F%3E%3Ctext%20x%3D%22270%22%20y%3D%22294%22%3E1.00%3C%2Ftext%3E%0A%3Crect%20x%3D%22395%22%20y%3D%22270%22%20width%3D%22130%22%20height%3D%2237%22%20rx%3D%227%22%20fill%3D%22%23cce5db%22%2F%3E%3Ctext%20x%3D%22460%22%20y%3D%22294%22%3E0.96%3C%2Ftext%3E%0A%3Crect%20x%3D%22585%22%20y%3D%22270%22%20width%3D%22130%22%20height%3D%2237%22%20rx%3D%227%22%20fill%3D%22%23b4d8cc%22%2F%3E%3Ctext%20x%3D%22650%22%20y%3D%22294%22%3E0.88%3C%2Ftext%3E%0A%3Crect%20x%3D%22775%22%20y%3D%22270%22%20width%3D%22130%22%20height%3D%2237%22%20rx%3D%227%22%20fill%3D%22%239ccabd%22%2F%3E%3Ctext%20x%3D%22840%22%20y%3D%22294%22%3E0.65%3C%2Ftext%3E%0A%3Crect%20x%3D%22965%22%20y%3D%22270%22%20width%3D%22130%22%20height%3D%2237%22%20rx%3D%227%22%20fill%3D%22%2386b9aa%22%2F%3E%3Ctext%20x%3D%221030%22%20y%3D%22294%22%3E0.58%3C%2Ftext%3E%0A%3C%2Fg%3E%0A%3Ctext%20x%3D%2276%22%20y%3D%22368%22%20font-size%3D%2215%22%20fill%3D%22%23647d80%22%20font-family%3D%22system-ui%22%3E%E6%AF%8F%E4%B8%AA%E6%A0%B7%E6%9C%AC%E7%9A%84%E9%A2%9C%E8%89%B2%E8%B4%A1%E7%8C%AE%20%3D%20%E5%BD%93%E5%89%8D%E9%80%8F%E5%B0%84%E7%8E%87%20%C3%97%20%E5%BD%93%E5%89%8D%20alpha%3C%2Ftext%3E%0A%3Crect%20x%3D%2276%22%20y%3D%22387%22%20width%3D%221050%22%20height%3D%2248%22%20rx%3D%2211%22%20fill%3D%22%23eaf0f7%22%20stroke%3D%22%23bfd0df%22%2F%3E%0A%3Ctext%20x%3D%22601%22%20y%3D%22418%22%20text-anchor%3D%22middle%22%20font-size%3D%2217%22%20font-weight%3D%22700%22%20fill%3D%22%233e6d8b%22%20font-family%3D%22system-ui%22%3E%E6%9C%80%E7%BB%88%E5%83%8F%E7%B4%A0%20%3D%20%CE%A3%EF%BC%88%E6%A0%B7%E6%9C%AC%E6%9D%83%E9%87%8D%20%C3%97%20%E6%A0%B7%E6%9C%AC%E9%A2%9C%E8%89%B2%EF%BC%89%20%2B%20%E5%89%A9%E4%BD%99%E9%80%8F%E5%B0%84%E7%8E%87%20%C3%97%20%E8%83%8C%E6%99%AF%E9%A2%9C%E8%89%B2%3C%2Ftext%3E%0A%3C%2Fsvg%3E" alt="五个射线样本从前到后进行 alpha 合成，前方样本消耗透射率，样本权重与颜色共同决定最终像素"><figcaption>体渲染可以理解为一层层半透明颜色的前向合成，但每层 alpha 由密度与采样间距共同决定。</figcaption></figure>
+
+<div class="experiment" id="render-demo">
+<h3>交互实验：密度变大，后面的颜色还看得见吗？</h3>
+<p class="mini">固定五个采样点的颜色和间距，只改变所有样本的密度倍率。观察每个点的贡献权重，以及最终像素 RGB 如何变化。这个数值实验是帮助理解体渲染的教学算例，不是论文数据。</p>
+<div class="controls">
+<label for="density-scale">整体密度倍率：<output id="density-value" aria-live="polite">1.00×</output></label>
+<input id="density-scale" type="range" min="0.25" max="3" step="0.25" value="1">
+<button id="boost-density" type="button">提高一次密度</button>
+</div>
+<div class="demo-grid">
+<div class="demo-panel"><h4>合成后的像素颜色</h4><div class="swatch" id="rendered-swatch" aria-label="合成像素颜色"></div><p class="rgb-readout" id="rendered-rgb">RGB (191, 209, 218) · #BFD1DA</p></div>
+<div class="demo-panel"><h4>每个采样点的颜色贡献权重</h4>
+<div class="weight-row"><span>样本 1</span><span class="weight-track"><span class="weight-fill" id="weight-1" style="width:3.7%"></span></span><span id="value-1">0.037</span></div>
+<div class="weight-row"><span>样本 2</span><span class="weight-track"><span class="weight-fill" id="weight-2" style="width:8.1%"></span></span><span id="value-2">0.081</span></div>
+<div class="weight-row"><span>样本 3</span><span class="weight-track"><span class="weight-fill" id="weight-3" style="width:22.9%"></span></span><span id="value-3">0.229</span></div>
+<div class="weight-row"><span>样本 4</span><span class="weight-track"><span class="weight-fill" id="weight-4" style="width:7.7%"></span></span><span id="value-4">0.077</span></div>
+<div class="weight-row"><span>样本 5</span><span class="weight-track"><span class="weight-fill" id="weight-5" style="width:1.7%"></span></span><span id="value-5">0.017</span></div>
+<p class="rgb-readout" id="residual-value">背景剩余透射率：0.560</p>
+</div>
+</div>
+<p class="readout" id="render-explanation" aria-live="polite">当前倍率为 1.00×。样本 3 的贡献最大；其前方样本已经消耗了一部分透射率，最后仍有约 56% 的光到达背景。</p>
+</div>
+</section>
+
+<section id="hierarchy">
+<h2>07 · Hierarchical Sampling：把计算预算花在重要位置</h2>
+<p>如果每条射线都均匀采样很多点，会反复查询大量空空间；如果采样太少，又可能跳过物体表面和细节。原始 NeRF 用 coarse-to-fine 两级采样缓解这个问题。</p>
+<ol>
+<li><strong>Coarse：</strong>先在近远区间内分层均匀取样，得到粗略的颜色、密度与权重。</li>
+<li><strong>构造分布：</strong>把粗网络的权重归一化，形成沿射线的分段概率密度函数（PDF）。</li>
+<li><strong>Fine：</strong>从这个分布中抽取额外位置，与初始样本合并后交给 fine 网络，重新进行体渲染。</li>
+</ol>
+<figure><div class="figure-title">FIGURE 06 · COARSE-TO-FINE RAY SAMPLING</div><img src="data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%201200%20420%22%20role%3D%22img%22%20aria-labelledby%3D%22title%20desc%22%3E%0A%3Ctitle%20id%3D%22title%22%3ENeRF%20%E7%B2%97%E5%88%B0%E7%BB%86%E5%88%86%E5%B1%82%E9%87%87%E6%A0%B7%3C%2Ftitle%3E%0A%3Cdesc%20id%3D%22desc%22%3ECoarse%20%E9%98%B6%E6%AE%B5%E5%9C%A8%E5%B0%84%E7%BA%BF%E4%B8%8A%E5%9D%87%E5%8C%80%E9%87%87%E6%A0%B7%EF%BC%8C%E5%BE%97%E5%88%B0%E6%9D%83%E9%87%8D%E5%88%86%E5%B8%83%EF%BC%8CFine%20%E9%98%B6%E6%AE%B5%E6%8A%8A%E9%A2%9D%E5%A4%96%E9%87%87%E6%A0%B7%E9%9B%86%E4%B8%AD%E5%88%B0%E9%AB%98%E6%9D%83%E9%87%8D%E7%9A%84%E5%8F%AF%E8%A7%81%E8%A1%A8%E9%9D%A2%E9%99%84%E8%BF%91%E3%80%82%3C%2Fdesc%3E%0A%3Crect%20x%3D%221%22%20y%3D%221%22%20width%3D%221198%22%20height%3D%22418%22%20rx%3D%2222%22%20fill%3D%22%23f8fbf9%22%20stroke%3D%22%23d9e7e1%22%20stroke-width%3D%222%22%2F%3E%0A%3Ctext%20x%3D%2240%22%20y%3D%2248%22%20font-size%3D%2222%22%20font-weight%3D%22750%22%20fill%3D%22%2329434b%22%20font-family%3D%22system-ui%2C'PingFang%20SC'%2Csans-serif%22%3E%E5%85%88%E7%B2%97%E7%95%A5%E6%8E%A2%E8%B7%AF%EF%BC%8C%E5%86%8D%E6%8A%8A%E6%9F%A5%E8%AF%A2%E6%94%BE%E5%88%B0%E5%8F%AF%E8%83%BD%E5%BD%B1%E5%93%8D%E5%83%8F%E7%B4%A0%E7%9A%84%E4%BD%8D%E7%BD%AE%3C%2Ftext%3E%0A%3Ctext%20x%3D%2265%22%20y%3D%22106%22%20font-size%3D%2218%22%20font-weight%3D%22750%22%20fill%3D%22%23315b5b%22%20font-family%3D%22system-ui%22%3E%E2%91%A0%20Coarse%EF%BC%9A%E5%9D%87%E5%8C%80%E9%87%87%E6%A0%B7%3C%2Ftext%3E%0A%3Cline%20x1%3D%2285%22%20y1%3D%22165%22%20x2%3D%221115%22%20y2%3D%22165%22%20stroke%3D%22%23789c93%22%20stroke-width%3D%224%22%2F%3E%0A%3Cg%20fill%3D%22%23dba05f%22%20stroke%3D%22%239b6b3d%22%20stroke-width%3D%222%22%3E%3Ccircle%20cx%3D%22120%22%20cy%3D%22165%22%20r%3D%2210%22%2F%3E%3Ccircle%20cx%3D%22250%22%20cy%3D%22165%22%20r%3D%2210%22%2F%3E%3Ccircle%20cx%3D%22380%22%20cy%3D%22165%22%20r%3D%2210%22%2F%3E%3Ccircle%20cx%3D%22510%22%20cy%3D%22165%22%20r%3D%2210%22%2F%3E%3Ccircle%20cx%3D%22640%22%20cy%3D%22165%22%20r%3D%2210%22%2F%3E%3Ccircle%20cx%3D%22770%22%20cy%3D%22165%22%20r%3D%2210%22%2F%3E%3Ccircle%20cx%3D%22900%22%20cy%3D%22165%22%20r%3D%2210%22%2F%3E%3Ccircle%20cx%3D%221030%22%20cy%3D%22165%22%20r%3D%2210%22%2F%3E%3C%2Fg%3E%0A%3Ctext%20x%3D%2265%22%20y%3D%22225%22%20font-size%3D%2218%22%20font-weight%3D%22750%22%20fill%3D%22%23315b5b%22%20font-family%3D%22system-ui%22%3E%E2%91%A1%20%E4%BC%B0%E8%AE%A1%E6%9D%83%E9%87%8D%EF%BC%9A%E5%93%AA%E9%87%8C%E6%9B%B4%E5%8F%AF%E8%83%BD%E8%B4%A1%E7%8C%AE%E6%9C%80%E7%BB%88%E9%A2%9C%E8%89%B2%EF%BC%9F%3C%2Ftext%3E%0A%3Cline%20x1%3D%2285%22%20y1%3D%22338%22%20x2%3D%221115%22%20y2%3D%22338%22%20stroke%3D%22%23a9c2b9%22%20stroke-width%3D%222%22%2F%3E%0A%3Cg%20fill%3D%22%237caea0%22%3E%0A%3Crect%20x%3D%22100%22%20y%3D%22325%22%20width%3D%2238%22%20height%3D%2213%22%20rx%3D%224%22%2F%3E%3Crect%20x%3D%22230%22%20y%3D%22318%22%20width%3D%2238%22%20height%3D%2220%22%20rx%3D%224%22%2F%3E%3Crect%20x%3D%22360%22%20y%3D%22293%22%20width%3D%2238%22%20height%3D%2245%22%20rx%3D%224%22%2F%3E%3Crect%20x%3D%22490%22%20y%3D%22258%22%20width%3D%2238%22%20height%3D%2280%22%20rx%3D%224%22%2F%3E%3Crect%20x%3D%22620%22%20y%3D%22236%22%20width%3D%2238%22%20height%3D%22102%22%20rx%3D%224%22%2F%3E%3Crect%20x%3D%22750%22%20y%3D%22283%22%20width%3D%2238%22%20height%3D%2255%22%20rx%3D%224%22%2F%3E%3Crect%20x%3D%22880%22%20y%3D%22315%22%20width%3D%2238%22%20height%3D%2223%22%20rx%3D%224%22%2F%3E%3Crect%20x%3D%221010%22%20y%3D%22326%22%20width%3D%2238%22%20height%3D%2212%22%20rx%3D%224%22%2F%3E%0A%3C%2Fg%3E%0A%3Cpath%20d%3D%22M640%20227%20L640%20205%22%20stroke%3D%22%23c47a42%22%20stroke-width%3D%223%22%2F%3E%0A%3Ctext%20x%3D%22640%22%20y%3D%22194%22%20text-anchor%3D%22middle%22%20font-size%3D%2214%22%20fill%3D%22%23a76535%22%20font-family%3D%22system-ui%22%3E%E9%AB%98%E6%9D%83%E9%87%8D%E5%8C%BA%E5%9F%9F%3C%2Ftext%3E%0A%3Ctext%20x%3D%2265%22%20y%3D%22386%22%20font-size%3D%2218%22%20font-weight%3D%22750%22%20fill%3D%22%23315b5b%22%20font-family%3D%22system-ui%22%3E%E2%91%A2%20Fine%EF%BC%9A%E6%8C%89%E6%9D%83%E9%87%8D%E5%88%86%E5%B8%83%E5%A2%9E%E5%8A%A0%E9%87%87%E6%A0%B7%3C%2Ftext%3E%0A%3Cg%20fill%3D%22%233e7594%22%20stroke%3D%22%23285d7b%22%20stroke-width%3D%222%22%3E%3Ccircle%20cx%3D%22120%22%20cy%3D%22165%22%20r%3D%220%22%2F%3E%3Ccircle%20cx%3D%22445%22%20cy%3D%22165%22%20r%3D%228%22%2F%3E%3Ccircle%20cx%3D%22525%22%20cy%3D%22165%22%20r%3D%228%22%2F%3E%3Ccircle%20cx%3D%22580%22%20cy%3D%22165%22%20r%3D%228%22%2F%3E%3Ccircle%20cx%3D%22625%22%20cy%3D%22165%22%20r%3D%228%22%2F%3E%3Ccircle%20cx%3D%22675%22%20cy%3D%22165%22%20r%3D%228%22%2F%3E%3Ccircle%20cx%3D%22730%22%20cy%3D%22165%22%20r%3D%228%22%2F%3E%3Ccircle%20cx%3D%22820%22%20cy%3D%22165%22%20r%3D%228%22%2F%3E%3C%2Fg%3E%0A%3Crect%20x%3D%22836%22%20y%3D%2272%22%20width%3D%22280%22%20height%3D%2248%22%20rx%3D%2210%22%20fill%3D%22%23e4edf5%22%20stroke%3D%22%23bfd0df%22%2F%3E%0A%3Ctext%20x%3D%22976%22%20y%3D%22102%22%20text-anchor%3D%22middle%22%20font-size%3D%2215%22%20fill%3D%22%233e6d8b%22%20font-family%3D%22system-ui%22%3E%E9%A2%9D%E5%A4%96%E6%A0%B7%E6%9C%AC%E9%9B%86%E4%B8%AD%E5%9C%A8%E9%AB%98%E6%9D%83%E9%87%8D%E9%99%84%E8%BF%91%3C%2Ftext%3E%0A%3Cpath%20d%3D%22M836%2096%20L785%20139%22%20stroke%3D%22%233e7594%22%20stroke-width%3D%222%22%20fill%3D%22none%22%2F%3E%0A%3C%2Fsvg%3E" alt="粗网络先均匀采样并估计射线权重，细网络再依据权重分布将更多采样点放到可见表面附近"><figcaption>粗网络并不是先生成一个低分辨率三维模型；它先估计“哪些深度位置更可能影响最终像素”，再把额外查询集中到这些区域。</figcaption></figure>
+<p>原论文实验中，coarse 网络使用 <strong>N<sub>c</sub>=64</strong> 个样本，fine 阶段再增加 <strong>N<sub>f</sub>=128</strong> 个样本。这个配置是论文中的实验设置，不是所有现代 NeRF 实现必须照搬的固定参数。</p>
+</section>
+
+<section id="training">
+<h2>08 · 训练闭环：让所有相机看到同一个场景</h2>
+<p>NeRF 的训练目标很直观：从训练图像中抽取一批像素射线，使用当前网络渲染这些射线，再把渲染颜色与真实像素颜色比较。因为体渲染公式可微，误差可以沿着颜色权重、密度和 MLP 参数反向传播。</p>
+<div class="eq" role="group" aria-label="原始 NeRF 的 coarse fine 双分支训练损失"><span class="eq-num">(7)</span><div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="训练损失公式，可横向滚动"><math display="block" aria-label="损失对每条射线累加 coarse 渲染和 fine 渲染相对真实颜色的平方误差"><mrow><mi>ℒ</mi><mo>=</mo><munder><mo>∑</mo><mrow><mi mathvariant="script">r</mi><mo>∈</mo><mi mathvariant="script">R</mi></mrow></munder><mo>[</mo><msup><mrow><msub><mrow><mo>‖</mo><mrow><msub><mi>C</mi><mi>c</mi></msub><mo>^</mo><mo>(</mo><mi mathvariant="script">r</mi><mo>)</mo><mo>−</mo><mi>C</mi><mo>(</mo><mi mathvariant="script">r</mi><mo>)</mo></mrow><mo>‖</mo></mrow><mn>2</mn></msub></mrow><mn>2</mn></msup><mo>+</mo><msup><mrow><msub><mrow><mo>‖</mo><mrow><msub><mi>C</mi><mi>f</mi></msub><mo>^</mo><mo>(</mo><mi mathvariant="script">r</mi><mo>)</mo><mo>−</mo><mi>C</mi><mo>(</mo><mi mathvariant="script">r</mi><mo>)</mo></mrow><mo>‖</mo></mrow><mn>2</mn></msub></mrow><mn>2</mn></msup><mo>]</mo></mrow></math></div></div>
+<p>为什么 coarse 和 fine 都要算损失？因为 coarse 网络的权重分布负责引导 fine 阶段在哪里增加样本；同时约束 coarse 输出，也能让这个采样分布在训练中保持有用。</p>
+<div class="two">
+<div><h3>原论文的数据条件</h3><p>每个场景单独训练。需要 RGB 图像、相机内参/位姿和场景边界；合成数据使用已知参数，真实数据使用 COLMAP 估计相机参数。</p></div>
+<div><h3>原论文训练规模</h3><p>每批随机抽取 4096 条射线；单场景通常训练 100k–300k 次迭代，在单张 NVIDIA V100 上约 1–2 天。这个数字只描述 2020 年论文的原始配置。</p></div>
+</div>
+<div class="note"><strong>训练目标与泛化范围要分开：</strong>原始 NeRF 的经典设定是针对每个场景优化一套网络。它并不是拿一张照片就能立即对任意新场景泛化的通用识别器。后续方法才逐步探索跨场景先验、预训练和更快的表示。</div>
+</section>
+
+<section id="evidence">
+<h2>09 · 原论文实验：哪些结论有数据支持？</h2>
+<p>原论文 Table 1 在多个新视角合成基准上比较 PSNR、SSIM 和 LPIPS。PSNR/SSIM 越高越好，LPIPS 越低越好。下面只列出用于说明结论的关键行，数值来自论文 Table 1，而不是重新运行实验。</p>
+<div class="tablewrap"><table>
+<thead><tr><th>数据集</th><th>方法</th><th>PSNR ↑</th><th>SSIM ↑</th><th>LPIPS ↓</th></tr></thead>
+<tbody>
+<tr><td rowspan="3">Realistic Synthetic 360°</td><td><strong>NeRF</strong></td><td>31.01</td><td>0.947</td><td>0.081</td></tr>
+<tr><td>LLFF</td><td>24.88</td><td>0.911</td><td>0.114</td></tr>
+<tr><td>SRN</td><td>22.26</td><td>0.846</td><td>0.170</td></tr>
+<tr><td rowspan="2">Real Forward-Facing</td><td><strong>NeRF</strong></td><td>26.50</td><td>0.811</td><td>0.250</td></tr>
+<tr><td>LLFF</td><td>24.13</td><td>0.798</td><td><strong>0.212</strong></td></tr>
+</tbody>
+</table></div>
+<p class="mini">原论文 Table 1，Realistic Synthetic 360° 与 Real Forward-Facing 两组结果。Real Forward-Facing 上，NeRF 的 PSNR/SSIM 更高，但 LLFF 的 LPIPS 更低；不同指标衡量不同性质，不能只摘取其中一个指标宣布全面胜出。</p>
+<h3>消融实验告诉我们什么？</h3>
+<p>在 Realistic Synthetic 360° 的 Table 2 中，完整模型的 PSNR/SSIM/LPIPS 为 <strong>31.01 / 0.947 / 0.081</strong>；移除位置编码后变为 <strong>28.77 / 0.924 / 0.108</strong>。移除视角相关颜色和分层采样也会降低表现。它支持的结论是：位置编码、方向相关外观和重要性采样共同构成了原始方法的关键设计，而不是说其中任一组件在所有数据集上都能独立保证最好结果。</p>
+<p>实验规模也值得记住：论文的 Realistic Synthetic 360° 数据集包含 8 个复杂合成物体，每个场景 100 张训练图像、200 张测试图像，分辨率为 800×800；Real Forward-Facing 包含 8 个真实场景，每个场景 20–62 张图像，并留出 1/8 测试图像。</p>
+</section>
+
+<section id="limits">
+<h2>10 · NeRF 的边界：它不是万能的三维扫描仪</h2>
+<ul>
+<li><strong>相机参数很重要：</strong>相机位姿或内参不准，射线就会落在错误的位置，多视角监督无法正确对齐。原始方法依赖已知或预估的相机参数。</li>
+<li><strong>静态场景假设：</strong>如果物体在不同照片之间移动，模型可能把运动误解释成模糊几何或不一致的密度。动态场景需要额外的时间/运动表示。</li>
+<li><strong>观察覆盖不足：</strong>被遮挡或从未拍摄到的区域缺少约束；网络可以给出一个平滑的猜测，但不代表它恢复了真实几何。</li>
+<li><strong>查询昂贵：</strong>每条射线需要多次 MLP 查询，训练与渲染都可能很慢。分层采样减少了无效查询，但没有消除逐点网络评估的基本成本。</li>
+<li><strong>不是直接可编辑的网格：</strong>场景知识主要编码在网络参数中。若下游任务需要碰撞检测、CAD 编辑或明确拓扑，通常还要额外提取几何并处理表面质量。</li>
+</ul>
+<p>因此，NeRF 的强项是从多视角图像中学习连续外观和生成新视角；它并不自动解决相机标定、动态物体、完整几何恢复和实时渲染等所有问题。</p>
+</section>
+
+<section id="evolution">
+<h2>11 · 从 NeRF 到后续方法：同一个目标，不同的表示和计算路径</h2>
+<p>NeRF 之后的研究大致沿着三条路线推进：减少采样带来的混叠；降低神经场查询成本；或者干脆换一种更适合实时渲染的场景表示。</p>
+<figure><div class="figure-title">FIGURE 07 · FOUR MILESTONES, DIFFERENT BOTTLENECKS</div><img src="data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%201200%20420%22%20role%3D%22img%22%20aria-labelledby%3D%22title%20desc%22%3E%0A%3Ctitle%20id%3D%22title%22%3ENeRF%20%E5%88%B0%20Mip-NeRF%E3%80%81Instant-NGP%20%E5%92%8C%203D%20Gaussian%20Splatting%20%E7%9A%84%E6%96%B9%E6%B3%95%E6%BC%94%E8%BF%9B%3C%2Ftitle%3E%0A%3Cdesc%20id%3D%22desc%22%3E%E5%9B%9B%E4%B8%AA%E6%97%B6%E9%97%B4%E8%8A%82%E7%82%B9%E5%B1%95%E7%A4%BA%E8%BF%9E%E7%BB%AD%20MLP%20%E5%9C%BA%E6%99%AF%E5%87%BD%E6%95%B0%E3%80%81%E6%8A%97%E9%94%AF%E9%BD%BF%E5%9C%86%E9%94%A5%E5%8F%B0%E3%80%81%E5%93%88%E5%B8%8C%E7%BD%91%E6%A0%BC%E5%8A%A0%E9%80%9F%E5%92%8C%E6%98%BE%E5%BC%8F%E4%B8%89%E7%BB%B4%E9%AB%98%E6%96%AF%E5%85%89%E6%A0%85%E5%8C%96%E7%9A%84%E4%B8%8D%E5%90%8C%E6%8A%80%E6%9C%AF%E8%B7%AF%E7%BA%BF%E3%80%82%3C%2Fdesc%3E%0A%3Crect%20x%3D%221%22%20y%3D%221%22%20width%3D%221198%22%20height%3D%22418%22%20rx%3D%2222%22%20fill%3D%22%23f8fbf9%22%20stroke%3D%22%23d9e7e1%22%20stroke-width%3D%222%22%2F%3E%0A%3Ctext%20x%3D%2240%22%20y%3D%2248%22%20font-size%3D%2222%22%20font-weight%3D%22750%22%20fill%3D%22%2329434b%22%20font-family%3D%22system-ui%2C'PingFang%20SC'%2Csans-serif%22%3E%E4%BB%BB%E5%8A%A1%E7%9B%B8%E8%BF%91%EF%BC%8C%E8%A1%A8%E7%A4%BA%E5%92%8C%E6%B8%B2%E6%9F%93%E8%B7%AF%E5%BE%84%E5%8D%B4%E5%9C%A8%E5%8F%98%E5%8C%96%3C%2Ftext%3E%0A%3Cline%20x1%3D%22112%22%20y1%3D%22164%22%20x2%3D%221085%22%20y2%3D%22164%22%20stroke%3D%22%238eb2a7%22%20stroke-width%3D%224%22%2F%3E%0A%3Cg%3E%0A%3Ccircle%20cx%3D%22150%22%20cy%3D%22164%22%20r%3D%2218%22%20fill%3D%22%233e8c83%22%20stroke%3D%22%23fff%22%20stroke-width%3D%224%22%2F%3E%0A%3Ccircle%20cx%3D%22455%22%20cy%3D%22164%22%20r%3D%2218%22%20fill%3D%22%23c47a42%22%20stroke%3D%22%23fff%22%20stroke-width%3D%224%22%2F%3E%0A%3Ccircle%20cx%3D%22755%22%20cy%3D%22164%22%20r%3D%2218%22%20fill%3D%22%233e7594%22%20stroke%3D%22%23fff%22%20stroke-width%3D%224%22%2F%3E%0A%3Ccircle%20cx%3D%221050%22%20cy%3D%22164%22%20r%3D%2218%22%20fill%3D%22%237566a7%22%20stroke%3D%22%23fff%22%20stroke-width%3D%224%22%2F%3E%0A%3C%2Fg%3E%0A%3Cg%20font-family%3D%22system-ui%2C'PingFang%20SC'%2Csans-serif%22%3E%0A%3Crect%20x%3D%2242%22%20y%3D%2278%22%20width%3D%22216%22%20height%3D%2262%22%20rx%3D%2212%22%20fill%3D%22%23e3f0ea%22%20stroke%3D%22%23b6d3c7%22%2F%3E%3Ctext%20x%3D%22150%22%20y%3D%22105%22%20text-anchor%3D%22middle%22%20font-size%3D%2218%22%20font-weight%3D%22750%22%20fill%3D%22%23276a63%22%3ENeRF%20%C2%B7%202020%3C%2Ftext%3E%3Ctext%20x%3D%22150%22%20y%3D%22127%22%20text-anchor%3D%22middle%22%20font-size%3D%2214%22%20fill%3D%22%23526f70%22%3E%E8%BF%9E%E7%BB%AD%205D%20MLP%20%2B%20%E4%BD%93%E6%B8%B2%E6%9F%93%3C%2Ftext%3E%0A%3Crect%20x%3D%22347%22%20y%3D%2278%22%20width%3D%22216%22%20height%3D%2262%22%20rx%3D%2212%22%20fill%3D%22%23f8eadc%22%20stroke%3D%22%23dfb78f%22%2F%3E%3Ctext%20x%3D%22455%22%20y%3D%22105%22%20text-anchor%3D%22middle%22%20font-size%3D%2218%22%20font-weight%3D%22750%22%20fill%3D%22%23935d35%22%3EMip-NeRF%20%C2%B7%202021%3C%2Ftext%3E%3Ctext%20x%3D%22455%22%20y%3D%22127%22%20text-anchor%3D%22middle%22%20font-size%3D%2214%22%20fill%3D%22%23805c3f%22%3E%E5%9C%86%E9%94%A5%E5%8F%B0%20%2B%20%E7%A7%AF%E5%88%86%E4%BD%8D%E7%BD%AE%E7%BC%96%E7%A0%81%3C%2Ftext%3E%0A%3Crect%20x%3D%22647%22%20y%3D%2278%22%20width%3D%22216%22%20height%3D%2262%22%20rx%3D%2212%22%20fill%3D%22%23e3edf5%22%20stroke%3D%22%23b6cad9%22%2F%3E%3Ctext%20x%3D%22755%22%20y%3D%22105%22%20text-anchor%3D%22middle%22%20font-size%3D%2218%22%20font-weight%3D%22750%22%20fill%3D%22%233e6d8b%22%3EInstant-NGP%20%C2%B7%202022%3C%2Ftext%3E%3Ctext%20x%3D%22755%22%20y%3D%22127%22%20text-anchor%3D%22middle%22%20font-size%3D%2214%22%20fill%3D%22%23456c84%22%3E%E5%A4%9A%E5%88%86%E8%BE%A8%E7%8E%87%E5%93%88%E5%B8%8C%E7%89%B9%E5%BE%81%20%2B%20%E5%B0%8F%20MLP%3C%2Ftext%3E%0A%3Crect%20x%3D%22942%22%20y%3D%2278%22%20width%3D%22216%22%20height%3D%2262%22%20rx%3D%2212%22%20fill%3D%22%23ece8f5%22%20stroke%3D%22%23c8bedf%22%2F%3E%3Ctext%20x%3D%221050%22%20y%3D%22105%22%20text-anchor%3D%22middle%22%20font-size%3D%2218%22%20font-weight%3D%22750%22%20fill%3D%22%2365588f%22%3E3DGS%20%C2%B7%202023%3C%2Ftext%3E%3Ctext%20x%3D%221050%22%20y%3D%22127%22%20text-anchor%3D%22middle%22%20font-size%3D%2214%22%20fill%3D%22%23665c85%22%3E%E6%98%BE%E5%BC%8F%E9%AB%98%E6%96%AF%20%2B%20splatting%3C%2Ftext%3E%0A%3Ctext%20x%3D%22150%22%20y%3D%22218%22%20text-anchor%3D%22middle%22%20font-size%3D%2215%22%20font-weight%3D%22700%22%20fill%3D%22%23315b5b%22%3E%E5%BB%BA%E7%AB%8B%E8%BF%9E%E7%BB%AD%E5%9C%BA%3C%2Ftext%3E%3Ctext%20x%3D%22150%22%20y%3D%22247%22%20text-anchor%3D%22middle%22%20font-size%3D%2214%22%20fill%3D%22%23647d80%22%3E%E8%A1%A8%E8%BE%BE%E5%87%A0%E4%BD%95%E4%B8%8E%E8%A7%86%E8%A7%92%E7%9B%B8%E5%85%B3%E5%A4%96%E8%A7%82%3C%2Ftext%3E%0A%3Ctext%20x%3D%22455%22%20y%3D%22218%22%20text-anchor%3D%22middle%22%20font-size%3D%2215%22%20font-weight%3D%22700%22%20fill%3D%22%23315b5b%22%3E%E5%87%8F%E5%B0%91%E6%B7%B7%E5%8F%A0%3C%2Ftext%3E%3Ctext%20x%3D%22455%22%20y%3D%22247%22%20text-anchor%3D%22middle%22%20font-size%3D%2214%22%20fill%3D%22%23647d80%22%3E%E8%80%83%E8%99%91%E5%83%8F%E7%B4%A0%E5%9C%A8%E7%A9%BA%E9%97%B4%E4%B8%AD%E7%9A%84%E8%B6%B3%E8%BF%B9%3C%2Ftext%3E%0A%3Ctext%20x%3D%22755%22%20y%3D%22218%22%20text-anchor%3D%22middle%22%20font-size%3D%2215%22%20font-weight%3D%22700%22%20fill%3D%22%23315b5b%22%3E%E9%99%8D%E4%BD%8E%E6%9F%A5%E8%AF%A2%E6%88%90%E6%9C%AC%3C%2Ftext%3E%3Ctext%20x%3D%22755%22%20y%3D%22247%22%20text-anchor%3D%22middle%22%20font-size%3D%2214%22%20fill%3D%22%23647d80%22%3E%E6%94%B9%E8%BF%9B%E7%BC%96%E7%A0%81%E5%92%8C%20GPU%20%E6%89%A7%E8%A1%8C%3C%2Ftext%3E%0A%3Ctext%20x%3D%221050%22%20y%3D%22218%22%20text-anchor%3D%22middle%22%20font-size%3D%2215%22%20font-weight%3D%22700%22%20fill%3D%22%23315b5b%22%3E%E8%BD%AC%E5%90%91%E6%98%BE%E5%BC%8F%E5%9F%BA%E5%85%83%3C%2Ftext%3E%3Ctext%20x%3D%221050%22%20y%3D%22247%22%20text-anchor%3D%22middle%22%20font-size%3D%2214%22%20fill%3D%22%23647d80%22%3E%E5%BF%AB%E9%80%9F%E5%8F%AF%E8%A7%81%E6%80%A7%E4%B8%8E%E5%85%89%E6%A0%85%E5%8C%96%3C%2Ftext%3E%0A%3C%2Fg%3E%0A%3Crect%20x%3D%2270%22%20y%3D%22300%22%20width%3D%221060%22%20height%3D%2270%22%20rx%3D%2213%22%20fill%3D%22%23fffefa%22%20stroke%3D%22%23d9e7e1%22%2F%3E%0A%3Ctext%20x%3D%22600%22%20y%3D%22330%22%20text-anchor%3D%22middle%22%20font-size%3D%2217%22%20font-weight%3D%22750%22%20fill%3D%22%23315b5b%22%20font-family%3D%22system-ui%22%3ENeRF%20%E6%98%AF%E8%BF%9E%E7%BB%AD%E7%A5%9E%E7%BB%8F%E5%9C%BA%EF%BC%9B3D%20Gaussian%20Splatting%20%E6%98%AF%E5%8F%A6%E4%B8%80%E7%A7%8D%E6%98%BE%E5%BC%8F%E5%9C%BA%E6%99%AF%E8%A1%A8%E7%A4%BA%3C%2Ftext%3E%0A%3Ctext%20x%3D%22600%22%20y%3D%22354%22%20text-anchor%3D%22middle%22%20font-size%3D%2214%22%20fill%3D%22%23647d80%22%20font-family%3D%22system-ui%22%3E%E4%B8%8D%E8%A6%81%E6%8A%8A%E5%90%8C%E4%B8%80%E4%BB%BB%E5%8A%A1%E7%9B%AE%E6%A0%87%E8%AF%AF%E5%86%99%E6%88%90%E5%90%8C%E4%B8%80%E4%B8%AA%E7%BD%91%E7%BB%9C%E6%9E%B6%E6%9E%84%E7%9A%84%E8%BF%9E%E7%BB%AD%E7%89%88%E6%9C%AC%3C%2Ftext%3E%0A%3C%2Fsvg%3E" alt="NeRF、Mip-NeRF、Instant-NGP 和 3D Gaussian Splatting 的时间线与各自解决的表示或渲染瓶颈"><figcaption>不要把这些方法看成同一个网络不断换名字：它们保留了新视角合成这一任务目标，但表示、采样和渲染算法有明显差异。</figcaption></figure>
+<div class="tablewrap"><table>
+<thead><tr><th>方法</th><th>主要变化</th><th>主要解决的问题</th></tr></thead>
+<tbody>
+<tr><td><strong>NeRF · 2020</strong></td><td>连续 5D MLP 场景函数 + 体渲染</td><td>从稀疏多视角图像学习高质量新视角</td></tr>
+<tr><td><strong>Mip-NeRF · 2021</strong></td><td>圆锥台像素足迹 + Integrated Positional Encoding</td><td>多尺度观察下的 aliasing 与模糊</td></tr>
+<tr><td><strong>Instant-NGP · 2022</strong></td><td>多分辨率可训练哈希特征 + 小 MLP + 融合 CUDA kernel</td><td>降低神经图形基元的训练和查询成本</td></tr>
+<tr><td><strong>3D Gaussian Splatting · 2023</strong></td><td>显式各向异性 3D Gaussians + 可见性感知 splatting</td><td>高质量实时新视角渲染</td></tr>
+</tbody>
+</table></div>
+<p>其中 3D Gaussian Splatting（3DGS）尤其需要单独理解：它不是把 NeRF 的 MLP 换成另一种 MLP，而是直接用一组可优化的三维高斯椭球表示场景，并通过快速 splatting/rasterization 渲染。它与 NeRF 解决相近任务，但数据结构与渲染路径不同。</p>
+<p>截至 2026 年的综述也指出，3DGS 已成为新视角合成的重要主流框架；与此同时，NeRF 及其隐式/混合神经场变体仍在特定表示和应用场景中持续发展。因此，学习 NeRF 仍然重要：它提供了理解连续场景函数、可微体渲染和后续神经场方法的基础。</p>
+</section>
+
+<section id="code">
+<h2>12 · 用一段代码验证体渲染的核心不变量</h2>
+<p>下面的纯 Python 函数只实现一条射线的前向 alpha 合成。它不是完整 NeRF：没有相机模型、MLP、位置编码、训练循环或分层采样。它的价值是把论文中的一个关键公式变成可以运行和测试的数值过程。</p>
+<pre tabindex="0" role="region" aria-label="Python 体渲染代码，可横向滚动"><code>from math import expm1
+
+def render_ray(samples, background=(1.0, 1.0, 1.0)):
+    rgb = [0.0, 0.0, 0.0]
+    transmittance = 1.0
+    weights = []
+
+    for sigma, color, delta in samples:  # near -> far
+        alpha = -expm1(-sigma * delta)
+        weight = transmittance * alpha
+        weights.append(weight)
+
+        for channel in range(3):
+            rgb[channel] += weight * color[channel]
+
+        transmittance *= 1.0 - alpha
+
+    pixel = tuple(
+        rgb[c] + transmittance * background[c]
+        for c in range(3)
+    )
+    return pixel, weights, transmittance</code></pre>
+<p>仓库中的完整示例增加了输入范围检查和数值断言，位于 <code>posts/architectures/nerf/volume_rendering.py</code>；对应测试位于 <code>tests/test_nerf_volume_rendering.py</code>。测试覆盖零密度背景、前景遮挡、权重质量守恒和非法输入。</p>
+<div class="callout"><strong>应该验证的守恒关系：</strong>所有样本的颜色权重之和，加上最终剩余透射率，应等于 1。也就是说，每条射线的可见贡献要么来自某个采样区间，要么来自背景，不能凭空多出或丢失颜色质量。</div>
+</section>
+
+<section id="summary">
+<h2>13 · 把整篇论文压缩成四个心智模型</h2>
+<div class="two">
+<div><h3>① 场景是一张可查询的函数</h3><p>位置告诉网络“在哪里”，方向告诉网络“从哪边看”。网络返回密度与方向相关颜色。</p></div>
+<div><h3>② 像素是一条射线的积分</h3><p>一个像素不是一个三维点。它是沿相机射线采样后，通过透射率和密度加权合成的结果。</p></div>
+<div><h3>③ 位置编码补足高频表达</h3><p>多尺度正余弦特征帮助 MLP 表达细节；这和 Transformer 的 token 顺序编码不是同一个目的。</p></div>
+<div><h3>④ 分层采样节省查询预算</h3><p>粗网络先估计哪里重要，细网络再把额外采样放到高权重区域，而不是把计算平均浪费在空空间。</p></div>
+</div>
+<p class="lead">理解 NeRF，真正需要掌握的不是“神经网络把照片变成 3D”这句口号，而是<strong>连续表示 → 射线查询 → 可微体渲染 → 多视角误差反传</strong>这条完整因果链。</p>
+</section>
+
+<section id="references">
+<h2>14 · 参考文献与进一步阅读</h2>
+<ol class="sources">
+<li><strong>原始论文：</strong>Ben Mildenhall, Pratul P. Srinivasan, Matthew Tancik, Jonathan T. Barron, Ravi Ramamoorthi, Ren Ng. <a href="https://arxiv.org/abs/2003.08934" target="_blank" rel="noopener">NeRF: Representing Scenes as Neural Radiance Fields for View Synthesis</a>. ECCV 2020. 重点阅读 Sections 3–6、Equations 1–6、Tables 1–2。</li>
+<li><strong>抗锯齿扩展：</strong>Jonathan T. Barron et al. <a href="https://openaccess.thecvf.com/content/ICCV2021/html/Barron_Mip-NeRF_A_Multiscale_Representation_for_Anti-Aliasing_Neural_Radiance_Fields_ICCV_2021_paper.html" target="_blank" rel="noopener">Mip-NeRF: A Multiscale Representation for Anti-Aliasing Neural Radiance Fields</a>. ICCV 2021。</li>
+<li><strong>高效神经图形基元：</strong>Thomas Müller et al. <a href="https://research.nvidia.com/publication/2022-07_instant-neural-graphics-primitives-multiresolution-hash-encoding" target="_blank" rel="noopener">Instant Neural Graphics Primitives with a Multiresolution Hash Encoding</a>. SIGGRAPH 2022。</li>
+<li><strong>显式高斯表示：</strong>Bernhard Kerbl et al. <a href="https://doi.org/10.1145/3592433" target="_blank" rel="noopener">3D Gaussian Splatting for Real-Time Radiance Field Rendering</a>. ACM Transactions on Graphics, 2023。</li>
+<li><strong>工程解释与实现：</strong><a href="https://docs.nerf.studio/nerfology/methods/nerf.html" target="_blank" rel="noopener">Nerfstudio · NeRF</a>。适合继续理解采样器、场表示、体渲染组件和常见输入假设。</li>
+<li><strong>领域综述：</strong>Kyle Gao et al. <a href="https://doi.org/10.26599/CVM.2026.9450535" target="_blank" rel="noopener">Neural radiance fields in 3D vision: A comprehensive review</a>. Computational Visual Media, 2026。</li>
+</ol>
+</section>
+<footer class="foot">继续沿着模型架构与三维场景表示专题阅读，比较不同方法如何在表示能力、采样成本和实时渲染之间做取舍。</footer>
+</article></main>
+</div>
+<script>
+(function(){
+  var slider=document.getElementById("density-scale");
+  var boost=document.getElementById("boost-density");
+  if(!slider||!boost)return;
+  var sigma=[0.15,0.35,1.20,0.50,0.12];
+  var colors=[[0.90,0.30,0.20],[0.95,0.65,0.25],[0.20,0.65,0.85],[0.25,0.55,0.80],[0.80,0.30,0.60]];
+  var delta=0.25;
+  var background=[1,1,1];
+  function update(){
+    var scale=Number(slider.value);
+    var trans=1;
+    var rgb=[0,0,0];
+    var weights=[];
+    for(var i=0;i<sigma.length;i++){
+      var alpha=1-Math.exp(-sigma[i]*scale*delta);
+      var weight=trans*alpha;
+      weights.push(weight);
+      for(var c=0;c<3;c++)rgb[c]+=weight*colors[i][c];
+      trans*=1-alpha;
+    }
+    for(var c=0;c<3;c++)rgb[c]+=trans*background[c];
+    var bytes=rgb.map(function(v){return Math.max(0,Math.min(255,Math.round(v*255)));});
+    var hex="#"+bytes.map(function(v){return v.toString(16).padStart(2,"0");}).join("").toUpperCase();
+    document.getElementById("density-value").textContent=scale.toFixed(2)+"×";
+    document.getElementById("rendered-swatch").style.backgroundColor="rgb("+bytes.join(",")+")";
+    document.getElementById("rendered-rgb").textContent="RGB ("+bytes.join(", ")+") · "+hex;
+    for(var j=0;j<weights.length;j++){
+      document.getElementById("weight-"+(j+1)).style.width=(weights[j]*100).toFixed(1)+"%";
+      document.getElementById("value-"+(j+1)).textContent=weights[j].toFixed(3);
+    }
+    document.getElementById("residual-value").textContent="背景剩余透射率："+trans.toFixed(3);
+    var largest=weights.indexOf(Math.max.apply(null,weights))+1;
+    document.getElementById("render-explanation").textContent="当前倍率为 "+scale.toFixed(2)+"×。样本 "+largest+" 的颜色贡献最大；所有样本权重之和为 "+(1-trans).toFixed(3)+"，仍有 "+trans.toFixed(3)+" 的光到达背景。";
+  }
+  slider.addEventListener("input",update);
+  boost.addEventListener("click",function(){
+    slider.value=String(Math.min(3,Number(slider.value)+0.25));
+    update();
+  });
+  update();
+})();
+</script>
+</body>
+</html>
