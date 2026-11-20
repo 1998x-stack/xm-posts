@@ -1962,7 +1962,8 @@
       "Verification",
       "Agent Memory",
       "Sandbox",
-      "Orchestration"
+      "Orchestration",
+      "Agent Skills"
     ],
     "summary": "从模型能力与系统能力的区别出发，系统拆解 Agent Harness 的七大子系统与十一项运行时职责；对照 OpenAI Codex 的仓库知识、可观测性和熵治理，以及 Anthropic 的长任务交接、Context Reset 与 Planner–Generator–Evaluator；配六幅原创 SVG、可交互瓶颈实验、工程蓝图、失败归因矩阵和 15 项证据账本。",
     "paper": "https://arxiv.org/abs/2609.00006",
