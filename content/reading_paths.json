@@ -200,6 +200,7 @@
     "posts": [
       "ppo",
       "rlhf",
+      "rejection-sampling",
       "reward-hacking",
       "dpo",
       "grpo"
@@ -331,6 +332,16 @@
   },
   {
     "id": "path-36",
+    "title": "从概率采样到奖励筛选",
+    "posts": [
+      "importance-sampling",
+      "rejection-sampling",
+      "rlhf",
+      "dpo"
+    ]
+  },
+  {
+    "id": "path-37",
     "title": "从奖励代理到智能体评价器",
     "posts": [
       "rlhf",
