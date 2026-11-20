@@ -15,6 +15,8 @@ RoPE 位于 `posts/architectures/rope/`，主题为 **Positional Encoding**；�
 
 ## Convolutional Neural Networks & Vision
 
+- [Understanding CNN](cnn/index.html)：以 LeNet-5 为核心，图解局部感受野、共享核、跨通道卷积、空间尺寸和梯度，并追溯原版 C3/S/RBF 机制。
+
 - [Understanding AlexNet](alexnet/index.html)：从 ImageNet 2012 的训练范式出发，拆解卷积、ReLU、LRN、双 GPU、数据增强与 Dropout；严格区分单模型指标和七模型竞赛集成。
 - [Understanding ResNet](resnet/index.html)：从网络深度的优化退化与 shortcut 切入，承接 AlexNet 到残差学习的历史发展。
 - 该主题作为模型架构的二级轨道，不增设新的顶层分类；后续 VGG、Inception、EfficientNet 可依此归档。
