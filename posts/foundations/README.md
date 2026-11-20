@@ -17,3 +17,5 @@
 - [Understanding Adam](adam/index.html)：一阶/二阶矩、偏差修正、AdamW 与 AMSGrad；含交互演示与纯 Python 更新核。
 
 - [Understanding SGD](sgd/index.html)：从全量 GD 到 Mini-batch、无偏梯度、学习率衰减与计算统计权衡；包含 SVG 与测试。
+
+- [Understanding Embeddings](embeddings/index.html)：覆盖 lookup、Word2Vec/GloVe、BERT、SBERT、SimCSE/E5、cosine 与 ANN/RAG 召回；附七幅图示、MathML、交互实验、证据与 Python 断言。所属二级主题：`Representation Learning & Embeddings`。
