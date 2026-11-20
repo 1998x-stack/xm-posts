@@ -241,7 +241,7 @@ code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace}
 <h3>7.1 BFS：让同一深度的候选公平竞争</h3>
 <p>令 Sₜ₋₁ 为上一层保留的状态集合。每个状态生成候选后，得到新候选集合 S′ₜ；评估器为它们打分，再保留价值最高的 b 个：</p>
 <div class="math-equation" role="group" aria-label="ToT BFS 的候选筛选公式"><div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="BFS top b 公式，可横向滚动"><math display="block" aria-label="S t 等于从 S t 撇中选出价值最高的 b 个状态"><mrow><msub><mi>S</mi><mi>t</mi></msub><mo>=</mo><munder><mi>Top</mi><mi>b</mi></munder><mo>(</mo><msub><msup><mi>S</mi><mo>′</mo></msup><mi>t</mi></msub><mo>,</mo><mi>V</mi><mo>)</mo></mrow></math></div></div>
-<p>当 b=1 时，系统每层只保留一个最优状态，容易退化成贪心搜索；当 b 增大时，更多替代路径可以活下来，但生成和评估成本也随之增加。论文 Game of 24 和 Creative Writing 使用 BFS；Game of 24 的宽度 b=5。</p>
+<p>当 b=1 时，系统每层只保留一个最优状态，退化为单路径启发式搜索；但它仍可能先生成并比较多个下一步候选，因此不等同于 vanilla CoT。增大 b 会让更多替代路径活下来，但生成和评估成本也随之增加。论文 Game of 24 和 Creative Writing 使用 BFS；Game of 24 的宽度 b=5。</p>
 <h3>7.2 DFS：沿着最有希望的路线深入，失败后回头</h3>
 <p>DFS 会先对候选排序，然后沿最有希望的状态递归深入。如果状态评估低于阈值，或者已经达到终止深度，就停止当前分支，并回到父状态探索下一个候选。这种机制特别适合深度不固定、局部约束会逐步收紧的任务。</p>
 <h3>7.3 Beam Search 是不是 ToT？</h3>
@@ -293,7 +293,7 @@ code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace}
 <section id="comparison">
 <h2>10 · 与 CoT、Self-Consistency、MCTS、RAP、ReAct 的边界</h2>
 <div class="table-scroll"><table><thead><tr><th>方法</th><th>核心搜索/控制对象</th><th>主要机制</th><th>与 ToT 的关系</th></tr></thead><tbody>
-<tr><td>CoT</td><td>一条中间推理链</td><td>按上下文连续生成 thought</td><td>ToT 可以把它看作宽度为 1 的受限情形</td></tr>
+<tr><td>CoT</td><td>一条中间推理链</td><td>按上下文连续生成 thought</td><td>ToT 在 b=1 时只保留一条路径，但仍可先生成并评估多个候选；不等同于 vanilla CoT</td></tr>
 <tr><td>Self-Consistency</td><td>多条完整推理路径</td><td>采样后聚合最终答案</td><td>有多样性，但通常没有中间状态搜索</td></tr>
 <tr><td>ToT</td><td>部分解构成的状态树</td><td>候选生成、状态评估、搜索和回溯</td><td>本篇核心框架</td></tr>
 <tr><td>MCTS</td><td>决策树节点与访问统计</td><td>选择、扩展、模拟、回传；平衡探索与利用</td><td>可作为更高级的搜索策略，但不是原论文的默认算法</td></tr>
