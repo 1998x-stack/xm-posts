@@ -1,0 +1,110 @@
+[
+  {
+    "id": "F01",
+    "claim": "FA1 uses IO-aware tiling to reduce GPU HBM/SRAM traffic without approximate attention",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/abs/2205.14135",
+    "locator": "Abstract; Section 3",
+    "status": "verified",
+    "notes": "Paper's central method; distinction between exact algorithm and floating point equality"
+  },
+  {
+    "id": "F02",
+    "claim": "FlashAttention Algorithm 1 computes exact dense softmax attention with O(N) additional memory",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/abs/2205.14135",
+    "locator": "Theorem 1; Algorithm 1",
+    "status": "verified",
+    "notes": "Excludes input/output arrays"
+  },
+  {
+    "id": "F03",
+    "claim": "The original paper compares Theta(Nd + N^2) and Theta(N^2 d^2 / M) HBM access models in a specified SRAM regime",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/abs/2205.14135",
+    "locator": "Theorem 2; Section 3",
+    "status": "verified",
+    "notes": "Assumptions are d <= M <= Nd; no universal hardware prediction"
+  },
+  {
+    "id": "F04",
+    "claim": "Original FA1 trains GPT-2 at sequence length 1k with reported 3x speedup over paper's baseline",
+    "kind": "experiment",
+    "source_url": "https://proceedings.neurips.cc/paper/2022/hash/67d57c32e20fd0a7a302cb81d36e40d5-Abstract.html",
+    "locator": "Abstract",
+    "status": "verified",
+    "notes": "End-to-end training; original 2022 comparison only"
+  },
+  {
+    "id": "F05",
+    "claim": "FA1 paper reports 15% BERT-large seq 512 wall-clock improvement versus specific MLPerf 1.1 record",
+    "kind": "experiment",
+    "source_url": "https://proceedings.neurips.cc/paper/2022/hash/67d57c32e20fd0a7a302cb81d36e40d5-Abstract.html",
+    "locator": "Abstract",
+    "status": "verified",
+    "notes": "Context-specific reported end-to-end result"
+  },
+  {
+    "id": "F06",
+    "claim": "FlashAttention-2 improves work partitioning and non-matmul FLOPs",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/abs/2307.08691",
+    "locator": "Abstract; algorithm",
+    "status": "verified",
+    "notes": "Distinguished from FA1; ICLR 2024 publication"
+  },
+  {
+    "id": "F07",
+    "claim": "FA2 reports up to 225 TFLOPs/s per A100 and 72% model FLOPs utilization in GPT-style training",
+    "kind": "experiment",
+    "source_url": "https://proceedings.iclr.cc/paper_files/paper/2024/hash/98ed250b203d1ac6b24bbcf263e3d4a7-Abstract-Conference.html",
+    "locator": "Abstract",
+    "status": "verified",
+    "notes": "Do not compare against single kernel FLOP/s"
+  },
+  {
+    "id": "F08",
+    "claim": "FlashAttention-3 exploits Hopper asynchronous computation, TMA and low-precision FP8 strategies",
+    "kind": "paper-claim",
+    "source_url": "https://proceedings.neurips.cc/paper/2024/hash/7ede97c3e082c6df10a8d6103a2eebd2-Abstract-Conference.html",
+    "locator": "Abstract",
+    "status": "verified",
+    "notes": "NeurIPS 2024; different numerical paths under FP8"
+  },
+  {
+    "id": "F09",
+    "claim": "FlashAttention-4 is an MLSys 2026 paper co-designing pipeline and algorithm for Blackwell",
+    "kind": "paper-claim",
+    "source_url": "https://proceedings.mlsys.org/paper_files/paper/2026/hash/ae8b0b5838ba510daff1198474e7b984-Abstract-Conference.html",
+    "locator": "Abstract",
+    "status": "verified",
+    "notes": "Blackwell B200 BF16 experimental context"
+  },
+  {
+    "id": "F10",
+    "claim": "FA4 reports up to 1.3x over cuDNN 9.13, 2.7x over Triton on B200 BF16 and 1613 TFLOPs/s",
+    "kind": "experiment",
+    "source_url": "https://proceedings.mlsys.org/paper_files/paper/2026/hash/ae8b0b5838ba510daff1198474e7b984-Abstract-Conference.html",
+    "locator": "Abstract",
+    "status": "verified",
+    "notes": "Best-case numbers, not general speedups"
+  },
+  {
+    "id": "F11",
+    "claim": "Official repo offers version- and architecture-specific backends and separate FA3 and FA4 paths",
+    "kind": "modern-implementation",
+    "source_url": "https://github.com/Dao-AILab/flash-attention",
+    "locator": "README: FlashAttention-3 beta; FlashAttention-4 (CuTeDSL); Installation and features",
+    "status": "verified",
+    "notes": "Moving repository target; verify for chosen commit in actual deployments"
+  },
+  {
+    "id": "F12",
+    "claim": "Toy three-score example yields approximately 5.3812084 for weighted value",
+    "kind": "toy-derivation",
+    "source_url": "https://arxiv.org/abs/2205.14135",
+    "locator": "Independently computed online-softmax example",
+    "status": "derived",
+    "notes": "Not a paper result; calculated with exponentials and cross-checked numerically"
+  }
+]

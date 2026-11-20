@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 398" width="860" height="398" role="img" aria-labelledby="fa-online-title fa-online-desc" data-export="fa-online.svg" style="font-family:system-ui,-apple-system,'PingFang SC','Microsoft YaHei',sans-serif">
+<title id="fa-online-title">在线 Softmax 重新缩放的必要性</title><desc id="fa-online-desc">先处理两个分数 1 和 2，再接入第三个分数 0；每个块都维持共享最大值、指数和及加权值和，最终一致。</desc>
+<rect x="0" y="0" width="860" height="398" rx="20" fill="#f7faf8"/>
+
+<text x="36" y="46" font-size="21" fill="#274d4c" font-weight="700" >一个 Query，依次看到三个 Key</text>
+<text x="40" y="83" font-size="14" fill="#607b7c" font-weight="700" >scores</text>
+<rect x="122" y="58" width="101" height="47" rx="7" fill="#e2f4ef" stroke="#b8dbd2" stroke-width="1.6"/><text x="162" y="88" font-size="22" fill="#197b78" font-weight="700" >1</text><rect x="241" y="58" width="101" height="47" rx="7" fill="#e2f4ef" stroke="#b8dbd2" stroke-width="1.6"/><text x="281" y="88" font-size="22" fill="#197b78" font-weight="700" >2</text><rect x="360" y="58" width="101" height="47" rx="7" fill="#fff0df" stroke="#e5be90" stroke-width="1.6"/><text x="400" y="88" font-size="22" fill="#aa7042" font-weight="700" >0</text>
+<text x="40" y="139" font-size="14" fill="#607b7c" font-weight="700" >values</text>
+<rect x="122" y="115" width="101" height="47" rx="7" fill="#e2f4ef" stroke="#b8dbd2" stroke-width="1.6"/><text x="158" y="145" font-size="21" fill="#197b78" font-weight="700" >2</text><rect x="241" y="115" width="101" height="47" rx="7" fill="#e2f4ef" stroke="#b8dbd2" stroke-width="1.6"/><text x="277" y="145" font-size="21" fill="#197b78" font-weight="700" >6</text><rect x="360" y="115" width="101" height="47" rx="7" fill="#fff0df" stroke="#e5be90" stroke-width="1.6"/><text x="396" y="145" font-size="21" fill="#aa7042" font-weight="700" >10</text>
+<rect x="40" y="190" width="376" height="157" rx="12" fill="#fff" stroke="#dae9e4" stroke-width="1.6"/>
+<text x="60" y="218" font-size="18" fill="#176f70" font-weight="700" >Tile 1：处理 (1, 2)</text>
+<text x="60" y="250" font-size="17" fill="#29474a"  >m = 2</text><text x="60" y="279" font-size="16" fill="#29474a"  >ℓ = exp(−1) + 1 ≈ 1.3679</text>
+<text x="60" y="308" font-size="15" fill="#29474a"  >acc = 2 exp(−1) + 6 ≈ 6.7358</text>
+<text x="60" y="330" font-size="15" fill="#176f70" font-weight="700" >o = acc / ℓ ≈ 4.924</text>
+<path d="M 425 260 L 444 260" fill="none" stroke="#4b817e" stroke-width="2.3"  stroke-linecap="round"/><path d="M 444 260 l -9 -5 l 0 10 z" fill="#4b817e" transform="rotate(0 444 260)"/>
+<rect x="446" y="190" width="374" height="157" rx="12" fill="#fff" stroke="#dae9e4" stroke-width="1.6"/>
+<text x="466" y="218" font-size="17" fill="#ac7043" font-weight="700" >Tile 2：接入 score=0, value=10</text>
+<text x="466" y="250" font-size="17" fill="#29474a"  >m′ = max(2, 0) = 2</text>
+<text x="466" y="279" font-size="15" fill="#29474a"  >ℓ′ = ℓ + exp(−2) ≈ 1.5032</text>
+<text x="466" y="308" font-size="15" fill="#29474a"  >acc′ = acc + 10 exp(−2) ≈ 8.0892</text>
+<text x="466" y="330" font-size="15" fill="#176f70" font-weight="700" >o′ = acc′ / ℓ′ ≈ 5.3812</text>
+<text x="42" y="376" font-size="14" fill="#5d7775"  >若新块的最大 score 更大，历史 ℓ 和 acc 必须按 exp(m_old − m_new) 同步缩放。</text>
+</svg>

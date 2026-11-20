@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 380" width="860" height="380" role="img" aria-labelledby="fa-backward-title fa-backward-desc" data-export="fa-backward.svg" style="font-family:system-ui,-apple-system,'PingFang SC','Microsoft YaHei',sans-serif">
+<title id="fa-backward-title">反向传播时为什么重计算而不是存储 P</title><desc id="fa-backward-desc">前向仅保留输出与每行 logsumexp；反向逐块重算 S 和 P，再消费 dO，累加 dQ、dK、dV。</desc>
+<rect x="0" y="0" width="860" height="380" rx="20" fill="#f7faf8"/>
+
+<rect x="25" y="35" width="810" height="78" rx="12" fill="#e2f4ef" stroke="#c9deda" stroke-width="1.6"/><text x="45" y="66" font-size="20" fill="#167c79" font-weight="700" >Forward</text>
+<text x="180" y="63" font-size="17" fill="#29474a"  >Q, K, V → block scores → online softmax → O</text>
+<text x="180" y="91" font-size="15" fill="#3f7775"  >保存：O 与行级 LSE = m + log(ℓ)；不保存 N×N 的 P</text>
+<path d="M 420 114 L 420 146" fill="none" stroke="#4b817e" stroke-width="2.3"  stroke-linecap="round"/><path d="M 420 146 l -9 -5 l 0 10 z" fill="#4b817e" transform="rotate(90 420 146)"/>
+<rect x="25" y="147" width="810" height="206" rx="12" fill="#fff" stroke="#d7e5e0" stroke-width="1.6"/>
+<text x="44" y="179" font-size="20" fill="#264a4b" font-weight="700" >Backward（tile 内）</text>
+<rect x="45" y="199" width="211" height="101" rx="12" fill="#fff2e8" stroke="#edceaf" stroke-width="1.6"/><text x="61" y="230" font-size="17" fill="#a36d45" font-weight="700" >从 Qᵢ, Kⱼ</text><text x="61" y="253" font-size="16" fill="#29474a"  >重算 Sᵢⱼ</text><text x="61" y="277" font-size="14" fill="#29474a"  >结合 LSE 恢复 Pᵢⱼ</text>
+<path d="M 263 249 L 287 249" fill="none" stroke="#4b817e" stroke-width="2.3"  stroke-linecap="round"/><path d="M 287 249 l -9 -5 l 0 10 z" fill="#4b817e" transform="rotate(0 287 249)"/>
+<rect x="291" y="199" width="238" height="101" rx="12" fill="#eeeafb" stroke="#cdc7eb" stroke-width="1.6"/><text x="306" y="229" font-size="17" fill="#6554a0" font-weight="700" >局部 Pᵢⱼ + dOᵢ</text><text x="306" y="253" font-size="15" fill="#29474a"  >dV ← Pᵀ dO</text><text x="306" y="276" font-size="15" fill="#29474a"  >dP ← dO Vᵀ</text>
+<path d="M 536 249 L 559 249" fill="none" stroke="#4b817e" stroke-width="2.3"  stroke-linecap="round"/><path d="M 559 249 l -9 -5 l 0 10 z" fill="#4b817e" transform="rotate(0 559 249)"/>
+<rect x="562" y="199" width="253" height="101" rx="12" fill="#e2f4ef" stroke="#bbded6" stroke-width="1.6"/><text x="578" y="229" font-size="16" fill="#1c7875" font-weight="700" >dS = P ⊙ (dP − D)</text><text x="578" y="253" font-size="15" fill="#29474a"  >dQ ← dS K / √d</text><text x="578" y="276" font-size="15" fill="#29474a"  >dK ← dSᵀ Q / √d</text>
+<text x="45" y="333" font-size="14" fill="#5a7675"  >每个 tile 的梯度累加到对应 Q/K/V；计算与内存流量的交换是核心权衡。</text>
+</svg>
