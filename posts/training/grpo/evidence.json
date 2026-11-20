@@ -1,0 +1,101 @@
+[
+  {
+    "id": "G01",
+    "claim": "GRPO removes the learned value model and uses multiple responses for group baseline",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/html/2402.03300",
+    "locator": "§4.1.1; Figure 4",
+    "status": "verified",
+    "notes": "Original 2024 GRPO mechanism; still uses rollouts and reward model"
+  },
+  {
+    "id": "G02",
+    "claim": "Original GRPO uses clipped token ratio and KL directly in the objective",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/html/2402.03300",
+    "locator": "Eq. (3–4)",
+    "status": "verified",
+    "notes": "Do not confuse old policy importance ratio with reference-policy KL ratio"
+  },
+  {
+    "id": "G03",
+    "claim": "Outcome supervision broadcasts each group-normalized reward to all response tokens",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/html/2402.03300",
+    "locator": "§4.1.2",
+    "status": "verified",
+    "notes": "Process supervision uses distinct stepwise rewards, §4.1.3"
+  },
+  {
+    "id": "G04",
+    "claim": "DeepSeekMath-RL uses about 144K RL questions, G=64, β=0.04, policy LR 1e-6",
+    "kind": "experiment",
+    "source_url": "https://arxiv.org/html/2402.03300",
+    "locator": "§4.2",
+    "status": "verified",
+    "notes": "These are 2024 DeepSeekMath settings not general defaults"
+  },
+  {
+    "id": "G05",
+    "claim": "GSM8K 82.9 to 88.2, MATH 46.8 to 51.7, CMATH 84.6 to 88.8 with CoT Top1",
+    "kind": "experiment",
+    "source_url": "https://arxiv.org/html/2402.03300",
+    "locator": "Table 5 (CoT, no tools, Instruct 7B vs RL 7B)",
+    "status": "verified",
+    "notes": "Not a controlled PPO-versus-GRPO ablation"
+  },
+  {
+    "id": "G06",
+    "claim": "Absolute gains +5.3,+4.9,+4.2 percentage points are arithmetic differences",
+    "kind": "toy-derivation",
+    "source_url": "https://arxiv.org/html/2402.03300",
+    "locator": "Table 5; arithmetic derivation",
+    "status": "derived",
+    "notes": "Percentage points, not relative percentages"
+  },
+  {
+    "id": "G07",
+    "claim": "Four binary reward examples demonstrate group normalization and variance-zero edge case",
+    "kind": "toy-derivation",
+    "source_url": "https://arxiv.org/html/2402.03300",
+    "locator": "§4.1.2; independent educational calculation",
+    "status": "illustrative",
+    "notes": "Population standard deviation and a zero-variance convention explicitly specified"
+  },
+  {
+    "id": "G08",
+    "claim": "DAPO proposes token-level normalization and dynamic sampling refinements",
+    "kind": "later-work",
+    "source_url": "https://arxiv.org/abs/2503.14476",
+    "locator": "Abstract and method; later than DeepSeekMath",
+    "status": "verified",
+    "notes": "Not the original 2024 objective"
+  },
+  {
+    "id": "G09",
+    "claim": "Dr. GRPO analyzes length bias and std normalization in GRPO",
+    "kind": "later-work",
+    "source_url": "https://arxiv.org/abs/2503.20783",
+    "locator": "Abstract; revised 2025 v2",
+    "status": "verified",
+    "notes": "Avoid universal claims of unbiasedness"
+  },
+  {
+    "id": "G10",
+    "claim": "TRL documentation exposes multiple GRPO loss normalization and reward scaling choices",
+    "kind": "modern-implementation",
+    "source_url": "https://huggingface.co/docs/trl/main/en/grpo_trainer",
+    "locator": "GRPO Trainer: computing loss; loss_type / scale_rewards",
+    "status": "verified",
+    "notes": "Implementation defaults version-dependent"
+  },
+  {
+    "id": "G11",
+    "claim": "DeepSeek-R1 later uses GRPO for reasoning reinforcement learning",
+    "kind": "later-work",
+    "source_url": "https://www.nature.com/articles/s41586-025-09422-z",
+    "locator": "Methods; GRPO description",
+    "status": "verified",
+    "notes": "Not original GRPO introduction"
+  }
+]
