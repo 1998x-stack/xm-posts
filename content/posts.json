@@ -817,7 +817,7 @@
     "title": "Understanding MCTS",
     "subtitle": "不必看完整棵树，也能做出更好的决策？从蒙特卡洛采样到 UCT 与 PUCT",
     "category": "reinforcement-learning",
-    "status": "draft",
+    "status": "published",
     "published": "2026-11-20",
     "updated": "2026-11-20",
     "reading_minutes": 32,
