@@ -141,7 +141,7 @@
       "Covariate Shift",
       "Expert Demonstrations"
     ],
-    "summary": "从机器人抓取任务出发，推导行为克隆的监督目标，解释协变量偏移与误差累积，再逐步拆解 DAgger、逆强化学习、最大熵 IRL、GAIL 和 Diffusion Policy。以“学习信号 × 策略表示”建立统一分类，配合 MathML 推导、六幅原创 SVG、可交互误差实验和可运行 Python 教学单元，区分论文结果、理论推导与教学算例。",
+    "summary": "从机器人抓取任务出发，推导行为克隆的监督目标，解释协变量偏移与误差累积，再逐步拆解 DAgger、逆强化学习、最大熵 IRL、GAIL 和 Diffusion Policy。以“学习信号 × 学习对象 / 模型形式”建立统一分类，配合 MathML 推导、六幅原创 SVG、可交互误差实验和可运行 Python 教学单元，区分论文结果、理论推导与教学算例。",
     "paper": "https://proceedings.mlr.press/v15/ross11a.html",
     "illustration": "imitation-learning",
     "cover": {
