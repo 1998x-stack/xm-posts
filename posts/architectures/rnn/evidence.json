@@ -1,0 +1,101 @@
+[
+  {
+    "id": "RNN01",
+    "claim": "Elman frames sequence learning as implicit temporal representation instead of a fixed-width spatial input",
+    "kind": "paper-motivation",
+    "source_url": "https://doi.org/10.1207/S15516709COG1402_1",
+    "locator": "Elman (1990), pp.180–181, The Problem with Time",
+    "status": "verified",
+    "notes": "Does not imply that all sliding-window models fail"
+  },
+  {
+    "id": "RNN02",
+    "claim": "Elman SRN context copies the previous hidden-unit activations using fixed one-to-one copy links",
+    "kind": "architecture",
+    "source_url": "https://gwern.net/doc/ai/nn/rnn/1990-elman.pdf",
+    "locator": "Elman (1990), pp.182–184, Figure 2 and caption",
+    "status": "verified",
+    "notes": "Figure 1 depicts Jordan (1986) output-feedback architecture; Figure 2 is Elman's hidden-feedback context"
+  },
+  {
+    "id": "RNN03",
+    "claim": "Sequential XOR case study uses 3,000 bits, one input, two hidden, one output, two context units",
+    "kind": "experiment",
+    "source_url": "https://gwern.net/doc/ai/nn/rnn/1990-elman.pdf",
+    "locator": "Elman (1990), pp.185–187, Exclusive-Or and Figure 3",
+    "status": "verified",
+    "notes": "Illustrative article SVG is not a measured graph"
+  },
+  {
+    "id": "RNN04",
+    "claim": "Elman studies six-bit letter feature sequences with 20 hidden units and 20 context units",
+    "kind": "experiment",
+    "source_url": "https://gwern.net/doc/ai/nn/rnn/1990-elman.pdf",
+    "locator": "Elman (1990), pp.187–189, Structure in Letter Sequences",
+    "status": "verified",
+    "notes": "Avoid conflating with current NLP token embeddings"
+  },
+  {
+    "id": "RNN05",
+    "claim": "The original paper describes incremental error back-propagation during time cycles rather than defining modern full-BPTT toy training as its only implementation",
+    "kind": "historical-scope",
+    "source_url": "https://gwern.net/doc/ai/nn/rnn/1990-elman.pdf",
+    "locator": "Elman (1990), p.182, Networks with Memory",
+    "status": "verified",
+    "notes": "Modern full-BPTT code is explicitly separate"
+  },
+  {
+    "id": "RNN06",
+    "claim": "Long-term gradient descent dependencies are difficult in standard recurrent networks",
+    "kind": "theory",
+    "source_url": "https://doi.org/10.1109/72.279181",
+    "locator": "Bengio, Simard and Frasconi (1994), Abstract",
+    "status": "verified",
+    "notes": "Not a theorem about all recurrent architectures"
+  },
+  {
+    "id": "RNN07",
+    "claim": "Temporal Jacobian products explain vanishing and exploding gradients; gradient norm clipping addresses explosion",
+    "kind": "theory",
+    "source_url": "https://proceedings.mlr.press/v28/pascanu13.html",
+    "locator": "Pascanu et al. (2013), Abstract and analysis",
+    "status": "verified",
+    "notes": "Clipping alone does not solve vanishing gradients"
+  },
+  {
+    "id": "RNN08",
+    "claim": "LSTM introduces a memory-cell mechanism to improve long-term dependency learning",
+    "kind": "related",
+    "source_url": "https://doi.org/10.1162/neco.1997.9.8.1735",
+    "locator": "Hochreiter and Schmidhuber (1997), Abstract",
+    "status": "verified",
+    "notes": "Later architecture, not part of the Elman 1990 SRN"
+  },
+  {
+    "id": "RNN09",
+    "claim": "GRU-style gating appears in RNN encoder-decoder work",
+    "kind": "related",
+    "source_url": "https://aclanthology.org/D14-1179/",
+    "locator": "Cho et al. (2014), model architecture",
+    "status": "verified",
+    "notes": "Do not treat GRU as a component of a vanilla RNN"
+  },
+  {
+    "id": "RNN10",
+    "claim": "Scalar chain h_t=lambda h_t-1 has sensitivity lambda^k across k steps",
+    "kind": "toy-derivation",
+    "source_url": "https://proceedings.mlr.press/v28/pascanu13.html",
+    "locator": "Chain rule derived in text; conceptual reference to Pascanu (2013)",
+    "status": "derived",
+    "notes": "Interactive values are synthetic, not paper measurements"
+  },
+  {
+    "id": "RNN11",
+    "claim": "Scalar tanh BPTT analytic gradients are checked by central finite differences",
+    "kind": "code-check",
+    "source_url": "https://github.com/1998x-stack/xm-posts/blob/main/posts/architectures/rnn/mini_rnn.py",
+    "locator": "mini_rnn.py plus tests/test_rnn.py",
+    "status": "illustrative",
+    "notes": "Will only be called tested after CI confirms"
+  }
+]

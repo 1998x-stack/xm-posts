@@ -17,6 +17,7 @@
 | **Understanding FlashAttention** | Attention 的 FLOPs 没变，为什么 GPU 仍能提速？ | [`posts/systems/flashattention/`](posts/systems/flashattention/index.html) | [Dao et al. (2022)](https://arxiv.org/abs/2205.14135) |
 | **Understanding AlexNet** | 为什么深层 CNN 能在 2012 ImageNet 上突破？卷积、ReLU、双 GPU 与真实集成指标 | [`posts/architectures/alexnet/`](posts/architectures/alexnet/index.html) | [Krizhevsky et al. (NeurIPS 2012)](https://papers.nips.cc/paper_files/paper/2012/file/c399862d3b9d6b76c8436e924a68c45b-Paper.pdf) |
 | **Understanding ResNet** | 网络越深，为什么训练反而可能更难？ | [`posts/architectures/resnet/`](posts/architectures/resnet/index.html) | [He et al.](https://arxiv.org/abs/1512.03385) |
+| **Understanding RNN** | 为什么新输入还能携带历史状态，长期依赖又为何难学？ | [`posts/architectures/rnn/`](posts/architectures/rnn/index.html) | [Elman (1990)](https://doi.org/10.1207/S15516709COG1402_1) |
 | **Understanding LSTM** | 为什么一千步前的线索仍可能影响当前输出？ | [`posts/architectures/lstm/`](posts/architectures/lstm/index.html) | [Hochreiter & Schmidhuber (1997)](https://doi.org/10.1162/neco.1997.9.8.1735) |
 | **Understanding RoPE** | 为什么旋转 Q/K 就能编码相对位置？ | [`posts/architectures/rope/`](posts/architectures/rope/index.html) | [Su et al., RoFormer](https://arxiv.org/abs/2104.09864) |
 | **Understanding Seq2Seq** | 从变长输入到变长输出：为什么需要 Encoder–Decoder？ | [`posts/architectures/seq2seq/`](posts/architectures/seq2seq/index.html) | [Sutskever et al. (2014)](https://arxiv.org/abs/1409.3215) |
@@ -51,6 +52,8 @@ SAC 归入 `reinforcement-learning`，在现有分类内增加 **Off-policy & Ex
 
 DDPG 包含 13 节连续控制精读、5 幅独立 SVG、可交互 Bellman target 实验、MathML 公式、最小数学断言与 ICLR 2016 原文证据；保留在 `Reinforcement Learning → Continuous Control / Off-policy Actor–Critic`，不新建顶层分类。
 
+RNN 具有 12 节渐进式机制解读、4 幅独立 SVG、4 处原生 MathML、可调梯度实验、纯 Python BPTT 有限差分验证，并区分 Elman 1990 原论文和现代训练算例。
+
 PPO 包含 14 节原论文推导、6 幅独立 SVG、交互式裁剪目标演算、纯标准库数学测试，并单独辨析了 RLHF 的参考模型 KL 与 PPO 的旧策略偏移指标。
 
 Chinchilla 的解读包含 12 节渐进讲解、5 幅独立 SVG、6 组原生 MathML 公式、固定预算交互实验与纯 Python 数学断言；原论文数据和教学示意分别标注。
@@ -65,7 +68,7 @@ The Pile 的 22 个来源按原论文 Table 1 给出有效采样权重，配五�
 |---|---|---|
 | 基础理论 | `posts/foundations/` | Adam、Word2Vec、词嵌入、优化器（AdamW）、正则化、表示学习 |
 | **经典机器学习** | `posts/classical-ml/` | SVM、核方法、线性与树模型、PCA 与无监督降维 |
-| **模型架构** | `posts/architectures/` | AlexNet / CNN、ResNet、Seq2Seq、Transformer、Normalization & Residual Paths、状态空间模型 |
+| **模型架构** | `posts/architectures/` | RNN / LSTM、AlexNet / CNN、ResNet、Seq2Seq、Transformer、Normalization & Residual Paths、状态空间模型 |
 | **强化学习** | `posts/reinforcement-learning/` | Policy Gradient、Actor–Critic、Off-policy Replay、SAC / Maximum Entropy、PPO/TRPO 与序贯决策 |
 | **数据与语料** | `posts/datasets/` | 预训练语料、数据清洗/去重、混合采样、污染检查与治理 |
 | 训练与对齐 | `posts/training/` | 预训练（Scaling Laws / Compute-Optimal Training）、微调、偏好对齐、DPO 与 RLHF与 PPO / GRPO 等强化学习策略优化 |
@@ -77,6 +80,8 @@ The Pile 的 22 个来源按原论文 Table 1 给出有效采样权重，配五�
 Linear Regression 使用现有 `classical-ml` → **Linear Models** 分类，不为单篇线性模型新增顶层分类；与后续 Logistic Regression、Ridge/Lasso 构成同一学习路径。其基础历史跨越 Legendre 与 Gauss，证据采用 NIST 和 Berkeley 等方法资料，而非误称一篇现代原论文。
 
 AlexNet 归入 `architectures` 的 **Convolutional Neural Networks & Vision** 主题，而不新建视觉顶层目录；后续 VGG、Inception、ResNet 可形成连贯的 CNN 历史线。原论文的 15.3% Top-5 test error 来自七模型集成，绝非单模型结果。
+
+RNN 沿用 `architectures` 下现有 **Recurrent Networks / LSTM** 主题，不重复新增顶层或近义二级分类；以 Elman 1990 为基本模型，串接 LSTM / GRU 与其他序列架构。
 
 LSTM 归入 `architectures` 的 **Recurrent Networks / LSTM** 二级主题，区分 1997 原始两门版、2000 年遗忘门与现代标准实现。
 
