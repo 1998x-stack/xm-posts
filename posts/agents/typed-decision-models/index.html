@@ -60,6 +60,9 @@ tr:last-child td{border-bottom:0}
 .lab h3{margin:.2rem 0 .6rem}
 .lab-intro{font-size:.9rem;color:var(--muted)}
 .lab-controls{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.lab-actions{display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;margin-top:1rem}
+.lab-actions button{font:inherit;font-size:.88rem;font-weight:700;cursor:pointer;padding:.55rem .85rem;border:1px solid #a9cec0;border-radius:.55rem;background:#e9f4f0;color:#24545a}
+.lab-actions button:hover{background:#dceee6}
 .control{padding:.8rem;border:1px solid var(--line);border-radius:.7rem;background:var(--surface)}
 .control label{display:flex;justify-content:space-between;gap:.5rem;font-weight:650;font-size:.88rem}
 .control input{width:100%;accent-color:var(--accent);margin:.7rem 0 .2rem}
@@ -143,7 +146,7 @@ footer{margin-top:4rem;padding-top:1.2rem;border-top:1px solid var(--line);font-
 <div class="math-equation" role="group" aria-label="Jev 的抽象输入输出接口">
 <div class="math-scroll" tabindex="0" role="region" aria-label="Jev 输入输出公式，可以横向滚动">
 <math display="block" aria-label="模型 f theta 接收状态 s 和问题集合 q，输出类型化答案集合 a 以及概率信息 p">
-<mrow><mi>f</mi><msub><mi>θ</mi><mrow></mrow></msub><mo>:</mo><mo>(</mo><mi>s</mi><mo>,</mo><mi>Q</mi><mo>)</mo><mo>→</mo><mo>(</mo><mi>A</mi><mo>,</mo><mi>P</mi><mo>)</mo></mrow>
+<mrow><msub><mi>f</mi><mi>θ</mi></msub><mo>:</mo><mo>(</mo><mi>s</mi><mo>,</mo><mi>Q</mi><mo>)</mo><mo>→</mo><mo>(</mo><mi>A</mi><mo>,</mo><mi>P</mi><mo>)</mo></mrow>
 </math>
 </div>
 </div>
@@ -298,6 +301,20 @@ p_max = 0.70</code></pre>
 <img src="assets/04-bayes-risk.svg" alt="从概率分布与成本矩阵计算每个动作的期望风险，并比较自动执行和人工复核" loading="lazy">
 <figcaption>图 4 · 概率提供对状态的估计，成本矩阵将估计映射为风险，策略代码再选择执行、拒绝或复核。所有成本均由应用定义。</figcaption>
 </figure>
+<figure>
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="190" viewBox="0 0 900 190" role="img" aria-labelledby="inline-bayes-title inline-bayes-desc">
+<title id="inline-bayes-title">贝叶斯决策的三个计算步骤</title>
+<desc id="inline-bayes-desc">先读取各真实类别的概率，再将每种动作与真实结果的损失相乘求和，最后选择期望风险最低的动作。</desc>
+<rect width="900" height="190" rx="16" fill="#f1f7f4"/>
+<g font-family="system-ui,'PingFang SC','Microsoft YaHei',sans-serif" text-anchor="middle">
+<rect x="28" y="42" width="220" height="105" rx="13" fill="#fff" stroke="#a9cec0" stroke-width="2"/><text x="138" y="83" font-size="20" font-weight="700" fill="#24545a">概率向量</text><text x="138" y="116" font-size="17" fill="#426c69">P(y | x)</text>
+<path d="M248 95 H326" stroke="#147f80" stroke-width="3"/><path d="M313 86 L326 95 L313 104" fill="none" stroke="#147f80" stroke-width="3"/>
+<rect x="333" y="42" width="234" height="105" rx="13" fill="#fff" stroke="#d6cfee" stroke-width="2"/><text x="450" y="83" font-size="20" font-weight="700" fill="#453b75">损失矩阵</text><text x="450" y="116" font-size="17" fill="#625b7d">L(a, y) × P(y | x)</text>
+<path d="M567 95 H645" stroke="#147f80" stroke-width="3"/><path d="M632 86 L645 95 L632 104" fill="none" stroke="#147f80" stroke-width="3"/>
+<rect x="652" y="42" width="220" height="105" rx="13" fill="#fff" stroke="#ebc7ae" stroke-width="2"/><text x="762" y="83" font-size="20" font-weight="700" fill="#85472e">最小风险动作</text><text x="762" y="116" font-size="17" fill="#8a624e">arg minₐ R(a | x)</text>
+</g></svg>
+<figcaption>图 4b · 先估计状态，再计算动作损失，最后由策略选择动作。该小图是对贝叶斯风险公式的独立教学示意。</figcaption>
+</figure>
 </section>
 
 <section id="lab">
@@ -326,6 +343,7 @@ p_max = 0.70</code></pre>
 <input id="review-cost" type="range" min="0.2" max="2" step="0.05" value="1">
 </div>
 </div>
+<div class="lab-actions"><button type="button" id="boost-billing">把 Billing 概率提高到 90%</button><span class="small">观察概率变化后，最低风险动作是否改变。</span></div>
 <div class="lab-result" aria-live="polite">
 <strong>当前概率分布</strong>
 <p id="probability-output">Billing 0.70 · Support 0.20 · Delivery 0.10</p>
@@ -507,6 +525,7 @@ assert abs(decision.risks["route_billing"] - 1.30) &lt; 1e-9</code></pre>
 var billing=document.getElementById("p-billing");
 var supportShare=document.getElementById("support-share");
 var review=document.getElementById("review-cost");
+var boost=document.getElementById("boost-billing");
 if(!billing||!supportShare||!review){return;}
 var fmt=function(x){return x.toFixed(2);};
 var setText=function(id,value){var el=document.getElementById(id);if(el){el.textContent=value;}};
@@ -552,6 +571,7 @@ function update(){
  }
 }
 [billing,supportShare,review].forEach(function(el){el.addEventListener("input",update);});
+if(boost){boost.addEventListener("click",function(){billing.value="90";supportShare.value="67";update();});}
 update();
 })();
 </script>
