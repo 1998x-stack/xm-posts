@@ -88,5 +88,14 @@
     "locator": "§5 Conclusion",
     "status": "verified",
     "notes": "Do not imply universal gain for language models."
+  },
+  {
+    "id": "AW11",
+    "claim": "For theta=(1,1), task g=(0,0), alpha=0.1, lambda=0.1 and fixed diagonal preconditioner scales s1=1 and s2=5, coupled L2 changes theta2 by 0.002 while decoupled decay changes it by 0.01; the two coordinate shrinkages share a visual absolute scale.",
+    "kind": "toy-derivation",
+    "source_url": "https://arxiv.org/abs/1711.05101",
+    "locator": "Loshchilov and Hutter decoupling argument, §2 and Algorithm 2; independent teaching arithmetic in Article Section 07",
+    "status": "derived",
+    "notes": "Uses a fixed diagonal preconditioner to isolate the coupling effect; does not simulate recursive Adam moment states or represent experimental loss/accuracy."
   }
 ]
