@@ -58,7 +58,9 @@
     "topics": [
       "KV Cache",
       "Batching",
-      "Decoding"
+      "Decoding",
+      "PagedAttention",
+      "Continuous Batching"
     ]
   },
   {

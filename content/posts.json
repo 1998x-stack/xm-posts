@@ -217,5 +217,26 @@
     "summary": "从成对偏好与 KL 正则化目标出发，推导最优策略、隐式奖励和 DPO log-sigmoid 损失，配合 6 幅机制图、β 交互、最小数值代码与原论文证据。",
     "paper": "https://arxiv.org/abs/2305.18290",
     "illustration": "dpo"
+  },
+  {
+    "slug": "pagedattention",
+    "title": "Understanding PagedAttention",
+    "subtitle": "为什么 KV Cache 需要像操作系统一样分页？从 Block Table 到 vLLM Serving",
+    "category": "inference",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 30,
+    "tags": [
+      "PagedAttention",
+      "vLLM",
+      "KV Cache",
+      "GPU Memory",
+      "Copy-on-Write",
+      "Serving"
+    ],
+    "summary": "从连续 KV 缓存的碎片和预留浪费出发，逐步推导逻辑块与物理块映射、Decode 扩容、CoW 共享、分页 Attention Kernel 与调度策略，并用交互模拟、代码及 SOSP 2023 实验辨析吞吐收益和边界。",
+    "paper": "https://arxiv.org/abs/2309.06180",
+    "illustration": "pagedattention"
   }
 ]
