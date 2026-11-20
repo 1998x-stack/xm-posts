@@ -2081,5 +2081,35 @@
       "src": "assets/03-llm-rejection-pipeline.svg",
       "caption": "同一提示生成多个回答，经奖励模型排序后保留高分样本并用于 SFT"
     }
+  },
+  {
+    "slug": "nerf",
+    "title": "Understanding NeRF",
+    "subtitle": "从多视角照片到连续三维场景：用 MLP、位置编码与体渲染合成新视角",
+    "category": "architectures",
+    "topic": "neural-rendering-3d-vision",
+    "status": "published",
+    "published": "2026-11-21",
+    "updated": "2026-11-21",
+    "reading_minutes": 28,
+    "tags": [
+      "NeRF",
+      "Neural Radiance Fields",
+      "Neural Rendering",
+      "Novel View Synthesis",
+      "3D Vision",
+      "Neural Fields",
+      "Volume Rendering",
+      "Positional Encoding",
+      "Camera Rays",
+      "3D Scene Representation"
+    ],
+    "summary": "从相机射线和五维场景函数出发，逐步推导 NeRF 的 MLP、位置编码、密度与方向相关颜色、可微体渲染和粗到细分层采样；用交互式像素合成、纯 Python 数值实现、原论文 Table 1/消融证据与原创 SVG，解释它如何从多视角照片学习连续场景，以及它与 Mip-NeRF、Instant-NGP、3D Gaussian Splatting 的边界。",
+    "paper": "https://arxiv.org/abs/2003.08934",
+    "illustration": "nerf",
+    "cover": {
+      "src": "assets/01-scene-pipeline.svg",
+      "caption": "多视角照片沿相机射线查询连续场景函数，再合成为新视角图像"
+    }
   }
 ]
