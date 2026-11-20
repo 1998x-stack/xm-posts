@@ -36,6 +36,7 @@
 | 训练与优化 | [SGD](posts/foundations/sgd/index.html) | [AdamW](posts/foundations/adamw/index.html) · [LoRA](posts/training/lora/index.html) |
 | 强化学习与智能体 | [Bellman Equations](posts/reinforcement-learning/bellman-equations/index.html) | [MCTS](posts/reinforcement-learning/mcts/index.html) · [ReAct](posts/agents/react/index.html) |
 | LLM 推理与系统 | [KV Cache](posts/inference/kv-cache/index.html) | [GQA](posts/architectures/gqa/index.html) · [FlashAttention](posts/systems/flashattention/index.html) |
+| LLM 评测与评审可靠性 | [LLM-as-a-Judge](posts/evaluation/llm-as-a-judge/index.html) | [ROC-AUC](posts/evaluation/roc-auc/index.html) · [RLHF](posts/training/rlhf/index.html) · [DPO](posts/training/dpo/index.html) |
 
 **完整且权威的文章清单是 [`content/posts.json`](content/posts.json)**。新文章通过发布门禁后自动进入网站归档与 RSS；不要根据 README 的示例表格统计文章数量。
 
@@ -48,7 +49,7 @@
 - **Training / Reinforcement Learning**：预训练、对齐、PEFT、价值与策略学习及搜索。
 - **Reasoning / Agents & Tool Use**：推理策略、工具调用、规划和智能体工作流。
 - **Retrieval & RAG / Inference**：向量检索、增强生成、解码、KV Cache、请求调度与 Serving。
-- **Systems / Datasets / Evaluation / Multimodal**：算子与 GPU、数据、评测和多模态。
+- **Systems / Datasets / Evaluation / Multimodal**：算子与 GPU、数据、Benchmark、LLM-as-a-Judge、评审器可靠性和多模态。
 - **Storage & Indexing**：B+ Tree、存储页、LSM、事务与索引结构。
 
 以上仅是导航概览。**分类、稳定 slug 和二级主题的唯一数据源是 [`content/categories.json`](content/categories.json)**；每篇文章在 `content/posts.json` 中只能有一个主 `category` 和 `topic`，跨领域关系使用 `tags`。详细约定见 [`docs/taxonomy.md`](docs/taxonomy.md)。
