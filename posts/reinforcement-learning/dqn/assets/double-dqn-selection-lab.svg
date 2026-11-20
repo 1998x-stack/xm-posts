@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 300" role="img" aria-labelledby="title desc"><title id="title">DQN 与 Double DQN 下一动作选择不同</title><desc id="desc">在线 Q 为 A 五、B 四，目标 Q 为 A 一、B 四；DQN 目标为三点六，Double DQN 为零点九。</desc><rect width="820" height="300" rx="16" fill="#fdfdfa"/><g font-family="system-ui,'PingFang SC','Microsoft YaHei',sans-serif">
+<text x="26" y="36" fill="#26454a" font-size="21" font-weight="700">同一个 s′：究竟由哪张网络挑动作？</text>
+<rect x="24" y="56" width="365" height="157" rx="12" fill="#e9f5ef" stroke="#b4d3c5"/><text x="42" y="83" fill="#216c66" font-size="17" font-weight="700">在线网络 θ · 选择动作</text>
+<text x="42" y="114" fill="#344f55" font-size="14">A</text><rect x="68" y="100" width="270" height="17" rx="4" fill="#277b73"/><text x="346" y="114" fill="#244f52" font-size="15">5</text>
+<text x="42" y="153" fill="#344f55" font-size="14">B</text><rect x="68" y="139" width="216" height="17" rx="4" fill="#90bdb2"/><text x="293" y="153" fill="#244f52" font-size="15">4</text><text x="42" y="193" fill="#216c66" font-size="14">argmax → A</text>
+<rect x="431" y="56" width="365" height="157" rx="12" fill="#fdf0e4" stroke="#e1c4ac"/><text x="449" y="83" fill="#a6623a" font-size="17" font-weight="700">目标网络 θ⁻ · 评估价值</text>
+<text x="449" y="114" fill="#344f55" font-size="14">A</text><rect x="475" y="100" width="54" height="17" rx="4" fill="#d59a6d"/><text x="540" y="114" fill="#674e43" font-size="15">1</text>
+<text x="449" y="153" fill="#344f55" font-size="14">B</text><rect x="475" y="139" width="216" height="17" rx="4" fill="#bb7647"/><text x="702" y="153" fill="#674e43" font-size="15">4</text><text x="449" y="193" fill="#a6623a" font-size="14">max Q⁻ → B</text>
+<rect x="26" y="232" width="362" height="49" rx="9" fill="#eaf1f7"/><text x="40" y="263" font-size="16" fill="#2b4e67">DQN：0 + 0.9 × 4 = 3.60</text>
+<rect x="432" y="232" width="363" height="49" rx="9" fill="#e8f5ee"/><text x="447" y="263" font-size="16" fill="#236a60">Double：0 + 0.9 × 1 = 0.90</text></g></svg>

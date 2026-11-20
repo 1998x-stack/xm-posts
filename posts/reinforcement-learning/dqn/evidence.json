@@ -124,5 +124,14 @@
     "locator": "Article visual explanations",
     "status": "illustrative",
     "notes": "No paper figure asset reuse."
+  },
+  {
+    "id": "D15",
+    "claim": "Two-action numeric illustration distinguishes standard DQN target-network maximization from later Double DQN online selection and target evaluation",
+    "kind": "toy-derivation",
+    "source_url": "https://arxiv.org/abs/1509.06461",
+    "locator": "Section 3 and this article, Double DQN arithmetic lab",
+    "status": "derived",
+    "notes": "Fixed r=0 gamma=0.9; deterministic toy values, not overestimation experiment."
   }
 ]
