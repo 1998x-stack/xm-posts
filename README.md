@@ -297,3 +297,9 @@ MobileNet 归入 `architectures` → **Convolutional Neural Networks & Vision** 
 ## Bellman 方程 · Reinforcement Learning / Value-based Learning
 
 - [Understanding Bellman Equations](posts/reinforcement-learning/bellman-equations/)：以 Bellman 1952 年动态规划论文和 Sutton & Barto 第二版为依据，区分状态价值与动作价值的期望/最优性方程，推导折扣收缩映射，配六幅 SVG、原生 MathML、交互式价值迭代与确定性 Python 数值测试。复用 `reinforcement-learning → value-learning` 现有二级主题，无需新建分类。
+
+## Storage & Indexing / B+ Tree
+
+新增 **存储与索引 / Storage & Indexing** 一级领域（`posts/storage-indexing/`），包含 Ordered Tree Indexes、LSM Trees、Hash / Filters、Pages & Buffer Pools、Transactions & Recovery、Concurrency & MVCC 六个稳定二级主题，不与 GPU Systems 或向量 Retrieval 混淆。各主题规划放在 `_topics/*/README.md`，不会作为文章发布。
+
+- [Understanding B+ Tree](posts/storage-indexing/b-plus-tree/index.html)：以 Bayer–McCreight 经典 B-tree 论文与 Brown / PostgreSQL 官方材料为线索，区分 B-tree 与 B+ tree；六幅 SVG、四组 MathML、范围扫描交互、插入与分裂教学代码、确定性测试和来源证据台账。

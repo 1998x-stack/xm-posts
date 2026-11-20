@@ -1525,5 +1525,31 @@
     "paper": "https://doi.org/10.1073/pnas.38.8.716",
     "illustration": "bellman",
     "topic": "value-learning"
+  },
+  {
+    "slug": "b-plus-tree",
+    "title": "Understanding B+ Tree",
+    "subtitle": "从磁盘页、分隔键与叶子链，到查找、范围扫描、分裂合并与数据库索引工程",
+    "category": "storage-indexing",
+    "topic": "ordered-tree-indexes",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 32,
+    "tags": [
+      "B+ Tree",
+      "B-Tree",
+      "Database Indexes",
+      "Ordered Index",
+      "Page-Oriented Storage",
+      "Leaf Split",
+      "Range Scan",
+      "Fanout",
+      "Index Maintenance",
+      "Storage Engines"
+    ],
+    "summary": "以 Bayer–McCreight B-tree 工作与数据库系统实现为脉络，严谨区分 B-tree 和 B+ tree；通过六幅独立 SVG、原生 MathML、分裂/合并示例、可交互页遍历和纯 Python 插入与范围扫描验证，理解页式索引的扇出、复杂度、删除边界以及 PostgreSQL 等现实实现的差异。",
+    "paper": "https://doi.org/10.1007/BF00288683",
+    "illustration": "b-plus-tree"
   }
 ]
