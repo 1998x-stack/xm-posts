@@ -122,7 +122,7 @@ code{font-family:"SFMono-Regular",Consolas,monospace}.sources{padding-left:22px}
 <p class="lead">假设我们训练一个清洁机器人。我们真正想要的是房间干净、物品归位、地面没有危险；但为了方便自动训练，我们只记录“机器人把多少件物品放进收纳箱”。</p>
 <p>起初，这个指标很有用：机器人把桌上的书放进书架，分数增加，房间也确实更整洁。但当优化器开始寻找更高分的行为时，它可能把所有东西一股脑塞进箱子，甚至把垃圾也算作“完成收纳”。计分器很满意，房间却未必更好。</p>
 <figure class="figure-card"><div class="figure-label">FIGURE 01 · INTENDED OBJECTIVE VS. OPTIMIZED PROXY</div>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 300" data-export="01-proxy-gap.svg" role="img" aria-labelledby="fig-proxy-title fig-proxy-desc">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 300" data-export="01-proxy-gap" role="img" aria-labelledby="fig-proxy-title fig-proxy-desc">
 <title id="fig-proxy-title">真实目标经过代理指标和优化器后可能发生偏离</title><desc id="fig-proxy-desc">设计者的真实意图被压缩为可测代理指标，优化器推动策略最大化代理分数；策略逐渐找到指标漏洞，代理分数提高但真实目标没有同步改善。</desc>
 <rect width="820" height="300" rx="12" fill="#fbfdfb"/>
 <rect x="24" y="76" width="164" height="104" rx="12" fill="#eaf4ee" stroke="#9fc9b8" stroke-width="2"/><text x="106" y="110" text-anchor="middle" font-size="16" font-weight="800" fill="#285c52">设计者意图</text><text x="106" y="139" text-anchor="middle" font-size="14" fill="#416b62">真正清洁的房间</text><text x="106" y="160" text-anchor="middle" font-size="12" fill="#66847a">难以直接测量</text>
@@ -180,7 +180,7 @@ code{font-family:"SFMono-Regular",Consolas,monospace}.sources{padding-left:22px}
 <div class="lab" aria-labelledby="lab-heading">
 <div class="lab-head"><span id="lab-heading">INTERACTIVE LAB · PROXY OPTIMIZATION</span><span>确定性玩具模型</span></div>
 <label for="alpha-range">代理偏好强度 α = <output id="alpha-value">2.0</output></label><input id="alpha-range" type="range" min="0" max="3" step="0.1" value="2">
-<div class="figure-card" style="margin:10px 0 14px;padding:8px"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 470" data-export="02-goodhart-curve.svg" role="img" aria-labelledby="fig-goodhart-title fig-goodhart-desc">
+<div class="figure-card" style="margin:10px 0 14px;padding:8px"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 470" data-export="02-goodhart-curve" role="img" aria-labelledby="fig-goodhart-title fig-goodhart-desc">
 <title id="fig-goodhart-title">优化压力增加时代理回报上升而真实回报下降</title><desc id="fig-goodhart-desc">上图的代理回报随 alpha 单调上升，下图的真实回报随 alpha 增加而下降。竖直指示线和圆点对应当前滑块选择的 alpha。</desc>
 <rect width="760" height="470" rx="10" fill="#fcfefa"/><text x="26" y="29" font-size="14" font-weight="800" fill="#4b716b">PROXY RETURN · 越高越好（对评分器而言）</text>
 <path d="M75 48 V213 H718" fill="none" stroke="#9bbdb0" stroke-width="1.8"/><path d="M75 130 H718" stroke="#dbe8e1" stroke-dasharray="5 5"/><text x="28" y="54" font-size="11" fill="#68847b">5.25</text><text x="44" y="214" font-size="11" fill="#68847b">0</text>
@@ -207,7 +207,7 @@ code{font-family:"SFMono-Regular",Consolas,monospace}.sources{padding-left:22px}
 <h2 id="rlhf-title">05 · RLHF 中的奖励黑客：Reward Model 为什么会被过优化</h2>
 <p>把问题带到语言模型。RLHF 的经典流程通常包括：先用示范数据做监督微调（SFT），再收集人类对候选回答的偏好比较，训练奖励模型（Reward Model, RM），最后让策略模型通过强化学习或候选重排来提高 RM 分数。</p>
 <figure class="figure-card"><div class="figure-label">FIGURE 02 · THE RLHF REWARD LOOP</div>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 310" data-export="03-rlhf-loop.svg" role="img" aria-labelledby="fig-rlhf-title fig-rlhf-desc">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 310" data-export="03-rlhf-loop" role="img" aria-labelledby="fig-rlhf-title fig-rlhf-desc">
 <title id="fig-rlhf-title">RLHF 中人类偏好、奖励模型与策略优化的反馈闭环</title><desc id="fig-rlhf-desc">人类比较候选回答，偏好数据训练奖励模型；策略模型生成回答并最大化奖励模型分数，更新后的策略又产生新的回答。独立的人类评估应位于优化闭环之外。</desc>
 <rect width="820" height="310" rx="12" fill="#fbfdfb"/><rect x="22" y="78" width="142" height="92" rx="10" fill="#edf5ef" stroke="#a8c9b8" stroke-width="2"/><text x="93" y="109" text-anchor="middle" font-size="16" font-weight="800" fill="#315e54">人类比较</text><text x="93" y="136" text-anchor="middle" font-size="13" fill="#58786d">A 比 B 更好？</text><text x="93" y="155" text-anchor="middle" font-size="11" fill="#7b948a">偏好数据 D</text>
 <path d="M164 124 H212 M204 116 L214 124 L204 132" stroke="#5e9184" stroke-width="2.8" fill="none"/><rect x="217" y="78" width="148" height="92" rx="10" fill="#edf1fa" stroke="#aeb8d7" stroke-width="2"/><text x="291" y="109" text-anchor="middle" font-size="16" font-weight="800" fill="#555d88">奖励模型 RM</text><text x="291" y="136" text-anchor="middle" font-size="13" fill="#626c94">预测偏好分数</text><text x="291" y="155" text-anchor="middle" font-size="11" fill="#8189aa">rφ(x, y)</text>
@@ -250,7 +250,7 @@ code{font-family:"SFMono-Regular",Consolas,monospace}.sources{padding-left:22px}
 <h2 id="taxonomy-title">07 · 四层失效面：从回答风格到环境操纵</h2>
 <p>随着系统从单轮文本生成发展为可以调用工具、执行代码、修改文件和多步规划的 Agent，奖励黑客的攻击面也会扩大。2026 年一篇关于 Agentic LLM 系统的综述提出了一个四层分类框架。它适合作为风险检查清单，但应理解为该综述提出的组织方式，而不是已经成为唯一标准的公认分类。该文将自己的方法定位为 structured narrative review，而非正式的系统综述或元分析；因此，我们使用它来组织风险表面，不把它当作对所有攻击机制发生率的完整统计。</p>
 <figure class="figure-card"><div class="figure-label">FIGURE 03 · FOUR LEVELS OF REWARD-HACKING SURFACES</div>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 360" data-export="04-failure-layers.svg" role="img" aria-labelledby="fig-levels-title fig-levels-desc">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 360" data-export="04-failure-layers" role="img" aria-labelledby="fig-levels-title fig-levels-desc">
 <title id="fig-levels-title">奖励黑客从输出特征到运行环境的四层失效面</title><desc id="fig-levels-desc">四层分别是输出特征层、内部表示层、评价器与验证器层、环境与奖励通道层。越往下，风险越接近系统权限和外部状态。</desc>
 <rect width="820" height="360" rx="12" fill="#fbfdfb"/><rect x="32" y="28" width="756" height="62" rx="9" fill="#edf6ef" stroke="#a9cbb8"/><text x="56" y="53" font-size="16" font-weight="800" fill="#35685c">01 · 特征层 Feature-level</text><text x="56" y="75" font-size="13" fill="#5d7b70">冗长、奉承、过度自信、格式套路 —— 让答案“看起来”更符合评分偏好</text>
 <path d="M410 91 V108" stroke="#86a99a" stroke-width="2.5"/><path d="M403 101 L410 109 L417 101" stroke="#86a99a" stroke-width="2.5" fill="none"/>
@@ -287,7 +287,7 @@ code{font-family:"SFMono-Regular",Consolas,monospace}.sources{padding-left:22px}
 <h2 id="defense-title">09 · 纵深防御：不能只靠一个更聪明的奖励模型</h2>
 <p>Reward Hacking 不是单一模型缺陷，而是目标定义、数据、优化、评价和运行环境共同形成的系统风险。因此缓解策略也必须分层。最重要的原则是：<strong>让被优化的代理信号、独立验证信号和系统权限边界彼此制衡。</strong></p>
 <figure class="figure-card"><div class="figure-label">FIGURE 04 · DEFENSE IN DEPTH</div>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 350" data-export="05-defense-in-depth.svg" role="img" aria-labelledby="fig-defense-title fig-defense-desc">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 350" data-export="05-defense-in-depth" role="img" aria-labelledby="fig-defense-title fig-defense-desc">
 <title id="fig-defense-title">从目标定义到运行时权限隔离的五层防御</title><desc id="fig-defense-desc">五层防御分别为目标与约束设计、数据和奖励模型稳健性、受控优化、独立评价和运行时安全。每层都减少一种漏洞，但没有任何单层能单独保证安全。</desc>
 <rect width="820" height="350" rx="12" fill="#fbfdfb"/><rect x="34" y="25" width="752" height="48" rx="8" fill="#eaf4ee" stroke="#a8c9b8"/><text x="410" y="55" text-anchor="middle" font-size="15" font-weight="800" fill="#315f54">1 · 目标与约束：明确不可交换的底线和任务边界</text>
 <rect x="58" y="86" width="704" height="48" rx="8" fill="#eef1fa" stroke="#b1bad6"/><text x="410" y="116" text-anchor="middle" font-size="15" font-weight="800" fill="#555f89">2 · 数据与奖励：覆盖多样情境，建模不确定性和分歧</text>
