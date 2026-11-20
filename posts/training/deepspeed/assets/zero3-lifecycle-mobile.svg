@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 760" role="img" aria-labelledby="lm-title lm-desc">
+<title id="lm-title">ZeRO-3 按需聚合与梯度分片的五步生命周期</title><desc id="lm-desc">参数分片、All-Gather、前向反向计算、Reduce-Scatter、本地优化器更新依次组成训练步骤。</desc>
+<rect width="560" height="760" rx="20" fill="#f5f8f4"/><g font-family="system-ui,-apple-system,'PingFang SC','Microsoft YaHei',sans-serif">
+<text x="28" y="48" font-size="25" font-weight="750" fill="#203c3e">ZeRO-3：参数按需重建</text>
+<g fill="#fff" stroke="#d3e0d8"><rect x="35" y="83" width="490" height="94" rx="12"/><rect x="35" y="215" width="490" height="94" rx="12"/><rect x="35" y="347" width="490" height="94" rx="12"/><rect x="35" y="479" width="490" height="94" rx="12"/><rect x="35" y="611" width="490" height="94" rx="12"/></g>
+<g font-size="21" font-weight="800" fill="#28665e"><text x="58" y="119">① 参数分片</text><text x="58" y="251">② All-Gather</text><text x="58" y="383">③ 前向 / 反向计算</text><text x="58" y="515">④ Reduce-Scatter</text><text x="58" y="647">⑤ 本地优化器更新</text></g>
+<g font-size="16" fill="#5e7770"><text x="58" y="151">每个 rank 只持有自己负责的 shard</text><text x="58" y="283">临时收集当前层所需的完整参数</text><text x="58" y="415">用完整参数执行当前层的计算</text><text x="58" y="547">归约梯度，并分配给对应 owner</text><text x="58" y="679">只更新本地参数与优化器状态分片</text></g>
+<g stroke="#8ba89b" stroke-width="3" fill="none"><path d="M280 177 V215 M272 207 L280 215 L288 207"/><path d="M280 309 V347 M272 339 L280 347 L288 339"/><path d="M280 441 V479 M272 471 L280 479 L288 471"/><path d="M280 573 V611 M272 605 L280 611 L288 605"/></g>
+<text x="28" y="738" font-size="14" fill="#73857d">预取、bucket 和 overlap 用于尽量隐藏数据传输等待。</text>
+</g></svg>
