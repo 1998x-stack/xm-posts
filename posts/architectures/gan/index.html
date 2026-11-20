@@ -121,7 +121,7 @@ loss_g.backward()
 opt_g.step()
 for param in D.parameters():
     param.requires_grad_(True)</code></pre>
-<p>与神经网络训练不同，本文的 <a href="demo.py">标准库 Python 数值小实验</a> 直接检验三类别 D*、JSD 和理论恒等式。它无需安装 torch，也不声称学出了图像。运行：<code>python posts/architectures/gan/demo.py</code>。</p></section>
+<p>与神经网络训练不同，本文的 <a href="https://github.com/1998x-stack/xm-posts/blob/main/posts/architectures/gan/demo.py">标准库 Python 数值小实验</a> 直接检验三类别 D*、JSD 和理论恒等式。它无需安装 torch，也不声称学出了图像。运行：<code>python posts/architectures/gan/demo.py</code>。</p></section>
 <section class="chapter" id="saturation" aria-labelledby="saturation-h"><h2 id="saturation-h"><small>08</small>为什么很多实现不让 G 直接最小化原式？</h2><p>如果 D 已把伪样本识别得很准，D(G(z)) 接近 0，原始 minimax 中 G 所最小化的 log(1−D(G(z))) 可能提供很弱的局部梯度。2014 年论文 §3 提出改用<strong>非饱和（non-saturating）</strong>生成器目标：最大化 log D(G(z))，实现中相当于最小化 −log D(G(z))。</p>
 <p>令 s 是 D 对伪样本输出的 logit，D = sigmoid(s)。针对同一个 s，可严格推出：minimax 损失对 s 的导数是 −D；非饱和损失对 s 的导数是 −(1−D)。假设 D = 0.01，两个局部导数的绝对值是 <strong>0.01 与 0.99</strong>。</p>
 <figure class="diagram"><div class="figtag">FIG. 04</div><img src="assets/04-generator-gradients.svg" alt="minimax生成器损失与非饱和损失在假样本判真概率为百分之一时的局部梯度对比。" decoding="async" loading="lazy"><figcaption>只比较对于判别器 logit 的导数；生成器整体梯度还要乘 D、G 的雅可比，不能从这幅图保证完整训练不发生梯度问题。</figcaption></figure>
@@ -135,7 +135,7 @@ for param in D.parameters():
 <section class="chapter" id="references" aria-labelledby="references-h"><h2 id="references-h"><small>10</small>原始论文与进一步阅读</h2><ol class="references"><li><a href="https://papers.nips.cc/paper_files/paper/2014/hash/f033ed80deb0234979a61f95710dbe25-Abstract.html">Goodfellow et al. (2014), <em>Generative Adversarial Nets</em></a>，NeurIPS 2014。重点：§3 Equation (1) 与 Algorithm 1、§4.1 Proposition 1 和 Theorem 1、§6 Discussion。</li>
 <li><a href="https://arxiv.org/abs/1406.2661">Goodfellow et al. (2014), arXiv:1406.2661</a>。可对照原文的符号与版本。</li>
 <li><a href="https://arxiv.org/abs/1701.00160">Goodfellow (2016), <em>NIPS 2016 Tutorial: Generative Adversarial Networks</em></a>。适合进一步了解训练难点与后续研究。</li>
-</ol><p>本文交互演示的概率和图示均为独立教学构造，不能引用为原论文实验指标；关键事实与推导的位置记录在同目录 <a href="evidence.json">evidence.json</a>。</p></section>
+</ol><p>本文交互演示的概率和图示均为独立教学构造，不能引用为原论文实验指标；关键事实与推导的位置记录在同目录 <a href="https://github.com/1998x-stack/xm-posts/blob/main/posts/architectures/gan/evidence.json">evidence.json</a>。</p></section>
 <footer class="footer"><p>基于 Goodfellow et al. (2014) 的原始 GAN 框架；离散算例仅用于理解理论，后续改进需单独对照其论文。</p><p><a href="../../../categories/architectures/">返回模型架构</a> · <a href="../../../archive/">查看文章归档</a></p></footer>
 </article></main></div><script>(()=>{"use strict";
 const control=document.getElementById("gan-t"),label=document.getElementById("gan-t-out"),result=document.getElementById("gan-result");
