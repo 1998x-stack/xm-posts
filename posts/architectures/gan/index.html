@@ -13,7 +13,7 @@ h2{font-size:clamp(27px,3.2vw,35px);line-height:1.35;letter-spacing:-.035em;marg
 h3{font-size:21px}.eyebrow{color:#327e70;font-weight:800;letter-spacing:.13em;font-size:12px}.deck{font-size:22px;color:#446a68;line-height:1.7}.meta{display:flex;flex-wrap:wrap;gap:15px;border-top:1px solid var(--line);margin:30px 0 52px;padding-top:16px;color:#637d79;font-size:12px}
 .summary{padding:17px 21px;border-left:4px solid var(--teal);background:#e7f3eb;color:#355e58;margin-bottom:43px}
 section.chapter{margin-bottom:75px;scroll-margin-top:24px}p{color:var(--text);margin:0 0 19px}.lead{font-size:19px;color:#355e5b}strong{color:#214d4c}
-.diagram{border:1px solid var(--line);border-radius:14px;padding:11px;background:var(--paper);margin:29px 0;overflow:hidden}.diagram img{display:block;width:100%;height:auto;object-fit:contain}.diagram figcaption{border-top:1px solid #e4eee7;padding:11px 8px 4px;color:var(--muted);font-size:13px;line-height:1.65}.figtag{font-size:12px;font-weight:750;color:#b56f48;letter-spacing:.15em;margin:2px 8px 8px}
+.diagram{border:1px solid var(--line);border-radius:14px;padding:11px;background:var(--paper);margin:29px 0;overflow:hidden}.diagram img,.diagram svg{display:block;width:100%;height:auto;object-fit:contain}.diagram figcaption{border-top:1px solid #e4eee7;padding:11px 8px 4px;color:var(--muted);font-size:13px;line-height:1.65}.figtag{font-size:12px;font-weight:750;color:#b56f48;letter-spacing:.15em;margin:2px 8px 8px}
 .pair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:24px 0}.pair>div{background:#fff;border:1px solid var(--line);border-radius:10px;padding:17px 19px}.pair p{font-size:14px;margin:8px 0 0}
 .equation{max-width:100%;min-width:0;border:1px solid #c8ded0;border-left:4px solid var(--teal);background:#eaf5ed;border-radius:10px;margin:25px 0}.math-scroll{overflow-x:auto;overflow-y:hidden;max-width:100%;padding:20px 14px}.math-scroll math[display="block"]{width:max-content;min-width:100%;font:normal 20px/1.55 "Cambria Math","STIX Two Math","DejaVu Serif",serif;color:#254a4b}
 .note{padding:15px 19px;background:#fff0e5;border-left:3px solid #c47d54;font-size:14px;color:#715d4d;margin:24px 0}
@@ -36,7 +36,29 @@ pre{background:#193c43;color:#e8f5ef;padding:18px;border-radius:12px;font:12px/1
 <figure class="diagram"><div class="figtag">FIG. 01</div><img src="assets/02-two-distributions.svg" alt="真实概率 A六成B三成C一成；生成器起始时明显偏向C。" decoding="async" loading="lazy"><figcaption>这是一道人工构造的离散概率习题，并非原论文里的实验图。GAN 通常面对连续高维数据，但三类玩具例子足以解释它的核心博弈。</figcaption></figure>
 <p>传统显式密度模型（例如 <a href="../../classical-ml/gmm/">GMM</a>）通常尝试写出可计算的概率密度；GAN 通过<strong>生成样本与一个判别器的反馈</strong>学习，不要求直接计算生成分布在某个样本处的可解析密度。</p></section>
 <section class="chapter" id="two-networks" aria-labelledby="two-networks-h"><h2 id="two-networks-h"><small>02</small>G 与 D：两个网络怎样相互教会对方？</h2><p><strong>生成器 G</strong>把噪声向量 z（如来自正态分布）变成一个样本 x̃ = G(z)。噪声不是标签，而是给 G 的不同输入；<strong>判别器 D</strong>读入样本 x，输出其来自真实数据而非生成器的概率估计，值在 0 到 1 之间。</p>
-<figure class="diagram"><div class="figtag">FIG. 02</div><img src="assets/01-adversarial-loop.svg" alt="噪声经过生成器形成合成样本，真实与合成样本进入同一个判别器，梯度回传给生成器。" decoding="async" loading="lazy"><figcaption>训练 D 时把 G 当前生成的样本当作负例；训练 G 时沿着 D 对输入的梯度调整 G 的参数，但该步骤不更新 D 的参数。</figcaption></figure>
+<figure class="diagram"><div class="figtag">FIG. 02</div><svg class="embedded-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 420" role="img" aria-labelledby="title desc">
+<title id="title">GAN 的生成器与判别器双网络回路</title>
+<desc id="desc">噪声经过生成器形成合成样本，真实与合成样本共同送入判别器；判别器更新分类边界，生成器根据判别器信号更新。</desc>
+<rect width="960" height="420" rx="20" fill="#fbfcf8"/>
+<g font-family="system-ui,'PingFang SC',sans-serif">
+<text x="44" y="52" font-size="27" font-weight="750" fill="#24494c">两个网络 · 两种任务 · 一条反馈回路</text>
+<rect x="46" y="117" width="175" height="93" rx="15" fill="#e8f2e9" stroke="#a8cdb9" stroke-width="2"/>
+<text x="133" y="152" text-anchor="middle" fill="#245c59" font-size="24" font-weight="750">随机噪声</text><text x="133" y="182" text-anchor="middle" fill="#47716c" font-size="19">z ~ p(z)</text>
+<rect x="293" y="117" width="172" height="93" rx="15" fill="#d6eee9" stroke="#6ba6a0" stroke-width="2"/>
+<text x="379" y="154" font-size="31" font-weight="800" text-anchor="middle" fill="#21736d">G</text><text x="379" y="184" font-size="20" text-anchor="middle" fill="#417069">生成器</text>
+<rect x="534" y="117" width="182" height="93" rx="15" fill="#fbe7dc" stroke="#da9877" stroke-width="2"/>
+<text x="625" y="153" font-size="24" font-weight="750" fill="#986244" text-anchor="middle">合成样本</text><text x="625" y="184" font-size="19" fill="#a36c4d" text-anchor="middle">G(z)</text>
+<rect x="534" y="260" width="182" height="86" rx="15" fill="#e8ecf8" stroke="#9ba9cb" stroke-width="2"/>
+<text x="625" y="295" text-anchor="middle" font-size="24" fill="#535f91" font-weight="750">真实样本</text><text x="625" y="324" text-anchor="middle" font-size="18" fill="#6b7294">x ~ p_data</text>
+<rect x="789" y="173" width="130" height="118" rx="16" fill="#284e56"/>
+<text x="854" y="213" text-anchor="middle" font-size="33" font-weight="800" fill="#fff">D</text><text x="854" y="243" text-anchor="middle" font-size="17" fill="#e6f4f0">是真样本吗？</text>
+<g fill="none" stroke-width="4"><path d="M221 164H286M465 164H528" stroke="#288077"/><path d="M716 164H754Q768 164 768 187V213H781" stroke="#c87750"/><path d="M716 304H755Q768 304 768 277V249H781" stroke="#707ead"/></g>
+<g fill="#288077"><path d="M283 155L293 164L283 173Z"/><path d="M525 155L535 164L525 173Z"/></g>
+<path d="M854 293V381H379V218" stroke="#bf7750" stroke-dasharray="9 8" stroke-width="3" fill="none"/>
+<path d="M370 230L379 215L388 230" fill="none" stroke="#bf7750" stroke-width="3"/>
+<text x="588" y="369" text-anchor="middle" font-size="17" fill="#925e40">更新 G 时：梯度穿过 D，D 的参数不更新</text>
+<text x="46" y="401" font-size="17" fill="#55716d">D 学习区分来源；G 学习让合成样本分布更接近真实数据。</text>
+</g></svg><figcaption>训练 D 时把 G 当前生成的样本当作负例；训练 G 时沿着 D 对输入的梯度调整 G 的参数，但该步骤不更新 D 的参数。</figcaption></figure>
 <div class="pair"><div><strong>训练判别器 D</strong><p>真样本希望打高分（接近 1）；G 产生的样本希望打低分（接近 0）。</p></div><div><strong>训练生成器 G</strong><p>改变 G 的输出，让 D 更愿意把生成样本当成真实样本。</p></div></div>
 <p>不要把 D 理解为永远可靠的“质量评分器”：它只能相对于<strong>当前数据和当前生成器</strong>学习区分。D 的准确率接近 50% 可能意味着双方接近平衡，也可能仅仅因为 D 欠拟合。</p></section>
 <section class="chapter" id="objective" aria-labelledby="objective-h"><h2 id="objective-h"><small>03</small>一条公式，把双方的目标放在一起</h2><p>2014 年 Goodfellow 等人的论文将双方写成一个 minimax（极小极大）博弈：D 尽量<strong>增大</strong>下式，G 尽量<strong>减小</strong>它。</p>
