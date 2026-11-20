@@ -45,6 +45,7 @@ jobs:
           python scripts/browser_check_nb_svm_sgd.py --output reports/nb-svm-sgd
           python scripts/browser_check_third_batch.py --output reports/third-batch
           python scripts/browser_check_all.py
+          python scripts/browser_check_teacher_forcing.py --output reports/teacher-forcing
           python scripts/browser_check_site.py --output reports/site
           python scripts/browser_check_svm_math.py --output reports/svm-math
           python scripts/browser_check_three_guides.py
