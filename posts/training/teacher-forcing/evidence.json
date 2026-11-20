@@ -1,0 +1,83 @@
+[
+  {
+    "id": "TF01",
+    "claim": "在 teacher forcing 中，训练时使用观测到的上一时刻输出作为下一步输入，采样时使用模型自身预测",
+    "kind": "paper-claim",
+    "source_url": "https://proceedings.neurips.cc/paper/2016/hash/16026d60ff9b54410b3435b403afd226-Abstract.html",
+    "locator": "Abstract",
+    "status": "verified",
+    "notes": "Lamb et al. (2016) is a later formal description; not claimed as inventor"
+  },
+  {
+    "id": "TF02",
+    "claim": "Williams 和 Zipser 早期循环网络研究讨论 teacher-forced learning",
+    "kind": "history",
+    "source_url": "https://doi.org/10.1162/neco.1989.1.2.270",
+    "locator": "Williams and Zipser (1989), teacher-forced RTRL section",
+    "status": "verified",
+    "notes": "Origins of technique in recurrent networks; do not confuse with the 2015 scheduled-sampling proposal"
+  },
+  {
+    "id": "TF03",
+    "claim": "Scheduled Sampling 指出训练采用 ground-truth、推理采用先前生成 token 的不一致，并提出逐步混用输入",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/abs/1506.03099",
+    "locator": "Abstract; §1–2",
+    "status": "verified",
+    "notes": "Later remedy, not part of standard teacher forcing"
+  },
+  {
+    "id": "TF04",
+    "claim": "Scheduled Sampling 论文中涉及图像描述、句法分析和语音识别三类序列任务",
+    "kind": "paper-claim",
+    "source_url": "https://proceedings.neurips.cc/paper/2015/hash/e995f98d56967d946471af29d7bf99f1-Abstract.html",
+    "locator": "Abstract",
+    "status": "verified",
+    "notes": "Do not infer benchmarks or reproducibility from abstract"
+  },
+  {
+    "id": "TF05",
+    "claim": "Professor Forcing 为 teacher-forced mode 与 free-running mode 的隐藏动态提供对抗式正则思路",
+    "kind": "later-work",
+    "source_url": "https://arxiv.org/abs/1610.09038",
+    "locator": "Abstract; §3",
+    "status": "verified",
+    "notes": "Different from scheduled sampling"
+  },
+  {
+    "id": "TF06",
+    "claim": "因果 Transformer 可在训练时用移位目标序列并行计算多个 token 的条件分布，但每个位置不能访问未来标签",
+    "kind": "derived",
+    "source_url": "https://arxiv.org/abs/1706.03762",
+    "locator": "§3.2.3 and decoder masking",
+    "status": "derived",
+    "notes": "Parallelism applies to Transformer training, not to sequential RNN unrolling"
+  },
+  {
+    "id": "TF07",
+    "claim": "示例正确标签概率 0.8、0.7、0.6 的平均 NLL 约为 0.36355 nat/token",
+    "kind": "toy-derivation",
+    "source_url": "https://www.deeplearningbook.org/contents/rnn.html",
+    "locator": "§10 sequence modelling; arithmetic evaluated by mini_teacher_forcing.py",
+    "status": "derived",
+    "notes": "Not experimental benchmark; values are made up only for illustration"
+  },
+  {
+    "id": "TF08",
+    "claim": "自由运行首次输出 We，继续得到 like、dogs；教师强制在真值 I、love 上仍输出 love、cats",
+    "kind": "toy-example",
+    "source_url": "https://github.com/1998x-stack/xm-posts/blob/main/posts/training/teacher-forcing/mini_teacher_forcing.py",
+    "locator": "demo_rollouts deterministic transition dictionary",
+    "status": "derived",
+    "notes": "Not trained model or real generated sample; diagram and interaction use same table"
+  },
+  {
+    "id": "TF09",
+    "claim": "Training exposure bias is a distribution shift; error accumulation is possible but not inevitable",
+    "kind": "interpretation",
+    "source_url": "https://arxiv.org/abs/1506.03099",
+    "locator": "§1 motivation",
+    "status": "derived",
+    "notes": "Avoid claiming inevitability or interpreting teacher forcing as data leakage"
+  }
+]
