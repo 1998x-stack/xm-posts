@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 390" role="img" aria-labelledby="ri-p-title ri-p-desc">
-<title id="ri-p-title">两列数的配对改变乘积和</title><desc id="ri-p-desc">三组配对：同序的乘积和为14，错序为12，反序为10。两侧数字都是3、2、1。</desc>
+<title id="ri-p-title">两列数的配对改变乘积和</title><desc id="ri-p-desc">三组配对：同序的乘积和为14，错序为13，反序为10。两侧数字都是3、2、1。</desc>
 <rect x="1" y="1" width="898" height="388" rx="15" fill="#fbfdfb" stroke="#d6e4de"/>
 <text x="450" y="39" font-size="25" text-anchor="middle" fill="#24464c" font-weight="700" font-family="sans-serif">把更大的数与更大的数相配</text>
 <g font-family="sans-serif" text-anchor="middle" font-size="17">
