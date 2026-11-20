@@ -5,7 +5,7 @@
 - **一级分类**：\`agents\`（以 \`content/categories.json\` 为准）
 - **二级主题**：\`tool-calling\`
 - **正式文章**：[Understanding Function Calling](../../function-calling/) — 工具定义、Schema、调用协议、运行时执行、MCP、权限和评测。
-- **研究范围**：工具选择、参数生成、schema / contract、结果验证、权限边界、错误处理、多工具规划与工具使用评测。
+- **研究范围**：工具选择（含 tool_choice）、参数生成、schema / contract、结果验证、权限边界、错误处理、多工具规划与工具使用评测。
 - **相关研究**：Toolformer、Gorilla、ToolLLM / ToolBench、ReAct、MCP、Programmatic Tool Calling。
 - **延伸方向**：工具检索与延迟加载、工具描述质量、并行与事务语义、幂等和重试、工具结果中的间接提示注入、Agent trace evaluation。
 - **投稿位置**：\`posts/agents/<article-slug>/index.html\`（不要将正式文章放到 \`_topics/\`）。
