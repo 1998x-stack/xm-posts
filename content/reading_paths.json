@@ -327,5 +327,14 @@
       "bert",
       "rag"
     ]
+  },
+  {
+    "id": "path-36",
+    "title": "从二维视觉到三维神经场景表示",
+    "posts": [
+      "cnn",
+      "resnet",
+      "nerf"
+    ]
   }
 ]
