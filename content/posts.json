@@ -1328,5 +1328,32 @@
     "paper": "https://arxiv.org/abs/1704.04861",
     "illustration": "mobilenet",
     "topic": "convolutional-vision"
+  },
+  {
+    "slug": "swiglu",
+    "title": "Understanding SwiGLU",
+    "subtitle": "为什么 Transformer FFN 的两路乘性门控，比单纯替换激活函数更有表现力？",
+    "category": "architectures",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 30,
+    "tags": [
+      "SwiGLU",
+      "GLU",
+      "GEGLU",
+      "ReGLU",
+      "Gated FFN & Activations",
+      "SiLU",
+      "Swish",
+      "Transformer",
+      "T5",
+      "LLaMA",
+      "Feedforward Networks"
+    ],
+    "summary": "精读 Shazeer 2020《GLU Variants Improve Transformer》：从两矩阵 FFN 到 SiLU 门控与三矩阵结构，推导 2/3 参数预算，核验 T5/C4 log-perplexity 与 GEGLU 对照，配六幅独立 SVG、MathML、交互标量门控与纯 Python 梯度/参数检查；明确区分 PaLM、LLaMA 后续实践。",
+    "paper": "https://arxiv.org/abs/2002.05202",
+    "illustration": "swiglu",
+    "topic": "gating-mechanisms"
   }
 ]
