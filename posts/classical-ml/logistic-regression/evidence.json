@@ -1,0 +1,90 @@
+[
+  {
+    "id": "LOG01",
+    "kind": "history",
+    "claim": "Berkson 1944 applied the logistic function to bio-assay; historical context rather than a unique origin of modern logistic regression.",
+    "source_url": "https://doi.org/10.1080/01621459.1944.10500699",
+    "locator": "Journal of the American Statistical Association 39(227), 357–365",
+    "status": "verified"
+  },
+  {
+    "id": "LOG02",
+    "kind": "history",
+    "claim": "Cox 1958 studied regression analysis of binary sequences.",
+    "source_url": "https://doi.org/10.1111/j.2517-6161.1958.tb00292.x",
+    "locator": "JRSS B 20(2), 215–232, abstract",
+    "status": "verified"
+  },
+  {
+    "id": "LOG03",
+    "kind": "history",
+    "claim": "Nelder and Wedderburn 1972 place binomial data in a generalized linear-model framework.",
+    "source_url": "https://doi.org/10.2307/2344614",
+    "locator": "JRSS A 135(3), 370–384",
+    "status": "verified"
+  },
+  {
+    "id": "LOG04",
+    "kind": "primary-derivation",
+    "claim": "Sigmoid Bernoulli conditional model and log likelihood support cross-entropy and gradient.",
+    "source_url": "https://cs229.stanford.edu/notes_archive/cs229-notes1.pdf",
+    "locator": "CS229 lecture notes §5, pp. 17–19",
+    "status": "verified"
+  },
+  {
+    "id": "LOG05",
+    "kind": "primary-derivation",
+    "claim": "Newton method and Hessian optimization are discussed for logistic regression.",
+    "source_url": "https://cs229.stanford.edu/notes_archive/cs229-notes1.pdf",
+    "locator": "CS229 §7, pp. 20–21",
+    "status": "verified"
+  },
+  {
+    "id": "LOG06",
+    "kind": "primary-derivation",
+    "claim": "Bernoulli exponential family with logit link leads to the logistic response.",
+    "source_url": "https://cs229.stanford.edu/notes_archive/cs229-notes1.pdf",
+    "locator": "CS229 §9.2, pp. 25–26",
+    "status": "verified"
+  },
+  {
+    "id": "LOG07",
+    "kind": "implementation",
+    "claim": "Modern scikit-learn logistic regression uses regularization and supports binary and multinomial variants, subject to solver selection.",
+    "source_url": "https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression",
+    "locator": "Linear Models §1.1.11 binary/multinomial cases and solver table",
+    "status": "verified"
+  },
+  {
+    "id": "LOG08",
+    "kind": "derived",
+    "claim": "For a linear logit model, Hessian equals X^T D X / n and is positive semidefinite.",
+    "source_url": "https://cs229.stanford.edu/notes_archive/cs229-notes1.pdf",
+    "locator": "Derived from CS229 §§5 and 7 using sigmoid derivative; independent algebra",
+    "status": "derived"
+  },
+  {
+    "id": "LOG09",
+    "kind": "toy",
+    "claim": "For [-2,-1,1,2] labels [0,0,1,1], unregularized gradient at zero is dw=-0.75, db=0.",
+    "source_url": "https://cs229.stanford.edu/notes_archive/cs229-notes1.pdf",
+    "locator": "Independent four-point teaching example; logistic_regression_demo.py deterministic test",
+    "status": "derived"
+  },
+  {
+    "id": "LOG10",
+    "kind": "derived",
+    "claim": "Stable BCE from logits equals softplus(z)-y*z and avoids exp overflow in a direct implementation.",
+    "source_url": "https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression",
+    "locator": "Derived algebra; logistic_regression_demo.py checks extreme logits and finite differences",
+    "status": "derived"
+  },
+  {
+    "id": "LOG11",
+    "kind": "scope",
+    "claim": "The standalone figures are conceptual diagrams and not historical experimental results.",
+    "source_url": "https://cs229.stanford.edu/notes_archive/cs229-notes1.pdf",
+    "locator": "Author-created figures 1–7; mathematical/toy visualization",
+    "status": "derived"
+  }
+]
