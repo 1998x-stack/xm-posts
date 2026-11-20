@@ -176,7 +176,41 @@ ex:StudentShape a sh:NodeShape ;
 <div class="demo-controls"><button type="button" data-demo-mode="explicit" aria-pressed="true">只看显式事实</button><button type="button" data-demo-mode="inferred" aria-pressed="false">运行推理并查看闭包</button></div>
 <div class="demo-output" id="ontology-demo-output" aria-live="polite"><p>Alice rdf:type ResearchStudent</p><p>ResearchStudent rdfs:subClassOf Student</p><p>Student rdfs:subClassOf Person</p><p>Alice enrolledIn CS101</p><p>enrolledIn rdfs:domain Student</p><p>enrolledIn rdfs:range Course</p></div>
 <p class="small">教学模型只实现了正向的 subClassOf、domain、range 三类规则，不是完整 RDFS 实现，更不是 OWL 2 推理器。正式系统必须使用符合目标语义标准的工具。</p></div>
-<h3>10.1 这个例子实际推导了什么？</h3><ul><li>由 <code>Alice rdf:type ResearchStudent</code> 和子类公理，推出 Alice 是 Student。</li><li>再由 Student 是 Person 的子类，推出 Alice 是 Person。</li><li>由 <code>Alice enrolledIn CS101</code> 与 domain，推出 Alice 是 Student。</li><li>由同一关系与 range，推出 CS101 是 Course。</li></ul><p>注意，推理结果是原始事实集合的扩展。推理器没有删除 Alice 的原始类型，也没有因为“缺少某条边”就推断其否定。</p></section>
+<h3>10.1 这个例子实际推导了什么？</h3><ul><li>由 <code>Alice rdf:type ResearchStudent</code> 和子类公理，推出 Alice 是 Student。</li><li>再由 Student 是 Person 的子类，推出 Alice 是 Person。</li><li>由 <code>Alice enrolledIn CS101</code> 与 domain，推出 Alice 是 Student。</li><li>由同一关系与 range，推出 CS101 是 Course。</li></ul><p>注意，推理结果是原始事实集合的扩展。推理器没有删除 Alice 的原始类型，也没有因为“缺少某条边”就推断其否定。</p>
+<h3>10.2 最小可运行 Python 实现</h3>
+<p>下面是同一规则的纯 Python 正向链实现。它反复应用子类传递、类型传播以及 domain / range 规则，直到没有新事实加入。完整文件与三个单元测试位于 <a href="https://github.com/1998x-stack/xm-posts/blob/main/posts/knowledge-representation/ontology/ontology_toy.py" target="_blank" rel="noopener">ontology_toy.py</a> 和 <a href="https://github.com/1998x-stack/xm-posts/blob/main/tests/test_ontology_toy.py" target="_blank" rel="noopener">test_ontology_toy.py</a>。</p>
+<pre><code>Triple = tuple[str, str, str]
+
+def infer(triples):
+    facts = set(triples)
+    while True:
+        additions = set()
+        subclasses = [(s, o) for s, p, o in facts if p == "rdfs:subClassOf"]
+        domains = [(s, o) for s, p, o in facts if p == "rdfs:domain"]
+        ranges = [(s, o) for s, p, o in facts if p == "rdfs:range"]
+
+        for subject, predicate, obj in facts:
+            if predicate == "rdf:type":
+                for child, parent in subclasses:
+                    if obj == child:
+                        additions.add((subject, "rdf:type", parent))
+            for prop, domain in domains:
+                if predicate == prop:
+                    additions.add((subject, "rdf:type", domain))
+            for prop, range_class in ranges:
+                if predicate == prop:
+                    additions.add((obj, "rdf:type", range_class))
+
+        for child, parent in subclasses:
+            for middle, ancestor in subclasses:
+                if parent == middle:
+                    additions.add((child, "rdfs:subClassOf", ancestor))
+
+        new_facts = additions - facts
+        if not new_facts:
+            return facts
+        facts.update(new_facts)</code></pre>
+<p>这个实现只演示有限的正向规则：没有实现 RDFS 规范的全部语义，更没有处理 OWL 的等价类、否定、存在限制或一致性检查。它的教学价值在于让你看见“公理 + 事实 → 蕴含闭包”的计算过程，而不是替代生产级推理器。</p></section>
 <section id="practice"><h2>11 · 实际系统如何选型？从最小语义开始</h2><p>不要为了使用 Ontology 而使用 Ontology。一个工程团队可以按需要逐级增加语义能力：</p>
 <div class="table-wrap"><table><thead><tr><th>你的真实需求</th><th>优先考虑</th><th>什么时候升级</th></tr></thead><tbody>
 <tr><td>只需要目录和上下位分类</td><td>Taxonomy / SKOS</td><td>出现大量横向关系、跨体系映射或机器可读查询</td></tr><tr><td>需要统一实体、关系和数据交换</td><td>RDF + RDFS</td><td>出现复杂等价、限制、互斥和分类推理需求</td></tr><tr><td>需要显式逻辑语义与推理</td><td>OWL 2 + Reasoner</td><td>需要按业务数据形状进行强约束验证时</td></tr><tr><td>需要验证实例数据的结构</td><td>SHACL</td><td>规则复杂、需要查询和自动化业务处理时</td></tr><tr><td>需要实体关系查询与应用</td><td>RDF Store / Knowledge Graph</td><td>根据图模型、性能和团队生态评估存储实现</td></tr><tr><td>需要语义召回与模糊匹配</td><td>Embedding / Vector Search</td><td>需要可解释的关系和确定性规则时，与知识图谱结合</td></tr></tbody></table></div>
