@@ -32,6 +32,8 @@ jobs:
         run: python scripts/sync_skills.py --check
       - name: Run tests
         run: python -m pytest -q
+      - name: Audit inline and standalone SVG integrity
+        run: python scripts/audit_svg.py
       - name: Build static site
         run: python scripts/build_site.py
       - name: Validate generated site and original articles
