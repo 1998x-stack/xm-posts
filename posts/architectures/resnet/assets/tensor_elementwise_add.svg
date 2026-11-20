@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="740" height="154" viewBox="0 0 740 154" role="img" aria-label="向量x等于1.5、负0.5、2.0，与残差F等于0.2、0.1、负0.4逐元素相加，得到1.7、负0.4、1.6"><style>
+.svg-label{font-family:"Noto Sans CJK SC",sans-serif;fill:#26474c;font-size:16px}
+.svg-small{font-family:"Noto Sans CJK SC",sans-serif;fill:#577476;font-size:12px}
+.svg-title{font-family:"Noto Sans CJK SC",sans-serif;fill:#194e50;font-size:17px;font-weight:700}
+.svg-line{stroke:#527478;stroke-width:2.5;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.svg-skip{stroke:#159d9d;stroke-width:4;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.svg-block{fill:#fff2df;stroke:#e3b375;stroke-width:1.5}
+.svg-teal{fill:#e2f5ef;stroke:#86ccc0;stroke-width:1.5}
+.svg-violet{fill:#ece9fa;stroke:#b2a8e1;stroke-width:1.5}
+</style><rect width="100%" height="100%" fill="#fff"/><text x="15" y="35" class="svg-title">x</text><text x="15" y="94" class="svg-title">F(x)</text><g font-size="23" font-family="Noto Sans CJK SC,monospace" text-anchor="middle"><g fill="#dbf3ed" stroke="#7cc7ba"><rect x="65" y="9" width="135" height="44" rx="8"/><rect x="205" y="9" width="135" height="44" rx="8"/><rect x="345" y="9" width="135" height="44" rx="8"/></g><g fill="#f8eddc" stroke="#dcb677"><rect x="65" y="65" width="135" height="44" rx="8"/><rect x="205" y="65" width="135" height="44" rx="8"/><rect x="345" y="65" width="135" height="44" rx="8"/></g><g fill="#263e40"><text x="133" y="38">1.5</text><text x="273" y="38">−0.5</text><text x="413" y="38">2.0</text><text x="133" y="94">+0.2</text><text x="273" y="94">+0.1</text><text x="413" y="94">−0.4</text></g><g fill="#d9f2ec" stroke="#128c8e"><rect x="552" y="39" width="173" height="64" rx="8"/></g><text x="637" y="67" font-size="14" fill="#176d6e">相加后 y</text><text x="637" y="90" fill="#185c5e" font-size="16">[1.7, −0.4, 1.6]</text></g><path d="M491 76H541" stroke="#527e7c" stroke-width="3"/><text x="515" y="65" class="svg-title" text-anchor="middle">+</text><text x="373" y="142" class="svg-small" text-anchor="middle">示例展示 ReLU 之前的相加结果，负数后续可能被 ReLU 截断</text></svg>

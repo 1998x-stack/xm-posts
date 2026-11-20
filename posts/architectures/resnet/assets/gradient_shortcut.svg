@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="235" viewBox="0 0 760 235" role="img" aria-label="多个残差单元在前向传播时保留水平恒等路径，梯度反向传播时也能沿这条路径传播"><style>
+.svg-label{font-family:"Noto Sans CJK SC",sans-serif;fill:#26474c;font-size:16px}
+.svg-small{font-family:"Noto Sans CJK SC",sans-serif;fill:#577476;font-size:12px}
+.svg-title{font-family:"Noto Sans CJK SC",sans-serif;fill:#194e50;font-size:17px;font-weight:700}
+.svg-line{stroke:#527478;stroke-width:2.5;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.svg-skip{stroke:#159d9d;stroke-width:4;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.svg-block{fill:#fff2df;stroke:#e3b375;stroke-width:1.5}
+.svg-teal{fill:#e2f5ef;stroke:#86ccc0;stroke-width:1.5}
+.svg-violet{fill:#ece9fa;stroke:#b2a8e1;stroke-width:1.5}
+</style><rect width="100%" height="100%" fill="#fff"/><defs><marker id="ag" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0 0L7 3.5L0 7" fill="#1c8587"/></marker></defs><g class="svg-small" text-anchor="middle"><text x="45" y="152">x₀</text><text x="273" y="152">x₁</text><text x="499" y="152">x₂</text><text x="728" y="152">x₃</text></g><path d="M53 137H728" stroke="#159c9d" stroke-width="5" fill="none" marker-end="url(#ag)"/><g stroke="#bd8657" stroke-width="2.5" fill="none"><path d="M90 137V55H226V137"/><path d="M319 137V55H454V137"/><path d="M547 137V55H680V137"/></g><g class="svg-block"><rect x="119" y="31" width="79" height="50" rx="9"/><rect x="345" y="31" width="79" height="50" rx="9"/><rect x="573" y="31" width="79" height="50" rx="9"/></g><g class="svg-label" text-anchor="middle"><text x="159" y="60">F₀</text><text x="385" y="60">F₁</text><text x="613" y="60">F₂</text></g><g fill="#e9f7f3" stroke="#159c9d" stroke-width="2"><circle cx="225" cy="137" r="15"/><circle cx="454" cy="137" r="15"/><circle cx="681" cy="137" r="15"/></g><g fill="#176a6e" text-anchor="middle" font-size="22"><text x="225" y="143">+</text><text x="454" y="143">+</text><text x="681" y="143">+</text></g><path d="M711 191H73" stroke="#756cc4" stroke-width="3" stroke-dasharray="8 5" fill="none"/><path d="M73 191l12 -7v14z" fill="#756cc4"/><text x="382" y="218" text-anchor="middle" class="svg-small">从后到前：反向梯度的直接贡献（理想化无后激活模型）</text></svg>
