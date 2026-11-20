@@ -237,7 +237,7 @@ figcaption{font-size:13px;color:#5e7977;line-height:1.73;padding:11px 8px 4px}
 </tbody></table></div>
 <p>Walker2d 的 <code>−DP</code> 在这份表上反而比完整 TD3 略高，说明「每个组件在每个任务必有正收益」是不成立的。总体而言，三项机制的联合作用有价值，改善的大小随任务而变。请勿把 Table 1、Table 2 混用得出因果结论。</p></section>
 <section id="code" aria-labelledby="code-heading"><h2 id="code-heading">13 · 可执行的最小数学核验</h2>
-<p>仓库附有无第三方依赖的 <a href="mini_td3.py"><code>mini_td3.py</code></a>，用标量样例检查 min-target、终止掩码、动作边界、截断噪声、软更新及延迟调度。它<strong>不是</strong>完整 MuJoCo trainer，不能复现实验回报。运行 <code>python posts/reinforcement-learning/td3/mini_td3.py</code> 或 <code>pytest tests/test_td3.py</code>。</p>
+<p>仓库附有无第三方依赖的 <a href="https://github.com/1998x-stack/xm-posts/blob/main/posts/reinforcement-learning/td3/mini_td3.py"><code>mini_td3.py</code></a>，用标量样例检查 min-target、终止掩码、动作边界、截断噪声、软更新及延迟调度。它<strong>不是</strong>完整 MuJoCo trainer，不能复现实验回报。运行 <code>python posts/reinforcement-learning/td3/mini_td3.py</code> 或 <code>pytest tests/test_td3.py</code>。</p>
 <pre class="code"><code># 目标值：两套目标 Critic 共用一个 label
 noise = clip(gaussian, -noise_clip, noise_clip)
 next_action = clip(actor_target(next_state) + noise, low, high)
