@@ -255,7 +255,7 @@ pre{padding:18px 20px;background:#223e45;color:#e7f3ea;border-radius:10px;overfl
 <section id="math">
 <h2>09 · 重试的数学：多跑几轮，成功概率一定更高吗？</h2>
 <p>先构造一个简单模型，帮助理解为什么重试可能提高成功概率，也为什么预算仍然必要。</p>
-<p>假设每次尝试相互独立，并且每次尝试成功概率都相同，记为 <math class="math-inline" aria-label="p"><mi>p</mi></math>。单次失败概率是 \(1-p\)。连续 n 次都失败的概率是 <math class="math-inline" aria-label="一减 p 的 n 次方"><msup><mrow><mo>(</mo><mn>1</mn><mo>−</mo><mi>p</mi><mo>)</mo></mrow><mi>n</mi></msup></math>，因此至少成功一次的概率为：</p>
+<p>假设每次尝试相互独立，并且每次尝试成功概率都相同，记为 <math class="math-inline" aria-label="p"><mi>p</mi></math>。单次失败概率是 <math class="math-inline" aria-label="一减 p"><mrow><mn>1</mn><mo>−</mo><mi>p</mi></mrow></math>。连续 n 次都失败的概率是 <math class="math-inline" aria-label="一减 p 的 n 次方"><msup><mrow><mo>(</mo><mn>1</mn><mo>−</mo><mi>p</mi><mo>)</mo></mrow><mi>n</mi></msup></math>，因此至少成功一次的概率为：</p>
 <div class="math-wrap"><div class="math-scroll" tabindex="0" role="region" aria-label="n 次独立尝试至少成功一次的概率公式"><math display="block" aria-label="P 成功于 n 次以内等于一减去一减 p 的 n 次方"><mrow><mi>P</mi><mo>(</mo><mtext>success by n</mtext><mo>)</mo><mo>=</mo><mn>1</mn><mo>−</mo><msup><mrow><mo>(</mo><mn>1</mn><mo>−</mo><mi>p</mi><mo>)</mo></mrow><mi>n</mi></msup></mrow></math></div></div>
 <p>例如，假设 <math class="math-inline" aria-label="p 等于零点三零"><mi>p</mi><mo>=</mo><mn>0.30</mn></math>，则 1、2、3、4 次尝试的累计成功概率分别约为 30%、51%、65.7%、76.0%。</p>
 <figure class="figure"><div class="figure-scroll"><img src="assets/07-retry-economics.svg" alt="每次尝试成功概率为百分之三十时，尝试次数增加带来的累计成功概率"></div><figcaption>图 7 · 教学算例：假设每次尝试独立且成功概率恒定为 0.30；这些数值不是任何 Agent Benchmark 的实测结果。</figcaption></figure>
@@ -310,7 +310,7 @@ class Verdict:
     escalate: bool = False
 
 def run_loop(task_id, act, verify, state_path: Path, max_attempts=3):
-    state = load_or_create_state(task_id, state_path)
+    state = _load(state_path, task_id)
 
     if state["status"] in {
         "completed", "needs_human", "budget_exhausted"
@@ -320,7 +320,7 @@ def run_loop(task_id, act, verify, state_path: Path, max_attempts=3):
     while state["attempts"] &lt; max_attempts:
         state["attempts"] += 1
         state["status"] = "running"
-        atomic_save(state_path, state)
+        _save(state_path, state)
 
         proposal = act(
             state["last_feedback"], state["attempts"]
@@ -330,21 +330,21 @@ def run_loop(task_id, act, verify, state_path: Path, max_attempts=3):
         if verdict.escalate:
             state["status"] = "needs_human"
             state["last_feedback"] = verdict.feedback
-            atomic_save(state_path, state)
+            _save(state_path, state)
             return state
 
         if verdict.passed:
             state["status"] = "completed"
             state["artifact"] = proposal
-            atomic_save(state_path, state)
+            _save(state_path, state)
             return state
 
         state["last_feedback"] = verdict.feedback
         state["status"] = "retrying"
-        atomic_save(state_path, state)
+        _save(state_path, state)
 
     state["status"] = "budget_exhausted"
-    atomic_save(state_path, state)
+    _save(state_path, state)
     return state</code></pre>
 <p>仓库中的配套实现 <a href="loop_engine.py">loop_engine.py</a> 补充了 JSON 状态读写、原子替换、任务 ID 校验和终态防重复执行；<a href="../../../tests/test_loop_engineering.py">测试文件</a>覆盖重试后通过、预算耗尽、人工升级、终态不重复执行和状态文件错配。</p>
 <h3>12.1 为什么先保存 running 状态？</h3>
