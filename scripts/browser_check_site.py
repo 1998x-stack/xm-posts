@@ -97,13 +97,33 @@ def run(output:Path, site:Path):
                         else:
                             page.set_content((site/'posts/architectures/resnet/index.html').read_text(encoding='utf-8'))
                         assert page.locator('svg').count()>=10
+                        # CI must check real generated article cards, not only HTML strings.
+                        if report['mode']=='http':
+                            related=page.locator('[data-xm-related-reading]')
+                            assert related.count()==1, 'ResNet: missing generated reading section'
+                            assert page.locator('link[href="../../../assets/related-posts.css"]').count()==1
+                            related.scroll_into_view_if_needed()
+                            assert related.is_visible(), 'ResNet: reading section is hidden'
+                            cards=related.locator('a.xm-related-card')
+                            assert 2<=cards.count()<=4, 'Unexpected related card count'
+                            for idx in range(cards.count()):
+                                card=cards.nth(idx)
+                                assert card.is_visible()
+                                img=card.locator('img')
+                                img.scroll_into_view_if_needed()
+                                assert img.evaluate('(el) => el.complete && el.naturalWidth > 0'), 'Related SVG failed to load'
+                                assert card.get_attribute('href').startswith('../../../posts/')
+                            box=related.bounding_box()
+                            assert box and box['width']>200, 'Related section has zero width'
+                            page.screenshot(path=str(output/'related-desktop.png'),full_page=False)
+                            report['navigation']['related_cards']='passed'
                         assert page.locator('.sitebar .brand').get_attribute('href')=='../../../'
                         if report['mode']=='http':
                             page.locator('.sitebar .brand').click();assert page.url.rstrip('/')==base.rstrip('/')
                         else:
                             page.set_content(offline_html(site,site/'index.html'))
                         assert page.locator('[data-post-card]').count()>=2
-                        report['navigation']={'search':'passed','category':'passed','article':'passed','back_to_home':'passed'}
+                        report['navigation'].update({'search':'passed','category':'passed','article':'passed','back_to_home':'passed'})
                     if label=='narrow':
                         toggle=page.locator('[data-menu-toggle]')
                         assert toggle.is_visible()
@@ -121,6 +141,27 @@ def run(output:Path, site:Path):
                             category_cover.scroll_into_view_if_needed()
                             assert category_cover.evaluate('(img) => img.complete && img.naturalWidth > 0')
                             page.screenshot(path=str(output/'category-narrow.png'),full_page=False)
+                            # Catch mobile-only CSS / clipping defects in the generated Post itself.
+                            page.goto(base+'posts/architectures/resnet/',wait_until='networkidle')
+                            section=page.locator('[data-xm-related-reading]')
+                            assert section.count()==1 and section.is_visible()
+                            section.scroll_into_view_if_needed()
+                            assert not page.evaluate('document.documentElement.scrollWidth > innerWidth + 1'), (
+                                'Related reading causes mobile horizontal overflow')
+                            assert section.locator('.xm-related-card').count()>=2
+                            for image in section.locator('img').all():
+                                image.scroll_into_view_if_needed()
+                                assert image.evaluate('(el) => el.complete && el.naturalWidth > 0')
+                            first=section.locator('a.xm-related-card').first
+                            assert first.is_visible()
+                            target=first.get_attribute('href')
+                            first.focus()
+                            assert first.evaluate('(el) => document.activeElement === el')
+                            page.screenshot(path=str(output/'related-narrow.png'),full_page=False)
+                            first.click()
+                            assert page.url.endswith(target.removeprefix('../../../').rstrip('/')+'/'), (
+                                'Related card click navigated to the wrong article')
+                            report['navigation']['related_mobile']='passed'
                     # Verify the archive at each desktop/tablet/mobile width.
                     # CI uses HTTP mode; the offline sandbox checks layout + DOM.
                     # Previous article navigation may request its own absent favicon;
