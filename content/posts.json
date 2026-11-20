@@ -2116,5 +2116,46 @@
       "src": "assets/03-llm-rejection-pipeline.svg",
       "caption": "同一提示生成多个回答，经奖励模型排序后保留高分样本并用于 SFT"
     }
+  },
+  {
+    "slug": "agent-evaluation",
+    "title": "Understanding Agent Evaluation",
+    "subtitle": "从任务成功率到执行轨迹、可靠性与安全性，建立完整的 Agent 评测体系",
+    "category": "agents",
+    "topic": "agent-evaluation",
+    "status": "published",
+    "published": "2026-11-21",
+    "updated": "2026-11-21",
+    "reading_minutes": 35,
+    "tags": [
+      "Agent Evaluation",
+      "Agent Benchmark",
+      "Trajectory Evaluation",
+      "Task Success Rate",
+      "Tool Use",
+      "Reliability",
+      "Robustness",
+      "Pass@k",
+      "Pass^k",
+      "Agent Safety",
+      "LLM-as-a-Judge",
+      "Benchmark Validity",
+      "Reproducibility",
+      "GAIA",
+      "AgentBench",
+      "WebArena",
+      "OSWorld",
+      "tau-bench",
+      "BFCL",
+      "SWE-bench",
+      "AgentDojo"
+    ],
+    "summary": "从单轮模型评测与 Agent 系统边界切入，结合 KDD 2025 与 ACL 2026 综述建立“评测目标 × 评测过程”二维 Taxonomy；推导任务成功率、工具调用、轨迹、Pass@k / Pass^k、安全、成本与 Judge 校准，系统比较 AgentBench、GAIA、WebArena、OSWorld、BFCL、τ-bench、SWE-bench Verified、AgentDojo 与 METR，并提供原创 SVG、交互式可靠性计算器、纯 Python 指标实现和确定性测试。",
+    "paper": "https://arxiv.org/abs/2507.21504",
+    "illustration": "agent-evaluation",
+    "cover": {
+      "src": "assets/00-cover-agent-evaluation.svg",
+      "caption": "Agent 评测同时检查任务结果、执行能力、可靠性与安全边界"
+    }
   }
 ]
