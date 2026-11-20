@@ -9,7 +9,8 @@
 ## 已发布的长文
 
 | Post | 解释的问题 | 文章源码 | 核心资料 |
-|---|---|---|---|
+|---|---|---|
+| **Understanding AlphaGo** | 为什么策略网络与价值网络能引导树搜索，避免只靠遍历下围棋？ | [`posts/reinforcement-learning/alphago/`](posts/reinforcement-learning/alphago/index.html) | [Silver et al. (Nature 2016)](https://doi.org/10.1038/nature16961) |
 | **Understanding The Pile** | 为什么 22 种语料混合能增强跨领域文本建模？ | [`posts/datasets/the-pile/`](posts/datasets/the-pile/index.html) | [Gao et al. (2020)](https://arxiv.org/abs/2101.00027) |
 | **Understanding Chinchilla** | 在固定训练 FLOPs 下，参数量与训练 tokens 如何均衡？ | [`posts/training/chinchilla/`](posts/training/chinchilla/index.html) | [Hoffmann et al. (NeurIPS 2022)](https://arxiv.org/abs/2203.15556) |
 | **Understanding FineWeb** | 跨快照去重越强，为什么训练效果反而可能更差？ | [`posts/datasets/fineweb/`](posts/datasets/fineweb/index.html) | [Penedo et al. (NeurIPS 2024)](https://arxiv.org/abs/2406.17557) |
@@ -32,6 +33,7 @@
 | **Understanding PCA** | 最大方差为何等价于最小平方重建误差？ | [`posts/classical-ml/pca/`](posts/classical-ml/pca/index.html) | [Pearson (1901)](https://doi.org/10.1080/14786440109462720) · [Hotelling (1933)](https://www.scienceopen.com/document?vid=a0c9b352-1645-4706-9d7c-a76e6534a1b5) |
 | **Understanding Chain-of-Thought Prompting** | Few-shot 的中间推理步骤如何改变复杂任务表现？ | [`posts/reasoning/chain-of-thought/`](posts/reasoning/chain-of-thought/index.html) | [Wei et al. (NeurIPS 2022)](https://arxiv.org/abs/2201.11903) |
 | **Understanding Self-Consistency** | 多路径采样与最终答案投票为何有效？ | [`posts/reasoning/self-consistency/`](posts/reasoning/self-consistency/index.html) | [Wang et al. (2022; ICLR 2023)](https://arxiv.org/abs/2203.11171) |
+| **Understanding MCTS** | 为什么不用搜完整棵树，也能优先探索有价值的决策？UCT、Monte Carlo Rollout 与 PUCT | [`posts/reinforcement-learning/mcts/`](posts/reinforcement-learning/mcts/index.html) | [Kocsis & Szepesvári (ECML 2006)](https://aima.cs.berkeley.edu/~russell/classes/cs294/s11/readings/Kocsis%2BSzepesvari%3A2006.pdf) |
 | **Understanding DQN** | 为什么像素与奖励足以驱动动作价值学习？ | [`posts/reinforcement-learning/dqn/`](posts/reinforcement-learning/dqn/index.html) | [Mnih et al. (Nature 2015)](https://doi.org/10.1038/nature14236) |
 | **Understanding REINFORCE** | 为什么无法对环境求导，也能从随机行动与奖励中估计策略梯度？ | [`posts/reinforcement-learning/reinforce/`](posts/reinforcement-learning/reinforce/index.html) | [Williams (Machine Learning 1992)](https://doi.org/10.1007/BF00992696) |
 | **Understanding PPO** | 为什么能复用同一批轨迹又避免过大更新？ | [`posts/reinforcement-learning/ppo/`](posts/reinforcement-learning/ppo/index.html) | [Schulman et al. (2017)](https://arxiv.org/abs/1707.06347) |
@@ -72,7 +74,7 @@ The Pile 的 22 个来源按原论文 Table 1 给出有效采样权重，配五�
 
 | 分类 | 路径 | 范围 |
 |---|---|---|
-| 基础理论 | `posts/foundations/` | Adam、Word2Vec、词嵌入、优化器（AdamW）、正则化、表示学习 |
+| 基础理论 | `posts/foundations/` | Adam、Word2Vec、BPE / Tokenization、词嵌入、优化器（AdamW）、正则化、表示学习 |
 | **经典机器学习** | `posts/classical-ml/` | SVM、核方法、线性模型、XGBoost 与树集成、PCA 与无监督降维 |
 | **模型架构** | `posts/architectures/` | RNN / LSTM、AlexNet / CNN、ResNet、Seq2Seq、Transformer、Normalization & Residual Paths、状态空间模型 |
 | **强化学习** | `posts/reinforcement-learning/` | Policy Gradient、Actor–Critic、Off-policy Replay、SAC / Maximum Entropy、PPO/TRPO 与序贯决策 |
@@ -100,6 +102,8 @@ RoPE 归入 `architectures`，补充 **Positional Encoding** 主题；不为单�
 AdamW 继续使用 `foundations` 中的 **Optimization & Regularization** 主题，不为单篇优化器论文新建顶层分类；未来 Adam、SGD 和学习率调度可共享该主题。各类别均有 `README.md` 占位；占位**不会作为文章上线**。`content/categories.json` 是分类单一数据源，`content/posts.json` 是文章元数据和发布状态的单一数据源。增加新文章不用手动编辑首页、Sitemap 或 RSS。
 
 XGBoost 归入 `classical-ml` 既有 **Trees & Ensembles** 主题，不新建顶层分类；KDD 2016 原论文与当前 `hist` 方法分开描述。文章包含 14 节、6 幅独立 SVG、7 组原生 MathML 公式、交互式阈值/正则化实验和确定性 Python 单元测试。
+
+BPE 放在 `foundations` → **Tokenization & Subword Units**（新增二级专题，沿用现有一级分类），而不是再新增一级目录；对应 `posts/foundations/bpe/` 包含原论文证据、六幅独立 SVG、交互训练/编码演示、MathML 与纯 Python 回归测试。明确区分 Gage 1994、Sennrich et al. ACL 2016 与 GPT-2 byte-level BPE。
 
 ## 仓库结构
 

@@ -1,0 +1,92 @@
+[
+  {
+    "id": "BPE01",
+    "claim": "Gage introduced BPE as a byte pair replacement compression algorithm in 1994",
+    "kind": "historical",
+    "source_url": "https://www.derczynski.com/papers/archive/BPE_Gage.pdf",
+    "locator": "Abstract and algorithm description",
+    "status": "verified",
+    "notes": "Historical byte substitution is not equivalent to an NLP tokenizer"
+  },
+  {
+    "id": "BPE02",
+    "claim": "Sennrich et al. introduced a subword-based vocabulary method for neural MT using BPE pair merges",
+    "kind": "paper-claim",
+    "source_url": "https://aclanthology.org/P16-1162/",
+    "locator": "§3 Byte Pair Encoding; Introduction",
+    "status": "verified",
+    "notes": "Subword BPE, not GPT-2 byte-level implementation"
+  },
+  {
+    "id": "BPE03",
+    "claim": "The paper considers WMT15 English–German and English–Russian and reports up to 1.1 and 1.3 BLEU improvement over back-off dictionary baseline respectively",
+    "kind": "experiment",
+    "source_url": "https://arxiv.org/abs/1508.07909",
+    "locator": "Abstract; original paper experiments",
+    "status": "verified",
+    "notes": "Paper-specific task comparison, not universal LLM gain"
+  },
+  {
+    "id": "BPE04",
+    "claim": "The learned BPE merge order is reused when encoding new words, without relearning corpus frequencies",
+    "kind": "algorithm",
+    "source_url": "https://github.com/rsennrich/subword-nmt/blob/master/subword_nmt/apply_bpe.py",
+    "locator": "apply_bpe.py implementation",
+    "status": "verified",
+    "notes": "The tutorial chooses a stable lexicographic tie-break"
+  },
+  {
+    "id": "BPE05",
+    "claim": "A word end boundary marker distinguishes word-final and word-internal subwords in the subword-nmt convention",
+    "kind": "implementation",
+    "source_url": "https://github.com/rsennrich/subword-nmt/blob/master/subword_nmt/learn_bpe.py",
+    "locator": "learn_bpe.py / subword-nmt README",
+    "status": "verified",
+    "notes": "Marker details vary among implementations"
+  },
+  {
+    "id": "BPE06",
+    "claim": "GPT-2 uses byte-level BPE with an initial alphabet of 256 bytes and model-specific tokenization conventions",
+    "kind": "later-variant",
+    "source_url": "https://cdn.openai.com/better-language-models/language_models_are_unsupervised_multitask_learners.pdf",
+    "locator": "§2.2 Input Representation",
+    "status": "verified",
+    "notes": "Byte coverage not identical to Unicode character-level BPE"
+  },
+  {
+    "id": "BPE07",
+    "claim": "BPE and WordPiece differ in their pair selection; Unigram scores candidate tokenizations differently",
+    "kind": "comparison",
+    "source_url": "https://huggingface.co/docs/transformers/tokenizer_summary",
+    "locator": "Tokenizer Summary sections BPE / WordPiece / Unigram",
+    "status": "verified",
+    "notes": "Distinction is pedagogical overview"
+  },
+  {
+    "id": "BPE08",
+    "claim": "The low/lower/newest/widest counts and the slider values are an independently constructed toy demonstration",
+    "kind": "toy-derivation",
+    "source_url": "https://aclanthology.org/P16-1162/",
+    "locator": "§3 methodology adapted into independent toy corpus",
+    "status": "illustrative",
+    "notes": "Numbers are not WMT test results; weighted pair frequencies are recomputable"
+  },
+  {
+    "id": "BPE09",
+    "claim": "Increasing merge budget can reduce the token count of some corpus examples but may increase vocabulary size",
+    "kind": "toy-derivation",
+    "source_url": "https://aclanthology.org/P16-1162/",
+    "locator": "§3 algorithm; derived count bounds",
+    "status": "derived",
+    "notes": "A conceptual tradeoff, not a measured performance curve"
+  },
+  {
+    "id": "BPE10",
+    "claim": "Python implementation verifies rule ranking and reconstruction for a small closed character alphabet",
+    "kind": "code",
+    "source_url": "https://github.com/rsennrich/subword-nmt",
+    "locator": "Independent simplification of method; not benchmark reproduction",
+    "status": "derived",
+    "notes": "Does not model unknown Unicode, pretokenization or GPT-2 special tokens"
+  }
+]

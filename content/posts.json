@@ -1,5 +1,27 @@
 [
   {
+    "slug": "alphago",
+    "title": "Understanding AlphaGo",
+    "subtitle": "策略网络、价值网络和 Monte Carlo Tree Search 如何协同打破围棋的搜索墙？",
+    "category": "reinforcement-learning",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 35,
+    "tags": [
+      "AlphaGo",
+      "MCTS",
+      "APV-MCTS",
+      "Policy Network",
+      "Value Network",
+      "Self-play",
+      "Planning & Tree Search"
+    ],
+    "summary": "精读 Silver et al. Nature 2016：从围棋的组合搜索难题、KGS 监督策略、自对弈策略梯度与价值学习，推导 APV-MCTS 的 PUCT、双通道价值回传与最终访问次数决策；包含 5 幅独立 SVG、7 组离线 MathML、交互探索实验及确定性 Python 数值验证，并严格区分 AlphaGo Fan、Lee、Zero。",
+    "paper": "https://doi.org/10.1038/nature16961",
+    "illustration": "alphago"
+  },
+  {
     "slug": "flashattention",
     "title": "Understanding FlashAttention",
     "subtitle": "Attention 的复杂度没变，为什么还能更快？从 HBM/SRAM 到 Online Softmax",
@@ -836,6 +858,49 @@
     "summary": "沿 Word2Vec、GloVe、BERT、SBERT、SimCSE 与 E5 的原论文主线，拆解 Embedding lookup、上下文表示、掩码池化、对比损失与检索系统，配七幅原创 SVG、原生 MathML、互动角度实验和可测的纯 Python 示例。",
     "paper": "https://aclanthology.org/D19-1410/",
     "illustration": "embedding"
+  },
+  {
+    "slug": "bpe",
+    "title": "Understanding BPE",
+    "subtitle": "从字符合并到 Token：语言模型如何构建子词词表？",
+    "category": "foundations",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 30,
+    "tags": [
+      "BPE",
+      "Byte Pair Encoding",
+      "Tokenization",
+      "Subword Units",
+      "Byte-level BPE",
+      "Vocabulary",
+      "GPT-2"
+    ],
+    "summary": "以 Gage 1994 与 Sennrich et al. ACL 2016 为证据，图解罕见词困境、带词频的贪心子词合并、训练与推理的规则分离、GPT-2 byte-level 变体和 WordPiece/Unigram 差异；含六幅独立 SVG、四个离线 MathML 公式、交互式合并实验与确定性 Python 测试。",
+    "paper": "https://aclanthology.org/P16-1162/",
+    "illustration": "bpe"
+  },
+  {
+    "slug": "mcts",
+    "title": "Understanding MCTS",
+    "subtitle": "不必看完整棵树，也能做出更好的决策？从蒙特卡洛采样到 UCT 与 PUCT",
+    "category": "reinforcement-learning",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 32,
+    "tags": [
+      "Monte Carlo Tree Search",
+      "UCT",
+      "Planning & Tree Search",
+      "UCB1",
+      "Exploration vs Exploitation",
+      "PUCT"
+    ],
+    "summary": "从有限预算下的树搜索困境出发，拆解选择、扩展、模拟和回传，推导 UCB1/UCT，交互比较探索系数，解释双人博弈回传，并区分经典 MCTS 与 AlphaZero 的 PUCT。",
+    "paper": "https://aima.cs.berkeley.edu/~russell/classes/cs294/s11/readings/Kocsis%2BSzepesvari%3A2006.pdf",
+    "illustration": "mcts"
   },
   {
     "slug": "reinforce",
