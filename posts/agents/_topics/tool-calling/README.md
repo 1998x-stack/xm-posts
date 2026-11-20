@@ -11,4 +11,6 @@
 - **投稿位置**：`posts/agents/<article-slug>/index.html`（不要将正式文章放到 `_topics/`）。
 - **发布规则**：先完成 HTML、独立 SVG、`evidence.json` 与 QA，再由 `content/posts.json` 控制 `draft` / `published`。
 
+- **阅读路径**：path-25（提示推理到 Agent）、path-26（检索式规划与工具使用）、path-37（工具调用到可验证的软件工程 Agent）。
+
 本主题不新增一级分类：Function Calling 是 Agents & Tool Use 中的工具调用协议与运行时接口问题；模型训练、MCP 连接和 Agent Evaluation 通过标签及阅读路径建立关联。
