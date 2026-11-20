@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 330" role="img" aria-labelledby="rs-fig2-title rs-fig2-desc">
+<title id="rs-fig2-title">离散拒绝采样算例</title>
+<desc id="rs-fig2-desc">三个离散状态的目标概率分别为 0.1、0.3、0.6，提议概率为 0.4、0.4、0.2；对应接受概率为 1/12、1/4、1。</desc>
+<rect width="900" height="330" rx="18" fill="#f7faf9"/>
+<text x="35" y="38" font-size="18" font-weight="700" fill="#315c5a">目标分布 p(x) 与提议分布 q(x)</text>
+<line x1="80" y1="255" x2="825" y2="255" stroke="#607b7a" stroke-width="2"/>
+<g font-size="16" fill="#526b6b" text-anchor="middle">
+<text x="205" y="282">状态 A</text><text x="445" y="282">状态 B</text><text x="685" y="282">状态 C</text>
+</g>
+<g>
+<rect x="130" y="218" width="54" height="37" rx="5" fill="#278d83"/><rect x="190" y="108" width="54" height="147" rx="5" fill="#b6c6ce"/>
+<rect x="370" y="145" width="54" height="110" rx="5" fill="#278d83"/><rect x="430" y="108" width="54" height="147" rx="5" fill="#b6c6ce"/>
+<rect x="610" y="35" width="54" height="220" rx="5" fill="#278d83"/><rect x="670" y="181" width="54" height="74" rx="5" fill="#b6c6ce"/>
+</g>
+<g font-size="15" fill="#39595b" text-anchor="middle" font-weight="700">
+<text x="157" y="207">0.10</text><text x="217" y="98">0.40</text><text x="397" y="134">0.30</text><text x="457" y="98">0.40</text><text x="637" y="25">0.60</text><text x="697" y="171">0.20</text>
+</g>
+<g font-size="14" fill="#526b6b">
+<text x="745" y="94">绿色：目标 p</text><text x="745" y="118">灰蓝：提议 q</text>
+</g>
+<rect x="75" y="294" width="750" height="25" rx="8" fill="#e9f3ef"/>
+<text x="450" y="312" font-size="14" text-anchor="middle" fill="#3c6864">p/q = (0.25, 0.75, 3)，M = 3；接受概率 = (1/12, 1/4, 1)</text>
+</svg>

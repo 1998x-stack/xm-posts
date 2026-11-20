@@ -1,0 +1,74 @@
+[
+  {
+    "id": "classical-rejection-sampling",
+    "claim": "精确接受—拒绝采样使用提议分布生成候选，并按目标密度与提议密度之比接受；接受样本服从目标分布。",
+    "kind": "theory",
+    "source_url": "https://cswr.nrhstat.org/reject-samp.html",
+    "locator": "Chapter 6, §6.1, General algorithm and Theorem 6.1",
+    "status": "verified",
+    "notes": "公式中的 M 采用目标密度相对提议密度的上界；本文自行给出离散算例与条件分布推导。"
+  },
+  {
+    "id": "webgpt-best-of-n",
+    "claim": "WebGPT 对固定问题采样 4、16 或 64 个回答并选择奖励模型排名最高的回答；论文将其作为无需额外训练、但增加推理计算的替代方法。",
+    "kind": "paper-method",
+    "source_url": "https://arxiv.org/abs/2112.09332",
+    "locator": "§3.1 Rejection sampling (best-of-n); §5.1–5.2",
+    "status": "verified",
+    "notes": "候选数与方法定位来自原论文；本文未将其误称为模型微调。"
+  },
+  {
+    "id": "llama2-rsft",
+    "claim": "Llama 2 §3.2.3 对每个 prompt 采样 K 个回答、用奖励模型选择最高分回答并进一步微调；论文说明拒绝采样仅用于最大的 70B Chat 模型，小模型从筛选数据蒸馏。",
+    "kind": "paper-method",
+    "source_url": "https://arxiv.org/abs/2307.09288",
+    "locator": "§3.2.3 Iterative Fine-Tuning, lines describing Rejection Sampling fine-tuning",
+    "status": "verified",
+    "notes": "版本与模型范围按论文原文描述；不将此设置泛化为所有 Llama 2 训练版本。"
+  },
+  {
+    "id": "raft-method",
+    "claim": "RAFT 将生成 K 个候选、奖励排序、保留高分样本和 SFT 组织成迭代训练框架，并研究语言模型与扩散模型。",
+    "kind": "paper-method",
+    "source_url": "https://arxiv.org/abs/2304.06767",
+    "locator": "§3.2 RAFT; §4 LLM Experiments; §5 Diffusion Model Experiments",
+    "status": "verified",
+    "notes": "本文只描述方法结构，不复述未必要的实验指标。"
+  },
+  {
+    "id": "rso-method",
+    "claim": "RSO 使用统计拒绝采样从目标最优策略获取偏好样本，以支持偏好优化目标的估计。",
+    "kind": "paper-method",
+    "source_url": "https://proceedings.iclr.cc/paper_files/paper/2024/hash/efea6d3821a7ccae74e58892162164c0-Abstract-Conference.html",
+    "locator": "ICLR 2024 abstract",
+    "status": "verified",
+    "notes": "本文将其定位为拒绝采样与偏好优化的连接工作。"
+  },
+  {
+    "id": "rs-dpo-method",
+    "claim": "RS-DPO 从 SFT 策略对每个 prompt 采样多个回答，按奖励分布构造对比样本，再执行 DPO。",
+    "kind": "paper-method",
+    "source_url": "https://aclanthology.org/2024.findings-naacl.108/",
+    "locator": "Abstract; Findings of NAACL 2024",
+    "status": "verified",
+    "notes": "论文元数据与摘要来自 ACL Anthology。"
+  },
+  {
+    "id": "bonbon-best-of-n",
+    "claim": "BoNBoN Alignment 分析 Best-of-N 与 RLHF 策略的关系，并提出通过微调模仿 Best-of-N 分布以减少推理时多次采样。",
+    "kind": "paper-method",
+    "source_url": "https://proceedings.neurips.cc/paper_files/paper/2024/hash/056521a35eacd9d2127b66a7d3c499c5-Abstract-Conference.html",
+    "locator": "NeurIPS 2024 abstract",
+    "status": "verified",
+    "notes": "本文只概括摘要所支持的结论，不延伸为所有任务均等价。"
+  },
+  {
+    "id": "von-neumann-reference",
+    "claim": "接受—拒绝采样的经典方法与 John von Neumann 关于随机数技术的工作相关。",
+    "kind": "historical-reference",
+    "source_url": "https://nvlpubs.nist.gov/nistpubs/Legacy/MONO/nbsmonograph12.pdf",
+    "locator": "NBS Applied Mathematics Series 12, 1951",
+    "status": "verified",
+    "notes": "作为历史延伸阅读；正文数学保证引用可计算统计教材的明确算法表述。"
+  }
+]

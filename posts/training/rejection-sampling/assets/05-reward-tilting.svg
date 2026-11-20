@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 320" role="img" aria-labelledby="rs-fig5-title rs-fig5-desc">
+<title id="rs-fig5-title">奖励倾斜后的目标策略分布</title>
+<desc id="rs-fig5-desc">参考策略给候选回答基础概率，指数奖励因子提高高奖励候选的权重，归一化后得到目标策略。</desc>
+<rect width="900" height="320" rx="18" fill="#f7faf9"/>
+<g font-family="Arial, PingFang SC, Microsoft YaHei, sans-serif">
+<rect x="35" y="90" width="220" height="140" rx="13" fill="#edf2f8" stroke="#c8d6e5" stroke-width="2"/>
+<text x="145" y="125" font-size="19" font-weight="700" text-anchor="middle" fill="#4e6684">参考策略</text><text x="145" y="160" font-size="22" text-anchor="middle" fill="#405e7c">πref(y | x)</text><text x="145" y="195" font-size="14" text-anchor="middle" fill="#6a7d90">先验生成概率</text>
+<path d="M258 160 H316" stroke="#789b97" stroke-width="3"/><path d="M307 152 L317 160 L307 168" fill="none" stroke="#789b97" stroke-width="3"/>
+<rect x="322" y="90" width="250" height="140" rx="13" fill="#fff3e8" stroke="#e5c7a9" stroke-width="2"/>
+<text x="447" y="125" font-size="19" font-weight="700" text-anchor="middle" fill="#96633e">奖励倾斜</text><text x="447" y="160" font-size="21" text-anchor="middle" fill="#8b6345">exp(r(x,y) / β)</text><text x="447" y="195" font-size="14" text-anchor="middle" fill="#987d67">高奖励获得更大权重</text>
+<path d="M575 160 H633" stroke="#789b97" stroke-width="3"/><path d="M624 152 L634 160 L624 168" fill="none" stroke="#789b97" stroke-width="3"/>
+<rect x="639" y="90" width="225" height="140" rx="13" fill="#eaf5ef" stroke="#b9d8c8" stroke-width="2"/>
+<text x="751" y="125" font-size="19" font-weight="700" text-anchor="middle" fill="#3c7157">目标策略</text><text x="751" y="160" font-size="22" text-anchor="middle" fill="#3c7157">π*(y | x)</text><text x="751" y="195" font-size="14" text-anchor="middle" fill="#638271">归一化后的分布</text>
+<text x="450" y="275" font-size="16" text-anchor="middle" fill="#5c7474">β 控制奖励偏好与参考策略约束之间的权衡</text>
+</g>
+</svg>
