@@ -1,0 +1,693 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<meta name="description" content="从概率论中的接受—拒绝算法出发，推导接受率与目标分布；再解释 LLM 的奖励筛选、Best-of-N、拒绝采样微调、RAFT、RSO 与 RS-DPO。">
+<title>Understanding Rejection Sampling · xm-posts</title>
+<style>
+:root{--paper:#fffdf9;--bg:#f4f7f5;--ink:#20383d;--muted:#617578;--line:#dce7e2;--teal:#197f76;--teal-soft:#e8f3ef;--amber:#b46e42;--amber-soft:#fff1e5;--violet:#7563a5;--blue:#527b9b;--shadow:0 14px 36px rgba(34,65,62,.07)}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.88 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}
+a{color:#176d70;text-decoration-color:#a9c9c4;text-underline-offset:4px}
+a:hover{color:#a45f37}
+a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid var(--amber);outline-offset:4px}
+.skip-link{position:absolute;top:-80px;left:14px;z-index:10;background:#1e5552;color:#fff;padding:10px 14px;border-radius:6px}
+.skip-link:focus{top:12px}
+.sitebar{background:#fffefa;border-bottom:1px solid var(--line)}
+.site-inner{max-width:1240px;margin:auto;min-height:62px;padding:0 24px;display:flex;align-items:center;justify-content:space-between;gap:18px}
+.brand{font-weight:850;letter-spacing:-.05em;font-size:17px;text-decoration:none;color:#26474a}.brand span{color:var(--amber)}
+.site-links{display:flex;gap:22px;font-size:13px;font-weight:700}
+.layout{max-width:1250px;margin:auto;display:grid;grid-template-columns:230px minmax(0,850px);gap:58px;padding:60px 24px 110px}
+.toc{position:sticky;top:24px;align-self:start;max-height:calc(100vh - 48px);overflow:auto;font-size:12px;line-height:1.55}
+.toc-label{font-size:10px;letter-spacing:.16em;color:#8b9a96;font-weight:800;margin:0 0 14px}
+.toc a{display:block;padding:8px 10px;border-left:2px solid #d6e3de;color:#5b7374;text-decoration:none}
+.toc a:hover{border-left-color:var(--teal);color:var(--teal)}
+main,article{min-width:0}
+.kicker{font-size:11px;letter-spacing:.16em;font-weight:850;color:var(--teal)}
+h1{font-size:clamp(38px,5.3vw,66px);line-height:1.13;letter-spacing:-.065em;margin:18px 0 22px}
+h2{font-size:clamp(26px,3.1vw,37px);line-height:1.35;letter-spacing:-.04em;margin:0 0 24px}
+h3{font-size:21px;line-height:1.45;letter-spacing:-.025em;margin:30px 0 12px}
+.dek{font-size:21px;line-height:1.72;color:#4b696b;max-width:790px;margin:0}
+.meta{display:flex;flex-wrap:wrap;gap:9px 24px;border-top:1px solid var(--line);padding:17px 0;margin:28px 0 54px;color:#78908e;font-size:12px}
+section{margin:0 0 82px;scroll-margin-top:26px}
+p{margin:0 0 19px;color:#3e5558}
+.lead{font-size:19px;line-height:1.86;color:#315256}
+strong{color:#1e4447}
+.figure{margin:27px 0 30px;padding:15px 16px 12px;background:#fff;border:1px solid var(--line);border-radius:13px;box-shadow:var(--shadow)}
+.figure svg{display:block;width:100%;height:auto}
+figcaption{font-size:13px;line-height:1.72;color:#637b7a;padding:12px 5px 2px}
+.fig-no{font-weight:800;color:#34756e}
+.math-card{margin:25px 0;background:#eaf4f0;border-left:4px solid var(--teal);border-radius:8px;padding:18px 20px}
+.math-title{font-size:13px;font-weight:800;color:#3a6e67;margin:0 0 8px}
+.math-scroll{max-width:100%;min-width:0;overflow-x:auto;overflow-y:hidden;scrollbar-width:thin;padding:8px 4px 12px}
+.math-scroll:focus-visible{outline:3px solid var(--amber);outline-offset:-2px}
+.math-scroll math[display="block"]{display:block;width:max-content;min-width:100%;font:normal 22px/1.5 "Cambria Math","STIX Two Math","Latin Modern Math","DejaVu Serif",serif;text-align:center;color:#23494a}
+.math-note{font-size:13px;color:#657d7b;line-height:1.7;margin:7px 4px 0}
+.callout{margin:23px 0;padding:17px 20px;border-left:4px solid #d1a06c;background:var(--amber-soft);border-radius:7px;color:#76583f;font-size:15px;line-height:1.8}
+.callout strong{color:#80532f}
+.callout.teal{border-left-color:var(--teal);background:var(--teal-soft);color:#416b66}
+.callout.teal strong{color:#28665f}
+.steps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:24px 0}
+.step{background:#fff;border:1px solid var(--line);border-radius:10px;padding:16px}
+.step b{display:block;color:var(--teal);font-size:13px;letter-spacing:.04em}
+.step strong{display:block;margin:8px 0 5px;font-size:15px}
+.step p{font-size:13px;line-height:1.65;color:#617778;margin:0}
+.table-scroll{max-width:100%;overflow-x:auto;border:1px solid var(--line);border-radius:10px;margin:24px 0;background:#fff}
+table{border-collapse:collapse;width:100%;min-width:690px;font-size:14px}
+th{background:#edf4f1;color:#345c59;text-align:left;font-weight:800}
+td,th{padding:13px 15px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:0}
+td{color:#455d60}
+code{font-family:"SFMono-Regular",Consolas,monospace;font-size:.9em;background:#edf2ef;padding:2px 5px;border-radius:4px;overflow-wrap:anywhere}
+pre{margin:22px 0;background:#1e3438;color:#eaf4ef;padding:22px;border-radius:11px;overflow-x:auto;font:13px/1.75 "SFMono-Regular",Consolas,monospace;tab-size:4}
+pre code{background:transparent;padding:0;color:inherit;font-size:inherit;white-space:pre}
+.demo{margin:26px 0;padding:22px;background:#fff;border:1px solid #cfe0d9;border-radius:13px;box-shadow:var(--shadow)}
+.demo-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}
+.demo-kicker{font-size:11px;letter-spacing:.13em;font-weight:850;color:var(--teal)}
+.demo h3{margin:5px 0 8px;font-size:20px}
+.demo p{font-size:14px;line-height:1.7;color:#617778}
+.control-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:17px 0}
+.control-row label{font-size:14px;font-weight:750;color:#385e5b}
+input[type=range]{width:min(340px,100%);accent-color:var(--teal)}
+.output-pill{display:inline-block;padding:5px 10px;border-radius:20px;background:#eaf4f0;color:#2c7168;font-weight:800;font-size:13px;font-variant-numeric:tabular-nums}
+.demo button{border:1px solid #bad4cb;background:#fff;color:#3f7069;border-radius:7px;padding:9px 13px;font:700 13px inherit;cursor:pointer}
+.demo button[aria-pressed=true]{background:#287c72;color:#fff;border-color:#287c72}
+.demo button:hover{border-color:var(--teal)}
+.demo-table{width:100%;min-width:0;border-collapse:collapse;font-size:13px;margin:12px 0}
+.demo-table th,.demo-table td{padding:9px 10px}
+.demo-table th{background:#f1f6f3}
+.mini-bar{height:10px;background:#e7efeb;border-radius:20px;overflow:hidden;min-width:70px}
+.mini-bar span{display:block;height:100%;border-radius:20px;background:#318a7e}
+.demo-summary{padding:12px 14px;background:#f1f7f4;border-radius:8px;font-size:14px;color:#3c6862;margin:14px 0}
+.candidate-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.candidate-card{background:#f6f9f7;border:1px solid var(--line);border-radius:9px;padding:13px;min-width:0}
+.candidate-card h4{font-size:13px;margin:0 0 8px;color:#456b67}
+.candidate-card p{font-size:13px;margin:0 0 8px;min-height:42px;color:#425a5d}
+.candidate-score{font-size:12px;font-weight:800;color:#2c786e}
+.live{min-height:24px;color:#34766e;font-weight:750;font-size:14px;margin:12px 0}
+.list-tight{padding-left:22px}
+.list-tight li{margin:0 0 9px;color:#455d60}
+.sources{padding-left:23px}
+.sources li{padding:0 0 13px 4px;color:#4b6265;font-size:14px;line-height:1.7}
+.sources small{display:block;color:#778b89;font-size:12px}
+.summary-band{padding:22px 24px;background:#edf5f1;border:1px solid #d4e5dc;border-radius:12px;margin:24px 0}
+.summary-band p:last-child{margin-bottom:0}
+.footer-note{border-top:1px solid var(--line);padding-top:23px;color:#738785;font-size:13px;margin-top:30px}
+@media(max-width:1000px){.layout{grid-template-columns:minmax(0,1fr);gap:0;padding:40px 22px 90px}.toc{position:static;max-height:none;margin:0 0 40px;padding-bottom:16px;border-bottom:1px solid var(--line)}.toc-links{display:flex;flex-wrap:wrap;gap:3px 8px}.toc a{border-left:0;border-bottom:2px solid transparent;padding:6px}.toc a:hover{border-bottom-color:var(--teal)}}
+@media(max-width:600px){body{font-size:16px}.site-inner{padding:0 16px}.site-links{gap:12px;font-size:12px}.layout{padding:28px 16px 70px}.dek{font-size:18px}.meta{margin-bottom:38px}.steps{grid-template-columns:repeat(2,minmax(0,1fr))}.candidate-grid{grid-template-columns:1fr}.demo{padding:16px}.figure{padding:9px 9px 8px}section{margin-bottom:64px}h1{font-size:42px}.math-scroll math[display="block"]{font-size:18px}pre{font-size:12px}}
+@media(max-width:380px){.site-links{gap:8px;font-size:11px}.steps{grid-template-columns:1fr}.layout{padding-left:14px;padding-right:14px}h1{font-size:38px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
+@media print{body{background:#fff;color:#111;font-size:11.5pt}.sitebar,.toc,.skip-link,.control-row,.demo button{display:none!important}.layout{display:block;padding:0;max-width:none}.figure,.demo,.math-card{box-shadow:none;break-inside:avoid}.math-scroll{overflow:visible}.math-scroll math[display="block"]{font-size:15px}.figure svg{max-width:100%}section{break-inside:auto}a{color:#111;text-decoration:underline}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#f1f3f2;color:#111;border:1px solid #ddd}}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">跳转至正文</a>
+<header class="sitebar"><div class="site-inner"><a class="brand" href="../../../">xm<span>.</span>posts</a><nav class="site-links" aria-label="站点导航"><a href="../../../categories/training/">训练与对齐</a><a href="../../../archive/">文章归档</a><a href="https://github.com/1998x-stack/xm-posts">GitHub</a></nav></div></header>
+<div class="layout">
+<nav class="toc" aria-label="文章目录">
+<p class="toc-label">THE READING MAP</p>
+<div class="toc-links">
+<a href="#problem">01 · 拒绝的究竟是什么？</a>
+<a href="#exact">02 · 精确拒绝采样的数学保证</a>
+<a href="#example">03 · 一个可以手算的离散例子</a>
+<a href="#llm">04 · LLM 如何把候选变成训练数据？</a>
+<a href="#variants">05 · 三种常被混称的机制</a>
+<a href="#tilt">06 · 奖励模型与目标分布</a>
+<a href="#practice">07 · 从 WebGPT 到 Llama 2 与 RAFT</a>
+<a href="#compare">08 · 与 PPO、DPO、GRPO 的边界</a>
+<a href="#lab">09 · 交互实验：采样预算和筛选策略</a>
+<a href="#failure">10 · 什么时候拒绝采样会失效？</a>
+<a href="#code">11 · 可运行的最小实现</a>
+<a href="#summary">12 · 建立正确的心智模型</a>
+<a href="#references">参考文献</a>
+</div>
+</nav>
+<main id="main"><article>
+<header>
+<span class="kicker">PROBABILITY &amp; ALIGNMENT / RESEARCH EXPLAINER</span>
+<h1>Understanding Rejection Sampling</h1>
+<p class="dek">拒绝采样不是“生成很多答案，然后挑一个”这么简单。从概率论中的接受—拒绝算法出发，推导它为什么能得到目标分布；再看奖励模型如何把这套思想带进 LLM 对齐、Best-of-N 和拒绝采样微调。</p>
+<div class="meta"><span>核心案例 · RAFT / Llama 2 / WebGPT</span><span>约 30 分钟</span><span>训练与对齐</span><span>概率采样 · 奖励筛选</span></div>
+</header>
+
+<section id="problem" aria-labelledby="problem-title">
+<h2 id="problem-title">01 · 拒绝的究竟是什么？</h2>
+<p class="lead">想象我们想从一个复杂分布里抽样，但它太难直接采样。我们手里却有一个容易采样的分布。拒绝采样的想法是：<strong>先从容易的分布提出候选，再按一个经过推导的概率接受或拒绝它</strong>。只要条件满足，最后留下来的样本就服从我们真正想要的目标分布。</p>
+<p>这和普通的“筛掉不喜欢的答案”有一点像，但两者不能直接画等号。统计学中的精确拒绝采样有严格的密度比和包络上界；LLM 后训练中的 reward filtering 通常使用奖励模型排序、阈值或每个 prompt 的 Top-1 / Top-K，是一种工程化的筛选流程。它继承了“多生成、再筛选”的思想，但不一定严格实现了概率论里的接受—拒绝算法。</p>
+<div class="steps">
+<div class="step"><b>01 / TARGET</b><strong>目标分布 p</strong><p>我们真正想得到的样本分布，可能难以直接采样。</p></div>
+<div class="step"><b>02 / PROPOSAL</b><strong>提议分布 q</strong><p>一个容易生成候选、并覆盖目标支持集的分布。</p></div>
+<div class="step"><b>03 / TEST</b><strong>接受概率 a(x)</strong><p>候选不是一律保留，而是按密度比随机接受。</p></div>
+<div class="step"><b>04 / RESULT</b><strong>目标样本</strong><p>被接受的候选，在理想条件下恰好服从 p。</p></div>
+</div>
+<p>在语言模型中，可以把“候选”理解为完整回答序列。模型先给出多个可能的回答，再由奖励模型或验证器判断哪些回答更符合偏好、规则或任务目标。接下来要弄清楚：这个类比在什么地方是严格的，在什么地方只是近似。</p>
+</section>
+
+<section id="exact" aria-labelledby="exact-title">
+<h2 id="exact-title">02 · 精确拒绝采样的数学保证</h2>
+<p>先把符号固定下来。目标密度记为 <strong>p(x)</strong>，提议密度记为 <strong>q(x)</strong>。我们要求提议分布覆盖目标分布的支持集：如果某处 q(x)=0，那么目标也必须在该处为零。否则，提议过程永远不可能产生目标分布需要的样本。</p>
+<div class="math-card">
+<p class="math-title">条件一：构造一个处处覆盖目标的包络</p>
+<div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="包络条件公式，可横向滚动">
+<math display="block" aria-label="对所有 x，p(x) 小于等于 M 乘 q(x)">
+<mrow><mi>p</mi><mo>(</mo><mi>x</mi><mo>)</mo><mo>≤</mo><mi>M</mi><mi>q</mi><mo>(</mo><mi>x</mi><mo>)</mo><mo>,</mo><mspace width="1em"/><mi>M</mi><mo>≥</mo><msup><mi>sup</mi><mo></mo></msup><mfrac><mi>p</mi><mi>q</mi></mfrac></mrow>
+</math>
+</div>
+<p class="math-note">M 是一个常数上界。图中的 Mq(x) 必须在每个 x 处都不低于 p(x)，而不是只在峰值附近覆盖。</p>
+</div>
+<figure class="figure"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 330" role="img" aria-labelledby="rs-fig1-title rs-fig1-desc">
+<title id="rs-fig1-title">提议分布、目标分布与接受概率</title>
+<desc id="rs-fig1-desc">提议分布 q 提供候选，放大后的包络 Mq 覆盖目标密度 p；候选点的接受概率由 p 除以 Mq 决定。</desc>
+<rect width="900" height="330" rx="18" fill="#f7faf9"/>
+<line x1="90" y1="260" x2="830" y2="260" stroke="#607b7a" stroke-width="2"/>
+<line x1="90" y1="260" x2="90" y2="35" stroke="#607b7a" stroke-width="2"/>
+<text x="842" y="267" font-size="15" fill="#526b6b">x</text><text x="56" y="38" font-size="15" fill="#526b6b">密度</text>
+<path d="M95 250 C180 225 205 105 350 70 C470 42 565 130 650 205 C710 245 765 250 825 252" fill="none" stroke="#a6b8c0" stroke-width="5" stroke-dasharray="10 8"/>
+<path d="M95 252 C195 238 255 175 350 145 C455 112 550 160 625 220 C690 250 760 252 825 253" fill="none" stroke="#278d83" stroke-width="5"/>
+<path d="M95 252 C180 215 205 75 350 40 C470 12 565 105 650 190 C710 235 765 248 825 252" fill="none" stroke="#d49b58" stroke-width="3" stroke-dasharray="5 7"/>
+<line x1="480" y1="40" x2="480" y2="260" stroke="#8b6db0" stroke-width="2" stroke-dasharray="6 6"/>
+<circle cx="480" cy="135" r="7" fill="#8b6db0" stroke="#fff" stroke-width="3"/>
+<rect x="505" y="49" width="220" height="58" rx="9" fill="#fff" stroke="#d9e5e1"/>
+<text x="520" y="73" font-size="16" font-weight="700" fill="#4d5e70">候选位置 x*</text>
+<text x="520" y="94" font-size="14" fill="#667a7b">接受概率 = p(x*) / [M q(x*)]</text>
+<rect x="112" y="24" width="250" height="72" rx="10" fill="#fff" stroke="#dce7e3"/>
+<line x1="130" y1="46" x2="175" y2="46" stroke="#d49b58" stroke-width="4" stroke-dasharray="5 6"/>
+<text x="187" y="51" font-size="15" fill="#5c6f73">包络上界 Mq(x)</text>
+<line x1="130" y1="68" x2="175" y2="68" stroke="#a6b8c0" stroke-width="4" stroke-dasharray="9 6"/>
+<text x="187" y="73" font-size="15" fill="#5c6f73">提议分布 q(x)</text>
+<line x1="130" y1="88" x2="175" y2="88" stroke="#278d83" stroke-width="4"/>
+<text x="187" y="93" font-size="15" fill="#5c6f73">目标密度 p(x)</text>
+<text x="112" y="296" font-size="15" fill="#607778">关键条件：对所有 x，目标密度都不能高于包络 Mq(x)。</text>
+</svg><figcaption><span class="fig-no">图 1｜</span>提议分布 q 负责提出候选，包络 Mq 保证接受概率不超过 1。紫色竖线表示一次候选位置；其接受概率由该点的目标密度与包络高度之比决定。</figcaption></figure>
+<p>算法每轮做两件事：先抽一个候选 X∼q，再独立抽一个 U∼Uniform(0,1)。只有当 U 落在接受区域内，才保留 X。</p>
+<div class="math-card">
+<p class="math-title">条件二：按密度比接受</p>
+<div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="接受概率公式，可横向滚动">
+<math display="block" aria-label="a(x) 等于 p(x) 除以 M q(x)">
+<mrow><mi>a</mi><mo>(</mo><mi>x</mi><mo>)</mo><mo>=</mo><mfrac><mrow><mi>p</mi><mo>(</mo><mi>x</mi><mo>)</mo></mrow><mrow><mi>M</mi><mi>q</mi><mo>(</mo><mi>x</mi><mo>)</mo></mrow></mfrac><mo>,</mo><mspace width="1em"/><mi>U</mi><mo>≤</mo><mi>a</mi><mo>(</mo><mi>X</mi><mo>)</mo></mrow>
+</math>
+</div>
+<p class="math-note">当 U ≤ a(X) 时接受，否则拒绝并重新采样。因为 p(x) ≤ Mq(x)，所以 0 ≤ a(x) ≤ 1。</p>
+</div>
+<h3>为什么接受后的分布恰好是 p？</h3>
+<p>这是整套算法最重要的一步。候选落在某个很小区间 dx 的概率约为 q(x)dx；它同时被接受的概率是 p(x)/(Mq(x))。两者相乘，q(x) 会被约掉：</p>
+<div class="math-card">
+<p class="math-title">被接受样本的未归一化概率质量</p>
+<div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="接受样本概率推导，可横向滚动">
+<math display="block" aria-label="q(x) 乘以 p(x) 除以 M q(x)，等于 p(x) 除以 M">
+<mrow><mi>q</mi><mo>(</mo><mi>x</mi><mo>)</mo><mo>·</mo><mfrac><mrow><mi>p</mi><mo>(</mo><mi>x</mi><mo>)</mo></mrow><mrow><mi>M</mi><mi>q</mi><mo>(</mo><mi>x</mi><mo>)</mo></mrow></mfrac><mo>=</mo><mfrac><mrow><mi>p</mi><mo>(</mo><mi>x</mi><mo>)</mo></mrow><mi>M</mi></mfrac></mrow>
+</math>
+</div>
+<p class="math-note">因此，所有位置上的接受质量都是目标密度 p 的同一个常数倍。</p>
+</div>
+<p>把所有 x 的接受质量加起来，得到单次提议的总接受概率：</p>
+<div class="math-card">
+<div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="接受率公式，可横向滚动">
+<math display="block" aria-label="P 接受等于对 p 积分除以 M，等于 1 除以 M">
+<mrow><mi>P</mi><mo>(</mo><mi>accept</mi><mo>)</mo><mo>=</mo><mo>∫</mo><mfrac><mi>p</mi><mi>M</mi></mfrac><mi>d</mi><mi>x</mi><mo>=</mo><mfrac><mn>1</mn><mi>M</mi></mfrac></mrow>
+</math>
+</div>
+</div>
+<p>于是对任意集合 A，接受样本落在 A 中的条件概率为：</p>
+<div class="math-card">
+<div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="条件分布证明，可横向滚动">
+<math display="block" aria-label="P X 属于 A 给定接受，等于积分 A 上 p(x) dx">
+<mrow><mi>P</mi><mo>(</mo><mi>X</mi><mo>∈</mo><mi>A</mi><mo>|</mo><mi>accept</mi><mo>)</mo><mo>=</mo><mfrac><mrow><mo>∫</mo><msub><mi>A</mi><mrow></mrow></msub><mi>p</mi><mo>(</mo><mi>x</mi><mo>)</mo><mi>d</mi><mi>x</mi></mrow><mrow><mn>1</mn><mo>/</mo><mi>M</mi></mrow></mfrac><mo>·</mo><mfrac><mn>1</mn><mi>M</mi></mfrac><mo>=</mo><mo>∫</mo><mi>A</mi><mi>p</mi><mo>(</mo><mi>x</mi><mo>)</mo><mi>d</mi><mi>x</mi></mrow>
+</math>
+</div>
+<p class="math-note">接受事件发生后，样本在任意集合 A 上的概率与目标分布完全一致。这就是“拒绝后仍然无偏”的核心原因。</p>
+</div>
+<div class="callout teal"><strong>效率结论：</strong>若 p 已归一化，单次提议接受率为 1/M，因此平均需要 M 次提议才能得到一个接受样本。M 越松，算法越慢；包络越紧，接受率越高。</div>
+<p>更一般地，目标可能只知道未归一化密度 p̃(x)，归一化常数 Z=∫p̃(x)dx 不可得。只要 Mq(x)≥p̃(x)，接受概率仍可写为 p̃(x)/(Mq(x))，接受后的样本服从 p̃/Z；单次接受率为 Z/M，平均提议次数为 M/Z。这正是拒绝采样有用的地方：不必先算出 Z。</p>
+</section>
+
+<section id="example" aria-labelledby="example-title">
+<h2 id="example-title">03 · 一个可以手算的离散例子</h2>
+<p>用三个离散状态 A、B、C 代替连续变量。我们希望目标分布为 p=(0.1, 0.3, 0.6)，但只会从提议分布 q=(0.4, 0.4, 0.2) 抽样。计算每个状态的密度比：</p>
+<div class="math-card">
+<div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="离散密度比公式，可横向滚动">
+<math display="block" aria-label="p 除以 q 等于 0.25、0.75、3，因此 M 等于 3">
+<mrow><mfrac><mi>p</mi><mi>q</mi></mfrac><mo>=</mo><mo>(</mo><mn>0.1</mn><mo>/</mo><mn>0.4</mn><mo>,</mo><mn>0.3</mn><mo>/</mo><mn>0.4</mn><mo>,</mo><mn>0.6</mn><mo>/</mo><mn>0.2</mn><mo>)</mo><mo>=</mo><mo>(</mo><mn>0.25</mn><mo>,</mo><mn>0.75</mn><mo>,</mo><mn>3</mn><mo>)</mo></mrow>
+</math>
+</div>
+</div>
+<p>最大密度比是 3，所以 M=3。A 的接受概率是 0.25/3=1/12；B 是 0.75/3=1/4；C 是 3/3=1。注意，提议分布中 A 很常见，但目标分布中 A 很少，因此大多数 A 会被拒绝。C 在提议分布中相对稀少，但目标分布中更常见，因此只要抽到 C 就接受。</p>
+<figure class="figure"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 330" role="img" aria-labelledby="rs-fig2-title rs-fig2-desc">
+<title id="rs-fig2-title">离散拒绝采样算例</title>
+<desc id="rs-fig2-desc">三个离散状态的目标概率分别为 0.1、0.3、0.6，提议概率为 0.4、0.4、0.2；对应接受概率为 1/12、1/4、1。</desc>
+<rect width="900" height="330" rx="18" fill="#f7faf9"/>
+<text x="35" y="38" font-size="18" font-weight="700" fill="#315c5a">目标分布 p(x) 与提议分布 q(x)</text>
+<line x1="80" y1="255" x2="825" y2="255" stroke="#607b7a" stroke-width="2"/>
+<g font-size="16" fill="#526b6b" text-anchor="middle">
+<text x="205" y="282">状态 A</text><text x="445" y="282">状态 B</text><text x="685" y="282">状态 C</text>
+</g>
+<g>
+<rect x="130" y="218" width="54" height="37" rx="5" fill="#278d83"/><rect x="190" y="108" width="54" height="147" rx="5" fill="#b6c6ce"/>
+<rect x="370" y="145" width="54" height="110" rx="5" fill="#278d83"/><rect x="430" y="108" width="54" height="147" rx="5" fill="#b6c6ce"/>
+<rect x="610" y="35" width="54" height="220" rx="5" fill="#278d83"/><rect x="670" y="181" width="54" height="74" rx="5" fill="#b6c6ce"/>
+</g>
+<g font-size="15" fill="#39595b" text-anchor="middle" font-weight="700">
+<text x="157" y="207">0.10</text><text x="217" y="98">0.40</text><text x="397" y="134">0.30</text><text x="457" y="98">0.40</text><text x="637" y="25">0.60</text><text x="697" y="171">0.20</text>
+</g>
+<g font-size="14" fill="#526b6b">
+<text x="745" y="94">绿色：目标 p</text><text x="745" y="118">灰蓝：提议 q</text>
+</g>
+<rect x="75" y="294" width="750" height="25" rx="8" fill="#e9f3ef"/>
+<text x="450" y="312" font-size="14" text-anchor="middle" fill="#3c6864">p/q = (0.25, 0.75, 3)，M = 3；接受概率 = (1/12, 1/4, 1)</text>
+</svg><figcaption><span class="fig-no">图 2｜</span>同一状态在提议分布和目标分布中的概率质量不同。接受概率会补偿这种差异，使最终保留样本的比例回到 0.1、0.3、0.6。</figcaption></figure>
+<div class="demo" id="exact-demo">
+<div class="demo-head"><div><span class="demo-kicker">INTERACTIVE EXPERIMENT 01</span><h3>把包络放松，看看效率如何变化</h3></div><span class="output-pill" id="m-value">M = 3</span></div>
+<p>真实的最大密度比是 3。把 M 从 3 调大到 6，仍然满足包络条件，所以抽样仍然正确；但接受概率会同比下降。这个滑块只改变包络松紧，不改变目标分布。</p>
+<div class="control-row"><label for="m-slider">包络常数 M</label><input id="m-slider" type="range" min="3" max="6" step="1" value="3"><output class="output-pill" id="accept-rate">接受率 33.3%</output></div>
+<div class="table-scroll"><table class="demo-table"><thead><tr><th>状态</th><th>提议 q</th><th>目标 p</th><th>接受概率 p/(Mq)</th><th>保留质量（归一化后）</th></tr></thead><tbody>
+<tr><td>A</td><td>0.40</td><td>0.10</td><td id="acc-a">8.3%</td><td><div class="mini-bar"><span style="width:10%"></span></div><small>0.10</small></td></tr>
+<tr><td>B</td><td>0.40</td><td>0.30</td><td id="acc-b">25.0%</td><td><div class="mini-bar"><span style="width:30%"></span></div><small>0.30</small></td></tr>
+<tr><td>C</td><td>0.20</td><td>0.60</td><td id="acc-c">100.0%</td><td><div class="mini-bar"><span style="width:60%"></span></div><small>0.60</small></td></tr>
+</tbody></table></div>
+<div class="demo-summary" id="exact-summary" aria-live="polite">每接受 1 个样本，平均需要 3 次提议。无论 M 取多少（只要 M ≥ 3），接受样本的分布仍为 (0.10, 0.30, 0.60)。</div>
+</div>
+<p>这个小例子揭示了拒绝采样的核心权衡：<strong>正确性由密度比和包络条件保证，效率由包络的松紧决定</strong>。如果包络低于目标密度，接受概率可能大于 1，算法就不再成立；如果包络远高于目标，算法仍正确，但会浪费大量提议。</p>
+</section>
+
+<section id="llm" aria-labelledby="llm-title">
+<h2 id="llm-title">04 · LLM 如何把候选变成训练数据？</h2>
+<p class="lead">现在把样本 x 换成一条用户提示，把候选样本换成完整回答 y。模型不是只生成一个答案，而是对同一个 prompt 生成 K 个候选；奖励模型再估计每个回答的偏好分数，最后把高分候选保留下来。</p>
+<figure class="figure"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 370" role="img" aria-labelledby="rs-fig3-title rs-fig3-desc">
+<title id="rs-fig3-title">LLM 中的奖励筛选与拒绝采样微调</title>
+<desc id="rs-fig3-desc">提示输入当前策略生成多个候选，奖励模型打分后按规则保留高质量回答，再通过监督微调更新策略。</desc>
+<rect width="960" height="370" rx="18" fill="#f7faf9"/>
+<g font-family="Arial, PingFang SC, Microsoft YaHei, sans-serif">
+<rect x="25" y="112" width="140" height="112" rx="13" fill="#e9f4f0" stroke="#b6d8cd" stroke-width="2"/>
+<text x="95" y="151" font-size="19" font-weight="700" text-anchor="middle" fill="#28635e">Prompt</text><text x="95" y="181" font-size="15" text-anchor="middle" fill="#547271">用户问题 x</text>
+<path d="M166 168 H205" stroke="#789b97" stroke-width="3" fill="none"/><path d="M196 160 L206 168 L196 176" fill="none" stroke="#789b97" stroke-width="3"/>
+<rect x="210" y="112" width="150" height="112" rx="13" fill="#eef1fa" stroke="#c7cce4" stroke-width="2"/>
+<text x="285" y="151" font-size="19" font-weight="700" text-anchor="middle" fill="#5e6290">Policy πθ</text><text x="285" y="181" font-size="15" text-anchor="middle" fill="#696e8e">采样 K 次</text>
+<path d="M361 168 H397" stroke="#789b97" stroke-width="3" fill="none"/><path d="M388 160 L398 168 L388 176" fill="none" stroke="#789b97" stroke-width="3"/>
+<rect x="402" y="50" width="200" height="235" rx="13" fill="#fff" stroke="#d9e5e1" stroke-width="2"/>
+<text x="502" y="80" font-size="17" font-weight="700" text-anchor="middle" fill="#49656a">候选回答</text>
+<rect x="423" y="99" width="158" height="43" rx="8" fill="#eef7f3"/><text x="502" y="126" font-size="15" text-anchor="middle" fill="#35645d">y₁ · 回答 A</text>
+<rect x="423" y="151" width="158" height="43" rx="8" fill="#fbf1e8"/><text x="502" y="178" font-size="15" text-anchor="middle" fill="#956744">y₂ · 回答 B</text>
+<rect x="423" y="203" width="158" height="43" rx="8" fill="#eef7f3"/><text x="502" y="230" font-size="15" text-anchor="middle" fill="#35645d">… yK</text>
+<path d="M603 168 H638" stroke="#789b97" stroke-width="3" fill="none"/><path d="M629 160 L639 168 L629 176" fill="none" stroke="#789b97" stroke-width="3"/>
+<rect x="643" y="112" width="145" height="112" rx="13" fill="#fff3e8" stroke="#e4c6a6" stroke-width="2"/>
+<text x="715" y="151" font-size="18" font-weight="700" text-anchor="middle" fill="#99633d">Reward Model</text><text x="715" y="181" font-size="15" text-anchor="middle" fill="#8a715e">rφ(x, y)</text>
+<path d="M789 168 H822" stroke="#789b97" stroke-width="3" fill="none"/><path d="M813 160 L823 168 L813 176" fill="none" stroke="#789b97" stroke-width="3"/>
+<rect x="827" y="112" width="110" height="112" rx="13" fill="#e9f4f0" stroke="#b6d8cd" stroke-width="2"/>
+<text x="882" y="151" font-size="17" font-weight="700" text-anchor="middle" fill="#28635e">筛选</text><text x="882" y="181" font-size="14" text-anchor="middle" fill="#547271">Top-K / 阈值</text>
+<path d="M882 226 V300 H285 V229" stroke="#8b79aa" stroke-width="2.5" fill="none" stroke-dasharray="7 6"/>
+<rect x="390" y="296" width="205" height="52" rx="10" fill="#f1edf8" stroke="#d3c9e2"/>
+<text x="492" y="318" font-size="16" text-anchor="middle" font-weight="700" fill="#655b87">SFT on selected</text><text x="492" y="338" font-size="13" text-anchor="middle" fill="#746d91">更新策略参数 θ</text>
+</g>
+</svg><figcaption><span class="fig-no">图 3｜</span>LLM 后训练中的奖励筛选流程。生成模型负责探索候选空间，奖励模型负责排序或过滤，SFT 把筛选后的输出变成新的监督样本。图中为概念流程，不对应某一篇论文的原始插图。</figcaption></figure>
+<div class="steps">
+<div class="step"><b>INPUT</b><strong>选择提示集合</strong><p>从指令数据或目标任务中选取 prompt，控制覆盖范围与难度。</p></div>
+<div class="step"><b>GENERATE</b><strong>采样多个回答</strong><p>从当前策略采样 K 个回答，温度、top-p 和长度上限会改变候选多样性。</p></div>
+<div class="step"><b>SCORE</b><strong>奖励模型打分</strong><p>用 reward model 或可验证规则对回答评分，必要时先去重。</p></div>
+<div class="step"><b>LEARN</b><strong>对保留样本做 SFT</strong><p>把高分回答作为伪标签，更新原模型或下一轮策略。</p></div>
+</div>
+<p>对第 i 个 prompt，记 K 个回答为 yᵢ₁,…,yᵢK，奖励模型分数为 rφ(xᵢ,yᵢⱼ)。最简单的“每个 prompt 留一个”策略是：</p>
+<div class="math-card">
+<p class="math-title">每个 prompt 独立选出奖励最高的回答</p>
+<div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="每个提示选择最高奖励样本的公式，可横向滚动">
+<math display="block" aria-label="y 星号 i 等于使奖励模型分数最大的 y i j">
+<mrow><msub><mi>y</mi><mi>i</mi></msub><mo>*</mo><mo>=</mo><msub><mi>y</mi><mrow><mi>i</mi><mo>,</mo><msup><mi>j</mi><mo>*</mo></msup></mrow></msub><mo>,</mo><mspace width=".5em"/><msup><mi>j</mi><mo>*</mo></msup><mo>=</mo><mi>argmax</mi><msub><mi>r</mi><mi>φ</mi></msub><mo>(</mo><msub><mi>x</mi><mi>i</mi></msub><mo>,</mo><msub><mi>y</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>)</mo></mrow>
+</math>
+</div>
+</div>
+<p>最后对保留的数据集合 Dkeep 做普通的监督微调：</p>
+<div class="math-card">
+<div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="拒绝采样微调目标公式，可横向滚动">
+<math display="block" aria-label="L RSFT 等于负的保留数据上答案 token 对数概率之和">
+<mrow><msub><mi>L</mi><mtext>RSFT</mtext></msub><mo>(</mo><mi>θ</mi><mo>)</mo><mo>=</mo><mo>−</mo><msub><mi>E</mi><mrow><mo>(</mo><mi>x</mi><mo>,</mo><mi>y</mi><mo>)</mo><mo>∼</mo><msub><mi>D</mi><mtext>keep</mtext></msub></mrow></msub><mo>[</mo><munderover><mo>∑</mo><mrow><mi>t</mi><mo>=</mo><mn>1</mn></mrow><mi>T</mi></munderover><mi>log</mi><msub><mi>π</mi><mi>θ</mi></msub><mo>(</mo><msub><mi>y</mi><mi>t</mi></msub><mo>|</mo><mi>x</mi><mo>,</mo><msub><mi>y</mi><mo>&lt;</mo><mi>t</mi></msub><mo>)</mo><mo>]</mo></mrow>
+</math>
+</div>
+<p class="math-note">这一步仍然是最大似然 / 交叉熵训练，不是 PPO 式的策略梯度更新。不同实现会采用 token mask、样本权重和长度归一化等细节。</p>
+</div>
+<p>关键变化是：训练标签不再只来自人工示范，也可以来自当前模型自己生成、再经奖励模型挑选的候选。这是一种带有模型筛选器的自训练过程。</p>
+</section>
+
+<section id="variants" aria-labelledby="variants-title">
+<h2 id="variants-title">05 · 三种常被混称的机制</h2>
+<p>论文与工程实践中，“rejection sampling”有时被用来泛指生成多个候选后筛选的过程。阅读论文时，必须先确认它具体指哪一种机制。</p>
+<figure class="figure"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 350" role="img" aria-labelledby="rs-fig4-title rs-fig4-desc">
+<title id="rs-fig4-title">Best-of-N 与拒绝采样微调的区别</title>
+<desc id="rs-fig4-desc">两者都生成多个候选并用奖励模型排序；Best-of-N 只在推理时返回最佳答案，拒绝采样微调则把保留样本用于监督微调。</desc>
+<rect width="920" height="350" rx="18" fill="#f7faf9"/>
+<rect x="25" y="30" width="420" height="285" rx="14" fill="#eef5fb" stroke="#c5d8e8" stroke-width="2"/>
+<rect x="475" y="30" width="420" height="285" rx="14" fill="#f2f7f3" stroke="#c7ded2" stroke-width="2"/>
+<g font-family="Arial, PingFang SC, Microsoft YaHei, sans-serif">
+<text x="235" y="68" font-size="21" font-weight="700" text-anchor="middle" fill="#3e6281">Best-of-N · 推理时选择</text>
+<rect x="60" y="103" width="112" height="62" rx="9" fill="#fff" stroke="#c5d8e8"/><text x="116" y="140" font-size="17" text-anchor="middle" fill="#47647a">Prompt</text>
+<path d="M174 134 H211" stroke="#7195ad" stroke-width="3"/><path d="M202 126 L212 134 L202 142" fill="none" stroke="#7195ad" stroke-width="3"/>
+<rect x="216" y="103" width="100" height="62" rx="9" fill="#fff" stroke="#c5d8e8"/><text x="266" y="140" font-size="17" text-anchor="middle" fill="#47647a">N samples</text>
+<path d="M318 134 H350" stroke="#7195ad" stroke-width="3"/><path d="M341 126 L351 134 L341 142" fill="none" stroke="#7195ad" stroke-width="3"/>
+<rect x="355" y="103" width="65" height="62" rx="9" fill="#dcebf5" stroke="#a8c5db"/><text x="387" y="140" font-size="15" text-anchor="middle" fill="#3e6281">Best</text>
+<text x="235" y="215" font-size="17" text-anchor="middle" fill="#3e6281">返回一个答案</text><text x="235" y="250" font-size="15" text-anchor="middle" fill="#617a8a">不更新模型参数</text><text x="235" y="280" font-size="14" text-anchor="middle" fill="#617a8a">代价：每个请求多次生成与打分</text>
+<text x="685" y="68" font-size="21" font-weight="700" text-anchor="middle" fill="#3d6d59">RSFT / RAFT · 训练时学习</text>
+<rect x="510" y="103" width="95" height="62" rx="9" fill="#fff" stroke="#c7ded2"/><text x="557" y="140" font-size="17" text-anchor="middle" fill="#476e5b">Prompt</text>
+<path d="M607 134 H638" stroke="#77a38b" stroke-width="3"/><path d="M629 126 L639 134 L629 142" fill="none" stroke="#77a38b" stroke-width="3"/>
+<rect x="643" y="103" width="95" height="62" rx="9" fill="#fff" stroke="#c7ded2"/><text x="690" y="140" font-size="16" text-anchor="middle" fill="#476e5b">N samples</text>
+<path d="M740 134 H768" stroke="#77a38b" stroke-width="3"/><path d="M759 126 L769 134 L759 142" fill="none" stroke="#77a38b" stroke-width="3"/>
+<rect x="773" y="103" width="90" height="62" rx="9" fill="#e1f1e8" stroke="#b2d4c0"/><text x="818" y="140" font-size="16" text-anchor="middle" fill="#3d6d59">Keep</text>
+<path d="M818 167 V205 H685" stroke="#77a38b" stroke-width="2.5" fill="none"/><path d="M694 197 L684 205 L694 213" fill="none" stroke="#77a38b" stroke-width="2.5"/>
+<rect x="580" y="211" width="210" height="50" rx="9" fill="#e1f1e8" stroke="#b2d4c0"/><text x="685" y="242" font-size="17" font-weight="700" text-anchor="middle" fill="#3d6d59">SFT 更新参数 θ</text>
+<text x="685" y="288" font-size="14" text-anchor="middle" fill="#617d6a">下一轮可用新策略重新采样</text>
+</g>
+</svg><figcaption><span class="fig-no">图 4｜</span>Best-of-N 和拒绝采样微调共享生成与评分步骤，但一个只改变本次推理输出，另一个会把保留样本用于更新模型。</figcaption></figure>
+<div class="table-scroll"><table><thead><tr><th>机制</th><th>候选如何保留</th><th>是否更新模型</th><th>主要用途</th><th>关键成本</th></tr></thead><tbody>
+<tr><td><strong>精确接受—拒绝采样</strong></td><td>按目标 / 提议密度比随机接受</td><td>否，采样算法本身不训练模型</td><td>从难采样的目标分布取样</td><td>包络常数 M 决定接受率</td></tr>
+<tr><td><strong>Best-of-N</strong></td><td>生成 N 个候选，返回奖励最高者</td><td>否</td><td>推理时用更多计算换取更高评分输出</td><td>每个请求多次生成和打分</td></tr>
+<tr><td><strong>RSFT / RAFT</strong></td><td>每个 prompt 留 Top-1、阈值通过或 Top-K</td><td>是，用保留样本做 SFT</td><td>将筛选结果蒸馏回生成模型</td><td>候选生成、奖励推理和反复训练</td></tr>
+</tbody></table></div>
+<div class="callout"><strong>术语边界：</strong>Best-of-N 在一些 LLM 论文里也被称为 rejection sampling，但它更准确地说是“奖励重排序 / 推理时选择”。如果它没有按 p/(Mq) 进行随机接受，就不要把它说成严格的概率论拒绝采样实现。</div>
+<p>对于固定 prompt x，若每个回答的奖励分数互不相同，Best-of-N 选择某个回答 y 的概率可以写成：</p>
+<div class="math-card">
+<div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="Best of N 选择分布公式，可横向滚动">
+<math display="block" aria-label="π N of y equals F of r y to the N power minus F minus of y to the N power">
+<mrow><msub><mi>π</mi><mi>N</mi></msub><mo>(</mo><mi>y</mi><mo>)</mo><mo>=</mo><mi>F</mi><msup><mrow><mo>(</mo><mi>r</mi><mo>(</mo><mi>y</mi><mo>)</mo><mo>)</mo></mrow><mi>N</mi></msup><mo>−</mo><msup><mrow><msup><mi>F</mi><mo>−</mo></msup><mo>(</mo><mi>r</mi><mo>(</mo><mi>y</mi><mo>)</mo><mo>)</mo></mrow><mi>N</mi></msup></mrow>
+</math>
+</div>
+<p class="math-note">F 是单次采样奖励分数的累积分布函数，F⁻ 表示严格低于该分数的概率。若存在并列分数，需要另外指定 tie-breaking 规则。</p>
+</div>
+<p>直觉上，N 越大，样本奖励排名靠前的概率越高。但这并不意味着它会在所有维度上变得更好：奖励模型只看它被训练来识别的偏好，模型可能越来越擅长“讨好评分器”，而不是真正完成任务。</p>
+</section>
+
+<section id="tilt" aria-labelledby="tilt-title">
+<h2 id="tilt-title">06 · 奖励模型与目标分布：一个更深的连接</h2>
+<p>上面我们用 Top-1 做了排序筛选。现在换一种更有理论解释力的视角：如果我们希望在参考策略 πref 的基础上偏好高奖励回答，同时不希望策略偏离参考模型太远，可以考虑一个 KL 正则化目标：</p>
+<div class="math-card">
+<div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="KL 正则化策略目标，可横向滚动">
+<math display="block" aria-label="最大化策略期望奖励减去 beta 倍 KL 散度">
+<mrow><msub><mi>max</mi><mi>π</mi></msub><mspace width=".4em"/><msub><mi>E</mi><mrow><mi>y</mi><mo>∼</mo><mi>π</mi><mo>(</mo><mo>·</mo><mo>|</mo><mi>x</mi><mo>)</mo></mrow></msub><mo>[</mo><mi>r</mi><mo>(</mo><mi>x</mi><mo>,</mo><mi>y</mi><mo>)</mo><mo>]</mo><mo>−</mo><mi>β</mi><msub><mi>D</mi><mtext>KL</mtext></msub><mo>(</mo><mi>π</mi><mo>∥</mo><msub><mi>π</mi><mtext>ref</mtext></msub><mo>)</mo></mrow>
+</math>
+</div>
+<p class="math-note">β 越大，越不愿偏离参考策略；β 越小，越愿意为了奖励改变输出分布。</p>
+</div>
+<p>对每个 prompt 固定 x，在所有可能回答上做归一化，可以得到最优分布的形式：</p>
+<div class="math-card">
+<div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="奖励倾斜后的目标策略公式，可横向滚动">
+<math display="block" aria-label="π 星号 y 给定 x，正比于 π ref y 给定 x 乘以 exp r 除以 beta">
+<mrow><msup><mi>π</mi><mo>*</mo></msup><mo>(</mo><mi>y</mi><mo>|</mo><mi>x</mi><mo>)</mo><mo>=</mo><mfrac><mrow><msub><mi>π</mi><mtext>ref</mtext></msub><mo>(</mo><mi>y</mi><mo>|</mo><mi>x</mi><mo>)</mo><mi>exp</mi><mo>(</mo><mfrac><mrow><mi>r</mi><mo>(</mo><mi>x</mi><mo>,</mo><mi>y</mi><mo>)</mo></mrow><mi>β</mi></mfrac><mo>)</mo></mrow><mrow><msub><mi>Z</mi><mi>β</mi></msub><mo>(</mo><mi>x</mi><mo>)</mo></mrow></mfrac></mrow>
+</math>
+</div>
+<p class="math-note">Zβ(x) 是归一化常数，对所有回答 y 求和或积分。这个表达式说明奖励并不是简单替换掉参考策略，而是对参考策略的概率质量进行重新加权。</p>
+</div>
+<figure class="figure"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 320" role="img" aria-labelledby="rs-fig5-title rs-fig5-desc">
+<title id="rs-fig5-title">奖励倾斜后的目标策略分布</title>
+<desc id="rs-fig5-desc">参考策略给候选回答基础概率，指数奖励因子提高高奖励候选的权重，归一化后得到目标策略。</desc>
+<rect width="900" height="320" rx="18" fill="#f7faf9"/>
+<g font-family="Arial, PingFang SC, Microsoft YaHei, sans-serif">
+<rect x="35" y="90" width="220" height="140" rx="13" fill="#edf2f8" stroke="#c8d6e5" stroke-width="2"/>
+<text x="145" y="125" font-size="19" font-weight="700" text-anchor="middle" fill="#4e6684">参考策略</text><text x="145" y="160" font-size="22" text-anchor="middle" fill="#405e7c">πref(y | x)</text><text x="145" y="195" font-size="14" text-anchor="middle" fill="#6a7d90">先验生成概率</text>
+<path d="M258 160 H316" stroke="#789b97" stroke-width="3"/><path d="M307 152 L317 160 L307 168" fill="none" stroke="#789b97" stroke-width="3"/>
+<rect x="322" y="90" width="250" height="140" rx="13" fill="#fff3e8" stroke="#e5c7a9" stroke-width="2"/>
+<text x="447" y="125" font-size="19" font-weight="700" text-anchor="middle" fill="#96633e">奖励倾斜</text><text x="447" y="160" font-size="21" text-anchor="middle" fill="#8b6345">exp(r(x,y) / β)</text><text x="447" y="195" font-size="14" text-anchor="middle" fill="#987d67">高奖励获得更大权重</text>
+<path d="M575 160 H633" stroke="#789b97" stroke-width="3"/><path d="M624 152 L634 160 L624 168" fill="none" stroke="#789b97" stroke-width="3"/>
+<rect x="639" y="90" width="225" height="140" rx="13" fill="#eaf5ef" stroke="#b9d8c8" stroke-width="2"/>
+<text x="751" y="125" font-size="19" font-weight="700" text-anchor="middle" fill="#3c7157">目标策略</text><text x="751" y="160" font-size="22" text-anchor="middle" fill="#3c7157">π*(y | x)</text><text x="751" y="195" font-size="14" text-anchor="middle" fill="#638271">归一化后的分布</text>
+<text x="450" y="275" font-size="16" text-anchor="middle" fill="#5c7474">β 控制奖励偏好与参考策略约束之间的权衡</text>
+</g>
+</svg><figcaption><span class="fig-no">图 5｜</span>奖励倾斜把参考策略的概率质量向高奖励回答移动。β 决定倾斜强度，Zβ(x) 负责把新分布归一化。</figcaption></figure>
+<p>这个形式把拒绝采样和偏好对齐连在了一起。若以 πref 作为提议分布，并且奖励有已知上界 rmax，那么对从 πref 抽出的回答 y，可以按下式接受：</p>
+<div class="math-card">
+<div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="奖励接受概率公式，可横向滚动">
+<math display="block" aria-label="接受概率等于 exp 乘以奖励减去最大奖励再除以 beta">
+<mrow><mi>a</mi><mo>(</mo><mi>y</mi><mo>|</mo><mi>x</mi><mo>)</mo><mo>=</mo><mi>exp</mi><mo>(</mo><mfrac><mrow><mi>r</mi><mo>(</mo><mi>x</mi><mo>,</mo><mi>y</mi><mo>)</mo><mo>−</mo><msub><mi>r</mi><mtext>max</mtext></msub></mrow><mi>β</mi></mfrac><mo>)</mo></mrow>
+</math>
+</div>
+<p class="math-note">因为 r(x,y) ≤ rmax，所以接受概率不超过 1。被接受的分布正比于 πref(y|x) exp(r/β)，恰好对应上面的 KL 正则化最优策略。</p>
+</div>
+<p>但这里有三个理想化前提：奖励上界必须真实有效；候选生成分布必须与推导中的参考策略一致；奖励模型必须足够可信。真实 LLM 的输出空间巨大，奖励上界与概率比往往难以精确获得，因此工程实现通常采用 Best-of-N、Top-K、阈值过滤或偏好对构造，而不是逐 token 精确执行这个接受概率。</p>
+</section>
+
+<section id="practice" aria-labelledby="practice-title">
+<h2 id="practice-title">07 · 从 WebGPT 到 Llama 2 与 RAFT</h2>
+<p>拒绝采样不是近几年才出现的 LLM 技巧。它在偏好对齐中有一条清晰的实践脉络，但不同论文把它放在了不同位置：有的把它当推理时基线，有的把筛选结果重新用于训练，还有的进一步研究如何从目标策略分布中构造偏好数据。</p>
+<h3>WebGPT（2021）：推理时的 Best-of-N</h3>
+<p><a href="https://arxiv.org/abs/2112.09332">WebGPT</a> 在行为克隆模型或 RL 模型上采样多个答案，再用奖励模型挑出最高分答案。论文将其描述为一种不需要额外训练、但需要更多推理计算的替代方案；实验设置比较了 Best-of-4、Best-of-16 和 Best-of-64。这个例子很重要，因为它清楚展示了“采样更多候选”本身就能成为一个推理时计算策略。</p>
+<h3>Llama 2（2023）：把最佳候选变成新的监督信号</h3>
+<p><a href="https://arxiv.org/abs/2307.09288">Llama 2</a> 的 §3.2.3 描述了 Rejection Sampling fine-tuning：对每个 prompt 采样 K 个回答，用当时可用的最佳奖励模型打分，并把最高分回答当作新的 gold response，再对筛选后的数据做微调。论文还指出，他们只在最大的 70B Chat 模型上执行这一步，较小模型使用来自大模型的拒绝采样数据进行蒸馏。到后续迭代阶段，拒绝采样与 PPO 也被组合使用。</p>
+<h3>RAFT（2023）：把筛选—微调变成迭代框架</h3>
+<p><a href="https://arxiv.org/abs/2304.06767">RAFT（Reward rAnked FineTuning）</a> 把流程组织成循环：当前模型对每个 prompt 采样 K 个候选；奖励模型排序，保留高质量回答；对保留样本做 SFT；更新后的模型进入下一轮。论文在语言模型和扩散模型上研究了这种 reward-ranked fine-tuning。它的价值在于把生成、排序和参数更新解耦，工程上更接近数据筛选加监督学习，而不是每一步都做策略梯度更新。</p>
+<h3>RSO 与 RS-DPO（2024）：让拒绝采样参与偏好数据构造</h3>
+<p><a href="https://proceedings.iclr.cc/paper_files/paper/2024/hash/efea6d3821a7ccae74e58892162164c0-Abstract-Conference.html">RSO</a> 研究如何用统计拒绝采样从目标最优策略中获取偏好样本；<a href="https://aclanthology.org/2024.findings-naacl.108/">RS-DPO</a> 则从 SFT 策略为每个 prompt 采样多个回答，根据奖励分布构造对比样本，再使用 DPO 优化。这些工作说明拒绝采样不只是“选出一个好答案”，也能成为偏好数据生成与离线优化之间的桥梁。</p>
+<p><a href="https://proceedings.neurips.cc/paper_files/paper/2024/hash/056521a35eacd9d2127b66a7d3c499c5-Abstract-Conference.html">BoNBoN Alignment（NeurIPS 2024）</a>进一步从理论上分析 Best-of-N 与 RLHF 策略之间的关系，并研究如何训练一个模型去模仿 Best-of-N 的输出分布，减少每次推理都采样 N 次的开销。</p>
+</section>
+
+<section id="compare" aria-labelledby="compare-title">
+<h2 id="compare-title">08 · 与 PPO、DPO、GRPO 的边界</h2>
+<p>拒绝采样经常被拿来与 PPO、DPO、GRPO 比较，但它们解决问题的方式并不相同。最简单的辨别方法是问：<strong>模型参数到底通过什么信号更新？</strong></p>
+<div class="table-scroll"><table><thead><tr><th>方法</th><th>主要数据 / 信号</th><th>参数更新方式</th><th>计算重心</th><th>典型优势与风险</th></tr></thead><tbody>
+<tr><td><strong>Best-of-N</strong></td><td>同一 prompt 的 N 个候选及奖励分数</td><td>不更新参数，只返回最高分输出</td><td>推理阶段重复生成与评分</td><td>简单直接；延迟和成本随 N 增长</td></tr>
+<tr><td><strong>RSFT / RAFT</strong></td><td>奖励筛选后的 prompt–completion 样本</td><td>对保留样本做 SFT / 最大似然训练</td><td>离线生成、评分、筛选与微调</td><td>训练流程简单；依赖奖励模型和覆盖度</td></tr>
+<tr><td><strong>PPO-RLHF</strong></td><td>在线 rollout、奖励、价值估计与优势</td><td>策略梯度更新，通常带 KL 约束</td><td>采样、奖励、价值网络和反向传播</td><td>可持续优化策略；系统复杂且超参敏感</td></tr>
+<tr><td><strong>DPO</strong></td><td>偏好对 (chosen, rejected)</td><td>直接优化偏好分类式目标</td><td>离线偏好数据与策略 / 参考模型前向计算</td><td>不必在优化环节单独训练 RM；依赖偏好对质量</td></tr>
+<tr><td><strong>GRPO</strong></td><td>同一问题的一组 rollout 与组内相对奖励</td><td>基于组相对优势做策略优化</td><td>组采样、奖励计算与策略更新</td><td>减少对独立 critic 的依赖；仍是 RL 更新而非简单筛选</td></tr>
+</tbody></table></div>
+<p>因此，拒绝采样不应该被描述成“比 PPO 更先进”或“DPO 的另一种名字”。更准确的说法是：它提供了一种从当前策略的候选分布中构造高质量监督样本的方法；PPO、DPO、GRPO 则分别定义了不同的优化目标和参数更新机制。它们可以互相作为基线，也可以组合使用。</p>
+</section>
+
+<section id="lab" aria-labelledby="lab-title">
+<h2 id="lab-title">09 · 交互实验：采样预算和筛选策略</h2>
+<p>下面用一组完全虚构的候选回答分数演示 LLM 奖励筛选。它不是某个真实模型的输出，也不是论文实验数据。我们只观察一个问题：每个 prompt 生成的候选越多，能看到高分回答的机会通常越大；但同时要付出更多生成和评分成本。</p>
+<div class="demo" id="ranking-demo">
+<div class="demo-head"><div><span class="demo-kicker">INTERACTIVE EXPERIMENT 02</span><h3>候选数量 K 如何改变保留结果？</h3></div><span class="output-pill" id="k-value">K = 4</span></div>
+<div class="control-row"><label for="k-slider">每个 prompt 生成的候选数 K</label><input id="k-slider" type="range" min="1" max="8" step="1" value="4"></div>
+<div class="control-row"><button type="button" id="selection-mode" aria-pressed="false">当前：每个 prompt 保留 Top-1</button><span class="output-pill" id="mode-value">保留 3 条</span></div>
+<div class="candidate-grid" id="candidate-grid">
+<div class="candidate-card"><h4>Prompt A · 解释 KL</h4><p>候选 1：分布差异的简洁解释</p><span class="candidate-score">奖励分数 0.82</span></div>
+<div class="candidate-card"><h4>Prompt B · 代码调试</h4><p>候选 1：给出错误原因和修复</p><span class="candidate-score">奖励分数 0.76</span></div>
+<div class="candidate-card"><h4>Prompt C · 数学推导</h4><p>候选 1：逐步说明假设与结论</p><span class="candidate-score">奖励分数 0.91</span></div>
+</div>
+<p class="live" id="ranking-live" aria-live="polite">K=4 时，每个 prompt 都会在前 4 个候选中挑出最高分回答。</p>
+<div class="demo-summary" id="ranking-summary">总生成量：12 条候选；保留 3 条训练样本。每个 prompt 至少贡献一条样本，有助于保持提示覆盖。</div>
+</div>
+<p>在每个 prompt 内保留 Top-1，能够保证每道题都有一个候选进入训练集；如果把所有 prompt 的候选混在一起做全局 Top-K，保留样本可能集中在某些更容易获得高奖励的 prompt 上。二者优化的不是同一个数据分布：前者保留 prompt 覆盖，后者优先保留最高的整体分数。</p>
+</section>
+
+<section id="failure" aria-labelledby="failure-title">
+<h2 id="failure-title">10 · 什么时候拒绝采样会失效？</h2>
+<h3>1. 奖励模型并不等于真实质量</h3>
+<p>奖励模型是对人类偏好或任务结果的代理。候选数量 K 增加时，模型有更多机会找到高分回答，也有更多机会找到“奖励模型认为高分、但人类并不喜欢”的漏洞。不能把 reward score 上升直接解释为真实能力或安全性同步上升。</p>
+<h3>2. 候选空间覆盖不足</h3>
+<p>如果当前策略几乎不会生成某类正确答案，单纯增加筛选力度也无法创造这些答案。拒绝采样只会从已有候选中挑选，不会保证找到全局最优解。温度、top-p、提示多样性、候选数量和模型能力共同决定了探索范围。</p>
+<h3>3. 采样预算与收益不是线性关系</h3>
+<p>增大 K 往往提高 Best-of-K 的最大分数，但生成和奖励推理成本也近似随候选数增加。收益通常会出现边际递减；工程上要在质量、延迟、显存、吞吐和预算之间做权衡。</p>
+<h3>4. 全局筛选可能改变 prompt 分布</h3>
+<p>若某些 prompt 天生更容易获得高奖励，全局 Top-K 可能过度保留这些 prompt 的候选，导致困难问题或少数领域被挤出训练集。每个 prompt 独立筛选、分桶配额、去重和覆盖率监控可以缓解这种偏差，但也会改变最终目标。</p>
+<h3>5. 迭代训练会放大分布漂移与遗忘</h3>
+<p>每轮都从更新后的策略重新采样，会形成“策略 → 候选 → 奖励筛选 → SFT → 新策略”的反馈闭环。若奖励模型不够稳健，错误偏好可能被一轮轮强化；如果只训练最近一轮的高分数据，也可能遗忘原本具备的能力。需要保留多样化数据、独立评测集和定期人工审查。</p>
+<div class="callout teal"><strong>实践建议：</strong>至少同时监控奖励分数、独立验证器 / 人类偏好、任务正确率、回答多样性、prompt 覆盖率、重复率和原始能力回归。奖励模型分数只能作为一项诊断信号。</div>
+</section>
+
+<section id="code" aria-labelledby="code-title">
+<h2 id="code-title">11 · 可运行的最小实现</h2>
+<p>下面的 Python 代码实现有限离散空间上的精确拒绝采样。它先检查分布是否归一化、目标支持集是否被提议分布覆盖，再计算最小包络常数 M=maxᵢ pᵢ/qᵢ。为了让逻辑透明，示例只使用 Python 标准库；它不是 LLM 训练代码。</p>
+<pre><code>from collections import Counter
+import random
+
+
+def rejection_sample(target, proposal, n, seed=0):
+    """Sample from a normalized discrete target using rejection sampling."""
+    if len(target) == 0 or len(target) != len(proposal):
+        raise ValueError("target and proposal must have equal nonzero length")
+    if any(p &lt; 0 for p in target) or any(q &lt; 0 for q in proposal):
+        raise ValueError("probabilities must be non-negative")
+    if abs(sum(target) - 1.0) &gt; 1e-9:
+        raise ValueError("target must sum to one")
+    if abs(sum(proposal) - 1.0) &gt; 1e-9:
+        raise ValueError("proposal must sum to one")
+    if any(p &gt; 0 and q == 0 for p, q in zip(target, proposal)):
+        raise ValueError("proposal does not cover target support")
+    if n &lt;= 0:
+        raise ValueError("n must be positive")
+
+    ratios = [p / q if q &gt; 0 else 0.0
+              for p, q in zip(target, proposal)]
+    envelope = max(ratios)
+    rng = random.Random(seed)
+    states = list(range(len(target)))
+    accepted = []
+
+    while len(accepted) &lt; n:
+        candidate = rng.choices(states, weights=proposal, k=1)[0]
+        q = proposal[candidate]
+        accept_prob = target[candidate] / (envelope * q)
+        if rng.random() &lt; accept_prob:
+            accepted.append(candidate)
+
+    return accepted
+
+
+def best_of_n(candidates, rewards):
+    """A separate LLM-style ranking heuristic; not exact accept-reject."""
+    if len(candidates) != len(rewards) or not candidates:
+        raise ValueError("candidates and rewards must have equal nonzero length")
+    return candidates[max(range(len(rewards)), key=rewards.__getitem__)]
+
+
+if __name__ == "__main__":
+    target = [0.1, 0.3, 0.6]
+    proposal = [0.4, 0.4, 0.2]
+    samples = rejection_sample(target, proposal, n=50000, seed=7)
+    counts = Counter(samples)
+    print([round(counts[i] / len(samples), 3) for i in range(3)])
+    # Expected to be close to [0.1, 0.3, 0.6].</code></pre>
+<p>单元测试不仅检查输出比例接近目标分布，也检查支持集缺失时必须报错。大样本频率测试有随机误差，因此使用合理容差，而不是要求小数点后完全相同。</p>
+<pre><code>import pytest
+from rejection_sampling import rejection_sample, best_of_n
+
+
+def test_rejection_sampling_recovers_target_distribution():
+    target = [0.1, 0.3, 0.6]
+    proposal = [0.4, 0.4, 0.2]
+    samples = rejection_sample(target, proposal, n=50000, seed=7)
+    frequencies = [samples.count(i) / len(samples) for i in range(3)]
+    assert abs(frequencies[0] - 0.1) &lt; 0.012
+    assert abs(frequencies[1] - 0.3) &lt; 0.012
+    assert abs(frequencies[2] - 0.6) &lt; 0.012
+
+
+def test_proposal_must_cover_target_support():
+    with pytest.raises(ValueError):
+        rejection_sample([0.5, 0.5], [1.0, 0.0], n=10)
+
+
+def test_best_of_n_is_a_separate_ranking_step():
+    assert best_of_n(["low", "high", "middle"], [0.1, 0.9, 0.4]) == "high"</code></pre>
+<p>可以在仓库对应目录中运行 <code>python -m pytest -q tests/test_rejection_sampling.py</code>。这里的 Monte Carlo 频率是教学验证，不是论文复现实验，也不代表某个 LLM 的实际对齐效果。</p>
+</section>
+
+<section id="summary" aria-labelledby="summary-title">
+<h2 id="summary-title">12 · 建立正确的心智模型</h2>
+<div class="summary-band">
+<p><strong>第一层：统计学。</strong> 拒绝采样用容易采样的提议分布，加上严格的密度比接受规则，构造出目标分布的无偏样本。包络条件决定正确性，接受率决定效率。</p>
+<p><strong>第二层：LLM 推理。</strong> Best-of-N 让模型生成多个回答，再用奖励模型选择一个输出；它不改变模型参数，只把额外计算花在当前请求上。</p>
+<p><strong>第三层：LLM 训练。</strong> RSFT / RAFT 把筛选出的高分回答变成新的监督数据，通过 SFT 更新策略。RSO、RS-DPO 等工作则进一步研究如何把拒绝采样融入偏好数据构造。</p>
+<p><strong>最重要的边界：</strong>奖励筛选是对精确拒绝采样思想的工程化借用，不应在没有密度比、包络和接受概率的情况下，把 Top-K 排序说成严格的概率采样算法。</p>
+</div>
+<p>读论文时，可以按顺序问四个问题：候选从哪个分布生成？用什么信号判断候选好坏？筛选规则是精确接受概率还是排序启发式？保留结果只用于当前推理，还是会进一步更新模型？回答这四个问题，通常就能看清一篇工作中的“拒绝采样”究竟承担了什么角色。</p>
+<p class="footer-note">下一步阅读建议：先看 <a href="../importance-sampling/">Importance Sampling</a> 理解采样分布与目标分布的差异，再看 <a href="./">Rejection Sampling</a>，然后沿着 <a href="./">RLHF</a>、<a href="./">DPO</a> 和 <a href="./">GRPO</a> 理解筛选样本如何进入不同的对齐目标。</p>
+</section>
+
+<section id="references" aria-labelledby="references-title">
+<h2 id="references-title">参考文献与延伸阅读</h2>
+<ol class="sources">
+<li>von Neumann, J. (1951). <a href="https://nvlpubs.nist.gov/nistpubs/Legacy/MONO/nbsmonograph12.pdf">Various Techniques Used in Connection with Random Digits</a>. NBS Applied Mathematics Series 12.<small>经典接受—拒绝方法的早期来源。</small></li>
+<li>Computational Statistics with R. <a href="https://cswr.nrhstat.org/reject-samp.html">Chapter 6: Rejection Sampling</a>.<small>目标密度、提议密度、接受概率和正确性证明的教学参考。</small></li>
+<li>Nakano et al. (2021). <a href="https://arxiv.org/abs/2112.09332">WebGPT: Browser-assisted question-answering with human feedback</a>.<small>§3.1 与 §5：Best-of-N 作为推理时奖励重排序。</small></li>
+<li>Bai et al. (2022). <a href="https://arxiv.org/abs/2204.05862">Training a Helpful and Harmless Assistant with Reinforcement Learning from Human Feedback</a>.<small>偏好模型与 RLHF 的早期实践背景。</small></li>
+<li>Touvron et al. (2023). <a href="https://arxiv.org/abs/2307.09288">Llama 2: Open Foundation and Fine-Tuned Chat Models</a>.<small>§3.2.3：Rejection Sampling fine-tuning 与 PPO 的组合。</small></li>
+<li>Dong et al. (2023). <a href="https://arxiv.org/abs/2304.06767">RAFT: Reward rAnked FineTuning for Generative Foundation Model Alignment</a>.<small>§3.2：奖励排序、筛选与迭代 SFT。</small></li>
+<li>Liu et al. (2024). <a href="https://proceedings.iclr.cc/paper_files/paper/2024/hash/efea6d3821a7ccae74e58892162164c0-Abstract-Conference.html">Statistical Rejection Sampling Improves Preference Optimization</a>. ICLR 2024.<small>RSO：从目标最优策略构造偏好样本。</small></li>
+<li>Khaki et al. (2024). <a href="https://aclanthology.org/2024.findings-naacl.108/">RS-DPO: A Hybrid Rejection Sampling and Direct Preference Optimization Method for Alignment of Large Language Models</a>. Findings of NAACL 2024.<small>把奖励筛选与 DPO 偏好对优化结合。</small></li>
+<li>Gui, Gârbacea &amp; Veitch (2024). <a href="https://proceedings.neurips.cc/paper_files/paper/2024/hash/056521a35eacd9d2127b66a7d3c499c5-Abstract-Conference.html">BoNBoN Alignment for Large Language Models and the Sweetness of Best-of-n Sampling</a>. NeurIPS 2024.<small>Best-of-N 分布与 RLHF 对齐的理论分析。</small></li>
+</ol>
+</section>
+</article></main>
+</div>
+<script>
+(() => {
+  const mSlider = document.getElementById('m-slider');
+  const mValue = document.getElementById('m-value');
+  const acceptRate = document.getElementById('accept-rate');
+  const exactSummary = document.getElementById('exact-summary');
+  const target = [0.1, 0.3, 0.6];
+  const proposal = [0.4, 0.4, 0.2];
+  const accCells = ['acc-a', 'acc-b', 'acc-c'];
+  function updateExact() {
+    const m = Number(mSlider.value);
+    mValue.textContent = 'M = ' + m;
+    acceptRate.textContent = '接受率 ' + (100 / m).toFixed(1) + '%';
+    target.forEach((p, i) => {
+      const value = p / (m * proposal[i]);
+      document.getElementById(accCells[i]).textContent = (100 * value).toFixed(1) + '%';
+    });
+    exactSummary.textContent = '每接受 1 个样本，平均需要 ' + m.toFixed(0) +
+      ' 次提议。无论 M 取多少（只要 M ≥ 3），接受样本的分布仍为 (0.10, 0.30, 0.60)。';
+  }
+  mSlider.addEventListener('input', updateExact);
+  updateExact();
+
+  const prompts = [
+    {name:'Prompt A · 解释 KL', items:[
+      ['简洁定义 KL',0.82],['堆砌术语',0.35],['给出公式与例子',0.91],['只说它衡量距离',0.62],
+      ['解释非对称性',0.87],['缺少变量定义',0.42],['结合概率分布',0.79],['误称真正距离',0.18]
+    ]},
+    {name:'Prompt B · 代码调试', items:[
+      ['定位边界错误',0.76],['重写全部代码',0.28],['给出最小修复',0.89],['忽略复现步骤',0.51],
+      ['解释异常原因',0.84],['给出未经验证的补丁',0.22],['补充测试用例',0.93],['只给结论',0.46]
+    ]},
+    {name:'Prompt C · 数学推导', items:[
+      ['直接写结论',0.44],['逐步说明假设',0.91],['跳过关键等式',0.31],['给出反例',0.83],
+      ['变量未定义',0.19],['解释边界条件',0.87],['推导归一化项',0.94],['只有直觉描述',0.55]
+    ]}
+  ];
+  const kSlider = document.getElementById('k-slider');
+  const kValue = document.getElementById('k-value');
+  const grid = document.getElementById('candidate-grid');
+  const rankingLive = document.getElementById('ranking-live');
+  const rankingSummary = document.getElementById('ranking-summary');
+  const modeButton = document.getElementById('selection-mode');
+  const modeValue = document.getElementById('mode-value');
+  let globalMode = false;
+
+  function updateRanking() {
+    const k = Number(kSlider.value);
+    kValue.textContent = 'K = ' + k;
+    const candidates = [];
+    prompts.forEach((prompt, index) => {
+      const visible = prompt.items.slice(0, k).map((item, j) => ({
+        prompt:index, answer:item[0], score:item[1], candidate:j + 1
+      }));
+      candidates.push(...visible);
+    });
+    let kept;
+    if (globalMode) {
+      kept = candidates.slice().sort((a,b) => b.score - a.score).slice(0, prompts.length);
+    } else {
+      kept = prompts.map((prompt, index) => candidates.filter(c => c.prompt === index)
+        .sort((a,b) => b.score - a.score)[0]);
+    }
+    grid.replaceChildren();
+    prompts.forEach((prompt, index) => {
+      const chosen = globalMode ? kept.find(item => item.prompt === index) : kept[index];
+      const card = document.createElement('div');
+      card.className = 'candidate-card';
+      const heading = document.createElement('h4');
+      heading.textContent = prompt.name;
+      const answer = document.createElement('p');
+      answer.textContent = chosen
+        ? '保留候选 ' + chosen.candidate + '：' + chosen.answer
+        : '本轮未进入全局 Top-K';
+      const score = document.createElement('span');
+      score.className = 'candidate-score';
+      score.textContent = chosen ? '奖励分数 ' + chosen.score.toFixed(2) : '未保留';
+      card.append(heading, answer, score);
+      grid.append(card);
+    });
+    const keptCount = kept.filter(Boolean).length;
+    modeButton.textContent = globalMode ? '当前：全局 Top-3' : '当前：每个 prompt 保留 Top-1';
+    modeButton.setAttribute('aria-pressed', String(globalMode));
+    modeValue.textContent = '保留 ' + keptCount + ' 条';
+    rankingLive.textContent = globalMode
+      ? '全局筛选把所有候选放在一起排序；低分 prompt 可能一条都没有留下。'
+      : '每个 prompt 单独排序，保证每个问题都至少有一个候选进入训练集。';
+    rankingSummary.textContent = '总生成量：' + candidates.length + ' 条候选；保留 ' +
+      keptCount + ' 条训练样本。' + (globalMode
+      ? '全局 Top-3 更偏向高分回答，但可能改变 prompt 覆盖。'
+      : '逐 prompt Top-1 保留问题覆盖，但不保证全局平均奖励最高。');
+  }
+  kSlider.addEventListener('input', updateRanking);
+  modeButton.addEventListener('click', () => {
+    globalMode = !globalMode;
+    updateRanking();
+  });
+  updateRanking();
+})();
+</script>
+</body>
+</html>
