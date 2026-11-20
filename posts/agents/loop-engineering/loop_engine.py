@@ -6,7 +6,7 @@ leases, idempotency keys, audit logs, and human approval for risky actions.
 """
 from __future__ import annotations
 
-from dataclasses import asdict, dataclass
+from dataclasses import dataclass
 import json
 from pathlib import Path
 from typing import Callable
