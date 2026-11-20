@@ -53,12 +53,26 @@
     ]
   },
   {
+    "slug": "datasets",
+    "title": "数据与语料",
+    "english": "Datasets & Data Curation",
+    "description": "预训练语料从哪里来？系统研究数据采集、清洗去重、混合采样、数据污染与许可证治理，并用分领域证据衡量数据质量。",
+    "topics": [
+      "Pretraining Corpora",
+      "Data Curation & Filtering",
+      "Dataset Mixing & Sampling",
+      "Data Governance & Licensing",
+      "Data Contamination"
+    ]
+  },
+  {
     "slug": "training",
     "title": "训练与对齐",
     "english": "Training & Alignment",
     "description": "预训练、微调、偏好对齐，以及 PPO / GRPO 等后训练强化学习与策略优化的可验证拆解。",
     "topics": [
       "Pretraining",
+      "Scaling Laws / Compute-Optimal Training",
       "Fine-tuning",
       "PEFT / LoRA",
       "Preference Alignment",

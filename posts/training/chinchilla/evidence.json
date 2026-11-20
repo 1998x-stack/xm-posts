@@ -1,0 +1,173 @@
+[
+  {
+    "id": "C01",
+    "claim": "Formal fixed-compute optimization",
+    "kind": "paper-claim",
+    "source_url": "https://papers.nips.cc/paper_files/paper/2022/file/c1e2faff6f588870935f114ebe04a3e5-Paper-Conference.pdf",
+    "locator": "§1, Eq. (1)",
+    "status": "verified",
+    "notes": "N_opt and D_opt minimize final loss subject to FLOPs(N,D)=C."
+  },
+  {
+    "id": "C02",
+    "claim": "Study over 400 transformer runs and scaling ranges",
+    "kind": "paper-claim",
+    "source_url": "https://papers.nips.cc/paper_files/paper/2022/file/c1e2faff6f588870935f114ebe04a3e5-Paper-Conference.pdf",
+    "locator": "Abstract; §1; §3",
+    "status": "verified",
+    "notes": "Approximate model/data ranges; not an exhaustive large-scale grid."
+  },
+  {
+    "id": "C03",
+    "claim": "Gopher 280B 300B tokens and Chinchilla 70B 1.4T tokens",
+    "kind": "experiment",
+    "source_url": "https://papers.nips.cc/paper_files/paper/2022/file/c1e2faff6f588870935f114ebe04a3e5-Paper-Conference.pdf",
+    "locator": "Table 1",
+    "status": "verified",
+    "notes": "Reported rounded values, approximate same full training FLOPs."
+  },
+  {
+    "id": "C04",
+    "claim": "The approximation FLOPs(N,D) approximately 6ND",
+    "kind": "paper-claim",
+    "source_url": "https://papers.nips.cc/paper_files/paper/2022/file/c1e2faff6f588870935f114ebe04a3e5-Paper-Conference.pdf",
+    "locator": "§3.3, Efficient frontier",
+    "status": "verified",
+    "notes": "Accounting approximation, not exact hardware or all architecture FLOPs."
+  },
+  {
+    "id": "C05",
+    "claim": "IsoFLOP method 9 compute levels 6e18 to 3e21",
+    "kind": "paper-claim",
+    "source_url": "https://papers.nips.cc/paper_files/paper/2022/file/c1e2faff6f588870935f114ebe04a3e5-Paper-Conference.pdf",
+    "locator": "§3.2, Figure 3",
+    "status": "verified",
+    "notes": "Different N and matched training horizon per fixed budget."
+  },
+  {
+    "id": "C06",
+    "claim": "Curve envelope finds a=b approximately 0.50",
+    "kind": "experiment",
+    "source_url": "https://papers.nips.cc/paper_files/paper/2022/file/c1e2faff6f588870935f114ebe04a3e5-Paper-Conference.pdf",
+    "locator": "§3.1, Table 2",
+    "status": "verified",
+    "notes": "Best-loss envelope from runs."
+  },
+  {
+    "id": "C07",
+    "claim": "IsoFLOP profile fits a=0.49 b=0.51",
+    "kind": "experiment",
+    "source_url": "https://papers.nips.cc/paper_files/paper/2022/file/c1e2faff6f588870935f114ebe04a3e5-Paper-Conference.pdf",
+    "locator": "§3.2, Table 2",
+    "status": "verified",
+    "notes": "Minimum final loss along iso-compute profiles."
+  },
+  {
+    "id": "C08",
+    "claim": "Parametric loss E+A/N^alpha+B/D^beta fitted using Huber L-BFGS",
+    "kind": "paper-claim",
+    "source_url": "https://papers.nips.cc/paper_files/paper/2022/file/c1e2faff6f588870935f114ebe04a3e5-Paper-Conference.pdf",
+    "locator": "§3.3, Eq. (2)-(3)",
+    "status": "verified",
+    "notes": "Fitted smoothed loss, data not raw public points."
+  },
+  {
+    "id": "C09",
+    "claim": "Third estimator a=0.46 b=0.54, Kaplan a=0.73 b=0.27",
+    "kind": "experiment",
+    "source_url": "https://papers.nips.cc/paper_files/paper/2022/file/c1e2faff6f588870935f114ebe04a3e5-Paper-Conference.pdf",
+    "locator": "Table 2",
+    "status": "verified",
+    "notes": "Point estimates; comparative historical methodology."
+  },
+  {
+    "id": "C10",
+    "claim": "Analytic optimality alpha A/N^alpha = beta B/D^beta and exponents",
+    "kind": "derivation",
+    "source_url": "https://papers.nips.cc/paper_files/paper/2022/file/c1e2faff6f588870935f114ebe04a3e5-Paper-Conference.pdf",
+    "locator": "§3.3, Eq. (2) and approximate C=6ND",
+    "status": "derived",
+    "notes": "Calculated by substituting D=C/(6N), setting derivative zero."
+  },
+  {
+    "id": "C11",
+    "claim": "Chinchilla large-run design differs from Gopher in optimizer/tokenizer/data mixture",
+    "kind": "paper-claim",
+    "source_url": "https://papers.nips.cc/paper_files/paper/2022/file/c1e2faff6f588870935f114ebe04a3e5-Paper-Conference.pdf",
+    "locator": "§4.1, Table 3, Appendix G",
+    "status": "verified",
+    "notes": "No single-variable causal claim."
+  },
+  {
+    "id": "C12",
+    "claim": "WikiText103 perplexity 7.16 vs 7.75",
+    "kind": "experiment",
+    "source_url": "https://papers.nips.cc/paper_files/paper/2022/file/c1e2faff6f588870935f114ebe04a3e5-Paper-Conference.pdf",
+    "locator": "§4.2, Language modelling",
+    "status": "verified",
+    "notes": "Lower is better; paper-reported, not independent reproduction."
+  },
+  {
+    "id": "C13",
+    "claim": "MMLU 5-shot average 67.6% and +7.6 percentage points",
+    "kind": "experiment",
+    "source_url": "https://papers.nips.cc/paper_files/paper/2022/file/c1e2faff6f588870935f114ebe04a3e5-Paper-Conference.pdf",
+    "locator": "§4.2, MMLU, Appendix Table A8",
+    "status": "verified",
+    "notes": "Body 67.6 differs slightly from abstract 67.5."
+  },
+  {
+    "id": "C14",
+    "claim": "LAMBADA zero-shot 77.4 vs 74.5 and RACE-h few-shot 82.3 vs 71.6",
+    "kind": "experiment",
+    "source_url": "https://papers.nips.cc/paper_files/paper/2022/file/c1e2faff6f588870935f114ebe04a3e5-Paper-Conference.pdf",
+    "locator": "Table 4",
+    "status": "verified",
+    "notes": "Original model- and prompt-specific comparisons."
+  },
+  {
+    "id": "C15",
+    "claim": "Three approaches suggest approx equal scaling N_opt and D_opt",
+    "kind": "paper-claim",
+    "source_url": "https://papers.nips.cc/paper_files/paper/2022/file/c1e2faff6f588870935f114ebe04a3e5-Paper-Conference.pdf",
+    "locator": "§3.4, Figure 1, Table 2",
+    "status": "verified",
+    "notes": "Extrapolation uncertainty."
+  },
+  {
+    "id": "C16",
+    "claim": "Only two large-scale comparable runs and possible curvature",
+    "kind": "paper-claim",
+    "source_url": "https://papers.nips.cc/paper_files/paper/2022/file/c1e2faff6f588870935f114ebe04a3e5-Paper-Conference.pdf",
+    "locator": "§5, Discussion and Conclusion",
+    "status": "verified",
+    "notes": "Authors explicitly state limitations."
+  },
+  {
+    "id": "C17",
+    "claim": "Training vs inference optimal objective distinction",
+    "kind": "later-research",
+    "source_url": "https://arxiv.org/abs/2401.00448",
+    "locator": "2024 arXiv 2401.00448 abstract",
+    "status": "verified",
+    "notes": "Later follow-up; not claimed by Chinchilla 2022."
+  },
+  {
+    "id": "C18",
+    "claim": "Fixed-compute slider holds N*D=70B*1.4T and reports D/N",
+    "kind": "toy-derivation",
+    "source_url": "https://papers.nips.cc/paper_files/paper/2022/file/c1e2faff6f588870935f114ebe04a3e5-Paper-Conference.pdf",
+    "locator": "Derived from §3.3 C~6ND",
+    "status": "derived",
+    "notes": "Not model loss prediction."
+  },
+  {
+    "id": "C19",
+    "claim": "All five original SVGs are conceptual diagrams",
+    "kind": "illustration",
+    "source_url": "https://papers.nips.cc/paper_files/paper/2022/file/c1e2faff6f588870935f114ebe04a3e5-Paper-Conference.pdf",
+    "locator": "Article Fig. 01-05",
+    "status": "illustrative",
+    "notes": "No original paper figures or empirical data points reused."
+  }
+]
