@@ -43,7 +43,7 @@ strong{color:#245e5d}
 ul,ol{padding-left:22px}
 li{margin:8px 0}
 figure{margin:25px 0 30px;border:1px solid #d8e5df;background:#fff;border-radius:13px;padding:10px 10px 0;max-width:100%;min-width:0}
-figure img{display:block;width:100%;height:auto;max-width:100%;border-radius:7px}
+figure img{display:block;width:100%;height:auto;max-width:100%;border-radius:7px}figure svg{display:block;width:100%;height:auto;max-width:100%}
 figcaption{padding:13px 8px 15px;border-top:1px solid #e9f0eb;font-size:13px;color:#607b7e;line-height:1.7}
 .figure-title{font-size:11px;color:var(--teal);font-weight:800;letter-spacing:.09em;padding:4px 5px 9px}
 .eq{display:flex;align-items:center;max-width:100%;min-width:0;gap:10px;background:#eaf3ee;border-radius:10px;padding:14px 12px;margin:24px 0}
@@ -157,6 +157,34 @@ code{font-family:ui-monospace,Consolas,monospace;font-size:.9em}
 <section id="mlp">
 <h2>04 · MLP 每次查询，究竟输出什么？</h2>
 <p>原始 NeRF 不是 CNN。它用一个全连接 MLP 表示每个场景：位置编码后的空间坐标先经过 8 层、每层 256 个通道的 ReLU 全连接层，得到密度 σ 和一个 256 维特征；再把该特征与位置编码后的观察方向拼接，经过一个 128 通道的 ReLU 层，输出 RGB。</p>
+<figure><div class="figure-title">FIGURE 03 · THE MLP SPLITS GEOMETRY FROM APPEARANCE</div>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 240" role="img" aria-labelledby="mlp-title mlp-desc">
+<title id="mlp-title">NeRF MLP 的空间主干和方向颜色分支</title>
+<desc id="mlp-desc">位置编码进入空间主干并输出密度和中间特征，中间特征再与方向编码拼接后输出 RGB 颜色。</desc>
+<rect x="1" y="1" width="958" height="238" rx="16" fill="#f8fbf9" stroke="#d9e7e1"/>
+<rect x="25" y="72" width="150" height="94" rx="12" fill="#eaf3ee" stroke="#b5d2c7" stroke-width="2"/>
+<text x="100" y="108" text-anchor="middle" font-size="17" font-weight="700" fill="#276a63" font-family="system-ui">γ(x)</text>
+<text x="100" y="137" text-anchor="middle" font-size="14" fill="#526f70" font-family="system-ui">位置编码</text>
+<path d="M178 119 L235 119" stroke="#4f817d" stroke-width="3" />
+<path d="M225 111 L237 119 L225 127" stroke="#4f817d" stroke-width="3" fill="none"/>
+<rect x="244" y="58" width="240" height="122" rx="12" fill="#fffefa" stroke="#cddfd8" stroke-width="2"/>
+<text x="364" y="91" text-anchor="middle" font-size="17" font-weight="700" fill="#315b5b" font-family="system-ui">8 × 256 ReLU</text>
+<g fill="#a9cfc2" stroke="#5f9488"><circle cx="300" cy="119" r="8"/><circle cx="326" cy="119" r="8"/><circle cx="352" cy="119" r="8"/><circle cx="378" cy="119" r="8"/><circle cx="404" cy="119" r="8"/><circle cx="430" cy="119" r="8"/></g>
+<text x="364" y="158" text-anchor="middle" font-size="14" fill="#647d80" font-family="system-ui">空间主干</text>
+<path d="M487 119 L540 119" stroke="#4f817d" stroke-width="3"/><path d="M530 111 L542 119 L530 127" stroke="#4f817d" stroke-width="3" fill="none"/>
+<rect x="550" y="34" width="155" height="68" rx="11" fill="#f8eadc" stroke="#dfb78f" stroke-width="2"/>
+<text x="627" y="62" text-anchor="middle" font-size="18" font-weight="750" fill="#935d35" font-family="system-ui">σ(x)</text>
+<text x="627" y="84" text-anchor="middle" font-size="13" fill="#805c3f" font-family="system-ui">密度输出</text>
+<rect x="550" y="136" width="155" height="68" rx="11" fill="#eaf0f7" stroke="#bfd0df" stroke-width="2"/>
+<text x="627" y="164" text-anchor="middle" font-size="16" font-weight="750" fill="#3e6d8b" font-family="system-ui">h(x) + γ(d)</text>
+<text x="627" y="186" text-anchor="middle" font-size="13" fill="#456c84" font-family="system-ui">拼接方向特征</text>
+<path d="M708 170 L760 170" stroke="#4f817d" stroke-width="3"/><path d="M750 162 L762 170 L750 178" stroke="#4f817d" stroke-width="3" fill="none"/>
+<rect x="770" y="136" width="160" height="68" rx="11" fill="#e3edf5" stroke="#b6cad9" stroke-width="2"/>
+<text x="850" y="164" text-anchor="middle" font-size="18" font-weight="750" fill="#3e6d8b" font-family="system-ui">RGB c(x,d)</text>
+<text x="850" y="186" text-anchor="middle" font-size="13" fill="#456c84" font-family="system-ui">128 通道 ReLU 后输出</text>
+<path d="M484 119 L518 119 L518 68 L545 68" stroke="#c47a42" stroke-width="2.5" fill="none"/>
+</svg>
+<figcaption>原论文的结构要点：空间主干先预测密度与特征；观察方向只在颜色分支中加入，因此密度不会随着相机角度漂移。</figcaption></figure>
 <div class="two">
 <div><h3>空间分支</h3><p><strong>输入：</strong>位置编码 γ(x)。</p><p><strong>输出：</strong>密度 σ(x) 与中间特征 h(x)。</p><p><strong>意义：</strong>同一位置无论从哪个视角被查询，密度都相同。</p></div>
 <div><h3>外观分支</h3><p><strong>输入：</strong>h(x) 与方向编码 γ(d)。</p><p><strong>输出：</strong>颜色 c(x,d)。</p><p><strong>意义：</strong>让网络能够表达镜面高光等方向相关的辐射变化。</p></div>
