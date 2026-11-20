@@ -969,5 +969,27 @@
     "summary": "精读 Mnih et al. ICML 2016：从经验相关性到多线程异步参数更新，推导 n-step Return、Advantage、策略梯度与熵正则，解析共享 RMSProp 和 57 款 Atari 的原论文数据。含 5 幅独立 SVG、6 组离线 MathML、交互算例、Python 确定性测试及 16 条证据。",
     "paper": "https://proceedings.mlr.press/v48/mniha16.html",
     "illustration": "a3c"
+  },
+  {
+    "slug": "importance-sampling",
+    "title": "Understanding Importance Sampling",
+    "subtitle": "换一种分布抽样，为什么仍能估计原来的概率？从稀有事件到离策略学习",
+    "category": "foundations",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 31,
+    "tags": [
+      "Importance Sampling",
+      "Monte Carlo & Importance Sampling",
+      "Variance Reduction",
+      "Rare Event Simulation",
+      "Self-normalized IS",
+      "Effective Sample Size",
+      "Off-policy Evaluation & Importance Sampling"
+    ],
+    "summary": "以 Kahn–Marshall 1953 为历史起点，从稀有事件与换测度推导无偏性、方差、最优提议分布、SNIS/ESS 和离策略比率；包含五幅独立 SVG、离线 MathML、解析交互以及 Python 确定性检验。",
+    "paper": "https://doi.org/10.1287/opre.1.5.263",
+    "illustration": "importance-sampling"
   }
 ]

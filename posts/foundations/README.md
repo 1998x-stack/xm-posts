@@ -23,3 +23,5 @@
 - [Understanding Embeddings](embeddings/index.html)：覆盖 lookup、Word2Vec/GloVe、BERT、SBERT、SimCSE/E5、cosine 与 ANN/RAG 召回；附七幅图示、MathML、交互实验、证据与 Python 断言。所属二级主题：`Representation Learning & Embeddings`。
 
 - [Understanding BPE](bpe/index.html)：带词频的贪心子词合并、原论文实验与 byte-level 变体；含六幅机制图、交互分词实验、MathML 与纯 Python 验证。
+
+- [Understanding Importance Sampling](importance-sampling/index.html)：稀有事件、换测度、方差缩减、SNIS、ESS 与离策略评价。
