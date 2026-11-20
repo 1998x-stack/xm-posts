@@ -10,6 +10,7 @@
 
 | Post | 解释的问题 | 文章源码 | 核心资料 |
 |---|---|---|
+| **Understanding GAE** | 一步 TD 与全轨迹回报之间，如何权衡偏差与方差？ | [`posts/reinforcement-learning/gae/`](posts/reinforcement-learning/gae/index.html) | [Schulman et al. (ICLR 2016)](https://arxiv.org/abs/1506.02438) |
 | **Understanding AlphaGo** | 为什么策略网络与价值网络能引导树搜索，避免只靠遍历下围棋？ | [`posts/reinforcement-learning/alphago/`](posts/reinforcement-learning/alphago/index.html) | [Silver et al. (Nature 2016)](https://doi.org/10.1038/nature16961) |
 | **Understanding The Pile** | 为什么 22 种语料混合能增强跨领域文本建模？ | [`posts/datasets/the-pile/`](posts/datasets/the-pile/index.html) | [Gao et al. (2020)](https://arxiv.org/abs/2101.00027) |
 | **Understanding Chinchilla** | 在固定训练 FLOPs 下，参数量与训练 tokens 如何均衡？ | [`posts/training/chinchilla/`](posts/training/chinchilla/index.html) | [Hoffmann et al. (NeurIPS 2022)](https://arxiv.org/abs/2203.15556) |
@@ -42,7 +43,7 @@
 | **Understanding SAC** | 为什么旧经验可复用，还要用最大熵保留探索？ | [`posts/reinforcement-learning/sac/`](posts/reinforcement-learning/sac/index.html) | [Haarnoja et al. (ICML 2018)](https://proceedings.mlr.press/v80/haarnoja18b.html) |
 | **Understanding RLHF** | 为什么示范微调还需要人类偏好与策略优化？ | [`posts/training/rlhf/`](posts/training/rlhf/index.html) | [Ouyang et al. (2022)](https://arxiv.org/abs/2203.02155) |
 | **Understanding GRPO** | 为什么不需要 Critic 也能构造策略优势？ | [`posts/training/grpo/`](posts/training/grpo/index.html) | [Shao et al. (2024)](https://arxiv.org/abs/2402.03300) |
-| **Understanding WordPiece** | 词表学习和 BERT MaxMatch 为什么是不同问题？ | [`posts/foundations/wordpiece/`](posts/foundations/wordpiece/index.html) | [Schuster & Nakajima (2012)](https://research.google/pubs/japanese-and-korean-voice-search/) · [BERT tokenizer](https://github.com/google-research/bert/blob/master/tokenization.py) |
+| **Understanding WordPiece** | 为什么 BERT MaxMatch 与训练词表不是一个算法？ | [`posts/foundations/wordpiece/`](posts/foundations/wordpiece/index.html) | [Schuster & Nakajima (2012)](https://research.google/pubs/japanese-and-korean-voice-search/) · [BERT tokenizer](https://github.com/google-research/bert/blob/master/tokenization.py) |
 | **Understanding Word2Vec** | 为什么上下文预测能产生词向量？ | [`posts/foundations/understanding-word2vec/`](posts/foundations/understanding-word2vec/index.html) | [Mikolov et al. (2013)](https://arxiv.org/abs/1301.3781) · [NeurIPS 2013](https://arxiv.org/abs/1310.4546) |
 | **Understanding Embeddings** | 为什么词的编号能够变成可比较的语义向量？从 Word2Vec 到对比检索 | [`posts/foundations/embeddings/`](posts/foundations/embeddings/index.html) | [Word2Vec](https://arxiv.org/abs/1301.3781) · [SBERT](https://aclanthology.org/D19-1410/) · [SimCSE](https://aclanthology.org/2021.emnlp-main.552/) |
 | **Understanding Importance Sampling** | 为什么故意改变抽样分布，仍可无偏估计目标概率？稀有事件、SNIS、ESS 与 Off-policy | [`posts/foundations/importance-sampling/`](posts/foundations/importance-sampling/index.html) | [Kahn & Marshall (1953)](https://doi.org/10.1287/opre.1.5.263) · [Owen (2013)](https://artowen.su.domains/mc/Ch-var-is.pdf) |
@@ -254,3 +255,5 @@ python scripts/sync_skills.py --check
 协作请先阅读 [`AGENTS.md`](AGENTS.md)、[`docs/editorial.md`](docs/editorial.md) 和 [`CONTRIBUTING.md`](CONTRIBUTING.md)。除非明确核验并添加仓库许可证，否则不要推断第三方论文、图像、代码享有与本站相同的再分发许可。
 
 QLoRA 归入 Training → PEFT / LoRA → Quantized Fine-tuning / QLoRA，不新建顶层分类；提供 12 节机制解读、6 幅 SVG、MathML、权重显存交互与论文证据表。
+
+GAE 归入 `reinforcement-learning` 下已有的 **Policy Gradient / Actor–Critic** 主题，不新增顶层分类；文章包含 14 节、五幅独立 SVG、原生 MathML、λ 交互、终止/截断算例和确定性 Python 验证，明确区分 2016 GAE + TRPO 与后续 GAE + PPO。
