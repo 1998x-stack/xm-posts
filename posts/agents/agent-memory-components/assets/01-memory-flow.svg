@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 380" role="img" aria-label="从会话事件到可验证笔记、知识索引和下次会话的记忆流">
+<title>Agent 记忆：经验不等于知识</title><desc>一条事件先留在原始记录中，经过证据检验形成笔记，组织为可检索索引，再把少量关键知识送入下次会话。</desc>
+<rect width="960" height="380" rx="22" fill="#f0f6f3"/>
+<g font-family="Arial,Helvetica,sans-serif"><text x="34" y="41" font-size="17" font-weight="700" fill="#23454a">FROM EXPERIENCE TO RELIABLE MEMORY</text>
+<g>
+<rect x="33" y="83" width="196" height="190" rx="17" fill="#ffffff" stroke="#cbded7" stroke-width="2"/>
+<rect x="49" y="101" width="164" height="36" rx="8" fill="#e9f1ed"/><text x="63" y="125" fill="#244e54" font-size="18" font-weight="700">1  Event log</text>
+<text x="49" y="166" fill="#486469" font-size="15">raw action</text><text x="49" y="192" fill="#486469" font-size="15">tool result</text><text x="49" y="218" fill="#486469" font-size="15">timestamp</text>
+<circle cx="68" cy="245" r="6" fill="#3b8c83"/><circle cx="92" cy="245" r="6" fill="#3b8c83"/><circle cx="116" cy="245" r="6" fill="#3b8c83"/>
+</g>
+<g><path d="M232 174 H273" stroke="#3b8c83" stroke-width="4" stroke-linecap="round"/><path d="M263 166 L277 174 L263 182" fill="none" stroke="#3b8c83" stroke-width="4" stroke-linecap="round"/></g>
+<g><rect x="284" y="83" width="196" height="190" rx="17" fill="#ffffff" stroke="#cbded7" stroke-width="2"/>
+<rect x="300" y="101" width="164" height="36" rx="8" fill="#ffe8da"/><text x="312" y="125" fill="#844d32" font-size="18" font-weight="700">2  Verify note</text>
+<text x="300" y="165" fill="#486469" font-size="15">claim + source</text><text x="300" y="191" fill="#486469" font-size="15">confidence</text><text x="300" y="217" fill="#486469" font-size="15">freshness</text>
+<circle cx="316" cy="246" r="11" fill="#28786d"/><path d="M310 246 l4 4 l8 -9" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+</g>
+<g><path d="M483 174 H524" stroke="#3b8c83" stroke-width="4" stroke-linecap="round"/><path d="M514 166 L528 174 L514 182" fill="none" stroke="#3b8c83" stroke-width="4" stroke-linecap="round"/></g>
+<g><rect x="535" y="83" width="182" height="190" rx="17" fill="#ffffff" stroke="#cbded7" stroke-width="2"/>
+<rect x="550" y="101" width="152" height="36" rx="8" fill="#deebfb"/><text x="560" y="125" fill="#31567b" font-size="18" font-weight="700">3  Link / search</text>
+<circle cx="578" cy="175" r="12" fill="#3d80b6"/><circle cx="666" cy="163" r="12" fill="#3d80b6"/><circle cx="628" cy="224" r="12" fill="#3d80b6"/>
+<path d="M588 172 L656 165 M585 184 L619 215 M655 175 L637 215" stroke="#8ab1d2" stroke-width="4"/>
+</g>
+<g><path d="M720 174 H755" stroke="#3b8c83" stroke-width="4" stroke-linecap="round"/><path d="M747 166 L761 174 L747 182" fill="none" stroke="#3b8c83" stroke-width="4" stroke-linecap="round"/></g>
+<g><rect x="767" y="83" width="160" height="190" rx="17" fill="#ffffff" stroke="#cbded7" stroke-width="2"/>
+<rect x="782" y="101" width="131" height="36" rx="8" fill="#dcefe4"/><text x="789" y="125" fill="#287051" font-size="17" font-weight="700">4  Next turn</text>
+<rect x="785" y="160" width="119" height="28" rx="6" fill="#eaf6ef"/><text x="797" y="180" font-size="13" fill="#287051">short index</text><rect x="785" y="200" width="119" height="28" rx="6" fill="#f0f5f7"/><text x="797" y="220" font-size="13" fill="#526e74">fetch details</text>
+</g>
+<path d="M395 282 V305 H143 V273" fill="none" stroke="#bc825b" stroke-width="3" stroke-dasharray="8 6"/><text x="230" y="329" font-size="14" fill="#995a36">check old notes against original evidence</text>
+<text x="35" y="354" font-size="13" fill="#6a8584">Teaching abstraction · arrows describe information flow, not an internal product implementation.</text>
+</g></svg>

@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 356" role="img" aria-label="错误记忆如何通过日志证据修正的对照流程">
+<title>错误记忆校验：核对证据而不是重复信念</title><desc>左侧是错误笔记直接驱动行动，右侧是先从日志取得版本证据再更新笔记，避免重复行动。</desc>
+<rect width="900" height="356" rx="20" fill="#f4f7f6"/>
+<g font-family="Arial,Helvetica,sans-serif">
+<rect x="26" y="29" width="402" height="288" rx="15" fill="#fff5ee" stroke="#ebc4ab" stroke-width="2"/>
+<rect x="472" y="29" width="402" height="288" rx="15" fill="#edf6f1" stroke="#b7dbcb" stroke-width="2"/>
+<text x="48" y="62" font-size="20" font-weight="700" fill="#96583c">Unverified memory</text><text x="494" y="62" font-size="20" font-weight="700" fill="#266d5e">Evidence-checked memory</text>
+<g fill="#fff" stroke-width="2">
+<rect x="48" y="87" width="358" height="64" rx="10" stroke="#e5b397"/><rect x="48" y="193" width="358" height="64" rx="10" stroke="#e5b397"/>
+<rect x="494" y="87" width="358" height="64" rx="10" stroke="#a8d3c4"/><rect x="494" y="193" width="358" height="64" rx="10" stroke="#a8d3c4"/>
+</g>
+<text x="65" y="112" font-size="15" fill="#704e43">Note claims: API = /v1</text><text x="65" y="136" font-size="14" fill="#886859">No source attached</text><path d="M224 153 V185" stroke="#c47655" stroke-width="4"/><path d="M215 177 L224 188 L233 177" fill="none" stroke="#c47655" stroke-width="4"/>
+<text x="65" y="218" font-size="15" fill="#704e43">Agent retries wrong route</text><text x="65" y="242" font-size="14" fill="#886859">Repeated failure</text>
+<text x="511" y="112" font-size="15" fill="#295e55">Log shows: API = /v2</text><text x="511" y="136" font-size="14" fill="#5b7b6d">Timestamp + direct evidence</text><path d="M670 153 V185" stroke="#35806b" stroke-width="4"/><path d="M661 177 L670 188 L679 177" fill="none" stroke="#35806b" stroke-width="4"/>
+<text x="511" y="218" font-size="15" fill="#295e55">Note updated: /v2</text><text x="511" y="242" font-size="14" fill="#5b7b6d">Try verified endpoint</text>
+<text x="48" y="292" font-size="14" fill="#96583c">Blind reuse amplifies error.</text><text x="494" y="292" font-size="14" fill="#266d5e">Audit then consolidate.</text>
+<text x="26" y="343" font-size="13" fill="#6a8280">Fictional API example · not an Anthropic benchmark or quoted implementation.</text>
+</g></svg>

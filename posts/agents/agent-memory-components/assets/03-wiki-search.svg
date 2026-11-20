@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 370" role="img" aria-label="检索与维基互补的知识发现流程">
+<title>搜索负责寻找证据，知识索引负责连接关系</title><desc>多份原始文档先被搜索，知识索引通过交叉文档链接引导访问，最后把有出处的材料综合成答案。</desc>
+<rect width="900" height="370" rx="20" fill="#f1f6f7"/>
+<g font-family="Arial,Helvetica,sans-serif"><text x="31" y="40" font-size="20" font-weight="700" fill="#254a54">SEARCH + CONNECTED KNOWLEDGE</text>
+<g fill="#fff" stroke="#cadbdc" stroke-width="2"><rect x="30" y="90" width="202" height="198" rx="14"/><rect x="333" y="90" width="229" height="198" rx="14"/><rect x="672" y="90" width="194" height="198" rx="14"/></g>
+<text x="48" y="123" font-size="17" font-weight="700" fill="#35576b">Original files</text><g fill="#d9e9ef"><rect x="48" y="144" width="161" height="28" rx="6"/><rect x="48" y="185" width="161" height="28" rx="6"/><rect x="48" y="226" width="161" height="28" rx="6"/></g>
+<text x="60" y="163" font-size="14" fill="#35576b">contract A</text><text x="60" y="204" font-size="14" fill="#35576b">release log</text><text x="60" y="245" font-size="14" fill="#35576b">support notes</text>
+<path d="M235 188 H323" stroke="#548d9c" stroke-width="4"/><path d="M312 180 L326 188 L312 196" stroke="#548d9c" stroke-width="4" fill="none"/><text x="258" y="170" fill="#496f74" font-size="13">search</text>
+<text x="350" y="123" font-size="17" font-weight="700" fill="#2c615a">Linked index</text>
+<g stroke="#87b6a7" stroke-width="4"><path d="M390 177 L473 161 L505 226 L396 239 Z"/><path d="M473 161 L396 239"/></g>
+<circle cx="390" cy="177" r="15" fill="#408d80"/><circle cx="473" cy="161" r="15" fill="#408d80"/><circle cx="505" cy="226" r="15" fill="#408d80"/><circle cx="396" cy="239" r="15" fill="#408d80"/>
+<path d="M565 188 H661" stroke="#548d9c" stroke-width="4"/><path d="M650 180 L664 188 L650 196" stroke="#548d9c" stroke-width="4" fill="none"/><text x="581" y="169" fill="#496f74" font-size="13">ground</text>
+<text x="690" y="123" font-size="17" font-weight="700" fill="#35576b">Answer</text><text x="691" y="155" font-size="14" fill="#4c6671">cross-file</text><text x="691" y="177" font-size="14" fill="#4c6671">synthesis</text><path d="M695 203 h140 M695 224 h124 M695 245 h145" stroke="#bfd0d5" stroke-width="7" stroke-linecap="round"/>
+<path d="M121 296 V324 H769 V290" stroke="#c08355" stroke-width="3" fill="none" stroke-dasharray="7 6"/><text x="275" y="343" font-size="14" fill="#a3663e">trace claims back to original documents</text>
+</g></svg>
