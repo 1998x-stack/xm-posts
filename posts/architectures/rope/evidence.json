@@ -61,5 +61,32 @@
     "locator": "Rotary embeddings utilities: Parameters",
     "status": "verified",
     "notes": "Versioned documentation as of 2026-11-20; implementation choices are separate from original paper."
+  },
+  {
+    "id": "R8",
+    "claim": "In the RoFormer paper WMT14 En-De test BLEU is Transformer-base 27.3 and RoFormer 27.5",
+    "kind": "paper-metric",
+    "source_url": "https://arxiv.org/abs/2104.09864",
+    "locator": "Section 4.1, Table 1; WMT 2014 En-De test; BLEU",
+    "status": "verified",
+    "notes": "Original paper reported results under fairseq training setup and beam search; no independent reproduction."
+  },
+  {
+    "id": "R9",
+    "claim": "In RoFormer paper GLUE MRPC validation F1 is BERT 88.9 versus RoFormer 89.5; SST-2 validation accuracy is BERT 93.5 versus RoFormer 90.7",
+    "kind": "paper-metric",
+    "source_url": "https://arxiv.org/abs/2104.09864",
+    "locator": "Section 4.3, Table 2; GLUE validation; F1 for MRPC and accuracy for SST-2",
+    "status": "verified",
+    "notes": "Mixed results: one gain and one drop; no universal superiority claim."
+  },
+  {
+    "id": "R10",
+    "claim": "CAIL2019-SCM RoFormer-512 test accuracy 68.29% and RoFormer-1024 69.79%",
+    "kind": "paper-metric",
+    "source_url": "https://arxiv.org/abs/2104.09864",
+    "locator": "Section 4.5, Table 5; CAIL2019-SCM test accuracy; cutoff lengths 512 vs 1024",
+    "status": "verified",
+    "notes": "Different truncation lengths; not an isolated position-encoding ablation; difference is 1.50 percentage points derived."
   }
 ]
