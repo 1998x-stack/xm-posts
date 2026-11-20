@@ -341,7 +341,7 @@ Evidence:
 <div class="score"><output id="harness-score" aria-live="polite">38.3</output><p><strong>Harness 教学指数 / 100</strong><br>不是实际成功概率，也不是论文拟合指标；它只用于演示多个环节同时存在短板时，系统综合能力可能受到怎样的限制。</p></div>
 <p id="harness-explain" class="status" aria-live="polite">当前瓶颈：验证覆盖率最低。系统可能完成了代码修改，却没有充分检查真实行为。</p>
 </div>
-<div class="formula"><strong>H_demo = C × T × V × S × (1 − E)</strong><small>C：上下文相关性；T：工具可靠性；V：验证覆盖率；S：安全边界质量；E：维护熵负担。各变量归一化到 0–1。</small></div>
+<div class="formula"><math aria-label="H demo equals C times T times V times S times one minus E"><mrow><msub><mi>H</mi><mi>demo</mi></msub><mo>=</mo><mi>C</mi><mo>×</mo><mi>T</mi><mo>×</mo><mi>V</mi><mo>×</mo><mi>S</mi><mo>×</mo><mo>(</mo><mn>1</mn><mo>−</mo><mi>E</mi><mo>)</mo></mrow></math><small>C：上下文相关性；T：工具可靠性；V：验证覆盖率；S：安全边界质量；E：维护熵负担。各变量归一化到 0–1。</small></div>
 <p>为什么用乘法而不是加法？这是一个教学上的瓶颈模型：如果某个关键环节接近零，其他环节即使很好，也很难补偿它。例如工具可靠性为零，Agent 就无法执行必要操作；验证覆盖率为零，系统就无法可靠区分“真的完成”与“看起来完成”。</p>
 <div class="caution"><strong>模型限制：</strong>真实 Harness 的各维度并不独立，也不一定能被压缩成一个分数。这个公式不是 OpenAI、Anthropic 或 arXiv 论文中的经验模型，更不能用来预测生产系统的成功率。实际研究应使用固定任务、固定环境、多个 trial 和可复核的 outcome 做 controlled ablation。</div>
 </section>
