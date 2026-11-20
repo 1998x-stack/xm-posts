@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 560" role="img" aria-labelledby="cover-title cover-desc">
+<title id="cover-title">LLM-as-a-Judge: judge and validate loop</title>
+<desc id="cover-desc">A task and candidate answer enter a rubric-guided LLM judge. Its score, decision and evidence are independently checked by humans, tests and bias audits.</desc>
+<defs><marker id="cover-arrow" markerWidth="14" markerHeight="14" refX="11" refY="4" orient="auto"><path d="M0 0 L12 4 L0 8 Z" fill="#477d77"/></marker></defs>
+<rect width="1000" height="560" rx="30" fill="#f7faf7"/>
+<text x="54" y="78" font-family="Arial,sans-serif" font-size="38" font-weight="700" fill="#25464b">LLM-as-a-Judge</text>
+<text x="56" y="119" font-family="Arial,sans-serif" font-size="21" fill="#60777a">评审不是终点：输出必须接受独立验证</text>
+<g font-family="Arial,sans-serif" text-anchor="middle">
+<rect x="52" y="190" width="250" height="180" rx="24" fill="#e7f0f4" stroke="#8daeba" stroke-width="3"/>
+<circle cx="177" cy="239" r="23" fill="#c9e0e8"/><path d="M163 240 H191 M177 226 V254" stroke="#356b7a" stroke-width="4" stroke-linecap="round"/>
+<text x="177" y="302" font-size="30" font-weight="700" fill="#315a66">输入</text>
+<text x="177" y="338" font-size="20" fill="#45666e">问题 + 候选答案</text>
+<rect x="375" y="165" width="250" height="230" rx="24" fill="#eeeafa" stroke="#a49acb" stroke-width="3"/>
+<path d="M500 208 L524 232 L500 256 L476 232 Z" fill="#dcd6f1" stroke="#8e82bc" stroke-width="2"/>
+<text x="500" y="303" font-size="31" font-weight="700" fill="#51447d">Judge</text>
+<text x="500" y="340" font-size="19" fill="#665d87">Rubric 约束判断</text>
+<text x="500" y="370" font-size="18" fill="#665d87">分数 · 证据 · 决策</text>
+<rect x="698" y="190" width="250" height="180" rx="24" fill="#e4f1e7" stroke="#8ab99a" stroke-width="3"/>
+<circle cx="823" cy="239" r="23" fill="#cfe6d5"/><path d="M811 240 L820 249 L837 228" fill="none" stroke="#32694a" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="823" y="302" font-size="30" font-weight="700" fill="#32694a">验证</text>
+<text x="823" y="338" font-size="19" fill="#4b745b">人工 · 测试 · 偏差审计</text>
+<path d="M302 280 H366 M625 280 H689" fill="none" stroke="#477d77" stroke-width="5" marker-end="url(#cover-arrow)"/>
+<path d="M823 371 V452 H500 V405" fill="none" stroke="#8b8066" stroke-width="3" stroke-dasharray="10 8" marker-end="url(#cover-arrow)"/>
+<rect x="255" y="455" width="490" height="66" rx="17" fill="#fff1e2" stroke="#d9a56d" stroke-width="2"/>
+<text x="500" y="497" font-size="23" font-weight="700" fill="#80552d">校准后再用：可靠性 ≠ 单次打分</text>
+</g></svg>
