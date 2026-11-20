@@ -19,3 +19,5 @@
 - [Understanding SGD](sgd/index.html)：从全量 GD 到 Mini-batch、无偏梯度、学习率衰减与计算统计权衡；包含 SVG 与测试。
 
 - [Understanding SVD](svd/index.html)：矩阵分解、Eckart–Young 低秩定理、PCA 与伪逆；含交互秩选择、MathML 与 NumPy 断言。
+
+- [Understanding BPE](bpe/index.html)：带词频的贪心子词合并、原论文实验与 byte-level 变体；含六幅机制图、交互分词实验、MathML 与纯 Python 验证。
