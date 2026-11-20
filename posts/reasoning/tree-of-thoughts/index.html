@@ -37,7 +37,7 @@ section{margin-bottom:74px;scroll-margin-top:24px}
 p{margin:0 0 18px;color:#415a61}
 strong{color:#24484c}
 .lead{font-size:19px;color:#284a50}
-.figure{margin:26px 0 30px;padding:12px;border:1px solid var(--border);border-radius:13px;background:#fff;box-shadow:0 14px 40px #1f59550b}
+.figure{margin:26px 0 30px;padding:12px;border:1px solid var(--border);border-radius:13px;background:#fff;box-shadow:0 14px 40px #1f59550b;overflow-x:auto;overscroll-behavior-x:contain}
 .figure svg{display:block;width:100%;height:auto;font-family:system-ui,-apple-system,"PingFang SC",sans-serif}
 .figure figcaption{font-size:13px;color:var(--muted);line-height:1.7;padding:10px 5px 0}
 .panel{border:1px solid var(--border);border-radius:13px;padding:20px 22px;background:white;margin:23px 0}
@@ -67,7 +67,7 @@ code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace}
 .foot{border-top:1px solid var(--border);padding-top:16px;font-size:13px}
 .foot a{margin-right:14px}
 @media(max-width:940px){.page{display:block;max-width:880px;padding:38px 20px 75px}.toc{position:static;max-height:none;margin-bottom:34px;background:white;border:1px solid var(--border);padding:12px;border-radius:10px}.toc a{display:inline-block;border:none;padding:7px}}
-@media(max-width:520px){body{font-size:16px}.barin{padding:12px 15px}.links{gap:10px}.page{padding:27px 15px 65px}.dek{font-size:18px}.twocol{grid-template-columns:1fr}.figure{padding:8px}.panel{padding:15px}section{margin-bottom:58px}.figure svg{width:100%;max-width:100%}.math-equation{padding:10px}.controls button{flex:1 1 auto}}
+@media(max-width:520px){.figure svg{width:720px;min-width:720px;max-width:none}body{font-size:16px}.barin{padding:12px 15px}.links{gap:10px}.page{padding:27px 15px 65px}.dek{font-size:18px}.twocol{grid-template-columns:1fr}.figure{padding:8px}.panel{padding:15px}section{margin-bottom:58px}.figure svg{width:100%;max-width:100%}.math-equation{padding:10px}.controls button{flex:1 1 auto}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 @media print{body{background:white}.bar,.toc,.skip,.controls{display:none!important}.page{display:block;max-width:none;padding:0}.figure{break-inside:avoid;box-shadow:none}.math-scroll{overflow:visible}.code-scroll{overflow:visible}pre{white-space:pre-wrap;min-width:0;overflow-wrap:anywhere;font-size:9pt}.panel{break-inside:avoid}}
 </style>
@@ -96,7 +96,7 @@ code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace}
 <div class="panel"><p><strong>第 1 步：</strong>13 − 9 = 4，剩余数字变成 {4, 4, 10}。</p><p><strong>第 2 步：</strong>10 − 4 = 6，剩余数字变成 {4, 6}。</p><p><strong>第 3 步：</strong>4 × 6 = 24，得到目标。</p></div>
 <p>关键在于：第一步并不唯一。模型也可能先生成 4 + 9 = 13、10 − 4 = 6、13 − 10 = 3 等候选操作。它们都像是合理的局部动作，但只有部分分支能在后续步骤中到达 24。</p>
 <p>如果模型一开始只沿着一条链生成，错误的早期选择会不断影响后续输出。传统 CoT 可以让模型把步骤写出来，却没有默认提供一个独立的机制来保留其他分支、比较它们的前景，再回到先前的分叉点。</p>
-<figure class="figure"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 570" role="img" aria-labelledby="tot-game24-title tot-game24-desc">
+<figure class="figure" tabindex="0" aria-label="技术图示，可横向滚动"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 570" role="img" aria-labelledby="tot-game24-title tot-game24-desc">
 <title id="tot-game24-title">Game of 24 中的思维树搜索轨迹</title>
 <desc id="tot-game24-desc">从数字 4、9、10、13 开始，比较不同第一步。选中 13 减 9 得 4，再算 10 减 4 得 6，最后 4 乘 6 得 24；其他分支被评估后暂缓或剪枝。</desc>
 <rect width="960" height="570" rx="18" fill="#fbfcfa"/>
