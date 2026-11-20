@@ -18,7 +18,7 @@
 | `systems` | GPU 内存、算子、编译、通信、性能分析及底层优化 | 服务请求、token 调度、端到端 serving 归 `inference` |
 | `storage-indexing` | B+ Tree、LSM Tree、页与缓冲区管理、事务恢复、MVCC | 数据库磁盘/索引结构归此类；向量语义召回归 `retrieval-rag`，GPU 算子实现归 `systems` |
 | `retrieval-rag` | 向量/ANN、稀疏混合检索、重排序、RAG、证据落地 | Agent 任务计划与工具执行归 `agents`，embedding 基础表征归 `foundations` |
-| `agents` | ReAct、规划、工具调用、记忆、Agent 端到端评估 | 纯推理策略归 `reasoning`；检索方法归 `retrieval-rag` |
+| `agents` | ReAct、规划、工具调用、记忆、Agent 端到端评估、类型化概率决策与模型路由 | 纯推理策略归 `reasoning`；检索方法归 `retrieval-rag`；通用概率校准指标归 `evaluation` |
 | `multimodal` | 视觉/语言/音频的跨模态建模与对齐 | 通用单模态 CNN 架构仍可归 `architectures` |
 | `evaluation` | 模型/任务 Benchmark、ROC/PR、消融与复现 | 训练数据质量、污染事实与许可证归 `datasets` |
 
@@ -29,6 +29,15 @@
 3. 对确有不同边界的二级主题，要求标题与描述不同；不得让两个 topic 共享同一展示标题。当前 Systems 已区分 Kernel 编程、GPU 内存、编译/内核优化、Collectives、分布式通信和 Roofline/Benchmark。
 4. 占位目录必须使用精确的注册 slug。新增 Topic 优先写分类元数据，再添加 `_topics/` 的 README；单篇新文章通常不值得新增一级分类。
 5. Draft 必须继续以 `status: draft` 保持离线，不要将规划中的 README 当作 `published` 条目。
+
+## 2026-11 Typed Decision Models
+
+`agents/typed-decision-models` 收录 Jev / System One 风格的类型化概率决策接口，以及它们在 Agent、模型路由、Guardrail 和自动化工作流中的使用。其主问题是“如何把有限答案空间中的判断安全地交给代码消费”，因此主分类归 `agents`，不新增一级分类。
+
+- `classical-ml` 继续收录 Logistic Regression、Naive Bayes 等模型本身的统计学习机制；`typed-decision-models` 讨论调用时定义问题、答案类型和概率输出的决策接口。
+- `evaluation` 继续负责 ECE、Brier Score、校准曲线、风险—覆盖率和 benchmark 方法；文章可用 tags 与阅读路径交叉链接，但不把 Jev 主文章重复归档。
+- `reasoning` 负责多步推理、搜索与验证；Jev 的窄范围快速判断不应被误写成通用 System 2 推理器。
+- 类型安全只约束结构，不等于语义正确；上线决策必须由目标任务校准、成本矩阵、拒绝策略和代码权限共同控制。
 
 ## 2026-11 分类占位整合
 
