@@ -1,0 +1,92 @@
+[
+  {
+    "id": "M01",
+    "claim": "UCT applies a multi-armed-bandit selection rule locally at explored tree nodes",
+    "kind": "paper-claim",
+    "source_url": "https://aima.cs.berkeley.edu/~russell/classes/cs294/s11/readings/Kocsis%2BSzepesvari%3A2006.pdf",
+    "locator": "§1–2: UCB1 applied to trees",
+    "status": "verified",
+    "notes": "Paper explicitly introduces UCT; not a claim about all MCTS variants"
+  },
+  {
+    "id": "M02",
+    "claim": "Rollout-based planning incrementally constructs a search tree through model-generated episodes",
+    "kind": "paper-claim",
+    "source_url": "https://aima.cs.berkeley.edu/~russell/classes/cs294/s11/readings/Kocsis%2BSzepesvari%3A2006.pdf",
+    "locator": "§2, rollout-based Monte-Carlo planning",
+    "status": "verified",
+    "notes": "Requires a generative transition model"
+  },
+  {
+    "id": "M03",
+    "claim": "UCT study provides conditional finite-horizon / discounted-MDP consistency and estimation bounds",
+    "kind": "paper-claim",
+    "source_url": "https://aima.cs.berkeley.edu/~russell/classes/cs294/s11/readings/Kocsis%2BSzepesvari%3A2006.pdf",
+    "locator": "Abstract, §2 theory and §4 discussion",
+    "status": "verified",
+    "notes": "Do not generalize guarantees to arbitrary learned models or finite budgets"
+  },
+  {
+    "id": "M04",
+    "claim": "Original study evaluates artificial game trees (P-games) and sailing planning against several baselines",
+    "kind": "experiment",
+    "source_url": "https://aima.cs.berkeley.edu/~russell/classes/cs294/s11/readings/Kocsis%2BSzepesvari%3A2006.pdf",
+    "locator": "§3 Experiments, figures and captions",
+    "status": "verified",
+    "notes": "Article intentionally does not quote unverified chart coordinates"
+  },
+  {
+    "id": "M05",
+    "claim": "Canonical MCTS description separates selection, expansion, simulation and backpropagation",
+    "kind": "survey-synthesis",
+    "source_url": "https://repository.essex.ac.uk/4117/",
+    "locator": "Browne et al. (2012), §3.1, Figure 1",
+    "status": "verified",
+    "notes": "Pedagogical four-stage taxonomy from survey, not a claim UCT invented all steps"
+  },
+  {
+    "id": "M06",
+    "claim": "MCTS is asymmetric and anytime; playout quality affects performance",
+    "kind": "survey-synthesis",
+    "source_url": "https://repository.essex.ac.uk/4117/",
+    "locator": "Browne et al. (2012), §§1,3,4 and 6",
+    "status": "verified",
+    "notes": "No monotonic per-run accuracy guarantee"
+  },
+  {
+    "id": "M07",
+    "claim": "AlphaZero uses a neural policy prior and value network to guide search rather than uniform terminal rollouts",
+    "kind": "later-variant",
+    "source_url": "https://arxiv.org/abs/1712.01815",
+    "locator": "Silver et al. (2017), Abstract and algorithm description",
+    "status": "verified",
+    "notes": "PUCT expression in article is a schematic common modern form; not reproduced as a verbatim original UCT equation"
+  },
+  {
+    "id": "M08",
+    "claim": "UCB exploration bonus declines with child visits and rises with parent visits",
+    "kind": "toy-derivation",
+    "source_url": "https://aima.cs.berkeley.edu/~russell/classes/cs294/s11/readings/Kocsis%2BSzepesvari%3A2006.pdf",
+    "locator": "Article's worked UCB equation and deterministic slider example",
+    "status": "derived",
+    "notes": "Assumes positive visits, bounded same-scale rewards, exploration c chosen for demonstration"
+  },
+  {
+    "id": "M09",
+    "claim": "Online mean update and single-agent maximizing tree search demonstrate backpropagation mechanically",
+    "kind": "toy-derivation",
+    "source_url": "https://repository.essex.ac.uk/4117/",
+    "locator": "Article §Backprop and mini_mcts.py",
+    "status": "derived",
+    "notes": "No alternating-player sign flips: toy is single-agent maximization"
+  },
+  {
+    "id": "M10",
+    "claim": "Five diagrams depict original teaching examples, not recreated paper figures",
+    "kind": "illustration",
+    "source_url": "https://repository.essex.ac.uk/4117/",
+    "locator": "Article figures 01–05 and standalone SVG files",
+    "status": "illustrative",
+    "notes": "Do not treat diagram values as experimental observations"
+  }
+]

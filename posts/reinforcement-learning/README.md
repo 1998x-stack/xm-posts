@@ -3,6 +3,7 @@
 从环境反馈、信用分配与值函数到策略优化，系统解释 Policy Gradient、Actor–Critic、GAE、TRPO、PPO 及其与 LLM 偏好对齐的联系。
 
 ## 已发布
+- [Understanding MCTS](mcts/index.html)：UCT 树搜索、四阶段模拟、探索系数与 PUCT 对比。
 - [Understanding AlphaGo](alphago/index.html)：2016 Nature 原论文、监督/强化策略、价值网络、APV-MCTS、rollout 与异步搜索；另辨析 AlphaGo Lee / Zero。
 - [Understanding DDPG](ddpg/index.html)：连续动作、确定性策略梯度、Off-policy Replay 与双目标网络。
 - [Understanding SAC](sac/index.html)：最大熵离策略 Actor–Critic、经验回放、双 Q、tanh 高斯策略、自动温度与版本分辨。
