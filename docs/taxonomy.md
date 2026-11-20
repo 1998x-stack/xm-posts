@@ -18,7 +18,7 @@
 | `systems` | GPU 内存、算子、编译、通信、性能分析及底层优化 | 服务请求、token 调度、端到端 serving 归 `inference` |
 | `storage-indexing` | B+ Tree、LSM Tree、页与缓冲区管理、事务恢复、MVCC | 数据库磁盘/索引结构归此类；向量语义召回归 `retrieval-rag`，GPU 算子实现归 `systems` |
 | `retrieval-rag` | 向量/ANN、稀疏混合检索、重排序、RAG、证据落地 | Agent 任务计划与工具执行归 `agents`，embedding 基础表征归 `foundations` |
-| `agents` | ReAct、规划、工具调用、记忆、Agent 端到端评估 | 纯推理策略归 `reasoning`；检索方法归 `retrieval-rag` |
+| `agents` | ReAct、规划、工具调用、记忆、软件工程 Agent、Agent-Computer Interface、Harness Engineering 与端到端评测 | 纯推理策略归 `reasoning`；检索方法归 `retrieval-rag`；Harness 研究模型外部的 Agent Runtime 与工程闭环 |
 | `multimodal` | 视觉/语言/音频的跨模态建模与对齐 | 通用单模态 CNN 架构仍可归 `architectures` |
 | `evaluation` | 模型/任务 Benchmark、ROC/PR、消融与复现 | 训练数据质量、污染事实与许可证归 `datasets` |
 
@@ -50,3 +50,13 @@
 5. PR 先审查完整 diff 和 Actions 结果；只在主分支可无冲突合并且 CI 成功后合并。合并后单独检查 Pages 工作流与在线网址。旧 PR 只有在新 PR 已承接其全部有效变更后才标记 superseded。
 
 自动回归：`tests/test_taxonomy_contract.py` 对重复的 ID/标题、孤儿占位目录、文章主专题和已发布文件路径进行检测。详见根目录 `AGENTS.md` 及 `docs/editorial.md`。
+
+
+## Harness Engineering 专题边界
+
+- **主分类：** `agents`；**二级专题：** `harness-engineering`。
+- 研究模型外部的运行时系统：Agent Loop、模型接入、工具与动作、上下文/记忆、安全权限、编排、扩展、可观测性、失败归因、验证与维护熵。
+- 不新建一级分类。Harness 横跨 ACI、Memory、Evaluation 和 Software Engineering Agents，但其核心研究对象是把这些能力组织成可恢复、可验证的运行时。
+- ReAct 主要解释推理—行动—观察循环；SWE-agent / ACI 主要研究操作接口；Agent Memory 主要研究跨会话知识；Harness Engineering 将这些能力置于完整任务生命周期中进行系统设计。
+- Harness 与 Evaluation Harness 必须区分：前者使模型能够行动，后者运行任务并测量结果。
+- 当前专题文献仍在快速演进；对预印本提出的子系统分类，应标注来源和研究状态，不把它们描述为已统一的行业标准。
