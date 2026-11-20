@@ -129,3 +129,43 @@ def test_home_editorial_discovery_and_manifest_consistency(tmp_path):
     assert indexed == {p['title'] for p in published}
     # A planned category must not masquerade as a published article collection.
     assert all(c['slug'] not in {x['data-category'] for x in home.select('[data-post-card]')} for c in planned)
+
+
+def test_unique_article_specific_cover_manifest_and_rendering(tmp_path):
+    from hashlib import sha256
+
+    categories, posts = data(ROOT)
+    published = [p for p in posts if p['status'] == 'published']
+    assert len(published) >= 60
+    assert all('cover' in p for p in published)
+    assert all((ROOT / 'posts' / p['category'] / p['slug'] / p['cover']['src']).is_file() for p in published)
+    assert len({p['cover']['caption'] for p in published}) == len(published)
+    diagram_digests = {
+        sha256((ROOT / 'posts' / p['category'] / p['slug'] / p['cover']['src']).read_bytes()).hexdigest()
+        for p in published
+    }
+    assert len(diagram_digests) == len(published), "Every cover should be a distinct scientific diagram"
+
+    output = tmp_path / 'cover-site'
+    build(ROOT, output, DEFAULT_URL)
+    for c in categories:
+        page = BeautifulSoup((output / 'categories' / c['slug'] / 'index.html').read_text(encoding='utf-8'), 'html.parser')
+        cards = page.select('.post-card .cover-figure')
+        matching = [p for p in published if p['category'] == c['slug']]
+        assert len(cards) == len(matching)
+        assert 'Observe → Derive → Verify' not in str(page)
+        for card in cards:
+            image = card.select_one('.cover-illustration img')
+            assert image and image.get('alt') and image.get('loading') == 'lazy'
+            assert image.get('src','').startswith('../../posts/' + c['slug'] + '/')
+            assert (output / 'categories' / c['slug'] / image['src']).resolve().is_file()
+            assert card.select_one('.cover-caption').get_text(strip=True) == image['alt']
+
+    home = BeautifulSoup((output / 'index.html').read_text(encoding='utf-8'), 'html.parser')
+    assert len(home.select('.index-image-link img')) == len(published)
+    assert len(home.select('.spotlight-cover-link img')) >= 2
+    assert home.select_one('.hero-feature .feature-art--cover img')
+    for p in published:
+        thumb = home.select_one(f'.index-card a[href="posts/{p["category"]}/{p["slug"]}/"] img')
+        assert thumb and thumb['src'].removeprefix('./') == 'posts/' + p['category'] + '/' + p['slug'] + '/' + p['cover']['src']
+    assert 'Observe → Derive → Verify' not in home.get_text()

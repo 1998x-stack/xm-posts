@@ -83,6 +83,13 @@ def run(output:Path, site:Path):
                         else:
                             page.set_content(offline_html(site,site/'categories/architectures/index.html'))
                         assert page.locator('.post-card').count()>=2
+                        covers=page.locator('.post-card .cover-illustration img')
+                        assert covers.count()==page.locator('.post-card').count()
+                        srcs=covers.evaluate_all('(nodes) => nodes.map(n => n.getAttribute("src"))')
+                        assert len(set(srcs))==len(srcs), 'Duplicate article cover URLs'
+                        covers.first.scroll_into_view_if_needed()
+                        if report['mode']=='http':
+                            assert covers.first.evaluate('(img) => img.complete && img.naturalWidth > 0'), 'Cover did not load'
                         link=page.locator('a[href="../../posts/architectures/resnet/"]').first
                         assert link.count()>=1
                         if report['mode']=='http':
@@ -105,6 +112,15 @@ def run(output:Path, site:Path):
                         assert page.locator('#site-nav').is_visible()
                         page.keyboard.press('Escape')
                         assert toggle.get_attribute('aria-expanded')=='false'
+                        if report['mode']=='http':
+                            page.goto(base+'categories/architectures/',wait_until='networkidle')
+                            category_qa=page.evaluate('''() => ({overflow:document.documentElement.scrollWidth>innerWidth+1,covers:[...document.querySelectorAll('.cover-illustration img')].length})''')
+                            assert not category_qa['overflow'], 'Category card covers overflow at 360px'
+                            assert category_qa['covers']>=2
+                            category_cover=page.locator('.cover-illustration img').first
+                            category_cover.scroll_into_view_if_needed()
+                            assert category_cover.evaluate('(img) => img.complete && img.naturalWidth > 0')
+                            page.screenshot(path=str(output/'category-narrow.png'),full_page=False)
                     page.close()
                 browser.close()
         finally:server.shutdown();server.server_close()

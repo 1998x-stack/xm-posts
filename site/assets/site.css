@@ -258,3 +258,46 @@
 
 .index-tags .paper-source{color:#28776d;text-decoration:underline;text-decoration-color:#a9cec0;text-underline-offset:3px;font-weight:750}
 .anchor-alias{position:relative;top:-24px;display:block;height:0;visibility:hidden}
+
+
+/* Article-specific covers — curated SVGs from the actual paper explanation.
+   The card frame is consistent, but every post supplies its own meaningful image
+   and succinct explanation from content/posts.json. No generic fallback artwork. */
+.figure-abstract.cover-figure{height:238px;padding:0;display:flex;flex-direction:column;background:#f0f4ee}
+.figure-abstract.cover-figure:before{display:none}
+.cover-illustration{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;padding:14px 16px 11px;background:linear-gradient(125deg,#edf3eb,#f6f7f1)}
+.cover-illustration img{display:block;max-width:100%;width:100%;height:100%;object-fit:contain;border:0}
+.cover-caption{min-height:44px;display:flex;align-items:center;background:#e9efe7;border-top:1px solid #dbe6dc;padding:8px 20px;color:#34695f;font-size:12px;font-weight:730;line-height:1.5;overflow-wrap:anywhere}
+.card-hit:hover .cover-caption{background:#deece1;color:#215c52}
+.feature-art.feature-art--cover{padding:17px;min-height:230px;background:#e9f2ea}
+.feature-art.feature-art--cover:before{display:none}
+.feature-art--cover img{position:relative;z-index:1;display:block;width:100%;height:200px;max-width:100%;object-fit:contain;filter:drop-shadow(0 4px 12px #24463810)}
+.spotlight-card .spotlight-cover-link{height:145px;margin:-23px -24px 19px;padding:12px 16px;display:flex;align-items:center;justify-content:center;background:linear-gradient(140deg,#edf3ee,#f8f8f1);border-bottom:1px solid #dce7dc;border-radius:9px 9px 0 0}
+.article-cover-thumb{display:block;width:100%;height:100%;max-height:100%;object-fit:contain;min-width:0}
+.spotlight-card .spotlight-cover-link:hover{background:#e6efe6}
+.index-card.post-card{grid-template-columns:46px 124px minmax(0,1fr) 30px;gap:20px}
+.index-image-link{width:124px;height:85px;display:flex;align-items:center;justify-content:center;padding:5px;background:#eef3ed;border:1px solid #dbe7dd;border-radius:6px;overflow:hidden}
+.index-image-link:hover{border-color:#85b5a2;background:#e5f0e8}
+.index-image-link img{width:100%;height:100%;object-fit:contain}
+@media(max-width:760px){
+  .figure-abstract.cover-figure{height:220px}
+  .cover-illustration{padding:12px}
+  .spotlight-card .spotlight-cover-link{margin:-20px -20px 17px}
+}
+@media(max-width:600px){
+  .index-card.post-card{grid-template-columns:24px 79px minmax(0,1fr) 18px;gap:8px}
+  .index-image-link{width:79px;height:66px;padding:3px}
+  .figure-abstract.cover-figure{height:215px}
+  .cover-caption{font-size:11px;padding:8px 14px}
+  .feature-art.feature-art--cover{min-height:188px;padding:13px}
+  .feature-art--cover img{height:161px}
+  .spotlight-card .spotlight-cover-link{height:132px}
+}
+@media(max-width:390px){
+  .index-card.post-card{grid-template-columns:20px 70px minmax(0,1fr) 15px;gap:6px}
+  .index-image-link{width:70px;height:62px}
+  .index-main h3{font-size:16px}
+}
+@media print{
+  .cover-illustration,.index-image-link,.spotlight-cover-link{break-inside:avoid}
+}
