@@ -291,3 +291,5 @@ MobileNet 归入 `architectures` → **Convolutional Neural Networks & Vision** 
 ### Logistic Regression — 经典机器学习 / Linear Models
 
 [Understanding Logistic Regression](posts/classical-ml/logistic-regression/index.html)：归入现有 `classical-ml → linear-models`，贯通 Berkson（1944）/Cox（1958）/Nelder–Wedderburn（1972）、Sigmoid / Log-Odds、Bernoulli 最大似然与 BCE、凸优化和 L2、Softmax。配套七幅独立 SVG、11 组原生 MathML、阈值交互实验、证据台账和纯 Python 梯度有限差分测试。
+
+- [Understanding Weight Decay](posts/foundations/weight-decay/) — Weight Decay、L₂/SGD 等价、AdamW 解耦、MathML、SVG、交互与测试。

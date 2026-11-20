@@ -31,3 +31,5 @@
 - [Understanding WordPiece](wordpiece/index.html)：从 2012 语音搜索、GNMT 到 BERT MaxMatch 编码，区分教学评分与原始未开源实现；含七幅独立 SVG、四组 MathML、双交互实验和测试。专题：`Tokenization & Subword Units`。
 
 - [Understanding LogSumExp & Softmax Taylor Expansion](logsumexp-softmax-taylor/index.html)：中心化 LSE/Softmax 的泰勒展开、误差与 Attention 线性化；所属二级主题 `Softmax, LogSumExp & Numerical Approximation`。
+
+- [Understanding Weight Decay](weight-decay/index.html)：权重衰减、正则化及优化器机制；主专题 `optimization`。
