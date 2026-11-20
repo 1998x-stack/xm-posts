@@ -13,7 +13,8 @@
       "Math",
       "Word Embeddings",
       "Linear Algebra & Matrix Factorization",
-      "Monte Carlo & Importance Sampling"
+      "Monte Carlo & Importance Sampling",
+      "Softmax, LogSumExp & Numerical Approximation"
     ]
   },
   {
