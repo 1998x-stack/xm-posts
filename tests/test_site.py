@@ -45,3 +45,30 @@ def test_no_placeholder_published(tmp_path):
     _,posts=data(ROOT)
     assert all(p['status'] in {'draft','published'} for p in posts)
     assert not (ROOT/'posts/foundations/index.html').exists()
+
+
+def test_taxonomy_topic_placeholders_are_not_published(tmp_path):
+    cats, posts = data(ROOT)
+    by_slug = {c['slug']: c for c in cats}
+    assert {'retrieval-rag', 'agents'} <= set(by_slug)
+    planned = {
+        'retrieval-rag': ['embedding-retrieval', 'ann', 'reranking', 'rag', 'grounding', 'hybrid-search'],
+        'agents': ['react', 'planning', 'tool-calling', 'memory', 'agent-evaluation'],
+        'training': ['distributed-training', 'training-parallelism', 'mixed-precision', 'checkpointing'],
+        'architectures': ['moe', 'state-space-models', 'efficient-attention', 'long-context-architectures'],
+        'inference': ['request-scheduling', 'continuous-batching', 'prefix-caching', 'speculative-decoding', 'prefill-decode-disaggregation'],
+        'systems': ['gpu-memory', 'compiler-kernel-optimization', 'distributed-communication', 'performance-modeling'],
+    }
+    for category, slugs in planned.items():
+        assert (ROOT / 'posts' / category / 'README.md').is_file()
+        for slug in slugs:
+            stub = ROOT / 'posts' / category / '_topics' / slug / 'README.md'
+            assert stub.is_file(), stub
+            assert not (stub.parent / 'index.html').exists()
+    assert not [p for p in posts if p['category'] in {'retrieval-rag', 'agents'}]
+    output = tmp_path / 'site'
+    build(ROOT, output, DEFAULT_URL)
+    for slug in ('retrieval-rag', 'agents'):
+        assert (output / 'categories' / slug / 'index.html').exists()
+        assert not (output / 'posts' / slug).exists()
+    assert not any('_topics' in path.parts for path in output.rglob('*'))
