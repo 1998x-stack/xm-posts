@@ -221,6 +221,29 @@
     "topic": "optimization"
   },
   {
+    "slug": "weight-decay",
+    "title": "Understanding Weight Decay",
+    "subtitle": "为什么让权重逐步缩小？从 L₂ 正则化、SGD 等价到 AdamW 和训练日程",
+    "category": "foundations",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 27,
+    "tags": [
+      "Weight Decay",
+      "L2 Regularization",
+      "Optimization & Regularization",
+      "SGD",
+      "AdamW",
+      "Generalization",
+      "Learning Rate Schedule"
+    ],
+    "summary": "从 Krogh–Hertz 1991 与 Loshchilov–Hutter ICLR 2019 论文出发，以四幅可独立查看的 SVG 和九组原生 MathML，推导参数按比例收缩、L₂ 正则化、无动量 SGD 等价条件、自适应预条件器的不等价以及衰减累积规律；包含零梯度交互实验、参数分组实践与纯 Python 确定性测试，并与站内 AdamW 专文建立学习路径。",
+    "paper": "https://arxiv.org/abs/1711.05101",
+    "illustration": "weight-decay",
+    "topic": "optimization"
+  },
+  {
     "slug": "pre-ln-vs-post-ln",
     "title": "Understanding Pre-LN vs Post-LN",
     "subtitle": "LayerNorm 放在哪里，为什么改变 Transformer 的训练？",

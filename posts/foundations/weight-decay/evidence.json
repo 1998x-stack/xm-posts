@@ -1,0 +1,101 @@
+[
+  {
+    "id": "WD01",
+    "claim": "Krogh and Hertz analyzed suppression of irrelevant weight components in linear networks",
+    "kind": "primary-paper",
+    "source_url": "https://papers.nips.cc/paper_files/paper/1991/hash/8eefcfdf5990e441f0fb6f3fad709e21-Abstract.html",
+    "locator": "Abstract",
+    "status": "verified",
+    "notes": "Not a universal deep-network guarantee"
+  },
+  {
+    "id": "WD02",
+    "claim": "With suitable regularization the 1991 analysis shows attenuation of static target noise",
+    "kind": "primary-paper",
+    "source_url": "https://papers.nips.cc/paper_files/paper/1991/hash/8eefcfdf5990e441f0fb6f3fad709e21-Abstract.html",
+    "locator": "Abstract",
+    "status": "verified",
+    "notes": "Subject to stated linear-network assumptions"
+  },
+  {
+    "id": "WD03",
+    "claim": "Direct weight decay and L2 penalty are equivalent under standard SGD with coefficient conversion",
+    "kind": "paper-proposition",
+    "source_url": "https://ar5iv.labs.arxiv.org/html/1711.05101",
+    "locator": "Section 2, Equation (1), Proposition 1",
+    "status": "verified",
+    "notes": "Paper lambda is per-step decay; modern implementation convention differs"
+  },
+  {
+    "id": "WD04",
+    "claim": "A scalar L2 coefficient generally cannot reproduce direct decay with non-scalar adaptive preconditioning",
+    "kind": "paper-proposition",
+    "source_url": "https://ar5iv.labs.arxiv.org/html/1711.05101",
+    "locator": "Section 2, Proposition 2",
+    "status": "verified",
+    "notes": "Applies with conditions of proposition"
+  },
+  {
+    "id": "WD05",
+    "claim": "SGDW and AdamW perform a separate decay outside gradient/momentum accumulation",
+    "kind": "paper-algorithm",
+    "source_url": "https://ar5iv.labs.arxiv.org/html/1711.05101",
+    "locator": "Section 2, Algorithms 1 and 2",
+    "status": "verified",
+    "notes": "Do not conflate original code's coefficient with current PyTorch option"
+  },
+  {
+    "id": "WD06",
+    "claim": "Original experiments compare learning rate schedules and training budgets on vision tasks",
+    "kind": "paper-experiment",
+    "source_url": "https://ar5iv.labs.arxiv.org/html/1711.05101",
+    "locator": "Section 4, Figures 1–4 and their captions",
+    "status": "verified",
+    "notes": "Includes CIFAR-10 and ImageNet32x32; no numerical curves reproduced"
+  },
+  {
+    "id": "WD07",
+    "claim": "Original authors caution broader tasks remain to be evaluated",
+    "kind": "paper-limitation",
+    "source_url": "https://ar5iv.labs.arxiv.org/html/1711.05101",
+    "locator": "Section 5 Conclusion",
+    "status": "verified",
+    "notes": "Cannot claim universal improvement"
+  },
+  {
+    "id": "WD08",
+    "claim": "PyTorch AdamW decouples weight_decay from moments",
+    "kind": "modern-implementation",
+    "source_url": "https://docs.pytorch.org/docs/stable/generated/torch.optim.AdamW",
+    "locator": "Algorithm description",
+    "status": "verified",
+    "notes": "Version-specific defaults should not be conflated with original paper"
+  },
+  {
+    "id": "WD09",
+    "claim": "A toy fixed preconditioner yields coupled (0.99,0.998) vs decoupled (0.99,0.99)",
+    "kind": "toy-derivation",
+    "source_url": "https://ar5iv.labs.arxiv.org/html/1711.05101",
+    "locator": "Derived from Proposition 2",
+    "status": "derived",
+    "notes": "Not a measured Adam training result"
+  },
+  {
+    "id": "WD10",
+    "claim": "With zero task gradient, fixed alpha and lambda, retained fraction is (1-alpha*lambda)^T",
+    "kind": "toy-derivation",
+    "source_url": "https://ar5iv.labs.arxiv.org/html/1711.05101",
+    "locator": "Derived from Equation (1) using modern coefficient convention",
+    "status": "derived",
+    "notes": "Excludes nonzero data gradient and time-varying rates"
+  },
+  {
+    "id": "WD11",
+    "claim": "A one-dimensional square loss plus lambda/2*w^2 has optimum 3/(1+lambda)",
+    "kind": "toy-derivation",
+    "source_url": "https://papers.nips.cc/paper_files/paper/1991/hash/8eefcfdf5990e441f0fb6f3fad709e21-Abstract.html",
+    "locator": "Independently derived classroom example",
+    "status": "derived",
+    "notes": "Not claimed as source experiment"
+  }
+]
