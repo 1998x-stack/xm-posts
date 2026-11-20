@@ -325,6 +325,41 @@ code{font: .91em ui-monospace,SFMono-Regular,Consolas,monospace;background:#eff5
 <li><strong>做统计分析。</strong>报告均值、分布、置信区间、任务分层表现、失败类型和重复运行一致性；不要只报告一个平均分。</li>
 <li><strong>发布可复现报告。</strong>包含任务集版本、环境镜像、Agent 配置、评测代码、原始结果、失败样本和已知局限。</li>
 </ol>
+<h3>7.1 评测报告最小元数据</h3>
+<p>建议把每次评测保存为机器可读的记录，而不是只在实验文档里写一个分数。下面是一个可复用的最小结构示例；占位值必须在真实实验中替换成固定版本和真实观测结果。</p>
+<pre class="code"><code>{
+  "run_id": "2026-11-21-agent-eval-001",
+  "agent": {
+    "model_id": "PINNED_MODEL_ID",
+    "scaffold_commit": "GIT_COMMIT_SHA",
+    "prompt_version": "PROMPT_VERSION",
+    "tool_schema_version": "TOOL_SCHEMA_VERSION"
+  },
+  "benchmark": {
+    "name": "BENCHMARK_NAME",
+    "dataset_version": "DATASET_COMMIT_OR_RELEASE"
+  },
+  "environment": {
+    "image_digest": "CONTAINER_IMAGE_DIGEST",
+    "reset_policy": "reset-before-each-attempt"
+  },
+  "protocol": {
+    "attempts_per_task": 5,
+    "seed_policy": "record-each-seed"
+  },
+  "metrics": {
+    "success_rate": null,
+    "pass_at_k": null,
+    "pass_all_k": null,
+    "cost_per_success": null
+  },
+  "artifacts": {
+    "raw_results": "results.jsonl",
+    "traces": "traces/",
+    "evaluator_version": "EVALUATOR_COMMIT_SHA"
+  }
+}</code></pre>
+<p>这份记录把“模型变了”“Prompt 变了”“环境变了”和“评测器变了”分开保存。只有这些信息都可追溯，两个版本之间的分数差异才有可解释性。</p>
 <div class="note"><strong>一个实用原则：</strong>如果无法回答“这个任务在什么初始状态下、经过哪些操作、最终满足了什么可机器检查的条件”，就还没有真正定义好 Agent Benchmark。</div>
 </section>
 
