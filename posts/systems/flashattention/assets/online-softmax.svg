@@ -18,6 +18,6 @@
 <text x="466" y="250" font-size="17" fill="#29474a"  >m′ = max(2, 0) = 2</text>
 <text x="466" y="279" font-size="15" fill="#29474a"  >ℓ′ = ℓ + exp(−2) ≈ 1.5032</text>
 <text x="466" y="308" font-size="15" fill="#29474a"  >acc′ = acc + 10 exp(−2) ≈ 8.0892</text>
-<text x="466" y="330" font-size="15" fill="#176f70" font-weight="700" >o′ = acc′ / ℓ′ ≈ 5.3819</text>
+<text x="466" y="330" font-size="15" fill="#176f70" font-weight="700" >o′ = acc′ / ℓ′ ≈ 5.3812</text>
 <text x="42" y="376" font-size="14" fill="#5d7775"  >若新块的最大 score 更大，历史 ℓ 和 acc 必须按 exp(m_old − m_new) 同步缩放。</text>
 </svg>
