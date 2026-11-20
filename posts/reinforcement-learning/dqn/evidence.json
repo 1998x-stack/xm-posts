@@ -1,0 +1,128 @@
+[
+  {
+    "id": "D01",
+    "claim": "DQN's online Q network uses value outputs, not policy probabilities",
+    "kind": "paper-claim",
+    "source_url": "https://storage.googleapis.com/deepmind-media/dqn/DQNNaturePaper.pdf",
+    "locator": "Methods: Model architecture; Figure 1",
+    "status": "verified",
+    "notes": "Separate linear Q output per legal action."
+  },
+  {
+    "id": "D02",
+    "claim": "2015 Nature convolution stack uses 84x84x4, 32@8x8/s4, 64@4x4/s2, 64@3x3/s1, dense 512",
+    "kind": "paper-claim",
+    "source_url": "https://storage.googleapis.com/deepmind-media/dqn/DQNNaturePaper.pdf",
+    "locator": "Methods: Model architecture",
+    "status": "verified",
+    "notes": "Derived valid spatial widths 20,9,7."
+  },
+  {
+    "id": "D03",
+    "claim": "Replay buffer uniformly samples transitions from previous experiences",
+    "kind": "paper-claim",
+    "source_url": "https://storage.googleapis.com/deepmind-media/dqn/DQNNaturePaper.pdf",
+    "locator": "Page 529; Methods: Experience replay; Algorithm 1",
+    "status": "verified",
+    "notes": "Paper uses buffer 1,000,000 and minibatch 32."
+  },
+  {
+    "id": "D04",
+    "claim": "Target parameters are synchronized with online network every C steps",
+    "kind": "paper-claim",
+    "source_url": "https://storage.googleapis.com/deepmind-media/dqn/DQNNaturePaper.pdf",
+    "locator": "Page 529 Q-learning loss; Methods: Target network",
+    "status": "verified",
+    "notes": "C=10,000 parameter updates (Extended Data Table 1)."
+  },
+  {
+    "id": "D05",
+    "claim": "DQN target uses r + gamma max Q-target and standard bootstrap excludes terminal states",
+    "kind": "paper-claim",
+    "source_url": "https://storage.googleapis.com/deepmind-media/dqn/DQNNaturePaper.pdf",
+    "locator": "Algorithm 1; Page 529 equation",
+    "status": "verified",
+    "notes": "Article explicitly represents terminal flag d as implementation formulation."
+  },
+  {
+    "id": "D06",
+    "claim": "Methods describe clipping the TD error update and reward sign clipping during training",
+    "kind": "paper-claim",
+    "source_url": "https://storage.googleapis.com/deepmind-media/dqn/DQNNaturePaper.pdf",
+    "locator": "Methods: Experience replay, Training details",
+    "status": "verified",
+    "notes": "Huber explanation is piecewise mathematical equivalent up to scaling."
+  },
+  {
+    "id": "D07",
+    "claim": "Nature 2015 evaluates 49 Atari games, training separate network per game",
+    "kind": "experiment",
+    "source_url": "https://storage.googleapis.com/deepmind-media/dqn/DQNNaturePaper.pdf",
+    "locator": "Page 530–531; Methods Training details",
+    "status": "verified",
+    "notes": "Same hyperparameters, separate trained networks."
+  },
+  {
+    "id": "D08",
+    "claim": "DQN exceeds prior RL approach on 43/49 games and exceeds 75 percent human score on 29/49",
+    "kind": "experiment",
+    "source_url": "https://storage.googleapis.com/deepmind-media/dqn/DQNNaturePaper.pdf",
+    "locator": "Figure 3 caption; Page 530",
+    "status": "verified",
+    "notes": "Not 29 games beating 100% human."
+  },
+  {
+    "id": "D09",
+    "claim": "2015 frame budget 50 million per game, epsilon train 1 to 0.1, epsilon eval 0.05, 30 evaluation episodes",
+    "kind": "experiment",
+    "source_url": "https://storage.googleapis.com/deepmind-media/dqn/DQNNaturePaper.pdf",
+    "locator": "Methods Training details, Evaluation procedure; Extended Data Table 1",
+    "status": "verified",
+    "notes": "Frames distinct from selected actions due to repeat 4."
+  },
+  {
+    "id": "D10",
+    "claim": "Replay/target ablations use shorter 10M frame protocol on select games",
+    "kind": "experiment",
+    "source_url": "https://storage.googleapis.com/deepmind-media/dqn/DQNNaturePaper.pdf",
+    "locator": "Extended Data Tables 3–4 captions",
+    "status": "verified",
+    "notes": "Not comparable as if a full 49-game ablation."
+  },
+  {
+    "id": "D11",
+    "claim": "2013 Atari DQN paper trained seven games, with earlier architecture than Nature version",
+    "kind": "historical",
+    "source_url": "https://arxiv.org/abs/1312.5602",
+    "locator": "Abstract, Network architecture",
+    "status": "verified",
+    "notes": "2013 version not described as 2015 Nature network."
+  },
+  {
+    "id": "D12",
+    "claim": "Double DQN decouples online action selection from target network evaluation",
+    "kind": "modern-variant",
+    "source_url": "https://arxiv.org/abs/1509.06461",
+    "locator": "Section 3",
+    "status": "verified",
+    "notes": "Later than Nature DQN."
+  },
+  {
+    "id": "D13",
+    "claim": "TD-target, Huber, terminal and convolution math checked in included deterministic Python module",
+    "kind": "toy-derivation",
+    "source_url": "https://storage.googleapis.com/deepmind-media/dqn/DQNNaturePaper.pdf",
+    "locator": "Article calculator and mini_dqn.py",
+    "status": "derived",
+    "notes": "Not a full Atari training reproduction."
+  },
+  {
+    "id": "D14",
+    "claim": "All six conceptual illustrations independently explain paper mechanisms",
+    "kind": "illustration",
+    "source_url": "https://storage.googleapis.com/deepmind-media/dqn/DQNNaturePaper.pdf",
+    "locator": "Article visual explanations",
+    "status": "illustrative",
+    "notes": "No paper figure asset reuse."
+  }
+]

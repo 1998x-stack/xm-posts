@@ -113,10 +113,13 @@ def build_home(categories,posts,base):
 
     by_slug={p['slug']:p for p in published}
     learning_paths=[
-        ('01 · 建立表征与架构直觉','从词向量走向残差网络，再理解自注意力。',['understanding-word2vec','resnet','transformer']),
-        ('02 · 理解训练中的优化','比较随机梯度、适应性动量、解耦权重衰减。',['sgd','adam','adamw']),
-        ('03 · 从模型到高效推理','从 Transformer 到注意力 Kernel，再到 KV 管理与分页。',['transformer','flashattention','kv-cache','pagedattention']),
-        ('04 · 对齐与策略优化','区分强化学习基线、偏好训练与组内优势。',['ppo','rlhf','dpo','grpo'])
+        ('01 · 经典机器学习与数学直觉','从线性模型、概率假设、间隔到树集成。',['linear-regression','naive-bayes','svm','pca','xgboost']),
+        ('02 · 视觉、序列与 Attention','沿 CNN、残差、循环记忆与序列转换理解 Transformer。',['cnn','resnet','rnn','lstm','seq2seq','transformer']),
+        ('03 · 优化、预训练与微调','理解梯度优化、语言模型训练，以及参数高效适配。',['sgd','adam','adamw','gpt-1','lora','qlora']),
+        ('04 · 数据与计算最优训练','从多来源语料治理走向训练数据与模型规模权衡。',['the-pile','fineweb','chinchilla']),
+        ('05 · 对齐、策略与推理','连接 CoT 采样、偏好目标与强化学习优化。',['chain-of-thought','self-consistency','ppo','rlhf','dpo','grpo']),
+        ('06 · 高效 Attention 与 Serving','从基础注意力进入旋转位置、GPU Kernel 和 KV 内存管理。',['transformer','rope','gqa','flashattention','kv-cache','pagedattention']),
+        ('07 · 深度强化学习','由 DQN 价值学习，走向确定性与随机 Actor–Critic。',['dqn','ddpg','ppo','sac'])
     ]
     path_cards=''.join(
         '<article class="learning-card"><div class="learning-number">'+H(title)+'</div>'

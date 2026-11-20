@@ -1,0 +1,155 @@
+[
+  {
+    "id": "PILE01",
+    "claim": "The Pile is an English-language 825.18 GiB dataset of 22 sources and paper credits 14 new LM constituent datasets",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/abs/2101.00027",
+    "locator": "Abstract; §1.1 contributions; Table 1",
+    "status": "verified",
+    "notes": "Original raw size, not post-epoch effective size"
+  },
+  {
+    "id": "PILE02",
+    "claim": "Effective source-weighted sum is 1254.20 GiB; epochs and effective weights differ from raw storage volume",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/abs/2101.00027",
+    "locator": "§2, Table 1 and caption",
+    "status": "verified",
+    "notes": "Sources shown with rounded values; effective size not unique bytes"
+  },
+  {
+    "id": "PILE03",
+    "claim": "Pile-CC uses jusText on raw WARC HTML rather than directly relying on WET plaintext",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/abs/2101.00027",
+    "locator": "§2.1 Pile-CC; Appendix C",
+    "status": "verified",
+    "notes": "Source-dependent processing, not universal guarantee of quality"
+  },
+  {
+    "id": "PILE04",
+    "claim": "The Pile validation and test partitions each use 0.1% randomly held-out data; duplicate documents across splits may remain",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/abs/2101.00027",
+    "locator": "§3.1 Benchmarking Guidelines",
+    "status": "verified",
+    "notes": "Not a proof of contamination-free splits"
+  },
+  {
+    "id": "PILE05",
+    "claim": "Authors prefer BPB with bpb=(LT/LB)*ell/ln(2) to normalize token loss by UTF-8 bytes",
+    "kind": "formula",
+    "source_url": "https://arxiv.org/abs/2101.00027",
+    "locator": "§3.1; Table 7",
+    "status": "verified",
+    "notes": "ell in nats per token; LT tokens; LB UTF-8 bytes"
+  },
+  {
+    "id": "PILE06",
+    "claim": "The paper reports LT/LB=0.29335 GPT-2 tokens per byte for The Pile aggregate",
+    "kind": "measurement",
+    "source_url": "https://arxiv.org/abs/2101.00027",
+    "locator": "§3.1 Benchmarking Guidelines",
+    "status": "verified",
+    "notes": "Specific to tokenizer and corpus, not universal constant"
+  },
+  {
+    "id": "PILE07",
+    "claim": "GPT-2 and GPT-3 families are evaluated zero-shot on Pile subsets; most GPT-3 comparisons use a tenth of the test set",
+    "kind": "experiment",
+    "source_url": "https://arxiv.org/abs/2101.00027",
+    "locator": "§3.2; Table 2 caption; Appendix E.2",
+    "status": "verified",
+    "notes": "Do not confuse with section 4 retrained 1.3B models"
+  },
+  {
+    "id": "PILE08",
+    "claim": "The size-controlled training comparison uses architecturally identical 1.3B models and approx 40 GB deduplicated samples from Pile, CC-100(en), Raw CC",
+    "kind": "experiment",
+    "source_url": "https://arxiv.org/abs/2101.00027",
+    "locator": "§4; §4.1; Table 3 caption",
+    "status": "verified",
+    "notes": "13-gram overlap filtering for evaluation sets"
+  },
+  {
+    "id": "PILE09",
+    "claim": "Pile test BPB: Pile 0.9433, CC-100(en) 1.3293, Raw CC 1.1275; WikiText PPL 5.59,8.27,11.75",
+    "kind": "experiment",
+    "source_url": "https://arxiv.org/abs/2101.00027",
+    "locator": "§4 Table 3",
+    "status": "verified",
+    "notes": "All are architecturally identical 1.3B models; lower is better"
+  },
+  {
+    "id": "PILE10",
+    "claim": "LAMBADA last-token accuracy 50.1, 49.7, 43.8 for Pile, CC-100, Raw CC",
+    "kind": "experiment",
+    "source_url": "https://arxiv.org/abs/2101.00027",
+    "locator": "§4 Table 3 and note",
+    "status": "verified",
+    "notes": "Last token, not whole word; comparison scale and model named"
+  },
+  {
+    "id": "PILE11",
+    "claim": "Pile/CC-100/Raw CC Table 4 BPB: arXiv 0.7945/1.8159/1.2642; GitHub 0.5597/1.6509/0.9301",
+    "kind": "experiment",
+    "source_url": "https://arxiv.org/abs/2101.00027",
+    "locator": "§4.2 Table 4",
+    "status": "verified",
+    "notes": "Different model training corpora, same Pile held-out component evaluation"
+  },
+  {
+    "id": "PILE12",
+    "claim": "Pile/CC-100/Raw CC Table 4 BPB on DM Mathematics is 1.5206/3.1774/2.6229",
+    "kind": "experiment",
+    "source_url": "https://arxiv.org/abs/2101.00027",
+    "locator": "§4.2 Table 4",
+    "status": "verified",
+    "notes": "Language modeling BPB, not mathematical solution accuracy"
+  },
+  {
+    "id": "PILE13",
+    "claim": "Pile source analytics cover lengths, topical structure, profanity, co-occurrence bias and consent",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/abs/2101.00027",
+    "locator": "§5–7",
+    "status": "verified",
+    "notes": "An exploratory audit, not safety certification"
+  },
+  {
+    "id": "PILE14",
+    "claim": "The Datasheet identifies copyright, privacy and source heterogeneity concerns including Books3",
+    "kind": "later-documentation",
+    "source_url": "https://arxiv.org/abs/2201.07311",
+    "locator": "Background; Dataset Distribution; §§ Are there any copyrights; Data Composition",
+    "status": "verified",
+    "notes": "Datasource permissions must be evaluated independently"
+  },
+  {
+    "id": "PILE15",
+    "claim": "Public construction code documents a replication workflow but does not grant licensing for all underlying documents",
+    "kind": "implementation-context",
+    "source_url": "https://github.com/EleutherAI/the-pile",
+    "locator": "README; repository structure; separate source rights in Datasheet",
+    "status": "verified",
+    "notes": "Do not claim unrestricted corpus redistribution"
+  },
+  {
+    "id": "PILE16",
+    "claim": "Three-source sampler and mixture-loss equations are illustrative derivations, not reported Pile training runs",
+    "kind": "toy-derivation",
+    "source_url": "https://arxiv.org/abs/2101.00027",
+    "locator": "Table 1 data, independent arithmetic and mixture objective",
+    "status": "derived",
+    "notes": "Toy Pile-CC 227.12, PMC 90.27, arXiv 56.21; epochs varied"
+  },
+  {
+    "id": "PILE17",
+    "claim": "Six top effective sampling weights sum to 71.14%; remaining sixteen sum to 28.86%",
+    "kind": "derived-arithmetic",
+    "source_url": "https://arxiv.org/abs/2101.00027",
+    "locator": "Table 1 weights",
+    "status": "derived",
+    "notes": "Displayed weights rounded to 0.01 percentage points"
+  }
+]

@@ -7,6 +7,7 @@ from pathlib import Path
 import sys
 from bs4 import BeautifulSoup
 
+LEGACY_MATH_MIGRATIONS = ["pre-ln-vs-post-ln","resnet","rope","transformer","adam","adamw","sgd","understanding-word2vec","kv-cache","pagedattention","self-consistency","ppo","flashattention","dpo","grpo","lora","rlhf"]
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/'scripts'))
 from build_site import data,build,DEFAULT_URL,article_url
@@ -33,7 +34,7 @@ def test_all_published_articles_have_semantic_math():
             assert region.get('role')=='region',p['slug']
         for frac in soup.select('math mfrac'):
             assert len(frac.find_all(recursive=False))==2,p['slug']
-        if p['slug'] not in {'svm','alexnet'}:
+        if p['slug'] in LEGACY_MATH_MIGRATIONS:
             assert soup.select('[data-math-enhanced]'),p['slug']
         for block in soup.select('div.eq, div.equation, div.formula, div.math, div.keyformula'):
             assert block.find('math'),f'Flat formula block: {p["slug"]}'

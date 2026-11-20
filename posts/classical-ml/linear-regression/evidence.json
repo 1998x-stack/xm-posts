@@ -1,0 +1,83 @@
+[
+  {
+    "id": "LR01",
+    "claim": "Linear least squares minimizes residual sum of squares in a model linear in parameters",
+    "kind": "technical-definition",
+    "source_url": "https://www.itl.nist.gov/div898/handbook/pmd/section1/pmd141.htm",
+    "locator": "Linear Least Squares Regression; introductory definition",
+    "status": "verified",
+    "notes": "Not one single modern origin paper"
+  },
+  {
+    "id": "LR02",
+    "claim": "NIST notes independent historical development of least squares by Gauss and Legendre",
+    "kind": "historical-context",
+    "source_url": "https://www.itl.nist.gov/div898/handbook/pmd/section1/pmd141.htm",
+    "locator": "Linear Least Squares Regression; historical paragraph",
+    "status": "verified",
+    "notes": "Do not attribute OLS solely to one author"
+  },
+  {
+    "id": "LR03",
+    "claim": "Gauss-Markov assumptions imply OLS is BLUE within the linear unbiased class, with Gaussianity not required",
+    "kind": "statistical-theorem",
+    "source_url": "https://eml.berkeley.edu/sst/regression.html",
+    "locator": "Regression Analysis; Assumptions and Gauss-Markov sections",
+    "status": "verified",
+    "notes": "The theorem is not a universal minimum-prediction-error result"
+  },
+  {
+    "id": "LR04",
+    "claim": "LinearRegression in scikit-learn is an ordinary least squares estimator with rank and conditioning caveats",
+    "kind": "modern-implementation",
+    "source_url": "https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LinearRegression.html",
+    "locator": "Estimator description, attributes and notes",
+    "status": "verified",
+    "notes": "Distinct from the hand-written single-feature demonstration"
+  },
+  {
+    "id": "LR05",
+    "claim": "Ridge penalizes coefficients and mitigates instability from correlated features",
+    "kind": "modern-implementation",
+    "source_url": "https://scikit-learn.org/stable/modules/linear_model.html",
+    "locator": "Ridge regression section",
+    "status": "verified",
+    "notes": "Intercept penalty convention depends on parameterization"
+  },
+  {
+    "id": "LR06",
+    "claim": "Explicit regularization can trade bias for lower variance",
+    "kind": "theory-reference",
+    "source_url": "https://gradml.mit.edu/supervised/explicit_regularization/",
+    "locator": "Ridge Regression and Bias–Variance Tradeoff",
+    "status": "verified",
+    "notes": "Applies under model and data assumptions"
+  },
+  {
+    "id": "LR07",
+    "claim": "Four teaching points yield slope 0.9 intercept 0.9 RSS 0.7 and R squared approximately 0.8526",
+    "kind": "toy-derivation",
+    "source_url": "https://www.itl.nist.gov/div898/handbook/pmd/section1/pmd141.htm",
+    "locator": "Article's independent toy derivation and linear_regression_demo.py",
+    "status": "derived",
+    "notes": "Not original measured experiment; executable asserts included"
+  },
+  {
+    "id": "LR08",
+    "claim": "Normal equations encode orthogonality of OLS residuals and model column space",
+    "kind": "derived-theorem",
+    "source_url": "https://eml.berkeley.edu/sst/regression.html",
+    "locator": "Regression Analysis; OLS normal equations",
+    "status": "derived",
+    "notes": "Assumes interior unconstrained least squares optimum"
+  },
+  {
+    "id": "LR09",
+    "claim": "Coefficient of determination compares residual sum of squares with target-mean total sum of squares",
+    "kind": "modern-definition",
+    "source_url": "https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LinearRegression.html",
+    "locator": "score method and R squared definition",
+    "status": "verified",
+    "notes": "Negative R squared possible out of sample"
+  }
+]
