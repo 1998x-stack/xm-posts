@@ -18,9 +18,18 @@
 | `systems` | GPU 内存、算子、编译、通信、性能分析及底层优化 | 服务请求、token 调度、端到端 serving 归 `inference` |
 | `storage-indexing` | B+ Tree、LSM Tree、页与缓冲区管理、事务恢复、MVCC | 数据库磁盘/索引结构归此类；向量语义召回归 `retrieval-rag`，GPU 算子实现归 `systems` |
 | `retrieval-rag` | 向量/ANN、稀疏混合检索、重排序、RAG、证据落地 | Agent 任务计划与工具执行归 `agents`，embedding 基础表征归 `foundations` |
-| `agents` | ReAct、规划、工具调用、记忆、软件工程 Agent、Agent-Computer Interface、Harness Engineering、Agentic RL 与端到端评测 | 纯推理策略归 `reasoning`；检索方法归 `retrieval-rag`；PPO / GRPO 等优化算法仍按其训练方法归 `training` 或 `reinforcement-learning` |
+| `agents` | ReAct、Reflection、规划、工具调用、记忆、软件工程 Agent、Agent-Computer Interface、Harness Engineering、Agentic RL 与端到端评测 | 纯推理策略归 `reasoning`；检索方法归 `retrieval-rag`；PPO / GRPO 等优化算法仍按其训练方法归 `training` 或 `reinforcement-learning` |
 | `multimodal` | 视觉/语言/音频的跨模态建模与对齐 | 通用单模态 CNN 架构仍可归 `architectures` |
 | `evaluation` | 模型/任务 Benchmark、ROC/PR、消融与复现 | 训练数据质量、污染事实与许可证归 `datasets` |
+
+## Reflection 专题边界（2026-11）
+
+- **主归属：** `agents/reflection`，研究 Agent 在生成或执行之后，如何利用反馈评价轨迹、形成可操作的修正，并在需要时把经过验证的经验带入后续任务。
+- **纳入范围：** Self-Critique / Self-Refine、工具或环境支持的 Critique、Reflexion 式跨轮次经验记忆、反思停止条件、反馈质量与回归风险。
+- **与 `reasoning` 的边界：** CoT 描述单次生成中的中间推理；Self-Consistency 聚合多条候选路径；Reflection 进一步评价已有输出/轨迹，并将评价转化为修正或下一轮策略。纯推理策略仍归 `reasoning`，Self-Refine 在本文中作为内部反馈基线。
+- **与 `memory` 的边界：** `memory` 关注跨会话知识的写入、组织、验证与检索；Reflection 关注从一次反馈中提炼什么经验、何时写入以及如何影响下一次行动。
+- **与 `evaluation` 的边界：** Evaluation 设计指标和测量协议；Reflection 消费评价信号来改变后续行为。评价器可以是独立模块，但“有评价”本身不等于“发生了反思”。
+- **分类原则：** 不新增一级分类；Reflection 是 Agent 反馈闭环的稳定二级主题。涉及参数更新的 SFT / DPO / RL 属于 `training`。
 
 ## 二级分类治理
 

@@ -239,6 +239,7 @@
       "chain-of-thought",
       "self-consistency",
       "react",
+      "reflection",
       "swe-agent"
     ]
   },
@@ -283,6 +284,7 @@
     "posts": [
       "react",
       "swe-agent",
+      "reflection",
       "agent-memory-components"
     ]
   },

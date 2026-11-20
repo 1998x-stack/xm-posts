@@ -1453,6 +1453,39 @@
     }
   },
   {
+    "slug": "reflection",
+    "title": "Understanding Reflection in LLM Agents",
+    "subtitle": "从自我批评到外部验证与经验记忆：理解智能体如何把失败转化为下一轮可执行的改进",
+    "category": "agents",
+    "topic": "reflection",
+    "status": "published",
+    "published": "2026-11-21",
+    "updated": "2026-11-21",
+    "reading_minutes": 36,
+    "tags": [
+      "Reflection",
+      "Self-Reflection",
+      "Self-Critique",
+      "Self-Refine",
+      "Reflexion",
+      "CRITIC",
+      "Verbal Reinforcement Learning",
+      "Agent Feedback",
+      "Episodic Memory",
+      "Self-Correction",
+      "Tool-Interactive Critiquing",
+      "Test-time Compute",
+      "Agent Evaluation"
+    ],
+    "summary": "从一次错误答案如何被发现、定位、修正并写入经验记忆出发，系统比较 Self-Refine、Reflexion 与 CRITIC；推导反思闭环、反馈可靠性与停止准则，分析自我纠错的负面研究证据、记忆污染和成本边界，并提供可交互的反馈模式实验及可测试 Python 教学实现。",
+    "paper": "https://arxiv.org/abs/2303.11366",
+    "illustration": "reflection",
+    "cover": {
+      "src": "assets/01-reflection-loop.svg",
+      "caption": "执行结果经过评价与反思，转化为下一轮可复用经验"
+    }
+  },
+  {
     "slug": "moe",
     "title": "Understanding Mixture of Experts (MoE)",
     "subtitle": "为什么只执行少量专家，就能扩展模型参数容量？",
