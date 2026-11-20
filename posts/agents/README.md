@@ -1,6 +1,6 @@
 # 智能体与工具使用 / Agents & Tool Use
 
-本分类专注模型与外界交互的行动闭环：ReAct、Planning、Tool Calling、Memory、Software Engineering Agents & ACI、Agent Evaluation。
+本分类专注模型与外界交互的行动闭环：ReAct、Planning、Tool Calling、Memory、Software Engineering Agents & ACI、Agent Evaluation，以及类型化概率决策与模型路由。
 
 ## 专题占位
 
@@ -10,6 +10,7 @@
 - [Tool Calling](_topics/tool-calling/README.md) — 研究规划占位；尚非正式 Post。
 - [Memory](_topics/memory/README.md) — 研究规划占位；尚非正式 Post。
 - [Agent Evaluation](_topics/agent-evaluation/README.md) — 研究规划占位；尚非正式 Post。
+- [Typed Decision Models & Probabilistic Routing](typed-decision-models/) — Jev / System One：Choice、Score、Noul、概率校准、Bayes Risk 与 Agent 决策。
 
 ## 分类边界与发布约定
 
