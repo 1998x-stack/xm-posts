@@ -62,6 +62,7 @@
       "rnn",
       "lstm",
       "seq2seq",
+      "teacher-forcing",
       "transformer",
       "multi-head-attention"
     ]
