@@ -263,7 +263,20 @@ p_max = 0.70</code></pre>
 </div>
 </div>
 <p>ECE 越低通常意味着分箱层面的概率与准确率更接近。但 ECE 依赖分箱数、分箱策略和样本量；单独报告一个 ECE 数字会掩盖局部过度自信或子群体失准。建议同时报告 reliability diagram、Brier Score / NLL、分组校准和置信区间。Guo 等人的经典研究也表明，现代神经网络的置信度可能失准，温度缩放是常见的后处理方法之一。[10]</p>
-<p>Score 的 confidence 还会考虑等级之间的距离：相邻等级之间的概率分散，与两端等级之间的概率分散，可能得到不同的 confidence。它仍是分布形状的摘要，不应直接解释为该分数“有多大概率正确”。</p>
+<p><p>Score 的 confidence 还会考虑等级之间的距离：相邻等级之间的概率分散，与两端等级之间的概率分散，可能得到不同的 confidence。其官方定义为：</p>
+<div class="math-equation" role="group" aria-label="Score confidence 的等级距离公式">
+<div class="math-scroll" tabindex="0" role="region" aria-label="Score confidence 公式，可横向滚动">
+<math display="block" aria-label="confidence 等于最大值零与一减去概率加权等级距离除以均匀分布平均距离中的较大者">
+<mrow><mi>confidence</mi><mo>=</mo><mi>max</mi><mo>(</mo><mn>0</mn><mo>,</mo><mn>1</mn><mo>−</mo><mfrac><mrow><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>0</mn></mrow><mrow><mi>n</mi><mo>−</mo><mn>1</mn></mrow></munderover><msub><mi>p</mi><mi>i</mi></msub><mo>|</mo><mi>i</mi><mo>−</mo><mi>m</mi><mo>|</mo></mrow><msub><mi>MAD</mi><mi>unif</mi></msub></mfrac><mo>)</mo></mrow>
+</math>
+</div>
+<div class="math-scroll" tabindex="0" role="region" aria-label="均匀分布的平均等级距离公式，可横向滚动">
+<math display="block" aria-label="MAD uniform 等于一除以 n 乘以从零到 n 减一的等级 i 与中点 n 减一除以二之间绝对距离之和">
+<mrow><msub><mi>MAD</mi><mi>unif</mi></msub><mo>=</mo><mfrac><mn>1</mn><mi>n</mi></mfrac><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>0</mn></mrow><mrow><mi>n</mi><mo>−</mo><mn>1</mn></mrow></munderover><mo>|</mo><mi>i</mi><mo>−</mo><mfrac><mrow><mi>n</mi><mo>−</mo><mn>1</mn></mrow><mn>2</mn></mfrac><mo>|</mo></mrow>
+</math>
+</div>
+</div>
+<p>其中 m 是概率最大的等级编号。这个定义让“概率分布在相邻等级之间摇摆”和“概率分布在两个极端等级之间摇摆”得到不同的 confidence。它仍然是对概率分布形状的摘要，不应直接解释为该分数有多大概率正确。[8]</p></p>
 </section>
 
 <section id="decision">
@@ -420,6 +433,19 @@ p_max = 0.70</code></pre>
 <h3>10.3 偏差研究：选项顺序与问题变体会影响判断</h3>
 <p>另一项对 Jev 1.13.0 的研究分析了 41,500 次回答，覆盖认知反思、锚定、合取、框架、沉没成本、零风险和定价偏差等任务。研究发现，部分无关数值和选项顺序会影响判断；在特定改写后的合取任务中，模型违反概率合取规则的比例达到 54%。[15]</p>
 <p>这里需要特别注意：这是预印本中的特定任务结果，不是一个可泛化的“Jev 偏差率”。它提示我们不能只检查最终选项是否变化，还要检查概率向量、confidence 和最终动作是否对无关的格式变化敏感。</p>
+<h3>10.4 风险预算：校准概率不等于受控错误率</h3>
+<p>Messoudi 与 Mansar 的研究把问题推进了一步：如果系统没有人工复核通道，每个输入都必须被分配一个动作，怎样保证“被允许通过的那一组样本”中的漏放风险不超过预算？他们在六个 moderation、safety 与 reranking 数据集上比较普通阈值、经验阈值和 Learn Then Test（LTT）。[16]</p>
+<p>在有定义的测试风险设置中，朴素阈值策略有 42.0%（105 / 250）超过预设风险预算，经验阈值为 51.7%（108 / 209），LTT 为 7.8%（12 / 153）。这些比例的分母只包含测试风险可定义的设置；LTT 也会在无法获得证书时拒绝部署该阈值，并采用保守 fallback。它不是一个“永不出错”的保证。</p>
+<div class="note"><strong>校准、Bayes Risk 与 LTT 解决的是不同问题：</strong><ul><li>Calibration：概率数值是否与长期观测频率相符？</li><li>Bayes Risk：给定概率与损失矩阵，哪个动作的期望损失最低？</li><li>Risk Control：在明确抽样假设和风险预算下，能否用独立校准样本为某个策略阈值提供有限样本保证？</li></ul></div>
+<p>LTT 不会自动让模型概率更校准。它把评分器和候选阈值固定后，使用独立校准样本检验候选策略；其保证依赖校准样本与部署总体的抽样假设。它展示了概率接口之后仍然需要一层统计决策治理。</p>
+<h3>10.5 选择性推理：决策模型也可以按需“慢下来”</h3>
+<p>Zheng 与 Chen 研究了如何在类型化答案接口中加入按需推理：先快速读取候选答案分布，只有在预期收益足够时才启动推理；过程中读取中间答案，并在不确定性足够低时提前停止。其 768 道 ProofWriter、LogiQA 2.0 与 ARC-Challenge 问题实验中，准确率从直接读取的 70.96% 提升到 84.38%；相较 1,024-token 终止读取，管线时间降低 46.30%，准确率差异为 −1.17 个百分点。[17]</p>
+<p>这不是 Jev 1.14 的内置功能，而是一个研究方向：System One 的快速判断可以与受控的 System Two 推理预算组合，而不是只能在“完全不推理”和“每次都长推理”之间二选一。</p>
+<h3>10.6 表格数据：内容不变，组织方式仍可能改变答案</h3>
+<p>关于 Tabular Data 的研究比较了四种类型化决策模型和三个 LLM，覆盖行分类、事实验证与异常检测，并对同一内容构造 21 种格式或措辞改写。研究报告：部分决策模型对问题措辞变化相对稳健，但没有被测试的模型能够对表格组织方式保持完全稳健；在某些改写下，至少三分之一的行级决策会发生变化。[18]</p>
+<p>这提醒工程师：将表格转成 JSON、调整列顺序、重命名字段、改变候选项描述，都属于输入契约的一部分。数据语义相同，不意味着模型的输出分布必然相同。</p>
+<h3>10.7 研究版图已经超出单一产品</h3>
+<p>Chen 等人的综述把 Typed Decision Models 放在 LLM 路由、零样本分类、Safety Guard、标签概率读取和部署适配成本的交汇处。作者版本标注已被 ACM SIGKDD Explorations 接收；作者同时披露参与 AnyJev 相关研发，因此这篇综述适合作为研究地图，不应单独作为中立的性能证据。[19]</p>
 <div class="takeaway"><strong>证据综合：</strong>类型化输出能减少解析和结构错误；概率接口让风险控制与拒绝策略更容易实现；但准确率、校准、鲁棒性和公平性仍然必须在目标任务、目标版本与目标人群上独立验证。</div>
 </section>
 
@@ -507,10 +533,13 @@ assert abs(decision.risks["route_billing"] - 1.30) &lt; 1e-9</code></pre>
 <li>Deußer, T. et al. <a href="https://arxiv.org/abs/2609.37647">Evaluating and Benchmarking the System One Model Jev</a>, 2026. 37 数据集、346,009 次请求的独立基准预印本。</li>
 <li>Meng, L. <a href="https://escholarship.org/uc/item/4t4449jv">How far can a commercial decision model's probabilities be trusted?</a>, 2026. Jev 1.13.0 校准审计预印本。</li>
 <li>Imperatrice, I. et al. <a href="https://arxiv.org/abs/2610.19619">Are AI Decision Models Biased? A Case Study of Jev</a>, 2026. Jev 1.13.0 的认知偏差与选项顺序研究预印本。</li>
+<li>Messoudi, S. &amp; Mansar, Y. <a href="https://arxiv.org/abs/2610.19811">Calibration and Risk-Budgeted Decisions with System One Models</a>, 2026.</li>
+<li>Zheng, B. &amp; Chen, Z. <a href="https://arxiv.org/abs/2610.19644">Selective Reasoning for Typed Decision Models: When to Start, Read, and Stop</a>, 2026.</li>
+<li>Zhang, B., Ye, H. &amp; Zha, H. <a href="https://arxiv.org/abs/2610.19536">Typed Decision Models on Tabular Data</a>, 2026.</li>
+<li>Chen, E. et al. <a href="https://evan-py-chen.github.io/jev-survey/jev-survey.pdf">A Survey on Jev: Prior Research, Adaptation Costs, and Evidence of System One Models</a>, 2026. 作者版本标注已被 ACM SIGKDD Explorations 接收；作者披露参与 AnyJev 相关研发。</li>
 <li>TypeSafe AI. <a href="https://docs.typesafe.ai/model-jaggedness">Model jaggedness</a>. 官方已知失败模式与规避建议。</li>
-<li>Chen, E. et al. <a href="https://evan-py-chen.github.io/jev-survey/jev-survey.pdf">A Survey on Jev: Prior Research, Adaptation Costs, and Evidence of System One Models</a>, 2026. 综述预印本；作者披露其参与 AnyJev 相关工作。</li>
 </ol>
-<p>站内延伸：<a href="../../classical-ml/logistic-regression/">Logistic Regression</a>（概率分类基础）、<a href="../../evaluation/roc-auc/">ROC-AUC</a>（分类评估）与 <a href="../react/">ReAct</a>（Agent 行动闭环）。</p>
+<p>站内延伸：<a href="../../classical-ml/logistic-regression/">Logistic Regression</a>（概率分类基础）、<a href="../../evaluation/roc-auc/">ROC-AUC</a>（分类评估）与 <a href="../../agents/react/">ReAct</a>（Agent 行动闭环）。</p>
 </section>
 
 <footer>
