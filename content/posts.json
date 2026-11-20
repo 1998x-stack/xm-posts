@@ -2049,5 +2049,36 @@
       "src": "assets/cover-mixture.svg",
       "caption": "RAG-Sequence 整句共享文档，RAG-Token 逐词混合证据"
     }
+  },
+  {
+    "slug": "tree-of-thoughts",
+    "title": "Understanding Tree of Thoughts",
+    "subtitle": "为什么显式搜索中间思维状态，能让大语言模型在复杂任务中探索、评估与回溯？",
+    "category": "reasoning",
+    "status": "published",
+    "published": "2026-11-21",
+    "updated": "2026-11-21",
+    "reading_minutes": 35,
+    "tags": [
+      "Tree of Thoughts",
+      "ToT",
+      "Reasoning",
+      "Search",
+      "BFS",
+      "DFS",
+      "Beam Search",
+      "Test-time Compute",
+      "State Evaluation",
+      "MCTS",
+      "Planning"
+    ],
+    "summary": "精读 Yao 等人 NeurIPS 2023：从 CoT 与 Self-Consistency 的边界出发，形式化 Thought/State/Value/Search，逐步拆解 BFS、DFS、剪枝与回溯；核验 Game of 24、Creative Writing、Mini Crosswords 原论文数据，并提供原创思维树 SVG、可交互搜索轨迹、MathML 与 Fraction 精确算术测试。",
+    "paper": "https://arxiv.org/abs/2305.10601",
+    "illustration": "tree-of-thoughts",
+    "topic": "search-verification",
+    "cover": {
+      "src": "assets/02-game24-tree.svg",
+      "caption": "从四个输入数字展开候选算式，并通过状态评估选择可行分支"
+    }
   }
 ]
