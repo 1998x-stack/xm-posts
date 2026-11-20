@@ -5,3 +5,5 @@
 新文章放在 `posts/classical-ml/<slug>/index.html`，配套 `assets/*.svg` 和 `evidence.json`。只有在 `content/posts.json` 中标记为 `published` 的完整文章才进入 GitHub Pages。
 
 已发布文章：[Understanding Decision Tree](decision-tree/index.html)（ID3、CART、C4.5、Gini、回归与剪枝）；[Understanding SVM](svm/index.html)（最大间隔、对偶与核方法）。
+
+新增文章：[Understanding KNN](knn/index.html)——实例学习、局部投票、距离尺度、k 的选择、Cover–Hart 大样本界，以及 ANN 与精确分类的区别。二级主题 `Instance-based Learning & Nearest Neighbors` 归在经典机器学习，不新建一级分类。
