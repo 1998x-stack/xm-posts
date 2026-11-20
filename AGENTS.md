@@ -98,3 +98,11 @@ The cover should let a student recognize **what happens inside the model** at a 
 ## 8. Copyright and provenance
 
 The teaching *method* is inspired by Christopher Olah and Harvard NLP. All article text and diagrams must be independently constructed. Cite primary papers for substantive facts; do not assume the absence of a license implies permission to redistribute images or code. Canonical Skill upstream provenance is recorded in `skills/olah-style-paper-posts/UPSTREAM.md`.
+
+## HTML layout regression contract
+
+- Published article source must start with **one** HTML5 doctype; never append another when updating a post.
+- Preserve the semantic heading ladder: one H1, H2 sections, H3 widgets/subsections, and H4 only inside an H3 subsection. Styling is controlled by classes, not heading rank.
+- Every published standalone article must provide valid `@media print { ... }` and `@media (prefers-reduced-motion: reduce) { ... }`. `@media(print)` is invalid and silently drops print rules.
+- Keep long equations, code and wide diagrams inside explicit keyboard-focusable scroll regions where applicable; never suppress page-level overflow with `overflow-x:hidden`. Use `min-width:0` on grid and flex children, allow long headings and references to wrap, and keep mobile illustrations readable by local scrolling when required.
+- Run `python scripts/validate_site.py` and Chromium checks at 360px, 390px, tablet, desktop and print. The static layout contract in `check_article_layout` prevents duplicate doctypes, skipped heading ranks and absent print/reduced-motion coverage; actual viewport overflow requires browser QA.
