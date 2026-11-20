@@ -30,3 +30,35 @@ def test_reject_inconsistent_or_empty_sequence():
             pass
         else:
             raise AssertionError("Should reject inconsistent sequence lengths")
+
+
+def test_narrow_mobile_has_no_document_overflow():
+    """Regress 360px layout; report exact elements when an overflow appears."""
+    from playwright.sync_api import sync_playwright
+    from pathlib import Path
+    html = (Path(__file__).resolve().parents[1] /
+            "posts/architectures/rnn/index.html").read_text(encoding="utf-8")
+    with sync_playwright() as p:
+        browser = p.chromium.launch(headless=True, args=["--no-sandbox"])
+        page = browser.new_page(viewport={"width": 360, "height": 800})
+        page.set_content(html, wait_until="load")
+        details = page.evaluate("""() => ({
+            viewport: innerWidth,
+            htmlWidth: document.documentElement.scrollWidth,
+            bodyWidth: document.body.scrollWidth,
+            offenders: [...document.querySelectorAll('body *')].map(e => {
+                const r=e.getBoundingClientRect();
+                const css=getComputedStyle(e);
+                return {
+                    tag:e.tagName.toLowerCase(),
+                    id:e.id, cls: typeof e.className === 'string' ? e.className : '',
+                    text:(e.innerText||e.textContent||'').slice(0,45),
+                    left:Math.round(r.left), right:Math.round(r.right),
+                    width:Math.round(r.width), minWidth:css.minWidth,
+                    whiteSpace:css.whiteSpace, overflowX:css.overflowX
+                };
+            }).filter(x => x.right > innerWidth + 1 || x.left < -1)
+              .sort((a,b)=>b.right-a.right).slice(0,25)
+        })""")
+        browser.close()
+    assert details["htmlWidth"] <= 361, details
