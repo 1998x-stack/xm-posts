@@ -426,5 +426,26 @@
     "summary": "以 Sutskever et al.（NeurIPS 2014）为主线，图解变长输入输出、固定向量瓶颈、LSTM 编解码、条件概率与 Teacher Forcing、源序列反转及 Beam Search；沿 Cho、Bahdanau、Luong 到 Transformer 辨析 Attention 演进，附交互示例、MathML 推导和确定性 Python 断言。",
     "paper": "https://arxiv.org/abs/1409.3215",
     "illustration": "seq2seq"
+  },
+  {
+    "slug": "cnn",
+    "title": "Understanding CNN",
+    "subtitle": "为什么一个小核在整张图上滑动，就能学习视觉结构？",
+    "category": "architectures",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 32,
+    "tags": [
+      "CNN",
+      "Convolutional Neural Networks",
+      "LeNet-5",
+      "Receptive Field",
+      "Weight Sharing",
+      "Computer Vision"
+    ],
+    "summary": "从局部感受野、共享核、空间形状和梯度累积，到 1998 原始 LeNet-5 的部分连接、可学习池化与 RBF 输出；配八幅独立机制图、交互滑窗、MathML 推导及纯 Python 数值验证。",
+    "paper": "https://doi.org/10.1109/5.726791",
+    "illustration": "cnn"
   }
 ]

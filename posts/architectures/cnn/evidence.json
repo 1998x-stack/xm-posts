@@ -1,0 +1,119 @@
+[
+  {
+    "id": "CNN-01",
+    "claim": "LeNet paper identifies local receptive fields, shared weights and subsampling as key architectural ideas",
+    "kind": "primary-paper",
+    "source_url": "https://doi.org/10.1109/5.726791",
+    "locator": "Section II-A, Figure 2",
+    "status": "verified",
+    "notes": ""
+  },
+  {
+    "id": "CNN-02",
+    "claim": "Original LeNet-5 stage shapes are 32x32, C1 6@28x28, S2 6@14x14, C3 16@10x10, S4 16@5x5, C5 120, F6 84, output 10",
+    "kind": "primary-paper",
+    "source_url": "https://doi.org/10.1109/5.726791",
+    "locator": "Figure 2, Section II-B",
+    "status": "verified",
+    "notes": ""
+  },
+  {
+    "id": "CNN-03",
+    "claim": "S2/S4 are learned subsampling layers with trainable coefficient, bias and nonlinearity",
+    "kind": "primary-paper",
+    "source_url": "https://doi.org/10.1109/5.726791",
+    "locator": "Section II-A/B",
+    "status": "verified",
+    "notes": "Distinct from contemporary max pooling."
+  },
+  {
+    "id": "CNN-04",
+    "claim": "Original C3 has partial connections and 1516 trainable parameters",
+    "kind": "primary-paper",
+    "source_url": "https://doi.org/10.1109/5.726791",
+    "locator": "Section II-B and Table I",
+    "status": "verified",
+    "notes": ""
+  },
+  {
+    "id": "CNN-05",
+    "claim": "LeNet-5 final output uses Euclidean RBF penalties and scaled tanh hidden activations",
+    "kind": "primary-paper",
+    "source_url": "https://doi.org/10.1109/5.726791",
+    "locator": "Section II-B, equations 5–7",
+    "status": "verified",
+    "notes": ""
+  },
+  {
+    "id": "CNN-06",
+    "claim": "Paper describes 345308 connections and about 60000 independent parameters",
+    "kind": "primary-paper",
+    "source_url": "https://doi.org/10.1109/5.726791",
+    "locator": "Section II-A last paragraph",
+    "status": "verified",
+    "notes": ""
+  },
+  {
+    "id": "CNN-07",
+    "claim": "Toy 5x5 by 3x3 cross correlation has top-left outputs -1 and 0",
+    "kind": "worked-example",
+    "source_url": "https://doi.org/10.1109/5.726791",
+    "locator": "Section II-A mechanism; independent illustrative numbers",
+    "status": "illustrative",
+    "notes": "Assertions in mini_cnn.py, not the original paper's values."
+  },
+  {
+    "id": "CNN-08",
+    "claim": "Standard dense convolution with bias uses Cout*(Cin*Kh*Kw+1) trainable parameters",
+    "kind": "derived-math",
+    "source_url": "https://doi.org/10.1109/5.726791",
+    "locator": "Section II-A shared weights",
+    "status": "derived",
+    "notes": "Explicitly excludes grouped and partial connections."
+  },
+  {
+    "id": "CNN-09",
+    "claim": "AlexNet NeurIPS 2012 official abstract reports top-1 39.7% and top-5 18.9% error on LSVRC-2010 test",
+    "kind": "paper-metric",
+    "source_url": "https://papers.nips.cc/paper_files/paper/2012/hash/c399862d3b9d6b76c8436e924a68c45b-Abstract.html",
+    "locator": "Abstract",
+    "status": "verified",
+    "notes": "Not a direct comparable benchmark with ResNet 2015."
+  },
+  {
+    "id": "CNN-10",
+    "claim": "VGG explores depth using small convolutional filters",
+    "kind": "follow-up",
+    "source_url": "https://arxiv.org/abs/1409.1556",
+    "locator": "Abstract, Section 2",
+    "status": "verified",
+    "notes": ""
+  },
+  {
+    "id": "CNN-11",
+    "claim": "ResNet reports 3.57 percent top-5 error for an ensemble on the ILSVRC 2015 test",
+    "kind": "paper-metric",
+    "source_url": "https://openaccess.thecvf.com/content_cvpr_2016/html/He_Deep_Residual_Learning_CVPR_2016_paper.html",
+    "locator": "Abstract",
+    "status": "verified",
+    "notes": "Ensemble, not one ResNet-50."
+  },
+  {
+    "id": "CNN-12",
+    "claim": "Effective receptive field is not spatially uniform within theoretical receptive field",
+    "kind": "follow-up",
+    "source_url": "https://papers.neurips.cc/paper_files/paper/2016/hash/c8067ad1937f728f51288b3eb986afaa-Abstract.html",
+    "locator": "Introduction and mathematical analysis",
+    "status": "verified",
+    "notes": ""
+  },
+  {
+    "id": "CNN-13",
+    "claim": "Weight sharing causes kernel gradients to accumulate over output positions",
+    "kind": "derived-math",
+    "source_url": "https://doi.org/10.1109/5.726791",
+    "locator": "Sections I/II backprop and shared weights",
+    "status": "derived",
+    "notes": "Only one-channel valid stride-one formula shown; numerical check in minimal code."
+  }
+]
