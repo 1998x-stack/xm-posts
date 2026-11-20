@@ -18,7 +18,7 @@
 | `systems` | GPU 内存、算子、编译、通信、性能分析及底层优化 | 服务请求、token 调度、端到端 serving 归 `inference` |
 | `storage-indexing` | B+ Tree、LSM Tree、页与缓冲区管理、事务恢复、MVCC | 数据库磁盘/索引结构归此类；向量语义召回归 `retrieval-rag`，GPU 算子实现归 `systems` |
 | `retrieval-rag` | 向量/ANN、稀疏混合检索、重排序、RAG、证据落地 | Agent 任务计划与工具执行归 `agents`，embedding 基础表征归 `foundations` |
-| `agents` | ReAct、规划、工具调用、记忆、软件工程 Agent、Agent-Computer Interface、Harness Engineering 与端到端评测 | 纯推理策略归 `reasoning`；检索方法归 `retrieval-rag`；Harness 研究模型外部的 Agent Runtime 与工程闭环 |
+| `agents` | ReAct、自主 Agent 系统、规划、工具调用、记忆、软件工程 Agent、Agent-Computer Interface、Harness Engineering 与端到端评测 | 纯推理策略归 `reasoning`；检索方法归 `retrieval-rag`；Harness 研究模型外部的 Agent Runtime 与工程闭环 |
 | `multimodal` | 视觉/语言/音频的跨模态建模与对齐 | 通用单模态 CNN 架构仍可归 `architectures` |
 | `evaluation` | 模型/任务 Benchmark、ROC/PR、消融与复现 | 训练数据质量、污染事实与许可证归 `datasets` |
 
@@ -40,6 +40,16 @@
 | `foundations/_topics/softmax-logsumexp` | `foundations/_topics/numerical-stability` |
 
 这些旧路径是未发布的研究占位，并非文章 URL。整理中没有迁移或删除已发布的文章路径，也没有改变现有 Systems 二级 slug。
+
+## 2026-11 新增二级专题：autonomous-agents
+
+在 `agents` 下新增稳定 topic `autonomous-agents`（Autonomous Agent Systems & Frameworks），用于完整自主 Agent 系统与运行时架构，而不是单一规划算法。
+
+- **收录**：AutoGPT、BabyAGI 等目标驱动系统；规划、工具、记忆、控制器、预算、权限与环境反馈的集成。
+- **与 planning 的边界**：`planning` 研究任务分解、计划选择、搜索和重规划方法；`autonomous-agents` 研究把这些能力与工具、状态、运行时和安全机制组合成可执行系统。
+- **与 react 的边界**：`react` 聚焦 Thought / Action / Observation 的交互范式；`autonomous-agents` 聚焦长程任务系统及其模块集成。
+- **与 software-engineering-agents 的边界**：后者以代码仓库、Issue、编辑与测试为应用场景；自主 Agent 是跨应用的系统架构主题。
+- **交叉关系**：使用 tags 与 `content/reading_paths.json` 建立 ReAct、Memory、SWE-agent、Harness Engineering 与 Agent Evaluation 的学习路径，不复制文章到多个主分类。
 
 ## 新 Post 审查与合并顺序
 

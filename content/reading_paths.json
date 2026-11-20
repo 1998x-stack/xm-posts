@@ -348,5 +348,16 @@
       "agent-memory-components",
       "harness-engineering"
     ]
+  },
+  {
+    "id": "path-38",
+    "title": "从 ReAct 到自主 Agent 系统",
+    "posts": [
+      "react",
+      "autogpt",
+      "agent-memory-components",
+      "swe-agent",
+      "harness-engineering"
+    ]
   }
 ]

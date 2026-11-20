@@ -1,0 +1,128 @@
+[
+  {
+    "id": "E01",
+    "kind": "project",
+    "claim": "AutoGPT is an evolving open-source project; current repository README describes the Platform as an AI-expert and workflow product rather than the original 2023 autonomous loop.",
+    "source_url": "https://github.com/Significant-Gravitas/AutoGPT",
+    "locator": "README.md, product overview and Workflows section; repository snapshot checked 2026-11-21",
+    "status": "verified",
+    "notes": "Project-level source; not an academic paper."
+  },
+  {
+    "id": "E02",
+    "kind": "project_status",
+    "claim": "AutoGPT Classic is explicitly marked unsupported; dependencies will not be updated and the README recommends AutoGPT Platform.",
+    "source_url": "https://github.com/Significant-Gravitas/AutoGPT/blob/master/classic/README.md",
+    "locator": "Project Status",
+    "status": "verified",
+    "notes": "Current repository documentation; do not recommend Classic for production."
+  },
+  {
+    "id": "E03",
+    "kind": "implementation",
+    "claim": "Classic Agent.propose_action gathers directives, commands and messages, builds a prompt strategy and parses a structured action proposal.",
+    "source_url": "https://github.com/Significant-Gravitas/AutoGPT/blob/master/classic/original_autogpt/autogpt/agents/agent.py",
+    "locator": "Agent.propose_action and complete_and_parse",
+    "status": "verified",
+    "notes": "Implementation snapshot checked 2026-11-21; not a guarantee about the earliest 2023 release."
+  },
+  {
+    "id": "E04",
+    "kind": "implementation",
+    "claim": "Classic Agent.execute checks permissions before tool execution, supports multiple tools in parallel, captures tool errors and passes results through AfterExecute.",
+    "source_url": "https://github.com/Significant-Gravitas/AutoGPT/blob/master/classic/original_autogpt/autogpt/agents/agent.py",
+    "locator": "Agent.execute, _execute_tool, _execute_tools_parallel",
+    "status": "verified",
+    "notes": "Implementation-specific behavior; versioned source should be revisited before production use."
+  },
+  {
+    "id": "E05",
+    "kind": "implementation",
+    "claim": "BaseAgentConfiguration includes cycle_budget, cycles_remaining and cycle_count; None allows continuous execution, 1 requests approval per step, 0 stops.",
+    "source_url": "https://github.com/Significant-Gravitas/AutoGPT/blob/master/classic/forge/forge/agent/base.py",
+    "locator": "BaseAgentConfiguration",
+    "status": "verified",
+    "notes": "Current Classic code snapshot."
+  },
+  {
+    "id": "E06",
+    "kind": "implementation",
+    "claim": "Classic Agent settings include episodic action history and context; Agent initialization composes file, code, web, todo, watchdog and skill components.",
+    "source_url": "https://github.com/Significant-Gravitas/AutoGPT/blob/master/classic/original_autogpt/autogpt/agents/agent.py",
+    "locator": "AgentSettings and Agent.__init__",
+    "status": "verified",
+    "notes": "Component list is implementation-specific."
+  },
+  {
+    "id": "E07",
+    "kind": "technical_analysis",
+    "claim": "Early AutoGPT used retrieval-based memory over intermediate agent-tool steps for long-running goals; BabyAGI differs by explicitly planning a sequence and updating the task list.",
+    "source_url": "https://www.langchain.com/blog/agents-round",
+    "locator": "AutoGPT and BabyAGI sections, 2023-04-18",
+    "status": "verified",
+    "notes": "Contemporary technical analysis, not the canonical AutoGPT specification."
+  },
+  {
+    "id": "E08",
+    "kind": "survey",
+    "claim": "LLM-Agent planning literature can be organized into task decomposition, plan selection, external modules, reflection and memory.",
+    "source_url": "https://arxiv.org/abs/2402.02716",
+    "locator": "Abstract and Section 2 taxonomy",
+    "status": "verified",
+    "notes": "Survey taxonomy; use as research context rather than an AutoGPT-specific claim."
+  },
+  {
+    "id": "E09",
+    "kind": "survey",
+    "claim": "A unified LLM autonomous-agent architecture survey discusses profile, memory, planning and action modules.",
+    "source_url": "https://doi.org/10.1007/s11704-024-40231-1",
+    "locator": "Section 2.1 and Figure 2 discussion",
+    "status": "verified",
+    "notes": "Wang et al., Frontiers of Computer Science, 2024."
+  },
+  {
+    "id": "E10",
+    "kind": "implementation",
+    "claim": "AutoGPT Platform Agent Builder uses typed input, action and output blocks, connections, triggers and error outputs.",
+    "source_url": "https://github.com/Significant-Gravitas/AutoGPT/blob/master/docs/platform/agent-builder-guide.md",
+    "locator": "Overview, Types of Blocks, Connecting Blocks, Error Handling",
+    "status": "verified",
+    "notes": "Current Platform documentation."
+  },
+  {
+    "id": "E11",
+    "kind": "implementation",
+    "claim": "Current Platform BlockEffect classifies side effects as NONE, READ, WORKSPACE, PLATFORM, EXTERNAL_JUDGED and EXTERNAL; undeclared effects are treated as external.",
+    "source_url": "https://github.com/Significant-Gravitas/AutoGPT/blob/master/autogpt_platform/backend/backend/blocks/_base.py",
+    "locator": "BlockEffect enum docstring",
+    "status": "verified",
+    "notes": "Current Platform source snapshot; diagram deliberately simplifies this taxonomy."
+  },
+  {
+    "id": "E12",
+    "kind": "survey",
+    "claim": "Agent evaluation research identifies capability, application-specific and generalist benchmarks and highlights cost-efficiency, safety and robustness as open evaluation challenges.",
+    "source_url": "https://arxiv.org/abs/2503.16416",
+    "locator": "Abstract",
+    "status": "verified",
+    "notes": "Yehudai et al., 2025 survey."
+  },
+  {
+    "id": "E13",
+    "kind": "derived",
+    "claim": "Under an independent fixed per-step success probability p, the probability that all n steps succeed in one pass is p^n; p=0.95 and n=20 gives approximately 0.358, p=0.98 and n=20 gives approximately 0.668.",
+    "source_url": "https://en.wikipedia.org/wiki/Independence_(probability_theory)",
+    "locator": "Elementary product rule under independence; pedagogical calculation",
+    "status": "derived",
+    "notes": "Simplifying assumption only; not a measured AutoGPT result or realistic calibrated task model."
+  },
+  {
+    "id": "E14",
+    "kind": "illustrative",
+    "claim": "The interactive trace and autogpt_loop.py simulator are deterministic teaching examples for explicit approval, budgets and tool errors; they do not call an LLM or execute external tools.",
+    "source_url": "https://github.com/Significant-Gravitas/AutoGPT",
+    "locator": "Independent teaching implementation in this article",
+    "status": "illustrative",
+    "notes": "Not original AutoGPT source and not a benchmark reproduction."
+  }
+]

@@ -1,10 +1,12 @@
 # 智能体与工具使用 / Agents & Tool Use
 
-本分类专注模型与外界交互的行动闭环：ReAct、Planning、Tool Calling、Memory、Software Engineering Agents & ACI、Harness Engineering、Agent Evaluation。
+本分类专注模型与外界交互的行动闭环：ReAct、自主 Agent 系统、Planning、Tool Calling、Memory、Software Engineering Agents & ACI、Harness Engineering、Agent Evaluation。
 
-## 专题占位
+## 正式文章与专题占位
 
-- [ReAct](react/) — 已有正式论文解读；[专题研究规划](_topics/react/README.md) 仍作为未发布的历史规划记录。
+- [ReAct](react/) — Thought / Action / Observation 的交互范式；[专题研究规划](_topics/react/README.md) 仍作为未发布的历史规划记录。
+- [AutoGPT](autogpt/) — 从 Classic 的目标驱动执行循环，到当前 Platform 的图工作流、记忆、权限与长程可靠性。
+- [Autonomous Agent Systems](_topics/autonomous-agents/README.md) — 完整自主 Agent 系统与运行时架构的研究边界。
 - [Software Engineering Agents & ACI](swe-agent/) — SWE-agent：代码搜索、编辑、错误护栏、上下文管理与软件修复评测。
 - [Harness Engineering](harness-engineering/) — 从 Codex 与 Claude 工程实践理解 Agent Runtime、上下文交接、工具、安全、独立评估与维护治理。
 - [Planning](_topics/planning/README.md) — 研究规划占位；尚非正式 Post。
