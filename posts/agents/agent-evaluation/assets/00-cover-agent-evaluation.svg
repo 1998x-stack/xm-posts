@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="cover-title cover-desc">
+<title id="cover-title">Agent Evaluation：从任务成功到可靠行动</title>
+<desc id="cover-desc">深色背景的研究型封面，中心展示 Agent Evaluation，四个评测目标为任务行为、能力、可靠性和安全性，底部展示评测过程与 Benchmark、Metrics、Trace。</desc>
+<defs><linearGradient id="cover-bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#173a3c"/><stop offset="1" stop-color="#244e4b"/></linearGradient><pattern id="cover-grid" width="42" height="42" patternUnits="userSpaceOnUse"><path d="M42 0H0V42" fill="none" stroke="#6a9b8b" stroke-opacity=".16" stroke-width="1"/></pattern></defs>
+<rect width="1200" height="630" rx="28" fill="url(#cover-bg)"/><rect width="1200" height="630" rx="28" fill="url(#cover-grid)"/>
+<circle cx="1080" cy="105" r="170" fill="#7fb9a1" opacity=".08"/><circle cx="1050" cy="105" r="105" fill="none" stroke="#8cc5ac" stroke-opacity=".25" stroke-width="2"/>
+<text x="72" y="78" fill="#a9d9c3" font-family="system-ui,sans-serif" font-size="22" font-weight="800" letter-spacing="5">AGENT SYSTEMS / RESEARCH GUIDE</text>
+<text x="72" y="178" fill="#f2faf5" font-family="system-ui,sans-serif" font-size="72" font-weight="850" letter-spacing="-2">Agent Evaluation</text>
+<text x="76" y="225" fill="#c3dfd2" font-family="system-ui,sans-serif" font-size="28">不只检查答案，还要验证行动、状态与可靠性</text>
+<g font-family="system-ui,sans-serif">
+<rect x="72" y="290" width="245" height="118" rx="17" fill="#e4f2e9"/><text x="96" y="334" fill="#24675c" font-size="18" font-weight="800" letter-spacing="1">01 · BEHAVIOR</text><text x="96" y="375" fill="#1e4945" font-size="28" font-weight="850">任务结果</text>
+<rect x="339" y="290" width="245" height="118" rx="17" fill="#e5eff8"/><text x="363" y="334" fill="#315f7c" font-size="18" font-weight="800" letter-spacing="1">02 · CAPABILITY</text><text x="363" y="375" fill="#244e68" font-size="28" font-weight="850">执行能力</text>
+<rect x="606" y="290" width="245" height="118" rx="17" fill="#fff0e2"/><text x="630" y="334" fill="#9b6742" font-size="18" font-weight="800" letter-spacing="1">03 · RELIABILITY</text><text x="630" y="375" fill="#815234" font-size="28" font-weight="850">稳定可靠</text>
+<rect x="873" y="290" width="255" height="118" rx="17" fill="#f6e9e8"/><text x="897" y="334" fill="#975c56" font-size="18" font-weight="800" letter-spacing="1">04 · SAFETY</text><text x="897" y="375" fill="#794943" font-size="28" font-weight="850">安全对齐</text>
+</g>
+<path d="M72 455H1128" stroke="#86b9a5" stroke-opacity=".45" stroke-width="2"/>
+<text x="72" y="512" fill="#f0f8f2" font-family="system-ui,sans-serif" font-size="25" font-weight="800">WHAT × HOW</text>
+<text x="290" y="512" fill="#c1dbce" font-family="system-ui,sans-serif" font-size="22">Benchmarks  ·  Metrics  ·  Trajectories  ·  Reproducibility</text>
+<text x="72" y="572" fill="#a5c7b8" font-family="system-ui,sans-serif" font-size="18">从 AgentBench / GAIA 到 WebArena / OSWorld / τ-bench / BFCL / AgentDojo</text>
+</svg>
