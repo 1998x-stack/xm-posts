@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 460" role="img" aria-labelledby="title desc">
+<title id="title">NeRF 的五维输入与两个输出分支</title>
+<desc id="desc">三维位置和二维观察方向进入神经网络，密度只依赖位置，颜色同时依赖位置和方向。</desc>
+<defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#4f817d"/></marker></defs>
+<rect x="1" y="1" width="1198" height="458" rx="22" fill="#f8fbf9" stroke="#d9e7e1" stroke-width="2"/>
+<text x="40" y="48" font-size="22" font-weight="750" fill="#29434b" font-family="system-ui,'PingFang SC',sans-serif">一个空间点，两个不同含义的输出</text>
+<rect x="42" y="104" width="250" height="118" rx="16" fill="#eaf3ee" stroke="#b5d2c7" stroke-width="2"/>
+<text x="167" y="139" text-anchor="middle" font-size="19" font-weight="750" fill="#276a63" font-family="system-ui">空间位置 x</text>
+<text x="167" y="176" text-anchor="middle" font-size="17" fill="#315b5b" font-family="system-ui">(x, y, z)</text>
+<text x="167" y="202" text-anchor="middle" font-size="14" fill="#647d80" font-family="system-ui">3 个坐标</text>
+<rect x="42" y="257" width="250" height="118" rx="16" fill="#eaf0f7" stroke="#bfd0df" stroke-width="2"/>
+<text x="167" y="292" text-anchor="middle" font-size="19" font-weight="750" fill="#3e6d8b" font-family="system-ui">观察方向 d</text>
+<text x="167" y="329" text-anchor="middle" font-size="17" fill="#365f7c" font-family="system-ui">(θ, φ) / unit vector</text>
+<text x="167" y="355" text-anchor="middle" font-size="14" fill="#647d80" font-family="system-ui">2 个自由度</text>
+<path d="M304 163 L385 163 L385 224 L456 224" stroke="#4f817d" stroke-width="4" fill="none" marker-end="url(#arrow)"/>
+<path d="M304 316 L385 316 L385 253 L456 253" stroke="#4f817d" stroke-width="4" fill="none" marker-end="url(#arrow)"/>
+<rect x="472" y="168" width="230" height="142" rx="18" fill="#fffefa" stroke="#cddfd8" stroke-width="2"/>
+<text x="587" y="207" text-anchor="middle" font-size="20" font-weight="750" fill="#315b5b" font-family="system-ui">MLP Fθ</text>
+<g fill="#a9cfc2" stroke="#5f9488"><circle cx="520" cy="243" r="10"/><circle cx="520" cy="270" r="10"/><circle cx="550" cy="232" r="10"/><circle cx="550" cy="259" r="10"/><circle cx="550" cy="286" r="10"/><circle cx="580" cy="243" r="10"/><circle cx="580" cy="270" r="10"/><circle cx="610" cy="232" r="10"/><circle cx="610" cy="259" r="10"/><circle cx="610" cy="286" r="10"/><circle cx="640" cy="243" r="10"/><circle cx="640" cy="270" r="10"/></g>
+<path d="M704 226 L772 226 L772 151 L842 151" stroke="#c47a42" stroke-width="4" fill="none" marker-end="url(#arrow)"/>
+<path d="M704 254 L772 254 L772 330 L842 330" stroke="#477c9b" stroke-width="4" fill="none" marker-end="url(#arrow)"/>
+<rect x="858" y="95" width="286" height="112" rx="16" fill="#f8eadc" stroke="#dfb78f" stroke-width="2"/>
+<text x="1001" y="135" text-anchor="middle" font-size="20" font-weight="750" fill="#935d35" font-family="system-ui">密度 σ(x)</text>
+<text x="1001" y="172" text-anchor="middle" font-size="16" fill="#805c3f" font-family="system-ui">只依赖位置</text>
+<rect x="858" y="274" width="286" height="112" rx="16" fill="#e3edf5" stroke="#b6cad9" stroke-width="2"/>
+<text x="1001" y="314" text-anchor="middle" font-size="20" font-weight="750" fill="#3e6d8b" font-family="system-ui">颜色 c(x, d)</text>
+<text x="1001" y="351" text-anchor="middle" font-size="16" fill="#456c84" font-family="system-ui">位置 + 观察方向</text>
+<rect x="424" y="394" width="720" height="42" rx="10" fill="#edf6f1" stroke="#c5ddd3"/>
+<text x="784" y="421" text-anchor="middle" font-size="15" fill="#315b5b" font-family="system-ui">同一位置保持几何密度一致；外观可随观察方向改变</text>
+</svg>
