@@ -1,0 +1,137 @@
+[
+  {
+    "id": "Q01",
+    "claim": "QLoRA keeps a quantized frozen pretrained backbone and trains LoRA adapters using BF16 compute",
+    "kind": "paper-claim",
+    "source_url": "https://papers.neurips.cc/paper_files/paper/2023/file/1feb87871436031bdc0f2beaa62a049b-Paper-Conference.pdf",
+    "locator": "§3 Eq. (5)–(6)",
+    "status": "verified",
+    "notes": "Scope and experimental conditions are specified in the article; pedagogical illustrations are not measured benchmarks."
+  },
+  {
+    "id": "Q02",
+    "claim": "The paper reports 65B QLoRA fine-tuning on a single 48 GB GPU, versus >780 GB for standard 16-bit full fine-tuning",
+    "kind": "experiment",
+    "source_url": "https://papers.neurips.cc/paper_files/paper/2023/file/1feb87871436031bdc0f2beaa62a049b-Paper-Conference.pdf",
+    "locator": "Abstract; §1",
+    "status": "verified",
+    "notes": "Scope and experimental conditions are specified in the article; pedagogical illustrations are not measured benchmarks."
+  },
+  {
+    "id": "Q03",
+    "claim": "NormalFloat4 derives quantization levels from Gaussian quantiles and ensures an exact zero",
+    "kind": "paper-claim",
+    "source_url": "https://papers.neurips.cc/paper_files/paper/2023/file/1feb87871436031bdc0f2beaa62a049b-Paper-Conference.pdf",
+    "locator": "§3 Eq. (4); Appendix H",
+    "status": "verified",
+    "notes": "Scope and experimental conditions are specified in the article; pedagogical illustrations are not measured benchmarks."
+  },
+  {
+    "id": "Q04",
+    "claim": "FP32 scales at block 64 cost 0.5 bits/parameter before double quantization",
+    "kind": "paper-claim",
+    "source_url": "https://papers.neurips.cc/paper_files/paper/2023/file/1feb87871436031bdc0f2beaa62a049b-Paper-Conference.pdf",
+    "locator": "§3, Double Quantization",
+    "status": "verified",
+    "notes": "Scope and experimental conditions are specified in the article; pedagogical illustrations are not measured benchmarks."
+  },
+  {
+    "id": "Q05",
+    "claim": "Nested quantization: 8/64 + 32/(64×256) is about 0.127 bits/parameter and saves 0.373",
+    "kind": "paper-claim",
+    "source_url": "https://papers.neurips.cc/paper_files/paper/2023/file/1feb87871436031bdc0f2beaa62a049b-Paper-Conference.pdf",
+    "locator": "§3, Double Quantization, pp. 4–5",
+    "status": "verified",
+    "notes": "Scope and experimental conditions are specified in the article; pedagogical illustrations are not measured benchmarks."
+  },
+  {
+    "id": "Q06",
+    "claim": "Paged Optimizers use NVIDIA unified memory for temporary migration of optimizer states",
+    "kind": "paper-claim",
+    "source_url": "https://papers.neurips.cc/paper_files/paper/2023/file/1feb87871436031bdc0f2beaa62a049b-Paper-Conference.pdf",
+    "locator": "§3 Paged Optimizers",
+    "status": "verified",
+    "notes": "Scope and experimental conditions are specified in the article; pedagogical illustrations are not measured benchmarks."
+  },
+  {
+    "id": "Q07",
+    "claim": "The paper reports no paging slowdown at 65B on 48GB with batch size 16 in measured configuration",
+    "kind": "experiment",
+    "source_url": "https://papers.neurips.cc/paper_files/paper/2023/file/1feb87871436031bdc0f2beaa62a049b-Paper-Conference.pdf",
+    "locator": "§4 Paged Optimizers paragraph",
+    "status": "verified",
+    "notes": "Scope and experimental conditions are specified in the article; pedagogical illustrations are not measured benchmarks."
+  },
+  {
+    "id": "Q08",
+    "claim": "Table 3 average 5-shot MMLU: BF16 53.0, FP4 52.2, NF4 + DQ 53.1",
+    "kind": "experiment",
+    "source_url": "https://papers.neurips.cc/paper_files/paper/2023/file/1feb87871436031bdc0f2beaa62a049b-Paper-Conference.pdf",
+    "locator": "§4, Table 3: 7B/13B/33B/65B, Alpaca/FLAN v2",
+    "status": "verified",
+    "notes": "Scope and experimental conditions are specified in the article; pedagogical illustrations are not measured benchmarks."
+  },
+  {
+    "id": "Q09",
+    "claim": "Table 2 Pile Common Crawl mean perplexity: Int4 34.34, FP4 E2M1 31.07, FP4 E3M0 29.48, NF4 + DQ 27.41",
+    "kind": "experiment",
+    "source_url": "https://papers.neurips.cc/paper_files/paper/2023/file/1feb87871436031bdc0f2beaa62a049b-Paper-Conference.pdf",
+    "locator": "§4, Table 2",
+    "status": "verified",
+    "notes": "Scope and experimental conditions are specified in the article; pedagogical illustrations are not measured benchmarks."
+  },
+  {
+    "id": "Q10",
+    "claim": "Guanaco 99.3%-of-ChatGPT relative figure occurs in the paper's Vicuna evaluation setup, whose limitations are discussed",
+    "kind": "experiment",
+    "source_url": "https://papers.neurips.cc/paper_files/paper/2023/file/1feb87871436031bdc0f2beaa62a049b-Paper-Conference.pdf",
+    "locator": "Abstract; §5–6; Appendix F",
+    "status": "verified",
+    "notes": "Scope and experimental conditions are specified in the article; pedagogical illustrations are not measured benchmarks."
+  },
+  {
+    "id": "Q11",
+    "claim": "Guanaco paper configuration uses LoRA rank 64, alpha 16 and all linear layers",
+    "kind": "experiment",
+    "source_url": "https://papers.neurips.cc/paper_files/paper/2023/file/1feb87871436031bdc0f2beaa62a049b-Paper-Conference.pdf",
+    "locator": "Appendix D.3 and Table 8",
+    "status": "verified",
+    "notes": "Scope and experimental conditions are specified in the article; pedagogical illustrations are not measured benchmarks."
+  },
+  {
+    "id": "Q12",
+    "claim": "A square 4096x4096 layer with r=8 requires 65536 adapter parameters and 16777216 base parameters",
+    "kind": "toy-derivation",
+    "source_url": "https://papers.neurips.cc/paper_files/paper/2023/file/1feb87871436031bdc0f2beaa62a049b-Paper-Conference.pdf",
+    "locator": "§2 Eq. (3); arithmetic derived independently",
+    "status": "derived",
+    "notes": "Scope and experimental conditions are specified in the article; pedagogical illustrations are not measured benchmarks."
+  },
+  {
+    "id": "Q13",
+    "claim": "65e9 weights times 0.373 bits divided by 8 equals about 3.03 decimal GB",
+    "kind": "toy-derivation",
+    "source_url": "https://papers.neurips.cc/paper_files/paper/2023/file/1feb87871436031bdc0f2beaa62a049b-Paper-Conference.pdf",
+    "locator": "§3; independent decimal conversion",
+    "status": "derived",
+    "notes": "Scope and experimental conditions are specified in the article; pedagogical illustrations are not measured benchmarks."
+  },
+  {
+    "id": "Q14",
+    "claim": "Theoretical weight-only estimate: BF16=2N bytes, NF4+DQ≈N*(4+0.127)/8 bytes, excluding activation and other overhead",
+    "kind": "toy-derivation",
+    "source_url": "https://papers.neurips.cc/paper_files/paper/2023/file/1feb87871436031bdc0f2beaa62a049b-Paper-Conference.pdf",
+    "locator": "§3; teaching calculator; not observed VRAM peak",
+    "status": "derived",
+    "notes": "Scope and experimental conditions are specified in the article; pedagogical illustrations are not measured benchmarks."
+  },
+  {
+    "id": "Q15",
+    "claim": "The original implementation exposes nf4, double-quant and paged optimizer configuration via Transformers/PEFT/bitsandbytes",
+    "kind": "implementation",
+    "source_url": "https://github.com/artidoro/qlora",
+    "locator": "README Quantization and Paged Optimizer",
+    "status": "verified",
+    "notes": "Scope and experimental conditions are specified in the article; pedagogical illustrations are not measured benchmarks."
+  }
+]

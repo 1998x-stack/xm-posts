@@ -684,6 +684,135 @@
     "illustration": "linear-regression"
   },
   {
+    "slug": "svd",
+    "title": "Understanding SVD",
+    "subtitle": "矩阵如何把空间拉伸成椭圆？从奇异值到最优低秩近似、PCA 与伪逆",
+    "category": "foundations",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 26,
+    "tags": [
+      "SVD",
+      "Singular Value Decomposition",
+      "Linear Algebra",
+      "Low-rank Approximation",
+      "PCA",
+      "Eckart–Young"
+    ],
+    "summary": "以单位圆映射椭圆建立几何直觉，逐步推导薄 SVD、特征值关系、秩一分解与 Eckart–Young 最优截断，辅以能量滑块、PCA、伪逆、随机化算法和 NumPy 断言。",
+    "paper": "https://doi.org/10.1007/BF02288367",
+    "illustration": "svd"
+  },
+  {
+    "slug": "rnn",
+    "title": "Understanding RNN",
+    "subtitle": "从循环记忆到时间反向传播：一条状态链为何既有力量也有局限？",
+    "category": "architectures",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 30,
+    "tags": [
+      "RNN",
+      "Recurrent Neural Network",
+      "Elman Network",
+      "Sequence Modeling",
+      "BPTT",
+      "Vanishing Gradient"
+    ],
+    "summary": "以 Elman 1990 为起点，从时间反馈、时序 XOR、状态方程、BPTT 与梯度消失/爆炸渐进解析 RNN；含 12 节正文、4 幅原创独立 SVG、离线 MathML、互动数值演示、纯 Python 梯度校验与论文证据台账。",
+    "paper": "https://doi.org/10.1207/S15516709COG1402_1",
+    "illustration": "rnn"
+  },
+  {
+    "slug": "xgboost",
+    "title": "Understanding XGBoost",
+    "subtitle": "从二阶梯度、分裂增益到稀疏感知与可扩展树提升系统",
+    "category": "classical-ml",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 34,
+    "tags": [
+      "XGBoost",
+      "Gradient Boosting",
+      "Second-order Optimization",
+      "Split Gain",
+      "Sparsity-aware",
+      "Weighted Quantile Sketch"
+    ],
+    "summary": "以 Chen 与 Guestrin KDD 2016 原论文为证据，渐进推导二阶树目标、叶子权重和分裂增益，图解稀疏缺失值方向、加权分位、排序列块与磁盘 IO，并附阈值/正则化交互和确定性 Python 测试。",
+    "paper": "https://arxiv.org/abs/1603.02754",
+    "illustration": "xgboost"
+  },
+  {
+    "slug": "naive-bayes",
+    "title": "Understanding Naive Bayes",
+    "subtitle": "为什么“天真”的条件独立假设，也能成为有效的分类器？",
+    "category": "classical-ml",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 30,
+    "tags": [
+      "Naive Bayes",
+      "Bayesian Classification",
+      "Multinomial Naive Bayes",
+      "Bernoulli Naive Bayes",
+      "Laplace Smoothing",
+      "Generative Models"
+    ],
+    "summary": "以 McCallum 与 Nigam 1998 的文本事件模型比较为主线，推导贝叶斯判别、条件独立、Multinomial/Bernoulli 似然、加法平滑与对数域计算；结合论文证据、六幅机制图、交互比较及纯 Python 可复验算例。",
+    "paper": "https://www.cse.iitb.ac.in/~soumen/readings/papers/McCallumN1998event.pdf",
+    "illustration": "naive-bayes"
+  },
+  {
+    "slug": "qlora",
+    "title": "Understanding QLoRA",
+    "subtitle": "65B 如何在单张 48GB GPU 上微调？NF4、Double Quantization 与分页优化器",
+    "category": "training",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 33,
+    "tags": [
+      "QLoRA",
+      "NF4",
+      "4-bit Quantization",
+      "Double Quantization",
+      "Paged Optimizers",
+      "LoRA",
+      "PEFT"
+    ],
+    "summary": "以 QLoRA NeurIPS 2023 为主线，拆解冻结主干的 NF4 存储、BF16 计算、双重量化 0.373 bit/参数、分页优化器和 MMLU 证据；附六幅 SVG、MathML 公式、交互内存账本与纯 Python 验证。",
+    "paper": "https://arxiv.org/abs/2305.14314",
+    "illustration": "qlora"
+  },
+  {
+    "slug": "decision-tree",
+    "title": "Understanding Decision Tree",
+    "subtitle": "一连串简单的问题，如何组成分类与回归规则？从 ID3、CART 到剪枝",
+    "category": "classical-ml",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 29,
+    "tags": [
+      "Decision Tree",
+      "ID3",
+      "CART",
+      "C4.5",
+      "Information Gain",
+      "Gini Impurity",
+      "Regression Tree",
+      "Pruning"
+    ],
+    "summary": "以原始 CART、ID3 与 C4.5 文献为脉络，渐进图解熵、Gini、连续阈值、回归叶与代价复杂度剪枝，配六幅原创机制图、MathML 推导、交互阈值实验及纯 Python 可验证断言。",
+    "paper": "https://doi.org/10.1007/BF00116251",
+    "illustration": "decision-tree"
+  },
+  {
     "slug": "embeddings",
     "title": "Understanding Embeddings",
     "subtitle": "从离散 token 到连续语义空间：查表、对比学习、句向量与语义检索",

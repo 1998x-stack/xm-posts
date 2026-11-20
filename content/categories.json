@@ -3,26 +3,28 @@
     "slug": "foundations",
     "title": "基础理论",
     "english": "Foundations",
-    "description": "从优化器、正则化、词嵌入、表示学习与数学直觉出发，建立理解现代模型训练的共同语言。",
+    "description": "从线性代数、矩阵分解、优化器、正则化、词嵌入、表示学习与数学直觉出发，建立理解现代模型训练的共同语言。",
     "topics": [
       "Optimization & Optimizers",
       "Optimization & Regularization",
       "Representation",
       "Representation Learning & Embeddings",
       "Math",
-      "Word Embeddings"
+      "Word Embeddings",
+      "Linear Algebra & Matrix Factorization"
     ]
   },
   {
     "slug": "classical-ml",
     "title": "经典机器学习",
     "english": "Classical Machine Learning",
-    "description": "从最大间隔与核技巧到线性模型、树模型和集成方法，梳理经典学习算法的数学机制与论文证据。",
+    "description": "从最大间隔与核技巧，到朴素贝叶斯概率分类、线性模型、树模型和集成方法，梳理经典学习算法的数学机制与论文证据。",
     "topics": [
       "SVM & Kernels",
       "Linear Models",
       "Trees & Ensembles",
-      "Unsupervised Learning & Dimensionality Reduction"
+      "Unsupervised Learning & Dimensionality Reduction",
+      "Probabilistic Models & Bayesian Classification"
     ]
   },
   {
@@ -82,6 +84,7 @@
       "Scaling Laws / Compute-Optimal Training",
       "Fine-tuning",
       "PEFT / LoRA",
+      "Quantized Fine-tuning / QLoRA",
       "Preference Alignment",
       "RL / Policy Optimization",
       "Preference Optimization",

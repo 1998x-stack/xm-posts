@@ -1,0 +1,74 @@
+[
+  {
+    "id": "NB01",
+    "claim": "McCallum and Nigam distinguish multivariate Bernoulli from multinomial event models for text classification",
+    "kind": "paper-claim",
+    "source_url": "https://www.cse.iitb.ac.in/~soumen/readings/papers/McCallumN1998event.pdf",
+    "locator": "Abstract; Introduction; Probabilistic Framework of Naive Bayes",
+    "status": "verified",
+    "notes": "Bernoulli models occurrences and absences; multinomial models counts"
+  },
+  {
+    "id": "NB02",
+    "claim": "The 1998 paper compares both event models on five corpora and reports mean 27 percent relative error reduction for multinomial over Bernoulli in its experimental setting",
+    "kind": "experiment",
+    "source_url": "https://www.cse.iitb.ac.in/~soumen/readings/papers/McCallumN1998event.pdf",
+    "locator": "Abstract; experimental figures 1–6; Conclusions",
+    "status": "verified",
+    "notes": "Historical experimental average, not a universal or present-day expected gain"
+  },
+  {
+    "id": "NB03",
+    "claim": "The 1998 paper observes Bernoulli competitive at smaller vocabularies but multinomial generally stronger at larger vocabularies",
+    "kind": "experiment",
+    "source_url": "https://www.cse.iitb.ac.in/~soumen/readings/papers/McCallumN1998event.pdf",
+    "locator": "Introduction; Figures 1–4; Conclusions",
+    "status": "verified",
+    "notes": "Scope limited to corpus and vocabulary configurations in paper"
+  },
+  {
+    "id": "NB04",
+    "claim": "The Bayesian classifier can be optimal under zero-one classification loss despite violations of conditional independence in some settings",
+    "kind": "theory",
+    "source_url": "https://mlanthology.org/mlj/1997/domingos1997mlj-optimality/",
+    "locator": "Abstract and main theoretical results",
+    "status": "verified",
+    "notes": "Do not conflate decision optimality with posterior probability calibration"
+  },
+  {
+    "id": "NB05",
+    "claim": "Later work identifies weaknesses in multinomial naive Bayes assumptions and proposes text-classification improvements",
+    "kind": "later-work",
+    "source_url": "https://people.csail.mit.edu/jrennie/papers/icml03-nb.pdf",
+    "locator": "Abstract; method",
+    "status": "verified",
+    "notes": "Rennie et al 2003 is not the origin of naive Bayes"
+  },
+  {
+    "id": "NB06",
+    "claim": "Multinomial additive smoothing and Bernoulli absence term are standard modern parameterizations",
+    "kind": "modern-implementation",
+    "source_url": "https://scikit-learn.org/stable/modules/naive_bayes.html",
+    "locator": "Multinomial Naive Bayes and Bernoulli Naive Bayes",
+    "status": "verified",
+    "notes": "Alpha and feature encoding explicitly described"
+  },
+  {
+    "id": "NB07",
+    "claim": "Six-document example with V=8 and alpha=1 gives posterior odds promo/work 12 to 1 for free offer",
+    "kind": "toy-derivation",
+    "source_url": "https://www.cse.iitb.ac.in/~soumen/readings/papers/McCallumN1998event.pdf",
+    "locator": "Independent example implementing the paper's multinomial event-model equations",
+    "status": "derived",
+    "notes": "Promo and work both have 9 word tokens; free counts 3/0; offer counts 2/0; ratio 12, posterior 12/13"
+  },
+  {
+    "id": "NB08",
+    "claim": "Repeating a token changes multinomial scores but not Bernoulli scores for the same binary feature vector",
+    "kind": "toy-derivation",
+    "source_url": "https://www.cse.iitb.ac.in/~soumen/readings/papers/McCallumN1998event.pdf",
+    "locator": "Paper event-model definitions; independent deterministic toy implementation",
+    "status": "derived",
+    "notes": "Shown in interactive experiment and Python asserts"
+  }
+]
