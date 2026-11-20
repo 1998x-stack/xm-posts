@@ -27,3 +27,5 @@
 - [Understanding BPE](bpe/index.html)：带词频的贪心子词合并、原论文实验与 byte-level 变体；含六幅机制图、交互分词实验、MathML 与纯 Python 验证。
 
 - [Understanding Importance Sampling](importance-sampling/index.html)：稀有事件、换测度、方差缩减、SNIS、ESS 与离策略评价。
+
+- [Understanding Rearrangement Inequalities](rearrangement-inequalities/index.html)：经典重排不等式、von Neumann 迹不等式、双随机矩阵与多序列最小值；3 幅独立 SVG、交互式三序列配对、MathML 与确定性数值检查。二级专题：`Rearrangement Inequalities & Matrix Trace`。
