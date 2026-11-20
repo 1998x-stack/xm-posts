@@ -9,7 +9,7 @@
 | --- | --- | --- |
 | `foundations` | 线性代数、数值稳定、优化与正则化、表示与分词基础 | 具体的学习算法归 `classical-ml`；训练过程与分布式实现归 `training` |
 | `classical-ml` | 线性/概率模型、树与集成、核方法、聚类、降维等经典算法 | 深度网络信息路径归 `architectures` |
-| `architectures` | CNN、RNN、Transformer、门控、MoE、状态空间与高效注意力结构 | GPU 算子实现归 `systems`，线上请求管理归 `inference` |
+| `architectures` | CNN、RNN、Transformer、门控、MoE、状态空间、高效注意力，以及神经场/三维场景表示与新视角合成 | GPU 算子实现归 `systems`，线上请求管理归 `inference`；跨模态联合建模归 `multimodal` |
 | `reinforcement-learning` | MDP、Bellman、Policy Gradient、Actor–Critic、探索与搜索 | RLHF/GRPO 等模型后训练方案的训练目标与流程归 `training` |
 | `datasets` | 语料来源、清洗去重、混合、污染与数据治理 | 任务指标、Benchmark 设计与可重复性归 `evaluation` |
 | `training` | 预训练、Scaling Laws、PEFT、偏好对齐、分布式与混合精度 | 权重衰减的基础推导可以在 `foundations`，但工程训练管线在此 |
@@ -21,6 +21,14 @@
 | `agents` | ReAct、规划、工具调用、记忆、软件工程 Agent、Agent-Computer Interface、Harness Engineering、Agentic RL 与端到端评测 | 纯推理策略归 `reasoning`；检索方法归 `retrieval-rag`；PPO / GRPO 等优化算法仍按其训练方法归 `training` 或 `reinforcement-learning` |
 | `multimodal` | 视觉/语言/音频的跨模态建模与对齐 | 通用单模态 CNN 架构仍可归 `architectures` |
 | `evaluation` | 模型/任务 Benchmark、ROC/PR、消融与复现 | 训练数据质量、污染事实与许可证归 `datasets` |
+
+
+### Neural Rendering & 3D Scene Representations
+
+- 稳定专题 slug：`architectures/neural-rendering-3d-vision`。
+- 收录 NeRF、Mip-NeRF、Instant-NGP 等神经场/隐式场景表示，以及用于同一新视角合成任务的显式或混合表示对照（例如 3D Gaussian Splatting）。
+- 不新增一级 `computer-vision` 分类：当前单篇 NeRF 不足以支撑新的顶层领域；`architectures` 可承载其模型信息流与场景表示机制。若未来视觉任务、几何重建、视频理解等形成多个稳定专题，再依据实际内容规模重新评估顶层分类。
+- 术语边界：NeRF 是连续神经场 + 体渲染；3D Gaussian Splatting 是以显式各向异性高斯为基元的竞争性场景表示，不应被写成 NeRF 的一个网络变体。
 
 ## 二级分类治理
 
