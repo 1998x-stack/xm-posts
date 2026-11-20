@@ -48,7 +48,8 @@
       "Attention Head Sharing",
       "Mixture of Experts (MoE)",
       "Efficient Attention",
-      "Long-context Architectures"
+      "Long-context Architectures",
+      "Gating & Multiplicative Interactions"
     ]
   },
   {

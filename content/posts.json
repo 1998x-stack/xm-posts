@@ -1222,5 +1222,28 @@
     "summary": "精读 Yang et al. NeurIPS 2024：从普通线性注意力的记忆干扰出发，推导 Delta Rule 误差修正、矩阵转移与 WY 伪值表示，图解 Chunkwise 并行和现代 DeltaNet Block，审计 340M/1.3B 实验及局限；附四幅独立 SVG、离线 MathML、写入强度交互、Python 断言与 15 条证据账本。",
     "paper": "https://proceedings.neurips.cc/paper_files/paper/2024/hash/d13a3eae72366e61dfdc7eea82eeb685-Abstract-Conference.html",
     "illustration": "deltanet"
+  },
+  {
+    "slug": "neural-gating",
+    "title": "Understanding Neural Gating",
+    "subtitle": "从 LSTM/GRU 的记忆门到 Highway、GLU 与 SwiGLU：学习信息何时保留与更新",
+    "category": "architectures",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 35,
+    "tags": [
+      "Neural Gating",
+      "Gating & Multiplicative Interactions",
+      "LSTM",
+      "GRU",
+      "Highway Networks",
+      "GLU",
+      "SwiGLU",
+      "Gated FFN"
+    ],
+    "summary": "跨论文精读神经网络门控机制：从 sigmoid 乘法门与互补插值出发，区分 LSTM 1997/2000、GRU 更新门、Highway 直通路径、GLU 与 SwiGLU 变体，包含六幅独立 SVG、原生 MathML、交互式混合演算和标准库数值校验。",
+    "paper": "https://doi.org/10.1162/neco.1997.9.8.1735",
+    "illustration": "neural-gating"
   }
 ]
