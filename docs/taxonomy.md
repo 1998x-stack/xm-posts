@@ -18,7 +18,7 @@
 | `systems` | GPU 内存、算子、编译、通信、性能分析及底层优化 | 服务请求、token 调度、端到端 serving 归 `inference` |
 | `storage-indexing` | B+ Tree、LSM Tree、页与缓冲区管理、事务恢复、MVCC | 数据库磁盘/索引结构归此类；向量语义召回归 `retrieval-rag`，GPU 算子实现归 `systems` |
 | `retrieval-rag` | 向量/ANN、稀疏混合检索、重排序、RAG、证据落地 | Agent 任务计划与工具执行归 `agents`，embedding 基础表征归 `foundations` |
-| `agents` | ReAct、规划、工具调用、记忆、Agent 端到端评估 | 纯推理策略归 `reasoning`；检索方法归 `retrieval-rag` |
+| `agents` | ReAct、规划、模型侧工具调用、MCP 等工具集成与互操作协议、记忆、软件工程智能体和 Agent 端到端评估 | 纯推理策略归 `reasoning`；检索方法归 `retrieval-rag`；模型生成函数调用意图归 `tool-calling`，跨 Host / Server 的能力发现与协议互操作归 `tool-integration-protocols` |
 | `multimodal` | 视觉/语言/音频的跨模态建模与对齐 | 通用单模态 CNN 架构仍可归 `architectures` |
 | `evaluation` | 模型/任务 Benchmark、ROC/PR、消融与复现 | 训练数据质量、污染事实与许可证归 `datasets` |
 
@@ -40,6 +40,12 @@
 | `foundations/_topics/softmax-logsumexp` | `foundations/_topics/numerical-stability` |
 
 这些旧路径是未发布的研究占位，并非文章 URL。整理中没有迁移或删除已发布的文章路径，也没有改变现有 Systems 二级 slug。
+
+## Agent 工具调用与协议互操作的边界
+
+`agents/tool-calling` 关注模型侧接口：工具定义如何进入模型上下文、模型如何选择函数并生成参数、Host 如何接收调用意图与工具结果。`agents/tool-integration-protocols` 关注应用与能力提供方之间的协议层：Host / Client / Server 角色、能力发现、Tools / Resources / Prompts、传输、协议版本、授权和跨实现互操作。
+
+MCP 属于后者。它可以把 Server 暴露的工具映射为模型可见的 Function Calling 定义，但并不替代模型调用接口，也不负责 Agent 的规划、记忆或最终授权。未来 A2A 等 Agent-to-Agent 协议可以作为同一二级专题的相邻研究方向；只有当其知识范围和文章规模明显增长时，才考虑独立一级分类。
 
 ## 新 Post 审查与合并顺序
 
