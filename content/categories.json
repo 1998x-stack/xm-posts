@@ -12,7 +12,8 @@
       "Representation Learning & Embeddings",
       "Math",
       "Word Embeddings",
-      "Linear Algebra & Matrix Factorization"
+      "Linear Algebra & Matrix Factorization",
+      "Monte Carlo & Importance Sampling"
     ]
   },
   {
@@ -65,7 +66,8 @@
       "Continuous Control",
       "Off-policy Actor–Critic",
       "Planning & Tree Search",
-      "Exploration & Parameter Noise"
+      "Exploration & Parameter Noise",
+      "Off-policy Evaluation & Importance Sampling"
     ]
   },
   {
