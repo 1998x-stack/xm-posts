@@ -17,7 +17,7 @@ section{margin-bottom:74px;scroll-margin-top:26px}p{margin:0 0 19px;color:var(--
 .card{background:#fff;border:1px solid var(--line);border-radius:13px;padding:19px 22px;margin:23px 0}.takeaway{background:#e9f4ed;border-left:4px solid #348776;padding:16px 18px;margin:22px 0}.caution{background:#fff3e9;border-left:4px solid #c4865e;padding:16px 18px;margin:22px 0}.blue-note{background:#edf3f9;border-left:4px solid #668eaf;padding:16px 18px;margin:22px 0}
 p code,li code{background:#e8f0ed;padding:2px 5px;border-radius:3px;color:#245e57;font-size:.9em}pre{overflow-x:auto;padding:17px 19px;background:#213d45;border-radius:11px;color:#e9f7f2;font:13px/1.7 ui-monospace,SFMono-Regular,Consolas,monospace}pre code{background:none;color:inherit;padding:0;font-size:inherit}
 .table-wrap{overflow-x:auto;margin:23px 0;border:1px solid var(--line);border-radius:11px;background:white}table{width:100%;border-collapse:collapse;min-width:620px;font-size:14px}th,td{text-align:left;padding:11px 13px;border-bottom:1px solid var(--line);vertical-align:top}th{background:#eef5f0;color:#315b57}tr:last-child td{border-bottom:0}
-.formula{background:#f0f6f2;border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:22px 0;text-align:center;font-size:18px;color:#2c6258}.formula small{display:block;font-size:12px;color:#6c8581;margin-top:8px}
+.formula{background:#f0f6f2;border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:22px 0;text-align:center;font-size:18px;color:#2c6258}.formula small{display:block;font-size:12px;color:#6c8581;margin-top:8px}.math-scroll{max-width:100%;overflow-x:auto;scrollbar-gutter:stable;background:#f0f6f2;border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:22px 0}.math-scroll math{display:block;width:max-content;min-width:100%;font-size:1.2rem}
 .demo{border:1px solid #b9d8ca;background:#fff;border-radius:14px;padding:20px;margin:25px 0}.demo-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}.control{min-width:0}.control label{display:flex;justify-content:space-between;gap:12px;font-size:14px;font-weight:650;color:#315c58}.control input{display:block;width:100%;margin:10px 0 3px;accent-color:#267d6e}.control output{font-variant-numeric:tabular-nums;color:#1e786c}.presets{display:flex;gap:9px;flex-wrap:wrap;margin:17px 0}.presets button{font:650 13px system-ui;cursor:pointer;border:1px solid #27877a;border-radius:8px;padding:9px 13px;background:white;color:#1f6f65;min-height:40px}.presets button:hover{background:#eaf5ef}.presets button.primary{background:#1d796d;color:#fff}.score{display:flex;align-items:center;gap:18px;border-top:1px solid var(--line);padding-top:16px}.score output{font-size:32px;font-weight:850;color:#237d6d;font-variant-numeric:tabular-nums;min-width:96px}.score p{margin:0;font-size:13px}.status{font-size:13px;color:#6a817d;min-height:22px}.references li{overflow-wrap:anywhere}.closing{border-top:1px solid var(--line);padding-top:20px;font-size:14px;color:#69817f}
 @media(max-width:900px){.layout{grid-template-columns:minmax(0,1fr);gap:18px;padding-top:28px}.toc{position:static;max-height:none;display:flex;flex-wrap:wrap;gap:4px 12px;border-bottom:1px solid var(--line);padding-bottom:18px}.toc strong{width:100%}.toc a{padding:4px 0;border:none}.meta{margin-bottom:38px}}
 @media(max-width:540px){body{font-size:16px}.layout{padding:28px 15px 65px}.barinner{padding:12px 15px}.barinner nav{gap:10px}.figure{padding:6px}.figure figcaption{padding:9px}.card{padding:16px}.deck{font-size:19px}.demo-grid{grid-template-columns:1fr}.score{align-items:flex-start;flex-direction:column;gap:5px}.meta{gap:8px}}
@@ -116,7 +116,7 @@ p code,li code{background:#e8f0ed;padding:2px 5px;border-radius:3px;color:#245e5
 </g>
 <rect x="36" y="365" width="828" height="1" fill="#d7e4dd"/>
 <text x="450" y="382" text-anchor="middle" font-size="12" fill="#70847e">七个子系统是架构观察维度；接口层与会话持久化是跨模块支撑面</text>
-</g></svg><figcaption>图 2 · 七个子系统围绕 Agent Loop 协同。它们不是七个必须独立部署的微服务，而是七类必须被设计和管理的运行时责任。<a href="assets/02-seven-subsystems.svg">独立 SVG</a></figcaption></figure>
+</g></svg><figcaption>图 2 · Agent Loop 是七个核心子系统之一，另外六个子系统为它提供支撑；Interface Layer 与 Session Substrate 是跨模块支撑面。它们不是七个必须独立部署的微服务，而是七类必须被设计和管理的运行时责任。<a href="assets/02-seven-subsystems.svg">独立 SVG</a></figcaption></figure>
 <h3>3.1 Agent Loop：决定何时行动、何时观察、何时停止</h3>
 <p>Agent Loop 是整个 Harness 的控制骨架。它反复执行：接收当前状态 → 请求模型决策 → 解析动作 → 执行工具 → 收集观察结果 → 更新状态。它还必须定义停止条件、最大步数、超时、失败重试和中断恢复。</p>
 <pre><code>state = initialize(task, environment)
@@ -130,7 +130,13 @@ while not terminal(state):
     persist(state)
 
 return verify_and_report(state)</code></pre>
-<p>这段伪代码刻意省略了模型 API、工具协议与存储实现，但揭示了一个重要事实：<strong>Agent 的行为不是一次文本生成，而是一系列会改变外部状态的决策。</strong> 如果没有 stop condition，Agent 可能无限循环；如果没有 failure recovery，一次超时就可能终止整个任务；如果没有持久化，进程重启就会丢失关键状态。</p>
+<p>这段伪代码刻意省略了模型 API、工具协议与存储实现，但揭示了一个重要事实：<strong>Agent 的行为不是一次文本生成，而是一系列会改变外部状态的决策。</strong> 如果没有 stop condition，Agent 可能无限循环；如果没有 failure recovery，一次超时就可能终止整个任务；如果没有持久化，进程重启就会丢失关键状态。</p><div class="math-scroll" data-math-scroll role="region" tabindex="0" aria-label="Agent 在时间步 t 根据环境状态、当前上下文和持久记忆生成动作，可横向滚动">
+<math xmlns="http://www.w3.org/1998/Math/MathML" display="block" aria-label="a 下标 t 服从策略 pi 下标 theta，条件是环境状态 x 下标 t、上下文 c 下标 t 和记忆 m 下标 t">
+<mrow>
+<msub><mi>a</mi><mi>t</mi></msub><mo>∼</mo><msub><mi>π</mi><mi>θ</mi></msub><mo>(</mo><mo>·</mo><mo>|</mo>
+<msub><mi>x</mi><mi>t</mi></msub><mo>,</mo><msub><mi>c</mi><mi>t</mi></msub><mo>,</mo><msub><mi>m</mi><mi>t</mi></msub><mo>)</mo>
+</mrow></math></div>
+<p class="small">这里 xₜ 表示当前环境状态，cₜ 表示本轮选择的上下文，mₜ 表示可检索的持久记忆。公式是对 Agent 决策条件的抽象表达，并非某一篇论文的专属算法。</p>
 <h3>3.2 LLM Integration：模型接口不只是发一个 HTTP 请求</h3>
 <p>这一层负责模型供应商协议、消息格式、工具调用 schema、模型路由、缓存、推理参数、流式响应以及不同模型能力的兼容。不同模型可能在工具调用格式、上下文长度、并行调用和结构化输出上存在差异。若把这些差异散落在业务代码里，Harness 会变得难以升级。</p>
 <p>更深一层的问题是 model–agent co-design：模型升级后，哪些能力已经内化到模型本身？哪些能力仍需要外部 scaffold？这决定了 Harness 应该保留什么、移除什么。</p>
@@ -146,7 +152,7 @@ return verify_and_report(state)</code></pre>
 <h3>3.6 Orchestration：多 Agent 不是默认答案</h3>
 <p>Orchestration 负责拆分任务、分配角色、传递结构化工件、管理并行执行与冲突。Planner、Generator、Evaluator 是一种常见模式，但每增加一个 Agent，就增加上下文同步、工具权限、协调延迟和成本。只有当角色分离带来的收益超过协调成本时，多 Agent 才值得采用。</p>
 <h3>3.7 Extensibility：Skills、Hooks、MCP 与插件扩展</h3>
-<p>扩展层让用户能够添加新工具、新工作流和领域知识。Skills 通常以可渐进读取的说明和资源文件提供能力；Hooks 在特定事件前后执行确定性逻辑；MCP 提供标准化的工具或资源连接。扩展机制必须同时考虑来源可信度、版本、权限、审计和回滚。</p>
+<p>扩展层让用户能够添加新工具、新工作流和领域知识。Anthropic 对 Agent Skills 的工程介绍将 Skill 描述为包含 SKILL.md、脚本和资源的目录，并通过渐进式披露按需加载更深层说明；这使通用 Agent 可以在不把所有领域知识塞进初始上下文的前提下获得专门能力。[9] Hooks 可在特定事件前后执行确定性逻辑；MCP 提供标准化的工具或资源连接。扩展机制必须同时考虑来源可信度、版本、权限、审计和回滚。</p>
 <p>七个子系统之外，研究还特别强调两个横切面：<strong>Interface Layer</strong>（CLI、TUI、IDE、SDK、HTTP 等入口）与 <strong>Session Substrate</strong>（对话轨迹、状态持久化、恢复、分叉和回放）。它们不一定是独立模块，却会影响几乎所有子系统。[6]</p>
 </section>
 
@@ -171,7 +177,7 @@ return verify_and_report(state)</code></pre>
 
 <section id="openai"><h2>05 · OpenAI：把仓库知识变成 Agent 的系统记录</h2>
 <p>OpenAI 于 2026 年 2 月发布的《Harness engineering: leveraging Codex in an agent-first world》，讲述了一个从空 Git 仓库出发、以 Codex Agent 为主要执行者构建内部软件产品的工程实验。[1]</p>
-<p>文章描述：项目在五个月左右发展到约一百万行代码，累计打开并合并约 1,500 个 Pull Request；团队最初为三名工程师，文中报告的平均吞吐量约为每位工程师每天 3.5 个 PR。作者还估计，整个产品的构建时间约为手工编写代码所需时间的十分之一。<strong>这些是 OpenAI 对其内部项目的工程自述，不是独立控制实验，也不应直接外推为其他团队的生产率承诺。</strong></p>
+<p>文章描述：项目在五个月左右发展到约一百万行代码，累计打开并合并约 1,500 个 Pull Request；团队最初为三名工程师，文中报告的平均吞吐量约为每位工程师每天 3.5 个 PR。作者还估计，整个产品的构建时间约为手工编写代码所需时间的十分之一。<strong>这些是 OpenAI 对其内部项目的工程自述，不是独立控制实验，也不应直接外推为其他团队的生产率承诺。</strong></p><p>原文还明确说明，产品逻辑、测试、CI 配置、文档、可观测性和内部开发工具都由 Codex 生成；团队成员没有直接手工编写代码。人类并未退出工程流程，而是把工作重心转移到目标设定、环境设计、反馈回路和结果验收。[1]</p>
 <h3>5.1 人类的角色从“写代码”转向“设计环境”</h3>
 <p>文章中有一句很值得记住的话：<strong>Humans steer. Agents execute.</strong> 这并不是说人类不再负责工程，而是工程师的主要工作从逐行实现，转向描述意图、设计工具、暴露上下文、定义架构边界和构建反馈闭环。</p>
 <p>团队早期遇到的瓶颈，并不只是模型写代码能力不足，而是环境没有被充分定义。模型不知道去哪里找信息，不知道哪些抽象可以复用，也没有足够清晰的工具和验证流程。因此，工程师遇到失败时不只是让模型“再试一次”，而是追问：<strong>缺失了什么能力？怎样让这项能力对 Agent 可见，并且能被机械执行？</strong></p>
@@ -441,6 +447,7 @@ Evidence:
 <li>Paul Barbaste, Tristan Darrigol, Germain Vu &amp; Tom Wiltberger. <a href="https://arxiv.org/abs/2609.00006">Harness Engineering: Anatomy, Architecture, and Evolution of Coding Agents</a>. arXiv:2609.00006, 2026-07-15. 研究预印本：十一套系统的源码分析、七大子系统与扩展机制。</li>
 <li>Yang et al. <a href="https://arxiv.org/abs/2405.15793">SWE-agent: Agent-Computer Interfaces Enable Automated Software Engineering</a>. NeurIPS 2024. 重点：ACI 如何改善模型与软件环境的交互。</li>
 <li>Yao et al. <a href="https://arxiv.org/abs/2210.03629">ReAct: Synergizing Reasoning and Acting in Language Models</a>. ICLR 2023. 重点：推理、行动与环境观察的交替循环。</li>
+<li>Anthropic Engineering. <a href="https://www.anthropic.com/research/equipping-agents-for-the-real-world-with-agent-skills">Equipping agents for the real world with Agent Skills</a>. 2025-10-16. 重点：SKILL.md、脚本与资源的渐进式披露和可组合扩展。</li>
 </ol>
 <p class="closing">建议学习路径：<a href="../react/">ReAct</a> → <a href="../swe-agent/">SWE-agent / ACI</a> → <a href="../agent-memory-components/">Agent Memory</a> → 本文 Harness Engineering。继续探索：<a href="../../../categories/agents/">Agents &amp; Tool Use</a>。</p>
 </section>
