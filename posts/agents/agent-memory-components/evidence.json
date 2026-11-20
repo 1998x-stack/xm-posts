@@ -1,0 +1,88 @@
+[
+  {
+    "id": "E01",
+    "kind": "publication",
+    "claim": "Anthropic Engineering article published November 6, 2026, by Lance Martin",
+    "source_url": "https://www.anthropic.com/research/components-of-agent-memory",
+    "locator": "Publication header; Authors & acknowledgements",
+    "status": "verified",
+    "notes": "Original engineering article; not a peer-reviewed research paper"
+  },
+  {
+    "id": "E02",
+    "kind": "method",
+    "claim": "Memory hierarchy includes transcripts, memory notes, linked representations, and injected context; dreaming can refine layers",
+    "source_url": "https://www.anthropic.com/research/components-of-agent-memory",
+    "locator": "Introduction; Figure 1; Memory notes",
+    "status": "verified",
+    "notes": "Teaching graphics are independently designed, not reproductions"
+  },
+  {
+    "id": "E03",
+    "kind": "definition",
+    "claim": "Article excludes model-weight updates, within-session in-context learning, and compaction from its agent-memory definition",
+    "source_url": "https://www.anthropic.com/research/components-of-agent-memory",
+    "locator": "Memory notes",
+    "status": "verified"
+  },
+  {
+    "id": "E04",
+    "kind": "result",
+    "claim": "CL-Bench database mean reward Opus 5 baseline 0.564 vs memory 0.828; Sonnet 4.6 baseline 0.330 vs memory 0.364",
+    "source_url": "https://www.anthropic.com/research/components-of-agent-memory",
+    "locator": "Figure 3 caption; Memory can be a prediction about what the future will need",
+    "status": "verified",
+    "notes": "Scope restricted to Anthropic's reported database task"
+  },
+  {
+    "id": "E05",
+    "kind": "result",
+    "claim": "In Pokémon navigation experiment correcting a wrong note via dreaming led to target city at cumulative action 1,935 in a reported run",
+    "source_url": "https://www.anthropic.com/research/components-of-agent-memory",
+    "locator": "Dreaming can correct memory; Figure 8",
+    "status": "verified",
+    "notes": "Single described setup; not generalized"
+  },
+  {
+    "id": "E06",
+    "kind": "result",
+    "claim": "In 25-question document-corpus experiment wiki+search scored from 54 to 61 percent as wiki grew; search-only about 53 percent",
+    "source_url": "https://www.anthropic.com/research/components-of-agent-memory",
+    "locator": "Dreaming can build new memory representations; Figure 10",
+    "status": "verified",
+    "notes": "Specific grading criterion and corpora; not a universal RAG effect"
+  },
+  {
+    "id": "E07",
+    "kind": "limitation",
+    "claim": "In one LAB experiment wiki grew beyond source size; in some tasks wiki gave no clear gain over direct search",
+    "source_url": "https://www.anthropic.com/research/components-of-agent-memory",
+    "locator": "Dreaming can build new memory representations; Figures 11-12",
+    "status": "verified"
+  },
+  {
+    "id": "E08",
+    "kind": "implementation",
+    "claim": "Article reports Claude Code auto memory loads first 200 lines or 25KB of MEMORY.md header",
+    "source_url": "https://www.anthropic.com/research/components-of-agent-memory",
+    "locator": "Dreaming can promote notes up the memory hierarchy",
+    "status": "verified",
+    "notes": "Version-specific product detail"
+  },
+  {
+    "id": "E09",
+    "kind": "pedagogy",
+    "claim": "Utility equation, API path example, four SVG teaching graphics, and Python reconcile toy are author-created abstractions",
+    "source_url": "https://www.anthropic.com/research/components-of-agent-memory",
+    "locator": "Independent educational adaptation; not an Anthropic method formula",
+    "status": "illustrative"
+  },
+  {
+    "id": "E10",
+    "kind": "engineering",
+    "claim": "Provenance, expiry, access control and prompt-injection isolation are additional engineering recommendations, not measured outcomes",
+    "source_url": "https://www.anthropic.com/research/components-of-agent-memory",
+    "locator": "Author's additional guidance / outside reported experiments",
+    "status": "illustrative"
+  }
+]

@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="zh-CN"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light"><meta name="description" content="Agent Memory 2026 工程解读：从日志、记忆笔记、知识索引到注入上下文，理解 dreaming 如何纠错、整理与检索跨会话经验；核对 Anthropic 实验、数学抽象与可运行教学例子。">
+<link rel="canonical" href="https://1998x-stack.github.io/xm-posts/posts/agents/agent-memory-components/">
+<link rel="alternate" type="application/rss+xml" title="xm-posts RSS" href="../../../feed.xml">
+<title>Understanding Agent Memory · xm-posts</title>
+<style>
+:root{--bg:#f3f7f5;--paper:#fffefb;--ink:#25464b;--body:#466366;--mute:#668184;--line:#d7e3de;--green:#237d6d;--amber:#aa653d}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.82 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}a{color:#176c70;text-underline-offset:4px}a:hover{color:#9a5c39}a:focus-visible,button:focus-visible,[tabindex]:focus-visible{outline:3px solid #c07f50;outline-offset:3px}
+.skip{position:absolute;top:-120px;left:12px;padding:9px;background:#153f44;color:#fff;z-index:4}.skip:focus{top:10px}
+.sitebar{background:var(--paper);border-bottom:1px solid var(--line)}.barinner{max-width:1200px;margin:auto;padding:11px 20px;display:flex;align-items:center;justify-content:space-between;gap:16px}.brand{color:#24484b;text-decoration:none;font-size:22px;font-weight:850;letter-spacing:-.055em}.brand b{color:var(--amber)}.barinner nav{display:flex;gap:17px;flex-wrap:wrap;font-size:13px}
+.layout{max-width:1200px;margin:auto;padding:54px 22px 85px;display:grid;grid-template-columns:224px minmax(0,824px);gap:48px}.toc{align-self:start;position:sticky;top:18px;max-height:92vh;overflow-y:auto}.toc strong{font:700 12px system-ui;letter-spacing:.13em;color:#678783}.toc a{display:block;border-left:2px solid var(--line);padding:6px 10px;text-decoration:none;color:#648083;font-size:12px}.toc a:hover{border-left-color:var(--green)}main,article{min-width:0}h1{font-size:clamp(37px,5.7vw,65px);letter-spacing:-.06em;line-height:1.09;margin:12px 0 17px}h2{font-size:clamp(25px,3vw,33px);line-height:1.3;letter-spacing:-.03em;margin:0 0 17px}h3{font-size:20px;line-height:1.5;margin:26px 0 10px}header .eyebrow{font:750 12px system-ui;letter-spacing:.16em;color:var(--green)}.deck{font-size:21px;color:#426467;line-height:1.65}.meta{display:flex;flex-wrap:wrap;gap:14px;font-size:12px;color:#69817f;border-top:1px solid var(--line);padding-top:15px;margin:25px 0 62px}
+section{margin-bottom:73px;scroll-margin-top:26px}p{margin:0 0 19px;color:var(--body)}strong{color:#254b4a}ul,ol{padding-left:25px;color:var(--body)}li{margin:8px 0}.lead{font-size:19px;color:#335659}.figure{margin:24px 0 30px;padding:13px;border:1px solid var(--line);border-radius:13px;background:white;box-shadow:0 15px 35px #21594a0a}.figure img,.figure svg{display:block;width:100%;height:auto}.figure figcaption{font-size:13px;color:#637f7d;padding:8px 7px 2px;line-height:1.65}.card{background:#fff;border:1px solid var(--line);border-radius:13px;padding:19px 22px;margin:23px 0}.takeaway{background:#e9f4ed;border-left:4px solid #348776;padding:16px 18px;margin:22px 0}.caution{background:#fff3e9;border-left:4px solid #c4865e;padding:16px 18px;margin:22px 0}
+.inline-code,code{font-size:.9em}p code,li code{background:#e8f0ed;padding:2px 5px;border-radius:3px}pre{overflow-x:auto;padding:17px 19px;background:#213d45;border-radius:11px;color:#e9f7f2;font:13px/1.65 ui-monospace,Consolas,monospace}pre code{font-size:inherit}.mathbox{background:#f0f6f2;border:1px solid var(--line);border-radius:12px;padding:15px 18px;margin:23px 0}.math-scroll{overflow-x:auto;max-width:100%;scrollbar-gutter:stable}.math-scroll math[display=block]{display:block;width:max-content;min-width:100%;font-size:1.12rem;font-family:"Cambria Math",serif}.mathbox small{display:block;color:#6c8581;margin-top:8px;font-size:12px}
+.table-wrap{overflow-x:auto;margin:23px 0;border:1px solid var(--line);border-radius:11px}table{width:100%;border-collapse:collapse;min-width:580px;font-size:14px}th,td{text-align:left;padding:11px 13px;border-bottom:1px solid var(--line);vertical-align:top}th{background:#eef5f0}tr:last-child td{border-bottom:0}
+.controls{display:flex;gap:10px;flex-wrap:wrap}.controls button{font:600 14px system-ui;cursor:pointer;background:#fff;color:#206e66;border:1px solid #2e897c;border-radius:9px;padding:10px 16px;min-height:43px}.controls button:hover,.controls button:focus-visible{background:#eaf6f0}.controls button:disabled{opacity:.5;cursor:not-allowed}.trace{background:#f1f6f4;border:1px solid #d7e5dd;border-radius:9px;padding:13px 17px;min-height:136px}.trace p{margin:0 0 9px}.trace p:last-child{margin-bottom:0}.refs li{overflow-wrap:anywhere}.end{border-top:1px solid var(--line);padding-top:20px;font-size:13px;color:#69817f}
+@media(max-width:880px){.layout{grid-template-columns:minmax(0,1fr);gap:18px;padding-top:28px}.toc{position:static;max-height:none;display:flex;flex-wrap:wrap;gap:4px 12px;border-bottom:1px solid var(--line);padding-bottom:18px}.toc strong{width:100%}.toc a{padding:4px 0;border:none}.meta{margin-bottom:37px}}
+@media(max-width:480px){body{font-size:16px}.layout{padding:28px 15px 65px}.barinner{padding:12px 15px}.barinner nav{gap:10px}.figure{padding:5px}.figure figcaption{padding:9px}.card{padding:16px}.deck{font-size:19px}.mathbox{padding:11px}.meta{gap:8px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+@media print{body{background:#fff;color:#000}.sitebar,.toc,.controls,.skip{display:none!important}.layout{display:block;max-width:none;padding:0}.figure,.card,.mathbox{box-shadow:none;break-inside:avoid}section{margin-bottom:30px}h1{font-size:35px}a{color:#123}}
+</style></head>
+<body><a class="skip" href="#main">跳至正文</a><header class="sitebar"><div class="barinner"><a class="brand" href="../../../">xm<b>.</b>posts</a><nav aria-label="网站导航"><a href="../../../">首页</a><a href="../../../topics/">知识地图</a><a href="../../../archive/">归档</a></nav></div></header>
+<div class="layout"><nav class="toc" aria-label="本文目录"><strong>READING MAP</strong>
+<a href="#problem">01 为什么需要记忆</a><a href="#layers">02 四层记忆</a><a href="#verify">03 Dreaming 与纠错</a><a href="#retrieve">04 检索与知识图</a><a href="#math">05 数学与设计权衡</a><a href="#results">06 证据与实验</a><a href="#demo">07 交互教学实验</a><a href="#limits">08 局限与工程实践</a><a href="#sources">09 原始资料</a></nav>
+<main id="main"><article><header><p class="eyebrow">AGENTS / MEMORY · ENGINEERING DEEP DIVE</p><h1>Understanding Agent Memory</h1><p class="deck">智能体需要记住的，并不是所有发生过的事情。它真正需要的是：<strong>可核对的经验、适时可检索的知识，以及一份足够小的下一次行动提示。</strong></p>
+<div class="meta"><span>来源：Anthropic Engineering · 2026-11-06</span><span>内容类型：工程技术解读（非同行评审论文）</span><span>主分类：Agents / Memory</span><span>约 22 分钟</span></div></header>
+<section id="problem"><h2>01 · 为什么让 Agent “全都记住”反而会出错？</h2>
+<p class="lead">想象一个跨越三十次会话的软件维护智能体。第一天它读到旧 API 使用 <code>/v1</code>；第五天团队改成 <code>/v2</code>；第六天它仍按旧笔记重试失败。问题不是“它没有记忆”，而是<strong>记忆把已失效的事实包装成了可信指导</strong>。</p>
+<p>普通对话的上下文会随着窗口结束而丢失；持久记忆则能跨会话保存，但引入三个新问题：哪些事件值得写入？旧记忆如何被纠正？下一次会话应该预先加载多少？Anthropic 在 2026 年 11 月的工程文章中，用 CL-Bench、游戏和知识库检索等实验探索这些问题。<a href="#sources">[1]</a></p>
+<div class="takeaway"><strong>最重要的区分：</strong>会话中的上下文不是跨会话记忆；模型参数变化不是这里讨论的记忆；压缩旧对话也不等同于可检索、可维护的长期记忆。</div>
+<figure class="figure"><svg viewBox="0 0 810 172" role="img" aria-label="旧会话与新会话之间，持久存储而非模型权重携带记忆"><title>跨会话记忆的边界</title><rect width="810" height="172" rx="14" fill="#eef5f2"/><g font-family="Arial,Helvetica,sans-serif"><rect x="25" y="37" width="211" height="97" rx="12" fill="#fff" stroke="#c5d9cf"/><text x="54" y="78" fill="#315e5c" font-size="20" font-weight="700">Session A</text><text x="54" y="104" fill="#597874" font-size="14">observe / act / log</text><rect x="298" y="37" width="213" height="97" rx="12" fill="#dceee6" stroke="#9cc8b4"/><text x="322" y="78" fill="#266954" font-size="20" font-weight="700">Persistent store</text><text x="322" y="104" fill="#477566" font-size="14">evidence + notes</text><rect x="573" y="37" width="211" height="97" rx="12" fill="#fff" stroke="#c5d9cf"/><text x="600" y="78" fill="#315e5c" font-size="20" font-weight="700">Session B</text><text x="600" y="104" fill="#597874" font-size="14">retrieve / verify / act</text><path d="M240 84 H291 M517 84 H565" stroke="#468a76" stroke-width="4"/><path d="M283 77 l10 7 -10 7 M557 77 l10 7 -10 7" stroke="#468a76" stroke-width="3" fill="none"/></g></svg><figcaption>图 1 · 两次会话之间真正延续的是外部保存的知识材料，而非一次对话的内部上下文。</figcaption></figure>
+</section>
+<section id="layers"><h2>02 · 四层记忆：从事件日志到下次会话</h2>
+<p>原文讨论了一个有层次的设计：底部保留<strong>transcripts</strong>（可搜索的事件原始记录）；其上是模型写下的<strong>memory notes</strong>（精炼事实与策略）；更上一层是<strong>knowledge representations</strong>（如相互链接的 wiki）；最顶部是会在未来会话启动时注入的简短上下文。原文的“dreaming”会在会话间利用计算整理这些材料。<a href="#sources">[1]</a></p>
+<figure class="figure"><img src="assets/01-memory-flow.svg" width="960" height="380" alt="原创横向流程图：原始事件经过证据核验形成笔记，再建立链接索引，最后向下次会话提供简短提示"><figcaption>图 2 · 独立绘制的信息流：<strong>记录 → 验证 → 组织 → 使用</strong>。这是对工程思想的教学整理，不代表 Anthropic 系统的具体内部结构。</figcaption></figure>
+<div class="table-wrap"><table><thead><tr><th>层</th><th>负责回答的问题</th><th>典型内容</th><th>最容易犯的错</th></tr></thead><tbody>
+<tr><td>日志 transcripts</td><td>“实际发生了什么？”</td><td>时间、工具输出、操作结果</td><td>海量冗余，检索成本高</td></tr>
+<tr><td>笔记 notes</td><td>“以后可能用到什么？”</td><td>已验证规则、失败原因</td><td>早早写入错误假设</td></tr>
+<tr><td>索引 / wiki</td><td>“知识之间如何相连？”</td><td>主题页、链接、溯源</td><td>索引变成比原文还长的副本</td></tr>
+<tr><td>注入上下文</td><td>“下一轮应该先知道什么？”</td><td>当前目标、关键约束、检索入口</td><td>超长、陈旧、抢占上下文预算</td></tr>
+</tbody></table></div>
+<p>关键并不是让四层越大越好。日志可以详细，预加载区域必须克制。原文提到 Claude Code auto memory 的 <code>MEMORY.md</code> 首部加载限制，用索引指向更多材料，而不是全部塞进每次会话。这个产品实现细节有版本范围，不应泛化成所有 Agent 的统一标准。<a href="#sources">[1]</a></p>
+</section>
+<section id="verify"><h2>03 · Dreaming：把“想起来”升级为“核对过”</h2>
+<p>写记忆时，Agent 只能根据当下已看到的证据判断价值。等任务往前走，它可能发现先前理解不对。所谓 dreaming，在这里不是模型睡觉或更新权重，而是<strong>利用会话间计算回看记录、找出矛盾、修正笔记、合并重复知识</strong>。</p>
+<figure class="figure"><img src="assets/02-fact-check.svg" width="900" height="356" alt="对照图：左侧未经验证的旧 API 版本记忆驱动错误重试；右侧通过带时间的日志证据修正路径后再行动"><figcaption>图 3 · 自构的 API 升级教学例子。事实应从原始记录回溯；不能仅因某条笔记被多次复述就认为它真实。</figcaption></figure>
+<h3>原文中的实际案例</h3>
+<p>Anthropic 报告了一次 Pokémon Red 导航案例：Agent 对某处地点位置有错误记忆，反复走错；离线校验后，系统根据会话日志修正了该笔记，在对应试验运行中成功继续前进。作者还报告：使用 corrected memory 的一次运行在累计第 1,935 个动作抵达目标城市，未修正记忆的运行则未能抵达。<a href="#sources">[1, Figure 8]</a></p>
+<p>这说明“错误记忆的修正”在这个测试中很重要；<strong>它并不证明任何系统只要增加 dreaming 就会普遍变聪明</strong>。任务难度、模型版本、评价方法、生成笔记成本都会影响结果。</p>
+<div class="caution"><strong>实用安全边界：</strong>如果日志本身不可靠、权限已变化或来源被污染，dreaming 也可能把错误重写得更有条理。应保留来源、时间、冲突标志，并对高风险行动再次校验。</div>
+</section>
+<section id="retrieve"><h2>04 · Wiki 是地图，不是另一份全文拷贝</h2>
+<p>原文还研究了把分散资料整理为相互链接的 wiki。当问题需要综合多份文件，链接关系可以为搜索提供更好的路线；当答案几乎都在一个文件里时，直接搜索可能足够。<a href="#sources">[1]</a></p>
+<figure class="figure"><img src="assets/03-wiki-search.svg" width="900" height="370" alt="搜索原始文档、浏览知识索引、从来源形成答案的原创链路图"><figcaption>图 4 · 搜索负责取得证据，链接索引负责提示关系，最终答案仍应能追溯回原始文件。</figcaption></figure>
+<p>研究者在一组约 35 万个文件、约 4.2 亿 tokens 的资料上测试，逐步建设 wiki；在作者报告的 25 道题设置中，结合搜索与不断增长的 wiki，达标比例由 54% 增至 61%，单独搜索约为 53%；这些都是<strong>特定测试及计分口径</strong>，不是普适的 RAG 提升率。另一个测试中，wiki 内容甚至超过源文件体积，成为“没有真正压缩的知识地图”。<a href="#sources">[1, Figures 10–12]</a></p>
+<p>因此两种常见错误同样值得避免：只做模糊总结、缺少原文引用；以及为每段原文都建一个近似副本，以致维护成本高于直接搜索。</p>
+</section>
+<section id="math"><h2>05 · 怎么用简单数学理解记忆的取舍？</h2>
+<p>Anthropic 的原文<strong>没有提出下面的通用数学定律</strong>。以下是帮助工程设计决策的<strong>教学目标函数</strong>，用来解释为什么“存得越多越好”不成立。</p>
+<div class="mathbox"><div class="math-scroll" role="region" aria-label="记忆保留价值的教学目标函数，可横向滚动" tabindex="0" data-math-scroll="true"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block" aria-label="效用等于未来使用概率乘以受益，减去读取成本、陈旧风险与维护成本"><mrow><mi>U</mi><mo stretchy="false">(</mo><mi>m</mi><mo stretchy="false">)</mo><mo>=</mo><mi>p</mi><msub><mi></mi><mi>reuse</mi></msub><mo>·</mo><mi>B</mi><mo>-</mo><msub><mi>C</mi><mi>read</mi></msub><mo>-</mo><msub><mi>C</mi><mi>stale</mi></msub><mo>-</mo><msub><mi>C</mi><mi>maint</mi></msub></mrow></math></div><small>式 1 · 自构工程抽象，并非 Anthropic 原文公式或训练损失。</small></div>
+<p>这里 <code>m</code> 是候选记忆；<code>p_reuse</code> 是未来真的用到它的概率；<code>B</code> 是正确复用带来的收益；<code>C_read</code> 是占用 token、检索与理解成本；<code>C_stale</code> 是过时记忆造成误导的预期代价；<code>C_maint</code> 是校验与更新成本。四个项可以用统一效用单位估计，也可以只作排序的概念框架。</p>
+<h3>一个可手算的例子</h3>
+<p>假设某条“部署流程已验证”笔记有 0.6 的机会在未来用到，一次正确复用值 10 个任意效用单位；读取、失效和维护的预期成本分别是 1、3、1。那么其教学净效用为 <strong>0.6 × 10 − 1 − 3 − 1 = 1</strong>。如果同一条笔记经常过时，使失效代价升到 6，则净效用变成 −2。此时更合理的方案可能不是永久注入，而是保留一个“每次先查询当前部署配置”的索引。</p>
+<p>上述数字全部为<strong>自构示例</strong>；不能据此推断 Anthropic 产品如何打分或调度 dreaming。</p>
+</section>
+<section id="results"><h2>06 · 论文式严谨性：给工程实验标清边界</h2>
+<p>原文是团队工程文章而非同行评审的正式论文。下面只列出可以直接从其图注及正文核对的两个模型在 CL-Bench 1.0 数据库任务中的平均奖励；“有记忆”指实验允许跨会话访问持久 memory directory，不能简单理解为同一模型参数发生训练更新。<a href="#sources">[1, Figure 3]</a></p>
+<figure class="figure"><img src="assets/04-cl-bench.svg" width="900" height="385" alt="Anthropic 报告的 CL-Bench 数据库任务：Opus 5 平均奖励由 0.564 到 0.828，Sonnet 4.6 由 0.330 到 0.364"><figcaption>图 5 · 根据原文报告的具体数字独立重绘；仅比较该实验设置。不同模型的记忆收益差异很大，不能当作普遍增益。</figcaption></figure>
+<div class="table-wrap"><table><thead><tr><th>模型（原文命名）</th><th>无记忆</th><th>有记忆</th><th>绝对变化</th></tr></thead><tbody><tr><td>Claude Opus 5</td><td>0.564</td><td>0.828</td><td>+0.264</td></tr><tr><td>Claude Sonnet 4.6</td><td>0.330</td><td>0.364</td><td>+0.034</td></tr></tbody></table></div>
+<p>另一个原文实验使用 Pokémon Red 来观察哪些信息值得记住。作者描述：某旧模型倾向保存大量原始经历，而更强的模型维护较精炼的策略、目标和路径笔记。两种做法对应不同模型与单次运行，因此<strong>不能仅凭记忆文件数量直接推断因果</strong>。<a href="#sources">[1, Figures 4–5]</a></p>
+</section>
+<section id="demo"><h2>07 · 一步步体验：修复错误笔记</h2>
+<p>下面的交互完全是<strong>自构教学模拟</strong>：假设内部工具文档版本已更改，旧笔记仍指向老接口。按“下一步”查看 Agent 如何从存储笔记、读取原始日志到确认修订。即使 JavaScript 不运行，四步逻辑也保留在下面。</p>
+<div class="card"><div class="controls"><button type="button" id="demo-next">下一步：检查记忆</button><button type="button" id="demo-reset">重置</button></div><p id="demo-status" aria-live="polite">0 / 4 · 待核对</p><div class="trace" id="demo-trace" aria-live="polite"><p><strong>初始状态：</strong>已有笔记声称接口路径为 <code>/v1</code>，尚未完成来源核验。</p></div></div>
+<ol><li>读取历史笔记，发现可能过时的接口说明。</li><li>定位较新的工具日志，日志包含 <code>/v2</code> 已启用的记录。</li><li>记录冲突、对比来源日期，修订笔记并保存证据指针。</li><li>未来会话只预加载“接口详情请检索最新版配置”的提示。</li></ol>
+<p>一个可以离线运行的简化 Python 示例与确定性测试见仓库本目录的 <code>memory_demo.py</code>、<code>test_memory_demo.py</code>；它演示验证流程，不复现 Anthropic 的产品。</p>
+</section>
+<section id="limits"><h2>08 · 工程实践：何时写、何时查、何时不记</h2>
+<div class="table-wrap"><table><thead><tr><th>设计决策</th><th>建议做法</th><th>失效信号</th></tr></thead><tbody>
+<tr><td>何时保存</td><td>保存用户允许保留的偏好、验证过的规则、关键失败教训</td><td>对每次点击和短暂状态都建档</td></tr>
+<tr><td>如何关联</td><td>笔记保留来源、时间、上下游关系；大型知识库结合搜索</td><td>知识索引失去可追溯来源</td></tr>
+<tr><td>何时校验</td><td>状态敏感、反复出错、过期概率高的记忆优先核对</td><td>错误规则跨会话复用</td></tr>
+<tr><td>如何注入</td><td>短小的当前目标与索引；其他信息按需检索</td><td>固定注入内容占满上下文</td></tr>
+<tr><td>怎样删除或更新</td><td>明确版本、过期策略、权限边界和撤回机制</td><td>内容错误、过期或应被忘记</td></tr>
+</tbody></table></div>
+<p>不要把这套流程理解为“必须有一个独立 dreaming 模型”。定时离线复核、任务结束时整理、检索前校验、人工审查都可以实现类似目标；关键是对实际环境、成本、权限、隐私及可验证性的权衡。</p>
+<div class="caution"><strong>隐私与安全：</strong>会话日志可能含个人信息、凭据或不可信工具输出。保存、跨会话检索和注入前应做数据最小化、授权过滤、来源隔离、保留期管理与删除处理。不可信文档不能成为高优先级指令。</div>
+<p>阅读路径：先看 <a href="../react/">ReAct 的 Thought–Action–Observation</a> 如何产生操作轨迹，再看 <a href="../swe-agent/">SWE-agent 的 ACI</a> 如何提供可靠工具反馈，最后理解哪些轨迹值得跨会话保存。</p>
+</section>
+<section id="sources"><h2>09 · 原始资料与延伸阅读</h2><ol class="refs">
+<li><a href="https://www.anthropic.com/research/components-of-agent-memory">Lance Martin, “The components of agent memory,” Anthropic Engineering, 2026-11-06</a>。本文的主来源；模型、图号、实验指标均以原文为准。</li>
+<li><a href="https://www.anthropic.com/research/effective-harnesses-for-long-running-agents">“Effective harnesses for long-running agents,” Anthropic Engineering, 2025-11-26</a>。跨上下文窗口的代理工作交接；与长期知识库记忆不是同一概念。</li>
+<li><a href="https://www.anthropic.com/research/managed-agents">“Scaling Managed Agents: Decoupling the brain from the hands,” Anthropic Engineering, 2026-04-08</a>。Session、Harness 与 Sandbox 的系统边界。</li>
+<li><a href="https://arxiv.org/abs/2405.15793">Yang et al., “SWE-agent: Agent-Computer Interfaces Enable Automated Software Engineering,” 2024</a>。Agent 执行动作与观察的研究背景。</li>
+</ol>
+<p class="end">资料声明：本文的经验性论断、实验数值来自注明的一手来源；图 1–4、示例 API、净效用公式与交互模拟为独立教学构造，不表示原作者的产品实现，也不暗示经过同行评审。 </p></section>
+</article></main></div>
+<script>(function(){var steps=[["发现旧笔记","memory.md: endpoint = /v1（无时间或来源）"],["回溯日志","2026-11-05 的工具事件显示 endpoint = /v2"],["核验并修正","记录 /v1 与 /v2 冲突，将 /v2 与来源指针写入笔记"],["控制注入量","新会话先加载索引：接口详情请查询最新配置"]];var index=0;var next=document.getElementById("demo-next"),reset=document.getElementById("demo-reset"),trace=document.getElementById("demo-trace"),status=document.getElementById("demo-status");function render(){trace.replaceChildren();if(index===0){var line=document.createElement("p");line.textContent="初始状态：旧笔记尚未被核验。";trace.appendChild(line)}for(var i=0;i<index;i++){var p=document.createElement("p");var b=document.createElement("strong");b.textContent=(i+1)+". "+steps[i][0]+"：";p.appendChild(b);p.appendChild(document.createTextNode(steps[i][1]));trace.appendChild(p)}status.textContent=index+" / 4 · "+(index===4?"核验完成":"正在学习");next.disabled=index>=steps.length}next.addEventListener("click",function(){if(index<steps.length){index++;render()}});reset.addEventListener("click",function(){index=0;render()});render()})();</script></body></html>
