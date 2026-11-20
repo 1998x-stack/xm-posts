@@ -54,6 +54,7 @@
     "topics": [
       "Pretraining",
       "Fine-tuning",
+      "PEFT / LoRA",
       "Preference Alignment",
       "RL / Policy Optimization"
     ]

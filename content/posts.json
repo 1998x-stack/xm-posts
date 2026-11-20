@@ -179,6 +179,26 @@
     "illustration": "adam"
   },
   {
+    "slug": "lora",
+    "title": "Understanding LoRA",
+    "subtitle": "为什么只学两个低秩矩阵，就能高效适配大模型？",
+    "category": "training",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 31,
+    "tags": [
+      "LoRA",
+      "PEFT",
+      "Fine-tuning",
+      "Low-Rank Adaptation",
+      "Adapter Merging"
+    ],
+    "summary": "从冻结主干与低秩增量出发，推导矩阵形状、初始化梯度和 rank 参数预算，核对 GPT-3 原论文实验，并解释推理合并及 QLoRA 等后续方法。",
+    "paper": "https://arxiv.org/abs/2106.09685",
+    "illustration": "lowrank"
+  },
+  {
     "slug": "ppo",
     "title": "Understanding PPO",
     "subtitle": "为什么同一批经验能学多轮，却不能任意改写策略？",
