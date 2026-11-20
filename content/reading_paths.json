@@ -327,5 +327,15 @@
       "bert",
       "rag"
     ]
+  },
+  {
+    "id": "path-36",
+    "title": "从工具调用到可验证的软件工程 Agent",
+    "posts": [
+      "react",
+      "swe-agent",
+      "agent-memory-components",
+      "harness-engineering"
+    ]
   }
 ]
