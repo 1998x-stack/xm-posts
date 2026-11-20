@@ -619,5 +619,26 @@
     "summary": "精读 Ainslie et al. (EMNLP 2023)：图解 MHA/GQA/MQA 的共享结构、KV Cache 显存比例、MHA 权重均值池化与 5% 继续训练；核对 T5-XXL 数据，附交互组数实验、MathML 和纯 Python 断言。",
     "paper": "https://aclanthology.org/2023.emnlp-main.298/",
     "illustration": "gqa"
+  },
+  {
+    "slug": "chain-of-thought",
+    "title": "Understanding Chain-of-Thought Prompting",
+    "subtitle": "为什么展示中间推理步骤，能改变大语言模型的复杂任务表现？",
+    "category": "reasoning",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 31,
+    "tags": [
+      "Chain-of-Thought",
+      "Few-shot Prompting",
+      "Reasoning",
+      "In-context Learning",
+      "Test-time Compute",
+      "Ablation"
+    ],
+    "summary": "精读 Wei et al. NeurIPS 2022：从标准 few-shot 与 CoT 的机制对照、条件生成概率分解，到 PaLM/GSM8K 规模效应与严格消融；配原创 SVG、交互格式实验、证据台账和可运行 Python 断言。",
+    "paper": "https://arxiv.org/abs/2201.11903",
+    "illustration": "chain-of-thought"
   }
 ]
