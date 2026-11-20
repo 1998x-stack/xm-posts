@@ -1939,6 +1939,40 @@
     }
   },
   {
+    "slug": "harness-engineering",
+    "title": "Understanding Harness Engineering",
+    "subtitle": "从 OpenAI Codex 与 Anthropic Claude 的工程实践，拆解 Agent Runtime 的七大子系统、上下文交接、工具与权限、独立评估和持续维护",
+    "category": "agents",
+    "topic": "harness-engineering",
+    "status": "published",
+    "published": "2026-11-21",
+    "updated": "2026-11-21",
+    "reading_minutes": 38,
+    "tags": [
+      "Harness Engineering",
+      "Agent Harness",
+      "Agent Runtime",
+      "Codex",
+      "Claude Code",
+      "Context Engineering",
+      "Agent Evaluation",
+      "Observability",
+      "Tool Use",
+      "Software Engineering Agents",
+      "Verification",
+      "Agent Memory",
+      "Sandbox",
+      "Orchestration"
+    ],
+    "summary": "从模型能力与系统能力的区别出发，系统拆解 Agent Harness 的七大子系统与十一项运行时职责；对照 OpenAI Codex 的仓库知识、可观测性和熵治理，以及 Anthropic 的长任务交接、Context Reset 与 Planner–Generator–Evaluator；配六幅原创 SVG、可交互瓶颈实验、工程蓝图、失败归因矩阵和 15 项证据账本。",
+    "paper": "https://arxiv.org/abs/2609.00006",
+    "illustration": "harness-engineering",
+    "cover": {
+      "src": "assets/01-model-harness-environment.svg",
+      "caption": "Harness 连接模型与环境，把推理能力变成可观察、可验证的行动"
+    }
+  },
+  {
     "slug": "speculative-decoding",
     "title": "Understanding Speculative Decoding",
     "subtitle": "小模型先猜，大模型批量验证：为什么更快却仍保持目标采样分布？",
