@@ -104,7 +104,7 @@ assert inputs[1] == "我" and targets[1] == "爱"
 
 p_correct = [0.8, 0.7, 0.6]
 loss = -sum(log(p) for p in p_correct) / len(p_correct)
-assert abs(loss - 0.3635494) &lt; 1e-6
+assert abs(loss - 0.3635480) &lt; 1e-6
 print(round(loss, 5))  # 0.36355</code></pre>
 <p>在真实的分类头里，应该先对 <code>[B,T,V]</code> logits 计算 <code>log_softmax</code>，再针对每个标签取对应的 log probability；训练梯度从交叉熵经网络参数反向传播。<strong>argmax 产生的 token 不应被误作训练标签</strong>。</p>
 </section>
