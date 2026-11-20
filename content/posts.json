@@ -406,6 +406,112 @@
     "illustration": "lstm"
   },
   {
+    "slug": "seq2seq",
+    "title": "Understanding Seq2Seq",
+    "subtitle": "一段序列如何变成另一段？从 LSTM Encoder–Decoder 到 Attention",
+    "category": "architectures",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 32,
+    "tags": [
+      "Seq2Seq",
+      "Encoder–Decoder",
+      "LSTM",
+      "Machine Translation",
+      "Teacher Forcing",
+      "Attention",
+      "Beam Search"
+    ],
+    "summary": "以 Sutskever et al.（NeurIPS 2014）为主线，图解变长输入输出、固定向量瓶颈、LSTM 编解码、条件概率与 Teacher Forcing、源序列反转及 Beam Search；沿 Cho、Bahdanau、Luong 到 Transformer 辨析 Attention 演进，附交互示例、MathML 推导和确定性 Python 断言。",
+    "paper": "https://arxiv.org/abs/1409.3215",
+    "illustration": "seq2seq"
+  },
+  {
+    "slug": "cnn",
+    "title": "Understanding CNN",
+    "subtitle": "为什么一个小核在整张图上滑动，就能学习视觉结构？",
+    "category": "architectures",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 32,
+    "tags": [
+      "CNN",
+      "Convolutional Neural Networks",
+      "LeNet-5",
+      "Receptive Field",
+      "Weight Sharing",
+      "Computer Vision"
+    ],
+    "summary": "从局部感受野、共享核、空间形状和梯度累积，到 1998 原始 LeNet-5 的部分连接、可学习池化与 RBF 输出；配八幅独立机制图、交互滑窗、MathML 推导及纯 Python 数值验证。",
+    "paper": "https://doi.org/10.1109/5.726791",
+    "illustration": "cnn"
+  },
+  {
+    "slug": "chinchilla",
+    "title": "Understanding Chinchilla",
+    "subtitle": "固定训练预算下，参数量与数据量怎样分配？从 IsoFLOP 到 Scaling Laws",
+    "category": "training",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 32,
+    "tags": [
+      "Chinchilla",
+      "Compute-Optimal Training",
+      "Scaling Laws",
+      "Pretraining",
+      "IsoFLOP",
+      "Training Compute"
+    ],
+    "summary": "以 Hoffmann et al. (NeurIPS 2022) 为主线，拆解 6ND 预算约束、三种经验缩放方法、幂律损失解析推导、70B/1.4T 验证、部署成本边界，并提供五幅机制图、MathML 公式、交互计算器与确定性数学测试。",
+    "paper": "https://arxiv.org/abs/2203.15556",
+    "illustration": "chinchilla"
+  },
+  {
+    "slug": "gpt-1",
+    "title": "Understanding GPT-1",
+    "subtitle": "为什么预测下一个 token，能够迁移到语言理解任务？",
+    "category": "training",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 30,
+    "tags": [
+      "GPT-1",
+      "Generative Pretraining",
+      "Autoregressive Language Modeling",
+      "Decoder-only Transformer",
+      "Fine-tuning",
+      "Transfer Learning"
+    ],
+    "summary": "依据 Radford 等人 2018 年 GPT-1 原论文，拆解 BooksCorpus 自回归预训练、Decoder-only 因果 Mask、任务输入变换与联合微调目标，对照 Tables 2–5 的正负证据，并提供 5 幅 SVG、MathML 和纯 Python 数值断言。",
+    "paper": "https://cdn.openai.com/research-covers/language-unsupervised/language_understanding_paper.pdf",
+    "illustration": "gpt1"
+  },
+  {
+    "slug": "the-pile",
+    "title": "Understanding The Pile",
+    "subtitle": "为什么 22 种语料的混合，比只扩大网页抓取更有意义？",
+    "category": "datasets",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 31,
+    "tags": [
+      "The Pile",
+      "Pretraining Data",
+      "Data Mixtures",
+      "Data Curation",
+      "Bits Per Byte",
+      "Dataset Governance"
+    ],
+    "summary": "解读 Gao et al. (2020) The Pile：22 个来源与 825.18 GiB 原始语料、1,254.20 GiB 采样后有效规模、BPB 指标、受控 1.3B 模型对照，以及可交互权重实验和版权、泄漏、数据治理边界。",
+    "paper": "https://arxiv.org/abs/2101.00027",
+    "illustration": "pile"
+  },
+  {
     "slug": "naive-bayes",
     "title": "Understanding Naive Bayes",
     "subtitle": "为什么“天真”的条件独立假设，也能成为有效的分类器？",

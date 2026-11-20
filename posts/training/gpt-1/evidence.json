@@ -1,0 +1,137 @@
+[
+  {
+    "id": "G01",
+    "claim": "两阶段生成预训练与判别微调；12 tasks 9 SOTA",
+    "kind": "paper-claim",
+    "source_url": "https://cdn.openai.com/research-covers/language-unsupervised/language_understanding_paper.pdf",
+    "locator": "Abstract;§1;§4.2",
+    "status": "verified",
+    "notes": ""
+  },
+  {
+    "id": "G02",
+    "claim": "12-layer decoder-only, 768 hidden,12 heads,3072 FFN",
+    "kind": "paper-claim",
+    "source_url": "https://cdn.openai.com/research-covers/language-unsupervised/language_understanding_paper.pdf",
+    "locator": "§4.1 Model specifications p.5",
+    "status": "verified",
+    "notes": ""
+  },
+  {
+    "id": "G03",
+    "claim": "因果遮蔽与输出 token 概率，输入输出嵌入参数关系",
+    "kind": "paper-claim",
+    "source_url": "https://cdn.openai.com/research-covers/language-unsupervised/language_understanding_paper.pdf",
+    "locator": "§3.1 Eq.(1)–(2), Figure 1",
+    "status": "verified",
+    "notes": ""
+  },
+  {
+    "id": "G04",
+    "claim": "监督末尾状态与附加 LM 目标",
+    "kind": "paper-claim",
+    "source_url": "https://cdn.openai.com/research-covers/language-unsupervised/language_understanding_paper.pdf",
+    "locator": "§3.2 Eq.(3)–(5)",
+    "status": "verified",
+    "notes": ""
+  },
+  {
+    "id": "G05",
+    "claim": "NLI、Similarity 双向编码、QA 候选分别编码",
+    "kind": "paper-claim",
+    "source_url": "https://cdn.openai.com/research-covers/language-unsupervised/language_understanding_paper.pdf",
+    "locator": "§3.3 Figure 1",
+    "status": "verified",
+    "notes": ""
+  },
+  {
+    "id": "G06",
+    "claim": "BooksCorpus >7000 books and token perplexity 18.4",
+    "kind": "paper-claim",
+    "source_url": "https://cdn.openai.com/research-covers/language-unsupervised/language_understanding_paper.pdf",
+    "locator": "§4.1 pp.4–5",
+    "status": "verified",
+    "notes": ""
+  },
+  {
+    "id": "G07",
+    "claim": "BPE 40k merges, sequence512, batch64,100 epochs",
+    "kind": "paper-claim",
+    "source_url": "https://cdn.openai.com/research-covers/language-unsupervised/language_understanding_paper.pdf",
+    "locator": "§4.1 p.5",
+    "status": "verified",
+    "notes": ""
+  },
+  {
+    "id": "G08",
+    "claim": "Adam2.5e-4 warmup2000 GELU learned position embeddings",
+    "kind": "paper-claim",
+    "source_url": "https://cdn.openai.com/research-covers/language-unsupervised/language_understanding_paper.pdf",
+    "locator": "§4.1 p.5",
+    "status": "verified",
+    "notes": ""
+  },
+  {
+    "id": "G09",
+    "claim": "Fine-tuning LR6.25e-5 batch32 most tasks3 epochs lambda0.5",
+    "kind": "paper-claim",
+    "source_url": "https://cdn.openai.com/research-covers/language-unsupervised/language_understanding_paper.pdf",
+    "locator": "§4.1 p.5",
+    "status": "verified",
+    "notes": ""
+  },
+  {
+    "id": "G10",
+    "claim": "MNLI-m 82.1 vs80.6; RTE56.0 vs61.7",
+    "kind": "experiment",
+    "source_url": "https://cdn.openai.com/research-covers/language-unsupervised/language_understanding_paper.pdf",
+    "locator": "Table 2 p.6",
+    "status": "verified",
+    "notes": ""
+  },
+  {
+    "id": "G11",
+    "claim": "Story Cloze86.5 vs77.6; RACE59.0 vs53.3",
+    "kind": "experiment",
+    "source_url": "https://cdn.openai.com/research-covers/language-unsupervised/language_understanding_paper.pdf",
+    "locator": "Table 3 p.6",
+    "status": "verified",
+    "notes": ""
+  },
+  {
+    "id": "G12",
+    "claim": "CoLA45.4 vs35.0; GLUE72.8 vs68.9",
+    "kind": "experiment",
+    "source_url": "https://cdn.openai.com/research-covers/language-unsupervised/language_understanding_paper.pdf",
+    "locator": "Table 4 p.7",
+    "status": "verified",
+    "notes": ""
+  },
+  {
+    "id": "G13",
+    "claim": "Ablation 74.7/59.9/75.0/69.1, unweighted average",
+    "kind": "experiment",
+    "source_url": "https://cdn.openai.com/research-covers/language-unsupervised/language_understanding_paper.pdf",
+    "locator": "Table 5 p.8",
+    "status": "verified",
+    "notes": "Table 5 avg != official GLUE overall"
+  },
+  {
+    "id": "G14",
+    "claim": "迁移层数与 MultiNLI/RACE 趋势、zero-shot heuristic probes",
+    "kind": "paper-claim",
+    "source_url": "https://cdn.openai.com/research-covers/language-unsupervised/language_understanding_paper.pdf",
+    "locator": "Figure 2;§5 pp.7–8",
+    "status": "verified",
+    "notes": ""
+  },
+  {
+    "id": "G15",
+    "claim": "Causal attention independent numeric checks",
+    "kind": "toy-derivation",
+    "source_url": "https://cdn.openai.com/research-covers/language-unsupervised/language_understanding_paper.pdf",
+    "locator": "Eq. (1)-(5); causal_attention_demo.py",
+    "status": "derived",
+    "notes": "Not full paper reproduction"
+  }
+]
