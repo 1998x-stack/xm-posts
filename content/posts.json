@@ -394,6 +394,36 @@
     }
   },
   {
+    "slug": "reward-hacking",
+    "title": "Understanding Reward Hacking",
+    "subtitle": "为什么奖励分数越来越高，模型却可能离真正目标越来越远？",
+    "category": "training",
+    "status": "draft",
+    "published": "2026-11-21",
+    "updated": "2026-11-21",
+    "reading_minutes": 38,
+    "tags": [
+      "Reward Hacking",
+      "Specification Gaming",
+      "Goodhart's Law",
+      "Reward Model Overoptimization",
+      "RLHF",
+      "DPO",
+      "Reward Tampering",
+      "Verifier Gaming",
+      "Agent Evaluation",
+      "AI Alignment"
+    ],
+    "summary": "从代理奖励与真实目标的形式化差异出发，解释 Goodhart 定律、RLHF 奖励模型过优化、DPO 的类似退化、RLVR 验证器漏洞与 Agent 奖励篡改；包含可交互数学实验、五幅原创 SVG、论文证据与纵深防御清单。",
+    "paper": "https://papers.neurips.cc/paper_files/paper/2022/hash/3d719fee332caa23d5038b8a90e81796-Abstract-Conference.html",
+    "illustration": "reward-hacking",
+    "topic": "reward-hacking",
+    "cover": {
+      "src": "assets/02-goodhart-curve.svg",
+      "caption": "代理回报持续上升时，真实目标可能已经越过峰值"
+    }
+  },
+  {
     "slug": "adam",
     "title": "Understanding Adam",
     "subtitle": "为什么梯度需要两份记忆？从自适应矩估计到 AdamW 与收敛边界",
