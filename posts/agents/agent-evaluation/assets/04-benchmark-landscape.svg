@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="520" viewBox="0 0 1100 520" role="img" aria-labelledby="agent-eval-04-title agent-eval-04-desc">
+<title id="agent-eval-04-title">Agent Benchmark 任务环境版图</title><desc id="agent-eval-04-desc">按照评测环境分为通用助手、多轮交互、Web、桌面、软件工程、工具调用和安全任务，并列出代表性 Benchmark。</desc>
+<rect width="1100" height="520" rx="20" fill="#f8fbf9"/>
+<text x="42" y="43" font-family="system-ui,sans-serif" font-size="17" font-weight="800" fill="#247e73" letter-spacing="2">BENCHMARK LANDSCAPE</text>
+<text x="42" y="80" font-family="system-ui,sans-serif" font-size="27" font-weight="800" fill="#203b3c">先按任务环境选 Benchmark，再看分数</text>
+<g font-family="system-ui,sans-serif">
+<rect x="42" y="108" width="1016" height="58" rx="10" fill="#e9f4ee"/><text x="66" y="143" font-size="18" font-weight="800" fill="#214f49">通用助手 / Generalist</text><text x="370" y="143" font-size="16" fill="#52736b">GAIA · AgentBench</text>
+<rect x="42" y="179" width="1016" height="58" rx="10" fill="#eaf1f8"/><text x="66" y="214" font-size="18" font-weight="800" fill="#254d68">Web 浏览器 / Web</text><text x="370" y="214" font-size="16" fill="#58768c">WebArena · BrowserGym</text>
+<rect x="42" y="250" width="1016" height="58" rx="10" fill="#fff2e8"/><text x="66" y="285" font-size="18" font-weight="800" fill="#85583b">桌面操作 / Computer Use</text><text x="370" y="285" font-size="16" fill="#94715a">OSWorld</text>
+<rect x="42" y="321" width="1016" height="58" rx="10" fill="#f1f5ee"/><text x="66" y="356" font-size="18" font-weight="800" fill="#456d56">软件工程 / Coding</text><text x="370" y="356" font-size="16" fill="#5c8069">SWE-bench Verified · METR tasks</text>
+<rect x="42" y="392" width="1016" height="58" rx="10" fill="#f8eceb"/><text x="66" y="427" font-size="18" font-weight="800" fill="#89524c">工具与用户交互 / Tool + User</text><text x="430" y="427" font-size="16" fill="#98716d">BFCL · τ-bench</text>
+<rect x="42" y="463" width="1016" height="40" rx="10" fill="#203b40"/><text x="66" y="490" font-size="17" font-weight="800" fill="#eaf5ee">安全与对抗</text><text x="370" y="490" font-size="15" fill="#b7d2c6">AgentDojo · Prompt Injection / Policy Tests</text>
+</g>
+</svg>
