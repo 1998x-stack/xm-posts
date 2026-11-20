@@ -110,3 +110,11 @@ Every published Post should offer **a small, relevant next-reading route**, not 
 ## 8. Copyright and provenance
 
 The teaching *method* is inspired by Christopher Olah and Harvard NLP. All article text and diagrams must be independently constructed. Cite primary papers for substantive facts; do not assume the absence of a license implies permission to redistribute images or code. Canonical Skill upstream provenance is recorded in `skills/olah-style-paper-posts/UPSTREAM.md`.
+
+## 9. RSS and README publication contract
+
+- `content/posts.json` is the only article publication registry. The RSS feed at `/feed.xml` is **generated**, never edited manually, and includes only `status: published` entries. Maintain `docs/rss.md` as the detailed feed specification.
+- Every published entry must have truthful ISO `published` and `updated` calendar dates (`updated >= published`). Do not fabricate publication times: RSS `pubDate` serializes date-only metadata as **00:00 GMT by convention**, not as an observed moment; `dcterms:modified` preserves date precision.
+- Article permalink is the **stable RSS GUID**. Preserve it when updating the article. Do not change `feed.xml`, public article slugs, or base paths casually. Include absolute item links, summaries, category/topic labels, `atom:link rel="self"`, and HTML `application/rss+xml` autodiscovery.
+- Update `README.md` as a reader-first project guide, **not** an ever-growing manual mirror of the article manifest. Give representative reading routes; point complete inventories to generated pages and the manifests. Keep deployment instructions explicit about PR-only validation vs successful Pages deployment.
+- Required RSS QA: `python -m pytest -q tests/test_rss.py` plus full site build/validator and, after merge, actual live feed verification. Check XML parseability, unique stable GUIDs, no drafts, date semantics, link correctness and non-duplicated article-head discovery. Never claim live feed availability from local tests alone.

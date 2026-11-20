@@ -16,6 +16,7 @@ import re
 import shutil
 from urllib.parse import urlparse
 from xml.sax.saxutils import escape as X
+from xml.etree import ElementTree as ET
 
 if __package__:
     from .related_posts import enrich_article_related, load_reading_paths
@@ -57,6 +58,9 @@ def data(root:Path):
         assert isinstance(p.get('reading_minutes'),int) and p['reading_minutes']>=0,p
         assert isinstance(p.get('tags'),list) and all(isinstance(tag,str) and tag.strip() for tag in p['tags']),p
         if p['status']=='published':
+            assert re.fullmatch(r'\d{4}-\d{2}-\d{2}',p.get('updated','')),f'Missing ISO updated date: {p["slug"]}'
+            datetime.fromisoformat(p['updated'])
+            assert p['updated']>=p['published'],f'Updated before published: {p["slug"]}'
             assert p['reading_minutes']>0,p
             assert isinstance(p.get('paper'),str) and urlparse(p['paper']).scheme=='https',p
             path=root/'posts'/p['category']/p['slug']/'index.html'
@@ -363,8 +367,58 @@ def enrich_article_head(html:str,p:dict,base:str)->str:
          '<meta name="twitter:card" content="summary">'),
     ]
     additions=[value for regex,value in specs if not re.search(regex,head,re.I)]
+    # Individual paper pages also advertise the same canonical site-wide RSS feed.
+    if not re.search(r'<link\b[^>]*application/rss\+xml',head,re.I):
+        additions.append('<link rel="alternate" type="application/rss+xml" title="xm-posts RSS" href="'+H(url_join(base,'feed.xml'),quote=True)+'">')
     if not additions:return html
     return re.sub(r'</head>',lambda m:'\n'.join(additions)+'\n'+m.group(0),html,count=1,flags=re.I)
+
+
+def build_feed(categories:list,posts:list,base:str)->str:
+    """Deterministic RSS 2.0 from published manifest entries only.
+
+    Manifest dates are calendar dates, not event timestamps. RSS requires a
+    datetime for pubDate, so encode midnight UTC consistently; do not present
+    this as the actual publication time. Modified dates retain day precision.
+    """
+    atom_ns='http://www.w3.org/2005/Atom'
+    dcterms_ns='http://purl.org/dc/terms/'
+    ET.register_namespace('atom',atom_ns)
+    ET.register_namespace('dcterms',dcterms_ns)
+    rss=ET.Element('rss',{'version':'2.0'})
+    channel=ET.SubElement(rss,'channel')
+    ET.SubElement(channel,'title').text='xm-posts'
+    ET.SubElement(channel,'link').text=base
+    ET.SubElement(channel,'description').text='以图解、数学推导与论文证据理解机器学习、LLM 和系统技术。'
+    ET.SubElement(channel,'language').text='zh-cn'
+    ET.SubElement(channel,f'{{{atom_ns}}}link',{
+        'href':url_join(base,'feed.xml'),
+        'rel':'self',
+        'type':'application/rss+xml',
+    })
+
+    category_titles={c['slug']:c['title'] for c in categories}
+    topic_titles=topic_labels(categories)
+    published=(p for p in posts if p['status']=='published')
+    for p in sorted(published,key=lambda p:(p.get('updated') or p['published'],p['published'],p['slug']),reverse=True):
+        url=url_join(base,article_url(p))
+        item=ET.SubElement(channel,'item')
+        ET.SubElement(item,'title').text=p['title']
+        ET.SubElement(item,'link').text=url
+        ET.SubElement(item,'guid',{'isPermaLink':'true'}).text=url
+        ET.SubElement(item,'description').text=p['summary']
+        day=datetime.fromisoformat(p['published']).replace(tzinfo=timezone.utc)
+        ET.SubElement(item,'pubDate').text=format_datetime(day,usegmt=True)
+        ET.SubElement(item,f'{{{dcterms_ns}}}modified').text=p.get('updated') or p['published']
+        ET.SubElement(item,'category',{
+            'domain':url_join(base,f'categories/{p["category"]}/'),
+        }).text=category_titles[p['category']]
+        ET.SubElement(item,'category',{
+            'domain':url_join(base,f'categories/{p["category"]}/#topic-{p["topic"]}'),
+        }).text=topic_titles[(p['category'],p['topic'])]
+
+    ET.indent(rss,space='  ')
+    return ET.tostring(rss,encoding='utf-8',xml_declaration=True).decode('utf-8')+'\n'
 
 
 def build(root:Path,out:Path,base:str):
@@ -395,8 +449,7 @@ def build(root:Path,out:Path,base:str):
     sitemap=''.join(f'<url><loc>{X(u)}</loc></url>' for u in urls)
     write(out,'sitemap.xml','<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'+sitemap+'</urlset>')
     write(out,'robots.txt',f'User-agent: *\nAllow: /\nSitemap: {url_join(base,"sitemap.xml")}\n')
-    rss=''.join(f'<item><title>{X(p["title"])}</title><link>{X(url_join(base,article_url(p)))}</link><guid isPermaLink="true">{X(url_join(base,article_url(p)))}</guid><description>{X(p["summary"])}</description><pubDate>{format_datetime(datetime.fromisoformat(p["published"]).replace(tzinfo=timezone.utc))}</pubDate></item>' for p in sorted(published,key=lambda x:x['published'],reverse=True))
-    write(out,'feed.xml',f'<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"><channel><title>xm-posts</title><link>{X(base)}</link><description>Evidence-grounded model explainers</description>{rss}</channel></rss>')
+    write(out,'feed.xml',build_feed(categories,posts,base))
     print(json.dumps({'build':str(out),'base':base,'categories':len(categories),'published':len(published),'files':len(list(out.rglob('*')))},ensure_ascii=False))
 
 

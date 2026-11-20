@@ -10,7 +10,7 @@ from bs4 import BeautifulSoup
 LEGACY_MATH_MIGRATIONS = ["pre-ln-vs-post-ln","resnet","rope","transformer","adam","adamw","sgd","understanding-word2vec","kv-cache","pagedattention","self-consistency","ppo","flashattention","dpo","grpo","lora","rlhf"]
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/'scripts'))
-from build_site import data,build,DEFAULT_URL,article_url
+from build_site import data,build,build_home,build_feed,DEFAULT_URL,article_url
 
 def test_all_published_articles_have_semantic_math():
     categories,posts=data(ROOT)
@@ -68,13 +68,24 @@ def test_site_study_routes_paper_sources_and_article_metadata(tmp_path):
             assert len(soup.select('meta[property="'+prop+'"]'))==1,(p['slug'],prop)
         assert soup.select('meta[name="twitter:card"]'),p['slug']
 
-def test_readme_is_complete_for_published_articles():
-    _,posts=data(ROOT)
-    text=(ROOT/'README.md').read_text(encoding='utf-8')
+def test_readme_links_to_complete_generated_article_inventory():
+    """The reader-facing README links to manifest-driven indexes, not a stale manual list."""
+    categories,posts=data(ROOT)
+    readme=(ROOT/'README.md').read_text(encoding='utf-8')
+    assert 'content/posts.json' in readme
+    assert 'https://1998x-stack.github.io/xm-posts/archive/' in readme
+    assert 'https://1998x-stack.github.io/xm-posts/topics/' in readme
+    assert 'https://1998x-stack.github.io/xm-posts/feed.xml' in readme
+
+    home=build_home(categories,posts,DEFAULT_URL)
+    feed=build_feed(categories,posts,DEFAULT_URL)
     for p in posts:
         if p['status']=='published':
-            assert f'posts/{p["category"]}/{p["slug"]}/' in text,p['slug']
-    assert 'posts/reasoning/' in text
+            path=article_url(p)
+            assert f'href="{path}"' in home,p['slug']
+            assert DEFAULT_URL+path in feed,p['slug']
+        else:
+            assert DEFAULT_URL+article_url(p) not in feed,p['slug']
 
 def test_migrated_math_fractions_and_accents_are_semantically_nested():
     dpo = (ROOT/'posts/training/dpo/index.html').read_text(encoding='utf-8')
