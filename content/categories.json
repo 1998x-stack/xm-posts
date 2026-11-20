@@ -57,6 +57,7 @@
     "description": "预训练、微调、偏好对齐，以及 PPO / GRPO 等后训练强化学习与策略优化的可验证拆解。",
     "topics": [
       "Pretraining",
+      "Scaling Laws / Compute-Optimal Training",
       "Fine-tuning",
       "PEFT / LoRA",
       "Preference Alignment",
