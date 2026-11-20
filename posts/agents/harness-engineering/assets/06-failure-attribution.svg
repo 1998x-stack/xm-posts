@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 360" role="img" aria-labelledby="h6-title h6-desc">
+<title id="h6-title">Agent 失败的诊断路径</title>
+<desc id="h6-desc">从观察到的失败开始，依次检查上下文、工具、反馈与可观测性、验证、安全权限、维护熵和模型能力，避免盲目重复修改。</desc>
+<rect width="900" height="360" rx="20" fill="#f6f8f5"/>
+<g font-family="system-ui,-apple-system,Segoe UI,PingFang SC,sans-serif">
+<rect x="320" y="24" width="260" height="55" rx="12" fill="#263f46"/>
+<text x="450" y="59" text-anchor="middle" font-size="19" font-weight="750" fill="#fff">观察到失败 / 回归</text>
+<path d="M450 79V104" stroke="#678f82" stroke-width="2.5"/><path d="M441 95L450 104L459 95" fill="none" stroke="#678f82" stroke-width="2.5"/>
+<g>
+<rect x="36" y="122" width="194" height="77" rx="12" fill="#e7eff9" stroke="#a7bfd6" stroke-width="2"/>
+<rect x="253" y="122" width="194" height="77" rx="12" fill="#e4f3eb" stroke="#91bca7" stroke-width="2"/>
+<rect x="470" y="122" width="194" height="77" rx="12" fill="#fff0e4" stroke="#d8a17b" stroke-width="2"/>
+<rect x="687" y="122" width="177" height="77" rx="12" fill="#f1ebfa" stroke="#b7a9d7" stroke-width="2"/>
+</g>
+<g font-size="17" font-weight="750" text-anchor="middle"><text x="133" y="153" fill="#315f83">Context</text><text x="350" y="153" fill="#236c59">Tool</text><text x="567" y="153" fill="#9b6039">Feedback</text><text x="775" y="153" fill="#65548c">Verification</text></g>
+<g font-size="12.5" text-anchor="middle" fill="#607b76"><text x="133" y="178">选错文件 / 缺约束</text><text x="350" y="178">工具缺失 / 参数错</text><text x="567" y="178">日志不清 / 无归因</text><text x="775" y="178">只声称完成 / 无证据</text></g>
+<path d="M133 200V230H350 M350 200V230 M567 200V230H350 M775 200V230H350" fill="none" stroke="#87a89b" stroke-width="2"/>
+<rect x="253" y="230" width="194" height="70" rx="12" fill="#fff" stroke="#a9cbbd" stroke-width="2"/>
+<text x="350" y="259" text-anchor="middle" fill="#2b6e5d" font-size="16" font-weight="750">归因后再恢复</text><text x="350" y="281" text-anchor="middle" fill="#607b76" font-size="12">复现 → 分类 → 修复</text>
+<rect x="470" y="230" width="194" height="70" rx="12" fill="#fff" stroke="#d5b89d" stroke-width="2"/>
+<text x="567" y="259" text-anchor="middle" fill="#94613c" font-size="16" font-weight="750">Permission / Entropy</text><text x="567" y="281" text-anchor="middle" fill="#7c6a5a" font-size="12">越权 / 残留 / 维护负担</text>
+<path d="M447 265H461 M456 256L465 265L456 274" fill="none" stroke="#c17b4d" stroke-width="2.5"/>
+<path d="M567 301V327H350V302" stroke="#c17b4d" stroke-width="2.2" stroke-dasharray="6 5" fill="none"/>
+<text x="450" y="348" text-anchor="middle" fill="#8a664c" font-size="13">每次修复都应留下可复核的证据与状态</text>
+</g></svg>

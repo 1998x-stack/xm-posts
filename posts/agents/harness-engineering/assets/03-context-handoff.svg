@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 350" role="img" aria-labelledby="h3-title h3-desc">
+<title id="h3-title">长任务中的上下文交接</title>
+<desc id="h3-desc">Initializer 创建运行脚本、功能清单和进度记录；多个 coding session 每次读取状态、完成一个增量任务、运行端到端测试、提交并写入交接记录。</desc>
+<rect width="900" height="350" rx="20" fill="#f6f8f5"/>
+<g font-family="system-ui,-apple-system,Segoe UI,PingFang SC,sans-serif">
+<rect x="34" y="48" width="188" height="230" rx="15" fill="#e8f0fa" stroke="#a8c0d4" stroke-width="2"/>
+<text x="128" y="84" text-anchor="middle" fill="#315f83" font-size="20" font-weight="750">Initializer</text>
+<text x="128" y="120" text-anchor="middle" fill="#4c6b80" font-size="14">init.sh</text><text x="128" y="148" text-anchor="middle" fill="#4c6b80" font-size="14">feature_list.json</text><text x="128" y="176" text-anchor="middle" fill="#4c6b80" font-size="14">progress log</text><text x="128" y="204" text-anchor="middle" fill="#4c6b80" font-size="14">initial git commit</text><text x="128" y="248" text-anchor="middle" fill="#315f83" font-size="12">建立可持续工作的起点</text>
+<g fill="#e7f3eb" stroke="#8fbca7" stroke-width="2">
+<rect x="286" y="48" width="170" height="230" rx="15"/><rect x="506" y="48" width="170" height="230" rx="15"/><rect x="726" y="48" width="140" height="230" rx="15"/>
+</g>
+<g fill="#246b5b" font-size="19" font-weight="750" text-anchor="middle">
+<text x="371" y="84">Session 1</text><text x="591" y="84">Session 2</text><text x="796" y="84">Session n</text>
+</g>
+<g fill="#4b7066" font-size="14" text-anchor="middle">
+<text x="371" y="122">读 progress + git</text><text x="371" y="151">选一个 feature</text><text x="371" y="180">实现 / 测试</text><text x="371" y="209">commit + handoff</text>
+<text x="591" y="122">读最新状态</text><text x="591" y="151">检查基础功能</text><text x="591" y="180">继续下一 feature</text><text x="591" y="209">commit + handoff</text>
+<text x="796" y="122">恢复项目</text><text x="796" y="151">验证剩余项</text><text x="796" y="180">完成 / 交付</text><text x="796" y="209">证据与报告</text>
+</g>
+<g stroke="#418b78" stroke-width="3" fill="none"><path d="M223 163H277 M267 154L277 163L267 172 M457 163H497 M487 154L497 163L487 172 M677 163H717 M707 154L717 163L707 172"/></g>
+<path d="M371 284V311H796V284" stroke="#c17b4d" stroke-width="2.5" stroke-dasharray="6 5" fill="none"/>
+<text x="584" y="334" text-anchor="middle" fill="#94633f" font-size="13">Git 历史 + 结构化进度文件 = 跨窗口交接协议</text>
+</g></svg>

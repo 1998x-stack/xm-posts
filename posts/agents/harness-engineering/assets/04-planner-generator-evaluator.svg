@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 340" role="img" aria-labelledby="h4-title h4-desc">
+<title id="h4-title">Planner Generator Evaluator 三角色反馈回路</title>
+<desc id="h4-desc">Planner 将目标变成规格和验收条件，Generator 实现，Evaluator 在真实应用中通过浏览器与测试检查；不通过时将可执行的缺陷反馈给 Generator。</desc>
+<rect width="900" height="340" rx="20" fill="#f6f8f5"/>
+<g font-family="system-ui,-apple-system,Segoe UI,PingFang SC,sans-serif">
+<rect x="45" y="75" width="218" height="165" rx="16" fill="#e7eff9" stroke="#a7bfd6" stroke-width="2"/>
+<rect x="341" y="75" width="218" height="165" rx="16" fill="#e4f3eb" stroke="#91bca7" stroke-width="2"/>
+<rect x="637" y="75" width="218" height="165" rx="16" fill="#fff0e4" stroke="#d8a17b" stroke-width="2"/>
+<g font-size="23" font-weight="800" text-anchor="middle"><text x="154" y="119" fill="#315f83">Planner</text><text x="450" y="119" fill="#236c59">Generator</text><text x="746" y="119" fill="#9b6039">Evaluator</text></g>
+<g font-size="14" text-anchor="middle" fill="#4d6b77">
+<text x="154" y="157">用户意图</text><text x="154" y="182">产品规格</text><text x="154" y="207">验收条件</text>
+<text x="450" y="157">代码 / 配置</text><text x="450" y="182">按目标实现</text><text x="450" y="207">运行与修复</text>
+<text x="746" y="157">浏览器操作</text><text x="746" y="182">测试 / 状态检查</text><text x="746" y="207">独立评分与缺陷</text>
+</g>
+<g stroke="#478b79" stroke-width="3" fill="none"><path d="M265 158H331 M321 149L331 158L321 167 M561 158H627 M617 149L627 158L617 167"/></g>
+<path d="M746 244V292H450V249" stroke="#c17b4d" stroke-width="3" fill="none"/>
+<path d="M441 259L450 249L459 259" stroke="#c17b4d" stroke-width="3" fill="none"/>
+<text x="598" y="318" fill="#94633f" font-size="13" text-anchor="middle">具体缺陷、复现步骤与验收结果</text>
+<text x="450" y="44" fill="#607c75" font-size="14" text-anchor="middle">先约定“完成”的定义，再开始实现</text>
+</g></svg>
