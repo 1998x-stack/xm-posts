@@ -8,7 +8,7 @@
 
 ## 已发布文章
 
-- [Understanding SentencePiece](sentencepiece/index.html)：原始 Unicode 文本、可见空格、BPE/Unigram、动态规划、子词采样、原论文实验与纯 Python 核验；二级主题为 Tokenization & Subword Modeling。
+- [Understanding SentencePiece](sentencepiece/index.html)：原始文本、可见空格、BPE/Unigram、动态规划、子词采样、原论文实验与 Python 核验；Tokenization & Subword Modeling 二级主题。
 
 
 - [Understanding Word2Vec](understanding-word2vec/index.html)：从自监督词窗到 CBOW / Skip-gram、Negative Sampling 和词向量几何。配套 `assets/`、`evidence.json`、`code/train_sgns.py` 与测试。
@@ -24,3 +24,5 @@
 - [Understanding SVD](svd/index.html)：矩阵分解、Eckart–Young 低秩定理、PCA 与伪逆；含交互秩选择、MathML 与 NumPy 断言。
 
 - [Understanding Embeddings](embeddings/index.html)：覆盖 lookup、Word2Vec/GloVe、BERT、SBERT、SimCSE/E5、cosine 与 ANN/RAG 召回；附七幅图示、MathML、交互实验、证据与 Python 断言。所属二级主题：`Representation Learning & Embeddings`。
+
+- [Understanding BPE](bpe/index.html)：带词频的贪心子词合并、原论文实验与 byte-level 变体；含六幅机制图、交互分词实验、MathML 与纯 Python 验证。
