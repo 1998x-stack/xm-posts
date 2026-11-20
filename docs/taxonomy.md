@@ -20,7 +20,7 @@
 | `retrieval-rag` | 向量/ANN、稀疏混合检索、重排序、RAG、证据落地 | Agent 任务计划与工具执行归 `agents`，embedding 基础表征归 `foundations` |
 | `agents` | ReAct、规划、工具调用、记忆、软件工程 Agent、Agent-Computer Interface、Harness Engineering 与端到端评测 | 纯推理策略归 `reasoning`；检索方法归 `retrieval-rag`；Harness 研究模型外部的 Agent Runtime 与工程闭环 |
 | `multimodal` | 视觉/语言/音频的跨模态建模与对齐 | 通用单模态 CNN 架构仍可归 `architectures` |
-| `evaluation` | 模型/任务 Benchmark、ROC/PR、消融与复现 | 训练数据质量、污染事实与许可证归 `datasets` |
+| `evaluation` | 模型/任务 Benchmark、ROC/PR、LLM-as-a-Judge、评审器可靠性、偏差校准、消融与复现 | 训练数据质量、污染事实与许可证归 `datasets`；Agent 端到端任务执行评估归 `agents` |
 
 ## 二级分类治理
 
@@ -40,6 +40,10 @@
 | `foundations/_topics/softmax-logsumexp` | `foundations/_topics/numerical-stability` |
 
 这些旧路径是未发布的研究占位，并非文章 URL。整理中没有迁移或删除已发布的文章路径，也没有改变现有 Systems 二级 slug。
+
+## LLM-as-a-Judge 专题边界
+
+`evaluation/llm-as-a-judge` 收录将 LLM 用作评审器的评价方法与可靠性研究：评价 rubric、pointwise / pairwise / listwise 判断、critique / verifier、人工一致性、位置与长度偏差、校准、对抗鲁棒性，以及评审器自身的 meta-evaluation。若重点是 Agent 在工具、环境和多步骤任务中的端到端成功率，主专题仍归 `agents/agent-evaluation`；若重点是偏好标签如何进入 Reward Model / RLHF / DPO 训练，则主专题归 `training/rlhf` 或 `training/preference-optimization`，并用 tags 关联本专题。
 
 ## 新 Post 审查与合并顺序
 
