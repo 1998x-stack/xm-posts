@@ -34,6 +34,10 @@ jobs:
         run: python scripts/ci_metrics.py run --name skill-mirrors -- python scripts/sync_skills.py --check
       - name: Run tests
         run: python scripts/ci_metrics.py run --name pytest -- python -m pytest -q
+      - name: Validate CLIP article draft
+        run: python skills/olah-style-paper-posts/scripts/validate.py posts/multimodal/clip/index.html
+      - name: Browser-check CLIP article draft
+        run: python skills/olah-style-paper-posts/scripts/browser_check.py posts/multimodal/clip/index.html --output reports/clip
       - name: Audit inline and standalone SVG integrity
         run: python scripts/ci_metrics.py run --name svg-audit -- python scripts/audit_svg.py
       - name: Build static site

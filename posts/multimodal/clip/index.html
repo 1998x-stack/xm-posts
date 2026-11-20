@@ -1,0 +1,445 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="从双编码器、图文对比学习与 N×N 相似度矩阵出发，推导 CLIP 的对称交叉熵、零样本分类与 prompt 设计，并核对原论文实验和局限。">
+<meta name="color-scheme" content="light">
+<link rel="canonical" href="https://1998x-stack.github.io/xm-posts/posts/multimodal/clip/">
+<title>Understanding CLIP · xm-posts</title>
+<style>
+:root{--canvas:#f4f7f5;--paper:#fffefa;--ink:#263f45;--muted:#647c80;--line:#dbe7e1;--teal:#147f80;--terra:#c06e4c;--blue:#477ca6;--purple:#7461ba;--green:#3f9474}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--canvas);color:var(--ink);font:17px/1.88 system-ui,-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}
+a{color:var(--teal);text-underline-offset:4px}
+a:hover{color:var(--terra)}
+a:focus-visible,button:focus-visible,input:focus-visible,[tabindex]:focus-visible{outline:3px solid #d58c53;outline-offset:3px}
+.skip{position:absolute;top:-90px;left:12px;z-index:10;background:#173e42;color:white;padding:10px 14px;border-radius:7px}
+.skip:focus{top:8px}
+.site-head{background:var(--paper);border-bottom:1px solid var(--line)}
+.site-inner{max-width:1280px;margin:auto;padding:12px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.brand{font-size:22px;font-weight:850;letter-spacing:-.05em;text-decoration:none;color:var(--ink)}
+.brand b{color:var(--terra)}
+.site-links{display:flex;gap:16px;flex-wrap:wrap;font-size:13px}
+.layout{max-width:1280px;margin:auto;padding:48px 24px 90px;display:grid;grid-template-columns:210px minmax(0,850px);gap:48px}
+.toc{position:sticky;top:18px;align-self:start;max-height:92vh;overflow:auto}
+.toc strong{display:block;margin-bottom:12px;color:var(--teal);font-size:11px;letter-spacing:.13em}
+.toc a{display:block;padding:6px 10px;border-left:2px solid var(--line);color:#607a7e;text-decoration:none;font-size:12px;line-height:1.55}
+.toc a:hover{background:#e8f2ed;border-color:var(--teal)}
+main,article{min-width:0}
+.eyebrow{font-size:12px;font-weight:800;color:var(--teal);letter-spacing:.14em}
+h1{margin:15px 0 18px;font-size:clamp(42px,5.3vw,70px);line-height:1.08;letter-spacing:-.055em;overflow-wrap:anywhere}
+h1 em{font-style:normal;color:var(--teal)}
+.dek{font-size:22px;line-height:1.6;color:#4b686e;max-width:780px}
+.meta{display:flex;gap:10px 20px;flex-wrap:wrap;margin:24px 0;border-top:1px solid var(--line);padding-top:13px;color:#70868a;font-size:12px}
+.insight{margin:22px 0;padding:18px 22px;border:1px solid #c2ddd1;border-radius:13px;background:#edf6f0;color:#315c50}
+.insight strong{color:#24634f}
+section{margin-top:64px;scroll-margin-top:22px}
+h2{font-size:clamp(25px,3vw,34px);line-height:1.35;letter-spacing:-.03em;margin:0 0 20px}
+h3{font-size:20px;line-height:1.45;margin:28px 0 10px}
+p{margin:0 0 17px;color:#3d5960}
+.lead{font-size:19px;color:#2d6562}
+strong{color:#245f5c}
+ul,ol{padding-left:23px}
+li{margin:8px 0;color:#3d5960}
+figure{margin:25px 0 30px;padding:12px 12px 0;border:1px solid var(--line);border-radius:14px;background:#fff;max-width:100%;min-width:0}
+figure svg{display:block;width:100%;height:auto;max-width:100%}
+figcaption{padding:12px 8px 14px;border-top:1px solid #edf1ed;color:#607a7e;font-size:13px;line-height:1.7}
+.figure-title{padding:3px 5px 10px;color:var(--teal);font-size:11px;font-weight:800;letter-spacing:.1em}
+.callout{margin:22px 0;padding:15px 19px;border-left:4px solid var(--terra);background:#fff3e9;color:#76513d;font-size:15px}
+.note{padding:14px 17px;border:1px solid #e3e8e2;border-radius:10px;background:#fff;font-size:14px;color:#62777a}
+.two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:22px 0}
+.two>div{min-width:0;padding:15px;border:1px solid var(--line);border-radius:12px;background:#fff}
+.two h3{margin:0 0 7px;font-size:17px}
+.two p{margin:0;font-size:14px}
+.math-equation{max-width:100%;min-width:0;margin:22px 0;padding:13px 14px;border-radius:10px;background:#edf4ef;display:flex;align-items:center;gap:10px}
+.math-scroll{flex:1;min-width:0;max-width:100%;overflow-x:auto;overflow-y:hidden}
+.math-scroll math[display=block]{display:block;width:max-content;min-width:100%;font-family:"STIX Two Math","Cambria Math",serif;font-size:1.17rem}
+.math-scroll:focus-visible{outline:3px solid var(--teal);outline-offset:2px}
+.eq-num{flex:none;color:#70878a;font-size:12px}
+.table-wrap,.matrix-wrap,.code-wrap{max-width:100%;min-width:0;overflow-x:auto;margin:20px 0}
+table{width:100%;border-collapse:collapse;font-size:14px}
+.data-table{min-width:650px}
+th,td{border:1px solid var(--line);padding:11px 13px;text-align:left;vertical-align:top}
+th{background:#edf4ef;color:#365b58}
+td{background:#fff;color:#405c61}
+code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.9em}
+pre{margin:18px 0;padding:18px 20px;max-width:100%;overflow:auto;border-radius:11px;background:#203f45;color:#f1f6f3;font:13px/1.75 ui-monospace,SFMono-Regular,Consolas,monospace}
+pre code{font-size:inherit}
+.experiment{margin:28px 0;padding:20px;border:1px solid #c5ddd3;border-radius:14px;background:#fff}
+.experiment h3{margin:0 0 8px}
+.controls{display:flex;gap:9px;flex-wrap:wrap;margin:17px 0}
+.controls button{border:1px solid #a8cfc2;border-radius:8px;padding:9px 13px;background:#fff;color:#276d65;font:600 14px system-ui;cursor:pointer}
+.controls button[aria-pressed=true]{background:var(--teal);border-color:var(--teal);color:#fff}
+.matrix{min-width:530px;table-layout:fixed;text-align:center}
+.matrix th,.matrix td{text-align:center;padding:12px 8px}
+.matrix td{font-weight:750}
+.matrix td.positive{background:#d9eee2;color:#27644d}
+.matrix td.negative{background:#f8e9e3;color:#8a5b4b}
+.matrix td.focus{outline:3px solid var(--teal);outline-offset:-4px}
+.status{margin:12px 0 0;padding:12px 14px;border-radius:8px;background:#edf6f0;color:#315c50;font-size:14px}
+.range-row{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:14px;margin:18px 0}
+.range-row input{width:100%;accent-color:var(--teal)}
+.prob-list{display:grid;gap:12px;margin-top:16px}
+.prob-row{display:grid;grid-template-columns:60px minmax(0,1fr) 58px;gap:10px;align-items:center;font-size:14px}
+.track{height:13px;border-radius:99px;background:#e7eee9;overflow:hidden}
+.bar{height:100%;width:0;border-radius:99px;background:var(--green);transition:width .18s ease}
+.prob-row:nth-child(2) .bar{background:#d49a63}
+.prob-row:nth-child(3) .bar{background:#8c82bb}
+.small{font-size:13px;color:#708487}
+.sources{font-size:14px}
+.sources li{margin:12px 0;overflow-wrap:anywhere}
+.foot{margin-top:66px;padding-top:22px;border-top:1px solid var(--line);font-size:13px;color:#718589}
+@media(max-width:960px){.layout{display:block;max-width:900px;padding-top:30px}.toc{position:static;max-height:none;display:flex;gap:6px;flex-wrap:wrap;margin-bottom:28px}.toc strong{width:100%}.toc a{border:1px solid var(--line);border-radius:6px;padding:5px 9px}}
+@media(max-width:600px){body{font-size:16px}.site-inner{padding:10px 14px}.site-links{gap:10px}.layout{padding:24px 14px 65px}h1{font-size:clamp(37px,11vw,46px)}.dek{font-size:19px}section{margin-top:52px}.two{grid-template-columns:1fr}.experiment{padding:13px}.math-equation{padding:10px 7px;gap:5px}.math-scroll math[display=block]{font-size:1rem}figure{padding:7px 6px 0}.range-row{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+@media print{body{background:#fff;font-size:11pt}.site-head,.toc,.skip,.controls,.range-row input{display:none!important}.layout{display:block;padding:0}.math-scroll{overflow:visible}.math-scroll math[display=block]{font-size:1rem}.experiment,figure{break-inside:avoid}.matrix-wrap,.table-wrap,.code-wrap{overflow:visible}pre{background:#f1f3f1;color:#203f45;white-space:pre-wrap;overflow-wrap:anywhere}section{margin-top:25px}h2,h3{break-after:avoid}.bar{print-color-adjust:exact}}
+</style>
+</head>
+<body>
+<a class="skip" href="#content">跳转至正文</a>
+<header class="site-head"><div class="site-inner"><a class="brand" href="../../../">xm<b>.</b>posts</a><nav class="site-links" aria-label="站点导航"><a href="../../../categories/multimodal/">多模态</a><a href="../../../topics/">知识地图</a><a href="../../../archive/">文章归档</a></nav></div></header>
+<div class="layout">
+<nav class="toc" aria-label="文章目录"><strong>CONTRASTIVE LANGUAGE–IMAGE PRE-TRAINING</strong>
+<a href="#problem">01 · 为什么让图文对齐？</a><a href="#architecture">02 · 双编码器架构</a><a href="#contrastive">03 · 对比学习与损失</a><a href="#lab">04 · 交互理解 batch</a><a href="#zero-shot">05 · 零样本分类</a><a href="#prompt">06 · Prompt 与温度</a><a href="#training">07 · 数据、训练与规模</a><a href="#evidence">08 · 原论文结果</a><a href="#limits">09 · 能力边界与风险</a><a href="#code">10 · 最小可运行实现</a><a href="#refs">11 · 参考文献</a></nav>
+<main id="content"><article>
+<header>
+<div class="eyebrow">MULTIMODAL / VISION–LANGUAGE / 2021</div>
+<h1>Understanding <em>CLIP</em></h1>
+<p class="dek">一张图片为什么能和一句话比较相似度？CLIP 的关键不是让模型“看图说话”，而是让图像与文本经过两条编码路径，最终落在<strong>同一个可比较的向量空间</strong>。</p>
+<div class="meta"><span>核心论文：Radford et al. · 2021</span><span>Contrastive Language–Image Pre-training</span><span>约 26 分钟</span></div>
+<div class="insight"><strong>先记住这一句话：</strong>图像编码器负责“把画面变成向量”，文本编码器负责“把描述变成向量”；训练时让正确配对的向量更接近、错误配对的向量更远。推理时，只需把候选类别写成文本，再比较相似度。</div>
+</header>
+
+<section id="problem">
+<h2>01 · 为什么要让图像和语言对齐？</h2>
+<p>传统图像分类器通常先确定一份标签清单，例如“猫、狗、汽车、飞机”，再训练最后一层分类头。模型学会的是这组固定标签：当新任务要识别“水彩风格的柴犬”或“停在雪地里的黄色校车”，往往需要补充数据、重新训练或修改分类头。</p>
+<p>但互联网上的图片经常已经带有标题、说明、替代文本或上下文描述。它们未必是人工审核过的标准标签，却包含了大量自然语言监督。CLIP 的问题意识是：<strong>能不能直接从这些图文配对中学习视觉概念，并让语言成为新任务的接口？</strong></p>
+<div class="two">
+<div><h3>固定类别监督</h3><p>训练时先定义类别集合，输出头与类别表绑定；新类别通常需要新增标注或适配。</p></div>
+<div><h3>自然语言监督</h3><p>从图片旁边的文字学习关联；使用时再用一句描述指定希望识别的概念。</p></div>
+</div>
+<p>论文构建了包含约 <strong>4 亿组图像—文本配对</strong>的 WebImageText（WIT）数据集。这里的文字并不都等同于高质量人工标签：它来自网络上的多种公开来源，规模大、覆盖广，也天然带有噪声和偏差。<a href="https://arxiv.org/abs/2103.00020">原论文 §2.2</a>。</p>
+<p class="lead">CLIP 并不是“完全不需要监督”。它使用的是图像与自然语言之间的配对监督，而不是每张图片都必须有一个人工指定的封闭类别 ID。</p>
+</section>
+
+<section id="architecture">
+<h2>02 · 双编码器：两种输入，进入同一语义空间</h2>
+<p>CLIP 包含两个独立的编码器。图像编码器读取像素，文本编码器读取 token；两者各自产生一个特征向量，再经过线性投影和 L2 归一化，映射到同一个多模态嵌入空间。</p>
+<figure><div class="figure-title">FIGURE 01 · TWO TOWERS, ONE EMBEDDING SPACE</div><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 360" role="img" aria-labelledby="clip-fig1-title clip-fig1-desc">
+<title id="clip-fig1-title">CLIP 的双编码器与共享向量空间</title>
+<desc id="clip-fig1-desc">图像和文本分别经过各自编码器与线性投影，归一化后进入同一个多模态向量空间；匹配的图文向量被拉近。</desc>
+<defs><marker id="clip1-arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0 0 L9 3 L0 6 Z" fill="#527a7b"/></marker></defs>
+<rect x="18" y="18" width="864" height="324" rx="20" fill="#f5f8f5"/>
+<text x="48" y="53" fill="#526d70" font-size="17" font-weight="700">两种输入 · 两条独立编码路径 · 一个可比较的空间</text>
+<rect x="48" y="92" width="145" height="86" rx="13" fill="#e7f0ff" stroke="#91afd9" stroke-width="2"/>
+<rect x="65" y="108" width="52" height="42" rx="6" fill="#c5d8f4"/>
+<circle cx="79" cy="121" r="8" fill="#e4a75c"/><path d="M68 145 L86 129 L99 140 L110 126 L117 145Z" fill="#6c9d83"/>
+<text x="135" y="125" text-anchor="middle" fill="#294c70" font-size="15" font-weight="700">图像</text><text x="135" y="148" text-anchor="middle" fill="#456784" font-size="12">xᵢ</text>
+<path d="M193 135 H236" stroke="#527a7b" stroke-width="3" marker-end="url(#clip1-arrow)"/>
+<rect x="245" y="96" width="170" height="78" rx="13" fill="#dce9ff" stroke="#86a8d8" stroke-width="2"/>
+<text x="330" y="126" text-anchor="middle" fill="#294c70" font-size="17" font-weight="700">Image Encoder</text><text x="330" y="150" text-anchor="middle" fill="#456784" font-size="13">ResNet / ViT</text>
+<path d="M415 135 H456" stroke="#527a7b" stroke-width="3" marker-end="url(#clip1-arrow)"/>
+<rect x="465" y="96" width="142" height="78" rx="13" fill="#fff0df" stroke="#d9a06a" stroke-width="2"/>
+<text x="536" y="126" text-anchor="middle" fill="#85512d" font-size="16" font-weight="700">线性投影</text><text x="536" y="150" text-anchor="middle" fill="#956642" font-size="13">+ L2 归一化</text>
+<path d="M607 135 H660" stroke="#527a7b" stroke-width="3" marker-end="url(#clip1-arrow)"/>
+<rect x="670" y="91" width="180" height="88" rx="14" fill="#dff2e8" stroke="#73aa91" stroke-width="2"/>
+<text x="760" y="121" text-anchor="middle" fill="#245f4b" font-size="16" font-weight="700">共享向量空间</text><text x="760" y="148" text-anchor="middle" fill="#34745d" font-size="15">zᵢᴵ · zᵢᵀ</text>
+<rect x="48" y="224" width="145" height="76" rx="13" fill="#fff0e7" stroke="#d8a27f" stroke-width="2"/>
+<text x="120" y="254" text-anchor="middle" fill="#805337" font-size="16" font-weight="700">文本</text><text x="120" y="278" text-anchor="middle" fill="#956642" font-size="13">“a photo of a dog”</text>
+<path d="M193 262 H236" stroke="#527a7b" stroke-width="3" marker-end="url(#clip1-arrow)"/>
+<rect x="245" y="223" width="170" height="78" rx="13" fill="#ffeadb" stroke="#d69a6d" stroke-width="2"/>
+<text x="330" y="253" text-anchor="middle" fill="#805337" font-size="17" font-weight="700">Text Encoder</text><text x="330" y="277" text-anchor="middle" fill="#956642" font-size="13">Transformer</text>
+<path d="M415 262 H456" stroke="#527a7b" stroke-width="3" marker-end="url(#clip1-arrow)"/>
+<rect x="465" y="223" width="142" height="78" rx="13" fill="#fff0df" stroke="#d9a06a" stroke-width="2"/>
+<text x="536" y="253" text-anchor="middle" fill="#85512d" font-size="16" font-weight="700">线性投影</text><text x="536" y="277" text-anchor="middle" fill="#956642" font-size="13">+ L2 归一化</text>
+<path d="M607 262 H638 Q652 262 652 246 V179" fill="none" stroke="#527a7b" stroke-width="3" marker-end="url(#clip1-arrow)"/>
+<path d="M760 179 V198" stroke="#73aa91" stroke-width="2" stroke-dasharray="5 5"/>
+<text x="760" y="220" text-anchor="middle" fill="#34745d" font-size="13">匹配的图文</text>
+<text x="760" y="238" text-anchor="middle" fill="#34745d" font-size="13">相似度更高</text>
+</svg><figcaption>图像与文本不会在编码器内部逐 token 拼接；它们先独立编码，再通过投影后的向量相似度建立跨模态联系。</figcaption></figure>
+<h3>从输入到向量，逐步看清数据形状</h3>
+<ol>
+<li><strong>图像路径：</strong>图像 <code>xᵢ</code> 进入 ResNet 或 Vision Transformer，得到视觉特征，再用线性层投影到共享维度。</li>
+<li><strong>文本路径：</strong>文本先经 BPE 分词和 Transformer 编码，取最后一层的 <code>[EOS]</code> 位置表示，再做 LayerNorm 与线性投影。</li>
+<li><strong>归一化：</strong>两边向量都除以自身的 L2 范数，使向量长度为 1。之后点积就等价于余弦相似度。</li>
+</ol>
+<div class="math-equation" role="group" aria-label="图像和文本特征的 L2 归一化定义"><div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="归一化公式，可横向滚动">
+<math display="block" aria-label="z 图像 i 等于图像编码器 f I 对 x i 的输出除以其二范数；z 文本 i 等于文本编码器 f T 对 t i 的输出除以其二范数">
+<mrow>
+<msubsup><mi>z</mi><mi>i</mi><mi>I</mi></msubsup><mo>=</mo><mfrac><mrow><msub><mi>f</mi><mi>I</mi></msub><mo>(</mo><msub><mi>x</mi><mi>i</mi></msub><mo>)</mo></mrow><msub><mrow><mo>‖</mo><msub><mi>f</mi><mi>I</mi></msub><mo>(</mo><msub><mi>x</mi><mi>i</mi></msub><mo>)</mo><mo>‖</mo></mrow><mn>2</mn></msub></mfrac>
+<mo>,</mo><mspace width="1em"/>
+<msubsup><mi>z</mi><mi>i</mi><mi>T</mi></msubsup><mo>=</mo><mfrac><mrow><msub><mi>f</mi><mi>T</mi></msub><mo>(</mo><msub><mi>t</mi><mi>i</mi></msub><mo>)</mo></mrow><msub><mrow><mo>‖</mo><msub><mi>f</mi><mi>T</mi></msub><mo>(</mo><msub><mi>t</mi><mi>i</mi></msub><mo>)</mo><mo>‖</mo></mrow><mn>2</mn></msub></mfrac>
+</mrow></math></div><span class="eq-num">(1)</span></div>
+<p>归一化之后，两个向量的点积只反映方向是否接近，不会因为某个编码器输出的数值尺度更大就天然占优。注意：共享的是<strong>投影后的表示空间</strong>，不是让两边共用同一套 Transformer 参数。</p>
+<h3>原论文到底用了哪些编码器？</h3>
+<div class="table-wrap"><table class="data-table"><thead><tr><th>部件</th><th>论文中的选择</th><th>需要理解的细节</th></tr></thead><tbody>
+<tr><td>图像编码器</td><td>ResNet 系列，或 ViT-B/32、ViT-B/16、ViT-L/14</td><td>ResNet 版本加入 attention pooling；ViT 版本沿用 patch + Transformer 主干，并调整初始化与 LayerNorm。</td></tr>
+<tr><td>文本编码器</td><td>12 层 Transformer，基础模型 63M 参数</td><td>宽度 512、8 个 attention heads；使用小写 BPE，词表 49,152。</td></tr>
+<tr><td>文本汇聚</td><td><code>[EOS]</code> 位置表示</td><td>最大序列长度 76；取最后一层 EOS 表示，LayerNorm 后线性投影。</td></tr>
+<tr><td>共同空间</td><td>线性投影 + L2 归一化</td><td>最终比较图像向量与文本向量的余弦相似度。</td></tr>
+</tbody></table></div>
+<p>因此，“CLIP 就是 ViT”并不准确。CLIP 是一种图文对比预训练方法；图像编码器可以是 ResNet，也可以是 ViT。论文中表现最好的配置是 <code>ViT-L/14@336px</code>，它在 ViT-L/14 的基础上又以 336 像素分辨率额外预训练一个 epoch。</p>
+</section>
+
+<section id="contrastive">
+<h2>03 · 对比学习：一个 batch 就能构造 N × N 个配对</h2>
+<p>假设一个 batch 中有 <code>N</code> 组真实配对：<code>(I₁,T₁), (I₂,T₂), …, (Iₙ,Tₙ)</code>。图像编码器输出 N 个向量，文本编码器也输出 N 个向量。把两组向量两两比较，就得到一个 <code>N × N</code> 相似度矩阵。</p>
+<figure><div class="figure-title">FIGURE 02 · IN-BATCH POSITIVES AND NEGATIVES</div><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 350" role="img" aria-labelledby="clip-fig2-title clip-fig2-desc">
+<title id="clip-fig2-title">一个 batch 中的图文相似度矩阵</title>
+<desc id="clip-fig2-desc">四张图片与四段文本组成十六种候选配对，主对角线四个格子是原始匹配，其余十二个格子作为 batch 内负样本。</desc>
+<rect x="18" y="18" width="864" height="314" rx="18" fill="#f7f8f5"/>
+<text x="52" y="55" fill="#526d70" font-size="17" font-weight="700">N = 4 时，模型要在 N² = 16 种配对中找回 4 个真实匹配</text>
+<text x="270" y="94" text-anchor="middle" fill="#526d70" font-size="14">文本 T₁</text><text x="370" y="94" text-anchor="middle" fill="#526d70" font-size="14">文本 T₂</text><text x="470" y="94" text-anchor="middle" fill="#526d70" font-size="14">文本 T₃</text><text x="570" y="94" text-anchor="middle" fill="#526d70" font-size="14">文本 T₄</text>
+<text x="112" y="145" text-anchor="middle" fill="#526d70" font-size="14">图像 I₁</text><text x="112" y="205" text-anchor="middle" fill="#526d70" font-size="14">图像 I₂</text><text x="112" y="265" text-anchor="middle" fill="#526d70" font-size="14">图像 I₃</text><text x="112" y="325" text-anchor="middle" fill="#526d70" font-size="14">图像 I₄</text>
+<g stroke="#fff" stroke-width="3" font-size="17" font-weight="700" text-anchor="middle">
+<rect x="220" y="108" width="100" height="48" rx="7" fill="#bfe3d0"/><text x="270" y="138" fill="#245f4b">+</text>
+<rect x="320" y="108" width="100" height="48" rx="7" fill="#f3dfd7"/><text x="370" y="138" fill="#8c5c4b">−</text>
+<rect x="420" y="108" width="100" height="48" rx="7" fill="#f3dfd7"/><text x="470" y="138" fill="#8c5c4b">−</text>
+<rect x="520" y="108" width="100" height="48" rx="7" fill="#f3dfd7"/><text x="570" y="138" fill="#8c5c4b">−</text>
+<rect x="220" y="168" width="100" height="48" rx="7" fill="#f3dfd7"/><text x="270" y="198" fill="#8c5c4b">−</text>
+<rect x="320" y="168" width="100" height="48" rx="7" fill="#bfe3d0"/><text x="370" y="198" fill="#245f4b">+</text>
+<rect x="420" y="168" width="100" height="48" rx="7" fill="#f3dfd7"/><text x="470" y="198" fill="#8c5c4b">−</text>
+<rect x="520" y="168" width="100" height="48" rx="7" fill="#f3dfd7"/><text x="570" y="198" fill="#8c5c4b">−</text>
+<rect x="220" y="228" width="100" height="48" rx="7" fill="#f3dfd7"/><text x="270" y="258" fill="#8c5c4b">−</text>
+<rect x="320" y="228" width="100" height="48" rx="7" fill="#f3dfd7"/><text x="370" y="258" fill="#8c5c4b">−</text>
+<rect x="420" y="228" width="100" height="48" rx="7" fill="#bfe3d0"/><text x="470" y="258" fill="#245f4b">+</text>
+<rect x="520" y="228" width="100" height="48" rx="7" fill="#f3dfd7"/><text x="570" y="258" fill="#8c5c4b">−</text>
+<rect x="220" y="288" width="100" height="36" rx="7" fill="#f3dfd7"/><text x="270" y="313" fill="#8c5c4b">−</text>
+<rect x="320" y="288" width="100" height="36" rx="7" fill="#f3dfd7"/><text x="370" y="313" fill="#8c5c4b">−</text>
+<rect x="420" y="288" width="100" height="36" rx="7" fill="#f3dfd7"/><text x="470" y="313" fill="#8c5c4b">−</text>
+<rect x="520" y="288" width="100" height="36" rx="7" fill="#bfe3d0"/><text x="570" y="313" fill="#245f4b">+</text>
+</g>
+<rect x="670" y="120" width="176" height="68" rx="12" fill="#e1f1e8" stroke="#80b69a"/><text x="758" y="148" text-anchor="middle" fill="#245f4b" font-size="17" font-weight="700">4 个正样本</text><text x="758" y="171" text-anchor="middle" fill="#34745d" font-size="13">真实图文配对</text>
+<rect x="670" y="205" width="176" height="68" rx="12" fill="#f7e8e1" stroke="#d7a18c"/><text x="758" y="233" text-anchor="middle" fill="#8c5c4b" font-size="17" font-weight="700">12 个负样本</text><text x="758" y="256" text-anchor="middle" fill="#986d5f" font-size="13">batch 内错配组合</text>
+</svg><figcaption>主对角线上的格子是真实配对，其余格子是 batch 内的错配组合。N=4 时共有 16 种候选配对，其中 4 个正样本、12 个负样本。</figcaption></figure>
+<p>定义第 i 张图像与第 j 段文本的相似度：</p>
+<div class="math-equation" role="group" aria-label="图文相似度计算"><div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="相似度公式，可横向滚动">
+<math display="block" aria-label="s i j 等于归一化图像向量 z i I 的转置乘归一化文本向量 z j T，再除以温度 tau">
+<mrow><msub><mi>s</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>=</mo><mfrac><mrow><msup><mrow><mo>(</mo><msubsup><mi>z</mi><mi>i</mi><mi>I</mi></msubsup><mo>)</mo></mrow><mo>⊤</mo></msup><msubsup><mi>z</mi><mi>j</mi><mi>T</mi></msubsup></mrow><mi>τ</mi></mfrac></mrow>
+</math></div><span class="eq-num">(2)</span></div>
+<p><code>τ</code> 是温度参数。它控制 softmax 对相似度差异的敏感程度。由于向量已经归一化，分子点积就是 cosine similarity；除以温度相当于放大或缩小 logits。</p>
+<h3>为什么要做两个方向？</h3>
+<p>只训练“给定图像找文本”还不够。CLIP 同时训练图像到文本（I→T）与文本到图像（T→I）：对每张图像，正确文本应该在这一行得分最高；对每段文本，正确图像也应该在这一列得分最高。</p>
+<div class="math-equation" role="group" aria-label="图像到文本与文本到图像的条件概率"><div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="两个方向的 softmax 公式，可横向滚动">
+<math display="block" aria-label="图像到文本概率 p j 给定 i 等于 exp s i j 除以对所有文本索引 k 的 exp s i k 求和；文本到图像概率 p i 给定 j 等于 exp s i j 除以对所有图像索引 k 的 exp s k j 求和">
+<mrow>
+<msub><mi>p</mi><mrow><mi>I</mi><mo>→</mo><mi>T</mi></mrow></msub><mo>(</mo><mi>j</mi><mo>|</mo><mi>i</mi><mo>)</mo><mo>=</mo><mfrac><mrow><mi>exp</mi><mo>(</mo><msub><mi>s</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>)</mo></mrow><mrow><munderover><mo>∑</mo><mrow><mi>k</mi><mo>=</mo><mn>1</mn></mrow><mi>N</mi></munderover><mi>exp</mi><mo>(</mo><msub><mi>s</mi><mrow><mi>i</mi><mi>k</mi></mrow></msub><mo>)</mo></mrow></mfrac>
+</mrow>
+<mspace linebreak="newline"/>
+<mrow>
+<msub><mi>p</mi><mrow><mi>T</mi><mo>→</mo><mi>I</mi></mrow></msub><mo>(</mo><mi>i</mi><mo>|</mo><mi>j</mi><mo>)</mo><mo>=</mo><mfrac><mrow><mi>exp</mi><mo>(</mo><msub><mi>s</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>)</mo></mrow><mrow><munderover><mo>∑</mo><mrow><mi>k</mi><mo>=</mo><mn>1</mn></mrow><mi>N</mi></munderover><mi>exp</mi><mo>(</mo><msub><mi>s</mi><mrow><mi>k</mi><mi>j</mi></mrow></msub><mo>)</mo></mrow></mfrac>
+</mrow>
+</math></div><span class="eq-num">(3)</span></div>
+<p>每个方向都把正确配对当作分类目标，使用交叉熵；最后对两个方向取平均：</p>
+<div class="math-equation" role="group" aria-label="CLIP 的对称对比损失"><div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="对称对比损失公式，可横向滚动">
+<math display="block" aria-label="L 等于图像到文本交叉熵与文本到图像交叉熵之和的一半；每个方向对 batch 中 N 个真实配对取平均">
+<mrow>
+<mi mathvariant="normal">L</mi><mo>=</mo><mfrac><mn>1</mn><mn>2</mn></mfrac>
+<mo>(</mo>
+<mo>−</mo><mfrac><mn>1</mn><mi>N</mi></mfrac><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>N</mi></munderover><mi>log</mi><msub><mi>p</mi><mrow><mi>I</mi><mo>→</mo><mi>T</mi></mrow></msub><mo>(</mo><mi>i</mi><mo>|</mo><mi>i</mi><mo>)</mo>
+<mo>−</mo><mfrac><mn>1</mn><mi>N</mi></mfrac><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>N</mi></munderover><mi>log</mi><msub><mi>p</mi><mrow><mi>T</mi><mo>→</mo><mi>I</mi></mrow></msub><mo>(</mo><mi>i</mi><mo>|</mo><mi>i</mi><mo>)</mo>
+<mo>)</mo>
+</mrow></math></div><span class="eq-num">(4)</span></div>
+<div class="callout"><strong>容易混淆的地方：</strong>负样本是“同一个 batch 里的其他配对”，不是人工标注的“错误类别”。如果两个不同图片其实都能匹配同一段描述，那么把它们强行视作负例可能引入噪声；这也是大规模网页图文数据并不完美的原因之一。</div>
+</section>
+
+<section id="lab">
+<h2>04 · 交互理解：为什么损失必须看两个方向？</h2>
+<p>下面是一个 N=4 的教学矩阵。绿色对角线代表 batch 中真实配对，其他格子代表当前 batch 的错配组合。切换方向，观察同一个矩阵中被当作分类候选集合的行或列如何变化。</p>
+<div class="experiment">
+<h3>选择检索方向</h3>
+<div class="controls"><button type="button" data-mode="i2t" aria-pressed="true">图像 → 文本</button><button type="button" data-mode="t2i" aria-pressed="false">文本 → 图像</button></div>
+<div class="matrix-wrap"><table class="matrix" aria-label="四张图像与四段文本的示意相似度矩阵"><thead><tr><th>相似度</th><th>文本 T₁</th><th>文本 T₂</th><th>文本 T₃</th><th>文本 T₄</th></tr></thead><tbody>
+<tr><th>图像 I₁</th><td class="positive focus" data-r="0" data-c="0">0.91</td><td class="negative" data-r="0" data-c="1">0.18</td><td class="negative" data-r="0" data-c="2">0.22</td><td class="negative" data-r="0" data-c="3">0.09</td></tr>
+<tr><th>图像 I₂</th><td class="negative" data-r="1" data-c="0">0.15</td><td class="positive" data-r="1" data-c="1">0.88</td><td class="negative" data-r="1" data-c="2">0.31</td><td class="negative" data-r="1" data-c="3">0.11</td></tr>
+<tr><th>图像 I₃</th><td class="negative" data-r="2" data-c="0">0.24</td><td class="negative" data-r="2" data-c="1">0.19</td><td class="positive" data-r="2" data-c="2">0.86</td><td class="negative" data-r="2" data-c="3">0.28</td></tr>
+<tr><th>图像 I₄</th><td class="negative" data-r="3" data-c="0">0.08</td><td class="negative" data-r="3" data-c="1">0.13</td><td class="negative" data-r="3" data-c="2">0.17</td><td class="positive" data-r="3" data-c="3">0.90</td></tr>
+</tbody></table></div>
+<p id="direction-status" class="status" aria-live="polite">当前是图像→文本：固定一张图像，在这一行的 N 段文本中找回正确描述。</p>
+<p class="small">矩阵数值为教学构造的示意相似度，不是原论文训练日志或真实模型输出。</p>
+</div>
+<p>真实训练时，模型会同时调整两个编码器和投影层，使正确配对的相似度在对应行、列的 softmax 中占据更高概率。注意它优化的是<strong>相对排序</strong>：不是只把正样本的分数推高，而是让它在同一批候选中胜过其他组合。</p>
+</section>
+
+<section id="zero-shot">
+<h2>05 · 零样本分类：文本编码器临时生成分类器</h2>
+<p>训练完成后，给定一张新图片和一组候选类别名称。先用图像编码器得到图片向量，再把每个类别写成文本提示并送入文本编码器。最后计算图像向量与每个类别向量的相似度，分数最高的类别就是预测结果。</p>
+<figure><div class="figure-title">FIGURE 03 · ZERO-SHOT CLASSIFICATION</div><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 330" role="img" aria-labelledby="clip-fig3-title clip-fig3-desc">
+<title id="clip-fig3-title">CLIP 零样本分类推理流程</title>
+<desc id="clip-fig3-desc">一张新图像和多个候选类别提示分别通过图像与文本编码器，计算归一化向量余弦相似度，再经 softmax 得到类别分布。</desc>
+<defs><marker id="clip3-arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0 0 L9 3 L0 6 Z" fill="#527a7b"/></marker></defs>
+<rect x="18" y="18" width="864" height="294" rx="18" fill="#f7f8f5"/>
+<rect x="45" y="78" width="132" height="70" rx="12" fill="#e7f0ff" stroke="#91afd9" stroke-width="2"/><text x="111" y="108" text-anchor="middle" fill="#294c70" font-size="16" font-weight="700">新图像</text><text x="111" y="130" text-anchor="middle" fill="#456784" font-size="13">未见过的样本</text>
+<rect x="45" y="205" width="132" height="70" rx="12" fill="#fff0e7" stroke="#d8a27f" stroke-width="2"/><text x="111" y="232" text-anchor="middle" fill="#805337" font-size="15" font-weight="700">候选文本</text><text x="111" y="254" text-anchor="middle" fill="#956642" font-size="12">狗 / 狼 / 猫 …</text>
+<path d="M177 113 H222" stroke="#527a7b" stroke-width="3" marker-end="url(#clip3-arrow)"/><path d="M177 240 H222" stroke="#527a7b" stroke-width="3" marker-end="url(#clip3-arrow)"/>
+<rect x="232" y="78" width="156" height="70" rx="12" fill="#dce9ff" stroke="#86a8d8" stroke-width="2"/><text x="310" y="108" text-anchor="middle" fill="#294c70" font-size="16" font-weight="700">图像编码器</text><text x="310" y="130" text-anchor="middle" fill="#456784" font-size="12">Image Encoder</text>
+<rect x="232" y="205" width="156" height="70" rx="12" fill="#ffeadb" stroke="#d69a6d" stroke-width="2"/><text x="310" y="235" text-anchor="middle" fill="#805337" font-size="16" font-weight="700">文本编码器</text><text x="310" y="257" text-anchor="middle" fill="#956642" font-size="12">Text Encoder</text>
+<path d="M388 113 H435 V165 H470" fill="none" stroke="#527a7b" stroke-width="3" marker-end="url(#clip3-arrow)"/><path d="M388 240 H435 V190 H470" fill="none" stroke="#527a7b" stroke-width="3" marker-end="url(#clip3-arrow)"/>
+<rect x="480" y="132" width="166" height="92" rx="13" fill="#e2f2e9" stroke="#78ae93" stroke-width="2"/><text x="563" y="164" text-anchor="middle" fill="#245f4b" font-size="16" font-weight="700">余弦相似度</text><text x="563" y="190" text-anchor="middle" fill="#34745d" font-size="14">÷ τ → Softmax</text>
+<path d="M646 178 H686" stroke="#527a7b" stroke-width="3" marker-end="url(#clip3-arrow)"/>
+<rect x="696" y="102" width="158" height="150" rx="13" fill="#fff" stroke="#9fc5b0" stroke-width="2"/>
+<text x="775" y="128" text-anchor="middle" fill="#245f4b" font-size="16" font-weight="700">类别概率</text>
+<text x="714" y="158" fill="#526d70" font-size="13">狗</text><rect x="744" y="146" width="88" height="14" rx="7" fill="#dce8e1"/><rect x="744" y="146" width="70" height="14" rx="7" fill="#3f9474"/>
+<text x="714" y="190" fill="#526d70" font-size="13">狼</text><rect x="744" y="178" width="88" height="14" rx="7" fill="#dce8e1"/><rect x="744" y="178" width="16" height="14" rx="7" fill="#d39a63"/>
+<text x="714" y="222" fill="#526d70" font-size="13">猫</text><rect x="744" y="210" width="88" height="14" rx="7" fill="#dce8e1"/><rect x="744" y="210" width="5" height="14" rx="7" fill="#9a91c8"/>
+<text x="450" y="295" text-anchor="middle" fill="#526d70" font-size="14">类别名称由任务提供；模型不需要为每个新类别重新训练分类头</text>
+</svg><figcaption>类别集合由使用者提供。文本编码器把每个自然语言类别转成一个分类权重向量，图片只需与这些向量比较。</figcaption></figure>
+<div class="math-equation" role="group" aria-label="零样本分类的预测公式"><div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="零样本分类公式，可横向滚动">
+<math display="block" aria-label="预测类别 y 帽等于使图像向量与类别文本向量余弦相似度最大的类别 c">
+<mrow><mover><mi>y</mi><mo>^</mo></mover><mo>=</mo><munder><mi>argmax</mi><mi>c</mi></munder><mtext> cos</mtext><mo>(</mo><msup><mi>z</mi><mi>I</mi></msup><mo>,</mo><msup><mi>z</mi><mrow><mi>T</mi><mo>,</mo><mi>c</mi></mrow></msup><mo>)</mo></mrow>
+</math></div><span class="eq-num">(5)</span></div>
+<p>从分类器角度看，这很巧妙：传统线性分类器的权重通常是训练出来的一组参数；CLIP 则让文本编码器根据类别描述生成这些权重。因此，增加一个新类别不必重新训练图像分类头，只需要增加一条候选文本。</p>
+<p>原论文将零样本分类解释为：把数据集的类别名称当作候选图文配对，比较每张图像与所有候选类别文本的相似度，再经 softmax 得到分布。类别文本可以提前编码并缓存，不必每张图重复计算。</p>
+</section>
+
+<section id="prompt">
+<h2>06 · Prompt 与温度：文字写法会改变分类边界</h2>
+<p>一个常见误解是“把类别名直接交给文本编码器就行”。但训练数据中的文本通常是完整描述，而不是孤立单词。论文发现，给类别补上自然语言上下文通常更贴近训练分布。例如把 <code>dog</code> 写成 <code>a photo of a dog</code>，在 ImageNet 上比只输入类别名高出约 1.3 个百分点。</p>
+<p>词义歧义也会影响结果：<code>crane</code> 可能是起重机，也可能是鹤；<code>boxer</code> 可能是拳击手，也可能是犬种。加入任务语境，例如“a photo of a {label}, a type of pet”，可以帮助文本编码器确定词义。论文还报告了多模板集成的收益：ImageNet 使用 80 个上下文模板进行集成，比单一默认提示又提升约 3.5 个百分点。见原论文 §3.1.4。</p>
+<h3>温度参数如何改变概率分布？</h3>
+<p>下面固定三个教学相似度：狗 0.82、狼 0.76、猫 0.35。拖动温度，观察 softmax 如何改变分布尖锐程度。这里的相似度是演示输入，不代表任何实际 CLIP 模型对某张图片的预测。</p>
+<div class="experiment">
+<h3>Softmax 温度实验</h3>
+<div class="range-row"><label for="temperature">温度 τ：<output id="temperature-value" for="temperature">0.07</output></label><input id="temperature" type="range" min="0.03" max="0.30" step="0.01" value="0.07" aria-label="调整 softmax 温度"></div>
+<div class="prob-list">
+<div class="prob-row"><span>狗</span><div class="track"><div class="bar" id="prob-dog"></div></div><output id="value-dog">—</output></div>
+<div class="prob-row"><span>狼</span><div class="track"><div class="bar" id="prob-wolf"></div></div><output id="value-wolf">—</output></div>
+<div class="prob-row"><span>猫</span><div class="track"><div class="bar" id="prob-cat"></div></div><output id="value-cat">—</output></div>
+</div>
+<p id="temperature-note" class="status" aria-live="polite">较低温度会放大相似度差异，使分布更尖锐。</p>
+</div>
+<p>训练时，论文把温度参数作为可学习的 log-parameterized 标量优化，而不是固定超参数；初始值相当于 <code>τ=0.07</code>，并限制 logit scale 不超过 100，以避免训练不稳定。推理时，温度缩放也会影响 softmax 概率的尖锐程度，但<strong>不会改变原始 cosine 相似度的排序</strong>。</p>
+</section>
+
+<section id="training">
+<h2>07 · 数据、训练与规模：CLIP 为什么能学到这么多概念？</h2>
+<div class="table-wrap"><table class="data-table"><thead><tr><th>要素</th><th>原论文设置</th><th>它解决什么问题</th></tr></thead><tbody>
+<tr><td>训练数据</td><td>约 4 亿组互联网图文对（WIT）</td><td>扩大视觉概念覆盖范围，不局限于固定类别表。</td></tr>
+<tr><td>Batch size</td><td>32,768</td><td>在一个 batch 内构造大量负配对，让对比任务具有较大的候选集合。</td></tr>
+<tr><td>训练轮数</td><td>32 epochs</td><td>论文训练 5 个 ResNet 与 3 个 ViT 规模配置。</td></tr>
+<tr><td>优化器</td><td>Adam + decoupled weight decay，cosine learning-rate schedule</td><td>优化双编码器和投影层；温度参数也参与学习。</td></tr>
+<tr><td>计算资源</td><td>最大 ResNet 版本 RN50x64：592 张 V100、18 天；最大 ViT：256 张 V100、12 天</td><td>大规模图文预训练仍然需要非常高的计算投入。</td></tr>
+</tbody></table></div>
+<p>这里要避免一个误读：CLIP 的“zero-shot”说的是<strong>下游分类时不使用该任务的训练样本来拟合分类器</strong>，并不意味着预训练阶段没有数据、没有监督或没有巨大的算力成本。</p>
+<p>对比目标之所以有吸引力，是因为它不要求模型逐字生成一条描述。模型只需在当前 batch 的 N 段文本中识别哪一段与给定图像配对。论文报告，在小到中等规模实验里，contrastive objective 的零样本 ImageNet 学习效率相较其图像描述生成基线高约 4–10 倍；ViT 图像编码器相较标准 ResNet 还带来额外计算效率收益。这里是论文实验中的特定对比，不应当理解成所有任务、所有模型都恒定加速。</p>
+</section>
+
+<section id="evidence">
+<h2>08 · 原论文结果：它真正证明了什么？</h2>
+<p>论文最有代表性的结果之一，是零样本 CLIP 在 ImageNet 上达到 76.2% accuracy，top-5 accuracy 达到 95%，与当时原始 ResNet-50 的 ImageNet accuracy 相当；这一结果没有使用 ImageNet 的 128 万张人工标注训练图片来拟合下游分类器。</p>
+<div class="table-wrap"><table class="data-table"><thead><tr><th>模型 / 方法</th><th>ImageNet accuracy</th><th>解释与比较边界</th></tr></thead><tbody>
+<tr><td>Visual N-Grams（2017）</td><td>11.5%</td><td>较早的自然语言零样本迁移方法，数据规模、架构和计算预算与 CLIP 不同。</td></tr>
+<tr><td>CLIP（论文最佳配置）</td><td>76.2%</td><td>零样本分类；论文另报告 top-5 accuracy 为 95%。</td></tr>
+</tbody></table></div>
+<p class="note">这张表用于展示研究进展，不是严格控制变量的算法对比。原论文明确提醒：CLIP 使用了约 10 倍规模的数据集、不同的模型与更多训练计算，因此不能把全部差距都归因于单一损失函数。</p>
+<p>更广泛的评测也说明 CLIP 不是只会 ImageNet：论文在 30 多个数据集上评估了零样本迁移，覆盖细粒度分类、视频动作识别、OCR、地理定位等任务；在 27 个数据集的一个比较中，zero-shot CLIP 在其中 16 个数据集上超过了基于 ResNet-50 特征训练的监督线性分类器。不同任务之间的表现差异仍然很大。</p>
+</section>
+
+<section id="limits">
+<h2>09 · 能力边界：图文相似，不等于视觉理解无所不能</h2>
+<figure><div class="figure-title">FIGURE 04 · WHAT GLOBAL ALIGNMENT DOES — AND DOES NOT — PROVIDE</div><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 300" role="img" aria-labelledby="clip-fig4-title clip-fig4-desc">
+<title id="clip-fig4-title">CLIP 的能力边界</title>
+<desc id="clip-fig4-desc">双编码器通过全局图文向量对齐，适合候选文本排序和零样本分类；它本身不生成自由文本、不提供像素级定位，也不能保证计数和细粒度判断可靠。</desc>
+<rect x="18" y="18" width="864" height="264" rx="18" fill="#f7f8f5"/>
+<rect x="52" y="58" width="366" height="182" rx="15" fill="#e4f2e9" stroke="#83b89b" stroke-width="2"/>
+<text x="235" y="91" text-anchor="middle" fill="#245f4b" font-size="19" font-weight="700">适合的任务</text>
+<circle cx="94" cy="130" r="7" fill="#3f9474"/><text x="116" y="136" fill="#315d4c" font-size="16">候选图文匹配与检索</text>
+<circle cx="94" cy="171" r="7" fill="#3f9474"/><text x="116" y="177" fill="#315d4c" font-size="16">开放词汇 / 零样本分类</text>
+<circle cx="94" cy="212" r="7" fill="#3f9474"/><text x="116" y="218" fill="#315d4c" font-size="16">冻结特征上的迁移学习</text>
+<rect x="482" y="58" width="366" height="182" rx="15" fill="#f7e9e3" stroke="#d8a28d" stroke-width="2"/>
+<text x="665" y="91" text-anchor="middle" fill="#8c5c4b" font-size="19" font-weight="700">不能直接保证</text>
+<circle cx="524" cy="130" r="7" fill="#c47b61"/><text x="546" y="136" fill="#80584d" font-size="16">生成完整、自由形式的描述</text>
+<circle cx="524" cy="171" r="7" fill="#c47b61"/><text x="546" y="177" fill="#80584d" font-size="16">精确框选或像素级定位</text>
+<circle cx="524" cy="212" r="7" fill="#c47b61"/><text x="546" y="218" fill="#80584d" font-size="16">稳定计数、细粒度与公平性</text>
+<text x="450" y="265" text-anchor="middle" fill="#687e7e" font-size="12">这是原始双编码器 CLIP 的能力边界，不代表后续组合系统永远无法完成这些任务。</text>
+</svg><figcaption>双编码器输出的是全局图像与文本表示的相似度。它适合候选排序，但不自动提供生成、定位或细粒度推理能力。</figcaption></figure>
+<h3>原始 CLIP 擅长什么？</h3>
+<ul><li>在候选文本中检索与图片最匹配的描述。</li><li>用自然语言指定类别，完成零样本图像分类。</li><li>抽取图像或文本表示，用于相似度检索、线性探测或其他迁移任务。</li></ul>
+<h3>哪些任务不能直接交给它？</h3>
+<ul><li><strong>自由形式图像描述：</strong>CLIP 本身输出向量与相似度，不是自回归文本生成器。</li><li><strong>精确定位：</strong>全局向量相似度不会自动给出物体框、像素分割或图像中的证据位置。</li><li><strong>计数与细粒度判断：</strong>论文发现它在抽象计数、距离估计以及部分细粒度类别上表现较弱。</li><li><strong>提示稳定性：</strong>同一类别换一种措辞，分数和排序可能发生变化；prompt 设计不是无关紧要的包装。</li></ul>
+<p>还要重视训练数据与分类标签带来的社会偏差。论文指出，模型从未经充分筛选的网络图文数据中学习，类别集合如何设计会明显影响分类结果和偏差表现。模型卡也提醒，细粒度分类、计数和公平性仍是重要限制。不能把“无需下游标注”误解为“没有偏差”或“可以无条件用于高风险决策”。</p>
+<div class="callout"><strong>边界判断：</strong>CLIP 是强大的跨模态表示与检索基础模块，不是完整的视觉问答、目标检测或图像生成系统。后续系统可以把 CLIP 编码器与区域特征、检测器、生成式语言模型或跨注意力模块组合起来，但那已经是更大的架构。</div>
+</section>
+
+<section id="code">
+<h2>10 · 最小可运行实现：把论文目标变成可测试的计算</h2>
+<p>下面的代码只实现 CLIP 的数学核心：归一化向量、构造图文相似度矩阵、计算双向 softmax 交叉熵，以及用候选文本做零样本排序。它使用纯 Python 标准库，便于看清每一步；<strong>它不是完整 CLIP 网络，也不是论文训练复现</strong>。</p>
+<pre><code>from clip_toy import symmetric_contrastive_loss, zero_shot_scores
+
+images = [[1.0, 0.0], [0.0, 1.0]]
+texts  = [[0.9, 0.1], [0.1, 0.9]]
+
+loss, scores = symmetric_contrastive_loss(images, texts, temperature=0.1)
+print("loss:", round(loss, 4))
+print("similarities:", scores)
+
+candidates = {
+    "dog": [0.9, 0.1],
+    "cat": [0.1, 0.9],
+}
+print(zero_shot_scores([1.0, 0.0], candidates, temperature=0.1))</code></pre>
+<p>实现与测试文件：<a href="clip_toy.py">clip_toy.py</a> · <a href="tests/test_clip_toy.py">tests/test_clip_toy.py</a>。测试检查正配对分数更高、对称损失有限且非负、零样本排序符合预期，并拒绝非法温度与零向量。</p>
+<h3>阅读代码时，重点检查四个不变量</h3>
+<ol><li>图像和文本特征维度必须一致，且 batch 中配对数量相同。</li><li>向量归一化后，点积才对应 cosine similarity。</li><li>图像到文本的 softmax 沿文本候选维度计算；文本到图像沿图像候选维度计算。</li><li>损失是两个方向交叉熵的平均值，而不是只计算一行或一个方向。</li></ol>
+</section>
+
+<section id="refs">
+<h2>11 · 参考文献与延伸阅读</h2>
+<ol class="sources">
+<li><strong>原始论文：</strong>Radford et al. (2021), <a href="https://arxiv.org/abs/2103.00020">Learning Transferable Visual Models From Natural Language Supervision</a>. 重点阅读 §2.2–2.5（数据、目标、编码器与训练）、§3.1（zero-shot transfer）、§7（broader impacts）。</li>
+<li><strong>作者解读：</strong>OpenAI, <a href="https://openai.com/index/clip/">CLIP: Connecting text and images</a>（2021-01-05）。适合快速了解动机、主要结果和局限。</li>
+<li><strong>官方代码与模型卡：</strong><a href="https://github.com/openai/CLIP">openai/CLIP</a>。模型卡记录适用场景、数据与已知风险；不要把代码仓库当前实现细节全部反推成 2021 年论文的训练设置。</li>
+<li><strong>相关基础：</strong><a href="../../foundations/embeddings/">Understanding Embeddings</a> 解释向量表示、对比学习与语义检索；<a href="../../architectures/transformer/">Understanding Transformer</a> 补充文本编码器所依赖的注意力结构。</li>
+</ol>
+</section>
+<footer class="foot">理解 CLIP 的关键，是把“图文相似度”拆成可追踪的编码、归一化、矩阵比较、双向分类与下游提示过程。</footer>
+</article></main>
+</div>
+<script>
+(() => {
+  const modeButtons = Array.from(document.querySelectorAll("[data-mode]"));
+  const cells = Array.from(document.querySelectorAll("[data-r][data-c]"));
+  const directionStatus = document.getElementById("direction-status");
+  function setMode(mode) {
+    modeButtons.forEach((button) => button.setAttribute("aria-pressed", String(button.dataset.mode === mode)));
+    cells.forEach((cell) => {
+      const active = mode === "i2t" ? Number(cell.dataset.r) === 0 : Number(cell.dataset.c) === 0;
+      cell.classList.toggle("focus", active);
+    });
+    directionStatus.textContent = mode === "i2t"
+      ? "当前是图像→文本：固定一张图像，在这一行的 N 段文本中找回正确描述。"
+      : "当前是文本→图像：固定一段文本，在这一列的 N 张图像中找回正确图片。";
+  }
+  modeButtons.forEach((button) => button.addEventListener("click", () => setMode(button.dataset.mode)));
+  const range = document.getElementById("temperature");
+  const output = document.getElementById("temperature-value");
+  const note = document.getElementById("temperature-note");
+  const scores = [0.82, 0.76, 0.35];
+  const keys = ["dog", "wolf", "cat"];
+  function updateTemperature() {
+    const tau = Number(range.value);
+    const logits = scores.map((score) => score / tau);
+    const maxLogit = Math.max(...logits);
+    const exps = logits.map((value) => Math.exp(value - maxLogit));
+    const total = exps.reduce((sum, value) => sum + value, 0);
+    output.textContent = tau.toFixed(2);
+    keys.forEach((key, index) => {
+      const probability = exps[index] / total;
+      document.getElementById("prob-" + key).style.width = (probability * 100).toFixed(1) + "%";
+      document.getElementById("value-" + key).textContent = (probability * 100).toFixed(1) + "%";
+    });
+    note.textContent = tau < 0.08
+      ? "当前温度较低：最高相似度会占据更大概率，分布更尖锐。"
+      : tau > 0.18
+        ? "当前温度较高：概率分布更平缓，类别之间的差异被压缩。"
+        : "当前温度处于中间范围：相似度差异会转化为适度尖锐的概率分布。";
+  }
+  range.addEventListener("input", updateTemperature);
+  setMode("i2t");
+  updateTemperature();
+})();
+</script>
+</body>
+</html>
