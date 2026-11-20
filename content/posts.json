@@ -1939,6 +1939,41 @@
     }
   },
   {
+    "slug": "harness-engineering",
+    "title": "Understanding Harness Engineering",
+    "subtitle": "从 OpenAI Codex 与 Anthropic Claude 的工程实践，拆解 Agent Runtime 的七大子系统、上下文交接、工具与权限、独立评估和持续维护",
+    "category": "agents",
+    "topic": "harness-engineering",
+    "status": "published",
+    "published": "2026-11-21",
+    "updated": "2026-11-21",
+    "reading_minutes": 38,
+    "tags": [
+      "Harness Engineering",
+      "Agent Harness",
+      "Agent Runtime",
+      "Codex",
+      "Claude Code",
+      "Context Engineering",
+      "Agent Evaluation",
+      "Observability",
+      "Tool Use",
+      "Software Engineering Agents",
+      "Verification",
+      "Agent Memory",
+      "Sandbox",
+      "Orchestration",
+      "Agent Skills"
+    ],
+    "summary": "从模型能力与系统能力的区别出发，系统拆解 Agent Harness 的七大子系统与十一项运行时职责；对照 OpenAI Codex 的仓库知识、可观测性和熵治理，以及 Anthropic 的长任务交接、Context Reset 与 Planner–Generator–Evaluator；配六幅原创 SVG、可交互瓶颈实验、工程蓝图、失败归因矩阵和 16 项证据账本。",
+    "paper": "https://arxiv.org/abs/2609.00006",
+    "illustration": "harness-engineering",
+    "cover": {
+      "src": "assets/01-model-harness-environment.svg",
+      "caption": "Harness 连接模型与环境，把推理能力变成可观察、可验证的行动"
+    }
+  },
+  {
     "slug": "speculative-decoding",
     "title": "Understanding Speculative Decoding",
     "subtitle": "小模型先猜，大模型批量验证：为什么更快却仍保持目标采样分布？",
@@ -2022,6 +2057,36 @@
     }
   },
   {
+    "slug": "nerf",
+    "title": "Understanding NeRF",
+    "subtitle": "从多视角照片到连续三维场景：用 MLP、位置编码与体渲染合成新视角",
+    "category": "architectures",
+    "topic": "neural-rendering-3d-vision",
+    "status": "published",
+    "published": "2026-11-21",
+    "updated": "2026-11-21",
+    "reading_minutes": 28,
+    "tags": [
+      "NeRF",
+      "Neural Radiance Fields",
+      "Neural Rendering",
+      "Novel View Synthesis",
+      "3D Vision",
+      "Neural Fields",
+      "Volume Rendering",
+      "Positional Encoding",
+      "Camera Rays",
+      "3D Scene Representation"
+    ],
+    "summary": "从相机射线和五维场景函数出发，逐步推导 NeRF 的 MLP、位置编码、密度与方向相关颜色、可微体渲染和粗到细分层采样；用交互式像素合成、纯 Python 数值实现、原论文 Table 1/消融证据与原创 SVG，解释它如何从多视角照片学习连续场景，以及它与 Mip-NeRF、Instant-NGP、3D Gaussian Splatting 的边界。",
+    "paper": "https://arxiv.org/abs/2003.08934",
+    "illustration": "nerf",
+    "cover": {
+      "src": "assets/01-scene-pipeline.svg",
+      "caption": "多视角照片沿相机射线查询连续场景函数，再合成为新视角图像"
+    }
+  },
+  {
     "slug": "rag",
     "title": "Understanding RAG",
     "subtitle": "从 DPR 检索到 RAG-Sequence 和 RAG-Token：两篇文档、两个词算明白",
@@ -2048,6 +2113,171 @@
     "cover": {
       "src": "assets/cover-mixture.svg",
       "caption": "RAG-Sequence 整句共享文档，RAG-Token 逐词混合证据"
+    }
+  },
+  {
+    "slug": "rejection-sampling",
+    "title": "Understanding Rejection Sampling",
+    "subtitle": "从接受—拒绝采样的概率保证，到 LLM 奖励筛选、Best-of-N 与拒绝采样微调",
+    "category": "training",
+    "topic": "rl-post-training",
+    "status": "published",
+    "published": "2026-11-21",
+    "updated": "2026-11-21",
+    "reading_minutes": 30,
+    "tags": [
+      "Rejection Sampling",
+      "接受—拒绝采样",
+      "Monte Carlo",
+      "Reward Model",
+      "RLHF",
+      "RSFT",
+      "Best-of-N",
+      "RAFT",
+      "RSO",
+      "RS-DPO",
+      "RLVR",
+      "Sampling"
+    ],
+    "summary": "从目标分布与提议分布的密度比推导精确拒绝采样的接受率和正确性，再把机制映射到 LLM 的奖励模型筛选、Best-of-N、RSFT/RAFT、RSO 与 RS-DPO；包含离散数值算例、两个交互实验、MathML 推导、五幅原创 SVG、可运行 Python 实现和单元测试。",
+    "paper": "https://arxiv.org/abs/2304.06767",
+    "illustration": "rejection-sampling",
+    "cover": {
+      "src": "assets/03-llm-rejection-pipeline.svg",
+      "caption": "同一提示生成多个回答，经奖励模型排序后保留高分样本并用于 SFT"
+    }
+  },
+  {
+    "slug": "agentic-rl",
+    "title": "Understanding Agentic Reinforcement Learning",
+    "subtitle": "从单轮回答优化到多轮环境交互：POMDP、轨迹回报、信用分配与长程训练",
+    "category": "agents",
+    "topic": "agentic-rl",
+    "status": "published",
+    "published": "2026-11-21",
+    "updated": "2026-11-21",
+    "reading_minutes": 42,
+    "tags": [
+      "Agentic RL",
+      "Agentic Reinforcement Learning",
+      "LLM Agents",
+      "POMDP",
+      "Long-Horizon Decision Making",
+      "Multi-turn RL",
+      "Trajectory Optimization",
+      "Credit Assignment",
+      "Tool Use",
+      "GRPO",
+      "PPO",
+      "AgentGym-RL",
+      "Agent Lightning",
+      "SOAR"
+    ],
+    "summary": "从 ReAct 的行动闭环出发，形式化 Agentic RL 的 POMDP 与轨迹目标，推导回报、GAE 和组内优势，拆解 Agent / Environment / Trainer 架构，并结合 AgentGym-RL、WebRL、Agent Lightning、SOAR 与 Tunix 研究长程课程、信用分配和异步 Rollout；含六幅原创 SVG、MathML、交互轨迹与可测试的 Python 玩具环境。",
+    "paper": "https://arxiv.org/abs/2509.08755",
+    "illustration": "agentic-rl",
+    "cover": {
+      "src": "assets/01-single-vs-multi-turn.svg",
+      "caption": "从一次生成扩展为由环境反馈驱动的多轮决策轨迹"
+    }
+  },
+  {
+    "slug": "context-engineering",
+    "title": "Context Engineering：构建可靠 AI Agent 的上下文工程",
+    "subtitle": "从 Prompt、RAG 与 Memory 到 Harness：理解模型每一步应该看到什么，以及信息如何被检索、压缩、组装、更新和验证",
+    "category": "agents",
+    "topic": "context-engineering",
+    "status": "published",
+    "published": "2026-11-21",
+    "updated": "2026-11-21",
+    "reading_minutes": 35,
+    "tags": [
+      "Context Engineering",
+      "Context Management",
+      "Agent Memory",
+      "Context Window",
+      "RAG",
+      "Just-in-Time Retrieval",
+      "Compaction",
+      "Long-horizon Agents",
+      "Harness Engineering",
+      "Anthropic Engineering",
+      "OpenAI Engineering",
+      "Tool Use"
+    ],
+    "summary": "系统梳理 AI Agent 的上下文生命周期：从目标定义、RAG 与 Just-in-Time Retrieval，到信息过滤、Token 预算、Session Trimming、Summarization、Compaction、分层 Memory、Dreaming 与 Harness Engineering；结合 Anthropic、OpenAI 和学术综述，提供原创 SVG、MathML 推导、交互式 Token 预算实验、安全边界与可落地架构。",
+    "paper": "https://arxiv.org/abs/2507.13334",
+    "illustration": "context-engineering",
+    "cover": {
+      "src": "assets/01-context-lifecycle.svg",
+      "caption": "从目标定义、检索、处理、组装到执行与持久化的上下文生命周期"
+    }
+  },
+  {
+    "slug": "loop-engineering",
+    "title": "Understanding Loop Engineering",
+    "subtitle": "从单次 Agent 执行到可持续、可验证、可恢复的自主工作循环",
+    "category": "agents",
+    "topic": "loop-engineering",
+    "status": "published",
+    "published": "2026-11-21",
+    "updated": "2026-11-21",
+    "reading_minutes": 28,
+    "tags": [
+      "Loop Engineering",
+      "Agentic Workflows",
+      "Agent Orchestration",
+      "Long-running Agents",
+      "Harness Engineering",
+      "Context Engineering",
+      "Verification",
+      "Persistent State",
+      "Human-in-the-loop"
+    ],
+    "summary": "从 ReAct 的内层行动循环出发，系统解释外层任务触发、任务发现、上下文投影、隔离执行、独立验证、状态持久化、预算与人工升级；通过 MathML 推导、七幅原创 SVG、交互实验和可测试 Python 控制器，理解如何构建长期、可治理的 Agent 工作系统。",
+    "paper": "https://arxiv.org/abs/2608.21884",
+    "illustration": "loop-engineering",
+    "cover": {
+      "src": "assets/02-outer-loop.svg",
+      "caption": "事件触发后，Agent 通过验证证据决定重试、持久化、人工升级或终止"
+    }
+  },
+  {
+    "slug": "knowledge-distillation",
+    "title": "Understanding Knowledge Distillation",
+    "subtitle": "从软目标到推理能力迁移：教师如何把知识教给更小的学生模型？",
+    "category": "training",
+    "status": "published",
+    "published": "2026-11-21",
+    "updated": "2026-11-21",
+    "reading_minutes": 32,
+    "tags": [
+      "Knowledge Distillation",
+      "Model Compression",
+      "Teacher–Student Learning",
+      "Soft Targets",
+      "Logit Distillation",
+      "Feature Distillation",
+      "Relation Distillation",
+      "Sequence-level Distillation",
+      "Reasoning Distillation",
+      "LLM Post-training",
+      "DeepSeek-R1",
+      "GKD",
+      "Dataset Distillation",
+      "Data-free Distillation",
+      "Self-distillation",
+      "Multi-teacher Distillation",
+      "Cross-modal Distillation",
+      "Diffusion Model Distillation"
+    ],
+    "summary": "从 Hinton 软目标与温度缩放出发，推导 KL 蒸馏损失及 T² 梯度校正，比较响应/特征/关系蒸馏、离线/在线与序列级蒸馏；拆解 DistilBERT、TinyBERT、GKD、DeepSeek-R1 与扩散模型轨迹蒸馏，附温度交互实验、可复现 Python 数值验证和证据账本。",
+    "paper": "https://arxiv.org/abs/1503.02531",
+    "illustration": "knowledge-distillation",
+    "topic": "knowledge-distillation",
+    "cover": {
+      "src": "assets/cover-teacher-student.svg",
+      "caption": "教师软目标、特征与关系信号如何迁移到更小的学生模型"
     }
   },
   {
