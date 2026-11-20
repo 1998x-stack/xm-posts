@@ -16,12 +16,13 @@
     "slug": "classical-ml",
     "title": "经典机器学习",
     "english": "Classical Machine Learning",
-    "description": "从最大间隔与核技巧到线性模型、树模型和集成方法，梳理经典学习算法的数学机制与论文证据。",
+    "description": "从最大间隔与核技巧，到朴素贝叶斯概率分类、线性模型、树模型和集成方法，梳理经典学习算法的数学机制与论文证据。",
     "topics": [
       "SVM & Kernels",
       "Linear Models",
       "Trees & Ensembles",
-      "Unsupervised Learning & Dimensionality Reduction"
+      "Unsupervised Learning & Dimensionality Reduction",
+      "Probabilistic Models & Bayesian Classification"
     ]
   },
   {
