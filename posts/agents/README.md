@@ -1,6 +1,6 @@
 # 智能体与工具使用 / Agents & Tool Use
 
-本分类专注模型与外界交互的行动闭环：ReAct、Planning、Tool Calling、Memory、Software Engineering Agents & ACI、Agent Evaluation，以及类型化概率决策与模型路由。
+本分类专注模型与外界交互的行动闭环：ReAct、Planning、Tool Calling、Memory、Software Engineering Agents & ACI、Agent Evaluation。
 
 ## 专题占位
 
@@ -10,11 +10,11 @@
 - [Tool Calling](_topics/tool-calling/README.md) — 研究规划占位；尚非正式 Post。
 - [Memory](_topics/memory/README.md) — 研究规划占位；尚非正式 Post。
 - [Agent Evaluation](_topics/agent-evaluation/README.md) — 研究规划占位；尚非正式 Post。
-- [Typed Decision Models & Probabilistic Routing](typed-decision-models/) — Jev / System One：Choice、Score、Noul、概率校准、Bayes Risk 与 Agent 决策。
 
 ## 分类边界与发布约定
 
 - `reasoning` 解释内在推理、搜索与测试时计算；`agents` 关注环境观察、工具执行、状态和实际任务结果。
 - `retrieval-rag` 研究检索质量和依据溯源；当检索被 Agent 作为工具使用时可做跨分类链接。
+- 类型化概率决策模型归 `decision-models`；Agent 工作流调用它们时通过阅读路径交叉链接，不重复归档。
 - 正式文章放在 `posts/agents/<slug>/index.html`，提供独立 SVG、证据账本及真实 QA，并在 `content/posts.json` 注册。
 - `_topics/` 中的 README 仅作规划，占位不创建文章记录，也不会部署为文章。
