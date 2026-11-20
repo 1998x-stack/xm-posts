@@ -1,0 +1,101 @@
+name: Validate & publish xm-posts
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name != 'push' }}
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Validate, test & build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+          cache-dependency-path: requirements-dev.txt
+      - name: Install test dependencies
+        run: python -m pip install -r requirements-dev.txt
+      - name: Install Chromium
+        run: python -m playwright install --with-deps chromium
+      - name: Check mirrored skills
+        run: python scripts/sync_skills.py --check
+      - name: Run tests
+        run: python -m pytest -q
+      - name: Build static site
+        run: python scripts/build_site.py
+      - name: Validate generated site and original articles
+        run: python scripts/validate_site.py
+      - name: Verify actual browser rendering & interactions
+        run: |
+          python scripts/browser_check_all.py
+          python scripts/browser_check_site.py --output reports/site
+      - name: Upload browser QA evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: browser-qa
+          path: reports/
+          if-no-files-found: ignore
+      - name: Upload validated site artifact
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: validated-site
+          path: _site/
+          include-hidden-files: true
+          retention-days: 7
+
+  deploy:
+    name: Publish GitHub Pages
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Download validated site
+        uses: actions/download-artifact@v4
+        with:
+          name: validated-site
+          path: _site
+      # GitHub Actions Pages source must be enabled for the repository.
+      # If this repo has not enabled it yet, try to create workflow-source Pages
+      # using the job-scoped pages:write GitHub token. If policy disallows this,
+      # the action will fail clearly and the README provides a one-time UI path.
+      - name: Enable Pages (workflow source) if necessary
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if gh api "repos/${GITHUB_REPOSITORY}/pages" >/dev/null 2>&1; then
+            echo 'Pages already enabled.'
+          else
+            echo 'Attempting first-time Pages enablement for GitHub Actions...'
+            gh api --method POST "repos/${GITHUB_REPOSITORY}/pages" \
+              -H 'Accept: application/vnd.github+json' \
+              -f build_type=workflow
+          fi
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: _site
+      - name: Deploy Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

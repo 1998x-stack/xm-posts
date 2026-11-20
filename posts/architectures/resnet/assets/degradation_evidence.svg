@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="292" viewBox="0 0 760 292" role="img" aria-label="ImageNet Top-1 错误率对比：普通18层 27.94%，普通34层 28.54%，残差18层 27.88%，残差34层 25.03%"><style>
+.svg-label{font-family:"Noto Sans CJK SC",sans-serif;fill:#26474c;font-size:16px}
+.svg-small{font-family:"Noto Sans CJK SC",sans-serif;fill:#577476;font-size:12px}
+.svg-title{font-family:"Noto Sans CJK SC",sans-serif;fill:#194e50;font-size:17px;font-weight:700}
+.svg-line{stroke:#527478;stroke-width:2.5;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.svg-skip{stroke:#159d9d;stroke-width:4;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.svg-block{fill:#fff2df;stroke:#e3b375;stroke-width:1.5}
+.svg-teal{fill:#e2f5ef;stroke:#86ccc0;stroke-width:1.5}
+.svg-violet{fill:#ece9fa;stroke:#b2a8e1;stroke-width:1.5}
+</style><rect width="100%" height="100%" fill="#fff"/><line x1="70" y1="240" x2="724" y2="240" stroke="#adc6c2" stroke-width="2"/><line x1="70" y1="47" x2="70" y2="240" stroke="#adc6c2" stroke-width="2"/><g fill="#6b8282" font-size="12" font-family="Noto Sans CJK SC"><text x="49" y="244">20</text><text x="49" y="180">23</text><text x="49" y="116">26</text><text x="49" y="52">29</text></g><g stroke="#e2ece9" stroke-dasharray="4 5"><path d="M70 47H724M70 111H724M70 175H724"/></g><rect x="110" y="69.6" width="112" height="170.4" rx="7" fill="#efb28d"/><rect x="266" y="56.8" width="112" height="183.2" rx="7" fill="#df8562"/><rect x="422" y="70.9" width="112" height="169.1" rx="7" fill="#90d3cc"/><rect x="578" y="131.8" width="112" height="108.2" rx="7" fill="#168d8f"/><g font-size="16" font-family="Noto Sans CJK SC" font-weight="700" text-anchor="middle"><text x="166" y="62" fill="#a64a2d">27.94%</text><text x="322" y="49" fill="#a64a2d">28.54%</text><text x="478" y="63" fill="#217c7d">27.88%</text><text x="634" y="125" fill="#137b7d">25.03%</text></g><g font-size="14" font-family="Noto Sans CJK SC" text-anchor="middle" fill="#3e5a60"><text x="166" y="261">Plain-18</text><text x="322" y="261">Plain-34</text><text x="478" y="261">ResNet-18</text><text x="634" y="261">ResNet-34</text><text x="400" y="289" font-size="12">ImageNet 验证集 · Top-1 error (%) · 越低越好</text></g></svg>

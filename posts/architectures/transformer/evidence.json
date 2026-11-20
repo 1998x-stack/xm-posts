@@ -1,0 +1,29 @@
+[
+  {
+    "id": "T1",
+    "claim": "Original Transformer uses encoder-decoder stacks and multi-head attention",
+    "kind": "architecture",
+    "source_url": "https://arxiv.org/abs/1706.03762",
+    "locator": "Figure 1; Sections 3.1–3.3",
+    "status": "verified",
+    "notes": "Original 2017 model is post-LN"
+  },
+  {
+    "id": "T2",
+    "claim": "Scaled dot product attention uses softmax(QK^T / sqrt(d_k))V",
+    "kind": "equation",
+    "source_url": "https://arxiv.org/abs/1706.03762",
+    "locator": "Equation 1, Section 3.2.1",
+    "status": "verified",
+    "notes": "Masking sets disallowed scores to negative infinity before softmax"
+  },
+  {
+    "id": "T3",
+    "claim": "Annotated implementation contains architecture, masking, training loop, synthetic example and evaluation visualizations",
+    "kind": "implementation-reference",
+    "source_url": "https://nlp.seas.harvard.edu/annotated-transformer/",
+    "locator": "Parts 1–3",
+    "status": "verified",
+    "notes": "Referenced for pedagogical sequence; source code not copied"
+  }
+]

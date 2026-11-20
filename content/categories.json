@@ -1,0 +1,79 @@
+[
+  {
+    "slug": "foundations",
+    "title": "基础理论",
+    "english": "Foundations",
+    "description": "从优化、表示学习和数学直觉出发，建立理解现代模型的共同语言。",
+    "topics": [
+      "Optimization",
+      "Representation",
+      "Math"
+    ]
+  },
+  {
+    "slug": "architectures",
+    "title": "模型架构",
+    "english": "Architectures",
+    "description": "拆开网络的信息路径：从 ResNet 的残差学习到 Transformer 的注意力结构。",
+    "topics": [
+      "ResNet",
+      "Transformer",
+      "State Space"
+    ]
+  },
+  {
+    "slug": "training",
+    "title": "训练与对齐",
+    "english": "Training & Alignment",
+    "description": "预训练、微调、对齐目标与优化策略的可验证拆解。",
+    "topics": [
+      "Pretraining",
+      "Fine-tuning",
+      "Alignment"
+    ]
+  },
+  {
+    "slug": "inference",
+    "title": "推理与 Serving",
+    "english": "Inference & Serving",
+    "description": "从自回归解码、KV Cache、批处理到实际在线服务的延迟与吞吐。",
+    "topics": [
+      "KV Cache",
+      "Batching",
+      "Decoding"
+    ]
+  },
+  {
+    "slug": "systems",
+    "title": "系统与 Kernel",
+    "english": "Systems & Kernels",
+    "description": "内存层级、GPU 算子、编译与系统性能分析。",
+    "topics": [
+      "CUDA",
+      "Triton",
+      "Parallelism"
+    ]
+  },
+  {
+    "slug": "multimodal",
+    "title": "多模态",
+    "english": "Multimodal",
+    "description": "视觉、语言、音频等模态如何编码、对齐与交互。",
+    "topics": [
+      "Vision",
+      "Audio",
+      "Fusion"
+    ]
+  },
+  {
+    "slug": "evaluation",
+    "title": "评测与复现",
+    "english": "Evaluation",
+    "description": "实验证据、Benchmark 设计、基线公平性与可重复性。",
+    "topics": [
+      "Benchmarks",
+      "Reproduction",
+      "Ablations"
+    ]
+  }
+]

@@ -1,0 +1,38 @@
+[
+  {
+    "slug": "resnet",
+    "title": "Understanding ResNet",
+    "subtitle": "为什么网络越深，训练反而可能越困难？",
+    "category": "architectures",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 24,
+    "tags": [
+      "Residual Learning",
+      "Computer Vision",
+      "Optimization"
+    ],
+    "summary": "从深度退化与恒等捷径出发，逐步理解残差块、梯度传播、ResNet-50、投影连接与论文中的对照实验。",
+    "paper": "https://arxiv.org/abs/1512.03385",
+    "illustration": "resnet"
+  },
+  {
+    "slug": "transformer",
+    "title": "Understanding Transformer",
+    "subtitle": "从循环记忆到 Attention：序列中的信息如何彼此连接？",
+    "category": "architectures",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 36,
+    "tags": [
+      "Self-Attention",
+      "QKV",
+      "Sequence Modeling"
+    ],
+    "summary": "以 Q/K/V 为线索，图解注意力计算、Mask、多头机制、位置编码及原始 Encoder–Decoder，并用简化 PyTorch 对照。",
+    "paper": "https://arxiv.org/abs/1706.03762",
+    "illustration": "transformer"
+  }
+]

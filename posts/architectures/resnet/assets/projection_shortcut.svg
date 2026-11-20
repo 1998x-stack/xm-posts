@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="249" viewBox="0 0 760 249" role="img" aria-label="主分支使用stride2卷积输出28乘28乘128，shortcut使用stride2的一乘一卷积，也输出28乘28乘128，最后相加"><style>
+.svg-label{font-family:"Noto Sans CJK SC",sans-serif;fill:#26474c;font-size:16px}
+.svg-small{font-family:"Noto Sans CJK SC",sans-serif;fill:#577476;font-size:12px}
+.svg-title{font-family:"Noto Sans CJK SC",sans-serif;fill:#194e50;font-size:17px;font-weight:700}
+.svg-line{stroke:#527478;stroke-width:2.5;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.svg-skip{stroke:#159d9d;stroke-width:4;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.svg-block{fill:#fff2df;stroke:#e3b375;stroke-width:1.5}
+.svg-teal{fill:#e2f5ef;stroke:#86ccc0;stroke-width:1.5}
+.svg-violet{fill:#ece9fa;stroke:#b2a8e1;stroke-width:1.5}
+</style><rect width="100%" height="100%" fill="#fff"/><rect x="15" y="92" width="147" height="57" rx="10" class="svg-teal"/><text x="89" y="118" class="svg-label" text-anchor="middle">输入 x</text><text x="89" y="139" class="svg-small" text-anchor="middle">56×56×64</text><path d="M162 121H194V58H228" stroke="#d88558" stroke-width="3" fill="none"/><rect x="228" y="25" width="265" height="66" rx="10" class="svg-block"/><text x="360" y="52" class="svg-label" text-anchor="middle">主分支 · Conv + BN</text><text x="360" y="76" class="svg-small" text-anchor="middle">stride=2 → 28×28×128</text><path d="M493 58H623V110" stroke="#d88558" stroke-width="3" fill="none"/><path d="M194 121V183H228" stroke="#148f93" stroke-width="4" fill="none"/><rect x="228" y="151" width="265" height="66" rx="10" class="svg-teal"/><text x="360" y="179" class="svg-label" text-anchor="middle">捷径 · 1×1 Conv + BN</text><text x="360" y="203" class="svg-small" text-anchor="middle">stride=2 → 28×28×128</text><path d="M493 184H623V145" stroke="#148f93" stroke-width="4" fill="none"/><circle cx="623" cy="128" r="19" fill="#e5f8f1" stroke="#13888a" stroke-width="3"/><text x="623" y="135" fill="#13888a" font-size="25" text-anchor="middle">+</text><path d="M642 128H660" stroke="#547777" stroke-width="3"/><rect x="660" y="98" width="94" height="61" rx="9" class="svg-violet"/><text x="707" y="124" class="svg-label" text-anchor="middle">输出</text><text x="707" y="144" class="svg-small" text-anchor="middle">28×28×128</text></svg>
