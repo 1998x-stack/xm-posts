@@ -33,7 +33,36 @@ section{margin-bottom:73px;scroll-margin-top:26px}p{margin:0 0 19px;color:var(--
 </section>
 <section id="layers"><h2>02 · 四层记忆：从事件日志到下次会话</h2>
 <p>原文讨论了一个有层次的设计：底部保留<strong>transcripts</strong>（可搜索的事件原始记录）；其上是模型写下的<strong>memory notes</strong>（精炼事实与策略）；更上一层是<strong>knowledge representations</strong>（如相互链接的 wiki）；最顶部是会在未来会话启动时注入的简短上下文。原文的“dreaming”会在会话间利用计算整理这些材料。<a href="#sources">[1]</a></p>
-<figure class="figure"><img src="assets/01-memory-flow.svg" width="960" height="380" alt="原创横向流程图：原始事件经过证据核验形成笔记，再建立链接索引，最后向下次会话提供简短提示"><figcaption>图 2 · 独立绘制的信息流：<strong>记录 → 验证 → 组织 → 使用</strong>。这是对工程思想的教学整理，不代表 Anthropic 系统的具体内部结构。</figcaption></figure>
+<figure class="figure"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 380" role="img" aria-label="从会话事件到可验证笔记、知识索引和下次会话的记忆流">
+<title>Agent 记忆：经验不等于知识</title><desc>一条事件先留在原始记录中，经过证据检验形成笔记，组织为可检索索引，再把少量关键知识送入下次会话。</desc>
+<rect width="960" height="380" rx="22" fill="#f0f6f3"/>
+<g font-family="Arial,Helvetica,sans-serif"><text x="34" y="41" font-size="17" font-weight="700" fill="#23454a">FROM EXPERIENCE TO RELIABLE MEMORY</text>
+<g>
+<rect x="33" y="83" width="196" height="190" rx="17" fill="#ffffff" stroke="#cbded7" stroke-width="2"/>
+<rect x="49" y="101" width="164" height="36" rx="8" fill="#e9f1ed"/><text x="63" y="125" fill="#244e54" font-size="18" font-weight="700">1  Event log</text>
+<text x="49" y="166" fill="#486469" font-size="15">raw action</text><text x="49" y="192" fill="#486469" font-size="15">tool result</text><text x="49" y="218" fill="#486469" font-size="15">timestamp</text>
+<circle cx="68" cy="245" r="6" fill="#3b8c83"/><circle cx="92" cy="245" r="6" fill="#3b8c83"/><circle cx="116" cy="245" r="6" fill="#3b8c83"/>
+</g>
+<g><path d="M232 174 H273" stroke="#3b8c83" stroke-width="4" stroke-linecap="round"/><path d="M263 166 L277 174 L263 182" fill="none" stroke="#3b8c83" stroke-width="4" stroke-linecap="round"/></g>
+<g><rect x="284" y="83" width="196" height="190" rx="17" fill="#ffffff" stroke="#cbded7" stroke-width="2"/>
+<rect x="300" y="101" width="164" height="36" rx="8" fill="#ffe8da"/><text x="312" y="125" fill="#844d32" font-size="18" font-weight="700">2  Verify note</text>
+<text x="300" y="165" fill="#486469" font-size="15">claim + source</text><text x="300" y="191" fill="#486469" font-size="15">confidence</text><text x="300" y="217" fill="#486469" font-size="15">freshness</text>
+<circle cx="316" cy="246" r="11" fill="#28786d"/><path d="M310 246 l4 4 l8 -9" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+</g>
+<g><path d="M483 174 H524" stroke="#3b8c83" stroke-width="4" stroke-linecap="round"/><path d="M514 166 L528 174 L514 182" fill="none" stroke="#3b8c83" stroke-width="4" stroke-linecap="round"/></g>
+<g><rect x="535" y="83" width="182" height="190" rx="17" fill="#ffffff" stroke="#cbded7" stroke-width="2"/>
+<rect x="550" y="101" width="152" height="36" rx="8" fill="#deebfb"/><text x="560" y="125" fill="#31567b" font-size="18" font-weight="700">3  Link / search</text>
+<circle cx="578" cy="175" r="12" fill="#3d80b6"/><circle cx="666" cy="163" r="12" fill="#3d80b6"/><circle cx="628" cy="224" r="12" fill="#3d80b6"/>
+<path d="M588 172 L656 165 M585 184 L619 215 M655 175 L637 215" stroke="#8ab1d2" stroke-width="4"/>
+</g>
+<g><path d="M720 174 H755" stroke="#3b8c83" stroke-width="4" stroke-linecap="round"/><path d="M747 166 L761 174 L747 182" fill="none" stroke="#3b8c83" stroke-width="4" stroke-linecap="round"/></g>
+<g><rect x="767" y="83" width="160" height="190" rx="17" fill="#ffffff" stroke="#cbded7" stroke-width="2"/>
+<rect x="782" y="101" width="131" height="36" rx="8" fill="#dcefe4"/><text x="789" y="125" fill="#287051" font-size="17" font-weight="700">4  Next turn</text>
+<rect x="785" y="160" width="119" height="28" rx="6" fill="#eaf6ef"/><text x="797" y="180" font-size="13" fill="#287051">short index</text><rect x="785" y="200" width="119" height="28" rx="6" fill="#f0f5f7"/><text x="797" y="220" font-size="13" fill="#526e74">fetch details</text>
+</g>
+<path d="M395 282 V305 H143 V273" fill="none" stroke="#bc825b" stroke-width="3" stroke-dasharray="8 6"/><text x="230" y="329" font-size="14" fill="#995a36">check old notes against original evidence</text>
+<text x="35" y="354" font-size="13" fill="#6a8584">Teaching abstraction · arrows describe information flow, not an internal product implementation.</text>
+</g></svg><figcaption>图 2 · 独立绘制的信息流：<strong>记录 → 验证 → 组织 → 使用</strong>。这是对工程思想的教学整理，不代表 Anthropic 系统的具体内部结构。</figcaption></figure>
 <div class="table-wrap"><table><thead><tr><th>层</th><th>负责回答的问题</th><th>典型内容</th><th>最容易犯的错</th></tr></thead><tbody>
 <tr><td>日志 transcripts</td><td>“实际发生了什么？”</td><td>时间、工具输出、操作结果</td><td>海量冗余，检索成本高</td></tr>
 <tr><td>笔记 notes</td><td>“以后可能用到什么？”</td><td>已验证规则、失败原因</td><td>早早写入错误假设</td></tr>
@@ -44,7 +73,24 @@ section{margin-bottom:73px;scroll-margin-top:26px}p{margin:0 0 19px;color:var(--
 </section>
 <section id="verify"><h2>03 · Dreaming：把“想起来”升级为“核对过”</h2>
 <p>写记忆时，Agent 只能根据当下已看到的证据判断价值。等任务往前走，它可能发现先前理解不对。所谓 dreaming，在这里不是模型睡觉或更新权重，而是<strong>利用会话间计算回看记录、找出矛盾、修正笔记、合并重复知识</strong>。</p>
-<figure class="figure"><img src="assets/02-fact-check.svg" width="900" height="356" alt="对照图：左侧未经验证的旧 API 版本记忆驱动错误重试；右侧通过带时间的日志证据修正路径后再行动"><figcaption>图 3 · 自构的 API 升级教学例子。事实应从原始记录回溯；不能仅因某条笔记被多次复述就认为它真实。</figcaption></figure>
+<figure class="figure"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 356" role="img" aria-label="错误记忆如何通过日志证据修正的对照流程">
+<title>错误记忆校验：核对证据而不是重复信念</title><desc>左侧是错误笔记直接驱动行动，右侧是先从日志取得版本证据再更新笔记，避免重复行动。</desc>
+<rect width="900" height="356" rx="20" fill="#f4f7f6"/>
+<g font-family="Arial,Helvetica,sans-serif">
+<rect x="26" y="29" width="402" height="288" rx="15" fill="#fff5ee" stroke="#ebc4ab" stroke-width="2"/>
+<rect x="472" y="29" width="402" height="288" rx="15" fill="#edf6f1" stroke="#b7dbcb" stroke-width="2"/>
+<text x="48" y="62" font-size="20" font-weight="700" fill="#96583c">Unverified memory</text><text x="494" y="62" font-size="20" font-weight="700" fill="#266d5e">Evidence-checked memory</text>
+<g fill="#fff" stroke-width="2">
+<rect x="48" y="87" width="358" height="64" rx="10" stroke="#e5b397"/><rect x="48" y="193" width="358" height="64" rx="10" stroke="#e5b397"/>
+<rect x="494" y="87" width="358" height="64" rx="10" stroke="#a8d3c4"/><rect x="494" y="193" width="358" height="64" rx="10" stroke="#a8d3c4"/>
+</g>
+<text x="65" y="112" font-size="15" fill="#704e43">Note claims: API = /v1</text><text x="65" y="136" font-size="14" fill="#886859">No source attached</text><path d="M224 153 V185" stroke="#c47655" stroke-width="4"/><path d="M215 177 L224 188 L233 177" fill="none" stroke="#c47655" stroke-width="4"/>
+<text x="65" y="218" font-size="15" fill="#704e43">Agent retries wrong route</text><text x="65" y="242" font-size="14" fill="#886859">Repeated failure</text>
+<text x="511" y="112" font-size="15" fill="#295e55">Log shows: API = /v2</text><text x="511" y="136" font-size="14" fill="#5b7b6d">Timestamp + direct evidence</text><path d="M670 153 V185" stroke="#35806b" stroke-width="4"/><path d="M661 177 L670 188 L679 177" fill="none" stroke="#35806b" stroke-width="4"/>
+<text x="511" y="218" font-size="15" fill="#295e55">Note updated: /v2</text><text x="511" y="242" font-size="14" fill="#5b7b6d">Try verified endpoint</text>
+<text x="48" y="292" font-size="14" fill="#96583c">Blind reuse amplifies error.</text><text x="494" y="292" font-size="14" fill="#266d5e">Audit then consolidate.</text>
+<text x="26" y="343" font-size="13" fill="#6a8280">Fictional API example · not an Anthropic benchmark or quoted implementation.</text>
+</g></svg><figcaption>图 3 · 自构的 API 升级教学例子。事实应从原始记录回溯；不能仅因某条笔记被多次复述就认为它真实。</figcaption></figure>
 <h3>原文中的实际案例</h3>
 <p>Anthropic 报告了一次 Pokémon Red 导航案例：Agent 对某处地点位置有错误记忆，反复走错；离线校验后，系统根据会话日志修正了该笔记，在对应试验运行中成功继续前进。作者还报告：使用 corrected memory 的一次运行在累计第 1,935 个动作抵达目标城市，未修正记忆的运行则未能抵达。<a href="#sources">[1, Figure 8]</a></p>
 <p>这说明“错误记忆的修正”在这个测试中很重要；<strong>它并不证明任何系统只要增加 dreaming 就会普遍变聪明</strong>。任务难度、模型版本、评价方法、生成笔记成本都会影响结果。</p>
@@ -52,7 +98,21 @@ section{margin-bottom:73px;scroll-margin-top:26px}p{margin:0 0 19px;color:var(--
 </section>
 <section id="retrieve"><h2>04 · Wiki 是地图，不是另一份全文拷贝</h2>
 <p>原文还研究了把分散资料整理为相互链接的 wiki。当问题需要综合多份文件，链接关系可以为搜索提供更好的路线；当答案几乎都在一个文件里时，直接搜索可能足够。<a href="#sources">[1]</a></p>
-<figure class="figure"><img src="assets/03-wiki-search.svg" width="900" height="370" alt="搜索原始文档、浏览知识索引、从来源形成答案的原创链路图"><figcaption>图 4 · 搜索负责取得证据，链接索引负责提示关系，最终答案仍应能追溯回原始文件。</figcaption></figure>
+<figure class="figure"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 370" role="img" aria-label="检索与维基互补的知识发现流程">
+<title>搜索负责寻找证据，知识索引负责连接关系</title><desc>多份原始文档先被搜索，知识索引通过交叉文档链接引导访问，最后把有出处的材料综合成答案。</desc>
+<rect width="900" height="370" rx="20" fill="#f1f6f7"/>
+<g font-family="Arial,Helvetica,sans-serif"><text x="31" y="40" font-size="20" font-weight="700" fill="#254a54">SEARCH + CONNECTED KNOWLEDGE</text>
+<g fill="#fff" stroke="#cadbdc" stroke-width="2"><rect x="30" y="90" width="202" height="198" rx="14"/><rect x="333" y="90" width="229" height="198" rx="14"/><rect x="672" y="90" width="194" height="198" rx="14"/></g>
+<text x="48" y="123" font-size="17" font-weight="700" fill="#35576b">Original files</text><g fill="#d9e9ef"><rect x="48" y="144" width="161" height="28" rx="6"/><rect x="48" y="185" width="161" height="28" rx="6"/><rect x="48" y="226" width="161" height="28" rx="6"/></g>
+<text x="60" y="163" font-size="14" fill="#35576b">contract A</text><text x="60" y="204" font-size="14" fill="#35576b">release log</text><text x="60" y="245" font-size="14" fill="#35576b">support notes</text>
+<path d="M235 188 H323" stroke="#548d9c" stroke-width="4"/><path d="M312 180 L326 188 L312 196" stroke="#548d9c" stroke-width="4" fill="none"/><text x="258" y="170" fill="#496f74" font-size="13">search</text>
+<text x="350" y="123" font-size="17" font-weight="700" fill="#2c615a">Linked index</text>
+<g stroke="#87b6a7" stroke-width="4"><path d="M390 177 L473 161 L505 226 L396 239 Z"/><path d="M473 161 L396 239"/></g>
+<circle cx="390" cy="177" r="15" fill="#408d80"/><circle cx="473" cy="161" r="15" fill="#408d80"/><circle cx="505" cy="226" r="15" fill="#408d80"/><circle cx="396" cy="239" r="15" fill="#408d80"/>
+<path d="M565 188 H661" stroke="#548d9c" stroke-width="4"/><path d="M650 180 L664 188 L650 196" stroke="#548d9c" stroke-width="4" fill="none"/><text x="581" y="169" fill="#496f74" font-size="13">ground</text>
+<text x="690" y="123" font-size="17" font-weight="700" fill="#35576b">Answer</text><text x="691" y="155" font-size="14" fill="#4c6671">cross-file</text><text x="691" y="177" font-size="14" fill="#4c6671">synthesis</text><path d="M695 203 h140 M695 224 h124 M695 245 h145" stroke="#bfd0d5" stroke-width="7" stroke-linecap="round"/>
+<path d="M121 296 V324 H769 V290" stroke="#c08355" stroke-width="3" fill="none" stroke-dasharray="7 6"/><text x="275" y="343" font-size="14" fill="#a3663e">trace claims back to original documents</text>
+</g></svg><figcaption>图 4 · 搜索负责取得证据，链接索引负责提示关系，最终答案仍应能追溯回原始文件。</figcaption></figure>
 <p>研究者在一组约 35 万个文件、约 4.2 亿 tokens 的资料上测试，逐步建设 wiki；在作者报告的 25 道题设置中，结合搜索与不断增长的 wiki，达标比例由 54% 增至 61%，单独搜索约为 53%；这些都是<strong>特定测试及计分口径</strong>，不是普适的 RAG 提升率。另一个测试中，wiki 内容甚至超过源文件体积，成为“没有真正压缩的知识地图”。<a href="#sources">[1, Figures 10–12]</a></p>
 <p>因此两种常见错误同样值得避免：只做模糊总结、缺少原文引用；以及为每段原文都建一个近似副本，以致维护成本高于直接搜索。</p>
 </section>
@@ -66,7 +126,22 @@ section{margin-bottom:73px;scroll-margin-top:26px}p{margin:0 0 19px;color:var(--
 </section>
 <section id="results"><h2>06 · 论文式严谨性：给工程实验标清边界</h2>
 <p>原文是团队工程文章而非同行评审的正式论文。下面只列出可以直接从其图注及正文核对的两个模型在 CL-Bench 1.0 数据库任务中的平均奖励；“有记忆”指实验允许跨会话访问持久 memory directory，不能简单理解为同一模型参数发生训练更新。<a href="#sources">[1, Figure 3]</a></p>
-<figure class="figure"><img src="assets/04-cl-bench.svg" width="900" height="385" alt="Anthropic 报告的 CL-Bench 数据库任务：Opus 5 平均奖励由 0.564 到 0.828，Sonnet 4.6 由 0.330 到 0.364"><figcaption>图 5 · 根据原文报告的具体数字独立重绘；仅比较该实验设置。不同模型的记忆收益差异很大，不能当作普遍增益。</figcaption></figure>
+<figure class="figure"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 385" role="img" aria-label="Anthropic CL-Bench 数据库任务的两个模型有无记忆的平均奖励对照">
+<title>CL-Bench 数据库任务：记忆前后平均奖励</title><desc>Opus 5 从0.564提升到0.828，Sonnet 4.6从0.330提升到0.364。均为 Anthropic 2026 年文章所报告的实验结果，不代表普遍提升幅度。</desc>
+<rect width="900" height="385" rx="20" fill="#f4f7f5"/>
+<g font-family="Arial,Helvetica,sans-serif">
+<text x="30" y="40" fill="#24464b" font-size="20" font-weight="700">MEMORY DOES NOT HELP EVERY MODEL EQUALLY</text>
+<text x="30" y="68" fill="#627c7d" font-size="15">CL-Bench 1.0 · database task · mean reward (Anthropic, 2026)</text>
+<line x1="256" y1="320" x2="817" y2="320" stroke="#8da6a4" stroke-width="2"/>
+<g font-size="14" fill="#67817f"><text x="250" y="345">0</text><text x="388" y="345">0.25</text><text x="526" y="345">0.50</text><text x="667" y="345">0.75</text><text x="804" y="345">1.0</text></g>
+<g stroke="#d3dfdb" stroke-dasharray="5 7"><path d="M397 90 V320 M537 90 V320 M677 90 V320 M817 90 V320"/></g>
+<text x="30" y="155" fill="#294b52" font-size="20" font-weight="700">Opus 5</text><text x="30" y="268" fill="#294b52" font-size="20" font-weight="700">Sonnet 4.6</text>
+<rect x="256" y="100" width="316" height="26" rx="5" fill="#84a4b0"/><rect x="256" y="137" width="464" height="26" rx="5" fill="#2d907d"/>
+<rect x="256" y="213" width="185" height="26" rx="5" fill="#84a4b0"/><rect x="256" y="250" width="204" height="26" rx="5" fill="#2d907d"/>
+<g font-size="14" font-weight="700" fill="#28484c"><text x="583" y="119">0.564</text><text x="731" y="156">0.828</text><text x="451" y="232">0.330</text><text x="470" y="269">0.364</text></g>
+<rect x="30" y="297" width="15" height="15" rx="3" fill="#84a4b0"/><text x="52" y="310" font-size="13" fill="#536f70">No memory</text><rect x="132" y="297" width="15" height="15" rx="3" fill="#2d907d"/><text x="154" y="310" font-size="13" fill="#536f70">With memory</text>
+<text x="30" y="369" fill="#6b8582" font-size="12">Values: source Figure 3; bar lengths are proportional to published means, not a causal estimate beyond this setup.</text>
+</g></svg><figcaption>图 5 · 根据原文报告的具体数字独立重绘；仅比较该实验设置。不同模型的记忆收益差异很大，不能当作普遍增益。</figcaption></figure>
 <div class="table-wrap"><table><thead><tr><th>模型（原文命名）</th><th>无记忆</th><th>有记忆</th><th>绝对变化</th></tr></thead><tbody><tr><td>Claude Opus 5</td><td>0.564</td><td>0.828</td><td>+0.264</td></tr><tr><td>Claude Sonnet 4.6</td><td>0.330</td><td>0.364</td><td>+0.034</td></tr></tbody></table></div>
 <p>另一个原文实验使用 Pokémon Red 来观察哪些信息值得记住。作者描述：某旧模型倾向保存大量原始经历，而更强的模型维护较精炼的策略、目标和路径笔记。两种做法对应不同模型与单次运行，因此<strong>不能仅凭记忆文件数量直接推断因果</strong>。<a href="#sources">[1, Figures 4–5]</a></p>
 </section>
