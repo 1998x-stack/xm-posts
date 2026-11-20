@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 480" role="img" aria-labelledby="regime-title regime-desc">
+<title id="regime-title">离线蒸馏与 on-policy 蒸馏的数据路径</title>
+<desc id="regime-desc">上半部分为教师预先生成固定样本与软标签后训练学生；下半部分为学生自己生成序列，教师对学生访问到的前缀提供反馈。</desc>
+<rect width="920" height="480" rx="18" fill="#fbfdfa"/>
+<text x="34" y="42" font-size="16" font-weight="800" fill="#2c6a62">OFFLINE KD · 固定教师目标</text>
+<rect x="36" y="72" width="170" height="76" rx="11" fill="#f8eadd" stroke="#d8ad8a"/><text x="121" y="103" text-anchor="middle" font-size="16" font-weight="800" fill="#865d3e">Teacher</text><text x="121" y="127" text-anchor="middle" font-size="12" fill="#8c6d53">预先推理</text>
+<path d="M206 110 H269" stroke="#bd8558" stroke-width="3"/><path d="M260 102 L270 110 L260 118" fill="none" stroke="#bd8558" stroke-width="3"/>
+<rect x="273" y="72" width="210" height="76" rx="11" fill="#eeebf7" stroke="#c9c0df"/><text x="378" y="102" text-anchor="middle" font-size="15" font-weight="800" fill="#61548c">缓存目标</text><text x="378" y="126" text-anchor="middle" font-size="12" fill="#766b98">logits / labels / traces</text>
+<path d="M483 110 H548" stroke="#7f72ad" stroke-width="3"/><path d="M539 102 L549 110 L539 118" fill="none" stroke="#7f72ad" stroke-width="3"/>
+<rect x="552" y="72" width="170" height="76" rx="11" fill="#e8f2ed" stroke="#afd0c0"/><text x="637" y="103" text-anchor="middle" font-size="16" font-weight="800" fill="#2d6b61">Student</text><text x="637" y="127" text-anchor="middle" font-size="12" fill="#54796f">读取固定目标训练</text>
+<rect x="748" y="72" width="136" height="76" rx="11" fill="#fff" stroke="#cbded4"/><text x="816" y="102" text-anchor="middle" font-size="14" font-weight="800" fill="#476c65">优点</text><text x="816" y="126" text-anchor="middle" font-size="11" fill="#6a8580">简单、可复用</text>
+<line x1="34" y1="188" x2="886" y2="188" stroke="#dce7e1" stroke-width="2"/>
+<text x="34" y="229" font-size="16" font-weight="800" fill="#2c6a62">ON-POLICY KD · 学生自己访问的状态</text>
+<rect x="36" y="263" width="170" height="80" rx="11" fill="#e8f2ed" stroke="#afd0c0"/><text x="121" y="296" text-anchor="middle" font-size="16" font-weight="800" fill="#2d6b61">Student</text><text x="121" y="320" text-anchor="middle" font-size="12" fill="#54796f">采样自己的序列</text>
+<path d="M206 303 H270" stroke="#438d80" stroke-width="3"/><path d="M261 295 L271 303 L261 311" fill="none" stroke="#438d80" stroke-width="3"/>
+<rect x="274" y="263" width="210" height="80" rx="11" fill="#fff" stroke="#cbded4"/><text x="379" y="295" text-anchor="middle" font-size="15" font-weight="800" fill="#466c66">学生生成前缀</text><text x="379" y="319" text-anchor="middle" font-size="12" fill="#6b8580">包含学生自己的偏差</text>
+<path d="M484 303 H546" stroke="#438d80" stroke-width="3"/><path d="M537 295 L547 303 L537 311" fill="none" stroke="#438d80" stroke-width="3"/>
+<rect x="550" y="263" width="170" height="80" rx="11" fill="#f8eadd" stroke="#d8ad8a"/><text x="635" y="295" text-anchor="middle" font-size="15" font-weight="800" fill="#865d3e">Teacher feedback</text><text x="635" y="319" text-anchor="middle" font-size="12" fill="#8c6d53">在该前缀上给出分布</text>
+<path d="M635 343 V380 H121 V343" fill="none" stroke="#8878b6" stroke-width="2.5" stroke-dasharray="7 6"/>
+<text x="379" y="408" text-anchor="middle" font-size="13" font-weight="700" fill="#655a8a">更新学生，使其在自己访问的状态上更接近教师</text>
+<rect x="748" y="263" width="136" height="80" rx="11" fill="#fff" stroke="#cbded4"/><text x="816" y="294" text-anchor="middle" font-size="14" font-weight="800" fill="#476c65">代价</text><text x="816" y="318" text-anchor="middle" font-size="11" fill="#6a8580">更多教师调用</text>
+<text x="460" y="454" text-anchor="middle" font-size="12" fill="#708781">GKD 的核心动机：缓解训练序列与学生部署时自生成序列之间的分布偏移。</text>
+</svg>

@@ -1,0 +1,137 @@
+[
+  {
+    "id": "E01",
+    "kind": "survey",
+    "claim": "Agentic RL reframes LLMs as decision-making agents in dynamic environments and contrasts single-step MDP-style LLM RL with temporally extended POMDP-style interaction.",
+    "source_url": "https://mlanthology.org/tmlr/2026/zhang2026tmlr-landscape/",
+    "locator": "Abstract, TMLR 2026",
+    "status": "verified",
+    "notes": "Survey reports synthesis of 500+ recent works and a two-axis taxonomy: agent capabilities and application domains."
+  },
+  {
+    "id": "E02",
+    "kind": "taxonomy",
+    "claim": "The survey identifies planning, tool use, memory, reasoning, self-improvement, and perception as core agentic capabilities.",
+    "source_url": "https://mlanthology.org/tmlr/2026/zhang2026tmlr-landscape/",
+    "locator": "Abstract, TMLR 2026",
+    "status": "verified",
+    "notes": "Used as research taxonomy, not copied as the repository's top-level category structure."
+  },
+  {
+    "id": "E03",
+    "kind": "framework",
+    "claim": "AgentGym-RL separates agent, environment, and training modules and supports multi-turn interactive decision-making across diverse scenarios.",
+    "source_url": "https://openreview.net/pdf/d8e15fc2cabf98ead8ffbe0d8e6ad1b2764a3d28.pdf",
+    "locator": "Abstract; §3; Figure 2",
+    "status": "verified",
+    "notes": "ICLR 2026 paper. Framework architecture is distinguished from the RL algorithms it supports."
+  },
+  {
+    "id": "E04",
+    "kind": "method",
+    "claim": "ScalingInter-RL progressively increases the interaction horizon during training to stabilize long-horizon agent learning.",
+    "source_url": "https://openreview.net/pdf/d8e15fc2cabf98ead8ffbe0d8e6ad1b2764a3d28.pdf",
+    "locator": "§4; Figure 4; Figure 5",
+    "status": "verified",
+    "notes": "The article's curriculum diagram is an independent conceptual illustration, not a reproduction of the paper's curve."
+  },
+  {
+    "id": "E05",
+    "kind": "result",
+    "claim": "AgentGym-RL evaluates across 27 tasks and reports competitive performance for its 7B model; the paper reports 61.8% average success for its method in the stated comparison.",
+    "source_url": "https://openreview.net/pdf/d8e15fc2cabf98ead8ffbe0d8e6ad1b2764a3d28.pdf",
+    "locator": "Abstract; Figure 1; §6",
+    "status": "verified",
+    "notes": "Results are specific to the paper's model, benchmarks, task set, and evaluation setup; not a universal agent score."
+  },
+  {
+    "id": "E06",
+    "kind": "method",
+    "claim": "WebRL uses a self-evolving online curriculum that generates tasks from failed attempts, an outcome-supervised reward model, and adaptive online RL.",
+    "source_url": "https://proceedings.iclr.cc/paper_files/paper/2025/hash/c66e1fcc9691aae706250638f36f681b-Abstract-Conference.html",
+    "locator": "Abstract, ICLR 2025",
+    "status": "verified",
+    "notes": "Paper-specific web agent training method."
+  },
+  {
+    "id": "E07",
+    "kind": "result",
+    "claim": "WebRL reports Llama-3.1-8B WebArena-Lite success increasing from 4.8% to 42.4%, and Llama-3.1-70B reaching 47.3% in its experimental setup.",
+    "source_url": "https://proceedings.iclr.cc/paper_files/paper/2025/hash/c66e1fcc9691aae706250638f36f681b-Abstract-Conference.html",
+    "locator": "Abstract, ICLR 2025",
+    "status": "verified",
+    "notes": "Do not generalize beyond the paper's benchmark and evaluation protocol."
+  },
+  {
+    "id": "E08",
+    "kind": "system",
+    "claim": "Agent Lightning decouples agent execution from training and introduces hierarchical credit assignment to turn multi-step traces into training transitions.",
+    "source_url": "https://arxiv.org/abs/2508.03680",
+    "locator": "Abstract; §1",
+    "status": "verified",
+    "notes": "Framework and LightningRL design; compatible with existing policy optimization algorithms."
+  },
+  {
+    "id": "E09",
+    "kind": "method",
+    "claim": "SOAR proposes observation-aligned advantages for environment observation tokens, scaled using the uncertainty of preceding actions.",
+    "source_url": "https://aclanthology.org/2026.acl-long.1624.pdf",
+    "locator": "Abstract; §3.2–3.3; Eq. 10",
+    "status": "verified",
+    "notes": "A specialized research method. Standard policy-gradient implementations generally distinguish policy-sampled tokens from environment observations."
+  },
+  {
+    "id": "E10",
+    "kind": "survey",
+    "claim": "The long-horizon tool-agent recipe studies reward shaping, model scaling, data composition, algorithm selection, and environmental stability.",
+    "source_url": "https://aclanthology.org/2026.findings-emnlp.118/",
+    "locator": "Abstract, Findings of EMNLP 2026",
+    "status": "verified",
+    "notes": "Reports about 1K balanced-difficulty samples as an empirical sweet spot under the primary setting; article avoids treating it as universal."
+  },
+  {
+    "id": "E11",
+    "kind": "engineering",
+    "claim": "Tunix describes asynchronous rollouts and a decoupled producer-consumer trajectory pipeline to reduce accelerator idle time and straggler effects.",
+    "source_url": "https://developers.googleblog.com/scaling-agentic-rl-high-throughput-agentic-training-with-tunix/",
+    "locator": "July 21, 2026; sections 1–2",
+    "status": "verified",
+    "notes": "Engineering article, not a peer-reviewed comparative benchmark."
+  },
+  {
+    "id": "E12",
+    "kind": "engineering_result",
+    "claim": "The Tunix and Gemma 4 Plane Strike demonstration reports held-out win rate improving from 9.4% to 95% after 100 agentic GRPO training steps, with average game length falling from about 22.44 to about 16 strikes.",
+    "source_url": "https://developers.googleblog.com/multi-turn-agentic-reinforcement-learning-with-tunix-and-gemma-4-on-google-tpus/",
+    "locator": "Nov. 19, 2026; Game Setup; Training Results",
+    "status": "verified",
+    "notes": "Specific 6x6 board-game task, Gemma 4 E2B, Cloud TPU v6e-8 and blog implementation; not general-purpose agent performance."
+  },
+  {
+    "id": "E13",
+    "kind": "method",
+    "claim": "ReAct interleaves Thought, Action and Observation; the original paper studies prompting rather than requiring RL policy updates.",
+    "source_url": "https://arxiv.org/abs/2210.03629",
+    "locator": "§2; Figure 1",
+    "status": "verified",
+    "notes": "Used to distinguish interaction protocol from a learning paradigm."
+  },
+  {
+    "id": "E14",
+    "kind": "derivation",
+    "claim": "The POMDP notation, trajectory return, policy-gradient expression, GAE expression and group-relative advantage are teaching summaries of standard RL formulations.",
+    "source_url": "https://openreview.net/pdf/d8e15fc2cabf98ead8ffbe0d8e6ad1b2764a3d28.pdf",
+    "locator": "§2; §3; standard policy-gradient and advantage-estimation notation",
+    "status": "derived",
+    "notes": "Notation is independently written for pedagogy; not presented as a single equation copied from one paper."
+  },
+  {
+    "id": "E15",
+    "kind": "illustrative",
+    "claim": "The Orion / Atlas / Mina task, interaction stepper, SVG diagrams and mini Python directory environment are deterministic instructional examples.",
+    "source_url": "https://github.com/1998x-stack/xm-posts/tree/main/posts/agents/agentic-rl",
+    "locator": "Self-contained teaching example",
+    "status": "illustrative",
+    "notes": "Not a paper reproduction, model output, or benchmark result."
+  }
+]

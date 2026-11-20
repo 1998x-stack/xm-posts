@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 330" role="img" aria-labelledby="rs-fig1-title rs-fig1-desc">
+<title id="rs-fig1-title">提议分布、目标分布与接受概率</title>
+<desc id="rs-fig1-desc">提议分布 q 提供候选，放大后的包络 Mq 覆盖目标密度 p；候选点的接受概率由 p 除以 Mq 决定。</desc>
+<rect width="900" height="330" rx="18" fill="#f7faf9"/>
+<line x1="90" y1="260" x2="830" y2="260" stroke="#607b7a" stroke-width="2"/>
+<line x1="90" y1="260" x2="90" y2="35" stroke="#607b7a" stroke-width="2"/>
+<text x="842" y="267" font-size="15" fill="#526b6b">x</text><text x="56" y="38" font-size="15" fill="#526b6b">密度</text>
+<path d="M95 250 C180 225 205 105 350 70 C470 42 565 130 650 205 C710 245 765 250 825 252" fill="none" stroke="#a6b8c0" stroke-width="5" stroke-dasharray="10 8"/>
+<path d="M95 252 C195 238 255 175 350 145 C455 112 550 160 625 220 C690 250 760 252 825 253" fill="none" stroke="#278d83" stroke-width="5"/>
+<path d="M95 252 C180 215 205 75 350 40 C470 12 565 105 650 190 C710 235 765 248 825 252" fill="none" stroke="#d49b58" stroke-width="3" stroke-dasharray="5 7"/>
+<line x1="480" y1="40" x2="480" y2="260" stroke="#8b6db0" stroke-width="2" stroke-dasharray="6 6"/>
+<circle cx="480" cy="135" r="7" fill="#8b6db0" stroke="#fff" stroke-width="3"/>
+<rect x="505" y="49" width="220" height="58" rx="9" fill="#fff" stroke="#d9e5e1"/>
+<text x="520" y="73" font-size="16" font-weight="700" fill="#4d5e70">候选位置 x*</text>
+<text x="520" y="94" font-size="14" fill="#667a7b">接受概率 = p(x*) / [M q(x*)]</text>
+<rect x="112" y="24" width="250" height="72" rx="10" fill="#fff" stroke="#dce7e3"/>
+<line x1="130" y1="46" x2="175" y2="46" stroke="#d49b58" stroke-width="4" stroke-dasharray="5 6"/>
+<text x="187" y="51" font-size="15" fill="#5c6f73">包络上界 Mq(x)</text>
+<line x1="130" y1="68" x2="175" y2="68" stroke="#a6b8c0" stroke-width="4" stroke-dasharray="9 6"/>
+<text x="187" y="73" font-size="15" fill="#5c6f73">提议分布 q(x)</text>
+<line x1="130" y1="88" x2="175" y2="88" stroke="#278d83" stroke-width="4"/>
+<text x="187" y="93" font-size="15" fill="#5c6f73">目标密度 p(x)</text>
+<text x="112" y="296" font-size="15" fill="#607778">关键条件：对所有 x，目标密度都不能高于包络 Mq(x)。</text>
+</svg>

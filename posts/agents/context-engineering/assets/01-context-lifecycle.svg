@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 430" role="img" aria-labelledby="title desc">
+<title id="title">Context Engineering 六阶段生命周期</title><desc id="desc">定义目标、检索信息、处理信息、组装上下文、执行动作、持久化状态，形成反馈循环。</desc>
+<rect width="1080" height="430" rx="24" fill="#f7fbf8"/>
+<text x="540" y="48" text-anchor="middle" font-size="24" font-weight="700" fill="#24484c" font-family="system-ui,sans-serif">Context is a lifecycle, not a prompt string</text>
+<g font-family="system-ui,'Microsoft YaHei',sans-serif" text-anchor="middle">
+<rect x="48" y="115" width="285" height="94" rx="15" fill="#e7f3ef" stroke="#7fb5a9" stroke-width="2"/><text x="190" y="151" font-size="23" font-weight="700" fill="#176f67">1 · DEFINE</text><text x="190" y="181" font-size="16" fill="#385e5d">目标 · 约束 · 验收标准</text>
+<rect x="397" y="115" width="285" height="94" rx="15" fill="#eaf2f8" stroke="#8bb0c8" stroke-width="2"/><text x="539" y="151" font-size="23" font-weight="700" fill="#3e7092">2 · RETRIEVE</text><text x="539" y="181" font-size="16" fill="#405d70">RAG · JIT · 工具查询</text>
+<rect x="746" y="115" width="285" height="94" rx="15" fill="#fff0e7" stroke="#d7a17d" stroke-width="2"/><text x="888" y="151" font-size="23" font-weight="700" fill="#a75e3d">3 · PROCESS</text><text x="888" y="181" font-size="16" fill="#775744">过滤 · 排序 · 压缩</text>
+<rect x="746" y="268" width="285" height="94" rx="15" fill="#f0edfa" stroke="#a99bd0" stroke-width="2"/><text x="888" y="304" font-size="23" font-weight="700" fill="#6a5a9d">4 · ASSEMBLE</text><text x="888" y="334" font-size="16" fill="#5d5478">预算 · 结构 · 指令边界</text>
+<rect x="397" y="268" width="285" height="94" rx="15" fill="#eaf2f8" stroke="#8bb0c8" stroke-width="2"/><text x="539" y="304" font-size="23" font-weight="700" fill="#3e7092">5 · EXECUTE</text><text x="539" y="334" font-size="16" fill="#405d70">模型 · 工具 · 观察</text>
+<rect x="48" y="268" width="285" height="94" rx="15" fill="#e7f3ef" stroke="#7fb5a9" stroke-width="2"/><text x="190" y="304" font-size="23" font-weight="700" fill="#176f67">6 · PERSIST</text><text x="190" y="334" font-size="16" fill="#385e5d">状态 · 日志 · 记忆</text>
+</g>
+<g fill="none" stroke="#648e88" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+<path d="M333 162 H397 M682 162 H746 M888 209 V268 M746 315 H682 M397 315 H333"/>
+<path d="M190 268 V239 H20 V162 H48" stroke-dasharray="8 7"/>
+</g>
+<g fill="#648e88"><path d="M388 154 L398 162 L388 170Z"/><path d="M737 154 L747 162 L737 170Z"/><path d="M880 258 L888 269 L896 258Z"/><path d="M692 307 L682 315 L692 323Z"/><path d="M343 307 L333 315 L343 323Z"/><path d="M40 154 L50 162 L40 170Z"/></g>
+<text x="540" y="405" text-anchor="middle" font-size="14" fill="#6a8181" font-family="system-ui,sans-serif">每轮推理都重新组装工作上下文；新观察进入状态，再影响下一轮检索</text>
+</svg>

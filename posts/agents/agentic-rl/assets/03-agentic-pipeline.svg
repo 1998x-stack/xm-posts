@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="980" height="430" viewBox="0 0 980 430" role="img" aria-label="Agentic RL 训练系统的模块化架构">
+<title>Agentic RL 的训练流水线</title><desc>任务采样驱动智能体与环境交互，轨迹收集器记录多轮数据，奖励模块评分，优势估计和 PPO 或 GRPO 更新策略，再进入下一轮 rollout。</desc>
+<rect width="980" height="430" rx="18" fill="#f7faf8"/>
+<rect x="35" y="68" width="165" height="88" rx="12" fill="#e7eef4" stroke="#91aabd" stroke-width="2"/><text x="117" y="101" text-anchor="middle" font-size="18" font-weight="700" fill="#284a56">Task Sampler</text><text x="117" y="128" text-anchor="middle" font-size="14" fill="#526d76">任务 / 难度分布</text>
+<rect x="245" y="68" width="165" height="88" rx="12" fill="#e5f2ed" stroke="#79aaa0" stroke-width="2"/><text x="327" y="101" text-anchor="middle" font-size="18" font-weight="700" fill="#244e4b">Agent</text><text x="327" y="128" text-anchor="middle" font-size="14" fill="#52756d">Policy + Memory</text>
+<rect x="455" y="68" width="165" height="88" rx="12" fill="#fff0e7" stroke="#d69b79" stroke-width="2"/><text x="537" y="101" text-anchor="middle" font-size="18" font-weight="700" fill="#814e36">Environment</text><text x="537" y="128" text-anchor="middle" font-size="14" fill="#814e36">Tools / Simulator / Web</text>
+<path d="M200 112 H245" stroke="#58747c" stroke-width="3"/><path d="M245 112 l-9 -6 v12 z" fill="#58747c"/>
+<path d="M410 112 H455" stroke="#58747c" stroke-width="3"/><path d="M455 112 l-9 -6 v12 z" fill="#58747c"/>
+<path d="M537 156 V196 H327 V156" fill="none" stroke="#187e75" stroke-width="2.5"/><path d="M327 156 l-7 10 h14 z" fill="#187e75"/><text x="432" y="188" text-anchor="middle" font-size="14" fill="#187e75">Observation / Reward / Done</text>
+<rect x="245" y="226" width="375" height="74" rx="12" fill="#edf3f7" stroke="#9ab1bc" stroke-width="2"/><text x="432" y="256" text-anchor="middle" font-size="18" font-weight="700" fill="#284a56">Trajectory Collector / Buffer</text><text x="432" y="280" text-anchor="middle" font-size="14" fill="#526d76">hₜ · aₜ · oₜ₊₁ · rₜ · token mask · log-prob</text>
+<path d="M327 156 V226" stroke="#58747c" stroke-width="2.5"/><path d="M327 226 l-7 -10 h14 z" fill="#58747c"/>
+<rect x="690" y="68" width="250" height="88" rx="12" fill="#f9eee5" stroke="#d4a07c" stroke-width="2"/><text x="815" y="101" text-anchor="middle" font-size="18" font-weight="700" fill="#814e36">Reward / Verifier</text><text x="815" y="128" text-anchor="middle" font-size="14" fill="#814e36">终局成功、规则、约束</text>
+<path d="M620 262 H815 V156" fill="none" stroke="#b87954" stroke-width="2.5"/><path d="M815 156 l-7 10 h14 z" fill="#b87954"/>
+<rect x="690" y="226" width="250" height="74" rx="12" fill="#e8f2eb" stroke="#8eb29b" stroke-width="2"/><text x="815" y="256" text-anchor="middle" font-size="18" font-weight="700" fill="#315b46">Advantage Estimation</text><text x="815" y="280" text-anchor="middle" font-size="14" fill="#52745d">Return / GAE / Group-relative</text>
+<path d="M815 156 V226" stroke="#b87954" stroke-width="2.5"/><path d="M815 226 l-7 -10 h14 z" fill="#b87954"/>
+<rect x="690" y="340" width="250" height="62" rx="12" fill="#e9e5f4" stroke="#a49ac6" stroke-width="2"/><text x="815" y="367" text-anchor="middle" font-size="18" font-weight="700" fill="#514775">Learner: PPO / GRPO</text><text x="815" y="389" text-anchor="middle" font-size="13" fill="#655d83">更新 θ，约束策略漂移</text>
+<path d="M815 300 V340" stroke="#7461ba" stroke-width="2.5"/><path d="M815 340 l-7 -10 h14 z" fill="#7461ba"/>
+<path d="M690 370 H118 V156" fill="none" stroke="#187e75" stroke-width="2.5" stroke-dasharray="7 6"/><path d="M118 156 l-7 10 h14 z" fill="#187e75"/><text x="390" y="360" text-anchor="middle" font-size="14" fill="#187e75">新策略进入下一轮采样</text>
+</svg>

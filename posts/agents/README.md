@@ -1,6 +1,13 @@
 # 智能体与工具使用 / Agents & Tool Use
 
-本分类专注模型与外界交互的行动闭环：ReAct、Planning、Tool Calling、Memory、Software Engineering Agents & ACI、Agent Evaluation。
+本分类专注模型与外界交互的行动闭环：ReAct、Planning、Tool Calling、Agent Memory、Context Engineering、Software Engineering Agents & ACI、Harness Engineering、Agentic RL、Agent Evaluation。
+
+## 已发布专题
+
+- [Agentic Reinforcement Learning](agentic-rl/index.html) — 从单轮 LLM-RL 到多轮环境交互，讲解 POMDP、轨迹回报、信用分配、长程课程与异步训练。
+- [Context Engineering](context-engineering/index.html) — 管理每轮推理所需的信息选择、检索、压缩、组装、记忆和上下文安全。
+- [Harness Engineering](harness-engineering/index.html) — Agent Runtime、上下文交接、工具、安全、独立评估与维护治理。
+- [Loop Engineering](loop-engineering/index.html) — 外层持续执行：触发、任务发现、独立验证、持久状态、预算与停止策略。
 
 ## 专题占位
 

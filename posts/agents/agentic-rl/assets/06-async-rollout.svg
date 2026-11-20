@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="980" height="390" viewBox="0 0 980 390" role="img" aria-label="同步与异步 rollout 的训练吞吐差异">
+<title>异步 Rollout：减少环境等待造成的加速器空转</title><desc>同步模式必须等待最慢轨迹，其他工作者空闲；异步模式把完成的轨迹放入队列，训练器持续消费。</desc>
+<rect width="980" height="390" rx="18" fill="#f7faf8"/><text x="42" y="42" font-size="20" font-weight="700" fill="#24434a">同步批次：慢轨迹拖住整个训练步</text>
+<text x="42" y="87" font-size="15" fill="#526d76">Worker A</text><text x="42" y="139" font-size="15" fill="#526d76">Worker B</text><text x="42" y="191" font-size="15" fill="#526d76">Worker C</text>
+<rect x="155" y="65" width="150" height="30" rx="6" fill="#e5f2ed"/><rect x="155" y="117" width="250" height="30" rx="6" fill="#e5f2ed"/><rect x="155" y="169" width="190" height="30" rx="6" fill="#e5f2ed"/>
+<rect x="305" y="65" width="100" height="30" rx="6" fill="#f4dfd2"/><rect x="345" y="169" width="60" height="30" rx="6" fill="#f4dfd2"/>
+<text x="355" y="85" text-anchor="middle" font-size="12" fill="#814e36">等待</text><text x="455" y="137" font-size="13" fill="#63777b">最慢轨迹</text><text x="375" y="189" text-anchor="middle" font-size="12" fill="#814e36">等待</text>
+<line x1="155" y1="215" x2="515" y2="215" stroke="#9eb3ad" stroke-width="1.5"/><text x="335" y="239" text-anchor="middle" font-size="13" fill="#63777b">同步屏障：整批完成后才能更新</text>
+<path d="M550 52 V245" stroke="#d5e0dc" stroke-width="2" stroke-dasharray="6 6"/><text x="585" y="42" font-size="20" font-weight="700" fill="#24434a">异步队列：完成一个就交付一个</text>
+<rect x="585" y="75" width="155" height="48" rx="9" fill="#e5f2ed" stroke="#79aaa0"/><text x="662" y="104" text-anchor="middle" font-size="16" font-weight="700" fill="#24534d">Rollout workers</text>
+<path d="M740 99 H780" stroke="#187e75" stroke-width="3"/><path d="M780 99 l-9 -6 v12 z" fill="#187e75"/>
+<rect x="786" y="65" width="150" height="68" rx="9" fill="#edf0f8" stroke="#9ca8ca"/><text x="861" y="94" text-anchor="middle" font-size="16" font-weight="700" fill="#4c547c">Trajectory</text><text x="861" y="115" text-anchor="middle" font-size="14" fill="#5c648b">Queue</text>
+<path d="M861 133 V170" stroke="#7461ba" stroke-width="3"/><path d="M861 170 l-7 -10 h14 z" fill="#7461ba"/>
+<rect x="786" y="177" width="150" height="58" rx="9" fill="#fff0e7" stroke="#d69b79"/><text x="861" y="201" text-anchor="middle" font-size="16" font-weight="700" fill="#814e36">Learner</text><text x="861" y="221" text-anchor="middle" font-size="13" fill="#814e36">持续消费样本</text>
+<text x="585" y="275" font-size="14" fill="#52756d">关键：并行环境交互、异步收集、动态组批与训练流水线解耦。</text><text x="585" y="301" font-size="13" fill="#63777b">仍需控制策略版本、样本新鲜度和 off-policy 偏差。</text>
+<rect x="42" y="315" width="894" height="44" rx="9" fill="#e9f1ec"/><text x="489" y="343" text-anchor="middle" font-size="15" font-weight="700" fill="#315b46">系统吞吐不只由 GPU 算力决定，也由环境延迟和轨迹调度决定</text>
+</svg>
