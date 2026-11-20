@@ -261,6 +261,27 @@
     "illustration": "ppo"
   },
   {
+    "slug": "kv-cache",
+    "title": "Understanding KV Cache",
+    "subtitle": "从重复计算到显存管理：为什么只生成一个 token，却要记住全部历史？",
+    "category": "inference",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 30,
+    "tags": [
+      "KV Cache",
+      "Autoregressive Decoding",
+      "PagedAttention",
+      "GQA",
+      "Prefix Caching",
+      "LLM Serving"
+    ],
+    "summary": "从因果 Attention 的单步计算与显存公式出发，图解 Prefill/Decode、MHA/GQA/MQA、PagedAttention、前缀复用，附交互显存计算器和可验证的最小 Python 示例。",
+    "paper": "https://arxiv.org/abs/2309.06180",
+    "illustration": "kv-cache"
+  },
+  {
     "slug": "rope",
     "title": "Understanding RoPE",
     "subtitle": "位置如何变成旋转？从相对距离到长上下文",
