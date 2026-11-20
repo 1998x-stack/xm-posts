@@ -124,5 +124,95 @@
     "locator": "Searching with policy and value networks; p. 487",
     "status": "verified",
     "notes": "Verified against source; article toy diagrams/numeric widgets are independently illustrative."
+  },
+  {
+    "id": "A15",
+    "claim": "2016 AlphaGo policy input is 19x19x48 planes; value adds player-to-move plane; policy match model has 192 filters, 5x5 first and 3x3 middle convolutions, 1x1 final",
+    "kind": "architecture",
+    "source_url": "https://storage.googleapis.com/deepmind-media/alphago/AlphaGoNaturePaper.pdf",
+    "locator": "Methods: Features for policy/value network; Neural network architecture",
+    "status": "verified",
+    "notes": "Checked against Nature 2016 method and extended tables; diagrams and interaction numbers are independent teaching illustrations."
+  },
+  {
+    "id": "A16",
+    "claim": "RL opponent pool adds current policy every 500 iterations; REINFORCE with zero baseline in first pass and value network baseline in second",
+    "kind": "algorithm",
+    "source_url": "https://storage.googleapis.com/deepmind-media/alphago/AlphaGoNaturePaper.pdf",
+    "locator": "Methods: Policy network: reinforcement learning",
+    "status": "verified",
+    "notes": "Checked against Nature 2016 method and extended tables; diagrams and interaction numbers are independent teaching illustrations."
+  },
+  {
+    "id": "A17",
+    "claim": "Naive KGS value model overfits train/test 0.19/0.37 MSE, independently generated self-play game positions lead 0.226/0.234 MSE",
+    "kind": "experiment",
+    "source_url": "https://storage.googleapis.com/deepmind-media/alphago/AlphaGoNaturePaper.pdf",
+    "locator": "p. 486 Reinforcement learning of value networks",
+    "status": "verified",
+    "notes": "Checked against Nature 2016 method and extended tables; diagrams and interaction numbers are independent teaching illustrations."
+  },
+  {
+    "id": "A18",
+    "claim": "Self-play value data sample U uniform 1..450, SL before U, random legal action at U, RL after U, one s_U+1 label per unique game",
+    "kind": "algorithm",
+    "source_url": "https://storage.googleapis.com/deepmind-media/alphago/AlphaGoNaturePaper.pdf",
+    "locator": "Methods: Value network regression",
+    "status": "verified",
+    "notes": "Checked against Nature 2016 method and extended tables; diagrams and interaction numbers are independent teaching illustrations."
+  },
+  {
+    "id": "A19",
+    "claim": "Asynchronous APV-MCTS uses P,Q,N_v,W_v,N_r,W_r and queues for GPU policy/value with CPU rollout; temporary tree policy priors are later replaced",
+    "kind": "systems",
+    "source_url": "https://storage.googleapis.com/deepmind-media/alphago/AlphaGoNaturePaper.pdf",
+    "locator": "Methods: Search algorithm; Selection, Evaluation, Backup, Expansion",
+    "status": "verified",
+    "notes": "Checked against Nature 2016 method and extended tables; diagrams and interaction numbers are independent teaching illustrations."
+  },
+  {
+    "id": "A20",
+    "claim": "Extended Data Table 5: beta=0.67, lambda=0.5, virtual loss=3, expansion threshold=40, c_puct=5",
+    "kind": "experiment",
+    "source_url": "https://storage.googleapis.com/deepmind-media/alphago/AlphaGoNaturePaper.pdf",
+    "locator": "Extended Data Table 5",
+    "status": "verified",
+    "notes": "Checked against Nature 2016 method and extended tables; diagrams and interaction numbers are independent teaching illustrations."
+  },
+  {
+    "id": "A21",
+    "claim": "Go reward sign is defined from current player perspective; alternating players require consistent zero-sum backup convention",
+    "kind": "equation",
+    "source_url": "https://storage.googleapis.com/deepmind-media/alphago/AlphaGoNaturePaper.pdf",
+    "locator": "Methods: Problem setting; Policy network reinforcement learning",
+    "status": "verified",
+    "notes": "Checked against Nature 2016 method and extended tables; diagrams and interaction numbers are independent teaching illustrations."
+  },
+  {
+    "id": "A22",
+    "claim": "After searching, root action selected by highest visit count and chosen subtree reused at subsequent moves",
+    "kind": "algorithm",
+    "source_url": "https://storage.googleapis.com/deepmind-media/alphago/AlphaGoNaturePaper.pdf",
+    "locator": "Methods: Search algorithm, final paragraph",
+    "status": "verified",
+    "notes": "Checked against Nature 2016 method and extended tables; diagrams and interaction numbers are independent teaching illustrations."
+  },
+  {
+    "id": "A23",
+    "claim": "Extended Data Table 7 single machine 5s/move ratings: policy/value/rollout 2890, policy/rollout 2416, policy/value 2177, no-deep-policy/value/rollout 2077",
+    "kind": "experiment",
+    "source_url": "https://storage.googleapis.com/deepmind-media/alphago/AlphaGoNaturePaper.pdf",
+    "locator": "Extended Data Table 7",
+    "status": "verified",
+    "notes": "Checked against Nature 2016 method and extended tables; diagrams and interaction numbers are independent teaching illustrations."
+  },
+  {
+    "id": "A24",
+    "claim": "Extended Data Table 8 fixed 48 CPUs 8 GPUs search thread ablation: 1 thread 2203 and 40 threads 2890 BayesElo",
+    "kind": "experiment",
+    "source_url": "https://storage.googleapis.com/deepmind-media/alphago/AlphaGoNaturePaper.pdf",
+    "locator": "Extended Data Table 8",
+    "status": "verified",
+    "notes": "Checked against Nature 2016 method and extended tables; diagrams and interaction numbers are independent teaching illustrations."
   }
 ]

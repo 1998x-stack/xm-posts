@@ -7,7 +7,7 @@
     "status": "published",
     "published": "2026-11-20",
     "updated": "2026-11-20",
-    "reading_minutes": 35,
+    "reading_minutes": 48,
     "tags": [
       "AlphaGo",
       "MCTS",
@@ -15,9 +15,13 @@
       "Policy Network",
       "Value Network",
       "Self-play",
-      "Planning & Tree Search"
+      "Planning & Tree Search",
+      "Virtual Loss",
+      "Asynchronous Search",
+      "Value Network Training",
+      "Ablation Studies"
     ],
-    "summary": "精读 Silver et al. Nature 2016：从围棋的组合搜索难题、KGS 监督策略、自对弈策略梯度与价值学习，推导 APV-MCTS 的 PUCT、双通道价值回传与最终访问次数决策；包含 5 幅独立 SVG、7 组离线 MathML、交互探索实验及确定性 Python 数值验证，并严格区分 AlphaGo Fan、Lee、Zero。",
+    "summary": "深度解读 Silver 等 Nature 2016 AlphaGo：19×19×48 围棋特征、策略与价值卷积网络、历史对手池自对弈、三阶段胜负样本生成、APV-MCTS 的 PUCT、双路异步回传、虚拟损失、根节点访问决策；新增 15 幅独立 SVG、12 组 MathML、三种交互实验、Extended Data Table 7/8 的真实 BayesElo 对照及确定性 Python 断言。",
     "paper": "https://doi.org/10.1038/nature16961",
     "illustration": "alphago"
   },
