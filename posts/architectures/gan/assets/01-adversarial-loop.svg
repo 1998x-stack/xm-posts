@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 420" role="img" aria-labelledby="title desc">
+<title id="title">GAN 的生成器与判别器双网络回路</title>
+<desc id="desc">噪声经过生成器形成合成样本，真实与合成样本共同送入判别器；判别器更新分类边界，生成器根据判别器信号更新。</desc>
+<rect width="960" height="420" rx="20" fill="#fbfcf8"/>
+<g font-family="system-ui,'PingFang SC',sans-serif">
+<text x="44" y="52" font-size="27" font-weight="750" fill="#24494c">两个网络 · 两种任务 · 一条反馈回路</text>
+<rect x="46" y="117" width="175" height="93" rx="15" fill="#e8f2e9" stroke="#a8cdb9" stroke-width="2"/>
+<text x="133" y="152" text-anchor="middle" fill="#245c59" font-size="24" font-weight="750">随机噪声</text><text x="133" y="182" text-anchor="middle" fill="#47716c" font-size="19">z ~ p(z)</text>
+<rect x="293" y="117" width="172" height="93" rx="15" fill="#d6eee9" stroke="#6ba6a0" stroke-width="2"/>
+<text x="379" y="154" font-size="31" font-weight="800" text-anchor="middle" fill="#21736d">G</text><text x="379" y="184" font-size="20" text-anchor="middle" fill="#417069">生成器</text>
+<rect x="534" y="117" width="182" height="93" rx="15" fill="#fbe7dc" stroke="#da9877" stroke-width="2"/>
+<text x="625" y="153" font-size="24" font-weight="750" fill="#986244" text-anchor="middle">合成样本</text><text x="625" y="184" font-size="19" fill="#a36c4d" text-anchor="middle">G(z)</text>
+<rect x="534" y="260" width="182" height="86" rx="15" fill="#e8ecf8" stroke="#9ba9cb" stroke-width="2"/>
+<text x="625" y="295" text-anchor="middle" font-size="24" fill="#535f91" font-weight="750">真实样本</text><text x="625" y="324" text-anchor="middle" font-size="18" fill="#6b7294">x ~ p_data</text>
+<rect x="789" y="173" width="130" height="118" rx="16" fill="#284e56"/>
+<text x="854" y="213" text-anchor="middle" font-size="33" font-weight="800" fill="#fff">D</text><text x="854" y="243" text-anchor="middle" font-size="17" fill="#e6f4f0">是真样本吗？</text>
+<g fill="none" stroke-width="4"><path d="M221 164H286M465 164H528" stroke="#288077"/><path d="M716 164H754Q768 164 768 187V213H781" stroke="#c87750"/><path d="M716 304H755Q768 304 768 277V249H781" stroke="#707ead"/></g>
+<g fill="#288077"><path d="M283 155L293 164L283 173Z"/><path d="M525 155L535 164L525 173Z"/></g>
+<path d="M854 293V381H379V218" stroke="#bf7750" stroke-dasharray="9 8" stroke-width="3" fill="none"/>
+<path d="M370 230L379 215L388 230" fill="none" stroke="#bf7750" stroke-width="3"/>
+<text x="588" y="369" text-anchor="middle" font-size="17" fill="#925e40">更新 G 时：梯度穿过 D，D 的参数不更新</text>
+<text x="46" y="401" font-size="17" fill="#55716d">D 学习区分来源；G 学习让合成样本分布更接近真实数据。</text>
+</g></svg>
