@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 650" role="img" aria-labelledby="aci-cover-title aci-cover-desc">
+<title id="aci-cover-title">SWE-agent 的 ACI：从 Issue 到可验证的代码补丁</title>
+<desc id="aci-cover-desc">左侧是问题单与代码错误，中间是 Agent-Computer Interface 的搜索、查看、编辑和语法护栏，右侧是代码仓库与测试结果；回路说明失败后再观察和修改。</desc>
+<defs>
+<linearGradient id="aci-cover-surface" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fffdf8"/><stop offset="1" stop-color="#eaf5ef"/></linearGradient>
+<linearGradient id="aci-cover-bridge" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2b9185"/><stop offset="1" stop-color="#176b71"/></linearGradient>
+<filter id="aci-cover-shadow"><feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#203c45" flood-opacity=".10"/></filter>
+</defs>
+<rect x="8" y="8" width="1184" height="634" rx="30" fill="url(#aci-cover-surface)" stroke="#d2e1db" stroke-width="2"/>
+<path d="M43 544 C225 456 356 611 544 544 S906 503 1157 566" fill="none" stroke="#ddece4" stroke-width="32" opacity=".75"/>
+<text x="66" y="76" font-family="system-ui,'PingFang SC',sans-serif" font-size="20" font-weight="700" fill="#167d76" letter-spacing="2">SOFTWARE ENGINEERING AGENTS</text>
+<text x="66" y="135" font-family="system-ui,'PingFang SC',sans-serif" font-size="46" font-weight="750" fill="#203f47">SWE-agent</text>
+<text x="67" y="177" font-family="system-ui,'PingFang SC',sans-serif" font-size="22" fill="#547177">让模型用好计算机，比只会生成代码更重要</text>
+<rect x="57" y="222" width="302" height="260" rx="20" fill="#fff9f2" stroke="#e5cdb7" stroke-width="2" filter="url(#aci-cover-shadow)"/>
+<rect x="57" y="222" width="302" height="47" rx="20" fill="#f3e0d0"/><rect x="57" y="247" width="302" height="22" fill="#f3e0d0"/>
+<circle cx="84" cy="245" r="6" fill="#c27855"/><circle cx="104" cy="245" r="6" fill="#dfb68c"/><circle cx="124" cy="245" r="6" fill="#fff9f2"/>
+<text x="209" y="254" text-anchor="middle" font-family="system-ui,sans-serif" font-size="15" font-weight="700" fill="#825f4e">ISSUE / BUG</text>
+<text x="83" y="308" font-family="ui-monospace,Consolas,monospace" font-size="20" fill="#805e4b">mean([2,4,6])</text>
+<rect x="80" y="331" width="250" height="61" rx="12" fill="#fff3e8" stroke="#e7d3c0"/>
+<text x="100" y="357" font-family="system-ui,'PingFang SC',sans-serif" font-size="17" fill="#875b43">观察到</text><text x="305" y="357" text-anchor="end" font-family="ui-monospace,Consolas,monospace" font-size="21" font-weight="700" fill="#b26345">12</text>
+<text x="100" y="381" font-family="system-ui,'PingFang SC',sans-serif" font-size="17" fill="#568273">期望值</text><text x="305" y="382" text-anchor="end" font-family="ui-monospace,Consolas,monospace" font-size="21" font-weight="700" fill="#247f76">4</text>
+<text x="83" y="440" font-family="system-ui,'PingFang SC',sans-serif" font-size="16" fill="#7d756f">先定位错误，再提出改动</text>
+<rect x="409" y="208" width="362" height="290" rx="24" fill="url(#aci-cover-bridge)" filter="url(#aci-cover-shadow)"/>
+<text x="590" y="257" text-anchor="middle" font-family="system-ui,sans-serif" font-size="16" font-weight="700" letter-spacing="2" fill="#c7f1e9">AGENT–COMPUTER</text>
+<text x="590" y="288" text-anchor="middle" font-family="system-ui,sans-serif" font-size="25" font-weight="800" fill="#fff">INTERFACE · ACI</text>
+<g font-family="ui-monospace,Consolas,monospace" font-size="17" fill="#23575c">
+<rect x="435" y="318" width="309" height="39" rx="9" fill="#f3fcf6"/><text x="458" y="343">01  search_dir()</text>
+<rect x="435" y="365" width="309" height="39" rx="9" fill="#f3fcf6"/><text x="458" y="390">02  open() + edit()</text>
+<rect x="435" y="412" width="309" height="39" rx="9" fill="#f3fcf6"/><text x="458" y="437">03  lint → test</text>
+</g>
+<rect x="824" y="222" width="322" height="260" rx="20" fill="#f4f8fb" stroke="#bcd5db" stroke-width="2" filter="url(#aci-cover-shadow)"/>
+<rect x="824" y="222" width="322" height="47" rx="20" fill="#dcecf2"/><rect x="824" y="247" width="322" height="22" fill="#dcecf2"/>
+<text x="985" y="253" text-anchor="middle" font-family="system-ui,sans-serif" font-size="16" font-weight="750" fill="#3b687c">REPOSITORY / PATCH</text>
+<text x="852" y="310" font-family="ui-monospace,Consolas,monospace" font-size="19" fill="#365d74">src/stats.py</text>
+<text x="851" y="354" font-family="ui-monospace,Consolas,monospace" font-size="17" fill="#bc6f58">− return sum(xs)</text>
+<text x="851" y="390" font-family="ui-monospace,Consolas,monospace" font-size="17" fill="#247b70">+ return sum(xs) / len(xs)</text>
+<rect x="847" y="422" width="276" height="37" rx="11" fill="#e2f3e9" stroke="#aacbb8"/>
+<circle cx="869" cy="440" r="8" fill="#248877"/>
+<text x="984" y="446" text-anchor="middle" font-family="system-ui,sans-serif" font-size="17" fill="#22665b">tests passed</text>
+<path d="M359 355 H401" fill="none" stroke="#b87854" stroke-width="5" stroke-linecap="round"/><path d="M388 345 L407 355 L388 365" fill="none" stroke="#b87854" stroke-width="5"/>
+<path d="M771 355 H817" fill="none" stroke="#27877d" stroke-width="5" stroke-linecap="round"/><path d="M804 345 L823 355 L804 365" fill="none" stroke="#27877d" stroke-width="5"/>
+<path d="M985 491 V537 H590 V505" fill="none" stroke="#ad7f62" stroke-width="3" stroke-dasharray="8 8" stroke-linecap="round"/>
+<path d="M580 520 L590 501 L600 520" fill="none" stroke="#ad7f62" stroke-width="3"/>
+<text x="790" y="563" text-anchor="middle" font-family="system-ui,'PingFang SC',sans-serif" font-size="16" fill="#946c56">测试失败 → 带反馈重试</text>
+<text x="63" y="596" font-family="system-ui,sans-serif" font-size="16" fill="#6b8884">ISSUE → SEARCH → EDIT → VERIFY</text>
+</svg>

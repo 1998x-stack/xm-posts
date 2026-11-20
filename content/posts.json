@@ -1877,8 +1877,8 @@
     "paper": "https://arxiv.org/abs/2405.15793",
     "illustration": "swe-agent",
     "cover": {
-      "src": "assets/01-aci.svg",
-      "caption": "模型提出代码操作，经由 ACI 约束和执行，再得到可验证的环境反馈。"
+      "src": "assets/cover-aci.svg",
+      "caption": "SWE-agent 用 ACI 串联代码定位、修改与测试反馈"
     }
   }
 ]

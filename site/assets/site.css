@@ -302,6 +302,124 @@
   .cover-illustration,.index-image-link,.spotlight-cover-link{break-inside:avoid}
 }
 
+
+/* Archive editorial list: chronology + a semantic miniature of each study.
+   Shares content/posts.json -> cover.src with home and category, never stock art. */
+.archive-page .timeline .archive-entry{
+  grid-template-columns:112px 138px minmax(0,1fr) 86px;
+  gap:22px;
+  align-items:center;
+  padding:22px 0;
+}
+.archive-entry .timeline-date{
+  padding-top:0;
+  align-self:center;
+  font-size:12px;
+  font-variant-numeric:tabular-nums;
+  white-space:nowrap;
+}
+.archive-cover{
+  display:flex;
+  width:138px;
+  height:96px;
+  min-width:0;
+  padding:7px;
+  background:linear-gradient(135deg,#edf5ef,#f9faf5);
+  border:1px solid #d9e6dc;
+  border-radius:9px;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+  transition:border-color .18s,background-color .18s,transform .18s;
+}
+.archive-cover .article-cover-thumb{
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:contain;
+}
+.archive-entry .archive-entry-copy{
+  min-width:0;
+  align-self:center;
+}
+.archive-entry-copy h2{
+  margin:0;
+  overflow-wrap:anywhere;
+}
+.archive-entry-copy p{
+  margin:6px 0 8px;
+  line-height:1.65;
+}
+.archive-cover:hover,
+.archive-cover:focus-visible{
+  border-color:#71a89b;
+  background:#e5f1e8;
+  transform:translateY(-1px);
+}
+.archive-cover:focus-visible{
+  outline:3px solid #d18d5d;
+  outline-offset:3px;
+}
+.archive-entry .timeline-time{
+  padding-top:0;
+  align-self:center;
+}
+@media(max-width:900px){
+  .archive-page .timeline .archive-entry{
+    grid-template-columns:90px 120px minmax(0,1fr);
+    gap:17px;
+  }
+  .archive-cover{width:120px;height:86px}
+  .archive-entry-copy h2{font-size:20px}
+  .archive-entry .timeline-time{display:none}
+}
+@media(max-width:600px){
+  .archive-page .timeline .archive-entry{
+    grid-template-columns:98px minmax(0,1fr);
+    grid-template-areas:"date date" "cover copy";
+    gap:8px 14px;
+    align-items:start;
+    padding:19px 0;
+  }
+  .archive-entry .timeline-date{
+    grid-area:date;
+    font-size:11px;
+    letter-spacing:.04em;
+    align-self:start;
+  }
+  .archive-entry .archive-cover{
+    grid-area:cover;
+    width:98px;
+    height:75px;
+    padding:5px;
+  }
+  .archive-entry .archive-entry-copy{
+    grid-area:copy;
+    align-self:start;
+  }
+  .archive-entry-copy h2{font-size:17px;line-height:1.42}
+  .archive-entry-copy p{font-size:12px;line-height:1.5;margin:4px 0 6px}
+  .archive-entry-copy .archive-topic{font-size:11px}
+}
+@media(max-width:390px){
+  .archive-page .timeline .archive-entry{
+    grid-template-columns:84px minmax(0,1fr);
+    gap:8px 10px;
+  }
+  .archive-entry .archive-cover{width:84px;height:67px;padding:4px}
+  .archive-entry-copy h2{font-size:16px}
+}
+@media(hover:none){
+  .archive-cover:hover{transform:none}
+}
+@media(prefers-reduced-motion:reduce){
+  .archive-cover{transition:none}
+}
+@media print{
+  .archive-page .timeline .archive-entry{break-inside:avoid}
+  .archive-cover{break-inside:avoid}
+}
+
 /* Long research titles must wrap inside editorial cards instead of expanding grids. */
 .index-card.post-card > *, .research-card, .route-card, .spotlight-card, .index-main { min-width: 0; }
 .index-main h3, .index-main > p, .research-card strong, .research-description,
