@@ -200,6 +200,7 @@
     "posts": [
       "ppo",
       "rlhf",
+      "rejection-sampling",
       "dpo",
       "grpo"
     ]
@@ -238,6 +239,7 @@
       "chain-of-thought",
       "self-consistency",
       "react",
+      "function-calling",
       "swe-agent"
     ]
   },
@@ -247,6 +249,7 @@
     "posts": [
       "mcts",
       "react",
+      "function-calling",
       "swe-agent"
     ]
   },
@@ -326,6 +329,16 @@
       "embeddings",
       "bert",
       "rag"
+    ]
+  },
+  {
+    "id": "path-36",
+    "title": "从概率采样到奖励筛选",
+    "posts": [
+      "importance-sampling",
+      "rejection-sampling",
+      "rlhf",
+      "dpo"
     ]
   }
 ]
