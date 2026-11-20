@@ -1,0 +1,146 @@
+[
+  {
+    "id": "A01",
+    "claim": "Parallel independent actor-learners reduce temporal correlation without an experience replay buffer",
+    "kind": "paper-claim",
+    "source_url": "https://proceedings.mlr.press/v48/mniha16.pdf",
+    "locator": "§1 and §4, pp.1–3",
+    "status": "verified",
+    "notes": "Workers are independent environment copies; decorrelation does not imply iid samples"
+  },
+  {
+    "id": "A02",
+    "claim": "Asynchronous actor-learners update shared global weights on a single multicore CPU using Hogwild-style updates",
+    "kind": "paper-claim",
+    "source_url": "https://proceedings.mlr.press/v48/mniha16.pdf",
+    "locator": "§4, p.3",
+    "status": "verified",
+    "notes": "Local parameter copies may be stale"
+  },
+  {
+    "id": "A03",
+    "claim": "A3C is the asynchronous advantage actor-critic variant among four tested asynchronous RL algorithms",
+    "kind": "paper-claim",
+    "source_url": "https://proceedings.mlr.press/v48/mniha16.pdf",
+    "locator": "§4, pp.3–4",
+    "status": "verified",
+    "notes": "Other three are one-step Q, one-step SARSA and n-step Q"
+  },
+  {
+    "id": "A04",
+    "claim": "Policy and value heads share non-output layers and the recurrent version adds 256 LSTM cells",
+    "kind": "paper-claim",
+    "source_url": "https://proceedings.mlr.press/v48/mniha16.pdf",
+    "locator": "§4 and §5.1, pp.4–5",
+    "status": "verified",
+    "notes": "Separate actor/critic outputs; LSTM only in recurrent variant"
+  },
+  {
+    "id": "A05",
+    "claim": "A3C uses n-step forward-view returns with final critic bootstrap, except on terminal state",
+    "kind": "equation",
+    "source_url": "https://proceedings.mlr.press/v48/mniha16.pdf",
+    "locator": "§4, p.4 and Supplementary Algorithm S2",
+    "status": "verified",
+    "notes": "Short rollout remainder yields variable k"
+  },
+  {
+    "id": "A06",
+    "claim": "Advantage is n-step return minus value baseline",
+    "kind": "equation",
+    "source_url": "https://proceedings.mlr.press/v48/mniha16.pdf",
+    "locator": "§3–§4, pp.2–4",
+    "status": "verified",
+    "notes": "Approximate advantage, not GAE-lambda"
+  },
+  {
+    "id": "A07",
+    "claim": "Actor gradient adds entropy regularization to the log-policy gradient",
+    "kind": "equation",
+    "source_url": "https://proceedings.mlr.press/v48/mniha16.pdf",
+    "locator": "§4, p.4",
+    "status": "verified",
+    "notes": "Beta controls entropy strength"
+  },
+  {
+    "id": "A08",
+    "claim": "Shared non-centered RMSProp statistics were more robust in tested Atari subset than alternatives",
+    "kind": "experiment",
+    "source_url": "https://proceedings.mlr.press/v48/mniha16.pdf",
+    "locator": "§4 Eq.(1), p.4; Supplementary §1",
+    "status": "verified",
+    "notes": "No universal optimizer ranking implied"
+  },
+  {
+    "id": "A09",
+    "claim": "A3C FF 1 day CPU mean 344.1%, median 68.2%; FF 4 days mean 496.8%, median 116.6%",
+    "kind": "experiment",
+    "source_url": "https://proceedings.mlr.press/v48/mniha16.pdf",
+    "locator": "§5.1 Table 1, p.5",
+    "status": "verified",
+    "notes": "57 Atari games; human starts, human-normalized score"
+  },
+  {
+    "id": "A10",
+    "claim": "A3C LSTM 4 days CPU mean 623.0% and median 112.6%",
+    "kind": "experiment",
+    "source_url": "https://proceedings.mlr.press/v48/mniha16.pdf",
+    "locator": "§5.1 Table 1, p.5",
+    "status": "verified",
+    "notes": "16 CPU cores; not a fair fixed-compute controlled comparison"
+  },
+  {
+    "id": "A11",
+    "claim": "DQN 8 days GPU mean 121.9%, median 47.5%; Dueling D-DQN 343.8%,117.1%; Prioritized DQN 463.6%,127.6%",
+    "kind": "experiment",
+    "source_url": "https://proceedings.mlr.press/v48/mniha16.pdf",
+    "locator": "§5.1 Table 1, p.5",
+    "status": "verified",
+    "notes": "Same reported table, distinct hardware and time budgets"
+  },
+  {
+    "id": "A12",
+    "claim": "A3C training speedup at 2/4/8/16 threads 2.1/3.7/6.9/12.5x",
+    "kind": "experiment",
+    "source_url": "https://proceedings.mlr.press/v48/mniha16.pdf",
+    "locator": "§5.5 Table 2, p.6",
+    "status": "verified",
+    "notes": "Averaged over seven Atari games, reference-score wall clock metric"
+  },
+  {
+    "id": "A13",
+    "claim": "A3C tested on Atari, TORCS, MuJoCo and Labyrinth",
+    "kind": "paper-claim",
+    "source_url": "https://proceedings.mlr.press/v48/mniha16.pdf",
+    "locator": "§5.1–§5.4, pp.5–6",
+    "status": "verified",
+    "notes": "Other three async variants not tested across all four environments"
+  },
+  {
+    "id": "A14",
+    "claim": "GAE is suggested as future improvement, not part of 2016 A3C algorithm",
+    "kind": "scope-boundary",
+    "source_url": "https://proceedings.mlr.press/v48/mniha16.pdf",
+    "locator": "§6, p.7",
+    "status": "verified",
+    "notes": "PPO and synchronized A2C are separate later methods"
+  },
+  {
+    "id": "A15",
+    "claim": "Toy scalar interactivity and Python assertions validate equations but do not reproduce game training",
+    "kind": "toy-derivation",
+    "source_url": "https://proceedings.mlr.press/v48/mniha16.pdf",
+    "locator": "mini_a3c.py, tests/test_a3c.py and article §8, §12",
+    "status": "derived",
+    "notes": "Derived locally, not a paper performance result"
+  },
+  {
+    "id": "A16",
+    "claim": "Five SVGs illustrate causal mechanism independently and are not copied from primary paper",
+    "kind": "illustration",
+    "source_url": "https://proceedings.mlr.press/v48/mniha16.pdf",
+    "locator": "assets/01–05",
+    "status": "illustrative",
+    "notes": "Original conceptual diagrams"
+  }
+]
