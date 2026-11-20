@@ -1,5 +1,30 @@
 [
   {
+    "slug": "logistic-regression",
+    "title": "Understanding Logistic Regression",
+    "subtitle": "从 Sigmoid、Log-Odds 与最大似然，到交叉熵、凸优化、正则化和 Softmax",
+    "category": "classical-ml",
+    "topic": "linear-models",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 28,
+    "tags": [
+      "Logistic Regression",
+      "Logit",
+      "Sigmoid",
+      "Binary Cross-Entropy",
+      "Maximum Likelihood",
+      "Convex Optimization",
+      "L2 Regularization",
+      "Softmax",
+      "Linear Models"
+    ],
+    "summary": "从二分类直觉推导对数胜算、Bernoulli 最大似然与交叉熵，解析梯度/Hessian 的凸性、完全分离与正则化，并通过七幅独立 SVG、11 组原生 MathML、交互概率曲线和标准库 Python 数值测试区分原始方法、历史证据与现代实现。",
+    "paper": "https://doi.org/10.1111/j.2517-6161.1958.tb00292.x",
+    "illustration": "logistic"
+  },
+  {
     "slug": "multi-head-attention",
     "title": "Understanding Multi-Head Attention",
     "subtitle": "为什么一个 Attention 不够？从独立 Q/K/V 投影、因果 Mask 到原论文 Head 消融",

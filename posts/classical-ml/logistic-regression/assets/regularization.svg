@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 320" role="img" aria-labelledby="lgr-d5-title lgr-d5-desc"><title id="lgr-d5-title">正则化阻止可分数据的权重无限放大</title><desc id="lgr-d5-desc">无惩罚的可分样本交叉熵可随权重放大而趋近零；L2 惩罚增大时总目标反而上升，从而形成有限最优点。</desc><rect width="760" height="320" rx="12" fill="#fbfcfa"/>
+<path d="M97 34 V266 H675" fill="none" stroke="#8aa0a1" stroke-width="2"/>
+<path d="M110 65 C207 171 316 215 650 246" fill="none" stroke="#387e96" stroke-width="4"/>
+<path d="M110 252 Q380 235 650 54" fill="none" stroke="#c36e49" stroke-width="4"/>
+<path d="M110 70 C190 162 300 195 365 189 C490 172 570 133 650 58" fill="none" stroke="#247f72" stroke-width="5"/>
+<circle cx="367" cy="189" r="9" fill="#247f72" stroke="#fff" stroke-width="3"/>
+<g font-family="sans-serif" font-size="16" fill="#5f7780"><text x="98" y="284">较小 |w|</text><text x="560" y="284">较大 |w|</text><text x="43" y="30">目标</text><text x="465" y="245" fill="#387e96">BCE 下降</text><text x="545" y="64" fill="#c36e49">L2 惩罚</text><text x="368" y="166" fill="#247f72" font-weight="700">有限极小值</text></g></svg>
