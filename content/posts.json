@@ -1938,6 +1938,33 @@
     }
   },
   {
+    "slug": "gnn",
+    "title": "Understanding Graph Neural Networks (GNN)",
+    "subtitle": "一条边如何传递信息？从邻居聚合、GCN 到 GraphSAGE 与 GAT",
+    "category": "architectures",
+    "topic": "graph-neural-networks",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 24,
+    "tags": [
+      "GNN",
+      "Graph Neural Networks",
+      "Message Passing",
+      "GCN",
+      "GraphSAGE",
+      "GAT",
+      "Graph Representation Learning"
+    ],
+    "summary": "从引用关系构成的图入手，直观理解节点、边与邻居聚合，逐层推导消息传递和 GCN 对称归一化；用四节点手算、可交互两层传播、四幅专属 SVG 与纯 Python 断言，区分 GCN、GraphSAGE 和 GAT 的机制、应用与局限。",
+    "paper": "https://arxiv.org/abs/1609.02907",
+    "illustration": "gnn",
+    "cover": {
+      "src": "assets/01-neighbor-messages.svg",
+      "caption": "节点 B 汇集自身与相邻节点的信息，生成新的表示"
+    }
+  },
+  {
     "slug": "gan",
     "title": "Understanding GAN",
     "subtitle": "从生成器与判别器的对抗博弈，推导 D*、Jensen–Shannon 散度与非饱和训练",

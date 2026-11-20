@@ -135,6 +135,44 @@ def post_card(p,rel,ordinal=0,topic_title=None):
 <p class="card-summary">{H(p['summary'])}</p><div class="card-bottom"><span>{p['reading_minutes']} 分钟阅读</span><span class="card-actions"><a class="paper-source" href="{H(p.get('paper',''),quote=True)}" target="_blank" rel="noopener noreferrer" aria-label="原始论文：{H(p['title'],quote=True)}">原论文</a><a href="{path}" aria-label="阅读 {H(p['title'],quote=True)}">阅读全文 <span aria-hidden="true">↗</span></a></span></div></div></article>'''
 
 
+HOME_PAGE_SIZE = 8
+ARCHIVE_PAGE_SIZE = 16
+
+
+def archive_page_url(page:int)->str:
+    return 'archive/' if page == 1 else f'archive/page/{page}/'
+
+
+def archive_page_count(posts)->int:
+    total = sum(p['status'] == 'published' for p in posts)
+    return max(1, (total + ARCHIVE_PAGE_SIZE - 1) // ARCHIVE_PAGE_SIZE)
+
+
+def archive_pagination(page:int,pages:int,rel:str)->str:
+    if pages <= 1:
+        return ''
+    numbers = sorted(n for n in {1, 2, page-1, page, page+1, pages-1, pages} if 1 <= n <= pages)
+    links = []
+    if page > 1:
+        links.append(f'<a class="page-control" rel="prev" href="{rel}{archive_page_url(page-1)}">← 上一页</a>')
+    else:
+        links.append('<span class="page-control is-disabled" aria-disabled="true">← 上一页</span>')
+    prior = 0
+    for n in numbers:
+        if prior and n > prior + 1:
+            links.append('<span class="page-ellipsis" aria-hidden="true">…</span>')
+        if n == page:
+            links.append(f'<span class="page-number is-current" aria-current="page">{n}</span>')
+        else:
+            links.append(f'<a class="page-number" href="{rel}{archive_page_url(n)}" aria-label="第 {n} 页">{n}</a>')
+        prior = n
+    if page < pages:
+        links.append(f'<a class="page-control" rel="next" href="{rel}{archive_page_url(page+1)}">下一页 →</a>')
+    else:
+        links.append('<span class="page-control is-disabled" aria-disabled="true">下一页 →</span>')
+    return f'<nav class="pagination" aria-label="文章归档分页">{"".join(links)}</nav>'
+
+
 def build_home(categories,posts,base):
     """Editorial home: fast routes into the corpus, full local search, no draft links."""
     published=[p for p in posts if p['status']=='published']
@@ -208,7 +246,7 @@ def build_home(categories,posts,base):
         )
 
     search_cards=[]
-    for i,p in enumerate(published):
+    for i,p in enumerate(published[:HOME_PAGE_SIZE]):
         topic=labels[(p['category'],p['topic'])]
         category=next(c['title'] for c in categories if c['slug']==p['category'])
         tokens=' '.join([p['title'],p['subtitle'],p['summary'],p['category'],category,topic,
@@ -254,15 +292,15 @@ def build_home(categories,posts,base):
       <div class="route-grid">{''.join(route_cards)}</div>
     </section>
     <section id="discover" class="container latest" aria-labelledby="index-title"><span id="latest" class="anchor-alias" aria-hidden="true"></span>
-      <div class="section-header"><div><div class="eyebrow muted">COMPLETE ARTICLE INDEX</div><h2 id="index-title">查找你的下一篇研究笔记 <span class="count">{count:02d}</span></h2></div><p>全部已发布文章均可搜索；默认只展开前 8 篇，避免无限滚动。</p></div>
+      <div class="section-header"><div><div class="eyebrow muted">COMPLETE ARTICLE INDEX</div><h2 id="index-title">查找你的下一篇研究笔记 <span class="count">{count:02d}</span></h2></div><p>全库搜索与筛选；每页只加载 8 篇文章及对应缩略图。</p></div>
       <div class="browse-controls">
         <label class="search-field" for="search-posts"><span aria-hidden="true">⌕</span><input id="search-posts" type="search" placeholder="搜索论文、模型、关键词或概念" autocomplete="off" data-search-input></label>
         <label class="filter-field" for="category-filter"><span>研究领域</span><select id="category-filter" data-category-filter><option value="">全部领域</option>{options}</select></label>
         <span class="visible-count" aria-live="polite" data-visible-count>共 {count} 篇文章</span>
       </div>
-      <div class="index-list" data-post-grid>{''.join(search_cards)}</div>
+      <div class="index-list" data-post-grid data-page-size="{HOME_PAGE_SIZE}">{''.join(search_cards)}</div>
       <p class="empty-result" hidden data-no-results>没有找到匹配的文章。试试更简短的关键词，或清除筛选条件。</p>
-      <div class="index-footer"><button class="load-more" type="button" data-load-more hidden>继续浏览更多文章 ↓</button><a href="archive/">查看完整时间归档 ↗</a></div>
+      <div class="index-footer"><nav class="pagination" data-home-pagination aria-label="文章索引分页" hidden></nav><a href="archive/">查看完整时间归档 ↗</a></div>
     </section>
     <section class="closing"><div class="container"><div class="eyebrow">AN OPEN, TRACEABLE NOTEBOOK</div>
       <h2>可解释的理解，需要可追溯的证据。</h2>
@@ -336,23 +374,31 @@ def build_category(c,posts,categories,base):
     return html_page(title=f"{c['title']} · xm-posts",description=c['description'],canonical=url_join(base,f'categories/{c["slug"]}/'),body=body,depth=2)
 
 
-def build_archive(posts,categories,base):
+def build_archive(posts,categories,base,page=1):
+    """A separate crawlable HTML page per chunk; only current thumbnails enter DOM."""
     published=sorted([p for p in posts if p['status']=='published'],key=lambda p:(p['published'],p['title']),reverse=True)
     labels=topic_labels(categories)
-    # Every published post already has an individually curated SVG cover in the
-    # manifest. Reuse it: no separate archive image mapping or generic fallback.
+    pages=archive_page_count(posts)
+    if not 1 <= page <= pages:
+        raise ValueError(f'archive page {page} is outside 1..{pages}')
+    rel='../' if page == 1 else '../../../'
+    current=published[(page-1)*ARCHIVE_PAGE_SIZE:page*ARCHIVE_PAGE_SIZE]
     cards=''.join(
         f'''<li class="archive-entry">
         <time class="timeline-date" datetime="{H(p['published'])}">{H(p['published'])}</time>
-        <a class="archive-cover" href="../{article_url(p)}" aria-label="阅读 {H(p['title'],quote=True)}" title="{H(p['cover']['caption'],quote=True)}">{cover_art(p,'../',compact=True)}</a>
-        <div class="archive-entry-copy"><h2><a href="../{article_url(p)}">{H(p['title'])}</a></h2>
+        <a class="archive-cover" href="{rel}{article_url(p)}" aria-label="阅读 {H(p['title'],quote=True)}" title="{H(p['cover']['caption'],quote=True)}">{cover_art(p,rel,compact=True)}</a>
+        <div class="archive-entry-copy"><h2><a href="{rel}{article_url(p)}">{H(p['title'])}</a></h2>
         <p>{H(p['subtitle'])}</p>
-        <a class="archive-topic" href="../categories/{H(p['category'])}/#topic-{H(p['topic'])}">{H(labels[(p['category'],p['topic'])])}</a></div>
+        <a class="archive-topic" href="{rel}categories/{H(p['category'])}/#topic-{H(p['topic'])}">{H(labels[(p['category'],p['topic'])])}</a></div>
         <span class="timeline-time">{p['reading_minutes']} min <span aria-hidden="true">↗</span></span></li>'''
-        for p in published
+        for p in current
     )
-    body=f'''<div class="container archive-page"><div class="breadcrumb"><a href="../">首页</a> <span>/</span> 文章归档</div><div class="eyebrow muted">ALL EXPLAINERS · CHRONOLOGICAL</div><h1>研究笔记归档<span class="count">{len(published):02d}</span></h1><p class="category-description">按发布时间浏览全部正式发布的文章。每篇配有独立的核心机制 SVG 缩略图；草稿与目录占位不会出现在这里。</p><ol class="timeline">{cards}</ol></div>'''
-    return html_page(title='文章归档 · xm-posts',description='按时间浏览 xm-posts 全部深度学习论文图解文章。',canonical=url_join(base,'archive/'),body=body,depth=1,active='archive')
+    first=(page-1)*ARCHIVE_PAGE_SIZE+1 if current else 0
+    last=first+len(current)-1 if current else 0
+    pager=archive_pagination(page,pages,rel)
+    body=f'''<div class="container archive-page"><div class="breadcrumb"><a href="{rel}">首页</a> <span>/</span> <a href="{rel}archive/">文章归档</a>{f' <span>/</span> 第 {page} 页' if page>1 else ''}</div><div class="eyebrow muted">ALL EXPLAINERS · CHRONOLOGICAL</div><h1>研究笔记归档<span class="count">{len(published):02d}</span></h1><p class="category-description">按发布时间浏览全部正式发布的文章。每页仅显示 {ARCHIVE_PAGE_SIZE} 篇，保留各自的 SVG 机制缩略图。</p><p class="archive-range">第 {page} / {pages} 页 · 显示 {first}–{last} / {len(published)} 篇</p><ol class="timeline">{cards}</ol>{pager}</div>'''
+    return html_page(title=f'文章归档{" · 第 "+str(page)+" 页" if page>1 else ""} · xm-posts',description='按时间浏览 xm-posts 深度学习论文图解文章。',canonical=url_join(base,archive_page_url(page)),body=body,depth=1 if page==1 else 3,active='archive')
+
 
 def write(out:Path,path:str,content:str):
     dest=out/path;dest.parent.mkdir(parents=True,exist_ok=True);dest.write_text(content,encoding='utf-8')
@@ -438,7 +484,8 @@ def build(root:Path,out:Path,base:str):
     out.mkdir(parents=True)
     categories,posts=data(root)
     write(out,'index.html',build_home(categories,posts,base))
-    write(out,'archive/index.html',build_archive(posts,categories,base))
+    for archive_page in range(1,archive_page_count(posts)+1):
+        write(out,archive_page_url(archive_page)+'index.html',build_archive(posts,categories,base,archive_page))
     write(out,'topics/index.html',build_topics(categories,posts,base))
     for c in categories:write(out,f'categories/{c["slug"]}/index.html',build_category(c,posts,categories,base))
     published=[p for p in posts if p['status']=='published']
@@ -453,9 +500,12 @@ def build(root:Path,out:Path,base:str):
     shutil.copytree(root/'site/assets',out/'assets')
     write(out,'.nojekyll','')
     write(out,'404.html',html_page(title='页面未找到 · xm-posts',description='你访问的页面不存在。',canonical=url_join(base,'404.html'),body='<div class="container category-empty not-found"><h1>这条路径尚未被写下。</h1><p>页面可能移动了，或文章尚未正式发布。</p><a href="'+H(base,quote=True)+'">回到首页 ↗</a></div>',root_href=base))
-    search=[{k:p[k] for k in ['title','slug','subtitle','summary','category','topic','tags','published','reading_minutes']}|{'url':article_url(p)} for p in published]
+    labels=topic_labels(categories)
+    category_names={c['slug']:c['title'] for c in categories}
+    ordered=sorted(published,key=lambda p:(p['published'],p['slug']),reverse=True)
+    search=[{k:p[k] for k in ['title','slug','subtitle','summary','category','topic','tags','published','reading_minutes']}|{'url':article_url(p),'paper':p.get('paper',''),'cover_src':article_url(p)+p['cover']['src'],'category_title':category_names[p['category']],'topic_title':labels[(p['category'],p['topic'])]} for p in ordered]
     write(out,'posts.json',json.dumps(search,ensure_ascii=False,indent=2)+'\n')
-    urls=[base,url_join(base,'archive/'),url_join(base,'topics/')]+[url_join(base,f'categories/{c["slug"]}/') for c in categories]+[url_join(base,article_url(p)) for p in published]
+    urls=[base]+[url_join(base,archive_page_url(i)) for i in range(1,archive_page_count(posts)+1)]+[url_join(base,'topics/')]+[url_join(base,f'categories/{c["slug"]}/') for c in categories]+[url_join(base,article_url(p)) for p in published]
     sitemap=''.join(f'<url><loc>{X(u)}</loc></url>' for u in urls)
     write(out,'sitemap.xml','<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'+sitemap+'</urlset>')
     write(out,'robots.txt',f'User-agent: *\nAllow: /\nSitemap: {url_join(base,"sitemap.xml")}\n')

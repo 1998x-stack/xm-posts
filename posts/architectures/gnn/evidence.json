@@ -1,0 +1,74 @@
+[
+  {
+    "id": "GNN-01",
+    "claim": "GCN's graph propagation uses self-loops and symmetrically degree-normalized adjacency; it is not an arithmetic neighbor mean",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/abs/1609.02907",
+    "locator": "§2.2, Eq. (2), renormalization trick",
+    "status": "verified",
+    "notes": "This post states W and activation and notes scalar W=1 exercise is independent."
+  },
+  {
+    "id": "GNN-02",
+    "claim": "The 2017 GCN paper studies semi-supervised node classification on citation networks",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/abs/1609.02907",
+    "locator": "§3; Figure 1",
+    "status": "verified",
+    "notes": "No paper dataset accuracy is quoted."
+  },
+  {
+    "id": "GNN-03",
+    "claim": "Message Passing Neural Networks provide a common framework with message, update, and readout functions",
+    "kind": "paper-claim",
+    "source_url": "https://proceedings.mlr.press/v70/gilmer17a.html",
+    "locator": "§2 Message Passing Neural Networks",
+    "status": "verified",
+    "notes": "Generic MPNN framework, not GCN-specific formula."
+  },
+  {
+    "id": "GNN-04",
+    "claim": "GraphSAGE samples neighbors and aggregates features to support inductive representation learning on unseen nodes/graphs",
+    "kind": "paper-claim",
+    "source_url": "https://proceedings.neurips.cc/paper/2017/hash/5dd9db5e033da9c6fb5ba83c7a7ebea9-Abstract.html",
+    "locator": "§3 GraphSAGE; §4 experiments",
+    "status": "verified",
+    "notes": "Sampling and aggregation are not symmetric GCN normalization."
+  },
+  {
+    "id": "GNN-05",
+    "claim": "GAT uses attention coefficients normalized over graph neighborhoods to weigh messages",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/abs/1710.10903",
+    "locator": "§3, Eq. (2)–(5)",
+    "status": "verified",
+    "notes": "Original masked neighborhood attention, not global full graph attention."
+  },
+  {
+    "id": "GNN-06",
+    "claim": "For chain A-B-C-D with scalar X=(2,4,8,6), self-loop row mean yields h_B^1=14/3 and h_B^2=41/9",
+    "kind": "toy-derivation",
+    "source_url": "https://arxiv.org/abs/1609.02907",
+    "locator": "Independent pedagogical arithmetic in mini_gnn.py and tests/test_gnn.py; not a paper experiment",
+    "status": "derived",
+    "notes": "Synchronous snapshots, no learned weights."
+  },
+  {
+    "id": "GNN-07",
+    "claim": "On the same chain, symmetric GCN with W=1 and identity activation yields B=2/sqrt(6)+4/3+8/3",
+    "kind": "toy-derivation",
+    "source_url": "https://arxiv.org/abs/1609.02907",
+    "locator": "Eq. (2) applied to an independent four-node path",
+    "status": "derived",
+    "notes": "Degree counts self loops; output approximately 4.8165."
+  },
+  {
+    "id": "GNN-08",
+    "claim": "Two local propagation steps create a computational path from D to B but not one step",
+    "kind": "toy-derivation",
+    "source_url": "https://proceedings.mlr.press/v70/gilmer17a.html",
+    "locator": "MPNN layer-wise neighborhood propagation; confirmed by mini_gnn.py assertions",
+    "status": "derived",
+    "notes": "Does not guarantee useful nonzero downstream trained signal in every model."
+  }
+]

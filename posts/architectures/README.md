@@ -41,6 +41,11 @@ RoPE 位于 `posts/architectures/rope/`，主题为 **Positional Encoding**；�
 - [Understanding GQA](gqa/index.html)：以 EMNLP 2023 原论文为主线，解释 MHA / GQA / MQA 头共享、Checkpoint mean-pooling + uptraining、KV Cache 成本与 T5-XXL 结果；提供交互演算、原生 MathML、独立 SVG、数值测试与证据账本。
 - 研究主题属于注意力架构；KV Cache 的内存分配、页表和在线调度延伸至 `inference`，无需新建顶层分类。
 
+## Graph Neural Networks & Message Passing
+
+- [Understanding GNN](gnn/index.html)：从节点/边/邻接矩阵进入消息传递；通过四节点手算、GCN 对称归一化、两跳交互和原始论文证据，理解 GCN、GraphSAGE 与 GAT 的区别。
+- [专题归属](_topics/graph-neural-networks/README.md)：作为 `architectures` 下的独立二级主题，图数据上的节点/边/图任务均可延伸到这里，不与规则网格 CNN 或全序列 Transformer Attention 混同。
+
 ## 专题规划占位（非文章）
 
 `architectures` 研究模型信息流与结构算法：MoE、State Space Models、Efficient Attention、Long-context。FlashAttention 等特定 GPU kernel 优化应与 `systems` 双向链接而不重复归档。
