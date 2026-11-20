@@ -13,3 +13,9 @@
 /* Maximum-margin preview for Classical ML papers. */
 .figure-margin{background:#e9f1ed}.figure-margin:before{background-image:linear-gradient(90deg,#cbded7 1px,transparent 1px);background-size:30px 30px}.figure-margin .math-mark{top:66px;left:24px;color:#235d63;font-size:clamp(20px,2.5vw,32px);white-space:nowrap}.svm-boundary{position:absolute;height:63px;top:117px;border-left:2px dashed #70a89c}.svm-left{right:112px}.svm-center{right:84px;border-left:3px solid #31565d}.svm-right{right:56px}.svm-point{position:absolute;top:136px;border-radius:50%;width:12px;height:12px;box-shadow:0 0 0 4px #ffffffb8}.point-blue{background:#367c91;right:128px}.point-orange{background:#ca7951;right:36px}
 @media(max-width:450px){.figure-margin .math-mark{font-size:21px}.svm-left{right:89px}.svm-center{right:65px}.svm-right{right:41px}.point-blue{right:105px}.point-orange{right:22px}}
+
+/* Word2Vec visual thumbnail: embeddings rather than attention or margin geometry. */
+.figure-embedding{background:linear-gradient(135deg,#e2f3e9 0%,#f8f8ed 72%,#fff2e7 100%)}
+.figure-embedding .math-mark{font-size:clamp(16px,2vw,23px);letter-spacing:-.02em;color:#225e58}
+.figure-embedding .embedding-dots{display:block;margin:15px 0 6px;font-size:27px;letter-spacing:14px;color:#25877b;white-space:nowrap}
+.figure-embedding .embedding-eq{display:block;color:#a96b4f;font:650 11px/1.5 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.05em}

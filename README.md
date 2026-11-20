@@ -13,14 +13,15 @@
 | **Understanding ResNet** | 网络越深，为什么训练反而可能更难？ | [`posts/architectures/resnet/`](posts/architectures/resnet/index.html) | [He et al.](https://arxiv.org/abs/1512.03385) |
 | **Understanding Transformer** | 为什么用 Self-Attention 替代循环结构？ | [`posts/architectures/transformer/`](posts/architectures/transformer/index.html) | [Vaswani et al.](https://arxiv.org/abs/1706.03762) |
 | **Understanding SVM** | 为什么分对了仍需最大间隔？ | [`posts/classical-ml/svm/`](posts/classical-ml/svm/index.html) | [Cortes & Vapnik (1995)](https://doi.org/10.1007/BF00994018) |
+| **Understanding Word2Vec** | 为什么上下文预测能产生词向量？ | [`posts/foundations/understanding-word2vec/`](posts/foundations/understanding-word2vec/index.html) | [Mikolov et al. (2013)](https://arxiv.org/abs/1301.3781) · [NeurIPS 2013](https://arxiv.org/abs/1310.4546) |
 
-ResNet 具有 11 节解读与 10 幅独立 SVG；Transformer 具有 16 节解读与 13 幅独立 SVG，另有最小 PyTorch Attention 示例；SVM 具有 12 节机制推导、6 幅独立 SVG、可调 RBF 相似度矩阵和纯 Python 一维解析示例。文章在发布前经过静态内容核验、浏览器布局与交互检查；教学简化、原论文和后续变体需明确区分。
+ResNet 具有 11 节解读与 10 幅独立 SVG；Transformer 具有 16 节解读与 13 幅独立 SVG，另有最小 PyTorch Attention 示例；SVM 具有 12 节机制推导、6 幅独立 SVG、可调 RBF 相似度矩阵和纯 Python 一维解析示例；Word2Vec 具有 12 节精读、5 幅内嵌原创图、7 份独立 SVG、SGNS 训练器和数值梯度校验。文章在发布前经过静态内容核验、浏览器布局与交互检查；教学简化、原论文和后续变体需明确区分。
 
 ## 内容分类
 
 | 分类 | 路径 | 范围 |
 |---|---|---|
-| 基础理论 | `posts/foundations/` | 表示、优化、数学直觉 |
+| 基础理论 | `posts/foundations/` | Word2Vec、词嵌入、表示学习、优化与数学直觉 |
 | **经典机器学习** | `posts/classical-ml/` | SVM、核方法、线性与树模型 |
 | **模型架构** | `posts/architectures/` | ResNet、Transformer、状态空间模型 |
 | 训练与对齐 | `posts/training/` | 预训练、微调、偏好对齐 |
@@ -42,6 +43,7 @@ xm-posts/
 │   └── posts.json                # 单一文章注册表；draft / published
 ├── posts/
 │   ├── classical-ml/svm/          # SVM: HTML、SVG、代码与证据
+│   ├── foundations/understanding-word2vec/  # Word2Vec: HTML、SVG、SGNS 与证据
 │   ├── architectures/
 │   │   ├── resnet/
 │   │   │   ├── index.html
