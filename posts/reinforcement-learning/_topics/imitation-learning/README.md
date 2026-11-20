@@ -13,7 +13,7 @@
 
 ## 正式文章
 
-- [Understanding Imitation Learning](../imitation-learning/index.html)
+- [Understanding Imitation Learning](../../imitation-learning/index.html)
 
 ## 分类边界
 
