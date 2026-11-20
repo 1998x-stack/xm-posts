@@ -68,3 +68,18 @@
 - 研究多轮、部分可观测环境中的策略学习、工具交互、轨迹奖励、信用分配、长程课程与异步 Rollout。
 - 不新增一级分类：Agentic RL 的任务形态属于 Agent 环境交互闭环；PPO、GAE、GRPO 等算法仍保留在原有强化学习 / 训练专题。
 - 与 ReAct / Tool Calling / Planning 通过阅读路径关联，避免把“行动协议”“优化算法”和“训练系统”混成一个概念。
+
+
+## Autonomous Execution & Iterative Control 专题边界（2026-11）
+
+该 topic 研究 Agent 的**外层执行控制**：如何把长周期目标拆成可验证工作单元，如何在多轮运行之间恢复项目状态，如何用测试和工具反馈控制下一轮，以及何时应继续、终止或交由人类处理。
+
+- **收录**：Ralph Loop、iterative agent execution、long-horizon coding tasks、任务切片、循环预算、完成条件、检查点、停滞/振荡诊断和执行器级安全门禁。
+- **与 Harness Engineering 的边界**：Harness Engineering 是完整的模型外部运行时系统，涵盖模型接入、工具、上下文、状态、权限、编排、可观测性、评估和维护；Autonomous Execution 是其中更窄的外层循环控制模式。Harness 不等于 Ralph，Ralph 也不能替代完整 Harness。
+- **与 ReAct 的边界**：ReAct 解释单次运行内部的 Thought / Action / Observation；本 topic 解释一次运行结束后如何调度下一轮。
+- **与 Software Engineering Agents & ACI 的边界**：SWE-agent / ACI 研究 Agent 如何搜索、编辑和操作软件环境；本 topic 研究如何将这些操作组织为可恢复、可验证的多轮任务。
+- **与 Context Engineering / Memory 的边界**：Context Engineering 研究每轮应提供什么信息；Memory 研究跨任务经验如何沉淀；本 topic 研究运行状态如何持久化并驱动下一次执行。
+- **与 Agentic RL 的边界**：Agentic RL 研究通过环境交互优化策略；Ralph 是部署阶段的工程执行模式，不是训练算法。
+- **与 Training Checkpointing 的边界**：这里的 checkpoint 是代码仓库、任务进度和执行状态，不是模型训练过程中的权重/优化器状态保存。
+
+Ralph Loop 是工程模式，不是新的模型架构，也没有一个可直接外推到所有项目的统一成功率或收敛保证。文章应明确区分原始 Shell 技术、具体产品插件和独立教学抽象；不能把某个执行器的上下文生命周期推广为所有 Ralph 实现的共同属性。

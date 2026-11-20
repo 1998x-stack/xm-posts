@@ -451,7 +451,7 @@
     "slug": "agents",
     "title": "智能体与工具使用",
     "english": "Agents & Tool Use",
-    "description": "围绕模型与外部环境交互的闭环，研究 ReAct、任务规划、工具调用、状态与记忆、软件工程智能体、Agent-Computer Interface、Harness Engineering、Agentic RL 与端到端评测。",
+    "description": "围绕模型与外部环境交互的闭环，研究 ReAct、任务规划、工具调用、状态与记忆、软件工程智能体、Agent-Computer Interface、Harness Engineering、Agentic RL 与端到端评测。 自主执行与迭代控制。",
     "topics": [
       {
         "slug": "react",
@@ -484,6 +484,10 @@
       {
         "slug": "agentic-rl",
         "title": "Agentic Reinforcement Learning"
+      },
+      {
+        "slug": "autonomous-execution",
+        "title": "Autonomous Execution & Iterative Control"
       }
     ]
   },

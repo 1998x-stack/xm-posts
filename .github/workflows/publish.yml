@@ -53,6 +53,10 @@ jobs:
           python scripts/ci_metrics.py run --name browser-second -- python scripts/browser_check_second_batch.py --output reports/second-batch
       - name: Check every published article with shared Chromium workers
         run: python scripts/ci_metrics.py run --name browser-all -- python scripts/browser_check_all.py --workers 2
+      - name: Validate Ralph Loop draft and browser interaction
+        run: |
+          python skills/olah-style-paper-posts/scripts/validate.py posts/agents/ralph-loop/index.html --report reports/ralph-loop/source-validation.json
+          python skills/olah-style-paper-posts/scripts/browser_check.py posts/agents/ralph-loop/index.html --output reports/ralph-loop/browser
       - name: Verify actual generated Pages site in Chromium
         run: python scripts/ci_metrics.py run --name browser-site -- python scripts/browser_check_site.py --output reports/site
       - name: Install Chinese and math fonts for PDF export

@@ -2150,5 +2150,35 @@
       "src": "assets/01-single-vs-multi-turn.svg",
       "caption": "从一次生成扩展为由环境反馈驱动的多轮决策轨迹"
     }
+  },
+  {
+    "slug": "ralph-loop",
+    "title": "Ralph Loop：自主 Agent 的迭代执行与反馈控制",
+    "subtitle": "从 Bash 循环、上下文边界到持久状态、验证反馈与安全停止",
+    "category": "agents",
+    "topic": "autonomous-execution",
+    "status": "draft",
+    "published": "2026-11-21",
+    "updated": "2026-11-21",
+    "reading_minutes": 28,
+    "tags": [
+      "Ralph Loop",
+      "Ralph Wiggum",
+      "Autonomous Coding Agents",
+      "Agentic Coding",
+      "Iterative Execution",
+      "Context Engineering",
+      "Feedback Control",
+      "Task Decomposition",
+      "Stop Hook",
+      "Harness Engineering"
+    ],
+    "summary": "拆解 Ralph Loop 的进程级循环与 Stop Hook 实现，解释任务切片、上下文与持久状态、测试反馈、收敛诊断、停止条件和安全边界。",
+    "paper": "https://ghuntley.com/ralph/",
+    "illustration": "ralph-loop",
+    "cover": {
+      "src": "assets/01-loop-architecture.svg",
+      "caption": "每轮 Agent 执行后先验证并写回持久状态，再决定继续还是终止"
+    }
   }
 ]

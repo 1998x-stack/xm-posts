@@ -1,6 +1,6 @@
 # 智能体与工具使用 / Agents & Tool Use
 
-本分类专注模型与外界交互的行动闭环：ReAct、Planning、Tool Calling、Memory、Software Engineering Agents & ACI、Harness Engineering、Agentic RL、Agent Evaluation。
+本分类专注模型与外界交互的行动闭环：ReAct、Planning、Tool Calling、Memory、Software Engineering Agents & ACI、Harness Engineering、Autonomous Execution & Iterative Control、Agentic RL、Agent Evaluation。
 
 ## 已发布专题
 
