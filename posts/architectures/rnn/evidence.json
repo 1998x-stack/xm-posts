@@ -97,5 +97,14 @@
     "locator": "mini_rnn.py plus tests/test_rnn.py",
     "status": "illustrative",
     "notes": "Will only be called tested after CI confirms"
+  },
+  {
+    "id": "RNN12",
+    "claim": "For a scalar recurrence h_t=lambda h_(t-1), the sensitivity over N steps is |lambda|^N, and a fixed-log-scale chart and a numeric table both follow the same closed form.",
+    "kind": "toy-derivation",
+    "source_url": "https://proceedings.mlr.press/v28/pascanu13.html",
+    "locator": "Article Section 08; independent chain-rule computation",
+    "status": "derived",
+    "notes": "This toy sensitivity does not equal retained information in an Elman RNN, and is not an empirical gradient curve."
   }
 ]
