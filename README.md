@@ -54,6 +54,7 @@
 | **Understanding PagedAttention** | 为什么 KV Cache 需要像操作系统一样分页？从 Block Table 到 vLLM Serving | [`posts/inference/pagedattention/`](posts/inference/pagedattention/index.html) | [研究出处](https://arxiv.org/abs/2309.06180) |
 | **Understanding DDPG** | 连续动作如何学习？从确定性策略梯度到双目标网络与经验回放 | [`posts/reinforcement-learning/ddpg/`](posts/reinforcement-learning/ddpg/index.html) | [研究出处](https://arxiv.org/abs/1509.02971) |
 | **Understanding CNN** | 为什么一个小核在整张图上滑动，就能学习视觉结构？ | [`posts/architectures/cnn/`](posts/architectures/cnn/index.html) | [研究出处](https://doi.org/10.1109/5.726791) |
+| **Understanding Rearrangement Inequalities** | 为什么同序配对最大化乘积和，而三序列的最小值难有同样规则？ | [`posts/foundations/rearrangement-inequalities/`](posts/foundations/rearrangement-inequalities/index.html) | [苏剑林（2026）](https://spaces.ac.cn/archives/11910) · [迹不等式](https://andre-a-no.github.io/von_neumann_type_i/lecture_notes/11_optimisation/) |
 | **Understanding SVD** | 矩阵如何把空间拉伸成椭圆？从奇异值到最优低秩近似、PCA 与伪逆 | [`posts/foundations/svd/`](posts/foundations/svd/index.html) | [研究出处](https://doi.org/10.1007/BF02288367) |
 | **Understanding KV Cache** | 自回归 Decode 为什么要保存历史 K/V？ | [`posts/inference/kv-cache/`](posts/inference/kv-cache/index.html) | [Kwon et al. (SOSP 2023)](https://doi.org/10.1145/3600006.3613165) |
 | **Understanding GPT-1** | 为什么预测下一个 token 能迁移到多种语言理解任务？ | [`posts/training/gpt-1/`](posts/training/gpt-1/index.html) | [Radford et al. (2018)](https://cdn.openai.com/research-covers/language-unsupervised/language_understanding_paper.pdf) |
