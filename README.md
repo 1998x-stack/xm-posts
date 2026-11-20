@@ -287,3 +287,7 @@ MobileNet 归入 `architectures` → **Convolutional Neural Networks & Vision** 
 ## K-Means / Clustering & Unsupervised Learning
 
 [Understanding K-Means](posts/classical-ml/k-means/index.html) — 归入 `classical-ml / clustering`：从 Lloyd 交替最小化、平方距离与均值最优性，到 k-means++ 的 D² 初始化、四点完整手算、五幅 SVG、原生 MathML、交互实验与可运行 Python 样例。聚类体系采用已有 Classical ML 一级类，新增 `Clustering & Unsupervised Learning` 二级主题。
+
+### Logistic Regression — 经典机器学习 / Linear Models
+
+[Understanding Logistic Regression](posts/classical-ml/logistic-regression/index.html)：归入现有 `classical-ml → linear-models`，贯通 Berkson（1944）/Cox（1958）/Nelder–Wedderburn（1972）、Sigmoid / Log-Odds、Bernoulli 最大似然与 BCE、凸优化和 L2、Softmax。配套七幅独立 SVG、11 组原生 MathML、阈值交互实验、证据台账和纯 Python 梯度有限差分测试。
