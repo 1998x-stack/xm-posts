@@ -428,6 +428,27 @@
     "illustration": "seq2seq"
   },
   {
+    "slug": "cnn",
+    "title": "Understanding CNN",
+    "subtitle": "为什么一个小核在整张图上滑动，就能学习视觉结构？",
+    "category": "architectures",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 32,
+    "tags": [
+      "CNN",
+      "Convolutional Neural Networks",
+      "LeNet-5",
+      "Receptive Field",
+      "Weight Sharing",
+      "Computer Vision"
+    ],
+    "summary": "从局部感受野、共享核、空间形状和梯度累积，到 1998 原始 LeNet-5 的部分连接、可学习池化与 RBF 输出；配八幅独立机制图、交互滑窗、MathML 推导及纯 Python 数值验证。",
+    "paper": "https://doi.org/10.1109/5.726791",
+    "illustration": "cnn"
+  },
+  {
     "slug": "the-pile",
     "title": "Understanding The Pile",
     "subtitle": "为什么 22 种语料的混合，比只扩大网页抓取更有意义？",
