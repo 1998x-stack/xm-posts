@@ -22,3 +22,5 @@
 - [Understanding SGD](sgd/index.html)：从全量 GD 到 Mini-batch、无偏梯度、学习率衰减与计算统计权衡；包含 SVG 与测试。
 
 - [Understanding SVD](svd/index.html)：矩阵分解、Eckart–Young 低秩定理、PCA 与伪逆；含交互秩选择、MathML 与 NumPy 断言。
+
+- [Understanding Embeddings](embeddings/index.html)：覆盖 lookup、Word2Vec/GloVe、BERT、SBERT、SimCSE/E5、cosine 与 ANN/RAG 召回；附七幅图示、MathML、交互实验、证据与 Python 断言。所属二级主题：`Representation Learning & Embeddings`。
