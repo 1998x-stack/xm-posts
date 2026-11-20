@@ -364,7 +364,7 @@ def solve_game24(numbers):
 
 if __name__ == "__main__":
     answer = solve_game24([4, 9, 10, 13])
-    print(answer)</code></pre></div>
+    print(answer[-1] if answer else "No solution found")</code></pre></div>
 <p>这个小程序的价值不是「让搜索替代 LLM」，而是演示一种混合系统思路：模型可以负责提出有意义的候选思维，程序负责检查数字是否重复使用、运算是否合法、最终值是否精确等硬约束。对于可形式化的任务，确定性验证器通常比让模型自己判断更可靠。</p>
 <p>仓库同时提供独立测试，验证样例可解、无解输入返回 None，以及精确算术不会把浮点误差当成成功。测试通过只说明这个小型算术程序满足断言，不代表复现了论文的 74% 指标。</p>
 </section>
