@@ -35,7 +35,7 @@
     "slug": "classical-ml",
     "title": "经典机器学习",
     "english": "Classical Machine Learning",
-    "description": "从最大间隔与核技巧，到实例学习、最近邻、朴素贝叶斯概率分类、线性模型、树模型和集成方法，梳理经典学习算法的数学机制与论文证据。",
+    "description": "从线性模型、概率分类、最大间隔、树模型与集成，到降维和无监督聚类，沿着数据几何与学习目标理解经典机器学习。",
     "topics": [
       {
         "slug": "linear-models",
@@ -64,6 +64,10 @@
       {
         "slug": "nearest-neighbors",
         "title": "Instance-based Learning & Nearest Neighbors"
+      },
+      {
+        "slug": "clustering",
+        "title": "Clustering & Unsupervised Learning"
       }
     ]
   },

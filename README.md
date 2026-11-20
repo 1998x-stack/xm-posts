@@ -283,3 +283,7 @@ MobileNet 归入 `architectures` → **Convolutional Neural Networks & Vision** 
 ### Classification Evaluation / ROC-AUC
 
 - **Understanding ROC-AUC**：从混淆矩阵、阈值扫描与成对排序推导 ROC-AUC，并比较 PR / AP、基率、校准及实际工作点。源文件：[`posts/evaluation/roc-auc/`](posts/evaluation/roc-auc/index.html)；Fawcett (2006), https://doi.org/10.1016/j.patrec.2005.10.010。
+
+## K-Means / Clustering & Unsupervised Learning
+
+[Understanding K-Means](posts/classical-ml/k-means/index.html) — 归入 `classical-ml / clustering`：从 Lloyd 交替最小化、平方距离与均值最优性，到 k-means++ 的 D² 初始化、四点完整手算、五幅 SVG、原生 MathML、交互实验与可运行 Python 样例。聚类体系采用已有 Classical ML 一级类，新增 `Clustering & Unsupervised Learning` 二级主题。

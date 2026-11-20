@@ -1427,5 +1427,29 @@
     "paper": "https://doi.org/10.1016/j.patrec.2005.10.010",
     "illustration": "roc-auc",
     "topic": "classification-metrics-roc"
+  },
+  {
+    "slug": "k-means",
+    "title": "Understanding K-Means",
+    "subtitle": "为什么“最近的中心”与“重新求平均”交替进行，就能把数据分成簇？",
+    "category": "classical-ml",
+    "topic": "clustering",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 29,
+    "tags": [
+      "K-Means",
+      "Lloyd Algorithm",
+      "Unsupervised Learning",
+      "Clustering",
+      "K-Means++",
+      "Inertia",
+      "Centroid",
+      "MiniBatchKMeans"
+    ],
+    "summary": "从二维点云到 Lloyd 的分配—更新交替最小化，推导平方误差与均值更新、完整手算四点示例、k-means++ D² 初始化和 O(nkdT) 计算成本；以五幅可独立查看的 SVG、原生 MathML、交互迭代、纯标准库 Python 测试和原论文证据解释聚类的能力与边界。",
+    "paper": "https://doi.org/10.1109/TIT.1982.1056489",
+    "illustration": "k-means"
   }
 ]
