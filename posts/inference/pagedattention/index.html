@@ -37,7 +37,7 @@ section{margin:0 0 72px;scroll-margin-top:24px}p{margin:0 0 18px;color:#3b5457}.
 <p>这个映射有意借鉴操作系统的页表，但不是 CUDA 的 thread block，更不等于操作系统直接管理的 CPU 虚拟页。它是在推理运行时与注意力 kernel 之间建立的 <strong>KV 逻辑块到物理块</strong> 的管理抽象。</p>
 </section>
 <section id="growth"><h2><span class="no">03</span>走完一次 Decode：什么时候真正分配新块？</h2>
-<p>考虑块大小 <code>B = 4</code>。初始 10 个 token 占据三个逻辑块；前两块各 4 个，第三块仅 2 个。后续生成先填充第三块的剩余位置，只有长度从 12 变成 13 时才需要第四块。<a href="https://arxiv.org/abs/2309.06180">[论文 §4.2]</a></p>
+<p>考虑块大小 <code>B = 4</code>。初始 10 个 token 占据三个逻辑块；前两块各 4 个，第三块仅 2 个。后续生成先填充第三块的剩余位置，只有长度从 12 变成 13 时才需要第四块。<a href="https://arxiv.org/abs/2309.06180">[论文 §4.3]</a></p>
 <figure class="figure"><div class="fig-kicker">FIGURE 03</div><div class="diagram-scroll"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 267" role="img" aria-label="Decode 时仅按需申请新的 KV 块"><title>Decode 时仅按需申请新的 KV 块</title><rect width="760" height="267" rx="16" fill="#f9fbf9"/><text x="24" y="35" fill="#35565d" text-anchor="start" font-size="16">t = 10：10 个 token，B = 4</text>
 <rect x="24" y="58" width="35" height="35" rx="5" fill="#72bbb1" stroke="#4a9a90"/><rect x="62" y="58" width="35" height="35" rx="5" fill="#72bbb1" stroke="#4a9a90"/><rect x="100" y="58" width="35" height="35" rx="5" fill="#72bbb1" stroke="#4a9a90"/><rect x="138" y="58" width="35" height="35" rx="5" fill="#72bbb1" stroke="#4a9a90"/><rect x="196" y="58" width="35" height="35" rx="5" fill="#72bbb1" stroke="#4a9a90"/><rect x="234" y="58" width="35" height="35" rx="5" fill="#72bbb1" stroke="#4a9a90"/><rect x="272" y="58" width="35" height="35" rx="5" fill="#72bbb1" stroke="#4a9a90"/><rect x="310" y="58" width="35" height="35" rx="5" fill="#72bbb1" stroke="#4a9a90"/><rect x="368" y="58" width="35" height="35" rx="5" fill="#72bbb1" stroke="#4a9a90"/><rect x="406" y="58" width="35" height="35" rx="5" fill="#72bbb1" stroke="#4a9a90"/><rect x="444" y="58" width="35" height="35" rx="5" fill="#e4eae6" stroke="#cbd4d0"/><rect x="482" y="58" width="35" height="35" rx="5" fill="#e4eae6" stroke="#cbd4d0"/><text x="555" y="82" fill="#35565d" text-anchor="start" font-size="15">已分配 3 块</text>
 <text x="24" y="145" fill="#35565d" text-anchor="start" font-size="16">t = 12 → t = 13：填满尾块后，才申请新块</text>
@@ -121,11 +121,13 @@ python -m pytest -q tests/test_pagedattention.py
 <p>论文对在线请求到达条件下的模型 Serving 做实验，对比 FasterTransformer 与不同 Orca 实现，测量吞吐与延迟，并评估 block size、kernel overhead 与内存管理策略。具体结论必须连同模型、工作负载及基线理解。</p>
 <div class="table-wrap"><table><thead><tr><th>观察</th><th>论文定位</th><th>可支持的结论 / 边界</th></tr></thead><tbody>
 <tr><td>整体 Serving 吞吐约 2–4×</td><td>摘要；§6 / Fig. 12–14（参见正式版本具体图号）</td><td>相对论文设定的基线与相近延迟区间；不能推广为任意 GPU、任意模型的固定倍数。</td></tr>
+<tr><td>ShareGPT basic sampling 的容量收益</td><td>§6.2 / Fig. 12–13</td><td>以 OPT-13B / 66B / 175B 为代表的原始评测中，vLLM 在相近延迟下可承受的请求到达率相对 Orca (Oracle) 为 1.7–2.7×（ShareGPT 配置范围）；该指标是服务请求率，不是单 token 运算加速。</td></tr>
+<tr><td>共享的实际节省</td><td>§6.3 / Fig. 15</td><td>Alpaca trace 下，并行采样共享节省 6.1–9.8% KV blocks，beam search 节省 37.6–55.2%；具体取决于候选数量与序列长度。</td></tr>
 <tr><td>PagedAttention 内核存在额外延迟</td><td>§7.1 / Fig. 18(a)</td><td>文中对比高度优化的 FasterTransformer attention kernel，报告约 20–26% 的 attention kernel latency overhead；整体吞吐仍可因 batch 容量改善而提高。</td></tr>
 <tr><td>Block size 存在权衡</td><td>§7.2 / Fig. 18(b)</td><td>论文中的 ShareGPT / Alpaca traces 下，较大的 block 对短序列可能不利；原系统采用 16 tokens 作为默认块大小，并非现代所有 backend 的永恒固定值。</td></tr>
 <tr><td>重算与换出皆有代价</td><td>§7.3 / Fig. 19</td><td>小块换出时可能遇到大量小型传输；重算与换出的选取需要考虑块大小及传输成本。</td></tr>
 </tbody></table></div>
-<p>论文报告的收益属于 <strong>系统层（vLLM + PagedAttention + 管理与调度）</strong>，不是只改一行索引或只换一种 Attention kernel 就必然得到 2–4× 的证明。<a href="https://doi.org/10.1145/3600006.3613165">[SOSP 2023 正式论文]</a></p>
+<p>实验以 ShareGPT / Alpaca 的 token 长度分布构造负载，并用 Poisson 过程模拟到达时间；主要指标为每请求端到端延迟除以该请求输出 token 数后的 normalized latency。对照组 Orca (Oracle) 假设预先知道真实输出长度，因此它是论文构造的理想化上界，并非可直接部署的真实预言器。<a href="https://arxiv.org/abs/2309.06180">[论文 §6.1]</a></p><p>论文报告的收益属于 <strong>系统层（vLLM + PagedAttention + 管理与调度）</strong>，不是只改一行索引或只换一种 Attention kernel 就必然得到 2–4× 的证明。<a href="https://doi.org/10.1145/3600006.3613165">[SOSP 2023 正式论文]</a></p>
 </section>
 <section id="limits"><h2><span class="no">11</span>代价、边界与今天的实现</h2>
 <div class="twocol"><div><strong>带来的能力</strong><p>按需分配、减少连续预留造成的浪费、通过块表共享前缀及写时复制、给在线动态 batching 留出更多 KV 内存空间。</p></div><div><strong>不能自动解决</strong><p>显存带宽、模型权重、算子计算量、scheduler 公平性、长序列的二次 attention 工作量、不同 KV dtype 与布局限制。</p></div></div>

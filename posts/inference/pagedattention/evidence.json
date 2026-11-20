@@ -106,5 +106,23 @@
     "locator": "mini_paged_cache.py and tests/test_pagedattention.py",
     "status": "derived",
     "notes": "Mechanism simulator, not actual vLLM benchmark"
+  },
+  {
+    "id": "PA13",
+    "claim": "On ShareGPT trace, the original vLLM evaluation sustains 1.7–2.7× higher request rates than Orca (Oracle) at similar latency",
+    "kind": "experiment",
+    "source_url": "https://arxiv.org/abs/2309.06180",
+    "locator": "§6.2 Basic Sampling; Fig. 12 and Fig. 13",
+    "status": "verified",
+    "notes": "Experiment-specific request arrival rate, not an isolated kernel speedup"
+  },
+  {
+    "id": "PA14",
+    "claim": "On Alpaca trace, KV block sharing saved 6.1–9.8% under parallel sampling and 37.6–55.2% under beam search",
+    "kind": "experiment",
+    "source_url": "https://arxiv.org/abs/2309.06180",
+    "locator": "§6.3 Parallel Sampling and Beam Search; Fig. 15",
+    "status": "verified",
+    "notes": "Memory savings are number of blocks saved compared with independent copies; task-specific"
   }
 ]

@@ -1,0 +1,101 @@
+[
+  {
+    "id": "R01",
+    "claim": "Human preferences are not identical to next-token likelihood; summarization used comparisons, learned reward and RL.",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/abs/2009.01325",
+    "locator": "Abstract; Section 1",
+    "status": "verified",
+    "notes": "Stiennon et al., 2020: summarization task, not general-purpose chat benchmark"
+  },
+  {
+    "id": "R02",
+    "claim": "The InstructGPT training recipe consists of SFT, reward modeling from rankings and PPO.",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/pdf/2203.02155",
+    "locator": "Figure 2 and Section 3.5 (PDF pp. 3, 8–9)",
+    "status": "verified",
+    "notes": "Three stages in the 2022 InstructGPT paper; diagram in this tutorial is independent"
+  },
+  {
+    "id": "R03",
+    "claim": "InstructGPT RM predicts pair preferences with sigmoid(score difference), with grouped comparisons from 4–9 ranked outputs.",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/pdf/2203.02155",
+    "locator": "Section 3.5, Equation (1), PDF p. 8",
+    "status": "verified",
+    "notes": "The paper uses one grouped batch element per ranking, unlike naive independent pair training"
+  },
+  {
+    "id": "R04",
+    "claim": "InstructGPT uses a 6B reward model, SFT as reference, per-token KL penalty and PPO; PPO-ptx mixes pretraining loss.",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/pdf/2203.02155",
+    "locator": "Section 3.5, Equation (2), PDF pp. 8–9",
+    "status": "verified",
+    "notes": "Equation and model variants inspected; gamma=0 for PPO, not for PPO-ptx"
+  },
+  {
+    "id": "R05",
+    "claim": "For 1.3B InstructGPT vs 175B GPT-3, human annotators preferred InstructGPT outputs on the paper's API prompt distribution.",
+    "kind": "experiment",
+    "source_url": "https://arxiv.org/pdf/2203.02155",
+    "locator": "Abstract and Figure 1, PDF pp. 1–3",
+    "status": "verified",
+    "notes": "Human preference on the specified prompt distribution, not universal model capability"
+  },
+  {
+    "id": "R06",
+    "claim": "The 175B InstructGPT was preferred to 175B GPT-3 85±3% and to few-shot GPT-3 71±4% in direct comparisons.",
+    "kind": "experiment",
+    "source_url": "https://arxiv.org/pdf/2203.02155",
+    "locator": "Section 4.1, PDF p. 11",
+    "status": "verified",
+    "notes": "Specific pairwise human preferences; avoid extrapolating beyond paper setup"
+  },
+  {
+    "id": "R07",
+    "claim": "The InstructGPT prompt training dataset was over 96% English and labelers were about 40 selected contractors.",
+    "kind": "dataset",
+    "source_url": "https://arxiv.org/pdf/2203.02155",
+    "locator": "Sections 3.3–3.4, PDF p. 7",
+    "status": "verified",
+    "notes": "Describes paper's dataset and annotator process, not all RLHF datasets"
+  },
+  {
+    "id": "R08",
+    "claim": "An online iterated preference learning variant for helpfulness and harmlessness is explored in Bai et al. 2022.",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/pdf/2204.05862",
+    "locator": "Abstract; Sections 2–4",
+    "status": "verified",
+    "notes": "Not a feature of the original InstructGPT pipeline by default"
+  },
+  {
+    "id": "R09",
+    "claim": "DPO is a later preference optimization alternative that removes an explicit RM+online RL loop in its training objective.",
+    "kind": "modern-variant",
+    "source_url": "https://arxiv.org/abs/2305.18290",
+    "locator": "Abstract; Section 4",
+    "status": "verified",
+    "notes": "Do not conflate DPO with PPO-based classical RLHF"
+  },
+  {
+    "id": "R10",
+    "claim": "Pairwise sigmoid scores and discrete KL in mini_rlhf.py are deterministic toy calculations.",
+    "kind": "toy-derivation",
+    "source_url": "https://arxiv.org/pdf/2203.02155",
+    "locator": "Equation (1) and Equation (2); independently checked toy values",
+    "status": "derived",
+    "notes": "Does not train an actual language model, RM or PPO policy"
+  },
+  {
+    "id": "R11",
+    "claim": "PPO clipped surrogate uses probability ratios against an old policy distinct from the reference policy KL term.",
+    "kind": "algorithm",
+    "source_url": "https://arxiv.org/abs/1707.06347",
+    "locator": "Schulman et al. 2017, Section 3; InstructGPT Eq. (2)",
+    "status": "verified",
+    "notes": "Two separate algorithmic constraints; not to be equated"
+  }
+]

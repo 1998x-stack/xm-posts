@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><meta name="description" content="Pre-LN vs Post-LN：图解 LayerNorm 的放置、残差梯度雅可比、warm-up 证据及现代 Transformer 变体，附可运行 Python 实验。"><title>Understanding Pre-LN vs Post-LN · xm-posts</title><style>:root{--bg:#f7f9f7;--paper:#fff;--ink:#263f46;--muted:#617b7d;--line:#dbe7e2;--teal:#1c7f82;--orange:#bc7751;--green:#45856a}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.9 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;-webkit-font-smoothing:antialiased}a{color:#18757a;text-underline-offset:4px}a:hover{color:#a96340}a:focus-visible,button:focus-visible{outline:3px solid #b77c4b;outline-offset:3px}.skip{position:absolute;top:-120px;left:14px;padding:12px;background:#23494b;color:#fff;z-index:5}.skip:focus{top:14px}.topbar{background:#fff;border-bottom:1px solid var(--line)}.topbar-inner{max-width:1220px;margin:auto;min-height:64px;display:flex;justify-content:space-between;align-items:center;gap:15px;padding:8px 24px}.wordmark{font-weight:850;font-size:19px;letter-spacing:-.05em;text-decoration:none;color:#24474b}.wordmark span{color:var(--orange)}.topnav{display:flex;gap:21px;flex-wrap:wrap}.topnav a{font-size:13px;text-decoration:none;font-weight:650}.layout{max-width:1210px;margin:auto;padding:70px 25px 100px;display:grid;grid-template-columns:230px minmax(0,830px);gap:54px}.toc{position:sticky;align-self:start;top:30px;max-height:calc(100vh - 60px);overflow:auto}.toc strong{font-size:11px;letter-spacing:.13em;color:#849796}.toc a{display:block;border-left:2px solid var(--line);padding:6px 13px;text-decoration:none;font-size:12px;line-height:1.7;color:#617a7d}.toc a:hover{border-left-color:var(--teal);color:var(--teal)}article,main{min-width:0}.kicker{text-transform:uppercase;color:var(--teal);font-weight:780;font-size:12px;letter-spacing:.13em}h1{font-size:clamp(39px,5vw,66px);line-height:1.17;letter-spacing:-.055em;margin:16px 0 20px}h1 em{font-style:normal;color:var(--teal)}.dek{font-size:21px;line-height:1.74;color:#4c6a6f}.meta{border-top:1px solid var(--line);margin-top:34px;padding:17px 0;color:#718786;font-size:12px;display:flex;gap:20px;flex-wrap:wrap}.lead{font-size:19px;color:#2f5860;font-weight:560;line-height:1.78}section{margin:69px 0 0;scroll-margin-top:30px}h2{font-size:clamp(25px,3vw,33px);line-height:1.38;letter-spacing:-.036em;margin:0 0 20px}h2 .n{font-size:14px;color:var(--orange);margin-right:10px;letter-spacing:0}h3{font-size:20px;margin:34px 0 12px;line-height:1.5}p{margin:15px 0}strong{color:#214b50}.eq{display:block;background:#eaf4f0;border-radius:11px;padding:16px 20px;margin:22px 0;color:#165d66;font:21px/1.75 Georgia,"Times New Roman",serif;overflow:auto;white-space:nowrap}.eq small{display:block;font:13px/1.65 -apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif;white-space:normal;color:#577779}.figure{border-radius:14px;background:#fff;border:1px solid var(--line);padding:18px;margin:26px 0;overflow:hidden}.fig-top{font-weight:750;font-size:11px;color:var(--teal);letter-spacing:.1em;margin-bottom:10px}.figure svg{display:block;width:100%;height:auto}.figure figcaption{border-top:1px solid #edf3f0;color:#638082;font-size:13px;line-height:1.75;padding-top:13px;margin-top:13px}.note{background:#e9f4ef;border-left:4px solid var(--teal);padding:15px 19px;margin:23px 0;border-radius:0 8px 8px 0;font-size:15px}.warn{border-color:var(--orange);background:#fff4e9}.two{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin:20px 0}.tile{border:1px solid var(--line);background:#fff;padding:15px 19px;border-radius:9px}.tile b{display:block;color:var(--teal)}.tile p{font-size:14px;color:#617c7d;margin:6px 0}.table-wrap{overflow:auto;margin:22px 0}table{border-collapse:collapse;width:100%;min-width:600px;font-size:14px}th,td{border-bottom:1px solid var(--line);padding:12px 13px;text-align:left;vertical-align:top}th{background:#eaf3f0}tbody tr:nth-child(even){background:#fbfdfb}.widget{border:1px solid #c9ded7;background:#fff;border-radius:13px;padding:21px;margin:24px 0}.controls{display:flex;flex-wrap:wrap;gap:9px;margin:15px 0}.controls button{cursor:pointer;border:1px solid #abcac1;background:#fff;color:#25666b;padding:9px 15px;border-radius:7px;font:650 14px -apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif}.controls button[aria-pressed=true]{background:#227a7d;color:#fff;border-color:#227a7d}.readout{background:#eef7f2;padding:16px;border-radius:7px;font:15px/1.7 ui-monospace,Consolas,monospace;color:#2f555d;overflow-wrap:anywhere}.small{font-size:13px;color:#6b8182}.list li{margin:12px 0}.code{background:#213a41;color:#ecf5ed;padding:18px 19px;overflow:auto;border-radius:10px;font:13px/1.65 ui-monospace,Consolas,monospace;tab-size:4}.refs{font-size:14px}.refs li{margin:10px 0}.footer{margin-top:68px;border-top:1px solid var(--line);padding-top:23px;color:#718687;font-size:13px}@media(max-width:980px){.layout{display:block;max-width:870px;padding:37px 25px 80px}.toc{position:static;max-height:none;margin-bottom:38px;border-bottom:1px solid var(--line);padding-bottom:15px}.toc a{display:inline-block;border-left:0;margin-right:7px;padding:5px 7px;background:#eaf4f0;border-radius:4px}}@media(max-width:520px){body{font-size:16px}.layout{padding:25px 15px 64px}.topbar-inner{padding:8px 15px}.topnav{gap:12px}h1{font-size:39px}.dek{font-size:18px}.meta{gap:8px}section{margin-top:58px}.figure{padding:7px 5px 12px}.fig-top{padding:7px}.figure figcaption{padding:10px}.two{grid-template-columns:1fr}.eq{font-size:17px;padding:12px}.toc a{font-size:11px}.widget{padding:13px}.code{font-size:12px}}@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{animation:none!important;transition:none!important}}@media print{body{background:#fff;font-size:11pt}.topbar,.toc,.skip,.controls{display:none!important}.layout{display:block;max-width:none;padding:0}section{break-inside:auto;margin-top:27px}.figure{break-inside:avoid}.code{color:#1c343a;background:#f2f5f3}a{color:#2e6068}}</style></head>
+<body><a class="skip" href="#article">跳转正文</a><header class="topbar"><div class="topbar-inner"><a class="wordmark" href="../../../">xm<span>.</span>posts</a><nav class="topnav" aria-label="站点导航"><a href="../../../categories/architectures/">模型架构</a><a href="../transformer/">Transformer</a><a href="../../../archive/">文章归档</a></nav></div></header>
+<div class="layout"><nav class="toc" aria-label="文章目录"><strong>CONTENTS / 阅读路线</strong>
+<a href="#paradox">01 · 训练为何敏感</a><a href="#two-paths">02 · 两条信息路径</a><a href="#layernorm">03 · LN 到底规范谁</a><a href="#gradient">04 · 梯度的两条链</a><a href="#toy">05 · 可交互的数值例子</a><a href="#paper">06 · Xiong 理论的边界</a><a href="#evidence">07 · 原论文证据</a><a href="#amplification">08 · 残差放大效应</a><a href="#variants">09 · 后续架构的答案</a><a href="#implementation">10 · 最小代码与审查</a><a href="#practice">11 · 工程排错清单</a><a href="#summary">12 · 结论与文献</a>
+</nav><main id="article"><article>
+<header><div class="kicker">ARCHITECTURE / NORMALIZATION &amp; RESIDUAL PATHS</div>
+<h1>Pre-LN vs Post-LN：<br><em>LayerNorm 放在哪里，为什么改变训练？</em></h1>
+<p class="dek">同样是 <strong>Attention、FFN、残差连接</strong>，只把归一化移到加法的前后，网络的梯度路线与训练日程就可能截然不同。真正改变的不是“有没有 LayerNorm”，而是<strong>恒等捷径是否穿过它</strong>。</p>
+<div class="meta"><span>2026-11-20</span><span>约 28 分钟阅读</span><span>主要论文：Xiong et al., ICML 2020</span><span>交互 · 数学 · 原始证据</span></div>
+</header>
+<section id="paradox"><h2><span class="n">01</span>一件反直觉的小事：换个位置，就能省掉 warm-up？</h2>
+<p class="lead">原始 Transformer 使用 <strong>Post-LN</strong>。它不是不能训练，而是训练开始时对学习率日程常常更敏感。Xiong 等人提出并验证，在他们研究的设置中，改为 <strong>Pre-LN</strong> 可以不使用 warm-up，仍取得相近结果。<a href="https://proceedings.mlr.press/v119/xiong20b.html">[Xiong 2020, §1, §4]</a></p>
+<p>这不是一个简单的“梯度消失 vs 不消失”故事。我们至少要分清三件事：<strong>激活怎么走</strong>、<strong>梯度怎么传</strong>、<strong>优化器在初始化附近如何更新参数</strong>。先把注意力的细节临时折叠成一个函数 <code>F</code>，只看一个子层。</p>
+<div class="note"><strong>问题拆解：</strong>如果同样的输入 <code>x ∈ ℝ^d</code>，两种结构在前向计算上已经不是同一个函数，那么它们的反向 Jacobian 也不可能完全相同。warm-up 只是这一差别对训练的一个后果，不是定义本身。</div>
+</section>
+<section id="two-paths"><h2><span class="n">02</span>把 Transformer 子层缩成两张路径图</h2>
+<figure class="figure"><div class="fig-top">FIGURE 01 / REASONING MAP</div><svg xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Post-LN 对残差和归一化；Pre-LN 先对分支输入归一化，然后再与未改变的跳连相加。" viewBox="0 0 960 380"><title>相同的残差算子，不同的归一化顺序</title><desc>Post-LN 对残差和归一化；Pre-LN 先对分支输入归一化，然后再与未改变的跳连相加。</desc><rect width="960" height="380" rx="18" fill="#fbfdfb"/>
+<text x="38" y="41" font-family="system-ui,'PingFang SC',sans-serif" font-size="25" fill="#ad6041" font-weight="750">POST-LN</text><text x="505" y="41" font-family="system-ui,'PingFang SC',sans-serif" font-size="25" fill="#197d80" font-weight="750">PRE-LN</text>
+<path d="M474 22L474 351" fill="none" stroke="#e0e8e4" stroke-width="2" stroke-linecap="round" stroke-dasharray="6 7"/>
+<rect x="40" y="75" width="82" height="58" rx="12" fill="#e9f1f4" stroke="#cbded9" stroke-width="2"/><text x="66" y="110" font-family="system-ui,'PingFang SC',sans-serif" font-size="24" fill="#294954" font-weight="500">x</text>
+<rect x="180" y="75" width="152" height="58" rx="12" fill="#fff0e5" stroke="#f1c6ab" stroke-width="2"/><text x="218" y="110" font-family="system-ui,'PingFang SC',sans-serif" font-size="22" fill="#a65e3c" font-weight="700">F(x)</text>
+<rect x="374" y="75" width="60" height="58" rx="12" fill="#fff8e7" stroke="#e9d69d" stroke-width="2"/><text x="392" y="111" font-family="system-ui,'PingFang SC',sans-serif" font-size="28" fill="#846c31" font-weight="700">+</text>
+<rect x="330" y="180" width="125" height="62" rx="12" fill="#e7f4e9" stroke="#b5d9c0" stroke-width="2"/><text x="353" y="217" font-family="system-ui,'PingFang SC',sans-serif" font-size="24" fill="#3a8363" font-weight="700">LN</text>
+<path d="M122 104L180 104" fill="none" stroke="#72969a" stroke-width="3" stroke-linecap="round" /><path d="M332 104L374 104" fill="none" stroke="#72969a" stroke-width="3" stroke-linecap="round" /><path d="M404 133L404 180" fill="none" stroke="#72969a" stroke-width="3" stroke-linecap="round" /><path d="M40 133L40 155" fill="none" stroke="#32758b" stroke-width="3" stroke-linecap="round" /><path d="M40 155L373 155" fill="none" stroke="#32758b" stroke-width="3" stroke-linecap="round" /><path d="M373 155L373 134" fill="none" stroke="#32758b" stroke-width="3" stroke-linecap="round" /><text x="47" y="148" font-family="system-ui,'PingFang SC',sans-serif" font-size="15" fill="#32758b" font-weight="650">identity shortcut</text>
+<path d="M404 242L404 290" fill="none" stroke="#72969a" stroke-width="3" stroke-linecap="round" /><rect x="360" y="291" width="87" height="47" rx="12" fill="#edf5f2" stroke="#cbded9" stroke-width="2"/><text x="381" y="321" font-family="system-ui,'PingFang SC',sans-serif" font-size="23" fill="#294954" font-weight="500">y</text>
+<rect x="510" y="75" width="75" height="58" rx="12" fill="#e9f1f4" stroke="#cbded9" stroke-width="2"/><text x="535" y="110" font-family="system-ui,'PingFang SC',sans-serif" font-size="24" fill="#294954" font-weight="500">x</text>
+<rect x="636" y="75" width="92" height="58" rx="12" fill="#e7f4e9" stroke="#b5d9c0" stroke-width="2"/><text x="657" y="111" font-family="system-ui,'PingFang SC',sans-serif" font-size="22" fill="#3a8363" font-weight="700">LN</text>
+<rect x="773" y="75" width="116" height="58" rx="12" fill="#fff0e5" stroke="#f1c6ab" stroke-width="2"/><text x="801" y="110" font-family="system-ui,'PingFang SC',sans-serif" font-size="23" fill="#a65e3c" font-weight="750">F</text>
+<rect x="778" y="181" width="67" height="57" rx="12" fill="#fff8e7" stroke="#e9d69d" stroke-width="2"/><text x="799" y="215" font-family="system-ui,'PingFang SC',sans-serif" font-size="28" fill="#846c31" font-weight="700">+</text>
+<path d="M585 104L636 104" fill="none" stroke="#72969a" stroke-width="3" stroke-linecap="round" /><path d="M728 104L773 104" fill="none" stroke="#72969a" stroke-width="3" stroke-linecap="round" /><path d="M811 133L811 181" fill="none" stroke="#72969a" stroke-width="3" stroke-linecap="round" /><path d="M510 133L510 164" fill="none" stroke="#32758b" stroke-width="3" stroke-linecap="round" /><path d="M510 164L778 164" fill="none" stroke="#32758b" stroke-width="3" stroke-linecap="round" /><path d="M778 164L778 181" fill="none" stroke="#32758b" stroke-width="3" stroke-linecap="round" />
+<text x="524" y="156" font-family="system-ui,'PingFang SC',sans-serif" font-size="15" fill="#32758b" font-weight="650">identity shortcut</text>
+<path d="M811 238L811 290" fill="none" stroke="#72969a" stroke-width="3" stroke-linecap="round" /><rect x="766" y="291" width="88" height="47" rx="12" fill="#edf5f2" stroke="#cbded9" stroke-width="2"/><text x="788" y="321" font-family="system-ui,'PingFang SC',sans-serif" font-size="23" fill="#294954" font-weight="500">y</text>
+<text x="47" y="366" font-family="system-ui,'PingFang SC',sans-serif" font-size="18" fill="#3a585f" font-weight="650">y = LN(x + F(x))</text><text x="515" y="366" font-family="system-ui,'PingFang SC',sans-serif" font-size="18" fill="#3a585f" font-weight="650">y = x + F(LN(x))</text>
+</svg><figcaption>同一个 F 可以代表 Self-Attention 或 FFN。蓝色是恒等跳连，橙色是变换分支，绿色是 LayerNorm。图中只画一个子层；Transformer 层通常串接两个子层。</figcaption></figure>
+<div class="two"><div class="tile"><b>Post-LN（原始 2017 Transformer）</b><p>先算残差和，再让整个输出过 LN。每一个块的输出都被规范化；但从输出到输入，LN 位于必经路径。</p></div><div class="tile"><b>Pre-LN（后来的重要变体）</b><p>先规范分支输入，再把分支输出与未经 LN 的 x 相加。块内保留直接相加的恒等通路；堆叠末端通常另加 final norm。</p></div></div>
+<div class="eq">Post-LN: xₗ₊₁ = LN(xₗ + Fₗ(xₗ))<br>Pre-LN: xₗ₊₁ = xₗ + Fₗ(LN(xₗ))<small>xₗ 与输出均是 d 维向量；这里将 dropout、mask、偏置、多个子层略去。真实网络是逐 token 应用这种结构。<a href="https://arxiv.org/abs/1706.03762">Vaswani 2017, §3.1</a>；<a href="https://proceedings.mlr.press/v119/xiong20b.html">Xiong 2020, Figure 1</a>。</small></div>
+<p>特别要记住：<strong>Pre-LN 并不是“整个残差流每层都保持方差为一”</strong>。被归一化的是送入 <code>F</code> 的分支输入；残差流本身仍可能随着深度增长。这正是为什么常见 Pre-LN 实现会在输出头前提供最终归一化。</p>
+</section>
+<section id="layernorm"><h2><span class="n">03</span>LayerNorm 到底在规范谁？</h2>
+<p>一个批次的隐藏状态张量可以记成 <code>X ∈ ℝ^{B×T×D}</code>。标准 LN 为每个 batch、每个 token 单独计算 <code>D</code> 维特征的均值和方差；它不跨 batch，也不在序列长度 <code>T</code> 上求均值。<a href="https://arxiv.org/abs/1607.06450">[Ba et al. 2016]</a></p>
+<figure class="figure"><div class="fig-top">FIGURE 02 / REASONING MAP</div><svg xmlns="http://www.w3.org/2000/svg" role="img" aria-label="对于每个 token 的 d 个特征计算均值和方差，并按特征应用缩放与偏置。" viewBox="0 0 960 380"><title>LayerNorm 沿隐藏维工作</title><desc>对于每个 token 的 d 个特征计算均值和方差，并按特征应用缩放与偏置。</desc><rect width="960" height="380" rx="18" fill="#fbfdfb"/>
+<text x="38" y="44" font-family="system-ui,'PingFang SC',sans-serif" font-size="24" fill="#30555d" font-weight="750">一个 token 的隐藏状态（d = 4）</text>
+<rect x="38" y="79" width="150" height="76" rx="12" fill="#ebf3f6" stroke="#cbded9" stroke-width="2"/><text x="71" y="126" font-family="system-ui,'PingFang SC',sans-serif" font-size="18" fill="#294954" font-weight="500">[1, 2, 3, 6]</text>
+<path d="M189 117L273 117" fill="none" stroke="#72969a" stroke-width="3" stroke-linecap="round" /><rect x="273" y="79" width="182" height="76" rx="12" fill="#e8f4ea" stroke="#cbded9" stroke-width="2"/><text x="292" y="109" font-family="system-ui,'PingFang SC',sans-serif" font-size="19" fill="#294954" font-weight="500">mean = 3</text><text x="292" y="137" font-family="system-ui,'PingFang SC',sans-serif" font-size="19" fill="#294954" font-weight="500">var = 3.5</text>
+<path d="M455 117L531 117" fill="none" stroke="#72969a" stroke-width="3" stroke-linecap="round" /><rect x="531" y="67" width="383" height="105" rx="12" fill="#e5f1f0" stroke="#cbded9" stroke-width="2"/><text x="552" y="100" font-family="system-ui,'PingFang SC',sans-serif" font-size="22" fill="#1d6971" font-weight="740">(xᵢ − μ) / √(σ² + ε)</text><text x="555" y="141" font-family="system-ui,'PingFang SC',sans-serif" font-size="16" fill="#294954" font-weight="500">再乘 γᵢ、加 βᵢ（逐特征）</text>
+<path d="M75 213L892 213" fill="none" stroke="#dee8e5" stroke-width="2" stroke-linecap="round" />
+<text x="39" y="256" font-family="system-ui,'PingFang SC',sans-serif" font-size="19" fill="#809697" font-weight="650">Batch</text><text x="242" y="256" font-family="system-ui,'PingFang SC',sans-serif" font-size="19" fill="#809697" font-weight="650">Sequence</text><text x="502" y="256" font-family="system-ui,'PingFang SC',sans-serif" font-size="21" fill="#27767d" font-weight="760">Hidden features</text>
+<rect x="38" y="280" width="150" height="55" rx="12" fill="#f1f4f3" stroke="#cbded9" stroke-width="2"/><rect x="224" y="280" width="212" height="55" rx="12" fill="#f1f4f3" stroke="#cbded9" stroke-width="2"/><rect x="472" y="280" width="439" height="55" rx="12" fill="#dcefed" stroke="#9acbc3" stroke-width="2"/>
+<text x="86" y="314" font-family="system-ui,'PingFang SC',sans-serif" font-size="23" fill="#294954" font-weight="500">B</text><text x="324" y="314" font-family="system-ui,'PingFang SC',sans-serif" font-size="23" fill="#294954" font-weight="500">T</text><text x="664" y="314" font-family="system-ui,'PingFang SC',sans-serif" font-size="24" fill="#176f70" font-weight="800">D</text>
+<text x="38" y="371" font-family="system-ui,'PingFang SC',sans-serif" font-size="16" fill="#294954" font-weight="500">标准 LayerNorm：每个 (b, t) 位置在 D 维上归一化；不是跨样本 BatchNorm。</text>
+</svg><figcaption>为了看到计算轴，图中只举 d=4 的一维向量，均值与方差为演示数值。真实参数 γ、β 的形状通常是 [D]，并沿 B、T 广播。</figcaption></figure>
+<div class="eq">μ = (1/D) Σᵢ xᵢ,　σ² = (1/D) Σᵢ(xᵢ − μ)²<br>LN(x)ᵢ = γᵢ · (xᵢ − μ) / √(σ² + ε) + βᵢ
+<small>i 遍历隐藏维；ε 是避免数值除零的常数。LN 的尺度与偏移是可学习参数。此文局部分析在说明时会使用简化的 γ=1、β=0。</small></div>
+<p>“前 / 后”是相对于残差加法的位置，不是相对于整个模型的输入输出位置。RMSNorm 则是一种不同的<strong>归一化函数</strong>，不要把 RMSNorm 与 Pre-LN 混为同一个维度的选择。</p>
+</section>
+<section id="gradient"><h2><span class="n">04</span>真正关键的差别在反向链式法则</h2>
+<p>令 <code>J_F</code> 与 <code>J_LN</code> 分别是 F 和 LN 对其输入的 Jacobian。在一个局部子层里，对两边求导便得到不同的结构：</p>
+<figure class="figure"><div class="fig-top">FIGURE 03 / REASONING MAP</div><svg xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Pre-LN 的块内含显式恒等导数项；Post-LN 的块输出经过归一化雅可比。" viewBox="0 0 960 380"><title>残差快捷通路与雅可比因子</title><desc>Pre-LN 的块内含显式恒等导数项；Post-LN 的块输出经过归一化雅可比。</desc><rect width="960" height="380" rx="18" fill="#fbfdfb"/>
+<text x="40" y="48" font-family="system-ui,'PingFang SC',sans-serif" font-size="24" fill="#187a7c" font-weight="750">PRE-LN：恒等项直接加入</text><text x="505" y="48" font-family="system-ui,'PingFang SC',sans-serif" font-size="24" fill="#a96643" font-weight="750">POST-LN：出口必经 LN</text>
+<path d="M474 24L474 349" fill="none" stroke="#dde9e6" stroke-width="2" stroke-linecap="round" stroke-dasharray="6 8"/>
+<rect x="42" y="86" width="395" height="65" rx="12" fill="#e5f3ee" stroke="#cbded9" stroke-width="2"/><text x="66" y="125" font-family="system-ui,'PingFang SC',sans-serif" font-size="26" fill="#1f7474" font-weight="750">J = I + JF · JLN</text>
+<rect x="43" y="185" width="166" height="62" rx="12" fill="#e7f0f5" stroke="#cbded9" stroke-width="2"/><text x="76" y="224" font-family="system-ui,'PingFang SC',sans-serif" font-size="22" fill="#2d7088" font-weight="740">identity I</text>
+<rect x="265" y="185" width="173" height="62" rx="12" fill="#fff0e5" stroke="#cbded9" stroke-width="2"/><text x="291" y="224" font-family="system-ui,'PingFang SC',sans-serif" font-size="22" fill="#a96541" font-weight="740">branch JF</text>
+<path d="M209 216L263 216" fill="none" stroke="#72969a" stroke-width="3" stroke-linecap="round" /><text x="42" y="284" font-family="system-ui,'PingFang SC',sans-serif" font-size="17" fill="#294954" font-weight="500">注意：这不等于总梯度永不衰减。</text>
+<rect x="509" y="86" width="409" height="65" rx="12" fill="#fff0e5" stroke="#cbded9" stroke-width="2"/><text x="529" y="125" font-family="system-ui,'PingFang SC',sans-serif" font-size="26" fill="#a96541" font-weight="750">J = JLN · (I + JF)</text>
+<rect x="510" y="185" width="183" height="62" rx="12" fill="#e9f2f5" stroke="#cbded9" stroke-width="2"/><text x="531" y="223" font-family="system-ui,'PingFang SC',sans-serif" font-size="25" fill="#315f72" font-weight="750">I + JF</text>
+<rect x="742" y="185" width="176" height="62" rx="12" fill="#e5f3ee" stroke="#cbded9" stroke-width="2"/><text x="774" y="224" font-family="system-ui,'PingFang SC',sans-serif" font-size="24" fill="#2b806d" font-weight="750">JLN</text>
+<path d="M693 216L742 216" fill="none" stroke="#72969a" stroke-width="3" stroke-linecap="round" />
+<text x="509" y="284" font-family="system-ui,'PingFang SC',sans-serif" font-size="17" fill="#294954" font-weight="500">LayerNorm 的 Jacobian 在求导链上。</text>
+<text x="43" y="348" font-family="system-ui,'PingFang SC',sans-serif" font-size="16" fill="#698185" font-weight="500">两式均为单个子层的局部链式法则；多层乘积、参数梯度和优化器行为需另行分析。</text>
+</svg><figcaption>绿色表示 LN 对梯度的作用，蓝色表示显式 identity 分量。这里解释的是单块局部 Jacobian；不能据此断言任何深度下整体梯度都永不消失或爆炸。</figcaption></figure>
+<div class="eq">J<sub>pre</sub> = I + J<sub>F</sub>(LN(x)) · J<sub>LN</sub>(x)<br>J<sub>post</sub> = J<sub>LN</sub>(x + F(x)) · (I + J<sub>F</sub>(x))
+<small>按列向量约定书写。两者都含有 residual branch；只有 Pre-LN 在这个局部块上直接出现不被输出 LN 左乘的 I。</small></div>
+<p>直觉可以这样抓住：Pre-LN 的梯度有一条不经过子层 <code>F</code> 和其前置 LN 的<strong>直接加法路径</strong>。Post-LN 的所有上游梯度都必须经过该块输出处的 LN Jacobian。不过，<strong>“存在 I”不等于学习一定更快或泛化一定更好</strong>；每层的实际梯度还要由损失、参数、数据和其他块共同决定。</p>
+</section>
+<section id="toy"><h2><span class="n">05</span>亲手移动输入：LN 到底消去了什么？</h2>
+<p>现在把输入向量整体加上相同常数 <code>c</code>：<code>x′ = x + c·1</code>。由于 LN 对逐特征一致的平移不敏感，<code>LN(x′)=LN(x)</code>。在无偏置的线性玩具分支 <code>F</code> 下，Pre-LN 与 Post-LN 的输出会呈现完全不同的平移响应。</p>
+<div class="widget"><strong>交互：固定输入 [1, 2, 4, 6]，整体平移 +2</strong><p class="small">选择结构，观察输出每一维的变化。代码不请求网络，数值由同页 JavaScript 计算；这不是训练实验。</p>
+<div class="controls" role="group" aria-label="选择归一化结构"><button class="norm-choice" data-choice="pre" aria-pressed="true" type="button">Pre-LN：分支前规范</button><button class="norm-choice" data-choice="post" aria-pressed="false" type="button">Post-LN：加法后规范</button></div>
+<div id="toy-result" class="readout" role="status" aria-live="polite">Pre-LN：对 x 所有维度加 2，输出也逐维增加 2。<br>因为 LN(x+2·1)=LN(x)，而残差 x 仍保留了这个平移。</div>
+</div>
+<p>这里的 <code>F(v)ᵢ = 0.2vᵢ + 0.1vᵢ₊₁</code>（循环索引）只是方便手算的线性变换。它没有 Attention、没有训练数据，也没有在模拟论文中的梯度统计。它能证明的仅是<strong>这些明确函数的局部输入输出性质</strong>。</p>
+</section>
+<section id="paper"><h2><span class="n">06</span>Xiong et al. 究竟证明了什么？</h2>
+<p>ICML 2020 论文研究的是<strong>初始化附近的参数梯度规模</strong>，不是笼统地说“Post-LN 所有层都会爆炸”。在该论文的简化初始化与集中性假设下，Theorem 1 针对<strong>最后一个 FFN 子层第二层权重 W²,L</strong>，给出梯度范数的上界量级：</p>
+<div class="eq">Post-LN: O(d √(ln d))<br>Pre-LN: O(d √(ln d / L))
+<small>d 为隐藏维，L 为论文定义的层数；这里刻意保留它所分析的特定权重、初始化和渐近上界范围。不是任何模型的精确梯度等式。<a href="https://proceedings.mlr.press/v119/xiong20b/xiong20b.pdf">Xiong 2020, Theorem 1</a>。</small></div>
+<p>背后的一步是：Pre-LN 的残差流规模在该论文假设下随深度增长，因此最终的 LN 对回传梯度有不同的尺度影响；Post-LN 则在每个块后规范化。这个理论为“初始化时上层参数可能承受较大更新”提供了机制解释。<strong>但定理是有前提的量级界，不直接等同现代大模型的一条通用训练规则。</strong></p>
+<div class="note warn"><strong>重要范围限制：</strong>论文的分析涉及特定初始化、网络与损失条件。不同宽度、深度、优化器、残差缩放、RMSNorm、混合精度和现代训练配方可能改变实际现象。不能把该上界当作逐层训练曲线或必然的泛化排名。</div>
+</section>
+<section id="evidence"><h2><span class="n">07</span>原论文实验：warm-up 的必要性是条件命题</h2>
+<figure class="figure"><div class="fig-top">FIGURE 04 / REASONING MAP</div><svg xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Pre-LN 在特定论文实验中可以不进行 warm-up；此图仅示学习率日程，不是性能或收敛曲线。" viewBox="0 0 960 380"><title>线性 warm-up 的训练日程示意</title><desc>Pre-LN 在特定论文实验中可以不进行 warm-up；此图仅示学习率日程，不是性能或收敛曲线。</desc><rect width="960" height="380" rx="18" fill="#fbfdfb"/>
+<text x="38" y="44" font-family="system-ui,'PingFang SC',sans-serif" font-size="23" fill="#30555d" font-weight="750">两种训练日程，不是实测训练曲线</text>
+<path d="M110 304L901 304" fill="none" stroke="#93acae" stroke-width="3" stroke-linecap="round" /><path d="M110 304L110 83" fill="none" stroke="#93acae" stroke-width="3" stroke-linecap="round" />
+<text x="20" y="99" font-family="system-ui,'PingFang SC',sans-serif" font-size="19" fill="#294954" font-weight="500">学习率</text><text x="813" y="338" font-family="system-ui,'PingFang SC',sans-serif" font-size="19" fill="#294954" font-weight="500">优化步数</text>
+<path d="M110 304 L365 103 L832 103" stroke="#b56c47" stroke-width="6" fill="none" stroke-linecap="round" />
+<path d="M110 144 L832 144" stroke="#197f86" stroke-width="6" fill="none" stroke-linecap="round" stroke-dasharray="11 8"/>
+<path d="M365 304L365 95" fill="none" stroke="#d9deda" stroke-width="2" stroke-linecap="round" stroke-dasharray="6 8"/>
+<text x="306" y="340" font-family="system-ui,'PingFang SC',sans-serif" font-size="17" fill="#ad6041" font-weight="700">T_warmup</text>
+<text x="559" y="93" font-family="system-ui,'PingFang SC',sans-serif" font-size="18" fill="#ab6245" font-weight="720">Post-LN 常配 warm-up（示意）</text>
+<text x="562" y="173" font-family="system-ui,'PingFang SC',sans-serif" font-size="18" fill="#1a7b82" font-weight="720">Pre-LN 的无 warm-up 配置（示意）</text>
+<text x="112" y="372" font-family="system-ui,'PingFang SC',sans-serif" font-size="16" fill="#698185" font-weight="500">是否需要 warm-up 仍依赖规模、优化器、初始化与训练配方。</text>
+</svg><figcaption>两条路线仅用来解释 warm-up 训练策略：Post-LN 的经典设置逐步提高学习率，某些 Pre-LN 设置可以直接使用非零初始学习率。不是论文的损失、BLEU 或速度测量。</figcaption></figure>
+<div class="table-wrap"><table><thead><tr><th>来源 / 实验</th><th>比较条件</th><th>论文观察</th><th>能否推广？</th></tr></thead><tbody>
+<tr><td><a href="https://proceedings.mlr.press/v119/xiong20b/xiong20b.pdf">Xiong 2020 §3.2, Fig.2</a></td><td>IWSLT14 De→En, Post-LN, Adam；比较有/无 warm-up 与不同 lr</td><td>论文报告一组不加 warm-up 的 BLEU 为 8.45，而相应使用 warm-up 的配置约为 34</td><td>这些是特定数据集、模型与学习率配置的对照，不是所有 Post-LN 的极限</td></tr>
+<tr><td><a href="https://proceedings.mlr.press/v119/xiong20b/xiong20b.pdf">Xiong 2020 §4, Fig.4–5</a></td><td>IWSLT14、WMT14 翻译与 BERT 预训练；Pre-LN 去掉 warm-up</td><td>在作者设置中可达到有竞争力的验证表现，并能更快到达某些训练里程碑</td><td>不能据此推断任意规模、任意优化器都无需 warm-up</td></tr>
+<tr><td><a href="https://aclanthology.org/2020.emnlp-main.463/">Liu 2020 §4, Fig.4</a></td><td>比较 Pre-LN、Post-LN、Admin 对扰动的敏感性</td><td>作者将训练不稳定与残差依赖造成的参数扰动放大关联</td><td>解释维度不同，不是对 Xiong 理论的直接否定</td></tr>
+</tbody></table></div>
+<p>阅读真实曲线时请同时核对：<strong>架构、优化器、学习率峰值、warm-up 步数、数据集方向、验证指标</strong>。只有这些变量清楚，才能分辨“结构改动有效”与“训练配方改动有效”。</p>
+</section>
+<section id="amplification"><h2><span class="n">08</span>更深一层：为什么“梯度不均衡”还不是全部？</h2>
+<p><a href="https://aclanthology.org/2020.emnlp-main.463/">Liu et al., EMNLP 2020</a> 提醒我们：光比较梯度范数不足以解释所有不稳定。若层输出对残差分支 <code>F(x)</code> 的依赖过重，分支参数的一点变化，就可能把输出扰动放大。过轻的分支依赖则可能压低模型表达潜力。</p>
+<div class="eq">branch dependency ≈ Var[F(x)] / Var[x + F(x)]
+<small>这是 Liu et al. 对分支贡献的一种方差度量；这里省略索引并用近似号提示展示的是简化理解，详见论文 Figure 2 注释与 §4。不能把它等同梯度范数。</small></div>
+<p>这产生了新的设计目标：<strong>初始化阶段不要让新分支太支配输出，训练后又要允许分支发挥作用</strong>。Admin 是该论文围绕此想法提出的初始化策略。因此，对“Pre-LN 和 Post-LN 谁更好”的严谨回答，必须明确是谈<strong>稳健性、收敛效率、最终质量，还是可扩展深度</strong>。</p>
+</section>
+<section id="variants"><h2><span class="n">09</span>不是二选一：后续研究如何改写设计空间</h2>
+<figure class="figure"><div class="fig-top">FIGURE 05 / REASONING MAP</div><svg xmlns="http://www.w3.org/2000/svg" role="img" aria-label="比较 Pre-LN、Post-LN、DeepNorm、Peri-LN 的残差支路和归一化位置。" viewBox="0 0 960 380"><title>规范化策略的演进</title><desc>比较 Pre-LN、Post-LN、DeepNorm、Peri-LN 的残差支路和归一化位置。</desc><rect width="960" height="380" rx="18" fill="#fbfdfb"/>
+<text x="38" y="44" font-family="system-ui,'PingFang SC',sans-serif" font-size="24" fill="#32535a" font-weight="750">归一化是架构设计变量，不是二选一的永久结论</text>
+<rect x="38" y="78" width="180" height="219" rx="12" fill="#ffffff" stroke="#d8e6e2" stroke-width="2"/><rect x="274" y="78" width="180" height="219" rx="12" fill="#ffffff" stroke="#d8e6e2" stroke-width="2"/><rect x="510" y="78" width="180" height="219" rx="12" fill="#ffffff" stroke="#d8e6e2" stroke-width="2"/><rect x="746" y="78" width="180" height="219" rx="12" fill="#ffffff" stroke="#d8e6e2" stroke-width="2"/>
+<text x="66" y="120" font-family="system-ui,'PingFang SC',sans-serif" font-size="22" fill="#b36c49" font-weight="750">Post-LN</text><text x="302" y="120" font-family="system-ui,'PingFang SC',sans-serif" font-size="22" fill="#1d7b80" font-weight="750">Pre-LN</text>
+<text x="538" y="120" font-family="system-ui,'PingFang SC',sans-serif" font-size="22" fill="#76649c" font-weight="750">DeepNorm</text><text x="774" y="120" font-family="system-ui,'PingFang SC',sans-serif" font-size="22" fill="#2e7e72" font-weight="750">Peri-LN</text>
+<text x="57" y="162" font-family="system-ui,'PingFang SC',sans-serif" font-size="16" fill="#294954" font-weight="500">LN(x + F(x))</text><text x="289" y="162" font-family="system-ui,'PingFang SC',sans-serif" font-size="16" fill="#294954" font-weight="500">x + F(LN(x))</text>
+<text x="524" y="162" font-family="system-ui,'PingFang SC',sans-serif" font-size="15" fill="#294954" font-weight="500">LN(αx + F(x))</text><text x="760" y="162" font-family="system-ui,'PingFang SC',sans-serif" font-size="16" fill="#294954" font-weight="500">分支前后归一化</text>
+<text x="57" y="208" font-family="system-ui,'PingFang SC',sans-serif" font-size="16" fill="#668086" font-weight="500">原始 Transformer</text><text x="289" y="208" font-family="system-ui,'PingFang SC',sans-serif" font-size="16" fill="#668086" font-weight="500">现代常见选项</text>
+<text x="524" y="208" font-family="system-ui,'PingFang SC',sans-serif" font-size="16" fill="#668086" font-weight="500">残差增益与初始化</text><text x="760" y="208" font-family="system-ui,'PingFang SC',sans-serif" font-size="16" fill="#668086" font-weight="500">Peri-LN (2025)</text>
+<text x="56" y="263" font-family="system-ui,'PingFang SC',sans-serif" font-size="15" fill="#91a2a2" font-weight="500">Vaswani 2017</text><text x="289" y="263" font-family="system-ui,'PingFang SC',sans-serif" font-size="15" fill="#91a2a2" font-weight="500">Xiong 2020</text>
+<text x="524" y="263" font-family="system-ui,'PingFang SC',sans-serif" font-size="15" fill="#91a2a2" font-weight="500">Wang 2022</text><text x="760" y="263" font-family="system-ui,'PingFang SC',sans-serif" font-size="15" fill="#91a2a2" font-weight="500">Kim 2025</text>
+<text x="42" y="344" font-family="system-ui,'PingFang SC',sans-serif" font-size="18" fill="#4c6f74" font-weight="500">策略还包括 RMSNorm、缩放与初始化；“归一化函数”和“归一化位置”是两个不同轴。</text>
+</svg><figcaption>这幅结构谱系图是概念定位，不是质量排行。DeepNorm 结合残差比例与初始化；Peri-LN 在子层周围安排规范化操作，不能简单视为 Pre-LN 的别名。</figcaption></figure>
+<div class="table-wrap"><table><thead><tr><th>策略</th><th>核心变化</th><th>证据来源</th></tr></thead><tbody>
+<tr><td>Pre-LN</td><td>LN 位于每个变换分支之前，残差加法出口不再经过 LN</td><td><a href="https://proceedings.mlr.press/v119/xiong20b.html">Xiong 2020</a></td></tr>
+<tr><td>Post-LN</td><td>加法后 LN；原始 Transformer 的布局</td><td><a href="https://arxiv.org/abs/1706.03762">Vaswani 2017</a></td></tr>
+<tr><td>DeepNorm</td><td>类似 Post-LN 的规范化位置，增加残差增益与匹配的初始化</td><td><a href="https://arxiv.org/abs/2203.00555">Wang et al., DeepNet 2022</a></td></tr>
+<tr><td>NormFormer</td><td>在 Pre-LN 骨架中加更多规范化与 head scaling</td><td><a href="https://arxiv.org/abs/2110.09456">Shleifer et al. 2021</a></td></tr>
+<tr><td>Peri-LN</td><td>将 LN 布置在子层周围，研究方差与梯度的平衡</td><td><a href="https://proceedings.mlr.press/v267/kim25u.html">Kim et al., ICML 2025</a></td></tr>
+</tbody></table></div>
+<p>这里应按两个正交问题组织知识：一是<strong>用什么归一化函数</strong>（LayerNorm、RMSNorm 等），二是<strong>把它放在残差加法的哪里</strong>（Pre、Post、Peri 或其他变体）。所以本主题属于架构分类的 Normalization &amp; Residual Paths，而不是新增一个割裂训练和模型设计的一级类目。</p>
+</section>
+<section id="implementation"><h2><span class="n">10</span>最小可运行代码：验证平移性质与数值 Jacobian</h2>
+<p>下面程序只依赖 Python 标准库，逐维使用总体方差（除以 D），对两个单子层函数做数值微分。它断言：在给定玩具分支下，Pre-LN 对全维相同平移保持等变，而 Post-LN 对这种平移不敏感；数值 Jacobian 的行和因此分别近似 1 和 0。</p>
+<pre class="code"><code>"""Minimal deterministic Pre-LN vs Post-LN experiment; standard library only.
+
+This is NOT a paper benchmark and contains no attention or language model.
+"""
+from math import sqrt
+
+EPS = 1e-5
+
+def ln(xs, eps=EPS):
+    mu = sum(xs) / len(xs)
+    var = sum((v-mu)**2 for v in xs) / len(xs)
+    return [(v-mu) / sqrt(var + eps) for v in xs]
+
+def branch(xs):
+    # Small linear, circularly coupled toy transformation.
+    n = len(xs)
+    return [0.2*xs[i] + 0.1*xs[(i+1) % n] for i in range(n)]
+
+def pre_ln(xs):
+    f = branch(ln(xs))
+    return [x + fx for x,fx in zip(xs, f)]
+
+def post_ln(xs):
+    f = branch(xs)
+    return ln([x + fx for x,fx in zip(xs, f)])
+
+def jacobian(fun, x, h=1e-5):
+    cols = []
+    for k in range(len(x)):
+        plus = x.copy(); minus = x.copy()
+        plus[k] += h; minus[k] -= h
+        cols.append([(a-b)/(2*h) for a,b in zip(fun(plus), fun(minus))])
+    return list(map(list, zip(*cols)))
+
+def check():
+    x = [1.0, 2.0, 4.0, 6.0]
+    shifted = [v+2.0 for v in x]
+    pre0, pre1 = pre_ln(x), pre_ln(shifted)
+    post0, post1 = post_ln(x), post_ln(shifted)
+    # LN(v + c*1) = LN(v).  Hence Pre-LN preserves the shortcut shift.
+    assert all(abs((b-a)-2.0) &lt; 1e-8 for a,b in zip(pre0, pre1))
+    # For this affine-free linear branch, Post-LN removes a uniform shift.
+    assert all(abs(a-b) &lt; 1e-8 for a,b in zip(post0, post1))
+    jpre, jpost = jacobian(pre_ln,x), jacobian(post_ln,x)
+    assert all(abs(sum(row)-1.0) &lt; 1e-6 for row in jpre)
+    assert all(abs(sum(row)) &lt; 1e-6 for row in jpost)
+    print("toy test passed; Pre-LN preserves constant shift, Post-LN removes it")
+
+if __name__ == "__main__":
+    check()
+</code></pre>
+<p class="small">仓库文件：<a href="https://github.com/1998x-stack/xm-posts/blob/main/posts/architectures/pre-ln-vs-post-ln/mini_norm.py"><code>mini_norm.py</code></a>（示例源码保存在 GitHub，站点本身只发布阅读页面）。可运行：<code>python posts/architectures/pre-ln-vs-post-ln/mini_norm.py</code>；独立测试见 <code>tests/test_pre_post_ln.py</code>。</p>
+<div class="note"><strong>和真实模型不同：</strong>真正的 F 包含 Attention / FFN、dropout、可学习参数与非线性，梯度还会与最终损失和 optimizer 耦合。因此数值微分测试只核对这段讲解的数学，不复现 ICML 的训练实验。</div>
+</section>
+<section id="practice"><h2><span class="n">11</span>工程实现时，究竟该检查什么？</h2>
+<ol class="list"><li><strong>核对 block 的精确 forward：</strong><code>x + F(norm(x))</code> 与 <code>norm(x + F(x))</code> 不可互换；确认每个 Attention、MLP 子层的位置与 final norm。</li>
+<li><strong>不要只看名字：</strong>框架中的 <code>norm_first</code>、<code>pre_norm</code> 不一定涵盖所有残差缩放、并行分支、cross-attention 或额外 norm；读 forward 和 checkpoint 配置。</li>
+<li><strong>验证 LN 统计轴：</strong>标准 LayerNorm 在隐藏维归一化；同时检查 EPS、γ/β、RMSNorm、fp32 accumulate 与混合精度的实现差异。</li>
+<li><strong>记录训练初期的层级梯度与更新：</strong>记录 per-layer grad norm、参数更新比例、loss spikes，而非凭最终 loss 猜测是否需要 warm-up。</li>
+<li><strong>做公平对照：</strong>锁定数据、模型宽度/深度、batch、优化器、初始化与 token 预算，分离归一化位置和调度器的影响。</li></ol>
+<p>训练不稳定时，调整 LN 位置是一个结构选项，但也应审查学习率峰值、warm-up、初始化、残差缩放、数值溢出和梯度裁剪。不存在一条不依赖配方的万能切换规则。</p>
+</section>
+<section id="summary"><h2><span class="n">12</span>把它收束为三条可复用的判断</h2>
+<div class="two"><div class="tile"><b>结构判断</b><p>Pre-LN 规范残差分支的输入；Post-LN 规范整个残差和的输出。</p></div><div class="tile"><b>数学判断</b><p>Pre-LN 的局部 Jacobian 有显式 I；Post-LN 必经输出 LN。但这不是总网络梯度质量的判词。</p></div><div class="tile"><b>证据判断</b><p>Xiong 解释初始化梯度与 warm-up；Liu 增加参数扰动放大这一视角。</p></div><div class="tile"><b>工程判断</b><p>把 LN 位置、函数类别、残差缩放、初始化与优化调度当成需要共同检查的变量。</p></div></div>
+<h3>主要参考文献</h3><ol class="refs"><li>Vaswani et al. (2017). <a href="https://arxiv.org/abs/1706.03762">Attention Is All You Need</a>，§3.1，原始 Post-LN。</li><li>Ba, Kiros &amp; Hinton (2016). <a href="https://arxiv.org/abs/1607.06450">Layer Normalization</a>。</li><li>Xiong et al. (ICML 2020). <a href="https://proceedings.mlr.press/v119/xiong20b.html">On Layer Normalization in the Transformer Architecture</a>，Figure 1–5、Theorem 1。</li><li>Liu et al. (EMNLP 2020). <a href="https://aclanthology.org/2020.emnlp-main.463/">Understanding the Difficulty of Training Transformers</a>。</li><li>Wang et al. (2022). <a href="https://arxiv.org/abs/2203.00555">DeepNet: Scaling Transformers to 1,000 Layers</a>。</li><li>Shleifer, Weston &amp; Ott (2021). <a href="https://arxiv.org/abs/2110.09456">NormFormer</a>。</li><li>Kim et al. (ICML 2025). <a href="https://proceedings.mlr.press/v267/kim25u.html">Peri-LN</a>。</li></ol>
+<p>相关延伸：<a href="../transformer/">Understanding Transformer</a> · <a href="../resnet/">Understanding ResNet</a> · <a href="../../../categories/architectures/">模型架构分类</a>。</p>
+</section><footer class="footer">读论文时，先画清楚残差加法的位置，再讨论梯度和训练日程。<a href="../../../">返回 xm-posts</a></footer></article></main></div>
+<script>(function(){"use strict";const xs=[1,2,4,6];const c=2;const ln=arr=>{const m=arr.reduce((a,b)=>a+b,0)/arr.length;const v=arr.reduce((a,b)=>a+(b-m)**2,0)/arr.length;return arr.map(x=>(x-m)/Math.sqrt(v+1e-5))};const F=a=>a.map((v,i)=>.2*v+.1*a[(i+1)%a.length]);const pre=a=>{const b=F(ln(a));return a.map((v,i)=>v+b[i])};const post=a=>ln(a.map((v,i)=>v+F(a)[i]));const buttons=[...document.querySelectorAll(".norm-choice")];const output=document.getElementById("toy-result");function choose(which){buttons.forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.choice===which)));const f=which==="pre"?pre:post;const a=f(xs),b=f(xs.map(v=>v+c)),delta=a.map((_,i)=>+(b[i]-a[i]).toFixed(5));output.textContent=(which==="pre"?"Pre-LN":"Post-LN")+" | Δoutput = ["+delta.join(", ")+"]。"+(which==="pre"?"原始 shortcut 保留每一维的 +2 平移。":"经过输出 LN 后，整个平移被消去。")+" （示例特定 F，不是训练结果）"}buttons.forEach(b=>b.addEventListener("click",()=>choose(b.dataset.choice)));})();</script></body></html>

@@ -10,4 +10,4 @@
 
 - [Understanding PagedAttention](pagedattention/index.html) — KV Cache 分页、Block Table、Copy-on-Write、Serving 调度与 GPU kernel。
 
-分类沿用 `inference`，无需新增顶级分类。
+此主题沿用 `inference`，无需新增顶级分类。
