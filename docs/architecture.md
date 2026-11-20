@@ -28,13 +28,13 @@ flowchart LR
 - Published article route: `/xm-posts/posts/<category>/<slug>/`.
 - Category route: `/xm-posts/categories/<category>/` and stable second-level anchors `/xm-posts/categories/<category>/#topic-<topic>`.
 - Global taxonomy route: `/xm-posts/topics/`; each topic links to its category's anchor.
-- Other routes: `/xm-posts/archive/`, `/xm-posts/posts.json`, `/xm-posts/feed.xml`, `/xm-posts/sitemap.xml`, `/xm-posts/robots.txt`.
+- Other routes: `/xm-posts/archive/`, `/xm-posts/posts.json`, `/xm-posts/feed.xml`, `/xm-posts/sitemap.xml`, `/xm-posts/robots.txt`. The RSS 2.0 feed includes Atom self-discovery, Dublin Core day-precision modification dates and category/topic metadata; see [`docs/rss.md`](rss.md) for the stable GUID/date contract.
 - Shared site assets: `site/assets/`; build places them at `_site/assets/`.
 - Links use **relative references** to work in project-site subpaths; `--base-url` controls absolute canonical, RSS and sitemap URLs.
 
 ## Content and publication schema
 
-`content/categories.json` is an ordered array of `{slug,title,english,description,topics}`, where `topics` is a non-empty array of `{slug,title}` with unique, stable kebab-case slugs **within each category**. `content/posts.json` contains `{slug,title,subtitle,category,topic,status,published,updated,reading_minutes,tags,summary,paper,illustration}`. The required `topic` must exist in the selected category's `topics` list; `tags` provide cross-topic search without changing the single primary placement. Status is either `draft` or `published`, slugs are unique lowercase kebab-case, categories must be registered, and dates use ISO `YYYY-MM-DD`.
+`content/categories.json` is an ordered array of `{slug,title,english,description,topics}`, where `topics` is a non-empty array of `{slug,title}` with unique, stable kebab-case slugs **within each category**. `content/posts.json` contains `{slug,title,subtitle,category,topic,status,published,updated,reading_minutes,tags,summary,paper,illustration,cover}`; a published article's `cover` is a unique local SVG and its explanatory caption. The required `topic` must exist in the selected category's `topics` list; `tags` provide cross-topic search without changing the single primary placement. Status is either `draft` or `published`, slugs are unique lowercase kebab-case, categories must be registered, and dates use ISO `YYYY-MM-DD`.
 
 The knowledge map, category grouped sections and archive labels are generated from those two manifests; missing article categories, duplicate topic IDs and broken fragment anchors fail CI. Topic IDs are not physical folders, so existing article URLs remain stable. Category/topic slugs should not be renamed without deliberate migration and redirect support.
 
