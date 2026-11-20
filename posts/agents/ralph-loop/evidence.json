@@ -106,5 +106,14 @@
     "locator": "Independent engineering recommendations; not measured by the original technique",
     "status": "illustrative",
     "notes": "General safety guidance; do not attribute these controls to the original Bash loop."
+  },
+  {
+    "id": "E13",
+    "kind": "safety",
+    "claim": "The official plugin README documents an unlimited default for --max-iterations and recommends an explicit finite iteration cap as an escape hatch.",
+    "source_url": "https://github.com/anthropics/claude-plugins-official/blob/main/plugins/ralph-loop/README.md",
+    "locator": "Options: --max-iterations default; Prompt Writing Best Practices / Escape Hatches",
+    "status": "verified",
+    "notes": "Product-specific README behavior; verify the installed plugin version before relying on defaults."
   }
 ]
