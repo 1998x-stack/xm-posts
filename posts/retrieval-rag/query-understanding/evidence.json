@@ -39,10 +39,10 @@
     "id": "Q05",
     "kind": "limitation",
     "claim": "A comprehensive study of generative query/document expansion finds gains are not universal and can diminish or reverse for stronger retrievers due to added noise.",
-    "source_url": "https://arxiv.org/abs/2309.08541",
-    "locator": "Abstract and experimental overview",
+    "source_url": "https://aclanthology.org/2024.findings-eacl.134/",
+    "locator": "Abstract and experimental overview; Findings of EACL 2024",
     "status": "verified",
-    "notes": "Study covers 11 expansion techniques, 12 datasets and 24 retrieval models."
+    "notes": "Peer-reviewed Findings of EACL 2024 version; study covers 11 expansion techniques, 12 datasets and 24 retrieval models."
   },
   {
     "id": "Q06",

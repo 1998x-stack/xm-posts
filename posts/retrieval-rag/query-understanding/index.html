@@ -179,6 +179,9 @@ figure{margin:2.1rem 0;padding:1.2rem;border:1px solid var(--border);border-radi
 <h3>06.1 什么时候应该追问？</h3>
 <p>不是每个模糊词都值得追问。一个实用原则是：只有当不同解释会显著改变结果、成本或副作用时，才优先澄清。比如“最近的论文”可以先按产品默认窗口搜索并明确标注；“把旧版本删掉”则必须先确认对象和删除范围。</p>
 <p><a href="https://aclanthology.org/2025.emnlp-main.496/">ICR（EMNLP 2025）</a>提出迭代式 Clarification and Rewriting：系统在澄清问题与重写查询之间交替推进，而不是一次性尝试修复所有模糊片段。其核心启示是：澄清可以是一个逐步收敛的过程。</p>
+<h3>06.2 让机器的理解可见、可编辑</h3>
+<p>Anand 等人在 GenIR @ SIGIR 2023 的立场论文中提出交互式 Query Rewriting：系统先用自然语言呈现自己的 <em>machine intent</em>，用户可以 Commit（接受）、Edit（修改）、Explore（继续探索）或 Hard Rewrite（彻底重写），然后再进入最终检索。这改变了传统搜索中“机器在后台悄悄改写，用户只能从结果猜测系统理解”的交互方式。</p>
+<p>这个想法的研究价值在于把模型的解释变成用户可检查的对象，并收集比点击行为更直接的意图反馈。但它仍是一种研究框架和早期可行性探索，不代表 LLM 改写一定更准确；延迟、冷启动、候选意图多样性和用户交互成本仍是开放问题。</p>
 </section>
 
 <section id="agent-boundary"><h2>07 · Query Understanding 如何连接 Agent 与 Tool Calling？</h2>
@@ -276,7 +279,7 @@ def parse_query_demo(raw_query: str) -> QueryFrame:
 <li>Yi Chang and Hongbo Deng (eds.). <em>Query Understanding for Search Engines</em>. Springer, 2020. <a href="https://doi.org/10.1007/978-3-030-58334-7">DOI / 章节目录</a>.</li>
 <li>Avishek Anand et al. <em>Query Understanding in the Age of Large Language Models</em>. arXiv:2306.16004, 2023. <a href="https://arxiv.org/abs/2306.16004">论文</a>.</li>
 <li>Liang Wang, Nan Yang, and Furu Wei. <em>Query2doc: Query Expansion with Large Language Models</em>. EMNLP 2023, pp. 9414–9423. <a href="https://aclanthology.org/2023.emnlp-main.585/">论文</a>.</li>
-<li>Orion Weller et al. <em>When do Generative Query and Document Expansions Fail?</em> arXiv:2309.08541, 2023. <a href="https://arxiv.org/abs/2309.08541">论文</a>.</li>
+<li>Orion Weller et al. <em>When do Generative Query and Document Expansions Fail? A Comprehensive Study Across Methods, Retrievers, and Datasets</em>. Findings of EACL 2024, pp. 1987–2003. <a href="https://aclanthology.org/2024.findings-eacl.134/">论文</a>.</li>
 <li>Yifei Yuan et al. <em>Query Understanding in LLM-based Conversational Information Seeking</em>. SIGIR 2025 Tutorial. <a href="https://sigirusertutorial.github.io/">教程材料</a>.</li>
 <li>Zhiyu Cao, Peifeng Li, and Qiaoming Zhu. <em>ICR: Iterative Clarification and Rewriting for Conversational Search</em>. EMNLP 2025, pp. 9810–9824. <a href="https://aclanthology.org/2025.emnlp-main.496/">论文</a>.</li>
 <li>Yunfei Zhong et al. <em>Reason to Retrieve: Enhancing Query Understanding through Decomposition and Interpretation</em>. arXiv:2509.06544, v4, 2026. <a href="https://arxiv.org/abs/2509.06544">论文</a>.</li>
