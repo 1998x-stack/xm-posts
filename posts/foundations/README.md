@@ -20,4 +20,6 @@
 
 - [Understanding SVD](svd/index.html)：矩阵分解、Eckart–Young 低秩定理、PCA 与伪逆；含交互秩选择、MathML 与 NumPy 断言。
 
+- [Understanding Embeddings](embeddings/index.html)：覆盖 lookup、Word2Vec/GloVe、BERT、SBERT、SimCSE/E5、cosine 与 ANN/RAG 召回；附七幅图示、MathML、交互实验、证据与 Python 断言。所属二级主题：`Representation Learning & Embeddings`。
+
 - [Understanding BPE](bpe/index.html)：带词频的贪心子词合并、原论文实验与 byte-level 变体；含六幅机制图、交互分词实验、MathML 与纯 Python 验证。

@@ -38,6 +38,7 @@
 | **Understanding RLHF** | 为什么示范微调还需要人类偏好与策略优化？ | [`posts/training/rlhf/`](posts/training/rlhf/index.html) | [Ouyang et al. (2022)](https://arxiv.org/abs/2203.02155) |
 | **Understanding GRPO** | 为什么不需要 Critic 也能构造策略优势？ | [`posts/training/grpo/`](posts/training/grpo/index.html) | [Shao et al. (2024)](https://arxiv.org/abs/2402.03300) |
 | **Understanding Word2Vec** | 为什么上下文预测能产生词向量？ | [`posts/foundations/understanding-word2vec/`](posts/foundations/understanding-word2vec/index.html) | [Mikolov et al. (2013)](https://arxiv.org/abs/1301.3781) · [NeurIPS 2013](https://arxiv.org/abs/1310.4546) |
+| **Understanding Embeddings** | 为什么词的编号能够变成可比较的语义向量？从 Word2Vec 到对比检索 | [`posts/foundations/embeddings/`](posts/foundations/embeddings/index.html) | [Word2Vec](https://arxiv.org/abs/1301.3781) · [SBERT](https://aclanthology.org/D19-1410/) · [SimCSE](https://aclanthology.org/2021.emnlp-main.552/) |
 | **Understanding SGD** | 为什么带噪梯度也能驱动大规模学习？ | [`posts/foundations/sgd/`](posts/foundations/sgd/index.html) | [Bottou (2010)](https://bottou.org/papers/bottou-2010) |
 | **Understanding Adam** | 梯度为什么需要方向和平方尺度的两份记忆？ | [`posts/foundations/adam/`](posts/foundations/adam/index.html) | [Kingma & Ba (2015)](https://arxiv.org/abs/1412.6980) |
 | **Understanding AdamW** | 为什么 Adam 的 L₂ 与 Weight Decay 不等价？ | [`posts/foundations/adamw/`](posts/foundations/adamw/index.html) | [Loshchilov & Hutter (ICLR 2019)](https://arxiv.org/abs/1711.05101) |
