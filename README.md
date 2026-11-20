@@ -33,7 +33,7 @@
 | --- | --- | --- |
 | 经典机器学习 | [Logistic Regression](posts/classical-ml/logistic-regression/index.html) | [K-Means](posts/classical-ml/k-means/index.html) · [SVM](posts/classical-ml/svm/index.html) |
 | 神经网络架构 | [ResNet](posts/architectures/resnet/index.html) | [Transformer](posts/architectures/transformer/index.html) · [Multi-Head Attention](posts/architectures/multi-head-attention/index.html) |
-| 训练与优化 | [SGD](posts/foundations/sgd/index.html) | [AdamW](posts/foundations/adamw/index.html) · [LoRA](posts/training/lora/index.html) |
+| 训练与优化 | [SGD](posts/foundations/sgd/index.html) | [AdamW](posts/foundations/adamw/index.html) · [Chinchilla](posts/training/chinchilla/index.html) · [DeepSpeed](posts/training/deepspeed/index.html) · [LoRA](posts/training/lora/index.html) |
 | 强化学习与智能体 | [Bellman Equations](posts/reinforcement-learning/bellman-equations/index.html) | [MCTS](posts/reinforcement-learning/mcts/index.html) · [ReAct](posts/agents/react/index.html) |
 | LLM 推理与系统 | [KV Cache](posts/inference/kv-cache/index.html) | [GQA](posts/architectures/gqa/index.html) · [FlashAttention](posts/systems/flashattention/index.html) |
 
