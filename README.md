@@ -23,6 +23,7 @@
 | **Understanding Transformer** | 为什么用 Self-Attention 替代循环结构？ | [`posts/architectures/transformer/`](posts/architectures/transformer/index.html) | [Vaswani et al.](https://arxiv.org/abs/1706.03762) |
 | **Understanding Pre-LN vs Post-LN** | LayerNorm 改动为何影响残差梯度与 warm-up？ | [`posts/architectures/pre-ln-vs-post-ln/`](posts/architectures/pre-ln-vs-post-ln/index.html) | [Xiong et al. (ICML 2020)](https://proceedings.mlr.press/v119/xiong20b.html) |
 | **Understanding DPO** | 为什么偏好对可以直接训练策略而无需显式奖励模型？ | [`posts/training/dpo/`](posts/training/dpo/index.html) | [Rafailov et al. (NeurIPS 2023)](https://arxiv.org/abs/2305.18290) |
+| **Understanding Linear Regression** | 为什么最小平方残差意味着正交投影？闭式解、梯度下降和统计推断需要哪些边界？ | [`posts/classical-ml/linear-regression/`](posts/classical-ml/linear-regression/index.html) | [NIST: Least Squares](https://www.itl.nist.gov/div898/handbook/pmd/section1/pmd141.htm) · [Berkeley: Gauss–Markov](https://eml.berkeley.edu/sst/regression.html) |
 | **Understanding SVM** | 为什么分对了仍需最大间隔？ | [`posts/classical-ml/svm/`](posts/classical-ml/svm/index.html) | [Cortes & Vapnik (1995)](https://doi.org/10.1007/BF00994018) |
 | **Understanding PCA** | 最大方差为何等价于最小平方重建误差？ | [`posts/classical-ml/pca/`](posts/classical-ml/pca/index.html) | [Pearson (1901)](https://doi.org/10.1080/14786440109462720) · [Hotelling (1933)](https://www.scienceopen.com/document?vid=a0c9b352-1645-4706-9d7c-a76e6534a1b5) |
 | **Understanding Chain-of-Thought Prompting** | Few-shot 的中间推理步骤如何改变复杂任务表现？ | [`posts/reasoning/chain-of-thought/`](posts/reasoning/chain-of-thought/index.html) | [Wei et al. (NeurIPS 2022)](https://arxiv.org/abs/2201.11903) |
@@ -72,6 +73,8 @@ The Pile 的 22 个来源按原论文 Table 1 给出有效采样权重，配五�
 | 系统与 Kernel | `posts/systems/` | GPU、Attention Kernels、算子、并行与性能分析 |
 | 多模态 | `posts/multimodal/` | Vision/Audio/Language 与跨模态交互 |
 | 评测与复现 | `posts/evaluation/` | Benchmark、消融、复现协议 |
+
+Linear Regression 使用现有 `classical-ml` → **Linear Models** 分类，不为单篇线性模型新增顶层分类；与后续 Logistic Regression、Ridge/Lasso 构成同一学习路径。其基础历史跨越 Legendre 与 Gauss，证据采用 NIST 和 Berkeley 等方法资料，而非误称一篇现代原论文。
 
 AlexNet 归入 `architectures` 的 **Convolutional Neural Networks & Vision** 主题，而不新建视觉顶层目录；后续 VGG、Inception、ResNet 可形成连贯的 CNN 历史线。原论文的 15.3% Top-5 test error 来自七模型集成，绝非单模型结果。
 
