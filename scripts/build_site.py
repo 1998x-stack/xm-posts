@@ -28,15 +28,32 @@ def data(root:Path):
     assert isinstance(categories,list) and isinstance(posts,list)
     ids=[c['slug'] for c in categories]
     assert len(set(ids))==len(ids) and all(VALID_SLUG.fullmatch(x) for x in ids), 'Bad category slug'
+    category_topics={}
+    for c in categories:
+        assert all(isinstance(c.get(k),str) and c[k].strip() for k in ('title','english','description')),c
+        assert isinstance(c.get('topics'),list) and c['topics'],f'Missing topics: {c["slug"]}'
+        topic_ids=[]
+        for t in c['topics']:
+            assert isinstance(t,dict) and VALID_SLUG.fullmatch(t.get('slug','')),t
+            assert isinstance(t.get('title'),str) and t['title'].strip(),t
+            topic_ids.append(t['slug'])
+        assert len(topic_ids)==len(set(topic_ids)),f'Duplicate topic ID in {c["slug"]}'
+        category_topics[c['slug']]=set(topic_ids)
+        assert (root/'posts'/c['slug']/'README.md').is_file(),f'Category README missing: {c["slug"]}'
     assert len({p['slug'] for p in posts})==len(posts), 'Duplicate post slug'
     for p in posts:
         assert VALID_SLUG.fullmatch(p['slug']), p
         assert p['category'] in ids, p
+        assert p.get('topic') in category_topics[p['category']],f'Invalid primary topic for {p["slug"]}: {p.get("topic")}'
         assert p['status'] in {'draft','published'}, p
         assert re.fullmatch(r'\d{4}-\d{2}-\d{2}',p['published']),p
         datetime.fromisoformat(p['published'])
         assert p['title'] and p['summary'] and p['subtitle']
+        assert isinstance(p.get('reading_minutes'),int) and p['reading_minutes']>=0,p
+        assert isinstance(p.get('tags'),list) and all(isinstance(tag,str) and tag.strip() for tag in p['tags']),p
         if p['status']=='published':
+            assert p['reading_minutes']>0,p
+            assert isinstance(p.get('paper'),str) and urlparse(p['paper']).scheme=='https',p
             path=root/'posts'/p['category']/p['slug']/'index.html'
             assert path.is_file(),f'Article missing: {path}'
     return categories,posts
@@ -49,8 +66,8 @@ def url_join(base:str, path:str)->str:
 def article_url(p):return f"posts/{p['category']}/{p['slug']}/"
 
 
-def html_page(*,title,description,canonical,body,depth=0,active='home',lang='zh-CN'):
-    rel='../'*depth or './'
+def html_page(*,title,description,canonical,body,depth=0,active='home',lang='zh-CN',root_href=None):
+    rel=root_href if root_href is not None else ('../'*depth or './')
     desc=H(description,quote=True)
     return f'''<!doctype html>
 <html lang="{lang}"><head>
@@ -66,7 +83,7 @@ def html_page(*,title,description,canonical,body,depth=0,active='home',lang='zh-
 <title>{H(title)}</title></head><body>
 <a class="skip-link" href="#main">跳至正文</a>
 <header class="site-header"><div class="container header-row"><a class="wordmark" href="{rel}" aria-label="xm.posts 首页">xm<span>.</span>posts</a>
-<nav class="top-nav" aria-label="主导航"><a {'aria-current="page"' if active=='home' else ''} href="{rel}">首页</a><a {'aria-current="page"' if active=='archive' else ''} href="{rel}archive/">文章归档</a><a href="{rel}#categories">分类</a><a href="{rel}#reading-paths">学习路径</a><a href="https://github.com/1998x-stack/xm-posts" target="_blank" rel="noopener noreferrer">GitHub ↗</a></nav></div></header>
+<nav class="top-nav" aria-label="主导航"><a {'aria-current="page"' if active=='home' else ''} href="{rel}">首页</a><a {'aria-current="page"' if active=='archive' else ''} href="{rel}archive/">文章归档</a><a href="{rel}#categories">分类</a><a {'aria-current="page"' if active=='topics' else ''} href="{rel}topics/">知识地图</a><a href="{rel}#reading-paths">学习路径</a><a href="https://github.com/1998x-stack/xm-posts" target="_blank" rel="noopener noreferrer">GitHub ↗</a></nav></div></header>
 <main id="main">{body}</main>
 <footer class="site-footer"><div class="container footer-main"><div><a class="wordmark" href="{rel}">xm<span>.</span>posts</a><p>从问题出发，经由图示、数学与实验，真正理解模型。</p></div><div><p class="footer-label">EXPLORE</p><a href="{rel}archive/">所有文章</a><a href="{rel}feed.xml">RSS 订阅</a><a href="https://github.com/1998x-stack/xm-posts">源代码</a></div></div><div class="container legal"><span>© xm-posts · Independent technical notes</span><span>Read deeply. Build carefully.</span></div></footer>
 </body></html>'''
@@ -76,7 +93,7 @@ def category_pill(c, rel, count, active=False):
     return f'<a class="category-pill {"is-selected" if active else ""}" href="{rel}categories/{H(c["slug"])}/"><span>{H(c["title"])}</span><small>{count:02d}</small></a>'
 
 
-def post_card(p,rel,ordinal=0):
+def post_card(p,rel,ordinal=0,topic_title=None):
     path=rel+article_url(p)
     if p['slug'] == 'resnet':
         icon, art = 'residual', '<span class="math-mark">H(x) = x + F(x)</span><span class="pathline pathline-a"></span><span class="pathline pathline-b"></span><span class="pathline pathline-c"></span>'
@@ -96,11 +113,12 @@ def post_card(p,rel,ordinal=0):
         icon, art = 'embedding', '<span class="math-mark">P(context | center)</span><span class="embedding-dots">● ● ● ● ●</span><span class="embedding-eq">positive + k negatives</span>'
     else:
         icon, art = 'generic', '<span class="math-mark">Observe → Derive → Verify</span>'
+    topic_link=(f'<a class="card-topic" href="{rel}categories/{H(p["category"])}/#topic-{H(p["topic"])}">{H(topic_title)}</a>' if topic_title else '')
     poster=f'<div class="figure-abstract figure-{icon}" aria-hidden="true"><span class="accent-label">FIG. {ordinal or 1:02d}</span>{art}</div>'
-    return f'''<article class="post-card" data-post-card data-search="{H((p['title']+' '+p['summary']+' '+' '.join(p['tags'])).lower(),quote=True)}" data-category="{H(p['category'])}">
+    return f'''<article class="post-card" data-post-card data-search="{H((p['title']+' '+p['summary']+' '+' '.join(p['tags'])+' '+p['category']+' '+p['topic']+' '+(topic_title or '')).lower(),quote=True)}" data-category="{H(p['category'])}">
 <a class="card-hit" href="{path}" aria-label="阅读 {H(p['title'],quote=True)}">{poster}</a>
 <div class="card-body"><div class="card-topline"><span>MODEL STUDY / {H(p['category']).upper()}</span><span>{H(p['published'])}</span></div>
-<h3><a href="{path}">{H(p['title'])}</a></h3><p class="card-subtitle">{H(p['subtitle'])}</p>
+{topic_link}<h3><a href="{path}">{H(p['title'])}</a></h3><p class="card-subtitle">{H(p['subtitle'])}</p>
 <p class="card-summary">{H(p['summary'])}</p><div class="card-bottom"><span>{p['reading_minutes']} 分钟阅读</span><span class="card-actions"><a class="paper-source" href="{H(p.get('paper',''),quote=True)}" target="_blank" rel="noopener noreferrer" aria-label="原始论文：{H(p['title'],quote=True)}">原论文</a><a href="{path}" aria-label="阅读 {H(p['title'],quote=True)}">阅读全文 <span aria-hidden="true">↗</span></a></span></div></div></article>'''
 
 
@@ -108,7 +126,8 @@ def build_home(categories,posts,base):
     published=[p for p in posts if p['status']=='published']
     published.sort(key=lambda p:(p['published'],p['slug']),reverse=True)
     cats=''.join(category_pill(c,'./',sum(p['category']==c['slug'] for p in published)) for c in categories)
-    cards=''.join(post_card(p,'./',i+1) for i,p in enumerate(published))
+    topic_labels={(c['slug'],t['slug']):t['title'] for c in categories for t in c['topics']}
+    cards=''.join(post_card(p,'./',i+1,topic_labels[(p['category'],p['topic'])]) for i,p in enumerate(published))
     count=len(published)
 
     by_slug={p['slug']:p for p in published}
@@ -135,7 +154,7 @@ def build_home(categories,posts,base):
 <p class="hero-text">不从繁复符号开始，而从一个具体困惑开始。沿着原始论文的证据、逐步展开的结构图与可运行代码，理解深度学习的关键思想。</p>
 <div class="hero-actions"><a class="primary-link" href="#latest">开始阅读 <span>↗</span></a><a class="secondary-link" href="archive/">浏览全部 {count} 篇 ↗</a></div>
 </div><div class="hero-visual" aria-hidden="true"><div class="visual-caption">ANATOMY OF AN IDEA <span>№ 001</span></div><div class="visual-model"><div class="diagram-node">Input<br><small>x</small></div><div class="diagram-mid"><span class="thin-line">Identity</span><div class="diagram-box">Transformation<br><small>F(x)</small></div></div><div class="diagram-node out">Output<br><small>x + F(x)</small></div></div><div class="visual-bottom">OBSERVE → FORMALIZE → IMPLEMENT<span>·</span>VERIFY</div></div></section>
-<section id="categories" class="category-band"><div class="container"><div class="section-header"><div><div class="eyebrow muted">EXPLORE BY SUBJECT</div><h2>沿着问题脉络阅读</h2></div><p>持续生长的研究主题，而不只是按时间堆叠的文章。</p></div><div class="category-grid">{cats}</div></div></section>
+<section id="categories" class="category-band"><div class="container"><div class="section-header"><div><div class="eyebrow muted">EXPLORE BY SUBJECT</div><h2>沿着问题脉络阅读</h2></div><p>一级分类是领域，二级主题是可直达文章的研究路径。<a href="topics/">查看完整知识地图 ↗</a></p></div><div class="category-grid">{cats}</div></div></section>
 <section id="reading-paths" class="container learning-paths"><div class="section-header"><div><div class="eyebrow muted">GUIDED STUDY ROUTES</div><h2>按学习目标，串起论文</h2></div><p>每条路线由已发布文章组成；不是用目录占位凑篇数。</p></div><div class="learning-grid">{path_cards}</div></section>
 <section id="latest" class="container latest"><div class="section-header"><div><div class="eyebrow muted">ESSAYS & VISUAL EXPLANATIONS</div><h2>全部论文解读 <span class="count">{count:02d}</span></h2></div><p>完整文章、可独立查看的 SVG 与论文证据。</p></div>
 <div class="browse-controls"><label class="search-field" for="search-posts"><span aria-hidden="true">⌕</span><input id="search-posts" type="search" placeholder="搜索模型、术语或论文关键词" autocomplete="off" data-search-input></label><span class="visible-count" aria-live="polite" data-visible-count>共 {count} 篇文章</span></div>
@@ -145,25 +164,75 @@ def build_home(categories,posts,base):
     return html_page(title='xm-posts · 深度学习论文图解',description='图解深度学习与 LLM 基础论文：从直觉到结构图、数学与可运行代码，附原论文证据与验证。',canonical=base,body=body)
 
 
+def topic_labels(categories):
+    return {(c['slug'],t['slug']):t['title'] for c in categories for t in c['topics']}
+
+
+def build_topics(categories,posts,base):
+    published=[p for p in posts if p['status']=='published']
+    summary=''.join(
+        f'<a href="#category-{H(c["slug"])}">{H(c["title"])} <small>{sum(p["category"]==c["slug"] for p in published):02d}</small></a>'
+        for c in categories
+    )
+    groups=[]
+    for c in categories:
+        related=[p for p in published if p['category']==c['slug']]
+        links=''.join(
+            f'<li><a href="../categories/{H(c["slug"])}/#topic-{H(t["slug"])}"><span>{H(t["title"])}</span>'
+            f'<small>{"%02d 篇" % sum(p["topic"]==t["slug"] for p in related) if any(p["topic"]==t["slug"] for p in related) else "规划中"}</small></a></li>'
+            for t in c['topics']
+        )
+        groups.append(
+            f'<section class="taxonomy-group" id="category-{H(c["slug"])}" aria-labelledby="taxonomy-{H(c["slug"])}">'
+            f'<div class="taxonomy-group-title"><h2 id="taxonomy-{H(c["slug"])}"><a href="../categories/{H(c["slug"])}/">{H(c["title"])}'
+            f' <span class="faded-en">/ {H(c["english"])}</span></a></h2><span>{len(related)} 篇 · {len(c["topics"])} 个二级主题</span></div>'
+            f'<p>{H(c["description"])}</p><ul class="taxonomy-links">{links}</ul></section>'
+        )
+    body=(
+        '<div class="container taxonomy-page"><div class="breadcrumb"><a href="../">首页</a> <span>/</span> 知识地图</div>'
+        '<div class="eyebrow muted">RESEARCH TAXONOMY · KNOWLEDGE MAP</div><h1>知识地图</h1>'
+        f'<p class="category-description">覆盖 {len(categories)} 个一级研究领域、{sum(len(c["topics"]) for c in categories)} 个二级主题、'
+        f'{len(published)} 篇正式发布文章。每篇文章归属一个主主题；交叉学科通过标签和学习路径相互连接。'
+        '“规划中”代表尚无文章，不代表已有解读。</p>'
+        f'<nav class="taxonomy-overview" aria-label="跳转至一级分类">{summary}</nav>'
+        +''.join(groups)+'</div>'
+    )
+    return html_page(title='知识地图 · xm-posts',description='xm-posts 全部一级分类与二级主题、已发布文章数量及规划中研究方向。',canonical=url_join(base,'topics/'),body=body,depth=1,active='topics')
+
+
 def build_category(c,posts,categories,base):
-    listing=sorted([p for p in posts if p['status']=='published' and p['category']==c['slug']],key=lambda p:p['published'],reverse=True)
+    listing=sorted([p for p in posts if p['status']=='published' and p['category']==c['slug']],key=lambda p:(p['published'],p['slug']),reverse=True)
     rel='../../'
     pills=''.join(category_pill(x,rel,sum(p['status']=='published' and p['category']==x['slug'] for p in posts),x['slug']==c['slug']) for x in categories)
-    if listing:
-        content='<div class="post-grid">'+''.join(post_card(p,rel,i+1) for i,p in enumerate(listing))+'</div>'
-    else:
-        content='<div class="category-empty"><span aria-hidden="true">◇</span><h2>这个主题的笔记还在路上。</h2><p>目录已经建立，后续文章通过 GitHub Actions 自动发布。这里不会把占位文件当成正式文章。</p><a href="'+rel+'archive/">先看看已发布的文章 ↗</a></div>'
-    body=f'''<div class="container category-page"><div class="breadcrumb"><a href="{rel}">首页</a> <span>/</span> 分类 <span>/</span> {H(c['title'])}</div>
+    jumps=''.join(
+        f'<a href="#topic-{H(t["slug"])}"><span>{H(t["title"])}</span><small>{sum(p["topic"]==t["slug"] for p in listing):02d} 篇</small></a>'
+        for t in c['topics']
+    )
+    sections=[]
+    for t in c['topics']:
+        group=[p for p in listing if p['topic']==t['slug']]
+        content=(
+            '<div class="post-grid">'+''.join(post_card(p,rel,i+1,t['title']) for i,p in enumerate(group))+'</div>'
+            if group else '<p class="topic-empty">该研究方向正在规划中，尚无正式发布的文章。</p>'
+        )
+        sections.append(
+            f'<section class="topic-section" id="topic-{H(t["slug"])}" aria-labelledby="heading-{H(t["slug"])}">'
+            f'<div class="topic-section-heading"><h2 id="heading-{H(t["slug"])}">{H(t["title"])}</h2>'
+            f'<span>{"%02d 篇文章" % len(group) if group else "规划中"}</span></div>{content}</section>'
+        )
+    body=f'''<div class="container category-page"><div class="breadcrumb"><a href="{rel}">首页</a> <span>/</span> <a href="{rel}topics/">知识地图</a> <span>/</span> {H(c['title'])}</div>
 <div class="eyebrow muted">TOPIC COLLECTION · {H(c['english']).upper()}</div><h1>{H(c['title'])}<span class="faded-en"> / {H(c['english'])}</span></h1><p class="category-description">{H(c['description'])}</p>
-<div class="topic-tracks">{''.join(f'<span>{H(x)}</span>' for x in c['topics'])}</div>
-<div class="divider-title"><h2>相关文章</h2><span>{len(listing):02d} POSTS</span></div>{content}
+<p class="taxonomy-hint">{len(listing)} 篇文章 · {len(c['topics'])} 个二级主题 · <a href="{rel}topics/#category-{H(c['slug'])}">查看完整知识地图 ↗</a></p>
+<nav class="topic-jumps" aria-label="本分类二级主题导航">{jumps}</nav>
+{''.join(sections)}
 <div class="category-nav"><div class="eyebrow muted">MORE TOPICS</div>{pills}</div></div>'''
     return html_page(title=f"{c['title']} · xm-posts",description=c['description'],canonical=url_join(base,f'categories/{c["slug"]}/'),body=body,depth=2)
 
 
-def build_archive(posts,base):
+def build_archive(posts,categories,base):
     published=sorted([p for p in posts if p['status']=='published'],key=lambda p:(p['published'],p['title']),reverse=True)
-    cards=''.join(f'''<li><span class="timeline-date">{H(p['published'])}</span><div><h2><a href="../{article_url(p)}">{H(p['title'])}</a></h2><p>{H(p['subtitle'])}</p></div><span class="timeline-time">{p['reading_minutes']} min <span aria-hidden="true">↗</span></span></li>''' for p in published)
+    labels=topic_labels(categories)
+    cards=''.join(f'''<li><span class="timeline-date">{H(p['published'])}</span><div><h2><a href="../{article_url(p)}">{H(p['title'])}</a></h2><p>{H(p['subtitle'])}</p><a class="archive-topic" href="../categories/{H(p['category'])}/#topic-{H(p['topic'])}">{H(labels[(p['category'],p['topic'])])}</a></div><span class="timeline-time">{p['reading_minutes']} min <span aria-hidden="true">↗</span></span></li>''' for p in published)
     body=f'''<div class="container archive-page"><div class="breadcrumb"><a href="../">首页</a> <span>/</span> 文章归档</div><div class="eyebrow muted">ALL EXPLAINERS · CHRONOLOGICAL</div><h1>研究笔记归档<span class="count">{len(published):02d}</span></h1><p class="category-description">所有已发布的长文。草稿与目录占位不会出现在这里。</p><ol class="timeline">{cards}</ol></div>'''
     return html_page(title='文章归档 · xm-posts',description='按时间浏览 xm-posts 全部深度学习论文图解文章。',canonical=url_join(base,'archive/'),body=body,depth=1,active='archive')
 
@@ -202,7 +271,8 @@ def build(root:Path,out:Path,base:str):
     out.mkdir(parents=True)
     categories,posts=data(root)
     write(out,'index.html',build_home(categories,posts,base))
-    write(out,'archive/index.html',build_archive(posts,base))
+    write(out,'archive/index.html',build_archive(posts,categories,base))
+    write(out,'topics/index.html',build_topics(categories,posts,base))
     for c in categories:write(out,f'categories/{c["slug"]}/index.html',build_category(c,posts,categories,base))
     published=[p for p in posts if p['status']=='published']
     for p in published:
@@ -212,10 +282,10 @@ def build(root:Path,out:Path,base:str):
         published_html.write_text(enrich_article_head(published_html.read_text(encoding='utf-8'),p,base),encoding='utf-8')
     shutil.copytree(root/'site/assets',out/'assets')
     write(out,'.nojekyll','')
-    write(out,'404.html',html_page(title='页面未找到 · xm-posts',description='你访问的页面不存在。',canonical=url_join(base,'404.html'),body='<div class="container category-empty not-found"><h1>这条路径尚未被写下。</h1><p>页面可能移动了，或文章尚未正式发布。</p><a href="./">回到首页 ↗</a></div>'))
-    search=[{k:p[k] for k in ['title','slug','subtitle','summary','category','tags','published','reading_minutes']}|{'url':article_url(p)} for p in published]
+    write(out,'404.html',html_page(title='页面未找到 · xm-posts',description='你访问的页面不存在。',canonical=url_join(base,'404.html'),body='<div class="container category-empty not-found"><h1>这条路径尚未被写下。</h1><p>页面可能移动了，或文章尚未正式发布。</p><a href="'+H(base,quote=True)+'">回到首页 ↗</a></div>',root_href=base))
+    search=[{k:p[k] for k in ['title','slug','subtitle','summary','category','topic','tags','published','reading_minutes']}|{'url':article_url(p)} for p in published]
     write(out,'posts.json',json.dumps(search,ensure_ascii=False,indent=2)+'\n')
-    urls=[base,url_join(base,'archive/')]+[url_join(base,f'categories/{c["slug"]}/') for c in categories]+[url_join(base,article_url(p)) for p in published]
+    urls=[base,url_join(base,'archive/'),url_join(base,'topics/')]+[url_join(base,f'categories/{c["slug"]}/') for c in categories]+[url_join(base,article_url(p)) for p in published]
     sitemap=''.join(f'<url><loc>{X(u)}</loc></url>' for u in urls)
     write(out,'sitemap.xml','<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'+sitemap+'</urlset>')
     write(out,'robots.txt',f'User-agent: *\nAllow: /\nSitemap: {url_join(base,"sitemap.xml")}\n')

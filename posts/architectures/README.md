@@ -21,6 +21,11 @@ RoPE 位于 `posts/architectures/rope/`，主题为 **Positional Encoding**；�
 - [Understanding ResNet](resnet/index.html)：从网络深度的优化退化与 shortcut 切入，承接 AlexNet 到残差学习的历史发展。
 - 该主题作为模型架构的二级轨道，不增设新的顶层分类；后续 VGG、Inception、EfficientNet 可依此归档。
 
+## Gating & Multiplicative Interactions
+
+- [Understanding Neural Gating](neural-gating/index.html)：从 LSTM/GRU 到 Highway、GLU、SwiGLU 的跨论文门控机制，区分可学习的 sigmoid 保留门与非概率的乘性 FFN 门。
+- [专题规划与术语边界](_topics/gating-multiplicative-interactions/README.md)：控制信息流而非独立建一级分类；与 Attention、MoE Routing 进行方法学区分。
+
 ## Recurrent Networks / LSTM
 
 - [Understanding LSTM](lstm/index.html)：从普通 RNN 的长期梯度问题到 1997 CEC / 输入与输出门；明确区分 2000 年遗忘门、2002 年 peephole 和现代四门实现。
@@ -51,3 +56,13 @@ RoPE 位于 `posts/architectures/rope/`，主题为 **Positional Encoding**；�
 
 - [Understanding Mixture of Experts (MoE)](moe/index.html)：精读 ICLR 2017 的 LSTM+稀疏专家结构，拆解 Noisy Top-K、Importance/Load、容量约束与 Expert Parallelism；区分 GShard、Switch、Mixtral 与 DeepSeekMoE。
 - 复用现有 `Mixture of Experts (MoE)` 二级专题和 [`_topics/moe` 研究规划](_topics/moe/README.md)，不增设重复分类。
+
+## Efficient Attention — DeltaNet
+
+- [Understanding DeltaNet](deltanet/index.html)：精读 Yang et al. NeurIPS 2024，解释 Delta Rule 纠错式关联记忆、单位 Key 下的覆写、WY/Chunkwise 并行与论文对照实验；提供四幅独立 SVG、可交互 β 演示和标准库测试。
+- DeltaNet 是高效注意力与线性 RNN 的交叉模型，复用已有 `Efficient Attention` / `State Space Models` 二级轨道，不新增一级分类；[Gated DeltaNet (2025)](https://arxiv.org/abs/2412.06464) 作为独立后续工作，不能混用实验结果。
+
+
+## Efficient & Mobile CNNs
+
+- [Understanding MobileNet](mobilenet/index.html)：从深度可分离卷积、α/ρ 与 V1 原论文实验到 V2/V3/V4 演进；后续接纳 ShuffleNet、MnasNet、EfficientNet，不设重复一级分类。

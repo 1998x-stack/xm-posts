@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 390" role="img" aria-labelledby="lse-f4-title lse-f4-desc"><title id="lse-f4-title">一阶近似 Attention 形成固定维度前缀状态</title><desc id="lse-f4-desc">每一步更新 key 求和、value 求和和 key-value 外积和，查询用这三个状态计算输出，无须遍历全部历史 token。</desc><rect x="1" y="1" width="958" height="388" rx="22" fill="#f9fcf9" stroke="#d9e7df"/>
+<g font-family="system-ui,-apple-system,'PingFang SC',sans-serif"><text x="37" y="54" font-size="23" fill="#24444b" font-weight="800">精确 Attention 的历史表 → 一阶展开的三个累计状态</text>
+<rect x="38" y="88" width="320" height="238" rx="12" fill="#f6ece9" stroke="#edd3c9" stroke-width="1.5"/><rect x="462" y="88" width="460" height="238" rx="12" fill="#e9f5f2" stroke="#b9d8cc" stroke-width="1.5"/>
+<text x="59" y="126" font-size="18" fill="#a2684e" font-weight="700">每次 Query 都读取过去 t 个 K/V</text>
+<rect x="68" y="156" width="38" height="56" rx="12" fill="#efd2c1" stroke="#d0a58f" stroke-width="1.5"/><text x="81" y="186" font-size="17" fill="#834f3a" >K</text><rect x="118" y="156" width="38" height="56" rx="12" fill="#efd2c1" stroke="#d0a58f" stroke-width="1.5"/><text x="131" y="186" font-size="17" fill="#834f3a" >K</text><rect x="168" y="156" width="38" height="56" rx="12" fill="#efd2c1" stroke="#d0a58f" stroke-width="1.5"/><text x="181" y="186" font-size="17" fill="#834f3a" >K</text><rect x="218" y="156" width="38" height="56" rx="12" fill="#efd2c1" stroke="#d0a58f" stroke-width="1.5"/><text x="231" y="186" font-size="17" fill="#834f3a" >K</text><rect x="268" y="156" width="38" height="56" rx="12" fill="#efd2c1" stroke="#d0a58f" stroke-width="1.5"/><text x="281" y="186" font-size="17" fill="#834f3a" >K</text>
+<text x="79" y="248" font-size="19" fill="#926c5a" >历史长度 t 增长</text>
+<text x="79" y="282" font-size="17" fill="#926c5a" >扫描工作随 t 增长</text>
+<line x1="369" y1="201" x2="439" y2="201" stroke="#bc7b5a" stroke-width="3.5"/><path d="M437 192 L451 201 L437 210 Z" fill="#bc7b5a"/>
+<text x="480" y="126" font-size="19" fill="#237d73" font-weight="800">增量更新（无须重新访问全部历史）</text>
+<rect x="489" y="148" width="124" height="96" rx="12" fill="#cfe9e3" stroke="#b9d8cc" stroke-width="1.5"/><rect x="627" y="148" width="125" height="96" rx="12" fill="#dbe8f7" stroke="#bacfe0" stroke-width="1.5"/><rect x="765" y="148" width="135" height="96" rx="12" fill="#f8e3d3" stroke="#ebcdb5" stroke-width="1.5"/>
+<text x="506" y="184" font-size="25" fill="#28434a" >Sₖ</text><text x="645" y="184" font-size="25" fill="#28434a" >Sᵥ</text><text x="780" y="184" font-size="25" fill="#28434a" >Sₖᵥ</text><text x="497" y="219" font-size="15" fill="#28434a" >d 维</text><text x="642" y="219" font-size="15" fill="#28434a" >dᵥ 维</text><text x="775" y="219" font-size="15" fill="#28434a" >d × dᵥ</text>
+<text x="510" y="276" font-size="19" fill="#2e716a" >qᵗ + 三个状态 → yᵗ（一阶近似）</text>
+<text x="490" y="303" font-size="15" fill="#517a75" >状态与长度 t 无关；精度则依赖 logit 分散程度</text>
+</g></svg>

@@ -2,7 +2,7 @@
 
 **深度学习论文的图解实验室。** 从读者真正遇到的困惑出发，用原创机制图、可核验的公式、论文证据和可运行的最小代码，拆解经典架构与 LLM 系统技术。
 
-[![Build & Pages](https://github.com/1998x-stack/xm-posts/actions/workflows/publish.yml/badge.svg)](https://github.com/1998x-stack/xm-posts/actions/workflows/publish.yml) · [网站](https://1998x-stack.github.io/xm-posts/) · [文章归档](https://1998x-stack.github.io/xm-posts/archive/) · [RSS](https://1998x-stack.github.io/xm-posts/feed.xml) · [源 Skill](https://github.com/1998x-stack/Olah-style-posts)
+[![Build & Pages](https://github.com/1998x-stack/xm-posts/actions/workflows/publish.yml/badge.svg)](https://github.com/1998x-stack/xm-posts/actions/workflows/publish.yml) · [网站](https://1998x-stack.github.io/xm-posts/) · [知识地图](https://1998x-stack.github.io/xm-posts/topics/) · [文章归档](https://1998x-stack.github.io/xm-posts/archive/) · [RSS](https://1998x-stack.github.io/xm-posts/feed.xml) · [源 Skill](https://github.com/1998x-stack/Olah-style-posts)
 
 > 发布源：`main` → GitHub Actions 校验与构建 → `_site/` artifact → GitHub Pages。公开网址需要仓库 Pages 功能首次启用且工作流成功；见 [启用说明](#github-pages-与持续部署)。
 
@@ -17,6 +17,7 @@
 | **Understanding Chinchilla** | 在固定训练 FLOPs 下，参数量与训练 tokens 如何均衡？ | [`posts/training/chinchilla/`](posts/training/chinchilla/index.html) | [Hoffmann et al. (NeurIPS 2022)](https://arxiv.org/abs/2203.15556) |
 | **Understanding FineWeb** | 跨快照去重越强，为什么训练效果反而可能更差？ | [`posts/datasets/fineweb/`](posts/datasets/fineweb/index.html) | [Penedo et al. (NeurIPS 2024)](https://arxiv.org/abs/2406.17557) |
 | **Understanding Multi-Head Attention** | 为什么多个 Q/K/V 投影比单个注意力汇总更有表达空间？ | [`posts/architectures/multi-head-attention/`](posts/architectures/multi-head-attention/index.html) | [Vaswani et al. (NeurIPS 2017)](https://arxiv.org/abs/1706.03762) |
+| **Understanding DeltaNet** | 为什么矩阵记忆需要 Delta Rule 纠错，怎样通过 WY 低秩表示实现分块训练？ | [`posts/architectures/deltanet/`](posts/architectures/deltanet/index.html) | [Yang et al. (NeurIPS 2024)](https://proceedings.neurips.cc/paper_files/paper/2024/hash/d13a3eae72366e61dfdc7eea82eeb685-Abstract-Conference.html) |
 | **Understanding GQA** | 为什么共享 KV Head 能降低 Decode 带宽又保留 Query 多头？ | [`posts/architectures/gqa/`](posts/architectures/gqa/index.html) | [Ainslie et al. (EMNLP 2023)](https://aclanthology.org/2023.emnlp-main.298/) |
 | **Understanding FlashAttention** | Attention 的 FLOPs 没变，为什么 GPU 仍能提速？ | [`posts/systems/flashattention/`](posts/systems/flashattention/index.html) | [Dao et al. (2022)](https://arxiv.org/abs/2205.14135) |
 | **Understanding AlexNet** | 为什么深层 CNN 能在 2012 ImageNet 上突破？卷积、ReLU、双 GPU 与真实集成指标 | [`posts/architectures/alexnet/`](posts/architectures/alexnet/index.html) | [Krizhevsky et al. (NeurIPS 2012)](https://papers.nips.cc/paper_files/paper/2012/file/c399862d3b9d6b76c8436e924a68c45b-Paper.pdf) |
@@ -55,6 +56,7 @@
 | **Understanding PagedAttention** | 为什么 KV Cache 需要像操作系统一样分页？从 Block Table 到 vLLM Serving | [`posts/inference/pagedattention/`](posts/inference/pagedattention/index.html) | [研究出处](https://arxiv.org/abs/2309.06180) |
 | **Understanding DDPG** | 连续动作如何学习？从确定性策略梯度到双目标网络与经验回放 | [`posts/reinforcement-learning/ddpg/`](posts/reinforcement-learning/ddpg/index.html) | [研究出处](https://arxiv.org/abs/1509.02971) |
 | **Understanding CNN** | 为什么一个小核在整张图上滑动，就能学习视觉结构？ | [`posts/architectures/cnn/`](posts/architectures/cnn/index.html) | [研究出处](https://doi.org/10.1109/5.726791) |
+| **Understanding LogSumExp & Softmax Taylor Expansion** | 为什么中心化 Softmax 会出现方差修正，及一阶近似如何线性化 Attention？ | [`posts/foundations/logsumexp-softmax-taylor/`](posts/foundations/logsumexp-softmax-taylor/index.html) | [苏剑林 (2026)](https://spaces.ac.cn/archives/11814) · [Kuzina et al. (2026)](https://arxiv.org/abs/2607.07706) |
 | **Understanding SVD** | 矩阵如何把空间拉伸成椭圆？从奇异值到最优低秩近似、PCA 与伪逆 | [`posts/foundations/svd/`](posts/foundations/svd/index.html) | [研究出处](https://doi.org/10.1007/BF02288367) |
 | **Understanding KV Cache** | 自回归 Decode 为什么要保存历史 K/V？ | [`posts/inference/kv-cache/`](posts/inference/kv-cache/index.html) | [Kwon et al. (SOSP 2023)](https://doi.org/10.1145/3600006.3613165) |
 | **Understanding GPT-1** | 为什么预测下一个 token 能迁移到多种语言理解任务？ | [`posts/training/gpt-1/`](posts/training/gpt-1/index.html) | [Radford et al. (2018)](https://cdn.openai.com/research-covers/language-unsupervised/language_understanding_paper.pdf) |
@@ -82,51 +84,39 @@ GPT-1 按 `Training → Pretraining` 既有分类归档，不新建顶级类别�
 
 The Pile 的 22 个来源按原论文 Table 1 给出有效采样权重，配五幅独立 SVG、原生 MathML 的混合权重与 BPB 公式、可交互三来源采样算例、受控 1.3B 模型实验证据及 Python 数值测试；明确区分历史论文结果与教学模拟。
 
-## 内容分类
+## 新增文章索引与分类补录
 
-| 分类 | 路径 | 范围 |
+以下条目补齐正文表格未覆盖的已发布文章路径；分类标识与全文 URL 均由 `content/posts.json` 驱动。
+
+| 论文解读 | 一级分类 / 二级主题 | 文章源文件 |
 |---|---|---|
-| 基础理论 | `posts/foundations/` | 优化器、正则化、Embedding、Tokenization / BPE、数学基础 |
-| 经典机器学习 | `posts/classical-ml/` | SVM、概率模型、树与集成、降维和线性模型 |
-| 模型架构 | `posts/architectures/` | CNN、RNN、Transformer、MoE、状态空间、高效注意力与长上下文架构 |
-| 强化学习 | `posts/reinforcement-learning/` | Policy Gradient、Actor–Critic、Replay、MCTS、连续控制 |
-| 数据与语料 | `posts/datasets/` | 预训练语料、清洗、混合采样、污染与数据治理 |
-| 训练与对齐 | `posts/training/` | 预训练、微调、RLHF、分布式训练、Training Parallelism、Mixed Precision、Checkpointing |
-| 推理策略与测试时计算 | `posts/reasoning/` | CoT、Self-Consistency、搜索、验证、Test-time Scaling |
-| 推理与 Serving | `posts/inference/` | 请求调度、Continuous Batching、KV Cache、Speculative Decoding、Prefill/Decode |
-| 系统与 Kernel | `posts/systems/` | GPU、内存层级、CUDA/Triton、编译、Collective Communication、性能建模 |
-| **检索与 RAG（新增）** | `posts/retrieval-rag/` | Embedding Retrieval、ANN、Reranking、RAG、Grounding、Hybrid Search |
-| **智能体与工具使用（新增）** | `posts/agents/` | ReAct、Planning、Tool Calling、Memory、Agent Evaluation |
-| 多模态 | `posts/multimodal/` | Vision / Audio / Language 与跨模态融合 |
-| 评测与复现 | `posts/evaluation/` | Benchmark、消融、复现实验协议 |
+| Understanding BPE | 基础理论 / Tokenization & Subword Units | [bpe](posts/foundations/bpe/index.html) |
 
-**分类与目录规则：** `content/categories.json` 是一级分类和二级 Topic 的唯一来源。新分类通过 `posts/<category>/README.md` 建立实体占位；研究专题通过 `posts/<category>/_topics/<topic>/README.md` 建立非发布占位。正式文章始终位于 `posts/<category>/<article-slug>/`，由 `content/posts.json` 注册和管理发布状态。
+## 内容分类与二级知识地图
 
-Linear Regression 使用现有 `classical-ml` → **Linear Models** 分类，不为单篇线性模型新增顶层分类；与后续 Logistic Regression、Ridge/Lasso 构成同一学习路径。其基础历史跨越 Legendre 与 Gauss，证据采用 NIST 和 Berkeley 等方法资料，而非误称一篇现代原论文。
+站点采用**一级领域 → 二级主题 → 正式发布的文章**结构。`content/categories.json` 持有分类及稳定的二级主题标识（`topics: [{slug, title}]`），`content/posts.json` 为每篇文章明确登记 `category` 和 `topic`。标签 `tags` 用于跨领域搜索，不能代替主分类。**每篇文章仅有一个主二级主题**，其余关联保留在文章标签和跨领域学习路径中。
 
-AlexNet 归入 `architectures` 的 **Convolutional Neural Networks & Vision** 主题，而不新建视觉顶层目录；后续 VGG、Inception、ResNet 可形成连贯的 CNN 历史线。原论文的 15.3% Top-5 test error 来自七模型集成，绝非单模型结果。
+在线浏览入口：[知识地图 /topics/](https://1998x-stack.github.io/xm-posts/topics/) · [文章归档 /archive/](https://1998x-stack.github.io/xm-posts/archive/)。从知识地图可以跳转至每个分类页面的 `#topic-<slug>` 永久锚点。无正式文章的主题明确显示“规划中”，不会伪造文章或把 README 占位发布到站点。
 
-RNN 沿用 `architectures` 下现有 **Recurrent Networks / LSTM** 主题，不重复新增顶层或近义二级分类；以 Elman 1990 为基本模型，串接 LSTM / GRU 与其他序列架构。
+| 一级分类 | 仓库目录 | 二级主题举例 | 边界 |
+|---|---|---|---|
+| 基础理论 | `posts/foundations/` | Linear Algebra、Numerical Stability、Optimization、Representation、Tokenization | 数学、优化器与表示基础 |
+| 经典机器学习 | `posts/classical-ml/` | Linear Models、Probabilistic Models、Kernels、Trees & Ensembles、PCA | 传统监督/无监督学习方法 |
+| 模型架构 | `posts/architectures/` | CNN、RNN、Seq2Seq、Transformer、MoE、SSM、Long-context | 神经网络内部信息路径和结构 |
+| 强化学习 | `posts/reinforcement-learning/` | Value Learning、Policy Gradient、Actor–Critic、SAC、GAE、Tree Search | 环境交互、价值/策略学习、搜索 |
+| 数据与语料 | `posts/datasets/` | Pretraining Corpora、Curation、Mixing、Governance、Contamination | 数据构建、质量与许可 |
+| 训练与对齐 | `posts/training/` | Pretraining、Scaling Laws、PEFT、RLHF、DPO、Distributed Training | 训练目标、参数更新与大规模训练 |
+| 推理策略 | `posts/reasoning/` | Chain-of-Thought、Self-Consistency、Search、Test-time Scaling | 答案推理策略与测试时算力 |
+| 检索与 RAG | `posts/retrieval-rag/` | Embedding Retrieval、ANN、Hybrid Search、Reranking、Grounding | 文档召回、排序与检索增强生成 |
+| 智能体与工具使用 | `posts/agents/` | ReAct、Planning、Tool Calling、Memory、Agent Evaluation | 工具与环境行动工作流 |
+| 推理与 Serving | `posts/inference/` | KV Cache、Paged Memory、Batching、Decoding、Prefix Caching | 请求管理、解码与缓存生命周期 |
+| 系统与 Kernel | `posts/systems/` | Attention Kernels、GPU、Compilers、Communication、Performance | 算子、编译和底层性能 |
+| 多模态 | `posts/multimodal/` | Vision–Language、Audio、Fusion | 跨模态表示与对齐 |
+| 评测与复现 | `posts/evaluation/` | Benchmarks、Reproduction、Ablations | 评价方法、实验复现与消融 |
 
-LSTM 归入 `architectures` 的 **Recurrent Networks / LSTM** 二级主题，区分 1997 原始两门版、2000 年遗忘门与现代标准实现。
+**交叉领域约定**：FlashAttention 归属 Systems / Attention Kernels（不是 Serving）；GQA 归属 Architectures / Attention Heads（而 KV Cache 的生命周期在 Inference）；Embedding 的训练原理归属 Foundations，向量索引和召回系统归属 Retrieval；MCTS 归属 RL / Planning & Tree Search，Agent Planning 是 Tool Use 工作流；RLHF、DPO、GRPO 的模型训练归属 Training & Alignment，与 RL 原理的 PPO 分离。
 
-Seq2Seq 归入 `architectures`，补充 **Sequence-to-Sequence / Encoder–Decoder** 二级主题；无需为一篇论文新建一级分类，后续 RNN、LSTM、Attention 与机器翻译架构可延伸此主题。
-
-MHA 归入 `architectures` 下新增的 **Attention Mechanisms & Multi-Head Attention** 二级专题，不另设一级分类；与 Transformer 机制总览和 GQA 的 Head Sharing 文章相互链接。文章对应 Vaswani et al. 2017 §3.2、Table 3，含六幅 SVG、原生 MathML、交互与确定性数值自检。
-
-GQA 归入 `architectures` 下新增的 **Attention Head Sharing** 专题，不新增一级分类；它对 KV Cache 的推理开销有直接影响，相关实现与 Serving 主题仍归入 `inference`。
-
-RoPE 归入 `architectures`，补充 **Positional Encoding** 主题；不为单篇位置编码论文增设顶层分类，后续 ALiBi、PI、YaRN 可以继续沿此脉络整理。
-
-AdamW 继续使用 `foundations` 中的 **Optimization & Regularization** 主题，不为单篇优化器论文新建顶层分类；未来 Adam、SGD 和学习率调度可共享该主题。各类别均有 `README.md` 占位；占位**不会作为文章上线**。`content/categories.json` 是分类单一数据源，`content/posts.json` 是文章元数据和发布状态的单一数据源。增加新文章不用手动编辑首页、Sitemap 或 RSS。
-
-XGBoost 归入 `classical-ml` 既有 **Trees & Ensembles** 主题，不新建顶层分类；KDD 2016 原论文与当前 `hist` 方法分开描述。文章包含 14 节、6 幅独立 SVG、7 组原生 MathML 公式、交互式阈值/正则化实验和确定性 Python 单元测试。
-
-BPE 放在 `foundations` → **Tokenization & Subword Units**（新增二级专题，沿用现有一级分类），而不是再新增一级目录；对应 `posts/foundations/bpe/` 包含原论文证据、六幅独立 SVG、交互训练/编码演示、MathML 与纯 Python 回归测试。明确区分 Gage 1994、Sennrich et al. ACL 2016 与 GPT-2 byte-level BPE。
-
-SentencePiece 继续归入 `foundations` → **Tokenization & Subword Units**，与 BPE 共享已有二级专题；包含 Unigram 动态规划、子词采样、原生 MathML、五幅 SVG 与原论文实证核验。
-
-WordPiece 继续归于 `foundations` → **Tokenization & Subword Units**，与 BPE 共享二级专题，不新增顶级分类。`posts/foundations/wordpiece/` 提供 14 节论文/源码精读、七幅独立 SVG、MathML、双交互实验、词表评分教学重建与 BERT MaxMatch 纯 Python 测试；明确标出 Google 原版词表训练源码未公开。
+新文章必须指定有效的二级主题；改变分类/主题 slug 会影响已有链接，原则上保持不变，如需迁移必须增加重定向策略并测试。二级主题是**清单驱动的逻辑分类**，不是在 `posts/<category>/` 下再多加一层物理目录；文章源路径与已发布 URL 仍保持不变。只需更新注册表，分类页、知识地图、归档、搜索索引、RSS 与 Sitemap 自动重建。
 
 ## 仓库结构
 
@@ -217,16 +207,16 @@ cd _site && python -m http.server 8000
 1. 从分类中选定一个稳定 slug，执行：
 
    ```bash
-   python scripts/new_post.py inference kv-cache \
+   python scripts/new_post.py inference new-kv-cache-guide --topic kv-cache \
      --title 'Understanding KV Cache' \
      --subtitle '为什么缓存 Key 与 Value 能加速自回归解码？' \
      --paper 'https://arxiv.org/...'
    ```
 
-2. 这会创建 `posts/inference/kv-cache/`，并在 `content/posts.json` 注册 `status: draft`。依据 [`SKILL.md`](skills/olah-style-paper-posts/SKILL.md) 完成论文取证、渐进式图解、SVG 单独提取、数学与代码核验，填充 `evidence.json`。
+2. 这会创建 `posts/inference/new-kv-cache-guide/`，并在 `content/posts.json` 注册 `status: draft`。依据 [`SKILL.md`](skills/olah-style-paper-posts/SKILL.md) 完成论文取证、渐进式图解、SVG 单独提取、数学与代码核验，填充 `evidence.json`。
 3. 在本地执行 `python scripts/build_site.py && python scripts/validate_site.py && python -m pytest -q`；在 Chromium 桌面 / 手机宽度下检查文章交互、图片与溢出。
 4. 论文证据和浏览器检查通过后，手动将注册条目的 `status` 改为 `published`，更新实际发布日期、摘要、阅读时长等数据。提交 PR；PR 会自动验证但**不会部署**。
-5. PR 合并到 `main` 后，Actions 重新构建并部署。首页、分类列表、归档、`posts.json`、RSS 和 Sitemap 自动更新。`draft` 从线上构建完全排除。
+5. PR 合并到 `main` 后，Actions 重新构建并部署。首页、知识地图、二级主题分组、归档、`posts.json`、RSS 和 Sitemap 自动更新。`draft` 从线上构建完全排除。
 
 ## 数学公式渲染规范
 
@@ -275,3 +265,10 @@ BERT 归入现有 `Training → Pretraining`，新增二级专题 **Bidirectiona
 
 
 TD3 归入 `reinforcement-learning` → **Continuous Control / Off-policy Actor–Critic** 既有分类，不新建一级或重复二级分类；论文精读位于 [`posts/reinforcement-learning/td3/`](posts/reinforcement-learning/td3/index.html)。内容以 Fujimoto et al. ICML 2018 为准，包含 16 节机制解释、五幅独立 SVG、五组原生 MathML、交互式 clipped double-Q 算例、Table 1 与 Table 2 分指标实验对照、纯 Python 数学核验及证据台账。
+
+
+Neural Gating 位于 `posts/architectures/neural-gating/`，归入 **Architectures → Gating & Multiplicative Interactions** 二级主题（不新增一级分类）。以 LSTM 原始/现代门控、GRU、Highway、GLU 与 SwiGLU 的论文谱系为主线，含 14 节机制解读、6 幅独立 SVG、9 组原生 MathML、交互状态插值及 Python 断言；相关史实与教学算例在 `evidence.json` 中分开标记。
+
+## MobileNet / Efficient & Mobile CNNs
+
+MobileNet 归入 `architectures` → **Convolutional Neural Networks & Vision** → **Efficient & Mobile CNNs**，无需新建一级分类。文章 [`Understanding MobileNet`](posts/architectures/mobilenet/index.html) 位于 `posts/architectures/mobilenet/`，以 2017 原论文为主线，区分 V2 逆残差、V3 NAS/SE 与 V4 UIB/Mobile MQA。包含五幅 SVG、MathML、交互成本分析、Python 验证及证据台账。

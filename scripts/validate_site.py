@@ -30,27 +30,43 @@ def source_articles(root=ROOT):
 def published_site(out:Path,base:str=DEFAULT_URL):
     cats,posts=data(ROOT)
     pub=[p for p in posts if p['status']=='published']
-    expect=['index.html','archive/index.html','404.html','sitemap.xml','feed.xml','posts.json','robots.txt']+[f'categories/{c["slug"]}/index.html' for c in cats]+[article_url(p)+'index.html' for p in pub]
+    expect=['index.html','archive/index.html','topics/index.html','404.html','sitemap.xml','feed.xml','posts.json','robots.txt']+[f'categories/{c["slug"]}/index.html' for c in cats]+[article_url(p)+'index.html' for p in pub]
     for f in expect:assert (out/f).is_file(),f'Missing output: {f}'
     sitemap=(out/'sitemap.xml').read_text(encoding='utf-8')
+    assert '/topics/' in sitemap,'Taxonomy page absent from sitemap'
     for p in pub:assert article_url(p) in sitemap,p
     for p in posts:
         if p['status']=='draft':assert article_url(p) not in sitemap,f'Leaked draft {p}'
     bad=[]
+    anchor_cache={}
+    def page_ids(page:Path):
+        if page not in anchor_cache:
+            anchor_cache[page]={node.get('id') for node in BeautifulSoup(page.read_text(encoding='utf-8'),'html.parser').select('[id]')}
+        return anchor_cache[page]
     for path in out.rglob('*.html'):
         soup=BeautifulSoup(path.read_text(encoding='utf-8'),'html.parser')
         if len(soup.select('h1')) != 1:bad.append(f'{path}: expected 1 H1')
         if not soup.find('main'):bad.append(f'{path}: no main')
         ids=[x.get('id') for x in soup.select('[id]')]
         if len(ids)!=len(set(ids)):bad.append(f'{path}: duplicate ids')
-        for link in soup.select('a[href],link[href],script[src],img[src]'):
-            href=link.get('href') or link.get('src') or ''
-            if not href or href.startswith(('#','mailto:','tel:','data:','javascript:')):continue
+        for link in soup.select('a[href],link[href],script[src],img[src],source[src],object[data]'):
+            href=link.get('href') or link.get('src') or link.get('data') or ''
+            if not href or href.startswith(('mailto:','tel:','data:','javascript:')):continue
             parsed=urlparse(href)
-            if parsed.scheme or href.startswith('//'):continue
-            dest=(path.parent/unquote(parsed.path)).resolve()
+            if parsed.scheme or parsed.netloc or href.startswith('//'):continue
+            dest=(path.parent/unquote(parsed.path)).resolve() if parsed.path else path.resolve()
             if dest.is_dir():dest/= 'index.html'
-            if not dest.is_file():bad.append(f'broken link: {path.relative_to(out)} -> {href}')
+            if not dest.is_relative_to(out.resolve()):
+                bad.append(f'out-of-root link: {path.relative_to(out)} -> {href}')
+                continue
+            if not dest.is_file():
+                bad.append(f'broken link: {path.relative_to(out)} -> {href}')
+                continue
+            if link.name=='a' and parsed.fragment:
+                anchor=unquote(parsed.fragment)
+                if anchor not in page_ids(dest):
+                    bad.append(f'broken fragment: {path.relative_to(out)} -> {href}')
+
         if path.parent != out and path.name=='index.html' and 'posts' in path.parts:
             if 'source-code' in path.name:bad.append('never')
     assert not bad,'\n'.join(bad)

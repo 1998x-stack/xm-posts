@@ -1,0 +1,137 @@
+[
+  {
+    "id": "D01",
+    "claim": "DeltaNet state uses prediction error instead of additive value writes",
+    "kind": "paper-claim",
+    "source_url": "https://proceedings.neurips.cc/paper_files/paper/2024/hash/d13a3eae72366e61dfdc7eea82eeb685-Abstract-Conference.html",
+    "locator": "§2.2, Eq.2 / p.3–4",
+    "status": "verified",
+    "notes": "S_t=S_(t-1)-beta(S_(t-1)k_t-v_t)k_t^T"
+  },
+  {
+    "id": "D02",
+    "claim": "Recurrence can be written as structured transition I-beta kk^T",
+    "kind": "derived-math",
+    "source_url": "https://proceedings.neurips.cc/paper_files/paper/2024/hash/d13a3eae72366e61dfdc7eea82eeb685-Abstract-Conference.html",
+    "locator": "§3.1 Eq.3, p.4",
+    "status": "verified",
+    "notes": "Requires consistent column vector and right-multiply convention"
+  },
+  {
+    "id": "D03",
+    "claim": "Unit key gives convex interpolation for the current key read",
+    "kind": "derived-math",
+    "source_url": "https://proceedings.neurips.cc/paper_files/paper/2024/hash/d13a3eae72366e61dfdc7eea82eeb685-Abstract-Conference.html",
+    "locator": "§2.2 memory interpretation, p.4",
+    "status": "derived",
+    "notes": "Exact only when k^T k=1; toy numbers are not paper results"
+  },
+  {
+    "id": "D04",
+    "claim": "Local square-error SGD yields delta rule",
+    "kind": "derived-math",
+    "source_url": "https://proceedings.neurips.cc/paper_files/paper/2024/hash/d13a3eae72366e61dfdc7eea82eeb685-Abstract-Conference.html",
+    "locator": "§2.2 gradient interpretation, p.3",
+    "status": "derived",
+    "notes": "No claim of weight updates to entire pretrained network"
+  },
+  {
+    "id": "D05",
+    "claim": "WY representation and chunkwise formulation parallelize training",
+    "kind": "paper-claim",
+    "source_url": "https://proceedings.neurips.cc/paper_files/paper/2024/hash/d13a3eae72366e61dfdc7eea82eeb685-Abstract-Conference.html",
+    "locator": "§3.1–3.2, Eq.3–11, p.4–6",
+    "status": "verified",
+    "notes": "Chunk boundaries still carry state"
+  },
+  {
+    "id": "D06",
+    "claim": "Full architecture uses L2-normalized Q/K, short convolution, SiLU, RMSNorm, SwiGLU",
+    "kind": "paper-claim",
+    "source_url": "https://proceedings.neurips.cc/paper_files/paper/2024/hash/d13a3eae72366e61dfdc7eea82eeb685-Abstract-Conference.html",
+    "locator": "§3.3, Figure 2, p.6",
+    "status": "verified",
+    "notes": "Separate original Delta Rule from 2024 block implementation"
+  },
+  {
+    "id": "D07",
+    "claim": "1.3B/100B Wikitext PPL Transformer++ 16.85 and DeltaNet 16.87",
+    "kind": "paper-result",
+    "source_url": "https://proceedings.neurips.cc/paper_files/paper/2024/hash/d13a3eae72366e61dfdc7eea82eeb685-Abstract-Conference.html",
+    "locator": "Table 1 / p.8",
+    "status": "verified",
+    "notes": "Pure DeltaNet does not beat Transformer++ on this particular metric"
+  },
+  {
+    "id": "D08",
+    "claim": "1.3B/100B zero-shot Avg: Transformer++ 50.9; DeltaNet 51.6",
+    "kind": "paper-result",
+    "source_url": "https://proceedings.neurips.cc/paper_files/paper/2024/hash/d13a3eae72366e61dfdc7eea82eeb685-Abstract-Conference.html",
+    "locator": "Table 1 / p.8",
+    "status": "verified",
+    "notes": "Reported average, not universal superiority"
+  },
+  {
+    "id": "D09",
+    "claim": "1.3B hybrid with Sliding Attention 16.56 PPL and 52.1 Avg",
+    "kind": "paper-result",
+    "source_url": "https://proceedings.neurips.cc/paper_files/paper/2024/hash/d13a3eae72366e61dfdc7eea82eeb685-Abstract-Conference.html",
+    "locator": "Table 1 / p.8",
+    "status": "verified",
+    "notes": "Hybrid model not pure DeltaNet"
+  },
+  {
+    "id": "D10",
+    "claim": "1.3B hybrid with 2 Global Attention 16.55 PPL and 51.8 Avg",
+    "kind": "paper-result",
+    "source_url": "https://proceedings.neurips.cc/paper_files/paper/2024/hash/d13a3eae72366e61dfdc7eea82eeb685-Abstract-Conference.html",
+    "locator": "Table 1 / p.8",
+    "status": "verified",
+    "notes": "Hybrid model not pure DeltaNet"
+  },
+  {
+    "id": "D11",
+    "claim": "1.3B Mamba PPL 17.06/Avg 50.0 and GLA with convolution 17.25/50.4",
+    "kind": "paper-result",
+    "source_url": "https://proceedings.neurips.cc/paper_files/paper/2024/hash/d13a3eae72366e61dfdc7eea82eeb685-Abstract-Conference.html",
+    "locator": "Table 1 / p.8",
+    "status": "verified",
+    "notes": "Compare matched scale and respect convolution variants"
+  },
+  {
+    "id": "D12",
+    "claim": "340M L1+1ELU PPL 31.12 versus L2+1ELU 28.03",
+    "kind": "paper-result",
+    "source_url": "https://proceedings.neurips.cc/paper_files/paper/2024/hash/d13a3eae72366e61dfdc7eea82eeb685-Abstract-Conference.html",
+    "locator": "Table 1 ablations / p.8",
+    "status": "verified",
+    "notes": "Other effects may be architecture-dependent"
+  },
+  {
+    "id": "D13",
+    "claim": "2024 paper identifies throughput behind GLA and limited length generalization",
+    "kind": "paper-claim",
+    "source_url": "https://proceedings.neurips.cc/paper_files/paper/2024/hash/d13a3eae72366e61dfdc7eea82eeb685-Abstract-Conference.html",
+    "locator": "§5.3 / p.10",
+    "status": "verified",
+    "notes": "Do not assert unrestricted length extension"
+  },
+  {
+    "id": "D14",
+    "claim": "Gated DeltaNet is a later ICLR 2025 work with additional decay gate",
+    "kind": "later-variant",
+    "source_url": "https://arxiv.org/abs/2412.06464",
+    "locator": "https://arxiv.org/abs/2412.06464; Introduction and recurrent equations",
+    "status": "verified",
+    "notes": "Treat as independent follow-up, not experiment from 2024"
+  },
+  {
+    "id": "D15",
+    "claim": "Python toy verifies delta update, β gate endpoints, orthogonal preservation and transition equivalence",
+    "kind": "toy-derivation",
+    "source_url": "https://proceedings.neurips.cc/paper_files/paper/2024/hash/d13a3eae72366e61dfdc7eea82eeb685-Abstract-Conference.html",
+    "locator": "mini_deltanet.py and tests/test_deltanet.py",
+    "status": "derived",
+    "notes": "No full model or GPU benchmark claim"
+  }
+]
