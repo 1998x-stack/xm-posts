@@ -682,5 +682,26 @@
     "summary": "从四点教学样本出发，逐步推导一元 OLS 闭式解、矩阵正规方程与正交投影，结合五幅独立 SVG、斜率截距交互、原生 MathML、可运行 Python 断言，辨析 BLUE、异方差、R² 与数值稳定性。",
     "paper": "https://www.itl.nist.gov/div898/handbook/pmd/section1/pmd141.htm",
     "illustration": "linear-regression"
+  },
+  {
+    "slug": "svd",
+    "title": "Understanding SVD",
+    "subtitle": "矩阵如何把空间拉伸成椭圆？从奇异值到最优低秩近似、PCA 与伪逆",
+    "category": "foundations",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 26,
+    "tags": [
+      "SVD",
+      "Singular Value Decomposition",
+      "Linear Algebra",
+      "Low-rank Approximation",
+      "PCA",
+      "Eckart–Young"
+    ],
+    "summary": "以单位圆映射椭圆建立几何直觉，逐步推导薄 SVD、特征值关系、秩一分解与 Eckart–Young 最优截断，辅以能量滑块、PCA、伪逆、随机化算法和 NumPy 断言。",
+    "paper": "https://doi.org/10.1007/BF02288367",
+    "illustration": "svd"
   }
 ]

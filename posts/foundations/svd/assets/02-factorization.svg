@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 350" role="img" aria-labelledby="svd-factor-title svd-factor-desc" font-family='system-ui,-apple-system,Segoe UI,PingFang SC,sans-serif'><title id="svd-factor-title">薄 SVD 的三个矩阵及其形状</title><desc id="svd-factor-desc">m×n 输入矩阵 A 分解为 m×q 的 U、q×q 的 Σ 和 q×n 的 V 转置，其中 q 等于 m 和 n 中较小的一个。</desc><rect x="1" y="1" width="898" height="348" rx="18" fill="#fbfdfb" stroke="#dceae3"/>
+<text x="450" y="43" text-anchor="middle" font-size="24" fill="#253e47" font-weight="700">先变基，再沿正交方向伸缩，最后映射到输出</text>
+<g stroke="#d1dfda" stroke-width="2"><rect x="38" y="86" width="160" height="190" rx="12" fill="#eef4f3"/><rect x="276" y="86" width="145" height="190" rx="12" fill="#e7f1fa"/><rect x="504" y="110" width="116" height="145" rx="12" fill="#f9efe4"/><rect x="704" y="130" width="153" height="105" rx="12" fill="#f0edf9"/></g>
+<g text-anchor="middle" font-size="46" font-weight="700"><text x="118" y="193" fill="#376b75">A</text><text x="350" y="192" fill="#4a7ea0">U</text><text x="562" y="198" fill="#c4824d">Σ</text><text x="780" y="191" fill="#7768ab">Vᵀ</text></g>
+<g fill="#62757b" font-size="18" text-anchor="middle"><text x="118" y="306">m × n</text><text x="350" y="306">m × q</text><text x="562" y="306">q × q</text><text x="780" y="306">q × n</text></g>
+<g fill="#61747a" font-size="27" text-anchor="middle"><text x="237" y="196">=</text><text x="463" y="197">·</text><text x="659" y="197">·</text></g>
+<text x="450" y="331" text-anchor="middle" font-size="15" fill="#61777b">q = min(m, n)；U 与 V 的相应列向量两两正交，σ ≥ 0</text>
+</svg>
