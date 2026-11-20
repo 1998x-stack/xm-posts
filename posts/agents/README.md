@@ -17,7 +17,7 @@
 
 ## 分类边界与发布约定
 
-- \`reasoning\` 解释内在推理、搜索与测试时计算；\`agents\` 关注环境观察、工具执行、状态和实际任务结果。
-- \`retrieval-rag\` 研究检索质量和依据溯源；当检索被 Agent 作为工具使用时可做跨分类链接。
-- 正式文章放在 \`posts/agents/<slug>/index.html\`，提供独立 SVG、证据账本及真实 QA，并在 \`content/posts.json\` 注册。
-- \`_topics/\` 中的 README 仅作规划或知识地图，不创建文章记录，也不会作为独立文章部署。
+- `reasoning` 解释内在推理、搜索与测试时计算；`agents` 关注环境观察、工具执行、状态和实际任务结果。
+- `retrieval-rag` 研究检索质量和依据溯源；当检索被 Agent 作为工具使用时可做跨分类链接。
+- 正式文章放在 `posts/agents/<slug>/index.html`，提供独立 SVG、证据账本及真实 QA，并在 `content/posts.json` 注册。
+- `_topics/` 中的 README 仅作规划或知识地图，不创建文章记录，也不会作为独立文章部署。
