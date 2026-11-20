@@ -38,12 +38,13 @@
     "slug": "training",
     "title": "训练与对齐",
     "english": "Training & Alignment",
-    "description": "预训练、微调、对齐目标与优化策略的可验证拆解。",
+    "description": "预训练、微调、偏好对齐，以及 PPO / GRPO 等后训练强化学习与策略优化的可验证拆解。",
     "topics": [
       "Pretraining",
       "Fine-tuning",
       "PEFT / LoRA",
-      "Alignment"
+      "Preference Alignment",
+      "RL / Policy Optimization"
     ]
   },
   {
