@@ -51,6 +51,12 @@ jobs:
           python scripts/ci_metrics.py run --name browser-svm-math -- python scripts/browser_check_svm_math.py --output reports/svm-math
           python scripts/ci_metrics.py run --name browser-three-guides -- python scripts/browser_check_three_guides.py
           python scripts/ci_metrics.py run --name browser-second -- python scripts/browser_check_second_batch.py --output reports/second-batch
+      - name: Validate Agent Evaluation article source
+        run: python scripts/ci_metrics.py run --name validate-agent-evaluation -- python skills/olah-style-paper-posts/scripts/validate.py posts/agents/agent-evaluation/index.html --report reports/agent-evaluation/static-validation.json
+      - name: Browser QA with the canonical Olah-style skill
+        run: python scripts/ci_metrics.py run --name skill-browser-agent-evaluation -- python skills/olah-style-paper-posts/scripts/browser_check.py posts/agents/agent-evaluation/index.html --output reports/agent-evaluation/skill-browser --click "#success-p"
+      - name: Check Agent Evaluation metrics and responsive diagrams
+        run: python scripts/ci_metrics.py run --name browser-agent-evaluation -- python scripts/browser_check_agent_evaluation.py --output reports/agent-evaluation
       - name: Check every published article with shared Chromium workers
         run: python scripts/ci_metrics.py run --name browser-all -- python scripts/browser_check_all.py --workers 2
       - name: Verify actual generated Pages site in Chromium
