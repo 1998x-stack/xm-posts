@@ -147,7 +147,7 @@
     "slug": "reinforcement-learning",
     "title": "强化学习",
     "english": "Reinforcement Learning",
-    "description": "从 Bellman 方程、DQN 的价值学习与经验回放，到 Policy Gradient、Actor–Critic、GAE 和 PPO，拆解经验回放与最大熵控制等序贯决策的学习信号，并延伸至 AlphaGo 的神经网络引导搜索与 MCTS 规划，并解析参数空间噪声探索。",
+    "description": "从 Bellman 方程、DQN 的价值学习与经验回放，到 Policy Gradient、Actor–Critic、GAE、PPO 和最大熵控制，理解奖励驱动的序贯决策；同时研究专家示范驱动的模仿学习、交互式纠错与策略迁移，并延伸至 AlphaGo 的自我博弈和搜索规划。",
     "topics": [
       {
         "slug": "value-learning",
@@ -188,6 +188,10 @@
       {
         "slug": "off-policy-evaluation",
         "title": "Off-policy Evaluation & Importance Sampling"
+      },
+      {
+        "slug": "imitation-learning",
+        "title": "Imitation Learning & Learning from Demonstrations"
       }
     ]
   },

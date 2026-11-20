@@ -115,6 +115,41 @@
     }
   },
   {
+    "slug": "imitation-learning",
+    "title": "Understanding Imitation Learning",
+    "subtitle": "从行为克隆、DAgger、逆强化学习到 GAIL 与 Diffusion Policy，理解智能体如何从专家示范中学会决策",
+    "category": "reinforcement-learning",
+    "topic": "imitation-learning",
+    "status": "published",
+    "published": "2026-11-21",
+    "updated": "2026-11-21",
+    "reading_minutes": 35,
+    "tags": [
+      "Imitation Learning",
+      "Learning from Demonstrations",
+      "Behavior Cloning",
+      "Behavioral Cloning",
+      "DAgger",
+      "Dataset Aggregation",
+      "Inverse Reinforcement Learning",
+      "Maximum Entropy IRL",
+      "GAIL",
+      "Occupancy Measure",
+      "Diffusion Policy",
+      "Robot Learning",
+      "Policy Learning",
+      "Covariate Shift",
+      "Expert Demonstrations"
+    ],
+    "summary": "从机器人抓取任务出发，推导行为克隆的监督目标，解释协变量偏移与误差累积，再逐步拆解 DAgger、逆强化学习、最大熵 IRL、GAIL 和 Diffusion Policy。以“学习信号 × 策略表示”建立统一分类，配合 MathML 推导、六幅原创 SVG、可交互误差实验和可运行 Python 教学单元，区分论文结果、理论推导与教学算例。",
+    "paper": "https://proceedings.mlr.press/v15/ross11a.html",
+    "illustration": "imitation-learning",
+    "cover": {
+      "src": "assets/01-demonstration-pipeline.svg",
+      "caption": "专家轨迹经过监督学习与数据聚合，转化为可在环境中闭环执行的策略"
+    }
+  },
+  {
     "slug": "flashattention",
     "title": "Understanding FlashAttention",
     "subtitle": "Attention 的复杂度没变，为什么还能更快？从 HBM/SRAM 到 Online Softmax",
