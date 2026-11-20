@@ -201,6 +201,7 @@
       "ppo",
       "rlhf",
       "rejection-sampling",
+      "reward-hacking",
       "dpo",
       "grpo"
     ]
@@ -337,6 +338,16 @@
       "rejection-sampling",
       "rlhf",
       "dpo"
+    ]
+  },
+  {
+    "id": "path-37",
+    "title": "从奖励代理到智能体评价器",
+    "posts": [
+      "rlhf",
+      "reward-hacking",
+      "react",
+      "swe-agent"
     ]
   }
 ]
