@@ -1,0 +1,92 @@
+[
+  {
+    "id": "DT01",
+    "claim": "CART is a 1984 classification and regression tree monograph with pruning methods",
+    "kind": "paper-claim",
+    "source_url": "https://www.routledge.com/Classification-and-Regression-Trees/Breiman-Friedman-Stone-Olshen/p/book/9780412048418",
+    "locator": "Book, title/contents and publication metadata",
+    "status": "verified",
+    "notes": "No original benchmark figures asserted"
+  },
+  {
+    "id": "DT02",
+    "claim": "Original ID3 recursively selects discrete features by information gain",
+    "kind": "paper-claim",
+    "source_url": "https://doi.org/10.1007/BF00116251",
+    "locator": "Quinlan (1986), Sections 3–4",
+    "status": "verified",
+    "notes": "Different from modern CART binary numeric splits"
+  },
+  {
+    "id": "DT03",
+    "claim": "Quinlan 1986 outlook example root entropy ~0.940 and gain ~0.246 bits",
+    "kind": "paper-claim",
+    "source_url": "https://www.seas.upenn.edu/~cis520/papers/quinlan.pdf",
+    "locator": "Section 4, weather-outlook worked example",
+    "status": "verified",
+    "notes": "Original worked-example numbers, not accuracy"
+  },
+  {
+    "id": "DT04",
+    "claim": "C4.5 extends ID3 with gain-ratio and continuous-attribute handling",
+    "kind": "paper-claim",
+    "source_url": "https://www.sciencedirect.com/book/9780080500584/c4-5",
+    "locator": "Quinlan (1993), book overview",
+    "status": "verified",
+    "notes": "Simplified conceptual coverage only"
+  },
+  {
+    "id": "DT05",
+    "claim": "Quinlan 1996 proposes refinements for continuous-attribute selection",
+    "kind": "paper-claim",
+    "source_url": "https://www.cs.cmu.edu/afs/cs/project/jair/pub/volume4/quinlan96a.pdf",
+    "locator": "JAIR (1996), abstract and methodology",
+    "status": "verified",
+    "notes": "Not presented as original ID3"
+  },
+  {
+    "id": "DT06",
+    "claim": "Modern scikit-learn trees use sample-weighted leaf impurities and minimal cost complexity pruning",
+    "kind": "modern-implementation",
+    "source_url": "https://scikit-learn.org/stable/modules/tree.html",
+    "locator": "Minimal cost-complexity pruning section",
+    "status": "verified",
+    "notes": "Modern formula and implementation details"
+  },
+  {
+    "id": "DT07",
+    "claim": "Eight-point toy root Gini 0.46875 and best threshold 4.5 gives weighted Gini 0.1875",
+    "kind": "toy-derivation",
+    "source_url": "https://scikit-learn.org/stable/modules/tree.html",
+    "locator": "Independently computed toy example and mini_decision_tree.py",
+    "status": "derived",
+    "notes": "Not a historical paper dataset"
+  },
+  {
+    "id": "DT08",
+    "claim": "Four-point regression toy has parent SSE 36 and split SSE 0 at threshold 2.5",
+    "kind": "toy-derivation",
+    "source_url": "https://scikit-learn.org/stable/modules/tree.html",
+    "locator": "Independently computed toy example and code asserts",
+    "status": "derived",
+    "notes": "No held-out data"
+  },
+  {
+    "id": "DT09",
+    "claim": "The two toy candidate trees tie in weighted-Gini cost at alpha=0.28125",
+    "kind": "toy-derivation",
+    "source_url": "https://scikit-learn.org/stable/modules/tree.html",
+    "locator": "Simplified two-candidate cost-complexity algebra",
+    "status": "derived",
+    "notes": "Not a full pruning sequence"
+  },
+  {
+    "id": "DT10",
+    "claim": "DecisionTreeClassifier supports ccp_alpha and pre-pruning parameters",
+    "kind": "modern-implementation",
+    "source_url": "https://scikit-learn.org/stable/modules/generated/sklearn.tree.DecisionTreeClassifier.html",
+    "locator": "Classifier parameter documentation",
+    "status": "verified",
+    "notes": "Version-specific details not conflated with historical algorithms"
+  }
+]
