@@ -296,6 +296,14 @@
   },
   {
     "id": "path-32",
+    "title": "从规则网格卷积到图结构学习",
+    "posts": [
+      "cnn",
+      "gnn"
+    ]
+  },
+  {
+    "id": "path-33",
     "title": "从向量表示到检索增强生成",
     "posts": [
       "embeddings",

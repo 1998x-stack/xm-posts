@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 import argparse
 import importlib.util,json,sys,re
 from urllib.parse import urlparse,urljoin,unquote
-from build_site import ROOT,data,DEFAULT_URL,article_url
+from build_site import ROOT,data,DEFAULT_URL,article_url,archive_page_count,archive_page_url,ARCHIVE_PAGE_SIZE,HOME_PAGE_SIZE
 from sync_skills import run as check_mirrors
 
 BAD_COPY=['原创图解 · 单文件离线 HTML','用直觉 → 图示 → 数学 → 工程实现，理解残差网络 · 参考 Colah 风格，非原文翻译','原创教程 · 单 HTML 文件','参考 Colah 风格，非原文翻译','原创 SVG，可在浏览器内放大','图形均为独立绘制的 SVG，可无损放大','文章中的教学简化已单独注明']
@@ -51,10 +51,18 @@ def published_site(out:Path,base:str=DEFAULT_URL,require_pdfs:bool=False):
     cats,posts=data(ROOT)
     pub=[p for p in posts if p['status']=='published']
     expect=['index.html','archive/index.html','topics/index.html','404.html','sitemap.xml','feed.xml','posts.json','robots.txt']+[f'categories/{c["slug"]}/index.html' for c in cats]+[article_url(p)+'index.html' for p in pub]
+    expect += [archive_page_url(i)+'index.html' for i in range(2,archive_page_count(posts)+1)]
     for f in expect:assert (out/f).is_file(),f'Missing output: {f}'
     sitemap=(out/'sitemap.xml').read_text(encoding='utf-8')
     assert '/topics/' in sitemap,'Taxonomy page absent from sitemap'
     for p in pub:assert article_url(p) in sitemap,p
+    for i in range(1,archive_page_count(posts)+1):
+        assert archive_page_url(i) in sitemap,f'Missing archive page {i} in sitemap'
+        page=out/archive_page_url(i)/'index.html'
+        soup=BeautifulSoup(page.read_text(encoding='utf-8'),'html.parser')
+        assert len(soup.select('.archive-entry')) <= ARCHIVE_PAGE_SIZE,f'Archive page {i} exceeds thumbnail budget'
+    home=BeautifulSoup((out/'index.html').read_text(encoding='utf-8'),'html.parser')
+    assert len(home.select('.index-card')) <= HOME_PAGE_SIZE,'Homepage embeds too many index thumbnails'
     for p in posts:
         if p['status']=='draft':assert article_url(p) not in sitemap,f'Leaked draft {p}'
     bad=[]

@@ -4,7 +4,7 @@ import pytest
 from bs4 import BeautifulSoup
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/'scripts'))
-from build_site import data,build,DEFAULT_URL
+from build_site import data,build,DEFAULT_URL,HOME_PAGE_SIZE,ARCHIVE_PAGE_SIZE,archive_page_url,archive_page_count
 from sync_skills import content_map,MIRRORS,SOURCE
 from validate_site import source_articles,published_site
 
@@ -123,14 +123,18 @@ def test_home_editorial_discovery_and_manifest_consistency(tmp_path):
     assert len(home.select('.planned-fields a')) == len(planned)
     assert len(home.select('.spotlight-card')) >= 2
     assert len(home.select('.route-card')) >= 4
-    assert len(home.select('[data-post-card]')) == len(published)
+    assert len(home.select('[data-post-card]')) == min(HOME_PAGE_SIZE,len(published))
     assert home.select_one('[data-search-input]')
     assert len(home.select('[data-category-filter] option')) == len(active) + 1
-    assert home.select_one('[data-load-more]')
+    assert home.select_one('[data-home-pagination]')
+    assert not home.select_one('[data-load-more]')
     assert home.select_one('[data-menu-toggle][aria-expanded="false"]')
     assert home.select_one('#latest') and home.select_one('#discover')
     indexed = {el.select_one('.index-main h3').get_text(strip=True) for el in home.select('.index-card')}
-    assert indexed == {p['title'] for p in published}
+    assert indexed == {p['title'] for p in sorted(published,key=lambda p:(p['published'],p['slug']),reverse=True)[:HOME_PAGE_SIZE]}
+    full_index = json.loads((output / 'posts.json').read_text(encoding='utf-8'))
+    assert len(full_index) == len(published)
+    assert all(item['cover_src'].endswith('.svg') and item['paper'] for item in full_index)
     # A planned category must not masquerade as a published article collection.
     assert all(c['slug'] not in {x['data-category'] for x in home.select('[data-post-card]')} for c in planned)
 
@@ -166,12 +170,14 @@ def test_unique_article_specific_cover_manifest_and_rendering(tmp_path):
             assert card.select_one('.cover-caption').get_text(strip=True) == image['alt']
 
     home = BeautifulSoup((output / 'index.html').read_text(encoding='utf-8'), 'html.parser')
-    assert len(home.select('.index-image-link img')) == len(published)
+    assert len(home.select('.index-image-link img')) == min(HOME_PAGE_SIZE,len(published))
     assert len(home.select('.spotlight-cover-link img')) >= 2
     assert home.select_one('.hero-feature .feature-art--cover img')
-    for p in published:
+    visible = sorted(published,key=lambda p:(p['published'],p['slug']),reverse=True)[:HOME_PAGE_SIZE]
+    for p in visible:
         thumb = home.select_one(f'.index-card a[href="posts/{p["category"]}/{p["slug"]}/"] img')
         assert thumb and thumb['src'].removeprefix('./') == 'posts/' + p['category'] + '/' + p['slug'] + '/' + p['cover']['src']
+    assert all(img.get('loading') == 'lazy' for img in home.select('.index-image-link img'))
     assert 'Observe → Derive → Verify' not in home.get_text()
 
 
@@ -180,35 +186,45 @@ def test_archive_has_a_distinct_valid_svg_thumbnail_for_every_published_post(tmp
     published = [p for p in posts if p['status'] == 'published']
     output = tmp_path / 'archive-with-covers'
     build(ROOT, output, DEFAULT_URL)
-    page = output / 'archive' / 'index.html'
-    archive = BeautifulSoup(page.read_text(encoding='utf-8'), 'html.parser')
-    entries = archive.select('.timeline > li.archive-entry')
-    assert len(entries) == len(published)
-    assert len(archive.select('h1')) == 1
-    assert 'Observe → Derive → Verify' not in str(archive)
-    images = archive.select('.archive-cover img.article-cover-thumb')
-    assert len(images) == len(published)
-    urls = [im['src'] for im in images]
-    assert len(set(urls)) == len(urls)
+    pages = archive_page_count(posts)
     by_slug = {p['slug']: p for p in published}
     found = set()
-    for entry in entries:
-        figure_link = entry.select_one('a.archive-cover')
-        img = figure_link.select_one('img') if figure_link else None
-        title_link = entry.select_one('.archive-entry-copy h2 a')
-        date = entry.select_one('time.timeline-date[datetime]')
-        assert figure_link and img and title_link and date
-        assert figure_link['href'] == title_link['href']
-        assert img.get('loading') == 'lazy'
-        assert img.get('decoding') == 'async'
-        assert img['src'].endswith('.svg')
-        assert img['src'].startswith('../posts/')
-        assert (page.parent / img['src']).resolve().is_file()
-        slug = title_link['href'].rstrip('/').split('/')[-1]
-        post = by_slug[slug]
-        found.add(slug)
-        assert img['src'] == '../posts/' + post['category'] + '/' + slug + '/' + post['cover']['src']
-        assert figure_link['title'] == post['cover']['caption']
-        assert figure_link['aria-label'] == '阅读 ' + post['title']
-        assert date['datetime'] == post['published']
+    urls = set()
+    assert pages >= 2
+    for number in range(1, pages+1):
+        page = output / archive_page_url(number) / 'index.html'
+        archive = BeautifulSoup(page.read_text(encoding='utf-8'), 'html.parser')
+        entries = archive.select('.timeline > li.archive-entry')
+        assert 1 <= len(entries) <= ARCHIVE_PAGE_SIZE
+        assert len(archive.select('h1')) == 1
+        assert 'Observe → Derive → Verify' not in str(archive)
+        images = archive.select('.archive-cover img.article-cover-thumb')
+        assert len(images) == len(entries)
+        assert len(archive.select('.pagination [aria-current="page"]')) == 1
+        assert archive.select_one('.pagination [aria-current="page"]').get_text(strip=True) == str(number)
+        expected_rel = '../' if number == 1 else '../../../'
+        for entry in entries:
+            figure_link = entry.select_one('a.archive-cover')
+            img = figure_link.select_one('img') if figure_link else None
+            title_link = entry.select_one('.archive-entry-copy h2 a')
+            date = entry.select_one('time.timeline-date[datetime]')
+            assert figure_link and img and title_link and date
+            assert figure_link['href'] == title_link['href']
+            assert img.get('loading') == 'lazy'
+            assert img.get('decoding') == 'async'
+            assert img['src'].endswith('.svg')
+            assert img['src'].startswith(expected_rel + 'posts/')
+            assert (page.parent / img['src']).resolve().is_file()
+            slug = title_link['href'].rstrip('/').split('/')[-1]
+            post = by_slug[slug]
+            assert slug not in found
+            found.add(slug)
+            urls.add(img['src'].removeprefix(expected_rel))
+            assert img['src'] == expected_rel + 'posts/' + post['category'] + '/' + slug + '/' + post['cover']['src']
+            assert figure_link['title'] == post['cover']['caption']
+            assert figure_link['aria-label'] == '阅读 ' + post['title']
+            assert date['datetime'] == post['published']
     assert found == set(by_slug)
+    assert len(urls) == len(published)
+    sitemap = (output / 'sitemap.xml').read_text(encoding='utf-8')
+    assert all(DEFAULT_URL + archive_page_url(i) in sitemap for i in range(1, pages + 1))
