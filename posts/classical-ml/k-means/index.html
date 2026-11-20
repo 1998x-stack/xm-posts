@@ -30,6 +30,9 @@ main,article,section{min-width:0}h1{font-size:clamp(44px,5.9vw,72px);letter-spac
 .km-tip{font-size:13px;color:#567575;margin:8px 0 0}
 .km-learning-path{background:#f1f8f3;border:1px solid #d1e5db;border-radius:9px;padding:15px;font-size:14px}
 @media(max-width:550px){.km-objective{padding:12px}.km-live-table{font-size:12px}}
+
+/* Keep SVG labels legible on phones by allowing horizontal panning. */
+@media (max-width:700px){figure{overflow-x:auto;scrollbar-width:thin}figure svg,figure .diagram svg{min-width:640px;max-width:none}}
 </style></head><body>
 <a class="skip" href="#main">跳转正文</a><header class="sitebar"><div class="sitebar-inner"><a class="wordmark" href="../../../">xm<span>.</span>posts</a><nav class="site-links" aria-label="站点导航"><a href="../../../categories/classical-ml/">经典机器学习</a><a href="../../../topics/">知识地图</a><a href="../../../archive/">全部文章</a></nav></div></header>
 <div class="layout"><nav class="toc" aria-label="文章目录"><strong>ANATOMY OF K-MEANS</strong>
@@ -73,7 +76,7 @@ main,article,section{min-width:0}h1{font-size:clamp(44px,5.9vw,72px);letter-spac
 </section>
 <section id="interact"><h2>06 · 交互实验：一步一步看中心移动</h2>
 <p>下面的微型演示重现上述四点数据。蓝色与橙色点表示当前归属，叉号表示质心，连接线显示每个点与所属中心的距离。逐个点击「下一半步」，先看谁属于谁，再看中心如何移动。下方的数字表实时列出<strong>每个点的平方误差</strong>；即使不操作，上面的手算例子也完整可读。</p>
-<div class="demo"><svg id="demo-plot" viewBox="0 0 660 140" role="img" aria-label="四点一维 K-Means 交互示意"><title>四点一维聚类的当前状态</title><line x1="40" y1="93" x2="610" y2="93" stroke="#abc0c0" stroke-width="2"/><circle cx="50" cy="77" r="9" fill="#397f98"/><circle cx="158" cy="77" r="9" fill="#dc8756"/><circle cx="482" cy="77" r="9" fill="#dc8756"/><circle cx="590" cy="77" r="9" fill="#dc8756"/></svg>
+<div class="demo"><svg id="demo-plot" viewBox="0 0 660 140" role="img" aria-label="四点一维 K-Means 交互示意" aria-describedby="k-means-svg-desc-04"><title>四点一维聚类的当前状态</title><desc id="k-means-svg-desc-04">四点一维 K-Means 交互示意</desc><line x1="40" y1="93" x2="610" y2="93" stroke="#abc0c0" stroke-width="2"/><circle cx="50" cy="77" r="9" fill="#397f98"/><circle cx="158" cy="77" r="9" fill="#dc8756"/><circle cx="482" cy="77" r="9" fill="#dc8756"/><circle cx="590" cy="77" r="9" fill="#dc8756"/></svg>
 <div class="controls"><button id="demo-next" type="button">下一半步</button><button id="demo-prev" type="button" disabled>上一步</button><button id="demo-finish" type="button">直接看收敛</button><button id="demo-reset" type="button">重置实验</button></div><p id="km-phase" class="km-current-phase">初始状态｜确认最近中心前</p><div id="demo-output" class="output" role="status" aria-live="polite">初始：中心为 0 与 2，平方距离和 J = 100。</div><div class="km-objective"><label for="km-objective-meter">当前总平方误差 J：<output id="km-j">100.000</output>（越短越好）</label><progress id="km-objective-meter" max="100" value="100">100</progress><p>以最初 J=100 为满格；长度是<strong>损失</strong>，不是聚类准确率。每次重新分配或更新中心，损失不会上升。</p></div><div class="km-table-wrap"><table class="km-live-table" aria-label="每个点对当前平方误差的贡献"><caption>跟着每一步逐项检查：点 → 中心 → 距离平方</caption><thead><tr><th scope="col">样本 x</th><th scope="col">当前簇</th><th scope="col">所属中心</th><th scope="col">平方误差</th></tr></thead><tbody id="km-point-rows"><tr><th scope="row">0</th><td>簇 1</td><td>0</td><td>0</td></tr><tr><th scope="row">2</th><td>簇 2</td><td>2</td><td>0</td></tr><tr><th scope="row">8</th><td>簇 2</td><td>2</td><td>36</td></tr><tr><th scope="row">10</th><td>簇 2</td><td>2</td><td>64</td></tr></tbody><tfoot><tr><th scope="row" colspan="3">合计 J</th><td id="km-total">100.000</td></tr></tfoot></table></div><p class="km-tip">先点击「下一半步」观察：第一次<strong>更新中心</strong>时成员不变，但 J 从 100 变成 34.667；接着<strong>重新分配</strong>点 2，J 又下降到约 16.889。表格会告诉你是哪一项变小。</p></div>
 <div class="callout"><p><strong>解释边界：</strong>演示使用固定的四点样本和明确的平局规则。它验证 Lloyd 迭代的局部机制，不是大型真实数据集上的性能实验。</p></div>
 </section>
