@@ -107,3 +107,15 @@ def test_policy_ratio_denominators_include_conditioning_arguments():
         assert '<msqrt><msub><mover accent="true"><mi>v</mi>' in html
     ppo = (ROOT/'posts/reinforcement-learning/ppo/index.html').read_text(encoding='utf-8')
     assert '<mi>E</mi><msub><mi>̂</mi>' not in ppo
+
+def test_floor_ceil_variance_and_derivative_semantic_structure():
+    pre = (ROOT/'posts/architectures/pre-ln-vs-post-ln/index.html').read_text(encoding='utf-8')
+    paged = (ROOT/'posts/inference/pagedattention/index.html').read_text(encoding='utf-8')
+    resnet = (ROOT/'posts/architectures/resnet/index.html').read_text(encoding='utf-8')
+    assert '<mtext>branch dependency</mtext><mo>≈</mo><mfrac>' in pre
+    assert '<msup><mrow><mo>(</mo><msub><mi>x</mi><mi>i</mi>' in pre
+    assert '<msub><mrow><mi mathvariant="normal">LN</mi>' in pre
+    assert '<mo>⌊</mo><mfrac><mi>j</mi><mi>B</mi></mfrac><mo>⌋</mo>' in paged
+    assert '<mo>⌈</mo><mfrac><mi>L</mi><mi>B</mi></mfrac><mo>⌉</mo>' in paged
+    assert '<msub><mi>M</mi><mtext>KV/token</mtext></msub>' in paged
+    assert '<mtext>对 x 求导：</mtext><mfrac>' in resnet
