@@ -16,6 +16,9 @@ main,article,section{min-width:0}h1{font-size:clamp(44px,5.9vw,72px);letter-spac
 @media(max-width:1000px){.layout{grid-template-columns:minmax(0,1fr);max-width:820px;gap:25px}.toc{position:static;max-height:none;display:flex;flex-wrap:wrap;gap:4px;border-bottom:1px solid var(--line);padding-bottom:12px}.toc strong{width:100%}.toc a{padding:5px 8px;background:#eaf2ec;border:0;border-radius:5px}}
 @media(max-width:550px){body{font-size:16px}.layout{padding:26px 15px 60px}.sitebar-inner{padding:9px 14px}h1{font-size:44px}.deck{font-size:18px}.meta{margin-bottom:42px}.columns{grid-template-columns:1fr}section{margin-bottom:62px}.viz{padding:5px 3px 12px}.viz figcaption{padding:8px}.math-scroll{padding:11px 12px 16px}.math-scroll math[display=block]{font-size:19px}.demo{padding:11px}.mini-table{font-size:12px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}@media print{body{background:#fff}.sitebar,.toc,.controls,.skip{display:none}.layout{display:block;max-width:none;padding:0}section{break-inside:auto;margin:0 0 25px}.equation,.viz{break-inside:avoid}.math-scroll{overflow:visible}.math-scroll math[display=block]{font-size:17px}pre{color:#20353e;background:#f0f2ef}}
+
+/* Keep SVG labels legible on phones by allowing horizontal panning. */
+@media (max-width:700px){figure{overflow-x:auto;scrollbar-width:thin}figure svg,figure .diagram svg{min-width:640px;max-width:none}}
 </style></head><body>
 <a class="skip" href="#main">跳转正文</a><header class="sitebar"><div class="sitebar-inner"><a class="wordmark" href="../../../">xm<span>.</span>posts</a><nav class="site-links" aria-label="站点导航"><a href="../../../categories/classical-ml/">经典机器学习</a><a href="../../../topics/">知识地图</a><a href="../../../archive/">全部文章</a></nav></div></header>
 <div class="layout"><nav class="toc" aria-label="文章目录"><strong>ANATOMY OF K-MEANS</strong>
@@ -59,7 +62,7 @@ main,article,section{min-width:0}h1{font-size:clamp(44px,5.9vw,72px);letter-spac
 </section>
 <section id="interact"><h2>06 · 交互实验：一步一步看中心移动</h2>
 <p>下面的微型演示重现上述四点数据。蓝色与橙色点表示当前归属，叉号表示当前质心。按“下一半步”分开观察更新；即使不操作，初始状态与算例也完整可读。</p>
-<div class="demo"><svg id="demo-plot" viewBox="0 0 660 140" role="img" aria-label="四点一维 K-Means 交互示意"><title>四点一维聚类的当前状态</title><line x1="40" y1="93" x2="610" y2="93" stroke="#abc0c0" stroke-width="2"/><circle cx="50" cy="77" r="9" fill="#397f98"/><circle cx="158" cy="77" r="9" fill="#dc8756"/><circle cx="482" cy="77" r="9" fill="#dc8756"/><circle cx="590" cy="77" r="9" fill="#dc8756"/></svg>
+<div class="demo"><svg id="demo-plot" viewBox="0 0 660 140" role="img" aria-label="四点一维 K-Means 交互示意" aria-describedby="k-means-svg-desc-04"><title>四点一维聚类的当前状态</title><desc id="k-means-svg-desc-04">四点一维 K-Means 交互示意</desc><line x1="40" y1="93" x2="610" y2="93" stroke="#abc0c0" stroke-width="2"/><circle cx="50" cy="77" r="9" fill="#397f98"/><circle cx="158" cy="77" r="9" fill="#dc8756"/><circle cx="482" cy="77" r="9" fill="#dc8756"/><circle cx="590" cy="77" r="9" fill="#dc8756"/></svg>
 <div class="controls"><button id="demo-next" type="button">下一半步</button><button id="demo-reset" type="button">重置实验</button></div><div id="demo-output" class="output" role="status" aria-live="polite">初始：中心为 0 与 2，平方距离和 J = 100。</div></div>
 <div class="callout"><p><strong>解释边界：</strong>演示使用固定的四点样本和明确的平局规则。它验证 Lloyd 迭代的局部机制，不是大型真实数据集上的性能实验。</p></div>
 </section>
