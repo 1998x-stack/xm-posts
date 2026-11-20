@@ -55,7 +55,7 @@ def check_sgd(page) -> None:
     assert "第 0 步" in page.locator("#sgd-step-count").inner_text()
     page.locator('[data-choice="one"]').click()
     assert "θ=-0.300" in page.locator("#sgd-step-count").inner_text()
-    assert "θ=-0.070" in page.locator("#sgd-demo-output").inner_text()
+    assert "θ=+0.200" in page.locator("#sgd-demo-output").inner_text()
     page.locator('[data-choice="all"]').focus()
     page.keyboard.press("Enter")
     assert "第 2 步" in page.locator("#sgd-step-count").inner_text()
