@@ -451,7 +451,7 @@
     "slug": "agents",
     "title": "智能体与工具使用",
     "english": "Agents & Tool Use",
-    "description": "围绕模型与外部环境交互的行动闭环，研究 ReAct、任务规划、工具调用、状态与记忆、软件工程智能体、Agent 评测，以及供工作流消费的类型化概率决策与模型路由。",
+    "description": "围绕模型与外部环境交互的闭环，研究 ReAct、任务规划、工具调用、状态与记忆、软件工程智能体与 Agent-Computer Interface，以及端到端的 Agent 评测。",
     "topics": [
       {
         "slug": "react",
@@ -476,10 +476,6 @@
       {
         "slug": "software-engineering-agents",
         "title": "Software Engineering Agents & ACI"
-      },
-      {
-        "slug": "typed-decision-models",
-        "title": "Typed Decision Models & Probabilistic Routing"
       }
     ]
   },
@@ -528,6 +524,42 @@
       {
         "slug": "imbalanced-classification-pr",
         "title": "Imbalanced Classification & PR Analysis"
+      }
+    ]
+  },
+  {
+    "slug": "decision-models",
+    "title": "概率决策模型",
+    "english": "Probabilistic Decision Models",
+    "description": "研究如何把有限答案空间中的模型判断转化为可审计、可校准、可执行的概率决策，包括类型化决策模型、贝叶斯风险、概率校准、风险预算、选择性预测、模型路由与鲁棒性。",
+    "topics": [
+      {
+        "slug": "typed-decision-models",
+        "title": "Typed Decision Models & System One"
+      },
+      {
+        "slug": "cost-sensitive-decision-theory",
+        "title": "Cost-sensitive Decision Theory"
+      },
+      {
+        "slug": "probability-calibration",
+        "title": "Probability Calibration"
+      },
+      {
+        "slug": "risk-budgeting",
+        "title": "Risk Budgeting & Statistical Guarantees"
+      },
+      {
+        "slug": "selective-prediction",
+        "title": "Selective Prediction & Abstention"
+      },
+      {
+        "slug": "decision-routing",
+        "title": "Decision Routing & Delegation"
+      },
+      {
+        "slug": "robustness-and-bias",
+        "title": "Robustness, Bias & Invariance"
       }
     ]
   }
