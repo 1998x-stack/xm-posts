@@ -1,0 +1,119 @@
+[
+  {
+    "id": "IL01",
+    "claim": "ALVINN used camera and laser range finder inputs and learned road-following steering behavior from simulated road images and driving examples.",
+    "kind": "paper-claim",
+    "source_url": "https://publications.ri.cmu.edu/alvinn-an-autonomous-land-vehicle-in-a-neural-network",
+    "locator": "Abstract; December 1989",
+    "status": "verified",
+    "notes": "Used as an early representative example, not claimed as the first imitation-learning system."
+  },
+  {
+    "id": "IL02",
+    "claim": "DAgger treats sequential imitation learning as an online learning problem and aggregates expert labels on states induced by the learner policy.",
+    "kind": "paper-claim",
+    "source_url": "https://proceedings.mlr.press/v15/ross11a.html",
+    "locator": "AISTATS 2011; Sections 2–4 and Algorithm 1",
+    "status": "verified",
+    "notes": "Guarantees depend on the no-regret learner and reduction assumptions; the article does not claim unconditional safety."
+  },
+  {
+    "id": "IL03",
+    "claim": "Inverse reinforcement learning infers a reward function under which the observed expert behavior is optimal or near-optimal.",
+    "kind": "paper-claim",
+    "source_url": "https://www.cl.cam.ac.uk/~ey204/teaching/ACS/R244_2022_2023/papers/NG_ICML_2000.pdf",
+    "locator": "Ng & Russell, ICML 2000; Abstract and Section 2",
+    "status": "verified",
+    "notes": "Reward functions are generally non-identifiable without additional assumptions."
+  },
+  {
+    "id": "IL04",
+    "claim": "Maximum-entropy IRL defines a globally normalized probabilistic distribution over decision sequences and uses entropy to represent ambiguity in demonstrated behavior.",
+    "kind": "paper-claim",
+    "source_url": "https://www.cs.cmu.edu/~bziebart/publications/maximum-entropy-inverse-reinforcement-learning.html",
+    "locator": "Ziebart et al., AAAI 2008; Abstract and model formulation",
+    "status": "verified",
+    "notes": "The displayed trajectory proportionality in the article omits the normalizing partition function and environment dynamics for intuition."
+  },
+  {
+    "id": "IL05",
+    "claim": "GAIL connects imitation learning to GAN-style adversarial training and matches learner and expert occupancy measures with an entropy-regularized objective.",
+    "kind": "paper-claim",
+    "source_url": "https://papers.neurips.cc/paper/2016/hash/cc7e2b878868cbae992d1fb743995d8f-Abstract.html",
+    "locator": "Ho & Ermon, NeurIPS 2016; Equations 15–16",
+    "status": "verified",
+    "notes": "The article defines D(s,a) as the probability that a state-action pair came from the expert; equivalent papers may reverse discriminator labels."
+  },
+  {
+    "id": "IL06",
+    "claim": "Diffusion Policy represents a visuomotor policy as a conditional denoising diffusion process and uses receding-horizon control for action sequences.",
+    "kind": "paper-claim",
+    "source_url": "https://roboticsproceedings.org/rss19/p026.html",
+    "locator": "Chi et al., RSS 2023; Abstract and method",
+    "status": "verified",
+    "notes": "The article distinguishes the action-generation representation from the source of supervision."
+  },
+  {
+    "id": "IL07",
+    "claim": "The RSS 2023 Diffusion Policy paper reports a 46.9% average relative performance improvement across 12 tasks and four robot-manipulation benchmarks.",
+    "kind": "experiment",
+    "source_url": "https://diffusion-policy.cs.columbia.edu/diffusion_policy_2023.pdf",
+    "locator": "Appendix G, Performance Improvement Calculation; main paper benchmark results",
+    "status": "verified",
+    "notes": "Relative improvement averaged per task; not 46.9 percentage points and not a universal result."
+  },
+  {
+    "id": "IL08",
+    "claim": "Under an independent constant per-step error probability epsilon, the probability of at least one error in T steps is 1-(1-epsilon)^T.",
+    "kind": "toy-derivation",
+    "source_url": "https://proceedings.mlr.press/v15/ross11a.html",
+    "locator": "This article's explicitly simplified interactive probability model; independent-error assumption",
+    "status": "derived",
+    "notes": "Teaching calculation only; not a general theorem or a measured BC failure rate."
+  },
+  {
+    "id": "IL09",
+    "claim": "The two-axis taxonomy separates the source of learning signal from the policy representation.",
+    "kind": "taxonomy-synthesis",
+    "source_url": "https://pubmed.ncbi.nlm.nih.gov/36279336/",
+    "locator": "Zheng et al., TNNLS 2024; survey taxonomy, synthesized with primary papers",
+    "status": "derived",
+    "notes": "A repository-oriented conceptual synthesis; axes are not mutually exclusive algorithm classes."
+  },
+  {
+    "id": "IL10",
+    "claim": "The 2024 demonstration-learning survey reviews method categories, workflow stages, benchmarks and evaluation practices.",
+    "kind": "survey-claim",
+    "source_url": "https://doi.org/10.1016/j.robot.2024.104812",
+    "locator": "Correia & Alexandre, Robotics and Autonomous Systems 182 (2024), 104812; Abstract",
+    "status": "verified",
+    "notes": "Used to motivate evaluation beyond training loss."
+  },
+  {
+    "id": "IL11",
+    "claim": "The 2025 legged-robot imitation-learning survey reviews behavior cloning, adversarial motion priors, diffusion methods and deployment challenges.",
+    "kind": "survey-claim",
+    "source_url": "https://www.frontiersin.org/journals/robotics-and-ai/articles/10.3389/frobt.2025.1678567/full",
+    "locator": "Mirza & Singh, Frontiers in Robotics and AI (2025); Abstract and taxonomy",
+    "status": "verified",
+    "notes": "Domain-specific survey; not generalized to all robot-learning tasks."
+  },
+  {
+    "id": "IL12",
+    "claim": "The six diagrams and interactive error calculation are independently authored teaching material, not reproduced paper figures or experimental results.",
+    "kind": "illustration",
+    "source_url": "https://proceedings.mlr.press/v15/ross11a.html",
+    "locator": "Article figures and explicitly labeled toy model",
+    "status": "illustrative",
+    "notes": "SVGs explain conceptual mechanisms; the toy model is not a benchmark reproduction."
+  },
+  {
+    "id": "IL13",
+    "claim": "The Python module implements continuous BC MSE, DAgger dataset aggregation and a simplified cumulative-error probability calculation.",
+    "kind": "code-demo",
+    "source_url": "https://proceedings.mlr.press/v15/ross11a.html",
+    "locator": "imitation_learning_demo.py and test_imitation_learning_demo.py",
+    "status": "derived",
+    "notes": "Pure Python deterministic teaching functions; no robot dynamics, model training or benchmark claim."
+  }
+]
