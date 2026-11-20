@@ -43,13 +43,15 @@
     "slug": "reinforcement-learning",
     "title": "强化学习",
     "english": "Reinforcement Learning",
-    "description": "从 Bellman 方程、DQN 的价值学习与经验回放，到 Policy Gradient、Actor–Critic、GAE 和 PPO，拆解序贯决策的学习信号。",
+    "description": "从 Bellman 方程、DQN 的价值学习与经验回放，到 Policy Gradient、Actor–Critic、GAE 和 PPO，拆解经验回放与最大熵控制等序贯决策的学习信号。",
     "topics": [
       "Policy Gradient",
       "Actor–Critic",
       "RL Optimization",
       "Value-based RL",
-      "Deep Q-Learning"
+      "Deep Q-Learning",
+      "Off-policy & Experience Replay",
+      "Maximum Entropy RL"
     ]
   },
   {

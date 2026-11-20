@@ -554,5 +554,27 @@
     "summary": "以 FineWeb NeurIPS 2024 论文为主线，拆解 96 个 Common Crawl 快照、WARC 正文提取、逐快照 MinHash、质量过滤和教育数据蒸馏；含六幅机制图、可交互阈值实验、原文证据及教学数值测试。",
     "paper": "https://arxiv.org/abs/2406.17557",
     "illustration": "fineweb"
+  },
+  {
+    "slug": "sac",
+    "title": "Understanding SAC",
+    "subtitle": "为什么旧经验可以反复学，还能在追求奖励时保留探索？",
+    "category": "reinforcement-learning",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 36,
+    "tags": [
+      "SAC",
+      "Soft Actor-Critic",
+      "Maximum Entropy RL",
+      "Off-policy",
+      "Experience Replay",
+      "Twin Q",
+      "Temperature Tuning"
+    ],
+    "summary": "以 ICML 2018 SAC 原论文为主线，逐步理解离策略 Replay、最大熵 Soft Bellman、随机 Actor 和双 Critic，区分独立 V 原版与后续无 V/自动温度版本；配六幅机制图、α 交互、MathML、纯 Python 检验和证据台账。",
+    "paper": "https://proceedings.mlr.press/v80/haarnoja18b.html",
+    "illustration": "sac"
   }
 ]

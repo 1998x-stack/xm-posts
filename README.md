@@ -26,6 +26,7 @@
 | **Understanding Self-Consistency** | 多路径采样与最终答案投票为何有效？ | [`posts/reasoning/self-consistency/`](posts/reasoning/self-consistency/index.html) | [Wang et al. (2022; ICLR 2023)](https://arxiv.org/abs/2203.11171) |
 | **Understanding DQN** | 为什么像素与奖励足以驱动动作价值学习？ | [`posts/reinforcement-learning/dqn/`](posts/reinforcement-learning/dqn/index.html) | [Mnih et al. (Nature 2015)](https://doi.org/10.1038/nature14236) |
 | **Understanding PPO** | 为什么能复用同一批轨迹又避免过大更新？ | [`posts/reinforcement-learning/ppo/`](posts/reinforcement-learning/ppo/index.html) | [Schulman et al. (2017)](https://arxiv.org/abs/1707.06347) |
+| **Understanding SAC** | 为什么旧经验可复用，还要用最大熵保留探索？ | [`posts/reinforcement-learning/sac/`](posts/reinforcement-learning/sac/index.html) | [Haarnoja et al. (ICML 2018)](https://proceedings.mlr.press/v80/haarnoja18b.html) |
 | **Understanding RLHF** | 为什么示范微调还需要人类偏好与策略优化？ | [`posts/training/rlhf/`](posts/training/rlhf/index.html) | [Ouyang et al. (2022)](https://arxiv.org/abs/2203.02155) |
 | **Understanding GRPO** | 为什么不需要 Critic 也能构造策略优势？ | [`posts/training/grpo/`](posts/training/grpo/index.html) | [Shao et al. (2024)](https://arxiv.org/abs/2402.03300) |
 | **Understanding Word2Vec** | 为什么上下文预测能产生词向量？ | [`posts/foundations/understanding-word2vec/`](posts/foundations/understanding-word2vec/index.html) | [Mikolov et al. (2013)](https://arxiv.org/abs/1301.3781) · [NeurIPS 2013](https://arxiv.org/abs/1310.4546) |
@@ -42,6 +43,8 @@ DQN 包含 14 节机制讲解、6 幅独立 SVG、TD Target / Huber 交互计算
 
 FineWeb 包含 14 节数据管道精读、6 幅独立 SVG、1 幅正文交互示意、MinHash banding 与 Edu 阈值交互、3 个原生 MathML 数学块、19 条来源证据及教学数值测试；研究数据版本与更新后统计口径严格区分。
 
+SAC 归入 `reinforcement-learning`，在现有分类内增加 **Off-policy & Experience Replay** 与 **Maximum Entropy RL** 两条主题，不新建顶层分类。文章明确区分 ICML 2018 原版独立 V 网络与后续 twin-target-Q / 自动温度设计，采用离线 MathML、6 幅可独立打开的 SVG、温度交互与标准库单测。
+
 PPO 包含 14 节原论文推导、6 幅独立 SVG、交互式裁剪目标演算、纯标准库数学测试，并单独辨析了 RLHF 的参考模型 KL 与 PPO 的旧策略偏移指标。
 
 Chinchilla 的解读包含 12 节渐进讲解、5 幅独立 SVG、6 组原生 MathML 公式、固定预算交互实验与纯 Python 数学断言；原论文数据和教学示意分别标注。
@@ -57,7 +60,7 @@ The Pile 的 22 个来源按原论文 Table 1 给出有效采样权重，配五�
 | 基础理论 | `posts/foundations/` | Adam、Word2Vec、词嵌入、优化器（AdamW）、正则化、表示学习 |
 | **经典机器学习** | `posts/classical-ml/` | SVM、核方法、线性与树模型 |
 | **模型架构** | `posts/architectures/` | AlexNet / CNN、ResNet、Seq2Seq、Transformer、Normalization & Residual Paths、状态空间模型 |
-| **强化学习** | `posts/reinforcement-learning/` | Value-based RL、DQN、Experience Replay、Policy Gradient、Actor–Critic、GAE、PPO/TRPO |
+| **强化学习** | `posts/reinforcement-learning/` | Policy Gradient、Actor–Critic、Off-policy Replay、SAC / Maximum Entropy、PPO/TRPO 与序贯决策 |
 | **数据与语料** | `posts/datasets/` | 预训练语料、数据清洗/去重、混合采样、污染检查与治理 |
 | 训练与对齐 | `posts/training/` | 预训练（Scaling Laws / Compute-Optimal Training）、微调、偏好对齐、DPO 与 RLHF与 PPO / GRPO 等强化学习策略优化 |
 | 推理与 Serving | `posts/inference/` | KV Cache、PagedAttention、Prefix Caching、Decode、在线 Serving |
