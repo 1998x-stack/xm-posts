@@ -238,6 +238,7 @@
     "posts": [
       "chain-of-thought",
       "self-consistency",
+      "tree-of-thoughts",
       "react",
       "swe-agent"
     ]
