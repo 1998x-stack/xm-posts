@@ -87,7 +87,7 @@ def test_home_and_individual_article_advertise_feed_without_duplicates():
     home_doc=BeautifulSoup(home,'html.parser')
     home_feed=home_doc.find_all('link',attrs={'rel':'alternate','type':'application/rss+xml'})
     assert len(home_feed)==1
-    assert home_feed[0]['href']=='feed.xml'
+    assert home_feed[0]['href']=='./feed.xml'
 
     original='<html><head><title>Post</title></head><body><main><h1>Post</h1></main></body></html>'
     enriched=enrich_article_head(original,p,DEFAULT_URL)
