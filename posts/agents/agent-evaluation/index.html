@@ -1,0 +1,447 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="从任务成功、执行轨迹、可靠性、安全性和成本效率出发，系统理解 LLM Agent Evaluation 与主流 Agent Benchmarks。">
+<title>Understanding Agent Evaluation · xm.posts</title>
+<style>
+:root{--ink:#203b3c;--muted:#627b7a;--teal:#247e73;--teal2:#dff0e9;--blue:#e8f1f8;--orange:#f8eee5;--red:#f8e9e7;--paper:#fff;--wash:#f4f8f6;--line:#dce8e2;--shadow:0 12px 34px rgba(32,59,60,.07)}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--wash);color:var(--ink);font:16px/1.82 system-ui,-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}
+a{color:#176f68;text-decoration-thickness:1px;text-underline-offset:3px}
+a:hover{color:#0c514d}
+:focus-visible{outline:3px solid #247e73;outline-offset:3px}
+.math-scroll:focus-visible{outline:3px solid #247e73;outline-offset:2px}
+.skip{position:absolute;left:-9999px;top:8px;background:#fff;padding:8px 12px;z-index:20}.skip:focus{left:10px}
+.sitebar{background:#fff;border-bottom:1px solid var(--line)}
+.sitebar-inner{max-width:1400px;margin:auto;padding:12px 28px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.brand{font-weight:850;letter-spacing:-.04em;color:var(--ink);text-decoration:none;font-size:20px}.brand span{color:var(--teal)}
+.links{display:flex;gap:20px;flex-wrap:wrap;font-size:13px}.links a{color:var(--muted);text-decoration:none}
+.layout{max-width:1400px;margin:auto;padding:42px 28px 90px;display:grid;grid-template-columns:245px minmax(0,1fr);gap:48px;align-items:start}
+.toc{position:sticky;top:24px;max-height:calc(100vh - 48px);overflow:auto;background:#fff;border:1px solid var(--line);border-radius:12px;padding:18px 16px;box-shadow:var(--shadow)}
+.toc strong{display:block;font-size:11px;letter-spacing:.14em;color:#78908a;margin-bottom:10px}
+.toc a{display:block;padding:6px 0;border-bottom:1px solid #edf2ef;color:#4c6865;text-decoration:none;font-size:12px;line-height:1.5}
+.toc a:last-child{border-bottom:0}
+main{min-width:0}
+article{max-width:990px;margin:0 auto;background:#fff;border:1px solid var(--line);border-radius:16px;padding:clamp(22px,4vw,58px);box-shadow:var(--shadow)}
+.hero{padding-bottom:30px;border-bottom:1px solid var(--line);margin-bottom:34px}
+.kicker{font-size:11px;letter-spacing:.16em;color:var(--teal);font-weight:800}
+h1{font-size:clamp(36px,5vw,58px);line-height:1.12;letter-spacing:-.045em;margin:14px 0 15px}
+.dek{font-size:19px;line-height:1.65;color:#486664;max-width:790px;margin:0 0 18px}
+.meta{font-size:12px;color:#7b918c;display:flex;flex-wrap:wrap;gap:10px}
+.meta span{border:1px solid var(--line);border-radius:99px;padding:3px 9px}
+section{margin:0 0 66px;scroll-margin-top:24px}
+h2{font-size:25px;line-height:1.35;letter-spacing:-.02em;margin:0 0 19px;padding-bottom:11px;border-bottom:1px solid var(--line)}
+h3{font-size:18px;margin:25px 0 9px;line-height:1.4}
+p{margin:12px 0}
+.lead{font-size:18px;color:#345a56}
+strong{color:#214e49}
+.note,.insight,.warning{padding:14px 17px;border-left:4px solid var(--teal);background:#edf7f1;border-radius:5px;margin:20px 0}
+.warning{border-left-color:#ca8156;background:#fff4eb}
+.figure{margin:24px 0 28px;padding:12px;border:1px solid var(--line);border-radius:12px;background:#fbfdfb;box-shadow:0 5px 18px rgba(32,59,60,.035)}
+.figure img,.figure svg{display:block;width:100%;height:auto;border-radius:7px}
+figcaption{font-size:13px;color:#637c77;line-height:1.65;padding:10px 8px 2px}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:20px 0}
+.panel{background:#f7faf8;border:1px solid var(--line);border-radius:10px;padding:16px;min-width:0}
+.panel h3{margin:0 0 7px;font-size:16px}.panel p{margin:0;font-size:14px;color:#58716d}
+.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px;margin:20px 0}
+table{border-collapse:collapse;width:100%;min-width:690px;font-size:13px;line-height:1.65}
+th,td{padding:11px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{background:#edf5f1;color:#315d57;font-weight:750}
+tr:last-child td{border-bottom:0}
+.formula{background:#f0f7f3;border:1px solid #d5e7dd;border-radius:10px;padding:15px 14px;margin:19px 0}
+.math-scroll{max-width:100%;overflow-x:auto;overflow-y:hidden;padding:4px 2px}
+math[display=block]{display:block;width:max-content;min-width:100%;font-family:"Cambria Math","STIX Two Math","DejaVu Serif",serif;font-size:1.15rem}
+.formula small{display:block;color:#6b8580;font-size:12px;margin-top:8px}
+.code{background:#203b40;color:#e4f1eb;padding:18px;border-radius:10px;overflow-x:auto;font:13px/1.75 ui-monospace,SFMono-Regular,Consolas,monospace;white-space:pre}
+code{font: .91em ui-monospace,SFMono-Regular,Consolas,monospace;background:#eff5f1;border-radius:4px;padding:1px 4px}
+.code code{background:transparent;padding:0;color:inherit}
+.lab{border:1px solid #cfe4da;background:#f7fcf8;border-radius:12px;padding:20px;margin:22px 0}
+.lab-title{font-weight:800;color:#276b63}
+.control{display:grid;grid-template-columns:170px minmax(0,1fr) 75px;gap:12px;align-items:center;margin:15px 0}
+.control label{font-size:14px;color:#466863}.control input{width:100%;accent-color:var(--teal)}
+.control output{font-weight:800;font-variant-numeric:tabular-nums;text-align:right;color:#236c63}
+.readouts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:18px 0}
+.readout{border:1px solid var(--line);border-radius:10px;padding:14px;background:#fff}
+.readout span{display:block;font-size:12px;color:#718982}.readout output{font-size:25px;font-weight:850;color:#226e64;font-variant-numeric:tabular-nums}
+.lab-foot{font-size:12px;color:#718780}
+.references{padding-left:21px}.references li{margin:10px 0;overflow-wrap:anywhere}
+.footer-note{border-top:1px solid var(--line);padding-top:18px;color:#6c8580;font-size:13px}
+@media(max-width:980px){.layout{display:block;padding:26px 18px 65px}.toc{position:static;max-height:none;margin-bottom:25px}.toc a{display:inline-block;margin-right:10px;border:0;padding:5px 4px}.toc strong{margin-bottom:4px}}
+@media(max-width:600px){body{font-size:15px}.sitebar-inner{padding:11px 15px}.links{gap:11px}.links a{font-size:12px}.layout{padding:18px 9px 50px}article{padding:22px 16px;border-radius:10px}.dek{font-size:17px}.grid2,.readouts{grid-template-columns:1fr}.control{grid-template-columns:1fr 65px;gap:5px}.control label{grid-column:1/-1}.control input{grid-column:1}.control output{grid-column:2;grid-row:2}.figure{padding:6px}.figure figcaption{padding:8px 4px}.lab{padding:14px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{transition:none!important;animation:none!important}}
+@media print{body{background:#fff}.control{display:none!important}.sitebar,.toc,.skip,.controls{display:none!important}.layout{display:block;padding:0;max-width:none}article{max-width:none;border:0;box-shadow:none;padding:0}.figure,.panel,.lab{break-inside:avoid;box-shadow:none}a{color:#214f4a;text-decoration:none}.math-scroll{overflow:visible}.table-wrap{overflow:visible}table{min-width:0;font-size:10px}section{break-inside:auto}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">跳转到正文</a>
+<header class="sitebar"><div class="sitebar-inner"><a class="brand" href="../../../">xm<span>.</span>posts</a><nav class="links" aria-label="站点导航"><a href="../../../">首页</a><a href="../../../categories/agents/">智能体与工具使用</a><a href="../../../categories/evaluation/">评测与复现</a><a href="../../../archive/">文章归档</a></nav></div></header>
+<div class="layout">
+<aside class="toc" aria-label="本文目录"><strong>IN THIS ARTICLE</strong>
+<a href="#problem">01 · 为什么 Agent 不能只看答案</a><a href="#system">02 · 评测对象：完整 Agent 系统</a><a href="#taxonomy">03 · 两维评测分类体系</a><a href="#metrics">04 · 六类核心指标</a><a href="#reliability">05 · Pass@k 与 Pass^k</a><a href="#benchmarks">06 · 主流 Benchmark 地图</a><a href="#protocol">07 · 如何设计严谨实验</a><a href="#judge">08 · Evaluator 与 LLM-as-a-Judge</a><a href="#validity">09 · Benchmark 有效性与常见陷阱</a><a href="#implementation">10 · 最小可运行指标代码</a><a href="#frontier">11 · 研究前沿与开放问题</a><a href="#references">12 · 参考资料与学习路线</a></aside>
+<main id="main"><article>
+<header class="hero"><div class="kicker">AGENTS / AGENT EVALUATION · RESEARCH GUIDE</div><h1>Understanding<br>Agent Evaluation</h1><p class="dek">一个 Agent 真正完成了任务吗？从最终状态、工具调用和执行轨迹，到一致性、安全性与成本，建立能够解释、复现并指导工程改进的评测体系。</p><div class="meta"><span>Research synthesis · 2023–2026</span><span>约 35 分钟阅读</span><span>Agent Benchmarks · Reliability · Safety</span></div></header>
+
+<section id="problem">
+<h2>01 · 为什么 Agent 不能只看答案？</h2>
+<p class="lead">对普通问答模型，我们常常把输入和输出放在一起比较；但 Agent 的任务不是只生成一段文字，而是通过一串行动改变外部世界。</p>
+<p>想象一个很普通的工程任务：<strong>“定位仓库里的一个 Bug，修复它，运行测试，并提交一个可审查的 Pull Request。”</strong> 一个 Agent 可能给出非常漂亮的解释，却没有真正修改文件；也可能修改了代码，但没有运行测试；甚至测试通过了，却误删了与问题无关的功能。</p>
+<p>如果评测器只检查最后一段自然语言是否包含“已修复”，它就会把“声称完成”误判成“任务完成”。这不是小小的指标误差，而是评测对象定义错了。</p>
+<div class="note"><strong>核心区别：</strong>对话模型主要回答“它说得对不对”；Agent 评测还必须回答“它做得对不对、过程是否可靠、是否越过权限边界，以及完成任务花了多少资源”。</div>
+<figure class="figure"><svg data-export="02-agent-system.svg" xmlns="http://www.w3.org/2000/svg" width="1100" height="470" viewBox="0 0 1100 470" role="img" aria-labelledby="agent-eval-02-title agent-eval-02-desc">
+<title id="agent-eval-02-title">Agent 系统边界与评测观测点</title><desc id="agent-eval-02-desc">用户目标进入 Agent Controller，控制器调用模型、记忆和工具；工具改变外部环境，环境观察反馈给 Agent。评测器同时读取最终状态和 Trace、成本、权限日志。</desc>
+<rect width="1100" height="470" rx="20" fill="#f8fbf9"/>
+<text x="42" y="42" font-family="system-ui,sans-serif" font-size="17" font-weight="800" fill="#247e73" letter-spacing="2">SYSTEM UNDER TEST · OBSERVABILITY</text>
+<rect x="40" y="175" width="155" height="90" rx="13" fill="#eaf1f8" stroke="#9cb8d1" stroke-width="2"/><text x="117" y="210" text-anchor="middle" font-size="21" font-weight="800" fill="#254d68" font-family="system-ui,sans-serif">User Goal</text><text x="117" y="239" text-anchor="middle" font-size="15" fill="#58768c" font-family="system-ui,sans-serif">任务契约</text>
+<path d="M195 220 H245" stroke="#6c9c8e" stroke-width="3"/><path d="M237 212 L247 220 L237 228" fill="none" stroke="#6c9c8e" stroke-width="3"/>
+<rect x="250" y="125" width="330" height="190" rx="15" fill="#e9f4ee" stroke="#91bca9" stroke-width="2"/>
+<text x="415" y="158" text-anchor="middle" font-size="22" font-weight="800" fill="#214f49" font-family="system-ui,sans-serif">Agent Controller</text>
+<rect x="272" y="180" width="130" height="58" rx="9" fill="#fff" stroke="#a7cbb9"/><text x="337" y="204" text-anchor="middle" font-size="16" font-weight="800" fill="#315f57" font-family="system-ui,sans-serif">LLM</text><text x="337" y="224" text-anchor="middle" font-size="13" fill="#66817a" font-family="system-ui,sans-serif">Model + Prompt</text>
+<rect x="423" y="180" width="135" height="58" rx="9" fill="#fff" stroke="#a7cbb9"/><text x="490" y="204" text-anchor="middle" font-size="16" font-weight="800" fill="#315f57" font-family="system-ui,sans-serif">Memory</text><text x="490" y="224" text-anchor="middle" font-size="13" fill="#66817a" font-family="system-ui,sans-serif">State / Context</text>
+<text x="415" y="279" text-anchor="middle" font-size="14" fill="#54746e" font-family="system-ui,sans-serif">Plan · Act · Observe · Stop</text>
+<path d="M580 220 H640" stroke="#6c9c8e" stroke-width="3"/><path d="M632 212 L642 220 L632 228" fill="none" stroke="#6c9c8e" stroke-width="3"/>
+<rect x="645" y="175" width="160" height="90" rx="13" fill="#fff2e8" stroke="#d9ae8b" stroke-width="2"/><text x="725" y="210" text-anchor="middle" font-size="21" font-weight="800" fill="#85583b" font-family="system-ui,sans-serif">Tool Gateway</text><text x="725" y="239" text-anchor="middle" font-size="15" fill="#94715a" font-family="system-ui,sans-serif">API / Browser / Code</text>
+<path d="M805 220 H855" stroke="#6c9c8e" stroke-width="3"/><path d="M847 212 L857 220 L847 228" fill="none" stroke="#6c9c8e" stroke-width="3"/>
+<rect x="860" y="175" width="200" height="90" rx="13" fill="#eaf1f8" stroke="#9cb8d1" stroke-width="2"/><text x="960" y="210" text-anchor="middle" font-size="21" font-weight="800" fill="#254d68" font-family="system-ui,sans-serif">Environment</text><text x="960" y="239" text-anchor="middle" font-size="15" fill="#58768c" font-family="system-ui,sans-serif">Web / DB / Files / OS</text>
+<path d="M960 270 V342 H415 V319" fill="none" stroke="#6c9c8e" stroke-width="3" stroke-dasharray="8 7"/><path d="M407 329 L415 317 L423 329" fill="none" stroke="#6c9c8e" stroke-width="3"/><text x="690" y="334" text-anchor="middle" font-size="14" fill="#567a71" font-family="system-ui,sans-serif">Observation / State Feedback</text>
+<path d="M415 125 V90 H550" fill="none" stroke="#d08c61" stroke-width="2.5" stroke-dasharray="6 6"/><text x="570" y="95" font-size="13" fill="#9b6949" font-family="system-ui,sans-serif">Telemetry: Trace · Tokens · Latency · Errors</text>
+<rect x="245" y="375" width="610" height="64" rx="12" fill="#203b40"/><text x="550" y="402" text-anchor="middle" font-size="18" font-weight="800" fill="#e5f3ec" font-family="system-ui,sans-serif">Evaluator · 独立验证最终状态与执行轨迹</text><text x="550" y="424" text-anchor="middle" font-size="13" fill="#b7d2c6" font-family="system-ui,sans-serif">Goal State Checker + Trace Analyzer + Cost / Safety Audit</text>
+<path d="M960 265 V360 H800 V375" fill="none" stroke="#638e81" stroke-width="2.5"/><path d="M415 315 V360 H300 V375" fill="none" stroke="#638e81" stroke-width="2.5"/>
+</svg><figcaption>图 1 · Agent 不是一个孤立的 LLM。任务结果来自模型、提示、控制器、工具、记忆、环境和安全策略共同作用；评测必须观察最终状态，也必须保留行动轨迹。</figcaption></figure>
+<p>这也是为什么 Agent 评测不能直接把 MMLU、GSM8K 或普通文本生成指标搬过来。它们可以测量底层模型的某些知识或推理能力，却不能单独回答一个系统能否稳定地完成多步骤任务。KDD 2025 的综述明确指出，Agent 在动态交互环境中规划、调用工具、利用记忆并与用户或其他 Agent 协作，因此评测复杂度高于孤立 LLM 的文本输出评测。<a href="https://arxiv.org/abs/2507.21504">Mohammadi et al., 2025</a></p>
+</section>
+
+<section id="system">
+<h2>02 · 评测对象：完整 Agent 系统，而不只是模型</h2>
+<p>先把评测对象写清楚。为了避免把 Agent 和它所处的环境混为一谈，我们把被测 Agent 系统与外部评测配置分开定义：</p>
+<div class="formula"><div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="Agent 系统与评测配置公式，可横向滚动"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block" aria-label="Agent 系统由模型、提示策略、控制器、工具、状态记忆和安全策略组成"><mrow><mi>AgentSystem</mi><mo>=</mo><mo>(</mo><mi>M</mi><mo>,</mo><mi>P</mi><mo>,</mo><mi>C</mi><mo>,</mo><mi>T</mi><mo>,</mo><mi>S</mi><mo>,</mo><mi>G</mi><mo>)</mo></mrow></math><math xmlns="http://www.w3.org/1998/Math/MathML" display="block" aria-label="评测配置由 Agent 系统、外部环境和独立评测器组成"><mrow><mi>EvaluationSetup</mi><mo>=</mo><mo>(</mo><mi>AgentSystem</mi><mo>,</mo><mi>E</mi><mo>,</mo><mi>V</mi><mo>)</mo></mrow></math></div><small>M：基础模型；P：Prompt / Policy；C：Controller；T：Tools；S：State / Memory；G：Guardrails / 权限控制。E 是外部 Environment，V 是独立 Verifier / Evaluator；两者属于评测配置，不是 Agent 自身的内部模块。该表达是本文的系统边界抽象，不是某篇论文规定的唯一架构。</small></div>
+<div class="grid2">
+<div class="panel"><h3>模型与提示</h3><p>模型版本、采样温度、系统提示、任务模板、上下文窗口和结构化输出约束。</p></div>
+<div class="panel"><h3>控制器与规划</h3><p>循环策略、最大步数、重试、终止条件、子任务拆分、并行或多 Agent 编排。</p></div>
+<div class="panel"><h3>工具与环境</h3><p>API Schema、浏览器、文件系统、代码解释器、数据库、权限、网络和外部状态。</p></div>
+<div class="panel"><h3>状态与安全</h3><p>短期上下文、长期记忆、状态同步、人工审批、访问控制和不可逆操作保护。</p></div>
+</div>
+<p>因此，实验报告不能只写“使用某模型”。更完整的描述应该是：模型版本 + Agent Scaffold + Prompt + 工具定义 + 环境版本 + 数据集版本 + 采样配置 + 评测器版本。</p>
+<p>否则，同一个模型换了工具说明、记忆机制或重试策略，成绩就可能发生变化；我们却错误地把所有变化都归因于模型能力。OpenAI 对 SWE-bench Verified 的分析也展示了这一点：同一 GPT-4 在不同软件 Agent Scaffold 下的表现可以明显不同。<a href="https://openai.com/index/introducing-swe-bench-verified/">SWE-bench Verified</a></p>
+</section>
+
+<section id="taxonomy">
+<h2>03 · 两维评测分类体系：评什么 × 怎么评</h2>
+<p>Agent Evaluation 研究已经形成了相对清晰的组织方式。Mohammadi 等人在 KDD 2025 的综述中提出一个二维 Taxonomy：第一维是 <strong>Evaluation Objectives（评测目标）</strong>，回答“我们想知道 Agent 的哪种性质”；第二维是 <strong>Evaluation Process（评测过程）</strong>，回答“我们通过什么数据、环境、指标和工具来测量”。</p>
+<figure class="figure"><svg data-export="01-evaluation-taxonomy.svg" xmlns="http://www.w3.org/2000/svg" width="1100" height="520" viewBox="0 0 1100 520" role="img" aria-labelledby="agent-eval-01-title agent-eval-01-desc">
+<title id="agent-eval-01-title">Agent Evaluation 的二维分类体系</title><desc id="agent-eval-01-desc">上方是评测目标：行为、能力、可靠性、安全与对齐；下方是评测过程：交互模式、评测数据、指标计算、评测工具和评测环境。两维共同定义一次 Agent 评测。</desc>
+<rect width="1100" height="520" rx="20" fill="#f8fbf9"/>
+<text x="42" y="43" font-family="system-ui,sans-serif" font-size="17" font-weight="800" fill="#247e73" letter-spacing="2">TWO AXES · ONE EVALUATION DESIGN</text>
+<text x="42" y="80" font-family="system-ui,sans-serif" font-size="27" font-weight="800" fill="#203b3c">评测目标 WHAT × 评测过程 HOW</text>
+<rect x="42" y="105" width="1016" height="40" rx="9" fill="#e4f0e9"/>
+<text x="550" y="132" text-anchor="middle" font-family="system-ui,sans-serif" font-size="17" font-weight="800" fill="#276b63">评测目标 · Evaluation Objectives</text>
+<g font-family="system-ui,sans-serif">
+<rect x="42" y="160" width="238" height="105" rx="12" fill="#e9f4ee" stroke="#91bca9" stroke-width="2"/>
+<text x="161" y="196" text-anchor="middle" font-size="21" font-weight="800" fill="#214f49">Behavior</text><text x="161" y="226" text-anchor="middle" font-size="15" fill="#52736b">任务成功 · 输出质量</text>
+<rect x="300" y="160" width="238" height="105" rx="12" fill="#eaf1f8" stroke="#9cb8d1" stroke-width="2"/>
+<text x="419" y="196" text-anchor="middle" font-size="21" font-weight="800" fill="#254d68">Capabilities</text><text x="419" y="226" text-anchor="middle" font-size="15" fill="#58768c">工具 · 规划 · 记忆 · 协作</text>
+<rect x="558" y="160" width="238" height="105" rx="12" fill="#fff2e8" stroke="#d9ae8b" stroke-width="2"/>
+<text x="677" y="196" text-anchor="middle" font-size="21" font-weight="800" fill="#85583b">Reliability</text><text x="677" y="226" text-anchor="middle" font-size="15" fill="#94715a">一致性 · 鲁棒性 · 恢复</text>
+<rect x="816" y="160" width="242" height="105" rx="12" fill="#f8eceb" stroke="#d7aaa5" stroke-width="2"/>
+<text x="937" y="196" text-anchor="middle" font-size="21" font-weight="800" fill="#89524c">Safety &amp; Alignment</text><text x="937" y="226" text-anchor="middle" font-size="15" fill="#98716d">权限 · 注入 · 合规</text>
+</g>
+<path d="M550 278 V307" stroke="#7ea99b" stroke-width="3" stroke-linecap="round"/><path d="M542 299 L550 309 L558 299" fill="none" stroke="#7ea99b" stroke-width="3"/>
+<rect x="42" y="322" width="1016" height="40" rx="9" fill="#e9eff6"/>
+<text x="550" y="349" text-anchor="middle" font-family="system-ui,sans-serif" font-size="17" font-weight="800" fill="#365d7b">评测过程 · Evaluation Process</text>
+<g font-family="system-ui,sans-serif" font-size="15" fill="#385c5a">
+<rect x="42" y="380" width="190" height="83" rx="10" fill="#fff" stroke="#d5e2dc"/><text x="137" y="411" text-anchor="middle" font-size="17" font-weight="800" fill="#203b3c">Interaction</text><text x="137" y="437" text-anchor="middle">静态 / 多轮 / 用户</text>
+<rect x="248" y="380" width="190" height="83" rx="10" fill="#fff" stroke="#d5e2dc"/><text x="343" y="411" text-anchor="middle" font-size="17" font-weight="800" fill="#203b3c">Data</text><text x="343" y="437" text-anchor="middle">合成 / 真实 / 领域</text>
+<rect x="454" y="380" width="190" height="83" rx="10" fill="#fff" stroke="#d5e2dc"/><text x="549" y="411" text-anchor="middle" font-size="17" font-weight="800" fill="#203b3c">Metrics</text><text x="549" y="437" text-anchor="middle">状态 / AST / Judge</text>
+<rect x="660" y="380" width="190" height="83" rx="10" fill="#fff" stroke="#d5e2dc"/><text x="755" y="411" text-anchor="middle" font-size="17" font-weight="800" fill="#203b3c">Tooling</text><text x="755" y="437" text-anchor="middle">Trace / Sandbox / Logs</text>
+<rect x="866" y="380" width="192" height="83" rx="10" fill="#fff" stroke="#d5e2dc"/><text x="962" y="411" text-anchor="middle" font-size="17" font-weight="800" fill="#203b3c">Context</text><text x="962" y="437" text-anchor="middle">模拟器 / Web / API</text>
+</g>
+<text x="550" y="495" text-anchor="middle" font-family="system-ui,sans-serif" font-size="14" fill="#6b8580">每个 Benchmark 都是这两个维度上的一个具体设计点，而不是 Agent 能力的完整定义。</text>
+</svg><figcaption>图 2 · 二维 Taxonomy。纵向是评测目标，横向是评测过程。一次实验必须同时选择两边：例如“可靠性 × 多轮交互 × 重复运行 × 数据库状态校验”，而不是只报一个 Benchmark 名字。</figcaption></figure>
+<h3>3.1 第一维：Evaluation Objectives——评测什么</h3>
+<div class="table-wrap"><table><thead><tr><th>目标</th><th>核心问题</th><th>典型观察对象</th><th>代表性指标</th></tr></thead><tbody>
+<tr><td><strong>Agent Behavior</strong><br>行为结果</td><td>用户目标是否完成？输出质量如何？</td><td>最终答案、环境状态、任务完成程度</td><td>Success Rate、Goal Completion、Quality、Latency、Cost</td></tr>
+<tr><td><strong>Agent Capabilities</strong><br>能力</td><td>Agent 是如何完成任务的？</td><td>工具选择、参数、规划、记忆、协作</td><td>Tool Selection Accuracy、Argument Validity、Step Success、Memory Recall</td></tr>
+<tr><td><strong>Reliability</strong><br>可靠性</td><td>重复运行是否一致？环境变化后是否还能完成？</td><td>重复轨迹、扰动输入、异常恢复</td><td>Pass@k、Pass^k、Robustness Drop、Recovery Rate</td></tr>
+<tr><td><strong>Safety &amp; Alignment</strong><br>安全与对齐</td><td>是否遵循权限和策略？是否造成不该发生的副作用？</td><td>敏感工具、恶意网页、用户数据、审批边界</td><td>Policy Violation Rate、Attack Success Rate、Unauthorized Action Rate</td></tr>
+</tbody></table></div>
+<p>这四类并不互相替代。一个 Agent 可以任务成功率很高，但需要大量不必要的工具调用；也可能任务成功率不错，却偶尔发生越权写入。只看一个指标会掩盖另一类失败。</p>
+<h3>3.2 第二维：Evaluation Process——怎么评</h3>
+<ul>
+<li><strong>Interaction Mode：</strong>固定输入的静态测试，还是用户、工具与环境持续交互的动态测试？单轮、长对话、多轮任务、多 Agent 协作都应明确区分。</li>
+<li><strong>Evaluation Data：</strong>合成任务、人工编写任务、真实工作流，还是领域 Benchmark？数据是否代表目标用户真实任务分布？</li>
+<li><strong>Metrics Computation：</strong>用程序检查最终状态、AST / Schema 检查工具调用、参考答案匹配、人工打分，还是 LLM-as-a-Judge？</li>
+<li><strong>Evaluation Tooling：</strong>是否记录完整 Trace、环境快照、模型版本、Token、工具调用、失败原因和运行日志？</li>
+<li><strong>Evaluation Context：</strong>任务是在模拟器、浏览器、桌面操作系统、代码仓库、数据库，还是开放互联网中执行？</li>
+</ul>
+<div class="insight"><strong>如何使用这套二维分类？</strong>不要把它理解成“每篇论文只能属于一个格子”。一个 Agent Benchmark 通常会同时涉及多个目标与多个过程维度。二维 Taxonomy 是设计评测矩阵的坐标系，不是互斥标签表。</div>
+</section>
+
+<section id="metrics">
+<h2>04 · 六类核心指标：从成功率到安全性</h2>
+<p>研究综述将行为、能力、可靠性和安全作为主要目标；在实际系统验收中，还应该把效率与用户体验单独报告。下面这六组指标可以构成一张可执行的 Scorecard。</p>
+<figure class="figure"><svg data-export="03-metric-map.svg" xmlns="http://www.w3.org/2000/svg" width="1100" height="540" viewBox="0 0 1100 540" role="img" aria-labelledby="agent-eval-03-title agent-eval-03-desc">
+<title id="agent-eval-03-title">Agent Evaluation 六类指标地图</title><desc id="agent-eval-03-desc">中心为 Agent Evaluation，周围六个指标维度：任务结果、执行过程、可靠性、安全性、效率成本和用户体验。每个维度列出典型观察对象。</desc>
+<rect width="1100" height="540" rx="20" fill="#f8fbf9"/>
+<text x="42" y="43" font-family="system-ui,sans-serif" font-size="17" font-weight="800" fill="#247e73" letter-spacing="2">EVALUATION SCORECARD</text>
+<rect x="410" y="215" width="280" height="100" rx="18" fill="#203b40"/><text x="550" y="254" text-anchor="middle" font-size="24" font-weight="850" fill="#eaf5ee" font-family="system-ui,sans-serif">Agent Evaluation</text><text x="550" y="284" text-anchor="middle" font-size="15" fill="#b7d2c6" font-family="system-ui,sans-serif">Outcome + Process + Risk + Cost</text>
+<g stroke="#9bb9ad" stroke-width="2.5" fill="none">
+<path d="M410 240 L330 145"/><path d="M550 215 V130"/><path d="M690 240 L770 145"/><path d="M410 290 L330 390"/><path d="M550 315 V410"/><path d="M690 290 L770 390"/>
+</g>
+<g font-family="system-ui,sans-serif">
+<rect x="42" y="75" width="300" height="112" rx="13" fill="#e9f4ee" stroke="#91bca9" stroke-width="2"/><text x="65" y="111" font-size="21" font-weight="850" fill="#214f49">01 · 任务结果</text><text x="65" y="143" font-size="15" fill="#52736b">Success Rate · Goal State</text><text x="65" y="165" font-size="15" fill="#52736b">Output Quality · Partial Completion</text>
+<rect x="400" y="48" width="300" height="112" rx="13" fill="#eaf1f8" stroke="#9cb8d1" stroke-width="2"/><text x="423" y="84" font-size="21" font-weight="850" fill="#254d68">02 · 执行过程</text><text x="423" y="116" font-size="15" fill="#58768c">Tool / Argument Accuracy</text><text x="423" y="138" font-size="15" fill="#58768c">Plan · Steps · Recovery · Loops</text>
+<rect x="758" y="75" width="300" height="112" rx="13" fill="#fff2e8" stroke="#d9ae8b" stroke-width="2"/><text x="781" y="111" font-size="21" font-weight="850" fill="#85583b">03 · 可靠性</text><text x="781" y="143" font-size="15" fill="#94715a">Pass@k · Pass^k</text><text x="781" y="165" font-size="15" fill="#94715a">Robustness · Recovery Rate</text>
+<rect x="42" y="360" width="300" height="112" rx="13" fill="#f8eceb" stroke="#d7aaa5" stroke-width="2"/><text x="65" y="396" font-size="21" font-weight="850" fill="#89524c">04 · 安全性</text><text x="65" y="428" font-size="15" fill="#98716d">Policy / Permission Violation</text><text x="65" y="450" font-size="15" fill="#98716d">Prompt Injection · Side Effects</text>
+<rect x="400" y="390" width="300" height="112" rx="13" fill="#e9f4ee" stroke="#91bca9" stroke-width="2"/><text x="423" y="426" font-size="21" font-weight="850" fill="#214f49">05 · 效率与成本</text><text x="423" y="458" font-size="15" fill="#52736b">Latency · Tokens · Tool Calls</text><text x="423" y="480" font-size="15" fill="#52736b">Cost per Successful Task</text>
+<rect x="758" y="360" width="300" height="112" rx="13" fill="#eaf1f8" stroke="#9cb8d1" stroke-width="2"/><text x="781" y="396" font-size="21" font-weight="850" fill="#254d68">06 · 用户体验</text><text x="781" y="428" font-size="15" fill="#58768c">Satisfaction · Trust</text><text x="781" y="450" font-size="15" fill="#58768c">Clarification · Human Handoff</text>
+</g>
+<text x="550" y="526" text-anchor="middle" font-size="13" fill="#6b8580" font-family="system-ui,sans-serif">不要将六个维度压成一个无法解释的总分；先报告各维度，再按业务风险定义决策门槛。</text>
+</svg><figcaption>图 3 · 六维指标地图。任务结果是必要条件，但不是充分条件；能力、可靠性、安全、效率和用户体验帮助定位“为什么成功或失败”。</figcaption></figure>
+<h3>4.1 任务结果：Success Rate / Goal Completion</h3>
+<p>最基础的指标是任务成功率。设测试集有 N 个任务，第 i 个任务的最终状态是否满足成功条件记作 yᵢ ∈ {0, 1}：</p>
+<div class="formula"><div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="数学公式，可横向滚动"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block" aria-label="成功率等于成功任务数量除以任务总数"><mrow><mi>SR</mi><mo>=</mo><mfrac><mn>1</mn><mi>N</mi></mfrac><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>N</mi></munderover><msub><mi>y</mi><mi>i</mi></msub></mrow></math></div><small>yᵢ=1 表示任务的预先定义成功条件全部满足，否则为 0。</small></div>
+<p>关键在于：<strong>成功条件应该尽可能落在可检查的环境状态上，而不是 Agent 自己的文字声明上。</strong>例如，数据库中的订单状态是否真的变更、代码补丁是否通过目标测试、日历事件是否按要求创建。</p>
+<p>对于多目标任务，可以额外定义部分完成度：先列出目标状态 g₁, …, gₘ，为每项设定权重 wⱼ，再计算已达成目标的加权比例。它适合诊断“完成了 3/4 个步骤”，但不能随意取代最终成功率；高风险任务中，某个关键子目标失败就可能意味着整体失败。</p>
+<h3>4.2 工具调用：选择正确还不够，参数和结果也必须正确</h3>
+<p>把一次工具调用拆成四个检查点：</p>
+<ol><li><strong>是否应该调用：</strong>问题是否真的需要外部信息或动作？</li><li><strong>选择哪个工具：</strong>工具名称和能力是否匹配？</li><li><strong>参数是否正确：</strong>字段、类型、枚举值和具体值是否符合 Schema 与任务语义？</li><li><strong>执行后是否达到预期：</strong>工具是否成功返回？环境状态是否发生了正确变化？</li></ol>
+<p>这四层不能混为一个“Function Calling Accuracy”。例如 AST 可以判断调用结构和参数语法是否正确，却不一定知道一个合法的 <code>user_id</code> 是否属于当前用户。BFCL 使用 AST 评估串行、并行工具调用，并逐步扩展到多轮、有状态的 Agentic 评测；它也强调单轮工具调用表现并不能代表记忆、动态决策和长程推理能力。<a href="https://proceedings.mlr.press/v267/patil25a.html">Patil et al., ICML 2025</a></p>
+<h3>4.3 规划与轨迹：Agent 有没有走对过程</h3>
+<p>设一次执行轨迹为 τ = (o₀, a₀, o₁, a₁, …, oₜ)，其中 oₜ 是观察，aₜ 是动作。除了最终成功与否，还可以检查：</p>
+<ul><li>工具序列是否满足任务依赖关系；</li><li>每一步是否推动了目标状态，而不是重复搜索或空转；</li><li>遇到空结果、超时、异常响应时，是否采取合理恢复动作；</li><li>是否过早结束，或在已完成后继续执行危险动作；</li><li>是否发生循环、重复调用、无关文件修改或不必要的状态写入。</li></ul>
+<p>轨迹指标特别适合错误归因：如果 Agent 最终失败，我们需要知道它是没理解任务、没选对工具、参数错了、环境没准备好，还是在第 8 步之后偏离了原目标。</p>
+<h3>4.4 可靠性：同一任务重复执行是否稳定</h3>
+<p>LLM Agent 通常具有采样随机性，外部环境也可能发生变化。因此一次成功并不代表可重复成功。下一节将重点推导 Pass@k 与 Pass^k。</p>
+<h3>4.5 安全性：不仅看有没有拒绝，还要看有没有越权副作用</h3>
+<p>安全评测应检查敏感数据泄露、未经授权的写入、危险工具调用、Prompt Injection 成功率、是否遵守人工确认流程，以及拒绝是否发生在正确的边界上。单纯统计“拒绝率”会误伤正常任务：一个永远拒绝操作的 Agent 可以得到很低的攻击成功率，却没有任何实际可用性。</p>
+<h3>4.6 效率与体验：完成一次任务付出了什么</h3>
+<p>至少报告端到端延迟、模型输入/输出 Token、工具调用次数、外部 API 成本、重试次数、人工接管次数，以及<strong>每个成功任务的成本</strong>。Agent 的成本不能只统计模型 Token：浏览器、代码执行、搜索、数据库和人工审核都可能成为主要开销。</p>
+<div class="formula"><div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="数学公式，可横向滚动"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block" aria-label="每个成功任务的成本等于总运行成本除以成功任务数量"><mrow><msub><mi>C</mi><mtext>success</mtext></msub><mo>=</mo><mfrac><mrow><msub><mi>C</mi><mtext>total</mtext></msub></mrow><mrow><msub><mi>N</mi><mtext>success</mtext></msub></mrow></mfrac></mrow></math></div><small>需注明统计范围、计价时间、重试策略与人工成本是否计入；若成功任务数为 0，该指标应报告为未定义，而不是 0。</small></div>
+</section>
+
+<section id="reliability">
+<h2>05 · Pass@k 与 Pass^k：偶尔能做成，不等于稳定能做成</h2>
+<p>这是 Agent 评测中最容易被误读、也最值得掌握的一组指标。</p>
+<p>假设一个 Agent 对同一个任务单次成功概率为 p = 0.8。如果允许它运行五次，只要其中一次成功就算成功，那么“至少成功一次”的概率会非常高；但如果要求五次全部成功，结果就会低得多。</p>
+<div class="formula"><div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="数学公式，可横向滚动"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block" aria-label="Pass at k 等于 k 次尝试至少成功一次的概率"><mrow><msub><mi>Pass</mi><mrow><mo>@</mo><mi>k</mi></mrow></msub><mo>=</mo><mi>P</mi><mo>(</mo><munderover><mo>∑</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mi>k</mi></munderover><msub><mi>y</mi><mi>j</mi></msub><mo>≥</mo><mn>1</mn><mo>)</mo><mo>=</mo><mn>1</mn><mo>−</mo><msup><mrow><mo>(</mo><mn>1</mn><mo>−</mo><mi>p</mi><mo>)</mo></mrow><mi>k</mi></msup></mrow></math></div><small>Pass@k：k 次独立尝试中至少一次成功。它更接近“允许多次采样 / 重试时，是否有机会找到成功轨迹”。</small></div>
+<div class="formula"><div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="数学公式，可横向滚动"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block" aria-label="Pass 的 k 次方等于 k 次尝试全部成功的概率"><mrow><msup><mi>Pass</mi><mi>k</mi></msup><mo>=</mo><mi>P</mi><mo>(</mo><munderover><mo>∑</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mi>k</mi></munderover><msub><mi>y</mi><mi>j</mi></msub><mo>=</mo><mi>k</mi><mo>)</mo><mo>=</mo><msup><mi>p</mi><mi>k</mi></msup></mrow></math></div><small>Pass^k：k 次尝试全部成功。它更严格地反映一致性，对每次执行都必须可靠的任务更有意义。</small></div>
+<figure class="figure"><svg data-export="05-pass-k.svg" xmlns="http://www.w3.org/2000/svg" width="1100" height="460" viewBox="0 0 1100 460" role="img" aria-labelledby="agent-eval-05-title agent-eval-05-desc">
+<title id="agent-eval-05-title">Pass at k 与 Pass 的 k 次方对比</title><desc id="agent-eval-05-desc">单次成功概率 p 等于 0.8，在独立尝试假设下，Pass at k 随 k 增加趋近 1，而 Pass 的 k 次方持续下降。</desc>
+<rect width="1100" height="460" rx="20" fill="#f8fbf9"/>
+<text x="42" y="43" font-family="system-ui,sans-serif" font-size="17" font-weight="800" fill="#247e73" letter-spacing="2">REPEATED-TRIAL RELIABILITY</text>
+<text x="42" y="80" font-family="system-ui,sans-serif" font-size="26" font-weight="800" fill="#203b3c">单次成功率 p = 0.80 · 假设各次尝试独立</text>
+<g font-family="system-ui,sans-serif" fill="#69827d" font-size="13"><text x="28" y="137">100%</text><text x="40" y="238">50%</text><text x="48" y="339">0%</text><text x="100" y="373">k=1</text><text x="275" y="373">k=2</text><text x="450" y="373">k=3</text><text x="625" y="373">k=4</text><text x="800" y="373">k=5</text></g>
+<path d="M95 120 V340 H930" fill="none" stroke="#a7c2b8" stroke-width="2"/>
+<path d="M95 220 H930 M95 320 H930" stroke="#dce8e2" stroke-width="1" stroke-dasharray="5 6"/>
+<path d="M110 164 L285 128.8 L460 121.76 L635 120.35 L810 120.07" fill="none" stroke="#247e73" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M110 164 L285 199.2 L460 227.36 L635 249.89 L810 267.0" fill="none" stroke="#c77c51" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<g fill="#247e73"><circle cx="110" cy="164" r="6"/><circle cx="285" cy="128.8" r="6"/><circle cx="460" cy="121.76" r="6"/><circle cx="635" cy="120.35" r="6"/><circle cx="810" cy="120.07" r="6"/></g>
+<g fill="#c77c51"><circle cx="110" cy="164" r="6"/><circle cx="285" cy="199.2" r="6"/><circle cx="460" cy="227.36" r="6"/><circle cx="635" cy="249.89" r="6"/><circle cx="810" cy="267.0 r="6"/></g>
+<g font-family="system-ui,sans-serif" font-size="15" font-weight="700"><rect x="955" y="147" width="22" height="6" rx="3" fill="#247e73"/><text x="988" y="155" fill="#247e73">Pass@k</text><rect x="955" y="183" width="22" height="6" rx="3" fill="#c77c51"/><text x="988" y="191" fill="#9b6442">Pass^k</text></g>
+<rect x="875" y="224" width="185" height="90" rx="11" fill="#fff" stroke="#dce8e2"/><text x="892" y="251" font-family="system-ui,sans-serif" font-size="14" fill="#58716d">k = 5</text><text x="892" y="277" font-family="system-ui,sans-serif" font-size="18" font-weight="800" fill="#247e73">99.968%</text><text x="892" y="299" font-family="system-ui,sans-serif" font-size="18" font-weight="800" fill="#c77c51">32.768%</text>
+<text x="550" y="421" text-anchor="middle" font-family="system-ui,sans-serif" font-size="14" fill="#6b8580">“至少一次成功”适合多次采样；“每次都成功”更严格地衡量一致性。</text>
+</svg><figcaption>图 4 · 在独立、同分布的简化假设下，p=0.8 时 Pass@5=99.968%，而 Pass^5=32.768%。这两条曲线回答的是不同问题，不能互相替代。</figcaption></figure>
+<div class="lab" id="pass-lab">
+<div class="lab-title">交互实验 · 改变单次成功概率和重复次数</div>
+<p>拖动滑块，观察“至少成功一次”和“全部成功”之间的差距。默认设置为单次成功率 80%、重复 5 次。</p>
+<div class="control"><label for="success-p">单次成功概率 p</label><input id="success-p" type="range" min="0.50" max="1" step="0.01" value="0.80"><output id="success-p-value" for="success-p">80%</output></div>
+<div class="control"><label for="attempt-k">重复次数 k</label><input id="attempt-k" type="range" min="1" max="10" step="1" value="5"><output id="attempt-k-value" for="attempt-k">5 次</output></div>
+<div class="readouts"><div class="readout"><span>Pass@k · 至少一次成功</span><output id="pass-at-k">99.968%</output></div><div class="readout"><span>Pass^k · 每次都成功</span><output id="pass-all-k">32.768%</output></div></div>
+<p class="lab-foot" id="pass-explanation" aria-live="polite">p=0.80，k=5。重试让“至少成功一次”的机会变大，但并没有让单次执行变得更稳定。</p>
+<noscript><p class="lab-foot">静态示例：p=0.80、k=5 时，Pass@5=99.968%，Pass^5=32.768%。交互计算需要启用 JavaScript。</p></noscript>
+</div>
+<p>τ-bench 将 Pass^k 用于衡量 Agent 在多次试验中的行为一致性。其任务模拟零售与航空客服场景：Agent 需要和模拟用户持续对话、遵循领域政策并调用 API，最终通过数据库状态与标注目标状态进行比较。原论文报告，GPT-4o 在任务上的成功率低于 50%，零售场景的 Pass^8 低于 25%。这些是该论文实验设置下的历史结果，不应当被当作当前所有模型的实时排名。<a href="https://proceedings.iclr.cc/paper_files/paper/2025/hash/1b126cc38b8638e07bef37e7b2bb72bf-Abstract-Conference.html">Yao et al., ICLR 2025</a></p>
+<div class="warning"><strong>重要的统计假设：</strong>上面的 1 − (1 − p)ᵏ 和 pᵏ 依赖“每次尝试独立且成功概率相同”的简化假设。真实 Agent 的多次运行可能共享缓存、随机种子、环境状态或同一模型偏差。正式报告应在每个任务上实际重复运行，并直接计算经验 Pass@k / Pass^k，而不是只从单次成功率外推。</div>
+</section>
+
+<section id="benchmarks">
+<h2>06 · 主流 Agent Benchmark 地图：不要用一个榜单代表全部能力</h2>
+<p>不同 Benchmark 的任务分布、环境和成功条件并不相同。选择 Benchmark 应该从应用场景出发，而不是从“哪个名字最流行”出发。</p>
+<figure class="figure"><svg data-export="04-benchmark-landscape.svg" xmlns="http://www.w3.org/2000/svg" width="1100" height="520" viewBox="0 0 1100 520" role="img" aria-labelledby="agent-eval-04-title agent-eval-04-desc">
+<title id="agent-eval-04-title">Agent Benchmark 任务环境版图</title><desc id="agent-eval-04-desc">按照评测环境分为通用助手、多轮交互、Web、桌面、软件工程、工具调用和安全任务，并列出代表性 Benchmark。</desc>
+<rect width="1100" height="520" rx="20" fill="#f8fbf9"/>
+<text x="42" y="43" font-family="system-ui,sans-serif" font-size="17" font-weight="800" fill="#247e73" letter-spacing="2">BENCHMARK LANDSCAPE</text>
+<text x="42" y="80" font-family="system-ui,sans-serif" font-size="27" font-weight="800" fill="#203b3c">先按任务环境选 Benchmark，再看分数</text>
+<g font-family="system-ui,sans-serif">
+<rect x="42" y="108" width="1016" height="58" rx="10" fill="#e9f4ee"/><text x="66" y="143" font-size="18" font-weight="800" fill="#214f49">通用助手 / Generalist</text><text x="370" y="143" font-size="16" fill="#52736b">GAIA · AgentBench</text>
+<rect x="42" y="179" width="1016" height="58" rx="10" fill="#eaf1f8"/><text x="66" y="214" font-size="18" font-weight="800" fill="#254d68">Web 浏览器 / Web</text><text x="370" y="214" font-size="16" fill="#58768c">WebArena · BrowserGym</text>
+<rect x="42" y="250" width="1016" height="58" rx="10" fill="#fff2e8"/><text x="66" y="285" font-size="18" font-weight="800" fill="#85583b">桌面操作 / Computer Use</text><text x="370" y="285" font-size="16" fill="#94715a">OSWorld</text>
+<rect x="42" y="321" width="1016" height="58" rx="10" fill="#f1f5ee"/><text x="66" y="356" font-size="18" font-weight="800" fill="#456d56">软件工程 / Coding</text><text x="370" y="356" font-size="16" fill="#5c8069">SWE-bench Verified · METR tasks</text>
+<rect x="42" y="392" width="1016" height="58" rx="10" fill="#f8eceb"/><text x="66" y="427" font-size="18" font-weight="800" fill="#89524c">工具与用户交互 / Tool + User</text><text x="430" y="427" font-size="16" fill="#98716d">BFCL · τ-bench</text>
+<rect x="42" y="463" width="1016" height="40" rx="10" fill="#203b40"/><text x="66" y="490" font-size="17" font-weight="800" fill="#eaf5ee">安全与对抗</text><text x="370" y="490" font-size="15" fill="#b7d2c6">AgentDojo · Prompt Injection / Policy Tests</text>
+</g>
+</svg><figcaption>图 5 · Benchmark 按任务环境划分。一个完整评测组合通常需要多个互补基准，而不是把不同场景的分数直接相加。</figcaption></figure>
+<div class="table-wrap"><table><thead><tr><th>Benchmark</th><th>主要任务 / 环境</th><th>重点测量</th><th>设计特点与使用边界</th></tr></thead><tbody>
+<tr><td><strong>AgentBench</strong><br>2023</td><td>8 个交互环境，多轮开放式任务</td><td>推理、决策、长期规划与指令遵循</td><td>早期多环境 Agent 评测代表；环境覆盖广，但不能代表所有现代工作流。<a href="https://arxiv.org/abs/2308.03688">论文</a></td></tr>
+<tr><td><strong>GAIA</strong><br>2023</td><td>通用助手问题，涉及浏览、工具和多模态</td><td>多步骤信息获取与可验证事实答案</td><td>初版包含 466 道问题；原论文报告人工答题者 92%、GPT-4 + plugins 15%，属于当时实验设定。<a href="https://arxiv.org/abs/2311.12983">论文</a></td></tr>
+<tr><td><strong>WebArena</strong><br>ICLR 2024</td><td>电商、论坛、协作开发、内容管理网站</td><td>长程 Web 导航与功能状态正确性</td><td>强调可复现的真实网站环境；论文中的 GPT-4 Agent 成功率 14.41%，人工表现 78.24%。<a href="https://proceedings.iclr.cc/paper_files/paper/2024/hash/4410c0711e9154a7a2d26f9b3816d1ef-Abstract-Conference.html">论文</a></td></tr>
+<tr><td><strong>OSWorld</strong><br>NeurIPS 2024</td><td>Ubuntu、Windows、macOS 中的真实桌面应用</td><td>GUI Grounding、跨应用操作、执行结果</td><td>初版包含 369 个任务；论文报告人工完成率超过 72.36%，当时最佳模型为 12.24%。<a href="https://proceedings.neurips.cc/paper_files/paper/2024/hash/5d413e48f84dc61244b6be550f1cd8f5-Abstract-Datasets_and_Benchmarks_Track.html">论文</a></td></tr>
+<tr><td><strong>BFCL</strong><br>ICML 2025</td><td>真实函数/API，串行、并行和多轮调用</td><td>工具选择、参数结构、执行与状态化推理</td><td>使用 AST 等方式检查调用结构；不能把语法正确等同于业务状态正确。<a href="https://proceedings.mlr.press/v267/patil25a.html">论文</a></td></tr>
+<tr><td><strong>τ-bench</strong><br>ICLR 2025</td><td>零售、航空客服；用户模拟器 + API + 政策</td><td>用户交互、规则遵循、最终状态、一致性</td><td>通过目标数据库状态评分，并提出 Pass^k。<a href="https://proceedings.iclr.cc/paper_files/paper/2025/hash/1b126cc38b8638e07bef37e7b2bb72bf-Abstract-Conference.html">论文</a></td></tr>
+<tr><td><strong>SWE-bench Verified</strong><br>2024</td><td>真实 GitHub Issue 与代码仓库</td><td>代码修改、目标测试和回归测试</td><td>500 个经人工筛选的样本；同时检查 FAIL_TO_PASS 与 PASS_TO_PASS。<a href="https://openai.com/index/introducing-swe-bench-verified/">说明</a></td></tr>
+<tr><td><strong>AgentDojo</strong><br>NeurIPS 2024</td><td>含不可信内容的工具环境</td><td>Prompt Injection、防御、任务效用与安全性</td><td>97 个真实任务、629 个安全测试用例；强调攻击与防御的动态评测。<a href="https://proceedings.neurips.cc/paper_files/paper/2024/hash/97091a5177d8dc64b1da8bf3e1f6fb54-Abstract-Datasets_and_Benchmarks_Track.html">论文</a></td></tr>
+<tr><td><strong>METR Time Horizon</strong><br>持续研究</td><td>专家级软件、ML 与安全任务</td><td>任务难度与成功可靠性随任务时长的变化</td><td>任务时长按人类专家完成时间估计；时间跨度不是 Agent 实际运行时长。<a href="https://evals.alignment.org/time-horizons/">研究页面</a></td></tr>
+</tbody></table></div>
+<h3>6.1 如何把这些 Benchmark 组合起来？</h3>
+<ul><li>通用助手：GAIA + AgentBench，关注跨领域任务与工具协同。</li><li>浏览器自动化：WebArena + <a href="https://arxiv.org/abs/2412.05467">BrowserGym 生态</a>，关注长程交互、页面变化和功能状态。</li><li>桌面自动化：OSWorld，关注截图理解、GUI 定位和跨应用操作。</li><li>工具密集型工作流：BFCL + τ-bench，分别观察调用能力和用户/业务规则闭环。</li><li>代码 Agent：SWE-bench Verified，配合新鲜任务集和完整容器化测试环境。</li><li>高风险 Agent：AgentDojo 等安全评测，与正常任务成功率一起报告。</li></ul>
+<p>GAIA 的设计尤其值得注意：它并不只追求“人类也很难做”的题目，而是强调对人类概念上简单、但需要系统准确执行多步骤动作的任务，并尽量让最终答案可以自动验证。这个思路提醒我们：Benchmark 的难度不等于它的评测质量。<a href="https://arxiv.org/abs/2311.12983">GAIA</a></p>
+<p>同样，WebArena 和 OSWorld 的早期论文结果不能直接与今天的模型排行榜横向比较：模型、工具、Agent Scaffold、环境和评测协议都可能已经变化。表格中的数字用于理解论文当时揭示的挑战，而不是构造统一的当前排名。</p>
+</section>
+
+<section id="protocol">
+<h2>07 · 如何设计严谨的 Agent Evaluation 实验？</h2>
+<p>下面是一套可以真正用于研究生实验、模型比较和生产验收的流程。重点不是“跑一个 Benchmark”，而是保证每个分数都有明确的测量含义。</p>
+<figure class="figure"><svg data-export="06-evaluation-protocol.svg" xmlns="http://www.w3.org/2000/svg" width="1100" height="440" viewBox="0 0 1100 440" role="img" aria-labelledby="agent-eval-06-title agent-eval-06-desc">
+<title id="agent-eval-06-title">Agent Evaluation 实验协议流程</title><desc id="agent-eval-06-desc">定义任务契约、冻结 Agent 配置、分层任务集、重复运行、记录轨迹、独立评分、统计分析和发布可复现报告的流程。</desc>
+<rect width="1100" height="440" rx="20" fill="#f8fbf9"/>
+<text x="42" y="43" font-family="system-ui,sans-serif" font-size="17" font-weight="800" fill="#247e73" letter-spacing="2">REPRODUCIBLE EVALUATION PROTOCOL</text>
+<text x="42" y="80" font-family="system-ui,sans-serif" font-size="26" font-weight="800" fill="#203b3c">从任务定义到可复现报告</text>
+<g font-family="system-ui,sans-serif">
+<rect x="42" y="125" width="230" height="82" rx="12" fill="#e9f4ee" stroke="#91bca9" stroke-width="2"/><text x="157" y="159" text-anchor="middle" font-size="18" font-weight="800" fill="#214f49">1 · 任务契约</text><text x="157" y="185" text-anchor="middle" font-size="14" fill="#52736b">初始状态 / 成功条件</text>
+<rect x="304" y="125" width="230" height="82" rx="12" fill="#eaf1f8" stroke="#9cb8d1" stroke-width="2"/><text x="419" y="159" text-anchor="middle" font-size="18" font-weight="800" fill="#254d68">2 · 冻结配置</text><text x="419" y="185" text-anchor="middle" font-size="14" fill="#58768c">模型 / Prompt / Tools</text>
+<rect x="566" y="125" width="230" height="82" rx="12" fill="#fff2e8" stroke="#d9ae8b" stroke-width="2"/><text x="681" y="159" text-anchor="middle" font-size="18" font-weight="800" fill="#85583b">3 · 分层任务集</text><text x="681" y="185" text-anchor="middle" font-size="14" fill="#94715a">难度 / 风险 / 长度</text>
+<rect x="828" y="125" width="230" height="82" rx="12" fill="#f8eceb" stroke="#d7aaa5" stroke-width="2"/><text x="943" y="159" text-anchor="middle" font-size="18" font-weight="800" fill="#89524c">4 · 重复运行</text><text x="943" y="185" text-anchor="middle" font-size="14" fill="#98716d">Seeds / k 次 / Reset</text>
+<g stroke="#7ea99b" stroke-width="3" fill="none"><path d="M272 166 H300"/><path d="M292 158 L302 166 L292 174"/><path d="M534 166 H562"/><path d="M554 158 L564 166 L554 174"/><path d="M796 166 H824"/><path d="M816 158 L826 166 L816 174"/></g>
+<path d="M943 207 V260 H157 V235" fill="none" stroke="#7ea99b" stroke-width="2.5" stroke-dasharray="7 6"/><path d="M149 244 L157 232 L165 244" fill="none" stroke="#7ea99b" stroke-width="2.5"/>
+<text x="550" y="252" text-anchor="middle" font-size="13" fill="#68857d">每次运行都重置到可比较的环境初始状态</text>
+<rect x="42" y="290" width="230" height="82" rx="12" fill="#fff" stroke="#b6cbc1" stroke-width="2"/><text x="157" y="324" text-anchor="middle" font-size="18" font-weight="800" fill="#315f57">5 · Trace 记录</text><text x="157" y="350" text-anchor="middle" font-size="14" fill="#66817a">Actions / State / Cost</text>
+<rect x="304" y="290" width="230" height="82" rx="12" fill="#fff" stroke="#b6cbc1" stroke-width="2"/><text x="419" y="324" text-anchor="middle" font-size="18" font-weight="800" fill="#315f57">6 · 独立评分</text><text x="419" y="350" text-anchor="middle" font-size="14" fill="#66817a">State Checker / Judge</text>
+<rect x="566" y="290" width="230" height="82" rx="12" fill="#fff" stroke="#b6cbc1" stroke-width="2"/><text x="681" y="324" text-anchor="middle" font-size="18" font-weight="800" fill="#315f57">7 · 统计分析</text><text x="681" y="350" text-anchor="middle" font-size="14" fill="#66817a">CI / Slices / Failure Modes</text>
+<rect x="828" y="290" width="230" height="82" rx="12" fill="#203b40"/><text x="943" y="324" text-anchor="middle" font-size="18" font-weight="800" fill="#eaf5ee">8 · 可复现报告</text><text x="943" y="350" text-anchor="middle" font-size="14" fill="#b7d2c6">Versions / Data / Logs</text>
+<g stroke="#7ea99b" stroke-width="3" fill="none"><path d="M272 331 H300"/><path d="M292 323 L302 331 L292 339"/><path d="M534 331 H562"/><path d="M554 323 L564 331 L554 339"/><path d="M796 331 H824"/><path d="M816 323 L826 331 L816 339"/></g>
+</g>
+<text x="550" y="412" text-anchor="middle" font-family="system-ui,sans-serif" font-size="14" fill="#6b8580">没有版本、状态、轨迹和评分依据的单个数字，不是可复现的实验结果。</text>
+</svg><figcaption>图 6 · 从任务定义到报告的评测协议。每一步都要留下版本和证据，才能复现并解释分数变化。</figcaption></figure>
+<ol>
+<li><strong>定义任务契约。</strong>写明用户目标、初始环境状态、可用工具、禁止操作、终止条件和成功状态。不要把模糊的自然语言期望留给评测器临时猜测。</li>
+<li><strong>冻结系统配置。</strong>固定模型快照、提示词、工具 Schema、控制器、记忆、权限、采样参数、超时、重试次数和上下文预算。</li>
+<li><strong>构造分层任务集。</strong>按任务类型、难度、步骤长度、工具数量、风险等级、是否需要澄清、是否包含环境变化分层。避免测试集只包含简单任务。</li>
+<li><strong>设计对照组。</strong>至少比较一个基线 Agent；若研究某个组件，使用 Ablation：关闭记忆、移除规划、替换工具描述、改变重试策略等。每次尽量只改变一个关键因素。</li>
+<li><strong>执行多次运行。</strong>记录随机种子、运行次数、失败重试和环境重置方式。随机性较大的系统不能只跑一个样本或一个种子。</li>
+<li><strong>记录完整 Trace。</strong>保存用户输入、模型版本、工具名称与参数、Observation、状态变化、异常、Token、时间、费用和最终状态。敏感信息必须脱敏。</li>
+<li><strong>使用独立评测器。</strong>优先通过数据库状态、单元测试、文件差异、API 返回和权限审计进行确定性验证；开放式质量再使用人工或校准过的模型评审。</li>
+<li><strong>做统计分析。</strong>报告均值、分布、置信区间、任务分层表现、失败类型和重复运行一致性；不要只报告一个平均分。</li>
+<li><strong>发布可复现报告。</strong>包含任务集版本、环境镜像、Agent 配置、评测代码、原始结果、失败样本和已知局限。</li>
+</ol>
+<div class="note"><strong>一个实用原则：</strong>如果无法回答“这个任务在什么初始状态下、经过哪些操作、最终满足了什么可机器检查的条件”，就还没有真正定义好 Agent Benchmark。</div>
+</section>
+
+<section id="judge">
+<h2>08 · Evaluator 与 LLM-as-a-Judge：谁来判断 Agent 做得对不对？</h2>
+<p>Agent 的最终输出有时是自然语言，有时是数据库状态、代码补丁、文件系统变化或多个工具副作用。评测器需要根据任务性质选择，不存在一种评分方法能覆盖全部场景。</p>
+<div class="table-wrap"><table><thead><tr><th>评测方式</th><th>适合什么</th><th>优势</th><th>主要风险</th></tr></thead><tbody>
+<tr><td><strong>程序化状态检查</strong></td><td>数据库、文件、代码、订单、日历状态</td><td>可复现、便宜、标准明确</td><td>成功条件设计错了会稳定地判错</td></tr>
+<tr><td><strong>测试 / 执行验证</strong></td><td>代码修复、数学工具、结构化操作</td><td>验证真实行为，而非文字描述</td><td>测试覆盖不完整，环境依赖可能误伤正确方案</td></tr>
+<tr><td><strong>规则 / Schema / AST</strong></td><td>函数调用、参数格式、协议遵循</td><td>容易定位格式和结构错误</td><td>合法语法不保证语义正确或权限合规</td></tr>
+<tr><td><strong>LLM-as-a-Judge</strong></td><td>解释质量、开放式规划、交互体验</td><td>可扩展到难以写规则的文本判断</td><td>偏好冗长答案、顺序偏差、模型偏差和自我偏好</td></tr>
+<tr><td><strong>人工评审</strong></td><td>高风险、复杂歧义、用户体验和安全审计</td><td>能处理细微上下文</td><td>昂贵、耗时，评审者之间可能不一致</td></tr>
+</tbody></table></div>
+<h3>8.1 为什么不能把所有评分都交给另一个 LLM？</h3>
+<p>LLM Judge 可以帮助判断“解释是否清楚”，却未必知道“数据库中的订单是否真的变更”。它还可能偏爱更长、更自信或格式更整齐的回答；如果没有盲测和校准，评分本身也可能引入新的偏差。</p>
+<p>建议采用分层 Evaluator：</p>
+<ul><li><strong>第一层：硬约束。</strong>状态、测试、权限、结构化字段、必须满足的条件，由确定性程序检查。</li><li><strong>第二层：语义质量。</strong>对解释、相关性、可读性等开放式内容，使用带 rubric 的 LLM Judge。</li><li><strong>第三层：人工审计。</strong>抽查成功与失败样本，尤其是边界案例、争议样本和高风险动作。</li></ul>
+<p>对 LLM Judge 至少做四项校准：固定评分 rubric；对模型答案隐藏系统身份；随机交换 A/B 顺序检测位置偏差；用人工标注子集测量 Judge 与人类的一致程度。还应保留原始评分和分歧案例，而不是只保存最终总分。</p>
+<p>GAIA 的论文讨论了模型评审的局限：开放式评测依赖人类或模型判断，而模型评审本身可能存在偏差；其设计因此尽量使用能够通过完成多步骤任务得到、且容易自动核验的事实答案。<a href="https://arxiv.org/abs/2311.12983">GAIA</a></p>
+</section>
+
+<section id="validity">
+<h2>09 · Benchmark 有效性：高分不一定代表真实能力</h2>
+<p>Benchmark 分数是一个测量结果，不是能力本身。要相信这个数字，至少要检查下面几种有效性风险。</p>
+<h3>9.1 数据污染与任务过时</h3>
+<p>静态任务可能出现在训练数据或公开代码仓库中。Agent 可能记住了答案，而不是现场完成任务。应使用私有留出集、时间切分、新鲜任务、动态环境或定期轮换的任务集，并明确报告污染检测的能力边界。</p>
+<h3>9.2 任务本身不公平或无法完成</h3>
+<p>SWE-bench Verified 是一个非常好的反例：原始 SWE-bench 中部分任务存在描述不充分、测试过于具体或环境配置不可靠的问题。OpenAI 与 SWE-bench 作者合作筛选出 500 个经人工确认质量更好的样本；其说明还报告，初始分析的 1,699 个随机样本中，68.3% 因任务描述、测试或其他问题被过滤。这个案例说明：评测集本身也需要被评测。<a href="https://openai.com/index/introducing-swe-bench-verified/">SWE-bench Verified</a></p>
+<h3>9.3 只报平均值掩盖长尾失败</h3>
+<p>同样的 80% 成功率，可能来自“所有任务都大约 80% 成功”，也可能来自“简单任务几乎全对、少数关键任务完全失败”。生产系统更需要按任务难度、风险、步骤长度和用户群体切片。</p>
+<h3>9.4 评测环境和真实部署之间存在差距</h3>
+<p>模拟器更可控，却可能不够真实；真实环境更贴近用户，却可能出现网络波动、页面改版、权限差异和不可重复状态。应明确评测是在封闭模拟器、真实沙箱，还是开放环境中完成，并记录环境版本和初始化状态。</p>
+<h3>9.5 Reward Hacking 与 Goodhart's Law</h3>
+<p>一旦把某个指标作为唯一优化目标，Agent 就可能学会钻指标的空子。例如：为了提高工具调用成功率而调用不必要的工具；为了提高任务完成率而绕过安全检查；为了得到更高 Judge 分而输出冗长解释；为了通过测试而硬编码样例答案。</p>
+<div class="warning"><strong>不要只问“分数提高了多少”。</strong>还要问：成功条件是否被投机？失败是否被隐藏？有没有新增副作用？在独立测试集和真实用户任务上是否仍然成立？</div>
+</section>
+
+<section id="implementation">
+<h2>10 · 最小可运行指标代码：把重复试验变成可复核统计</h2>
+<p>下面的 Python 示例使用纯标准库，输入每个任务的多次运行结果，输出 Pass@1、Pass@k、Pass^k 和平均单次成功率。它不连接模型、不调用外部 API，也不声称复现某个论文 Benchmark；它只实现定义清楚的统计量。</p>
+<pre class="code"><code>from agent_eval_metrics import summarize_runs
+
+# 每一行是同一个任务的 5 次独立运行结果
+runs = [
+    [True,  True,  False, True,  True],
+    [True,  False, False, False, True],
+    [False, False, False, False, False],
+]
+
+report = summarize_runs(runs)
+print(report)
+
+# 预期：
+# pass_at_1       = 2 / 3
+# pass_at_k       = 2 / 3
+# pass_all_k      = 0 / 3
+# mean_attempt_success = 6 / 15</code></pre>
+<p>运行方式（从仓库根目录）：</p>
+<pre class="code"><code>python -m pytest -q tests/test_agent_eval_metrics.py
+python posts/agents/agent-evaluation/agent_eval_metrics.py</code></pre>
+<p>注意：Pass@k 和 Pass^k 必须基于同一任务的重复运行分组计算。把不同任务的成功结果混在一起，或者把“同一个任务的 k 次尝试”误当成“k 个不同任务”，都会得到没有意义的统计量。</p>
+</section>
+
+<section id="frontier">
+<h2>11 · 研究前沿与开放问题：从 Benchmark 分数走向持续评测</h2>
+<p>到 2026 年，Agent 评测已经从“比较几个模型谁的分数高”逐渐转向对评测体系本身的研究。2026 年的 <em>Survey on Evaluation of LLM-based Agents</em> 从基础 Agent 能力、领域 Benchmark、通用 Agent、Benchmark 核心维度和开发者评测框架五个视角组织相关工作，并指出成本效率、安全性、鲁棒性和可扩展的细粒度评测仍是重要缺口。<a href="https://aclanthology.org/2026.findings-acl.1330.pdf">Yehudai et al., Findings of ACL 2026</a></p>
+<div class="grid2">
+<div class="panel"><h3>动态任务与持续评测</h3><p>静态 Benchmark 会过时。未来需要定期更新任务、追踪环境变化，并保留可比较的固定锚点集。</p></div>
+<div class="panel"><h3>长时程能力</h3><p>任务步骤越长，错误累积和状态漂移越明显。METR 的 Time Horizon 研究以人类专家完成时间作为任务难度刻度，并拟合 Agent 在不同任务时长下的成功概率。它测量的是任务难度与成功可靠性的关系，不是 Agent 运行了多久。</p></div>
+<div class="panel"><h3>多 Agent 协作</h3><p>需要额外衡量任务分配、信息共享、冲突解决、协调开销和失败传播，而不只是每个子 Agent 的单体分数。</p></div>
+<div class="panel"><h3>安全与治理</h3><p>权限控制、数据隔离、人工审批、审计日志和 Prompt Injection 防护应进入常规评测协议，而不是部署后再补测。</p></div>
+</div>
+<p>AgentDojo 把安全问题变成可执行测试：外部工具返回的内容可能包含恶意指令，诱导 Agent 代表用户执行不该做的事。其 NeurIPS 2024 版本包含 97 个任务和 629 个安全测试用例，覆盖邮件、网银和旅行预订等场景。它强调安全评测必须同时观察正常任务效用和攻击条件下的安全属性。<a href="https://proceedings.neurips.cc/paper_files/paper/2024/hash/97091a5177d8dc64b1da8bf3e1f6fb54-Abstract-Datasets_and_Benchmarks_Track.html">AgentDojo</a></p>
+<p>最终，成熟的 Agent 评测不应只有一个排行榜，而应是一套持续运行的工程系统：任务集持续更新，运行轨迹可追溯，评测器经过校准，安全边界可验证，成本和可靠性与任务成功率一起呈现。</p>
+</section>
+
+<section id="references">
+<h2>12 · 参考资料与下一条阅读路线</h2>
+<ol class="references">
+<li>Mohammadi, M., Li, Y., Lo, J., &amp; Yip, W. (2025). <a href="https://arxiv.org/abs/2507.21504">Evaluation and Benchmarking of LLM Agents: A Survey</a>. KDD 2025. 本文二维评测 Taxonomy 的主要依据。</li>
+<li>Yehudai, A. et al. (2026). <a href="https://aclanthology.org/2026.findings-acl.1330.pdf">Survey on Evaluation of LLM-based Agents</a>. Findings of ACL 2026.</li>
+<li>Liu, X. et al. (2023). <a href="https://arxiv.org/abs/2308.03688">AgentBench: Evaluating LLMs as Agents</a>.</li>
+<li>Mialon, G. et al. (2023). <a href="https://arxiv.org/abs/2311.12983">GAIA: a benchmark for General AI Assistants</a>.</li>
+<li>Zhou, S. et al. (2024). <a href="https://proceedings.iclr.cc/paper_files/paper/2024/hash/4410c0711e9154a7a2d26f9b3816d1ef-Abstract-Conference.html">WebArena: A Realistic Web Environment for Building Autonomous Agents</a>. ICLR 2024.</li>
+<li>Xie, T. et al. (2024). <a href="https://proceedings.neurips.cc/paper_files/paper/2024/hash/5d413e48f84dc61244b6be550f1cd8f5-Abstract-Datasets_and_Benchmarks_Track.html">OSWorld: Benchmarking Multimodal Agents for Open-Ended Tasks in Real Computer Environments</a>. NeurIPS 2024.</li>
+<li>Le Sellier De Chezelles, T. et al. (2024). <a href="https://arxiv.org/abs/2412.05467">The BrowserGym Ecosystem for Web Agent Research</a>.</li>
+<li>Yao, S. et al. (2025). <a href="https://proceedings.iclr.cc/paper_files/paper/2025/hash/1b126cc38b8638e07bef37e7b2bb72bf-Abstract-Conference.html">τ-bench: A Benchmark for Tool-Agent-User Interaction in Real-World Domains</a>. ICLR 2025.</li>
+<li>Patil, S. G. et al. (2025). <a href="https://proceedings.mlr.press/v267/patil25a.html">The Berkeley Function Calling Leaderboard (BFCL): From Tool Use to Agentic Evaluation of Large Language Models</a>. ICML 2025.</li>
+<li>Debenedetti, E. et al. (2024). <a href="https://proceedings.neurips.cc/paper_files/paper/2024/hash/97091a5177d8dc64b1da8bf3e1f6fb54-Abstract-Datasets_and_Benchmarks_Track.html">AgentDojo: A Dynamic Environment to Evaluate Prompt Injection Attacks and Defenses for LLM Agents</a>. NeurIPS 2024.</li>
+<li>OpenAI (2024, updated 2025). <a href="https://openai.com/index/introducing-swe-bench-verified/">Introducing SWE-bench Verified</a>.</li>
+<li>METR. <a href="https://evals.alignment.org/time-horizons/">Task-Completion Time Horizons of Frontier AI Models</a>. 研究页面，最后更新 2026-09-08。</li>
+</ol>
+<div class="note"><strong>建议学习顺序：</strong><a href="../react/">ReAct</a>（理解行动反馈循环）→ 本文 Agent Evaluation（建立评测坐标系）→ <a href="../swe-agent/">SWE-agent</a>（研究代码 Agent 的工具接口）→ <a href="../agent-memory-components/">Agent Memory</a>（理解长时程状态与记忆）。再结合 <a href="../../../categories/evaluation/">Evaluation &amp; Benchmarks</a>，系统学习实验设计、指标与复现。</div>
+<p class="footer-note">真正有意义的 Agent 分数，必须能够回答三个问题：它完成了什么、它是如何完成的，以及我们凭什么相信这个结论。</p>
+</section>
+</article></main></div>
+<script>
+(function(){
+"use strict";
+const p=document.getElementById("success-p"),k=document.getElementById("attempt-k");
+const pOut=document.getElementById("success-p-value"),kOut=document.getElementById("attempt-k-value");
+const atOut=document.getElementById("pass-at-k"),allOut=document.getElementById("pass-all-k");
+const explanation=document.getElementById("pass-explanation");
+const percent=x=>(x*100).toFixed(3)+"%";
+function update(){
+ const probability=Number(p.value),trials=Number(k.value);
+ const atLeastOnce=1-Math.pow(1-probability,trials);
+ const everyTime=Math.pow(probability,trials);
+ pOut.textContent=Math.round(probability*100)+"%";
+ kOut.textContent=trials+" 次";
+ atOut.textContent=percent(atLeastOnce);
+ allOut.textContent=percent(everyTime);
+ explanation.textContent="p="+probability.toFixed(2)+"，k="+trials+"。至少一次成功的概率为 1−(1−p)^k；全部成功的概率为 p^k。两者依赖独立、同分布假设，正式实验应直接重复运行测量。";
+}
+[p,k].forEach(input=>input.addEventListener("input",update));
+update();
+})();
+</script>
+</body>
+</html>
