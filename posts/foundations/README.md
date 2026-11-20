@@ -13,3 +13,5 @@
 - [Understanding AdamW](adamw/index.html)：解耦权重衰减，从 SGD 中的等价性到 Adam 的逐坐标更新。配套六幅 SVG、`mini_adamw.py` 与原论文证据。
 
 本类别中优化器、正则化与表示学习以文章标签和专题结构细分，不为单篇论文新增顶级分类。
+
+- [Understanding Adam](adam/index.html)：一阶/二阶矩、偏差修正、AdamW 与 AMSGrad；含交互演示与纯 Python 更新核。
