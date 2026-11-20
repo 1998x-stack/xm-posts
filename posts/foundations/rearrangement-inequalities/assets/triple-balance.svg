@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 394" role="img" aria-labelledby="ri-b-title ri-b-desc">
+<title id="ri-b-title">三序列的乘积和：最大与最小配对</title><desc id="ri-b-desc">同序三项为27、8、1，总和36；只反转一列为9、8、3，总和20；交错均衡得到6、6、6，总和18，是该3元素算例的最小值。</desc>
+<rect x="1" y="1" width="898" height="392" rx="16" fill="#fbfdfb" stroke="#d8e5df"/>
+<text x="450" y="41" font-family="sans-serif" font-weight="700" font-size="24" fill="#24474d" text-anchor="middle">三列数的「反序」不再只有一种选法</text>
+<g font-family="sans-serif">
+<g transform="translate(30,71)"><rect width="260" height="272" rx="13" fill="#e9f3ef"/>
+<text x="130" y="33" font-size="21" font-weight="700" text-anchor="middle" fill="#27786f">全同序 · 36</text>
+<g fill="#358a7d"><rect x="37" y="77" width="48" height="154" rx="4"/><rect x="104" y="185" width="48" height="46" rx="4"/><rect x="171" y="225" width="48" height="6" rx="3"/></g>
+<g text-anchor="middle" fill="#315e63" font-size="18"><text x="61" y="67">27</text><text x="128" y="174">8</text><text x="195" y="214">1</text></g><text x="130" y="258" text-anchor="middle" font-size="15" fill="#607e7d">最强者聚集在一行</text></g>
+<g transform="translate(319,71)"><rect width="260" height="272" rx="13" fill="#f3f6f6"/>
+<text x="130" y="33" font-size="21" font-weight="700" text-anchor="middle" fill="#497f9d">反转 c · 20</text>
+<g fill="#77a4b4"><rect x="37" y="159" width="48" height="72" rx="4"/><rect x="104" y="167" width="48" height="64" rx="4"/><rect x="171" y="207" width="48" height="24" rx="4"/></g>
+<g text-anchor="middle" fill="#315e63" font-size="18"><text x="61" y="149">9</text><text x="128" y="157">8</text><text x="195" y="197">3</text></g><text x="130" y="258" text-anchor="middle" font-size="15" fill="#607e7d">比同序小，但还不最小</text></g>
+<g transform="translate(608,71)"><rect width="262" height="272" rx="13" fill="#fbefe7"/>
+<text x="131" y="33" font-size="21" font-weight="700" text-anchor="middle" fill="#ba7852">交错均衡 · 18</text>
+<g fill="#c58a65"><rect x="38" y="183" width="48" height="48" rx="4"/><rect x="106" y="183" width="48" height="48" rx="4"/><rect x="174" y="183" width="48" height="48" rx="4"/></g>
+<g text-anchor="middle" fill="#865c45" font-size="18"><text x="62" y="173">6</text><text x="130" y="173">6</text><text x="198" y="173">6</text></g><text x="131" y="258" text-anchor="middle" font-size="15" fill="#976f58">本教学例的全局最小值</text></g>
+</g>
+<text x="450" y="372" text-anchor="middle" font-family="sans-serif" fill="#59787c" font-size="16">所有柱高按同一比例绘制；数据来自 3!×3! = 36 种排列的枚举</text>
+</svg>
