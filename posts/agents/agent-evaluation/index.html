@@ -252,7 +252,7 @@ code{font: .91em ui-monospace,SFMono-Regular,Consolas,monospace;background:#eff5
 <p class="lab-foot" id="pass-explanation" aria-live="polite">p=0.80，k=5。重试让“至少成功一次”的机会变大，但并没有让单次执行变得更稳定。</p>
 <noscript><p class="lab-foot">静态示例：p=0.80、k=5 时，Pass@5=99.968%，Pass^5=32.768%。交互计算需要启用 JavaScript。</p></noscript>
 </div>
-<p>τ-bench 将 Pass^k 用于衡量 Agent 在多次试验中的行为一致性。其任务模拟零售与航空客服场景：Agent 需要和模拟用户持续对话、遵循领域政策并调用 API，最终通过数据库状态与标注目标状态进行比较。原论文报告，GPT-4o 在任务上的成功率低于 50%，零售场景的 Pass^8 低于 25%。这些是该论文实验设置下的历史结果，不应当被当作当前所有模型的实时排名。<a href="https://proceedings.iclr.cc/paper_files/paper/2025/hash/1b126cc38b8638e07bef37e7b2bb72bf-Abstract-Conference.html">Yao et al., ICLR 2025</a></p>
+<p>τ-bench 将 Pass^k 用于衡量 Agent 在多次试验中的行为一致性。其任务模拟零售与航空客服场景：Agent 需要和模拟用户持续对话、遵循领域政策并调用 API，最终通过数据库状态与标注目标状态进行比较。原论文展示了多轮业务交互中单次任务成功与多次执行一致性之间的差距，并用 Pass^k 强调了可靠性要求。该基准的原始结果属于论文实验设定，不应当被当作当前模型的实时排名。<a href="https://proceedings.iclr.cc/paper_files/paper/2025/hash/1b126cc38b8638e07bef37e7b2bb72bf-Abstract-Conference.html">Yao et al., ICLR 2025</a></p>
 <div class="warning"><strong>重要的统计假设：</strong>上面的 1 − (1 − p)ᵏ 和 pᵏ 依赖“每次尝试独立且成功概率相同”的简化假设。真实 Agent 的多次运行可能共享缓存、随机种子、环境状态或同一模型偏差。正式报告应在每个任务上实际重复运行，并直接计算经验 Pass@k / Pass^k，而不是只从单次成功率外推。</div>
 </section>
 
@@ -275,9 +275,9 @@ code{font: .91em ui-monospace,SFMono-Regular,Consolas,monospace;background:#eff5
 </svg><figcaption>图 5 · Benchmark 按任务环境划分。一个完整评测组合通常需要多个互补基准，而不是把不同场景的分数直接相加。</figcaption></figure>
 <div class="table-wrap"><table><thead><tr><th>Benchmark</th><th>主要任务 / 环境</th><th>重点测量</th><th>设计特点与使用边界</th></tr></thead><tbody>
 <tr><td><strong>AgentBench</strong><br>2023</td><td>8 个交互环境，多轮开放式任务</td><td>推理、决策、长期规划与指令遵循</td><td>早期多环境 Agent 评测代表；环境覆盖广，但不能代表所有现代工作流。<a href="https://arxiv.org/abs/2308.03688">论文</a></td></tr>
-<tr><td><strong>GAIA</strong><br>2023</td><td>通用助手问题，涉及浏览、工具和多模态</td><td>多步骤信息获取与可验证事实答案</td><td>初版包含 466 道问题；原论文报告人工答题者 92%、GPT-4 + plugins 15%，属于当时实验设定。<a href="https://arxiv.org/abs/2311.12983">论文</a></td></tr>
-<tr><td><strong>WebArena</strong><br>ICLR 2024</td><td>电商、论坛、协作开发、内容管理网站</td><td>长程 Web 导航与功能状态正确性</td><td>强调可复现的真实网站环境；论文中的 GPT-4 Agent 成功率 14.41%，人工表现 78.24%。<a href="https://proceedings.iclr.cc/paper_files/paper/2024/hash/4410c0711e9154a7a2d26f9b3816d1ef-Abstract-Conference.html">论文</a></td></tr>
-<tr><td><strong>OSWorld</strong><br>NeurIPS 2024</td><td>Ubuntu、Windows、macOS 中的真实桌面应用</td><td>GUI Grounding、跨应用操作、执行结果</td><td>初版包含 369 个任务；论文报告人工完成率超过 72.36%，当时最佳模型为 12.24%。<a href="https://proceedings.neurips.cc/paper_files/paper/2024/hash/5d413e48f84dc61244b6be550f1cd8f5-Abstract-Datasets_and_Benchmarks_Track.html">论文</a></td></tr>
+<tr><td><strong>GAIA</strong><br>2023</td><td>通用助手问题，涉及浏览、工具和多模态</td><td>多步骤信息获取与可验证事实答案</td><td>初版包含 466 道问题，强调多步骤信息获取与可验证答案；原论文显示当时通用助手距离稳定完成此类任务仍有明显差距。<a href="https://arxiv.org/abs/2311.12983">论文</a></td></tr>
+<tr><td><strong>WebArena</strong><br>ICLR 2024</td><td>电商、论坛、协作开发、内容管理网站</td><td>长程 Web 导航与功能状态正确性</td><td>强调可复现的真实网站环境；原论文指出当时 GPT-4 Agent 与人类在长程网站任务上的表现仍存在明显差距。<a href="https://proceedings.iclr.cc/paper_files/paper/2024/hash/4410c0711e9154a7a2d26f9b3816d1ef-Abstract-Conference.html">论文</a></td></tr>
+<tr><td><strong>OSWorld</strong><br>NeurIPS 2024</td><td>Ubuntu、Windows、macOS 中的真实桌面应用</td><td>GUI Grounding、跨应用操作、执行结果</td><td>初版包含 369 个任务；原论文显示当时模型在真实桌面操作上仍明显落后于人类。<a href="https://proceedings.neurips.cc/paper_files/paper/2024/hash/5d413e48f84dc61244b6be550f1cd8f5-Abstract-Datasets_and_Benchmarks_Track.html">论文</a></td></tr>
 <tr><td><strong>BFCL</strong><br>ICML 2025</td><td>真实函数/API，串行、并行和多轮调用</td><td>工具选择、参数结构、执行与状态化推理</td><td>使用 AST 等方式检查调用结构；不能把语法正确等同于业务状态正确。<a href="https://proceedings.mlr.press/v267/patil25a.html">论文</a></td></tr>
 <tr><td><strong>τ-bench</strong><br>ICLR 2025</td><td>零售、航空客服；用户模拟器 + API + 政策</td><td>用户交互、规则遵循、最终状态、一致性</td><td>通过目标数据库状态评分，并提出 Pass^k。<a href="https://proceedings.iclr.cc/paper_files/paper/2025/hash/1b126cc38b8638e07bef37e7b2bb72bf-Abstract-Conference.html">论文</a></td></tr>
 <tr><td><strong>SWE-bench Verified</strong><br>2024</td><td>真实 GitHub Issue 与代码仓库</td><td>代码修改、目标测试和回归测试</td><td>500 个经人工筛选的样本；同时检查 FAIL_TO_PASS 与 PASS_TO_PASS。<a href="https://openai.com/index/introducing-swe-bench-verified/">说明</a></td></tr>
