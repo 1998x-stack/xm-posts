@@ -272,3 +272,7 @@ BERT 归入现有 `Training → Pretraining`，新增二级专题 **Bidirectiona
 
 
 TD3 归入 `reinforcement-learning` → **Continuous Control / Off-policy Actor–Critic** 既有分类，不新建一级或重复二级分类；论文精读位于 [`posts/reinforcement-learning/td3/`](posts/reinforcement-learning/td3/index.html)。内容以 Fujimoto et al. ICML 2018 为准，包含 16 节机制解释、五幅独立 SVG、五组原生 MathML、交互式 clipped double-Q 算例、Table 1 与 Table 2 分指标实验对照、纯 Python 数学核验及证据台账。
+
+## MobileNet / Efficient & Mobile CNNs
+
+MobileNet 归入 `architectures` → **Convolutional Neural Networks & Vision** → **Efficient & Mobile CNNs**，不新增一级分类。文章 [`Understanding MobileNet`](posts/architectures/mobilenet/index.html) 位于 `posts/architectures/mobilenet/`，以 Howard et al. 2017 的 Depthwise Separable Convolution、α/ρ 缩放及 ImageNet 实验为主线，区分 MobileNetV2 的逆残差/线性瓶颈、V3 的 NAS/SE/h-swish 与 V4 的 UIB/Mobile MQA。包含 5 幅独立 SVG、MathML 公式、交互计算账本、标准库 Python 数值验证及原论文证据台账。
