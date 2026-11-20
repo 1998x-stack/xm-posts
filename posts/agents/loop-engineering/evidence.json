@@ -24,7 +24,7 @@
     "source_url": "https://arxiv.org/abs/2608.21884",
     "locator": "Abstract",
     "status": "verified",
-    "notes": "Important evidence gap: configuration is more visible in repositories than runtime state."
+    "notes": "The paper reports that almost none of the identified repositories committed the prescribed state files. However, 180 of 217 confirmed loops were event-only; many process a new PR per run and therefore do not need cross-run state files. Absence of a STATE.md file is not proof of poor design."
   },
   {
     "id": "E04",
@@ -97,5 +97,23 @@
     "locator": "run_loop; _save; _load",
     "status": "illustrative",
     "notes": "Teaching implementation, not a production workflow engine; does not implement distributed locking, leases, exactly-once side effects, or a security sandbox."
+  },
+  {
+    "id": "E12",
+    "kind": "threats_to_validity",
+    "claim": "The authors identify construct-validity risks: definitions of a loop differ, ordinary automation can be mistaken for loop engineering, and heuristics can miss unconventional implementations.",
+    "source_url": "https://arxiv.org/abs/2608.21884",
+    "locator": "§6 Threats to Validity",
+    "status": "verified",
+    "notes": "The authors explicitly frame the mining results as exploratory and manually inspect heuristic matches."
+  },
+  {
+    "id": "E13",
+    "kind": "adoption_detail",
+    "claim": "Of the 217 confirmed loops, 180 were repository-event-only, many reviewing each newly opened pull request; some scheduled issue-triage loops relied on the issue tracker as their state source.",
+    "source_url": "https://arxiv.org/abs/2608.21884",
+    "locator": "§5 Discussion, lines discussing the 217 confirmed loops",
+    "status": "verified",
+    "notes": "This nuance explains why committed cross-run state files are not necessary for every event-triggered loop."
   }
 ]
