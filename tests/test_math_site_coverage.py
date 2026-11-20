@@ -89,3 +89,21 @@ def test_migrated_math_fractions_and_accents_are_semantically_nested():
     assert '<msub><mi>π</mi><mrow><mi>ref</mi></mrow></msub><mo>(</mo><mi>y</mi>' in dpo
     assert '<mfrac><mi>t</mi><mi>f</mi></mfrac>' not in word2vec
     assert '<mfrac><mi>t</mi><mrow><mi>f</mi><mo>(</mo><mi>w</mi>' in word2vec
+
+def test_policy_ratio_denominators_include_conditioning_arguments():
+    patterns = {
+        'reinforcement-learning/ppo': ('<mi>old</mi></mrow></msub><mo>(</mo>',),
+        'training/grpo': ('<mi>θ</mi></mrow></msub><mo>(</mo>',),
+        'training/rlhf': ('<mi>ref</mi></mrow></msub><mo>(</mo>',
+                          '<mi>old</mi></mrow></msub><mo>(</mo>')
+    }
+    for route, expected in patterns.items():
+        html = (ROOT/'posts'/route/'index.html').read_text(encoding='utf-8')
+        for fragment in expected:
+            assert fragment in html, route
+    for slug in ('adam', 'adamw'):
+        html = (ROOT/'posts/foundations'/slug/'index.html').read_text(encoding='utf-8')
+        assert '<msqrt><mi>v</mi></msqrt><msub><mi>̂</mi>' not in html
+        assert '<msqrt><msub><mover accent="true"><mi>v</mi>' in html
+    ppo = (ROOT/'posts/reinforcement-learning/ppo/index.html').read_text(encoding='utf-8')
+    assert '<mi>E</mi><msub><mi>̂</mi>' not in ppo
