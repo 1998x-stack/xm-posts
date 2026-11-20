@@ -32,7 +32,8 @@
       "ResNet",
       "Transformer",
       "State Space",
-      "Normalization & Residual Paths"
+      "Normalization & Residual Paths",
+      "Positional Encoding"
     ]
   },
   {

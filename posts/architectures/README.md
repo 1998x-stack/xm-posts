@@ -10,3 +10,5 @@
 
 - [Understanding Pre-LN vs Post-LN](pre-ln-vs-post-ln/index.html)：LayerNorm 位置、残差梯度、warm-up 论文证据、DeepNorm / Peri-LN。
 - 本主题横跨模型结构与训练稳定性，先作为 `architectures` 的二级主题；若未来扩展为覆盖多个模型家族的独立系列，再评估增设一级分类。
+
+RoPE 位于 `posts/architectures/rope/`，主题为 **Positional Encoding**；位置编码属于模型架构，推理缓存与部署属于推理分类的交叉议题。

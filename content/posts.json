@@ -280,5 +280,25 @@
     "summary": "从因果 Attention 的单步计算与显存公式出发，图解 Prefill/Decode、MHA/GQA/MQA、PagedAttention、前缀复用，附交互显存计算器和可验证的最小 Python 示例。",
     "paper": "https://arxiv.org/abs/2309.06180",
     "illustration": "kv-cache"
+  },
+  {
+    "slug": "rope",
+    "title": "Understanding RoPE",
+    "subtitle": "位置如何变成旋转？从相对距离到长上下文",
+    "category": "architectures",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 30,
+    "tags": [
+      "RoPE",
+      "Positional Encoding",
+      "Rotary Embedding",
+      "Relative Position",
+      "Long Context"
+    ],
+    "summary": "从二维旋转和矩阵恒等式出发，图解 RoPE 如何将相对位移写入 Q/K 内积，结合交互平移实验、纯 Python 断言、RoFormer 论文证据与 PI、YaRN、LongRoPE 的工程边界。",
+    "paper": "https://arxiv.org/abs/2104.09864",
+    "illustration": "rope"
   }
 ]
