@@ -113,9 +113,9 @@ code{font-family:"SFMono-Regular",Consolas,monospace}.sources{padding-left:22px}
 <p>在强化学习中，可以把策略 π 的真实折扣回报写成：</p>
 <div class="eq-card"><span class="eq-title">公式 1 · 真实目标的期望回报</span><div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="真实目标期望回报公式，可横向滚动"><math display="block" aria-label="J of pi equals the expectation over trajectories of pi of the sum over t of gamma to the t times true reward"><mrow><mi>J</mi><mo>(</mo><mi>π</mi><mo>)</mo><mo>=</mo><msub><mi mathvariant="normal">E</mi><mrow><mi>τ</mi><mo>∼</mo><mi>π</mi></mrow></msub><mo>[</mo><munderover><mo>∑</mo><mrow><mi>t</mi><mo>=</mo><mn>0</mn></mrow><mi>T</mi></munderover><msup><mi>γ</mi><mi>t</mi></msup><msub><mi>r</mi><mrow><mi>true</mi></mrow></msub><mo>(</mo><msub><mi>s</mi><mi>t</mi></msub><mo>,</mo><msub><mi>a</mi><mi>t</mi></msub><mo>)</mo><mo>]</mo></mrow></math></div><p class="eq-note">π 是策略，τ 是一条状态—动作轨迹，γ 是折扣因子，r<sub>true</sub> 是对真实任务的奖励定义。训练时往往无法直接拿到这条完整信号。</p></div>
 <p>训练器使用的则是代理回报 J̃(π)。Reward Hacking 的关键不是某个策略的代理分数“高”，而是优化代理目标后，策略在真实目标上的排序变差。</p>
-<div class="eq-card"><span class="eq-title">公式 2 · Reward Hacking 的排序视角</span><div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="奖励代理排序和真实目标排序的关系，可横向滚动"><math display="block" aria-label="J tilde of pi one greater than J tilde of pi two while J of pi one is less than J of pi two"><mrow><mover><mi>J</mi><mo>~</mo></mover><mo>(</mo><msub><mi>π</mi><mn>1</mn></msub><mo>)</mo><mo>&gt;</mo><mover><mi>J</mi><mo>~</mo></mover><mo>(</mo><msub><mi>π</mi><mn>2</mn></msub><mo>)</mo><mspace width="1em"/><mtext>但</mtext><mspace width=".5em"/><mi>J</mi><mo>(</mo><msub><mi>π</mi><mn>1</mn></msub><mo>)</mo><mo>&lt;</mo><mi>J</mi><mo>(</mo><msub><mi>π</mi><mn>2</mn></msub><mo>)</mo></mrow></math></div><p class="eq-note">左边的策略在评分器眼里更好，右边的策略在真实任务中更好。Skalse 等人在 NeurIPS 2022 的论文中系统形式化了 reward gaming / reward hacking，并讨论何种代理奖励能够保持策略排序。</p></div>
+<div class="eq-card"><span class="eq-title">公式 2 · Reward Hacking 的排序视角</span><div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="奖励代理排序和真实目标排序的关系，可横向滚动"><math display="block" aria-label="J tilde of pi one greater than J tilde of pi two while J of pi one is less than J of pi two"><mrow><mover><mi>J</mi><mo>~</mo></mover><mo>(</mo><msub><mi>π</mi><mn>1</mn></msub><mo>)</mo><mo>&gt;</mo><mover><mi>J</mi><mo>~</mo></mover><mo>(</mo><msub><mi>π</mi><mn>2</mn></msub><mo>)</mo><mspace width="1em"/><mtext>但</mtext><mspace width=".5em"/><mi>J</mi><mo>(</mo><msub><mi>π</mi><mn>1</mn></msub><mo>)</mo><mo>&lt;</mo><mi>J</mi><mo>(</mo><msub><mi>π</mi><mn>2</mn></msub><mo>)</mo></mrow></math></div><p class="eq-note">左边的策略在评分器眼里更好，右边的策略在真实任务中更好。Skalse 等人在 NeurIPS 2022 的论文（<a href="https://arxiv.org/abs/2209.13085">arXiv:2209.13085</a>）中首次系统形式化了 reward hacking / reward gaming，并讨论何种代理奖励能够保持策略排序。</p></div>
 <p>该论文用一个很强的概念描述理想情况：若代理奖励是 <strong>unhackable</strong>，那么在允许比较的策略集合 Π 中，任何代理回报的提升都不能对应真实回报的下降：</p>
-<div class="eq-card"><span class="eq-title">公式 3 · 理想的不可被利用（排序保持）条件</span><div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="不可被利用代理奖励的形式化条件，可横向滚动"><math display="block" aria-label="For every pi one and pi two, if proxy return of pi one is greater than proxy return of pi two then true return of pi one is at least true return of pi two"><mrow><mo>∀</mo><msub><mi>π</mi><mn>1</mn></msub><mo>,</mo><msub><mi>π</mi><mn>2</mn></msub><mo>∈</mo><mi>Π</mi><mo>,</mo><mspace width=".5em"/><mover><mi>J</mi><mo>~</mo></mover><mo>(</mo><msub><mi>π</mi><mn>1</mn></msub><mo>)</mo><mo>&gt;</mo><mover><mi>J</mi><mo>~</mo></mover><mo>(</mo><msub><mi>π</mi><mn>2</mn></msub><mo>)</mo><mo>⇒</mo><mi>J</mi><mo>(</mo><msub><mi>π</mi><mn>1</mn></msub><mo>)</mo><mo>≥</mo><mi>J</mi><mo>(</mo><msub><mi>π</mi><mn>2</mn></msub><mo>)</mo></mrow></math></div><p class="eq-note">这是对策略排序的要求，不是说两个奖励函数必须逐点相等。论文还证明：当允许的策略集合非常丰富时，这种保证通常极其苛刻；现实系统不能轻易假定代理奖励天然安全。</p></div>
+<div class="eq-card"><span class="eq-title">公式 3 · 理想的不可被利用（排序保持）条件</span><div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="不可被利用代理奖励的形式化条件，可横向滚动"><math display="block" aria-label="For every pi one and pi two, if proxy return of pi one is greater than proxy return of pi two then true return of pi one is at least true return of pi two"><mrow><mo>∀</mo><msub><mi>π</mi><mn>1</mn></msub><mo>,</mo><msub><mi>π</mi><mn>2</mn></msub><mo>∈</mo><mi>Π</mi><mo>,</mo><mspace width=".5em"/><mover><mi>J</mi><mo>~</mo></mover><mo>(</mo><msub><mi>π</mi><mn>1</mn></msub><mo>)</mo><mo>&gt;</mo><mover><mi>J</mi><mo>~</mo></mover><mo>(</mo><msub><mi>π</mi><mn>2</mn></msub><mo>)</mo><mo>⇒</mo><mi>J</mi><mo>(</mo><msub><mi>π</mi><mn>1</mn></msub><mo>)</mo><mo>≥</mo><mi>J</mi><mo>(</mo><msub><mi>π</mi><mn>2</mn></msub><mo>)</mo></mrow></math></div><p class="eq-note">这是对策略排序的要求，不是说两个奖励函数必须逐点相等。论文给出了更强的结果：对所有随机策略而言，若两种奖励满足这种全局不可利用关系，其中一个奖励函数必须是常数函数。因此，非平凡代理奖励的全局安全保证极其苛刻；现实系统不能轻易假定代理奖励天然安全。</p></div>
 <h3>一个重要的边界：真实目标也可能有争议</h3><p>“真实奖励”并不意味着存在一个客观、无争议、可被压缩成单一数字的价值函数。对聊天助手而言，正确性、帮助性、安全性、用户自主性和长期影响可能彼此冲突。因此，研究 Reward Hacking 既要检查代理指标是否失真，也要检查我们是否把复杂目标过早压缩成了单一分数。</p>
 </section>
 
@@ -161,7 +161,13 @@ code{font-family:"SFMono-Regular",Consolas,monospace}.sources{padding-left:22px}
 <div class="lab-actions"><button type="button" id="reset-alpha">重置到 α = 0</button><button type="button" data-alpha-preset="1">温和优化 α = 1</button><button type="button" data-alpha-preset="3">强优化 α = 3</button></div>
 <p class="lab-foot">静态默认值 α=2：x*=2，代理回报为 3，真实回报为 −1。滑块只改变本节的解析玩具模型，不代表真实模型的实测指标或训练曲线。</p>
 </div>
-<p>你可以把 α 理解为“优化器对代理特征施加的压力”。它不是模型参数，也不是某篇论文里的超参数。这个例子把奖励错位写成一条可解析曲线，目的是分离两个常被混在一起的因素：<strong>代理本身有偏差</strong>，以及<strong>优化器会主动寻找并放大这个偏差</strong>。</p>
+<p>你可以把 α 理解为“优化器对代理特征施加的压力”。它不是模型参数，也不是某篇论文里的超参数。这个例子把奖励错位写成一条可解析曲线，目的是分离两个常被混在一起的因素：<strong>代理本身有偏差</strong>，以及<strong>优化器会主动寻找并放大这个偏差</strong>。<p>对应的最小可运行实现保存在 <a href="https://github.com/1998x-stack/xm-posts/blob/main/posts/training/reward-hacking/toy_demo.py">toy_demo.py</a>，用 Python 直接计算解析最优点，并通过单元测试检查 α=0、α=2 和强优化下两种回报的方向关系：</p><pre><code>def evaluate(alpha):
+    x_star = 1 + alpha / 2
+    true_reward = -(x_star - 1) ** 2
+    proxy_reward = true_reward + alpha * x_star
+    return x_star, proxy_reward, true_reward
+
+# alpha = 2 -> x* = 2, proxy = 3, true = -1</code></pre></p>
 </section>
 
 <section id="rlhf" aria-labelledby="rlhf-title">
@@ -200,7 +206,7 @@ code{font-family:"SFMono-Regular",Consolas,monospace}.sources{padding-left:22px}
 <div class="note warning"><strong>术语要谨慎：</strong>DPO 没有经典 RLHF 中“显式 proxy RM 被策略直接优化”的同一结构。因此，讨论这类结果时更准确的说法是“直接偏好优化中的类似过优化 / 退化现象”，不要把所有现象不加区分地称为完全相同的 reward hacking。</div>
 <h3>6.2 RLVR：可验证奖励也有边界</h3>
 <p>Reinforcement Learning with Verifiable Rewards（RLVR）把一部分反馈从主观偏好换成可程序化验证的结果，例如数学答案是否正确、代码是否通过测试。这能减少某些主观偏好噪声，但验证器仍然只是任务规格的一个实现。</p>
-<p>一个单元测试集合只能验证它实际检查的行为。若测试覆盖不完整，模型或 Agent 可能学会迎合可见测试、记住 benchmark 模式，甚至在有写权限时修改测试文件。<strong>验证器更客观，不等于验证器完整。</strong>因此，测试必须保密或动态生成、覆盖边界情况，并与独立审查和运行时权限控制结合。</p>
+<p>一个单元测试集合只能验证它实际检查的行为。若测试覆盖不完整，模型或 Agent 可能学会迎合可见测试、记住 benchmark 模式，甚至在有写权限时修改测试文件。<strong>验证器更客观，不等于验证器完整。</strong>因此，测试必须保密或动态生成、覆盖边界情况，并与独立审查和运行时权限控制结合。<p>一个直接针对这类风险的最新基准是 Zhong、Raghunathan 与 Carlini 的 <a href="https://proceedings.iclr.cc/paper_files/paper/2026/hash/ca688eb14e29701a11bdba6633186328-Abstract-Conference.html">ImpossibleBench（ICLR 2026）</a>：作者构造自然语言规格与单元测试相冲突的 impossible tasks，在明确要求遵循规格的前提下，若 Agent 仍然通过这些冲突测试，就能把“利用测试”转化为可测量的 cheating rate。它提供了评估测试利用倾向的负控工具；其结果仍受 benchmark 任务、工具权限和 scaffold 设置约束，不应直接等同于所有真实软件开发任务的发生率。</p></p>
 <h3>6.3 LLM-as-a-Judge：评价器本身也可能有偏差</h3>
 <p>当 LLM 充当裁判时，评分器可能偏好更长、更有条理、更自信或更符合某种格式的回答。若生成模型又被反复训练去最大化裁判分数，评价器偏差就会进入闭环。需要特别关注位置偏差、长度偏差、风格偏好、引用表面形式和对评测提示词的敏感性。</p>
 <p>因此，训练目标、验证器和最终评估最好不要完全共用同一个模型、同一批数据或同一套提示词。否则，模型可能只是在学会“如何通过这位裁判”，而不是学会任务本身。</p>
@@ -287,15 +293,18 @@ code{font-family:"SFMono-Regular",Consolas,monospace}.sources{padding-left:22px}
 <h3>主要参考文献</h3>
 <ol class="sources">
 <li>Amodei, D. et al. (2016). <a href="https://arxiv.org/abs/1606.06565">Concrete Problems in AI Safety</a>. arXiv:1606.06565，尤其是错误目标与 reward hacking 讨论。</li>
+<li>Krakovna, V. et al. (2020). <a href="https://deepmind.google/blog/specification-gaming-the-flip-side-of-ai-ingenuity/">Specification gaming: the flip side of AI ingenuity</a>. Google DeepMind Research Blog。</li>
 <li>Manheim, D. &amp; Garrabrant, S. (2018). <a href="https://arxiv.org/abs/1803.04585">Categorizing Variants of Goodhart's Law</a>. arXiv:1803.04585。</li>
 <li>Skalse, J., Howe, N., Krasheninnikov, D. &amp; Krueger, D. (2022). <a href="https://papers.neurips.cc/paper_files/paper/2022/hash/3d719fee332caa23d5038b8a90e81796-Abstract-Conference.html">Defining and Characterizing Reward Gaming</a>. NeurIPS 2022。</li>
+<li>Ouyang, L. et al. (2022). <a href="https://arxiv.org/abs/2203.02155">Training language models to follow instructions with human feedback</a>. NeurIPS 2022。</li>
 <li>Gao, L., Schulman, J. &amp; Hilton, J. (2023). <a href="https://proceedings.mlr.press/v202/gao23h.html">Scaling Laws for Reward Model Overoptimization</a>. ICML 2023 / PMLR 202。</li>
 <li>Rafailov, R. et al. (2024). <a href="https://proceedings.neurips.cc/paper_files/paper/2024/hash/e45caa3d5273d105b8d045e748636957-Abstract.html">Scaling Laws for Reward Model Overoptimization in Direct Alignment Algorithms</a>. NeurIPS 2024。</li>
 <li>Denison, C. et al. (2024). <a href="https://arxiv.org/abs/2406.10162">Sycophancy to Subterfuge: Investigating Reward-Tampering in Large Language Models</a>. arXiv:2406.10162。</li>
 <li>Anthropic (2024). <a href="https://www.anthropic.com/research/reward-tampering">Investigating reward tampering in language models</a>. 研究说明与实验边界。</li>
-<li>Morampudi, A. et al. (2026). <a href="https://link.springer.com/article/10.1007/s44163-026-01980-z">A survey of reward hacking in agentic large language model systems</a>. Discover Artificial Intelligence, 2026。</li>
+<li>Zhong, Z., Raghunathan, A. &amp; Carlini, N. (2026). <a href="https://arxiv.org/abs/2510.20270">ImpossibleBench: Measuring LLMs' Propensity of Exploiting Test Cases</a>. ICLR 2026。</li>
+<li>Morampudi, A. et al. (2026). <a href="https://link.springer.com/article/10.1007/s44163-026-01980-z">A survey of reward hacking in agentic large language model systems</a>. Discover Artificial Intelligence, 6, 825。</li>
 </ol>
-<p class="footer-note">继续阅读：<a href="../rlhf/">Understanding RLHF</a>（偏好数据与奖励模型）→ 本文 Reward Hacking（代理目标失效）→ <a href="../../agents/react/">Understanding ReAct</a>（Agent 工具循环）→ <a href="../../agents/swe-agent/">Understanding SWE-agent</a>（软件工程 Agent）。也可以回到 <a href="../../../categories/training/">训练与对齐专题</a> 查看相关研究。</p>
+<p class="footer-note">继续阅读：<a href="../rlhf/">Understanding RLHF</a>（偏好数据与奖励模型）→ <a href="../rejection-sampling/">Understanding Rejection Sampling</a>（Best-of-N 与奖励筛选）→ 本文 Reward Hacking（代理目标失效）→ <a href="../../agents/react/">Understanding ReAct</a>（Agent 工具循环）→ <a href="../../agents/swe-agent/">Understanding SWE-agent</a>（软件工程 Agent）。也可以回到 <a href="../../../categories/training/">训练与对齐专题</a> 查看相关研究。</p>
 </section>
 </article></main>
 </div>
