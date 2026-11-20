@@ -92,7 +92,7 @@ section{margin-top:69px;scroll-margin-top:24px}h2{font-size:clamp(27px,3.1vw,35p
 <p class="note warn"><strong>不要机械地下结论“Teacher Forcing 必须被 Scheduled Sampling 取代”。</strong> 标准的下一个 token 最大似然训练，在很多自回归语言模型中仍是基础目标；替代策略的收益取决于任务、目标函数和评估方式。</p>
 </section>
 <section id="code"><h2><small>09</small>最小可复算代码：先学对齐，再学损失</h2>
-<p>仓库附有 <a href="mini_teacher_forcing.py">教学 Python 文件</a>（源码位于文章目录；正式网站只发布 HTML）。下面仅摘出最关键的计算。它不依赖 PyTorch，不能把它当成“复现论文的完整 RNN”：</p>
+<p>仓库附有 <a href="https://github.com/1998x-stack/xm-posts/blob/main/posts/training/teacher-forcing/mini_teacher_forcing.py">教学 Python 文件</a>（源码位于文章目录；正式网站只发布 HTML）。下面仅摘出最关键的计算。它不依赖 PyTorch，不能把它当成“复现论文的完整 RNN”：</p>
 <pre class="code"><code>from math import log
 
 tokens = ["&lt;bos&gt;", "我", "爱", "机器", "学习", "&lt;eos&gt;"]
