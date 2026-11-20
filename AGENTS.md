@@ -95,6 +95,14 @@ The cover should let a student recognize **what happens inside the model** at a 
 
 *Reminder:* `Agents.md` is a discoverability alias to canonical `AGENTS.md`. Maintain these rules here, not in two divergent copies.
 
+## PDF export contract (every published article)
+
+- **One PDF per published post.** On a clean build, `python scripts/build_site.py` creates the original HTML site and `python scripts/render_pdfs.py` renders each published article to `_site/posts/<category>/<slug>/article.pdf` using Chromium/Playwright. Do not commit generated PDFs or `_site/`. Draft posts never receive generated PDFs or site buttons.
+- **Website layout is authoritative.** PDF output comes from the actual article HTML/CSS (including inline SVG, native MathML and original print rules), not from a second Markdown, LaTeX or Word source. Only add conservative print overrides for page sizing, navigation and pagination; never rebuild the explanation as a different template.
+- **No per-article manual button edits.** The exporter injects the accessible `下载 PDF` link and `site/assets/pdf-download.css` into the *built* HTML after a valid PDF exists. The article's source `index.html` remains standalone, and the on-screen control must not change normal document flow. Hide the control in PDF/print output.
+- **PDF QA matters.** Fail the build for broken images, missing PDFs, invalid output or unsearchable/empty documents. Keep CJK + mathematical fonts available in CI; inspect SVG, MathML, code wrapping, page breaks and text clipping on representative long and short posts. Interactive exercises become static snapshots in PDF; retain the interactive HTML version for experimentation.
+- **Deployment.** `.github/workflows/publish.yml` must generate PDFs before link validation and Pages upload. Verify links and PDF integrity on PRs; only claim production success after a successful Pages deployment and reachable downloadable URLs.
+
 ## 8. Copyright and provenance
 
 The teaching *method* is inspired by Christopher Olah and Harvard NLP. All article text and diagrams must be independently constructed. Cite primary papers for substantive facts; do not assume the absence of a license implies permission to redistribute images or code. Canonical Skill upstream provenance is recorded in `skills/olah-style-paper-posts/UPSTREAM.md`.
