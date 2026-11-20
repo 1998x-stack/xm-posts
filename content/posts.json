@@ -53,5 +53,26 @@
     "summary": "从支持超平面的几何距离出发，推导硬间隔和对偶、软间隔的历史与现代形式，图解核映射和 RBF 参数，并用可验证的一维解析例子落实公式。",
     "paper": "https://doi.org/10.1007/BF00994018",
     "illustration": "svm"
+  },
+  {
+    "slug": "understanding-word2vec",
+    "title": "Understanding Word2Vec",
+    "subtitle": "词，如何找到自己的位置？从上下文预测到语义空间",
+    "category": "foundations",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 32,
+    "tags": [
+      "Word2Vec",
+      "Word Embeddings",
+      "CBOW",
+      "Skip-gram",
+      "Negative Sampling",
+      "SGNS"
+    ],
+    "summary": "从词窗自监督出发，图解 CBOW 与 Skip-gram，推导负采样损失和梯度，并用可运行的 NumPy SGNS 验证实现。",
+    "paper": "https://arxiv.org/abs/1301.3781",
+    "illustration": "word2vec"
   }
 ]
