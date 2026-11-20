@@ -1,0 +1,462 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light">
+<meta name="description" content="从 Hinton 的软目标与温度缩放出发，推导知识蒸馏损失，比较响应、特征、关系与序列级蒸馏，拆解 DistilBERT、TinyBERT、GKD 和 DeepSeek-R1。">
+<link rel="canonical" href="https://1998x-stack.github.io/xm-posts/posts/training/knowledge-distillation/">
+<title>Understanding Knowledge Distillation · xm-posts</title>
+<style>
+:root{--ink:#243d43;--muted:#61787b;--line:#dce7e1;--accent:#267a72;--warm:#bd7952;--violet:#7565a7;--paper:#fffdf9;--wash:#f4f7f2}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--wash);color:var(--ink);font:17px/1.82 system-ui,-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}
+a{color:#176f6a;text-decoration-color:#b4d2c9;text-underline-offset:3px}
+a:hover{color:#a65f3e}
+a:focus-visible,button:focus-visible,input:focus-visible,[tabindex]:focus-visible{outline:3px solid #c27b4e;outline-offset:3px}
+p{margin:0 0 19px}
+strong{color:#173e43}
+.skip{position:absolute;top:-100px;left:16px;z-index:20;background:#24494d;color:white;padding:9px 15px}
+.skip:focus{top:12px}
+.sitebar{background:#fffdfa;border-bottom:1px solid var(--line)}
+.sitebar-inner{max-width:1210px;margin:auto;padding:12px 22px;display:flex;align-items:center;justify-content:space-between;gap:15px}
+.brand{font-weight:850;font-size:19px;text-decoration:none;color:#254950}
+.brand span{color:var(--warm)}
+.site-links{display:flex;flex-wrap:wrap;gap:16px;font-size:13px}
+.site-links a{text-decoration:none;font-weight:700}
+.layout{max-width:1210px;margin:auto;padding:48px 22px 110px;display:grid;grid-template-columns:220px minmax(0,850px);gap:48px}
+.toc{position:sticky;top:22px;align-self:start;max-height:calc(100vh - 44px);overflow:auto;font-size:12px}
+.toc .eyebrow{font-size:11px;letter-spacing:.14em;font-weight:850;color:#829793;margin:0 0 12px}
+.toc a{display:block;text-decoration:none;color:#5b7778;border-left:2px solid #d3e3dc;padding:7px 9px;line-height:1.45}
+.toc a:hover{color:var(--accent);border-color:var(--accent)}
+main,article{min-width:0}
+.kicker{font-size:11px;font-weight:850;letter-spacing:.15em;color:var(--accent)}
+h1{font-size:clamp(39px,5vw,64px);letter-spacing:-.065em;line-height:1.12;margin:12px 0 18px}
+h2{font-size:clamp(26px,3.2vw,36px);letter-spacing:-.045em;line-height:1.32;margin:0 0 20px}
+h3{font-size:20px;line-height:1.38;letter-spacing:-.025em;margin:29px 0 10px}
+.dek{font-size:21px;line-height:1.68;color:#4f6d71}
+.meta{display:flex;flex-wrap:wrap;gap:8px 20px;border-top:1px solid var(--line);padding-top:14px;margin:25px 0 52px;color:#829493;font-size:12px}
+section{margin:0 0 76px;scroll-margin-top:22px}
+.lead{font-size:19px;line-height:1.8}
+.figure{margin:25px 0 32px;background:white;border:1px solid #dce7e1;border-radius:10px;overflow:hidden}
+.figure img{display:block;width:100%;height:auto}
+.figure figcaption{padding:10px 20px 18px;color:#627a79;font-size:13px;line-height:1.65}
+.figure figcaption strong{display:block;color:#31585a;font-size:14px;margin:4px 0}
+.fig-no{font-size:11px;font-weight:850;letter-spacing:.13em;color:#b87650}
+.callout{margin:22px 0;padding:17px 19px;background:#fcf1e6;border-left:4px solid #c18758;border-radius:5px;color:#705c48;font-size:14px}
+.callout strong{color:#825a39}
+.note{margin:19px 0;padding:15px 18px;background:#eaf3ee;border-left:3px solid var(--accent);border-radius:5px;font-size:14px;color:#456a67}
+.two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px;margin:22px 0}
+.two>div{background:#fff;border:1px solid var(--line);border-radius:8px;padding:17px;font-size:14px}
+.two b{display:block;color:#28746d;margin-bottom:7px}
+.two p{margin:0}
+.three{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:22px 0}
+.three>div{background:#fff;border:1px solid var(--line);border-radius:8px;padding:16px;font-size:14px}
+.three b{display:block;color:#28746d;margin-bottom:7px}
+.three p{margin:0}
+.mathbox{background:#e8f2ed;border-left:4px solid var(--accent);border-radius:5px;padding:16px 19px;margin:22px 0;min-width:0;max-width:100%}
+.math-scroll{max-width:100%;min-width:0;overflow-x:auto;overflow-y:hidden;padding:7px 4px 10px}
+.math-scroll:focus-visible{outline:3px solid #bd7952;outline-offset:-2px}
+.math-scroll math[display="block"]{display:block;width:max-content;min-width:100%;font:normal clamp(18px,2.1vw,24px)/1.55 "Cambria Math","STIX Two Math","DejaVu Serif",serif;text-align:center;color:#244f52}
+.math-note{font-size:13px;color:#5d7777;margin:10px 4px 0}
+.math-inline{font-family:"Cambria Math","STIX Two Math","DejaVu Serif",serif;vertical-align:-.06em}
+.lab{margin:26px 0;padding:20px;background:#fff;border:1px solid #c9ded4;border-radius:10px}
+.lab-title{font-size:11px;font-weight:850;letter-spacing:.13em;color:#2a7a70}
+.lab label{display:block;font-size:14px;font-weight:700;margin:14px 0 8px}
+.lab input[type=range]{width:100%;accent-color:#287b72}
+.lab-output{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.lab-output output{font-size:23px;font-weight:850;color:#28766e;font-variant-numeric:tabular-nums}
+.lab svg{display:block;width:100%;height:auto;margin-top:12px}
+.lab-caption{font-size:13px;color:#607b79;margin:10px 0 0}
+.status{background:#e9f3ed;border-radius:6px;padding:12px 15px;font-size:14px;color:#315e59;margin-top:12px}
+.table-wrap{max-width:100%;overflow-x:auto}
+table{border-collapse:collapse;width:100%;margin:20px 0 26px;font-size:14px}
+th,td{text-align:left;vertical-align:top;border-bottom:1px solid #dce6e1;padding:11px 10px}
+thead th{background:#e8f0eb;color:#31585a}
+td:first-child{font-weight:700}
+.table-note{font-size:13px;color:#667d7c}
+.code{overflow:auto;background:#203840;color:#f1f6f1;border-radius:8px;padding:19px;font:13px/1.7 ui-monospace,SFMono-Regular,Consolas,monospace;tab-size:4}
+.code code{white-space:pre}
+.references{padding-left:23px;font-size:14px}
+.references li{margin:11px 0}
+.small{font-size:13px;color:#687e7d}
+.footer{border-top:1px solid var(--line);padding-top:18px;font-size:13px;color:#758b88}
+@media(max-width:1000px){.layout{display:block;max-width:900px;padding-top:27px}.toc{position:static;max-height:none;display:flex;flex-wrap:wrap;gap:4px;border-bottom:1px solid var(--line);padding-bottom:13px;margin-bottom:26px}.toc .eyebrow{width:100%;margin-bottom:7px}.toc a{border:0;background:#e7efea;border-radius:4px;padding:6px 9px}}
+@media(max-width:580px){body{font-size:16px}.sitebar-inner{padding:10px 15px}.site-links{gap:9px;font-size:12px}.layout{padding:23px 15px 72px}.dek{font-size:18px}h1{font-size:43px}.meta{margin-bottom:36px}.two,.three{grid-template-columns:1fr}.figure figcaption{padding:8px 13px 15px}.mathbox{padding:12px}.math-scroll math[display="block"]{font-size:17px}.lab{padding:14px}.table-wrap table{min-width:650px}.code{padding:14px;font-size:12px}section{margin-bottom:62px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+@media print{body{background:white}.sitebar,.toc,.skip,.lab input{display:none!important}.layout{display:block;max-width:none;padding:0}.meta{margin-bottom:25px}section{break-inside:avoid;margin:0 0 27px}.figure{break-inside:avoid}.math-scroll{overflow:visible}.math-scroll math[display="block"]{font-size:15px}.lab{break-inside:avoid}.code{background:#f1f4f2;color:#203840}}
+</style>
+</head>
+<body>
+<a class="skip" href="#content">跳转至正文</a>
+<header class="sitebar"><div class="sitebar-inner"><a class="brand" href="../../../">xm<span>.</span>posts</a><nav class="site-links" aria-label="站点导航"><a href="../../../categories/training/">训练与对齐</a><a href="../../../archive/">文章归档</a><a href="https://github.com/1998x-stack/xm-posts">GitHub</a></nav></div></header>
+<div class="layout">
+<nav class="toc" aria-label="文章目录">
+<p class="eyebrow">KNOWLEDGE DISTILLATION</p>
+<a href="#problem">01 · 蒸馏究竟在转移什么？</a>
+<a href="#soft-target">02 · 为什么软目标比硬标签信息更多？</a>
+<a href="#objective">03 · 温度、KL 与 T² 损失</a>
+<a href="#knowledge">04 · 三种知识：输出、特征、关系</a>
+<a href="#regime">05 · 离线、在线与自蒸馏</a>
+<a href="#llm">06 · 从分类蒸馏走向 LLM</a>
+<a href="#deepseek">07 · DeepSeek-R1：把推理轨迹交给小模型</a>
+<a href="#compare">08 · 蒸馏与其他压缩/训练方法</a>
+<a href="#practice">09 · 一个可执行的蒸馏实验</a>
+<a href="#failure">10 · 失败模式与评测设计</a>
+<a href="#summary">11 · 研究路线与参考文献</a>
+</nav>
+<main id="content"><article>
+<header>
+<div class="kicker">TRAINING &amp; ALIGNMENT / TEACHER–STUDENT LEARNING</div>
+<h1>Understanding<br>Knowledge Distillation</h1>
+<p class="dek">大模型学到的知识，能否迁移到更小、更便宜的模型？从 Hinton 的软目标、温度缩放与 KL 散度出发，走到 Transformer 中间表征、LLM 推理轨迹和 DeepSeek-R1。</p>
+<div class="meta"><span>Hinton et al. · 2015</span><span>DistilBERT · TinyBERT · GKD · DeepSeek-R1</span><span>约 32 分钟阅读</span></div>
+</header>
+
+<section id="problem" aria-labelledby="problem-heading">
+<h2 id="problem-heading">01 · 蒸馏究竟在转移什么？</h2>
+<p class="lead">假设你已经训练出一个效果很好的模型：它可能有数十亿参数，甚至是多个模型组成的集成。训练它花了很多 GPU 时间，但真正部署时，你可能只需要一个延迟更低、显存更小、成本更可控的模型。问题是：<strong>能不能让一个小模型学习大模型已经学会的行为，而不是从头再学一遍？</strong></p>
+<p>知识蒸馏（Knowledge Distillation, KD）给出的答案是：先让教师模型（Teacher）在输入上产生更丰富的监督信号，再训练学生模型（Student）去拟合这些信号。学生不必复制教师的参数，也不必拥有相同的网络结构；它要学习的是教师在相关输入分布上的行为或内部表征。</p>
+<figure class="figure">
+<img src="assets/cover-teacher-student.svg" alt="输入样本同时送入较大的教师模型和较小的学生模型，教师输出软目标作为额外监督，学生通过蒸馏损失学习">
+<figcaption><span class="fig-no">FIGURE 01 · THE CORE IDEA</span><strong>蒸馏迁移的是可学习的行为信号，而不是教师模型的权重文件。</strong>教师可以是单个大模型，也可以是多个模型组成的集成；学生则通过任务标签和蒸馏信号共同训练。</figcaption>
+</figure>
+<div class="two">
+<div><b>教师模型：提供更丰富的监督</b><p>通常能力更强、计算成本更高。它可以输出类别概率、token logits、中间层特征、注意力矩阵，或完整的文本/推理轨迹。</p></div>
+<div><b>学生模型：学习并承担部署</b><p>通常更小、更快或更适合目标设备。它需要在有限容量下，保留对目标任务最重要的知识，而不是逐项复刻教师的所有内部细节。</p></div>
+</div>
+<div class="callout"><strong>先纠正一个常见误解：</strong>蒸馏本身不等于压缩。如果学生模型并没有更小、更低精度或更便宜的推理结构，蒸馏也可能只是改变训练监督、提升同等规模模型的任务表现。只有当学生的部署成本确实下降时，才实现了“压缩”意义上的收益。</div>
+<p>Hinton、Vinyals 与 Dean 在 2015 年的工作将这一思路系统化：一个大型模型或集成可以把学到的泛化行为传给更小的模型。论文中特别强调，模型知识不应只被理解为参数值；它也可以被看作输入到输出的映射。<a href="https://arxiv.org/abs/1503.02531">阅读原论文</a>。</p>
+</section>
+
+<section id="soft-target" aria-labelledby="soft-target-heading">
+<h2 id="soft-target-heading">02 · 为什么软目标比硬标签信息更多？</h2>
+<p>先从一个只有三个类别的分类问题开始。图片的真实标签是“猫”。传统监督学习通常把目标写成 one-hot 向量：猫为 1，狗和狐狸为 0。这个标签告诉学生“正确答案是哪一个”，却没有告诉它：教师认为“狗”比“狐狸”更像猫，还是反过来。</p>
+<p>教师模型的输出概率则保留了这种相对判断。例如：</p>
+<div class="mathbox">
+<div class="math-scroll" tabindex="0" role="region" aria-label="教师软目标的概率向量，可横向滚动">
+<math display="block" aria-label="教师输出概率为猫零点七零、狗零点二五、狐狸零点零五">
+<mrow><msub><mi>p</mi><mi>T</mi></msub><mo>=</mo><mo>[</mo><mn>0.70</mn><mo>,</mo><mn>0.25</mn><mo>,</mo><mn>0.05</mn><mo>]</mo></mrow>
+</math>
+</div>
+<p class="math-note">这是教学示例，不是某篇论文的实验数据。第二类和第三类虽然都不是正确标签，但概率大小反映了教师对类别相似性的判断。</p>
+</div>
+<p>这就是所谓的 <strong>dark knowledge（暗知识）</strong>：它不一定是显式写在标签里的知识，而是藏在教师输出分布中的类别关系。对于语言模型，类似的信息可能体现在“下一个 token 的候选分布”中：多个词都合理，但教师对它们的相对偏好不同。</p>
+<h3>温度 T：让分布变软，而不是改变类别顺序</h3>
+<p>对教师 logits <math class="math-inline" aria-label="z sub i"><msub><mi>z</mi><mi>i</mi></msub></math> 做温度缩放：</p>
+<div class="mathbox">
+<div class="math-scroll" tabindex="0" role="region" aria-label="温度缩放 softmax 公式，可横向滚动">
+<math display="block" aria-label="p i 上标 T 等于 exp z i 除以 T，再除以所有类别 exp z j 除以 T 的总和">
+<mrow>
+<msubsup><mi>p</mi><mi>i</mi><mrow><mo>(</mo><mi>T</mi><mo>)</mo></mrow></msubsup><mo>=</mo>
+<mfrac>
+<mrow><mi>exp</mi><mo>(</mo><msub><mi>z</mi><mi>i</mi></msub><mo>/</mo><mi>T</mi><mo>)</mo></mrow>
+<mrow><munderover><mo>∑</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mi>K</mi></munderover><mi>exp</mi><mo>(</mo><msub><mi>z</mi><mi>j</mi></msub><mo>/</mo><mi>T</mi><mo>)</mo></mrow>
+</mfrac>
+</mrow>
+</math>
+</div>
+<p class="math-note"><math class="math-inline" aria-label="z sub i"><msub><mi>z</mi><mi>i</mi></msub></math> 是第 i 类的 logit，K 是类别数，T 是温度。T=1 是普通 softmax；T 越高，概率分布通常越平滑。训练结束后，学生部署时通常恢复 T=1。</p>
+</div>
+<figure class="figure">
+<img src="assets/01-temperature-soft-targets.svg" alt="温度为 1、2、4 时，教师对猫、狗、狐狸三个类别的概率分布逐渐变平">
+<figcaption><span class="fig-no">FIGURE 02 · TEMPERATURE SOFTENS THE DISTRIBUTION</span><strong>温度提高时，最大类别的概率下降，次优类别的概率上升。</strong>这张静态图对应固定 logits 的三组 softmax 计算；下方交互实验允许改变温度。</figcaption>
+</figure>
+<div class="lab" aria-labelledby="temperature-lab-title">
+<div class="lab-title" id="temperature-lab-title">INTERACTIVE LAB · 温度如何改变教师的“表达方式”</div>
+<p>固定教师 logits 为 [2.2, 1.2, −0.2]。拖动温度，观察最可能类别之外的概率质量如何展开。类别顺序不会因为温度缩放而改变。</p>
+<label for="temperature">温度 T</label>
+<div class="lab-output"><input id="temperature" type="range" min="1" max="5" step="0.5" value="2" aria-label="调整教师 softmax 温度"><output id="temperature-value" for="temperature">2.0</output></div>
+<svg viewBox="0 0 720 252" role="img" aria-labelledby="temp-chart-title temp-chart-desc">
+<title id="temp-chart-title">三个类别在温度缩放后的教师概率分布</title>
+<desc id="temp-chart-desc">横向条形图显示猫、狗、狐狸三个类别的概率，默认温度为 2。</desc>
+<rect width="720" height="252" rx="10" fill="#fbfdfa"/>
+<g font-size="16" fill="#355e5c" font-weight="700"><text x="24" y="57">猫</text><text x="24" y="126">狗</text><text x="24" y="195">狐狸</text></g>
+<g fill="#e7eee9"><rect x="112" y="30" width="450" height="34" rx="6"/><rect x="112" y="99" width="450" height="34" rx="6"/><rect x="112" y="168" width="450" height="34" rx="6"/></g>
+<rect id="bar-cat" x="112" y="30" width="235.9" height="34" rx="6" fill="#287b72"/>
+<rect id="bar-dog" x="112" y="99" width="143.1" height="34" rx="6" fill="#c17c52"/>
+<rect id="bar-fox" x="112" y="168" width="71.0" height="34" rx="6" fill="#7666a8"/>
+<g id="temp-values" font-size="14" font-weight="800" fill="#294e50"><text id="value-cat" x="580" y="53">52.4%</text><text id="value-dog" x="580" y="122">31.8%</text><text id="value-fox" x="580" y="191">15.8%</text></g>
+<text x="112" y="232" font-size="12" fill="#728985">0%</text><text x="562" y="232" text-anchor="end" font-size="12" fill="#728985">100%</text>
+</svg>
+<div class="status" id="temperature-status" aria-live="polite">T = 2.0：猫 52.4%，狗 31.8%，狐狸 15.8%。相比 T=1，教师给次优类别留下了更多概率质量。</div>
+<p class="lab-caption">交互值由页面内的 softmax 公式直接计算。T=4 时分布更平滑，但“猫”仍然是最大概率类别。</p>
+</div>
+<p>温度不是越高越好。温度太低，学生几乎只看到教师的 top-1 选择；温度太高，分布会变得过于均匀，教师对类别的区分信息也会被削弱。实践中需要在验证集上选择温度，而不是把某个固定数值当成普适规律。</p>
+</section>
+
+<section id="objective" aria-labelledby="objective-heading">
+<h2 id="objective-heading">03 · 温度、KL 与 T² 损失</h2>
+<p>现在把“让学生接近教师”写成一个可优化的目标。设教师和学生在温度 T 下的输出分布分别为 <math class="math-inline" aria-label="p T at temperature T"><msubsup><mi>p</mi><mi>T</mi><mrow><mo>(</mo><mi>T</mi><mo>)</mo></mrow></msubsup></math> 与 <math class="math-inline" aria-label="p S at temperature T"><msubsup><mi>p</mi><mi>S</mi><mrow><mo>(</mo><mi>T</mi><mo>)</mo></mrow></msubsup></math>。一种常见蒸馏损失是教师分布到学生分布的 KL 散度：</p>
+<div class="mathbox">
+<div class="math-scroll" tabindex="0" role="region" aria-label="知识蒸馏损失公式，可横向滚动">
+<math display="block" aria-label="L KD 等于 T 的平方乘以教师分布到学生分布的 KL 散度">
+<mrow><msub><mi>L</mi><mtext>KD</mtext></msub><mo>=</mo><msup><mi>T</mi><mn>2</mn></msup><msub><mi>D</mi><mtext>KL</mtext></msub><mo>(</mo><msubsup><mi>p</mi><mi>T</mi><mrow><mo>(</mo><mi>T</mi><mo>)</mo></mrow></msubsup><mo>∥</mo><msubsup><mi>p</mi><mi>S</mi><mrow><mo>(</mo><mi>T</mi><mo>)</mo></mrow></msubsup><mo>)</mo></mrow>
+</math>
+</div>
+<p class="math-note">这里的 KL 方向是 <math class="math-inline" aria-label="KL divergence from teacher distribution to student distribution"><msub><mi>D</mi><mtext>KL</mtext></msub><mo>(</mo><msub><mi>p</mi><mi>T</mi></msub><mo>∥</mo><msub><mi>p</mi><mi>S</mi></msub><mo>)</mo></math>：教师分布作为目标，学生分布作为被优化的一方。不同论文也可能使用其他方向或其他散度。</p>
+</div>
+<p>为什么前面还要乘 <math class="math-inline" aria-label="T squared"><msup><mi>T</mi><mn>2</mn></msup></math>？当 T 增大时，softmax 的分布变平，学生 logits 的梯度尺度也会随温度变化而缩小。Hinton 等人指出，在高温近似下，软目标交叉熵的梯度会按约 <math class="math-inline" aria-label="one divided by T squared"><mfrac><mn>1</mn><msup><mi>T</mi><mn>2</mn></msup></mfrac></math> 缩放；乘上 <math class="math-inline" aria-label="T squared"><msup><mi>T</mi><mn>2</mn></msup></math> 可以让改变温度时软目标项的梯度贡献更可比。它是损失尺度校正，不是“温度越高，知识越多”的定理。</p>
+<h3>软目标不能替代真实标签</h3>
+<p>如果数据集还提供真实标签 y，可以把蒸馏目标与普通监督目标结合：</p>
+<div class="mathbox">
+<div class="math-scroll" tabindex="0" role="region" aria-label="联合蒸馏与硬标签损失公式，可横向滚动">
+<math display="block" aria-label="总损失等于 lambda 乘以 T 平方 KL 蒸馏损失，加上 1 减 lambda 乘以学生对真实标签的交叉熵">
+<mrow><mi>L</mi><mo>=</mo><mi>λ</mi><msup><mi>T</mi><mn>2</mn></msup><msub><mi>D</mi><mtext>KL</mtext></msub><mo>(</mo><msubsup><mi>p</mi><mi>T</mi><mrow><mo>(</mo><mi>T</mi><mo>)</mo></mrow></msubsup><mo>∥</mo><msubsup><mi>p</mi><mi>S</mi><mrow><mo>(</mo><mi>T</mi><mo>)</mo></mrow></msubsup><mo>)</mo><mo>+</mo><mo>(</mo><mn>1</mn><mo>−</mo><mi>λ</mi><mo>)</mo><msub><mi>L</mi><mtext>CE</mtext></msub><mo>(</mo><mi>y</mi><mo>,</mo><msubsup><mi>p</mi><mi>S</mi><mrow><mo>(</mo><mn>1</mn><mo>)</mo></mrow></msubsup><mo>)</mo></mrow>
+</math>
+</div>
+<p class="math-note">λ 控制软目标项的权重。实际论文可能使用不同记号和权重约定；复现实验时要检查原文，不要只凭符号猜测。</p>
+</div>
+<p>第一项让学生学习教师的相对判断，第二项让学生不要偏离数据标签。教师可能犯错、过拟合或对某个样本过度自信，因此真实标签仍然是重要的校正信号。</p>
+<h3>张量维度：分类与语言模型有什么不同？</h3>
+<p>分类任务中，每个样本通常有一个 K 维 logits 向量。自回归语言模型则会为每个位置预测整个词表的分布。若 batch 大小为 B、序列长度为 L、词表大小为 V，那么教师 logits 与学生 logits 在共享 tokenizer / vocab 时可写为：</p>
+<div class="mathbox">
+<div class="math-scroll" tabindex="0" role="region" aria-label="语言模型蒸馏 logits 张量形状，可横向滚动">
+<math display="block" aria-label="教师和学生 logits 张量形状均为 B 乘 L 乘 V">
+<mrow><msub><mi>Z</mi><mi>T</mi></msub><mo>,</mo><msub><mi>Z</mi><mi>S</mi></msub><mo>∈</mo><msup><mi>R</mi><mrow><mi>B</mi><mo>×</mo><mi>L</mi><mo>×</mo><mi>V</mi></mrow></msup></mrow>
+</math>
+</div>
+<p class="math-note">KL 通常沿词表维 V 计算，再对有效 token 位置做 mask 与平均；padding token 不应被当作真实训练目标。若 teacher/student 词表不同，就不能直接逐 token 对齐 logits，需要改用文本级输出或显式映射。</p>
+</div>
+</section>
+
+<section id="knowledge" aria-labelledby="knowledge-heading">
+<h2 id="knowledge-heading">04 · 三种知识：输出、特征、关系</h2>
+<p>“蒸馏什么”比“模型有多大”更能决定方法设计。经典研究通常把知识信号分成三类：输出响应、内部特征和样本/特征之间的关系。它们不是互斥的算法名称，而是教师可以提供的不同监督层次。</p>
+<figure class="figure">
+<img src="assets/02-knowledge-types.svg" alt="三种知识蒸馏对比图：响应蒸馏对齐教师和学生输出概率，特征蒸馏对齐中间层表示，关系蒸馏对齐样本之间的相似性结构">
+<figcaption><span class="fig-no">FIGURE 03 · WHAT IS TRANSFERRED?</span><strong>输出回答“预测什么”，特征回答“内部如何表示”，关系回答“样本之间如何组织”。</strong>同一篇工作可以组合多种知识信号。</figcaption>
+</figure>
+<h3>4.1 Response-based：对齐输出响应</h3>
+<p>最经典的方式就是前面介绍的 soft targets：教师和学生对同一输入产生类别 logits 或 token logits，学生通过 KL / 交叉熵拟合教师分布。优点是实现简单、教师与学生结构可以不同；局限是学生只看到最终输出，无法直接得到教师中间层的表示。</p>
+<h3>4.2 Feature-based：对齐中间表征</h3>
+<p>对于 Transformer，可以选择某些层的 hidden states、attention maps 或 embedding 层输出作为蒸馏目标。若教师和学生的隐藏维度不同，通常需要一个投影层把学生表示映射到教师的空间。一个示意性的特征损失是：</p>
+<div class="mathbox">
+<div class="math-scroll" tabindex="0" role="region" aria-label="中间层特征对齐损失，可横向滚动">
+<math display="block" aria-label="特征损失为所有选定层的学生投影特征与教师特征之间平方二范数之和">
+<mrow><msub><mi>L</mi><mtext>feat</mtext></msub><mo>=</mo><munder><mo>∑</mo><mrow><mi>l</mi><mo>∈</mo><mi>ℒ</mi></mrow></munder><msubsup><mrow><mo>∥</mo><mrow><msub><mi>P</mi><mi>l</mi></msub><mo>(</mo><msubsup><mi>H</mi><mi>S</mi><mi>l</mi></msubsup><mo>)</mo><mo>−</mo><msubsup><mi>H</mi><mi>T</mi><mrow><mi>g</mi><mo>(</mo><mi>l</mi><mo>)</mo></mrow></msubsup></mrow><mo>∥</mo></mrow><mn>2</mn><mn>2</mn></msubsup></mrow>
+</math>
+</div>
+<p class="math-note"><math class="math-inline" aria-label="H sub T"><msub><mi>H</mi><mi>T</mi></msub></math>、<math class="math-inline" aria-label="H sub S"><msub><mi>H</mi><mi>S</mi></msub></math> 分别是教师和学生的中间表征，<math class="math-inline" aria-label="P sub l"><msub><mi>P</mi><mi>l</mi></msub></math> 是维度对齐投影，g(l) 指定教师与学生层的对应关系。该式是通用示意，具体论文可能采用 MSE、余弦距离或注意力专用目标。</p>
+</div>
+<p><strong>DistilBERT</strong> 在预训练阶段组合语言模型损失、蒸馏损失和 cosine-distance 损失。作者报告其模型参数规模比 BERT-base 小 40%，保留约 97% 的语言理解能力，推理速度快 60%；这些数字对应论文指定的模型与评测设置，不应直接外推到任意模型。<a href="https://arxiv.org/abs/1910.01108">Sanh et al., 2019</a>。</p>
+<p><strong>TinyBERT</strong> 则进一步对 embedding 输出、Transformer hidden states、attention matrices 和 prediction logits 做对齐，并采用通用预训练蒸馏 + 任务特定蒸馏的两阶段框架。论文中的 TinyBERT4 在 GLUE 上达到教师 BERT-base 约 96.8% 的性能，参数规模约为 1/7.5，推理速度约快 9.4 倍。<a href="https://aclanthology.org/2020.findings-emnlp.372/">Jiao et al., Findings EMNLP 2020</a>。</p>
+<h3>4.3 Relation-based：保留样本之间的几何关系</h3>
+<p>有时逐点拟合特征并不理想：学生容量较小，无法把教师的每一个表示都对齐。但它仍然可能学会“哪些样本相似、哪些样本相距更远”。关系蒸馏就会对齐样本间距离、角度、相似度矩阵或图结构，而不是只对齐单个向量。</p>
+<div class="mathbox">
+<div class="math-scroll" tabindex="0" role="region" aria-label="关系蒸馏损失示意，可横向滚动">
+<math display="block" aria-label="关系损失是学生关系矩阵和教师关系矩阵之间的 Frobenius 范数平方">
+<mrow><msub><mi>L</mi><mtext>rel</mtext></msub><mo>=</mo><msubsup><mrow><mo>∥</mo><mrow><mi>R</mi><mo>(</mo><msub><mi>H</mi><mi>S</mi></msub><mo>)</mo><mo>−</mo><mi>R</mi><mo>(</mo><msub><mi>H</mi><mi>T</mi></msub><mo>)</mo></mrow><mo>∥</mo></mrow><mi>F</mi><mn>2</mn></msubsup></mrow>
+</math>
+</div>
+<p class="math-note">R(·) 可以是 batch 内样本两两距离、角度或相似度矩阵；这是一种概念性写法，不代表所有关系蒸馏论文都采用同一个目标。</p>
+</div>
+<div class="note"><strong>如何选择？</strong> 如果任务的最终输出分布最重要，先尝试 response KD；如果教师内部层含有对学生有用的归纳偏置，再考虑 feature KD；如果模型结构差异很大、逐点表示难以对齐，但样本几何结构很重要，可以尝试 relation KD。复杂目标并不自动优于简单目标。</div>
+</section>
+
+<section id="regime" aria-labelledby="regime-heading">
+<h2 id="regime-heading">05 · 离线、在线与自蒸馏</h2>
+<p>除了“传递哪种知识”，还要问“教师何时产生监督、学生看到什么数据”。同一种 response KD 可以离线完成，也可以在线完成；因此这条分类轴与输出/特征/关系分类轴是正交的。</p>
+<figure class="figure">
+<img src="assets/03-offline-online.svg" alt="离线蒸馏先用教师预计算固定软标签再训练学生；在线或 on-policy 蒸馏由学生生成样本，教师对学生访问到的状态提供反馈">
+<figcaption><span class="fig-no">FIGURE 04 · WHEN DOES THE TEACHER TEACH?</span><strong>离线蒸馏复用固定教师标签；on-policy 蒸馏让教师评价学生自己生成的样本。</strong>后者针对自回归模型训练与推理时输入分布不一致的问题。</figcaption>
+</figure>
+<div class="two">
+<div><b>Offline KD（离线蒸馏）</b><p>先用教师在 transfer set 上生成 logits / soft labels，再固定这些目标训练学生。实现和数据管线较简单，但学生训练时看到的前缀可能与部署时自己生成的前缀不同。</p></div>
+<div><b>Online KD（在线蒸馏）</b><p>训练时教师和学生持续交互，或者根据当前学生状态更新监督信号。它可以适应学生变化，但需要额外的教师前向计算与更复杂的训练调度。</p></div>
+</div>
+<div class="note"><strong>分类不是一棵互斥树，而是多个正交坐标轴：</strong>“传递什么知识”（response / feature / relation）、“能看到教师什么”（white-box / black-box）、“样本从哪里来”（offline / online / on-policy / self-generated）以及“迁移哪种能力”（通用任务 / 推理 / 多模态 / Agent）。一篇论文可以同时落在多个坐标上；这也是本专题采用多维标签而非把每个词都建成独立一级分类的原因。</div>
+<h3>自蒸馏与多教师蒸馏</h3>
+<p><strong>Self-distillation</strong> 不要求教师一定比学生大很多：同一个模型的深层/浅层、早期/后期 checkpoint，或带有额外监督头的分支，都可以形成 teacher–student 关系。<strong>Multi-teacher KD</strong> 则组合多个教师，可能通过平均概率、置信度加权或特征融合来生成学生目标。前者的风险是放大自身错误，后者的风险是教师之间的冲突和额外成本。</p>
+<h3>GKD：让学生从自己的错误中学习</h3>
+<p>自回归模型存在一个关键问题：训练时学生可能只在真实数据或教师生成的序列上学习，但推理时它会不断消费自己的输出。一旦学生早期生成了不同于教师轨迹的 token，后续前缀也会改变，训练分布和部署分布便出现 <strong>distribution mismatch</strong>。</p>
+<p>Agarwal 等人在 ICLR 2024 的 <strong>Generalized Knowledge Distillation (GKD)</strong> 中，让学生采样自己的输出序列，再让教师对这些序列提供反馈。这样，学生会在自己实际访问到的状态上学习，而不只是在教师预先写好的轨迹上学习。GKD 还讨论了 forward KL、reverse KL 和 generalized JS 等可选散度，并可与 RL fine-tuning 结合。<a href="https://arxiv.org/abs/2306.13649">阅读 GKD 原论文</a>。</p>
+</section>
+
+<section id="llm" aria-labelledby="llm-heading">
+<h2 id="llm-heading">06 · 从分类蒸馏走向 LLM</h2>
+<p>LLM 蒸馏的“知识对象”变得更丰富。教师不仅可以给出每个 token 的概率分布，还可以生成完整答案、解释轨迹、代码、工具调用序列或多轮对话样本。由此可以把 LLM KD 看作多个维度的组合，而不是一个单一算法。</p>
+<h3>6.1 白盒与黑盒蒸馏</h3>
+<div class="two">
+<div><b>White-box KD</b><p>能够访问教师 logits、隐藏状态、注意力或其他内部信号。可以做 token-level KL、feature matching、attention matching；监督更细，但依赖模型访问权限、计算资源和兼容的 tokenizer。</p></div>
+<div><b>Black-box KD</b><p>只能调用教师 API 或读取教师生成的文本。学生通过教师答案、解释或合成数据做 SFT。更容易用于闭源教师，但拿不到完整概率分布，监督信号的信息粒度较粗。</p></div>
+</div>
+<h3>6.2 Token-level 与 Sequence-level</h3>
+<p>Token-level 蒸馏通常逐位置对齐教师和学生的词表分布；Sequence-level 蒸馏则让教师先生成一条完整序列，再把这条序列作为学生的监督答案。后者可写成标准自回归负对数似然：</p>
+<div class="mathbox">
+<div class="math-scroll" tabindex="0" role="region" aria-label="序列级蒸馏的监督微调目标，可横向滚动">
+<math display="block" aria-label="序列损失等于负的从第一个 token 到最后一个 token 的学生条件概率对数之和">
+<mrow><msub><mi>L</mi><mtext>seq</mtext></msub><mo>=</mo><mo>−</mo><munderover><mo>∑</mo><mrow><mi>t</mi><mo>=</mo><mn>1</mn></mrow><mi>L</mi></munderover><mi>log</mi><msub><mi>p</mi><mi>S</mi></msub><mo>(</mo><msubsup><mi>y</mi><mi>t</mi><mi>T</mi></msubsup><mo>|</mo><mi>x</mi><mo>,</mo><msubsup><mi>y</mi><mrow><mo>&lt;</mo><mi>t</mi></mrow><mi>T</mi></msubsup><mo>)</mo></mrow>
+</math>
+</div>
+<p class="math-note"><math class="math-inline" aria-label="y superscript T"><msup><mi>y</mi><mi>T</mi></msup></math> 是教师生成的目标序列。学生在教师前缀上预测下一个 token，这本质上是一种以教师输出为标签的 SFT。</p>
+</div>
+<p>这也解释了一个常见说法为什么不严谨：<strong>“SFT 和蒸馏是两种完全不同的训练算法。”</strong>不一定。对教师生成的文本做监督微调，本身就是一种 sequence-level / black-box distillation 形式；区别在于训练目标数据的来源和教师信息的使用方式。</p>
+<h3>6.3 Reasoning Distillation：迁移解题轨迹，而不只是最终答案</h3>
+<p>对于数学、代码和复杂问答，只复制最终答案可能让学生学不到中间的分解、验证、回溯和错误修正过程。Reasoning KD 通常让强教师生成推理轨迹，再通过正确性过滤、格式约束或 verifier 选择训练样本，最后对小模型做 SFT。</p>
+<p>需要注意：可见的 rationale 是一种监督文本，不等同于模型内部完整、忠实的“思维过程”。它可能包含冗余、错误或事后合理化；训练前必须检查答案正确性、步骤一致性、数据污染和安全边界。</p>
+</section>
+
+<section id="deepseek" aria-labelledby="deepseek-heading">
+<h2 id="deepseek-heading">07 · DeepSeek-R1：把推理轨迹交给小模型</h2>
+<p>DeepSeek-R1 是一个很好的现代案例，因为它把“教师如何获得能力”和“学生如何接收能力”分成了两个不同过程。先通过大模型训练出高质量推理行为，再把这些输出整理成监督数据，让小模型学习。</p>
+<figure class="figure">
+<img src="assets/04-deepseek-r1-pipeline.svg" alt="DeepSeek-R1 教师模型生成推理与非推理数据，过滤和整理成约 80 万条样本，再通过 SFT 训练 Qwen 和 Llama 学生模型">
+<figcaption><span class="fig-no">FIGURE 05 · DEEPSEEK-R1 DISTILLATION</span><strong>教师的推理能力来自其训练过程；蒸馏阶段则把筛选后的教师输出作为学生的 SFT 数据。</strong>这两个阶段不能混写成“学生也做了同样的强化学习”。</figcaption>
+</figure>
+<h3>论文中真正发生了什么？</h3>
+<ol>
+<li><strong>先训练教师：</strong>DeepSeek-R1 系列通过多阶段流程提升推理能力，其中包括强化学习、拒绝采样和监督微调。</li>
+<li><strong>生成并筛选数据：</strong>论文 Appendix B.3.3 报告约 80 万条监督样本，其中约 60 万条与推理有关，约 20 万条是写作、事实问答、翻译等非推理数据。推理样本通过多次采样并保留正确回答；部分样本由规则验证或模型评判。</li>
+<li><strong>训练学生：</strong>蒸馏出的 Qwen / Llama 学生使用 SFT。论文明确说明，这一蒸馏阶段没有再加入 RL 阶段。</li>
+<li><strong>评估学生：</strong>在 AIME、MATH-500、GPQA Diamond、LiveCodeBench 和 Codeforces 等任务上衡量不同规模学生的表现。</li>
+</ol>
+<p>下面摘录原论文 Table 15 中三个 Qwen 学生模型的部分结果。这里每个指标的含义不同：AIME、MATH-500、GPQA 和 LiveCodeBench 是 pass@1，Codeforces 是 rating，不能把这些列当成同一种百分比比较。</p>
+<div class="table-wrap">
+<table>
+<caption>DeepSeek-R1 论文 Table 15：部分蒸馏学生结果</caption>
+<thead><tr><th>学生模型</th><th>AIME 2024<br>pass@1</th><th>MATH-500<br>pass@1</th><th>GPQA Diamond<br>pass@1</th><th>LiveCodeBench<br>pass@1</th><th>Codeforces<br>rating</th></tr></thead>
+<tbody>
+<tr><td>R1-Distill-Qwen-1.5B</td><td>28.9</td><td>83.9</td><td>33.8</td><td>16.9</td><td>954</td></tr>
+<tr><td>R1-Distill-Qwen-7B</td><td>55.5</td><td>92.8</td><td>49.1</td><td>37.6</td><td>1189</td></tr>
+<tr><td>R1-Distill-Qwen-32B</td><td>72.6</td><td>94.3</td><td>62.1</td><td>57.2</td><td>1691</td></tr>
+</tbody>
+</table>
+</div>
+<p class="table-note">来源：DeepSeek-R1, Appendix F, Table 15（arXiv:2501.12948v2，2026-01-04 修订版）。表中数字按论文原口径保留；不同模型的训练预算、底座、推理设置与评测协议不完全相同，不能把这张表解释成“参数翻倍就会固定增加多少准确率”。</p>
+<p>这个案例最重要的研究启示并不是某个单一分数，而是：<strong>高质量教师轨迹可以成为可复用的监督数据，使学生通过 SFT 获得一部分复杂推理行为，而不必完整复现教师训练时的昂贵 RL 流程。</strong>但它也不意味着蒸馏永远优于 RL；结果依赖教师能力、样本质量、学生容量、基座模型和评测任务。</p>
+</section>
+
+<section id="compare" aria-labelledby="compare-heading">
+<h2 id="compare-heading">08 · 蒸馏与其他压缩/训练方法</h2>
+<p>蒸馏经常与剪枝、量化、低秩适配、SFT 和强化学习放在一起讨论，但它们解决的问题并不相同。一个很实用的判断方式是：<strong>它改变的是模型结构、数值表示、训练参数，还是监督信号？</strong></p>
+<div class="table-wrap">
+<table>
+<thead><tr><th>方法</th><th>核心改变</th><th>典型收益</th><th>与蒸馏的关系</th></tr></thead>
+<tbody>
+<tr><td>Knowledge Distillation</td><td>训练目标增加教师提供的知识信号</td><td>学生学习教师行为；若学生更小可降低部署成本</td><td>可与量化、剪枝和 PEFT 组合</td></tr>
+<tr><td>Pruning（剪枝）</td><td>删除权重、通道、头或层</td><td>减少参数或计算</td><td>可用 KD 补偿剪枝造成的性能损失</td></tr>
+<tr><td>Quantization（量化）</td><td>用更低位宽表示权重/激活</td><td>降低存储、带宽和部分硬件上的计算成本</td><td>可先蒸馏再量化，也可做量化感知蒸馏</td></tr>
+<tr><td>LoRA / PEFT</td><td>冻结大部分基座参数，只训练少量适配参数</td><td>降低微调参数与优化器状态成本</td><td>可用教师生成的数据训练 LoRA 学生；但 PEFT 本身不一定减少基础模型推理成本</td></tr>
+<tr><td>SFT</td><td>最大化给定目标答案的条件似然</td><td>让模型学习示范数据中的任务行为</td><td>教师输出作为目标答案时，SFT 就可实现 sequence-level KD</td></tr>
+<tr><td>Dataset Distillation</td><td>压缩训练数据集，构造少量合成/凝练样本</td><td>降低数据存储或训练数据处理成本</td><td>与模型 KD 相关但目标不同；可以组合，不能把“数据集变小”误称为“学生模型被蒸馏”</td></tr>
+<tr><td>RL / RLHF / RLVR</td><td>依据奖励或偏好优化策略</td><td>探索并优化可验证结果或偏好目标</td><td>可以与 on-policy KD 结合，但奖励优化与模仿教师分布不是同一目标</td></tr>
+</tbody>
+</table>
+</div>
+<p>还要区分 <strong>Dataset Distillation（数据集蒸馏）</strong>：它关注如何把训练集压缩成少量高信息量的合成样本；Knowledge Distillation 则关注教师模型知识如何迁移到学生模型。两者可以协同，但研究对象、优化目标和评测口径不同。可参考 <a href="https://link.springer.com/article/10.1007/s10462-025-11423-3">Fang et al. (2026) 的 KD 与 Dataset Distillation 综述</a>。</p>
+<div class="note"><strong>工程上常见的组合：</strong>先让大教师生成并筛选高质量数据，再对小学生做 SFT/KD；随后视部署预算进行剪枝或量化；若还需要特定行为对齐，再做偏好优化或 RL。每一步都应单独测量质量、延迟、显存与成本，避免把收益重复归因给蒸馏。</div>
+</section>
+
+<section id="practice" aria-labelledby="practice-heading">
+<h2 id="practice-heading">09 · 一个可执行的蒸馏实验</h2>
+<p>下面的最小示例不训练神经网络，而是验证蒸馏中最核心的数值关系：温度 softmax、KL 散度、T² 缩放，以及学生 logits 上的梯度。它是一个确定性的教学算例，不是论文复现，也不代表实际模型的 benchmark。</p>
+<h3>实验设定</h3>
+<ul>
+<li>教师 logits：<code>[2.2, 1.2, -0.2]</code>，代表教师对三个类别的偏好。</li>
+<li>学生 logits：<code>[1.7, 1.1, -0.1]</code>，初始分布与教师接近但并不相同。</li>
+<li>温度：<math class="math-inline" aria-label="T equals 2"><mi>T</mi><mo>=</mo><mn>2</mn></math>。先将两者转换为 softmax 概率，再计算 <math class="math-inline" aria-label="T squared times KL divergence from teacher to student"><msup><mi>T</mi><mn>2</mn></msup><msub><mi>D</mi><mtext>KL</mtext></msub><mo>(</mo><msub><mi>p</mi><mi>T</mi></msub><mo>∥</mo><msub><mi>p</mi><mi>S</mi></msub><mo>)</mo></math>。</li>
+</ul>
+<p>本仓库配套的纯 Python 脚本实现了这些计算，并用有限差分检查解析梯度。运行方式：</p>
+<pre class="code"><code>python posts/training/knowledge-distillation/distillation_demo.py
+python -m pytest -q tests/test_knowledge_distillation.py</code></pre>
+<p>核心逻辑可以缩写成：</p>
+<pre class="code"><code>teacher = [2.2, 1.2, -0.2]
+student = [1.7, 1.1, -0.1]
+temperature = 2.0
+
+teacher_prob = softmax(teacher, temperature)
+student_prob = softmax(student, temperature)
+loss = temperature ** 2 * kl_divergence(
+    teacher_prob, student_prob
+)
+gradient = distillation_gradient(
+    student, teacher, temperature
+)</code></pre>
+<p>注意这里的 student 只是一个 logits 向量。真正训练 Transformer 时，梯度会通过学生网络的输出层和所有参与训练的参数反向传播；教师通常被冻结，不接收蒸馏损失的梯度。</p>
+</section>
+
+<section id="failure" aria-labelledby="failure-heading">
+<h2 id="failure-heading">10 · 失败模式与评测设计</h2>
+<h3>10.1 教师错误会被继承</h3>
+<p>学生拟合教师不代表学生更接近真实世界。教师的幻觉、偏见、知识过时和安全缺陷都可能进入蒸馏数据。对开放式文本任务，应增加事实核验、拒答边界、安全测试与人类抽样审核。</p>
+<h3>10.2 学生容量不足</h3>
+<p>如果教师在某些任务上依赖很复杂的表示，而学生太小，就可能出现不可约的能力差距。继续增加 KD 权重不一定有用；可以调整目标任务范围、选择更合适的学生结构，或只蒸馏最重要的能力子集。</p>
+<h3>10.3 训练分布与部署分布不一致</h3>
+<p>离线蒸馏如果只使用教师生成的正确轨迹，学生在推理时可能遇到自己产生的错误前缀。可以通过 on-policy 采样、混合教师与学生轨迹、课程式采样或 verifier 反馈来缓解，但这些策略会增加计算和实现复杂度。</p>
+<h3>10.4 数据与评测污染</h3>
+<p>教师生成的训练数据可能覆盖公开 benchmark 的题目或近似版本。应使用时间切分、去重、近重复检测、训练集/评测集隔离和独立评测集，并在报告中说明筛选规则、模型版本、采样温度、prompt 与评测协议。</p>
+<h3>10.5 不要只看准确率</h3>
+<div class="three">
+<div><b>能力质量</b><p>任务准确率、鲁棒性、校准、长尾样本、跨域泛化和安全行为。</p></div>
+<div><b>部署成本</b><p>模型大小、峰值显存、首 token 延迟、tokens/s、吞吐量、能耗与服务成本。</p></div>
+<div><b>蒸馏成本</b><p>教师调用费用、生成样本数量、过滤成本、训练 GPU 小时和数据许可。</p></div>
+</div>
+<p>一个更公平的实验应该比较同一任务、相近推理预算、相同数据切分和一致的硬件环境；报告学生在多个指标上的 Pareto 前沿，而不是只挑一个最亮眼的准确率数字。</p>
+</section>
+
+<section id="summary" aria-labelledby="summary-heading">
+<h2 id="summary-heading">11 · 研究路线与参考文献</h2>
+<p class="lead">知识蒸馏不是一种固定损失，而是一套“选择教师信号—选择学生可学习目标—设计数据分布—验证能力迁移”的方法体系。读一篇新的 KD 论文时，建议按下面五个问题拆解：</p>
+<ol>
+<li><strong>知识是什么？</strong> logits、hidden states、attention、样本关系、完整序列，还是推理轨迹？</li>
+<li><strong>谁能访问教师？</strong> 白盒 logits/特征，还是只能获得黑盒文本输出？</li>
+<li><strong>学生看到什么数据？</strong> 真实样本、教师生成样本、学生自己生成的样本，还是合成/无标签数据？</li>
+<li><strong>优化什么目标？</strong> KL、交叉熵、MSE、余弦距离、关系损失，还是多目标组合？</li>
+<li><strong>收益如何验证？</strong> 是否同时衡量任务质量、泛化、安全、延迟、显存与蒸馏成本？</li>
+</ol>
+<h3>建议的先修与延伸阅读</h3>
+<ul>
+<li><a href="../bert/">Understanding BERT</a>：理解 Transformer 表示、MLM 预训练与微调。</li>
+<li><a href="../lora/">Understanding LoRA</a>：理解参数高效微调与蒸馏的区别。</li>
+<li><a href="../qlora/">Understanding QLoRA</a>：理解量化与低秩适配如何组合。</li>
+<li><a href="../grpo/">Understanding GRPO</a>：理解 RL 后训练与模仿教师输出的目标差异。</li>
+</ul>
+<h3>核心论文与综述</h3>
+<ol class="references">
+<li>Hinton, G., Vinyals, O., &amp; Dean, J. (2015). <a href="https://arxiv.org/abs/1503.02531">Distilling the Knowledge in a Neural Network</a>. arXiv:1503.02531. 重点：§2 的温度 softmax、软目标和 <math class="math-inline" aria-label="T squared"><msup><mi>T</mi><mn>2</mn></msup></math> 梯度尺度校正。</li>
+<li>Sanh, V. et al. (2019). <a href="https://arxiv.org/abs/1910.01108">DistilBERT, a distilled version of BERT: smaller, faster, cheaper and lighter</a>. 重点：§2 的三项损失与预训练阶段蒸馏。</li>
+<li>Jiao, X. et al. (2020). <a href="https://aclanthology.org/2020.findings-emnlp.372/">TinyBERT: Distilling BERT for Natural Language Understanding</a>. Findings of EMNLP 2020. 重点：Transformer 多层蒸馏和两阶段训练。</li>
+<li>Agarwal, R. et al. (2024). <a href="https://arxiv.org/abs/2306.13649">On-Policy Distillation of Language Models: Learning from Self-Generated Mistakes</a>. ICLR 2024. 重点：学生自生成样本、分布偏移和 GKD。</li>
+<li>DeepSeek-AI. (2025, revised 2026). <a href="https://arxiv.org/abs/2501.12948">DeepSeek-R1: Incentivizing Reasoning Capability in LLMs via Reinforcement Learning</a>. 重点：Appendix B.3.3、Appendix F、Tables 5/15/16。</li>
+<li>Park, W. et al. (2019). <a href="https://openaccess.thecvf.com/content_CVPR_2019/html/Park_Relational_Knowledge_Distillation_CVPR_2019_paper.html">Relational Knowledge Distillation</a>. CVPR 2019. 重点：distance-wise 与 angle-wise relational losses。</li>
+<li>Xu, X. et al. (2024). <a href="https://arxiv.org/abs/2402.13116">A Survey on Knowledge Distillation of Large Language Models</a>. 重点：算法、技能迁移、领域垂直化与数据增强。</li>
+<li>Yang, C. et al. (2024). <a href="https://arxiv.org/abs/2407.01885">Survey on Knowledge Distillation for Large Language Models: Methods, Evaluation, and Application</a>. 重点：white-box 与 black-box KD 的方法和评估差异。</li>
+<li>Moslemi, A., Briskina, A., Dang, Z., &amp; Li, J. (2024). <a href="https://doi.org/10.1016/j.mlwa.2024.100605">A survey on knowledge distillation: Recent advancements</a>. Machine Learning with Applications 18, 100605. 重点：response、feature、relation、self、cross-modal 与 adversarial KD。</li>
+<li>Mansourian, A. M. et al. (2025). <a href="https://arxiv.org/abs/2503.12067">A Comprehensive Survey on Knowledge Distillation</a>. 重点：蒸馏来源、方案、算法、模态与应用的多维分类。</li>
+<li>Fang, L. et al. (2025). <a href="https://arxiv.org/abs/2504.14772">Knowledge Distillation and Dataset Distillation of Large Language Models: Emerging Trends, Challenges, and Future Directions</a>. 重点：区分模型知识迁移与训练数据集压缩。</li>
+</ol>
+<p class="footer">最后记住：蒸馏不是把“大模型缩小”这么简单，而是把教师学到的某种知识，以学生能够吸收的形式重新编码进训练目标。好的蒸馏设计，首先要回答“要保留哪一种能力”，然后才是选择损失函数和模型规模。</p>
+</section>
+</article></main>
+</div>
+<script>
+(function(){
+"use strict";
+const slider=document.getElementById("temperature");
+const value=document.getElementById("temperature-value");
+const status=document.getElementById("temperature-status");
+const bars=[document.getElementById("bar-cat"),document.getElementById("bar-dog"),document.getElementById("bar-fox")];
+const labels=[document.getElementById("value-cat"),document.getElementById("value-dog"),document.getElementById("value-fox")];
+const logits=[2.2,1.2,-0.2],names=["猫","狗","狐狸"];
+function softmax(z,t){
+ const m=Math.max.apply(null,z),ex=z.map(v=>Math.exp((v-m)/t)),sum=ex.reduce((a,b)=>a+b,0);
+ return ex.map(v=>v/sum);
+}
+function render(){
+ const t=Number(slider.value),p=softmax(logits,t);
+ value.textContent=t.toFixed(1);
+ slider.setAttribute("aria-valuetext","温度 "+t.toFixed(1));
+ p.forEach((v,i)=>{
+   bars[i].setAttribute("width",(450*v).toFixed(2));
+   labels[i].textContent=(100*v).toFixed(1)+"%";
+ });
+ status.textContent="T = "+t.toFixed(1)+"："+names.map((n,i)=>n+" "+(100*p[i]).toFixed(1)+"%").join("，")+"。温度提高会让分布更平滑，但最大概率类别保持不变。";
+}
+slider.addEventListener("input",render);
+render();
+})();
+</script>
+</body>
+</html>

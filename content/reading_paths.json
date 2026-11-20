@@ -348,5 +348,15 @@
       "agent-memory-components",
       "harness-engineering"
     ]
+  },
+  {
+    "id": "path-38",
+    "title": "预训练模型的知识迁移与高效适配",
+    "posts": [
+      "bert",
+      "knowledge-distillation",
+      "lora",
+      "qlora"
+    ]
   }
 ]

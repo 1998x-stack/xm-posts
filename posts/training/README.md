@@ -8,6 +8,8 @@
 
 ## 已发布论文解读
 
+- [Understanding Knowledge Distillation](knowledge-distillation/index.html) — Hinton et al. (2015) 的 soft targets、温度缩放与 KL；延伸到 DistilBERT、TinyBERT、GKD 和 DeepSeek-R1 推理蒸馏。二级主题：Knowledge Distillation & Teacher–Student Transfer。
+
 - [Understanding DPO](dpo/index.html) — Rafailov et al. (NeurIPS 2023)，隐式奖励、成对偏好、KL 正则化与离线对齐。
 
 相关子主题：Preference Optimization / RLHF。DPO 属于训练与对齐，不另建同义的顶层类别。
@@ -20,11 +22,12 @@
 
 ## 专题规划占位（非文章）
 
-训练与对齐负责模型参数更新与跨设备训练机制。并行算法及精度训练归本类；NCCL、GPU kernel 与底层网络通信性能归 `systems`。
+训练与对齐负责模型参数更新、教师—学生知识迁移与跨设备训练机制。知识蒸馏归本类；剪枝/量化等效率方法通过交叉标签关联；NCCL、GPU kernel 与底层网络通信性能归 `systems`。
 
 - [Distributed Training](_topics/distributed-training/README.md)
 - [Training Parallelism](_topics/training-parallelism/README.md)
 - [Mixed Precision](_topics/mixed-precision/README.md)
 - [Checkpointing](_topics/checkpointing/README.md)
+- [Knowledge Distillation](_topics/knowledge-distillation/README.md)
 
 上述 `_topics/` 是研究路线占位目录，正式文章仍遵循 `posts/training/<slug>/index.html`；只有 `content/posts.json` 中的 `published` 文章才会被发布。

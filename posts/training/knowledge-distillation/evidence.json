@@ -1,0 +1,182 @@
+[
+  {
+    "id": "KD01",
+    "claim": "知识蒸馏将教师模型的学习行为视为可迁移的输入到输出映射，而不是复制教师参数；教师可为模型集成或单个大模型。",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/abs/1503.02531",
+    "locator": "§1 Introduction",
+    "status": "verified",
+    "notes": "Hinton et al. 将蒸馏描述为从 cumbersome model 向部署友好的小模型迁移知识。"
+  },
+  {
+    "id": "KD02",
+    "claim": "温度 softmax 使用 exp(z_i/T) 归一化；提高 T 会产生更平滑的类别概率分布，训练完成后学生通常以 T=1 推理。",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/abs/1503.02531",
+    "locator": "§2 Distillation, Equation (1) and surrounding text",
+    "status": "verified",
+    "notes": "本文公式沿用原论文温度定义。"
+  },
+  {
+    "id": "KD03",
+    "claim": "高温下软目标梯度尺度近似按 1/T^2 缩小，因此在硬标签与软目标联合训练时乘 T^2 可保持两项梯度贡献的相对尺度更可比。",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/abs/1503.02531",
+    "locator": "§2 Distillation, Equations (2)–(4)",
+    "status": "verified",
+    "notes": "这是梯度尺度校正，不意味着温度越高蒸馏质量越好。"
+  },
+  {
+    "id": "KD04",
+    "claim": "Hinton et al. 使用 transfer set 上的软目标训练小模型，并讨论在已知标签时将软目标交叉熵与真实标签交叉熵组合。",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/abs/1503.02531",
+    "locator": "§2 Distillation",
+    "status": "verified",
+    "notes": "本文联合损失中的 lambda 仅为清晰教学记号，权重约定应按具体论文核对。"
+  },
+  {
+    "id": "KD05",
+    "claim": "DistilBERT 采用语言建模、蒸馏和 cosine-distance 三项损失，并在论文设定下报告相对 BERT 减少 40% 模型大小、保留 97% 语言理解能力和 60% 更快推理。",
+    "kind": "experiment",
+    "source_url": "https://arxiv.org/abs/1910.01108",
+    "locator": "Abstract; §2 Knowledge distillation; experiment sections",
+    "status": "verified",
+    "notes": "数字保留原文口径，不能无条件外推到其他模型、硬件和任务。"
+  },
+  {
+    "id": "KD06",
+    "claim": "TinyBERT 对 embedding 输出、Transformer hidden states、attention matrices 与 prediction logits 设计蒸馏目标，并采用通用预训练蒸馏与任务特定蒸馏两阶段框架。",
+    "kind": "paper-claim",
+    "source_url": "https://aclanthology.org/2020.findings-emnlp.372/",
+    "locator": "§1 Introduction; §3 Method; Figure 1",
+    "status": "verified",
+    "notes": "论文的层映射和损失组合是 TinyBERT 的具体设计，不代表所有 feature KD。"
+  },
+  {
+    "id": "KD07",
+    "claim": "TinyBERT4 achieves 96.8% of the performance of teacher BERT_BASE on GLUE, with about 7.5x fewer parameters and approximately 9.4x faster inference in the paper's reported setup.",
+    "kind": "experiment",
+    "source_url": "https://aclanthology.org/2020.findings-emnlp.372/",
+    "locator": "Abstract; Table 1 and evaluation sections",
+    "status": "verified",
+    "notes": "Do not phrase the reported 96.8% as 'at least 96.8%' or as an absolute score; it is a relative performance statement."
+  },
+  {
+    "id": "KD08",
+    "claim": "关系蒸馏可匹配样本间距离、角度或关系矩阵，而不要求逐个样本的内部特征向量完全一致。",
+    "kind": "survey-claim",
+    "source_url": "https://doi.org/10.1016/j.mlwa.2024.100605",
+    "locator": "Sections 2.1–2.3; survey taxonomy of response-, feature- and relation-based KD",
+    "status": "verified",
+    "notes": "本文中的 Frobenius-norm relation objective 是概念示意，不声称为某篇论文唯一的关系损失。"
+  },
+  {
+    "id": "KD09",
+    "claim": "GKD 通过学生自生成序列并使用教师反馈来缓解自回归模型训练序列与部署时学生生成序列之间的分布偏移。",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/abs/2306.13649",
+    "locator": "Abstract; §1 Introduction; Figure 1",
+    "status": "verified",
+    "notes": "GKD 支持不同散度目标；本文将 on-policy 机制与具体散度选择分开解释。"
+  },
+  {
+    "id": "KD10",
+    "claim": "DeepSeek-R1 Appendix B.3.3 报告约 600K reasoning-related 与约 200K non-reasoning supervised samples，总量约 800K。",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/abs/2501.12948",
+    "locator": "Appendix B.3.3 800K Supervised Data; Table 5",
+    "status": "verified",
+    "notes": "数据量为论文报告的近似值；Table 5 的统计总数为 804,745。"
+  },
+  {
+    "id": "KD11",
+    "claim": "DeepSeek-R1 蒸馏学生在该蒸馏阶段使用 SFT，论文说明没有加入 RL stage。",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/abs/2501.12948",
+    "locator": "Appendix F DeepSeek-R1 Distillation",
+    "status": "verified",
+    "notes": "不能将教师的 RL 训练过程误写成学生蒸馏阶段也执行了同一 RL 过程。"
+  },
+  {
+    "id": "KD12",
+    "claim": "DeepSeek-R1 Table 15 中 R1-Distill-Qwen-1.5B 的 AIME 2024 pass@1 为 28.9、MATH-500 pass@1 为 83.9、GPQA Diamond pass@1 为 33.8、LiveCodeBench pass@1 为 16.9、Codeforces rating 为 954。",
+    "kind": "experiment",
+    "source_url": "https://arxiv.org/abs/2501.12948",
+    "locator": "Appendix F, Table 15",
+    "status": "verified",
+    "notes": "保留每项指标的原始口径；不同列不是同一种百分比。"
+  },
+  {
+    "id": "KD13",
+    "claim": "DeepSeek-R1 Table 15 中 R1-Distill-Qwen-32B 的 AIME 2024 pass@1 为 72.6、MATH-500 pass@1 为 94.3、GPQA Diamond pass@1 为 62.1、LiveCodeBench pass@1 为 57.2、Codeforces rating 为 1691。",
+    "kind": "experiment",
+    "source_url": "https://arxiv.org/abs/2501.12948",
+    "locator": "Appendix F, Table 15",
+    "status": "verified",
+    "notes": "数值对应 arXiv v2 版本 Table 15。"
+  },
+  {
+    "id": "KD14",
+    "claim": "知识蒸馏、剪枝、量化和低秩分解是不同的模型效率路径；蒸馏主要改变学生训练时的监督信号，不必然修改学生网络结构。",
+    "kind": "survey-claim",
+    "source_url": "https://arxiv.org/abs/2503.12067",
+    "locator": "§1 Introduction",
+    "status": "verified",
+    "notes": "蒸馏可以与结构压缩、量化和其他训练策略组合。"
+  },
+  {
+    "id": "KD15",
+    "claim": "温度为 2、教师 logits 为 [2.2, 1.2, -0.2] 时，softmax 概率约为 [0.5242, 0.3179, 0.1579]；学生 logits 为 [1.7, 1.1, -0.1] 时，T^2 KL 损失约为 0.02956。",
+    "kind": "toy-derivation",
+    "source_url": "https://arxiv.org/abs/1503.02531",
+    "locator": "Temperature-softmax definition; independently computed in distillation_demo.py",
+    "status": "derived",
+    "notes": "确定性教学算例，不是论文实验，也不是训练出的神经网络结果。"
+  },
+  {
+    "id": "KD16",
+    "claim": "对于 LLM logits 张量 B×L×V，逐 token 蒸馏需沿词表维计算分布差异，并对 padding 与无效 token 位置进行 mask。",
+    "kind": "derived",
+    "source_url": "https://arxiv.org/abs/2306.13649",
+    "locator": "Autoregressive sequence-model distillation objective; tensor shape follows standard causal LM logits",
+    "status": "derived",
+    "notes": "本文描述通用张量形状；具体实现需核对 tokenizer、vocabulary、mask 与 reduction 方式。"
+  },
+  {
+    "id": "KD17",
+    "claim": "Relational Knowledge Distillation transfers mutual relations among examples and proposes distance-wise and angle-wise losses, rather than only matching individual output activations.",
+    "kind": "paper-claim",
+    "source_url": "https://openaccess.thecvf.com/content_CVPR_2019/html/Park_Relational_Knowledge_Distillation_CVPR_2019_paper.html",
+    "locator": "Abstract; Figure 1; method sections",
+    "status": "verified",
+    "notes": "Original CVPR 2019 work. The article's generic relation-matrix equation is illustrative, not a transcription of the paper's exact pairwise/angle objectives."
+  },
+  {
+    "id": "KD18",
+    "claim": "The 2024 survey on LLM knowledge distillation organizes the field around algorithms, skill transfer, verticalization, and the interaction with data augmentation.",
+    "kind": "survey-claim",
+    "source_url": "https://arxiv.org/abs/2402.13116",
+    "locator": "Abstract; survey organization",
+    "status": "verified",
+    "notes": "Used to support the LLM capability-transfer perspective, not as a claim that all methods share one taxonomy."
+  },
+  {
+    "id": "KD19",
+    "claim": "A 2024 LLM KD survey distinguishes white-box and black-box distillation and reviews methods, evaluation, and applications.",
+    "kind": "survey-claim",
+    "source_url": "https://arxiv.org/abs/2407.01885",
+    "locator": "Abstract; survey taxonomy",
+    "status": "verified",
+    "notes": "White-box/black-box is an access axis and is orthogonal to response/feature/relation signal types."
+  },
+  {
+    "id": "KD20",
+    "claim": "Knowledge distillation and dataset distillation are complementary but distinct paradigms: one transfers model capabilities, the other condenses training data.",
+    "kind": "survey-claim",
+    "source_url": "https://link.springer.com/article/10.1007/s10462-025-11423-3",
+    "locator": "Abstract; article scope and definitions",
+    "status": "verified",
+    "notes": "The survey appeared in Artificial Intelligence Review 59:17 (2026); the arXiv preprint is 2504.14772."
+  }
+]

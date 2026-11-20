@@ -12,7 +12,7 @@
 | `architectures` | CNN、RNN、Transformer、门控、MoE、状态空间与高效注意力结构 | GPU 算子实现归 `systems`，线上请求管理归 `inference` |
 | `reinforcement-learning` | MDP、Bellman、Policy Gradient、Actor–Critic、探索与搜索 | RLHF/GRPO 等模型后训练方案的训练目标与流程归 `training` |
 | `datasets` | 语料来源、清洗去重、混合、污染与数据治理 | 任务指标、Benchmark 设计与可重复性归 `evaluation` |
-| `training` | 预训练、Scaling Laws、PEFT、偏好对齐、分布式与混合精度 | 权重衰减的基础推导可以在 `foundations`，但工程训练管线在此 |
+| `training` | 预训练、Scaling Laws、PEFT、知识蒸馏与教师—学生迁移、偏好对齐、分布式与混合精度 | 权重衰减的基础推导可以在 `foundations`，模型知识迁移训练归此；推理部署优化归 `inference` / `systems` |
 | `reasoning` | CoT、自一致性、推理采样、验证与测试时计算 | 涉及工具和环境反馈闭环时归 `agents` |
 | `inference` | KV Cache、解码、Batching、服务调度和 Prefill/Decode | 硬件 kernel/编译与通讯归 `systems` |
 | `systems` | GPU 内存、算子、编译、通信、性能分析及底层优化 | 服务请求、token 调度、端到端 serving 归 `inference` |
@@ -29,6 +29,12 @@
 3. 对确有不同边界的二级主题，要求标题与描述不同；不得让两个 topic 共享同一展示标题。当前 Systems 已区分 Kernel 编程、GPU 内存、编译/内核优化、Collectives、分布式通信和 Roofline/Benchmark。
 4. 占位目录必须使用精确的注册 slug。新增 Topic 优先写分类元数据，再添加 `_topics/` 的 README；单篇新文章通常不值得新增一级分类。
 5. Draft 必须继续以 `status: draft` 保持离线，不要将规划中的 README 当作 `published` 条目。
+
+### Knowledge Distillation 的分类边界
+
+`knowledge-distillation` 注册为 `training` 下的二级专题，不新增 `model-compression` 一级分类。原因是 KD 的核心对象是训练监督与教师—学生知识迁移；它可以服务模型压缩，也可以用于同规模能力迁移、LLM 推理轨迹学习和多模态知识迁移。剪枝、量化与低秩分解仍保留各自技术边界，通过 tags、文章链接与阅读路径建立交叉关系。
+
+专题采用多维标签而非互斥树：知识信号（response / feature / relation / sequence）、教师访问方式（white-box / black-box）、数据机制（offline / online / on-policy / self / multi-teacher）和能力目标（通用任务 / reasoning / multimodal / agent）。一篇论文可以同时落在多个轴上；每篇文章仍只有一个主 category/topic。
 
 ## 2026-11 分类占位整合
 

@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 430" role="img" aria-labelledby="r1-title r1-desc">
+<title id="r1-title">DeepSeek-R1 推理数据蒸馏管线</title>
+<desc id="r1-desc">先训练 DeepSeek-R1 教师，再生成并过滤约 60 万条推理样本和约 20 万条非推理样本，合计约 80 万条数据，通过 SFT 训练较小的 Qwen 和 Llama 学生模型。</desc>
+<rect width="960" height="430" rx="18" fill="#fbfdfa"/>
+<text x="34" y="42" font-size="16" font-weight="800" fill="#2d665e">TEACHER CAPABILITY → CURATED TRACES → STUDENT SFT</text>
+<rect x="34" y="118" width="180" height="148" rx="14" fill="#f8eadd" stroke="#d8ad8a" stroke-width="2"/>
+<text x="124" y="158" text-anchor="middle" font-size="18" font-weight="800" fill="#875b3c">DeepSeek-R1</text><text x="124" y="188" text-anchor="middle" font-size="13" fill="#896e56">强教师模型</text><text x="124" y="216" text-anchor="middle" font-size="12" fill="#896e56">推理 / 验证 / 回溯</text><text x="124" y="240" text-anchor="middle" font-size="12" fill="#896e56">生成候选轨迹</text>
+<path d="M214 192 H276" stroke="#bd8558" stroke-width="3.5"/><path d="M266 182 L278 192 L266 202" fill="none" stroke="#bd8558" stroke-width="3.5"/>
+<rect x="280" y="94" width="226" height="198" rx="14" fill="#eeebf7" stroke="#c8c0df" stroke-width="2"/>
+<text x="393" y="131" text-anchor="middle" font-size="16" font-weight="800" fill="#5d5288">约 800K 样本</text>
+<rect x="305" y="153" width="176" height="52" rx="8" fill="#fff" stroke="#cfc6e5"/><text x="393" y="176" text-anchor="middle" font-size="14" font-weight="800" fill="#65588e">约 600K</text><text x="393" y="193" text-anchor="middle" font-size="11" fill="#756b97">推理相关</text>
+<rect x="305" y="219" width="176" height="52" rx="8" fill="#fff" stroke="#cfc6e5"/><text x="393" y="242" text-anchor="middle" font-size="14" font-weight="800" fill="#65588e">约 200K</text><text x="393" y="259" text-anchor="middle" font-size="11" fill="#756b97">非推理任务</text>
+<path d="M506 192 H568" stroke="#7f72ad" stroke-width="3.5"/><path d="M558 182 L570 192 L558 202" fill="none" stroke="#7f72ad" stroke-width="3.5"/>
+<rect x="572" y="118" width="148" height="148" rx="14" fill="#e8f2ed" stroke="#afd0c0" stroke-width="2"/>
+<text x="646" y="158" text-anchor="middle" font-size="17" font-weight="800" fill="#2d6b61">SFT</text><text x="646" y="188" text-anchor="middle" font-size="12" fill="#557a71">学生学习</text><text x="646" y="210" text-anchor="middle" font-size="12" fill="#557a71">教师生成的</text><text x="646" y="232" text-anchor="middle" font-size="12" fill="#557a71">输入—输出样本</text>
+<path d="M720 192 H774" stroke="#438d80" stroke-width="3.5"/><path d="M764 182 L776 192 L764 202" fill="none" stroke="#438d80" stroke-width="3.5"/>
+<rect x="778" y="104" width="150" height="176" rx="14" fill="#fff" stroke="#bfd9cd" stroke-width="2"/>
+<text x="853" y="140" text-anchor="middle" font-size="16" font-weight="800" fill="#2e6d63">学生模型</text><text x="853" y="173" text-anchor="middle" font-size="13" fill="#54766f">Qwen 1.5B</text><text x="853" y="198" text-anchor="middle" font-size="13" fill="#54766f">Qwen 7B / 32B</text><text x="853" y="223" text-anchor="middle" font-size="13" fill="#54766f">Llama 8B / 70B</text><text x="853" y="252" text-anchor="middle" font-size="11" fill="#748b84">不再执行同一 RL 阶段</text>
+<rect x="204" y="330" width="550" height="58" rx="11" fill="#f3f5f0" stroke="#d8e4dc"/><text x="479" y="354" text-anchor="middle" font-size="14" font-weight="800" fill="#426c65">蒸馏阶段：SFT on teacher-generated data</text><text x="479" y="375" text-anchor="middle" font-size="12" fill="#71867f">教师训练与学生蒸馏是两个不同的计算阶段</text>
+</svg>
