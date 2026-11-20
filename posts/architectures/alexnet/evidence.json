@@ -1,0 +1,110 @@
+[
+  {
+    "id": "A1",
+    "claim": "ILSVRC-2012 seven-CNN ensemble attained 15.3% top-5 test error; runner-up 26.2%",
+    "kind": "paper-metric",
+    "source_url": "https://papers.nips.cc/paper_files/paper/2012/file/c399862d3b9d6b76c8436e924a68c45b-Paper.pdf",
+    "locator": "Abstract; Section 6; Table 2",
+    "status": "verified",
+    "notes": "Competition ensemble and runner-up, not one-CNN comparison"
+  },
+  {
+    "id": "A2",
+    "claim": "The original AlexNet network has five convolutional and three fully connected learned layers",
+    "kind": "architecture",
+    "source_url": "https://papers.nips.cc/paper_files/paper/2012/file/c399862d3b9d6b76c8436e924a68c45b-Paper.pdf",
+    "locator": "Section 3.5; Figure 2",
+    "status": "verified",
+    "notes": "LRN and pooling are not counted among eight learned layers"
+  },
+  {
+    "id": "A3",
+    "claim": "The text states 224x224 inputs and Figure 2 shows 55 spatial size after stride-4 11x11 Conv1",
+    "kind": "paper-ambiguity",
+    "source_url": "https://papers.nips.cc/paper_files/paper/2012/file/c399862d3b9d6b76c8436e924a68c45b-Paper.pdf",
+    "locator": "Section 3.5; Figure 2 and footnote 4",
+    "status": "verified",
+    "notes": "227/p0 and 224/p2 are explicit shape-consistent teaching conventions, not both claimed historical CUDA settings"
+  },
+  {
+    "id": "A4",
+    "claim": "ReLU reached 25% CIFAR-10 training error about six times faster than tanh in a four-layer CNN",
+    "kind": "ablation",
+    "source_url": "https://papers.nips.cc/paper_files/paper/2012/file/c399862d3b9d6b76c8436e924a68c45b-Paper.pdf",
+    "locator": "Section 3.1; Figure 1",
+    "status": "verified",
+    "notes": "This is not a six-times AlexNet end-to-end throughput result"
+  },
+  {
+    "id": "A5",
+    "claim": "LRN uses k=2 n=5 alpha=1e-4 beta=0.75 and improved top-1/top-5 error by 1.4/1.2 points",
+    "kind": "ablation",
+    "source_url": "https://papers.nips.cc/paper_files/paper/2012/file/c399862d3b9d6b76c8436e924a68c45b-Paper.pdf",
+    "locator": "Section 3.3",
+    "status": "verified",
+    "notes": "Paper-defined local competition, not LayerNorm/BatchNorm"
+  },
+  {
+    "id": "A6",
+    "claim": "Overlapping max-pool 3x3 stride2 improved top-1/top-5 by 0.4/0.3 percentage points",
+    "kind": "ablation",
+    "source_url": "https://papers.nips.cc/paper_files/paper/2012/file/c399862d3b9d6b76c8436e924a68c45b-Paper.pdf",
+    "locator": "Section 3.4",
+    "status": "verified",
+    "notes": "Compared against nonoverlap 2x2 stride2 with comparable output size"
+  },
+  {
+    "id": "A7",
+    "claim": "Conv2 Conv4 Conv5 have GPU-local connections while Conv3 and FC cross GPU boundaries",
+    "kind": "architecture",
+    "source_url": "https://papers.nips.cc/paper_files/paper/2012/file/c399862d3b9d6b76c8436e924a68c45b-Paper.pdf",
+    "locator": "Section 3.2; Section 3.5; Figure 2",
+    "status": "verified",
+    "notes": "Original two-GPU model partition, not ordinary data parallelism"
+  },
+  {
+    "id": "A8",
+    "claim": "Training uses random 224 patches from 256 images, flips, color PCA; test averages ten crops",
+    "kind": "method",
+    "source_url": "https://papers.nips.cc/paper_files/paper/2012/file/c399862d3b9d6b76c8436e924a68c45b-Paper.pdf",
+    "locator": "Section 4.1",
+    "status": "verified",
+    "notes": "Five center/corner crops and their reflections"
+  },
+  {
+    "id": "A9",
+    "claim": "Dropout of 0.5 used in first two fully connected hidden layers",
+    "kind": "regularization",
+    "source_url": "https://papers.nips.cc/paper_files/paper/2012/file/c399862d3b9d6b76c8436e924a68c45b-Paper.pdf",
+    "locator": "Section 4.2",
+    "status": "verified",
+    "notes": "Paper describes test-time scaling, whereas inverted dropout scales during training"
+  },
+  {
+    "id": "A10",
+    "claim": "SGD uses batch128 momentum0.9 weight decay0.0005 initial LR0.01; trains 5-6 days on two GTX580 GPUs",
+    "kind": "training",
+    "source_url": "https://papers.nips.cc/paper_files/paper/2012/file/c399862d3b9d6b76c8436e924a68c45b-Paper.pdf",
+    "locator": "Introduction; Section 5",
+    "status": "verified",
+    "notes": "Historic training protocol, not an independent reproduction"
+  },
+  {
+    "id": "A11",
+    "claim": "2010 single CNN 37.5% top-1 and 17.0% top-5 test; 2012 single CNN 18.2% top-5 val, 5 CNNs 16.4% test, 7 CNNs 15.3% test",
+    "kind": "paper-metric",
+    "source_url": "https://papers.nips.cc/paper_files/paper/2012/file/c399862d3b9d6b76c8436e924a68c45b-Paper.pdf",
+    "locator": "Section 6; Tables 1 and 2",
+    "status": "verified",
+    "notes": "Explicitly distinguish split, ensemble count and extra ImageNet Fall 2011 pretraining"
+  },
+  {
+    "id": "A12",
+    "claim": "Removing any middle convolutional layer hurt top-1 performance by approximately 2 points",
+    "kind": "ablation",
+    "source_url": "https://papers.nips.cc/paper_files/paper/2012/file/c399862d3b9d6b76c8436e924a68c45b-Paper.pdf",
+    "locator": "Section 7 Discussion",
+    "status": "verified",
+    "notes": "Conditional on paper model and training"
+  }
+]
