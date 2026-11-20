@@ -70,5 +70,14 @@
     "locator": "Independent parameter count from §9.2 model definition",
     "status": "derived",
     "notes": "Assumes unconstrained full covariance for each component"
+  },
+  {
+    "id": "GMM09",
+    "claim": "With equal Gaussian likelihood at x=0 in a symmetric two-component 1D mixture, responsibility equals the component prior, and the equality boundary shifts by sigma^2/(mu2-mu1)*log(pi1/pi2).",
+    "kind": "toy-derivation",
+    "source_url": "https://www.microsoft.com/en-us/research/wp-content/uploads/2006/01/Bishop-Pattern-Recognition-and-Machine-Learning-2006.pdf",
+    "locator": "Article Section 11; Bayes posterior in Bishop §9.2, independently solved equal-variance 1D case",
+    "status": "derived",
+    "notes": "Conditional means and standard deviations held fixed; changing pi is a teaching intervention, not an EM training step."
   }
 ]
