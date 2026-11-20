@@ -32,8 +32,9 @@ def test_reject_inconsistent_or_empty_sequence():
             raise AssertionError("Should reject inconsistent sequence lengths")
 
 
+
 def test_narrow_mobile_has_no_document_overflow():
-    """Regress 360px layout; report exact elements when an overflow appears."""
+    """Keep inline shell commands readable without sideways document scrolling."""
     from playwright.sync_api import sync_playwright
     from pathlib import Path
     html = (Path(__file__).resolve().parents[1] /
@@ -42,54 +43,13 @@ def test_narrow_mobile_has_no_document_overflow():
         browser = p.chromium.launch(headless=True, args=["--no-sandbox"])
         page = browser.new_page(viewport={"width": 360, "height": 800})
         page.set_content(html, wait_until="load")
-        details = page.evaluate("""() => ({
-            viewport: innerWidth,
-            htmlWidth: document.documentElement.scrollWidth,
-            bodyWidth: document.body.scrollWidth,
-            culprits: (() => {
-                const items=[];
-                const nodes=[...document.querySelectorAll('body *')];
-                for(const el of nodes) {
-                    const saved=el.style.display;
-                    el.style.display='none';
-                    const now=document.documentElement.scrollWidth;
-                    el.style.display=saved;
-                    if(now<=361) {
-                        let depth=0,p=el.parentElement;
-                        while(p){depth++;p=p.parentElement;}
-                        const r=el.getBoundingClientRect();
-                        items.push({tag:el.tagName.toLowerCase(),
-                            id:el.id||'',
-                            cls:typeof el.className==='string'?el.className:'',
-                            text:(el.innerText||'').slice(0,25),
-                            depth,right:Math.round(r.right),newWidth:now});
-                    }
-                }
-                return items.sort((a,b)=>b.depth-a.depth).slice(0,12);
-            })(),
-            offenders: [...document.querySelectorAll('body *')].map(e => {
-                const r=e.getBoundingClientRect();
-                const css=getComputedStyle(e);
-                return {
-                    tag:e.tagName.toLowerCase(),
-                    id:e.id, cls: typeof e.className === 'string' ? e.className : '',
-                    text:(e.innerText||e.textContent||'').slice(0,45),
-                    left:Math.round(r.left), right:Math.round(r.right),
-                    width:Math.round(r.width), minWidth:css.minWidth,
-                    whiteSpace:css.whiteSpace, overflowX:css.overflowX
-                };
-            }).filter(x => (x.right > innerWidth + 1 || x.left < -1)
-              && ![...document.querySelectorAll('body *')].some(e => {
-                  if (e.tagName.toLowerCase() !== x.tag || e.id !== x.id ||
-                      Math.round(e.getBoundingClientRect().right) !== x.right) return false;
-                  let p=e.parentElement;
-                  while(p && p !== document.body){
-                      if(['auto','scroll','hidden','clip'].includes(getComputedStyle(p).overflowX))return true;
-                      p=p.parentElement;
-                  }
-                  return false;
-              }))
-              .sort((a,b)=>b.right-a.right).slice(0,12)
+        metrics = page.evaluate("""() => ({
+            viewport: innerWidth, pageWidth: document.documentElement.scrollWidth,
+            inlineCode: getComputedStyle(document.querySelector('p code')).overflowWrap
         })""")
+        page.locator('button[data-rate="1.3"]').click()
+        result = page.locator("#lambda-result").inner_text()
         browser.close()
-    assert details["htmlWidth"] <= 361, details
+    assert metrics["pageWidth"] <= metrics["viewport"] + 1, metrics
+    assert metrics["inlineCode"] == "anywhere", metrics
+    assert result == "8.1573", result
