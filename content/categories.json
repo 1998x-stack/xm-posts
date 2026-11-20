@@ -27,25 +27,28 @@
     "slug": "architectures",
     "title": "模型架构",
     "english": "Architectures",
-    "description": "拆开模型的信息路径：AlexNet 与 ResNet 的视觉卷积架构、Transformer 注意力、归一化布局与深层架构稳定性。",
+    "description": "拆开模型的信息路径：LSTM 循环记忆、AlexNet 与 ResNet 的视觉卷积架构、Transformer 注意力、归一化布局与深层架构稳定性。",
     "topics": [
       "Convolutional Neural Networks & Vision",
       "ResNet",
       "Transformer",
       "State Space",
       "Normalization & Residual Paths",
-      "Positional Encoding"
+      "Positional Encoding",
+      "Recurrent Networks / LSTM"
     ]
   },
   {
     "slug": "reinforcement-learning",
     "title": "强化学习",
     "english": "Reinforcement Learning",
-    "description": "从策略梯度、价值估计到 PPO、TRPO 与现代偏好优化，拆解序贯决策中的学习信号。",
+    "description": "从 Bellman 方程、DQN 的价值学习与经验回放，到 Policy Gradient、Actor–Critic、GAE 和 PPO，拆解序贯决策的学习信号。",
     "topics": [
       "Policy Gradient",
       "Actor–Critic",
-      "RL Optimization"
+      "RL Optimization",
+      "Value-based RL",
+      "Deep Q-Learning"
     ]
   },
   {

@@ -384,5 +384,46 @@
     "summary": "以 Krizhevsky、Sutskever、Hinton 2012 原论文为证据，逐层拆解八层 AlexNet、卷积输出尺寸、ReLU、LRN、重叠池化、双 GPU 分组、Dropout 与十裁剪推理；辨明单模型和竞赛集成指标，配原创 SVG、交互形状实验及纯 Python 断言。",
     "paper": "https://papers.nips.cc/paper_files/paper/2012/file/c399862d3b9d6b76c8436e924a68c45b-Paper.pdf",
     "illustration": "alexnet"
+  },
+  {
+    "slug": "lstm",
+    "title": "Understanding LSTM",
+    "subtitle": "记忆如何跨越时间？从 1997 CEC 到现代遗忘门",
+    "category": "architectures",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 32,
+    "tags": [
+      "LSTM",
+      "Recurrent Networks",
+      "Long-term Dependencies",
+      "Forget Gate",
+      "Gradient Flow"
+    ],
+    "summary": "从普通 RNN 的长期梯度问题出发，精读 1997 年 CEC 与两门结构，厘清 2000 年遗忘门与 2002 年 Peephole 的历史演进，再以现代四门 MathML 公式、6 幅图、交互状态模拟和确定性 Python 断言理解记忆更新。",
+    "paper": "https://doi.org/10.1162/neco.1997.9.8.1735",
+    "illustration": "lstm"
+  },
+  {
+    "slug": "dqn",
+    "title": "Understanding DQN",
+    "subtitle": "为什么只看像素和奖励，就能学会玩 Atari？从贝尔曼自举到经验回放与目标网络",
+    "category": "reinforcement-learning",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 34,
+    "tags": [
+      "DQN",
+      "Deep Q-Learning",
+      "Value-based RL",
+      "Experience Replay",
+      "Target Network",
+      "Atari"
+    ],
+    "summary": "以 Mnih et al. Nature 2015 为核心，逐步拆解 Q-learning 自举目标、回放缓存、双网络延迟同步、卷积架构与 Atari 证据；提供六幅机制图、可调 TD 目标和纯 Python 数学检验，并区分 2013 DQN、Double DQN 等后续工作。",
+    "paper": "https://doi.org/10.1038/nature14236",
+    "illustration": "dqn"
   }
 ]
