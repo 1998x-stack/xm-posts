@@ -341,6 +341,16 @@
   },
   {
     "id": "path-37",
+    "title": "从工具调用到可验证的软件工程 Agent",
+    "posts": [
+      "react",
+      "swe-agent",
+      "agent-memory-components",
+      "harness-engineering"
+    ]
+  },
+  {
+    "id": "path-38",
     "title": "从 Agent 推理到工具协议互操作",
     "posts": [
       "react",
