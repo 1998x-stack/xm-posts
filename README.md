@@ -304,3 +304,15 @@ MobileNet 归入 `architectures` → **Convolutional Neural Networks & Vision** 
 新增 **存储与索引 / Storage & Indexing** 一级领域（`posts/storage-indexing/`），包含 Ordered Tree Indexes、LSM Trees、Hash / Filters、Pages & Buffer Pools、Transactions & Recovery、Concurrency & MVCC 六个稳定二级主题，不与 GPU Systems 或向量 Retrieval 混淆。各主题规划放在 `_topics/*/README.md`，不会作为文章发布。
 
 - [Understanding B+ Tree](posts/storage-indexing/b-plus-tree/index.html)：以 Bayer–McCreight 经典 B-tree 论文与 Brown / PostgreSQL 官方材料为线索，区分 B-tree 与 B+ tree；六幅 SVG、四组 MathML、范围扫描交互、插入与分裂教学代码、确定性测试和来源证据台账。
+
+## Rearrangement Inequalities · Foundations
+
+- [Understanding Rearrangement Inequalities](posts/foundations/rearrangement-inequalities/index.html)：从局部交换证明与 von Neumann 迹不等式到三序列最小值反例。归入 `foundations → rearrangement-inequalities`，不增设一级分类。
+
+## 分类一致性与 PR 集成
+
+- `content/categories.json` 是唯一的一级分类与二级专题 slug 来源；`content/posts.json` 登记文章所属的唯一主专题，交叉学科使用 tags。
+- `_topics/*/README.md` 仅做研究规划占位，不作为公开文章；占位文件夹名称必须与注册的专题 slug 完全一致。旧的同义占位目录已合并到正式 slug，避免死链与重复专题。
+- `systems` 保留现有稳定 slug，明确区分 Kernel 编程、GPU 内存、编译优化、分布式通信和性能建模；新增 `tests/test_taxonomy_contract.py` 守护目录、元数据与已发布路径的一致性。
+
+分类边界、跨域归属和稳定 slug 规则详见 [分类体系治理说明](docs/taxonomy.md)。

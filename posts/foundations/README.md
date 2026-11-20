@@ -33,3 +33,5 @@
 - [Understanding LogSumExp & Softmax Taylor Expansion](logsumexp-softmax-taylor/index.html)：中心化 LSE/Softmax 的泰勒展开、误差与 Attention 线性化；所属二级主题 `Softmax, LogSumExp & Numerical Approximation`。
 
 - [Understanding Weight Decay](weight-decay/index.html)：权重衰减、正则化及优化器机制；主专题 `optimization`。
+
+- [Understanding Rearrangement Inequalities](rearrangement-inequalities/index.html)：从经典重排不等式、双随机矩阵到矩阵迹上界与三序列优化，配独立 SVG、MathML、交互算例与确定性 Python 验证；二级主题 `rearrangement-inequalities`。

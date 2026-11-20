@@ -1,0 +1,101 @@
+[
+  {
+    "id": "RI01",
+    "claim": "经典重排不等式对有序实数列给出反序下界、同序上界，无需非负性",
+    "kind": "mathematical-theorem",
+    "source_url": "https://spaces.ac.cn/archives/11910",
+    "locator": "基本形式 / Basic Form；作者原文标题经公开介绍及译文间接核对",
+    "status": "derived",
+    "notes": "局部交换证明为本文独立重写，原站直接访问返回 403；没有声称逐字核对原始页面"
+  },
+  {
+    "id": "RI02",
+    "claim": "两位置交换带来的差值等于 (a_i-a_j)(b_j-b_i)",
+    "kind": "derivation",
+    "source_url": "https://ashwinkg.com/scientific-spaces/11910/",
+    "locator": "Basic Form, local-exchange argument",
+    "status": "derived",
+    "notes": "代数直接展开，算例与脚本核验"
+  },
+  {
+    "id": "RI03",
+    "claim": "实对称 A B 的 tr(AB) 位于特征值反序点积与同序点积之间",
+    "kind": "mathematical-theorem",
+    "source_url": "https://andre-a-no.github.io/von_neumann_type_i/lecture_notes/11_optimisation/",
+    "locator": "Theorem 11.4(a), rearrangement",
+    "status": "verified",
+    "notes": "适用条件是实对称矩阵；特征值可为负"
+  },
+  {
+    "id": "RI04",
+    "claim": "tr(AB) 可分解为 eigenvalue products 权重 q_ij^2 的双随机加权和",
+    "kind": "derivation",
+    "source_url": "https://www2.isye.gatech.edu/~nemirovs/KKN_EssMath.pdf",
+    "locator": "Functions of eigenvalues of symmetric matrices: doubly-stochastic proof",
+    "status": "derived",
+    "notes": "Q=U^TV 正交；其 Hadamard 平方是 orthostochastic matrix，是 doubly stochastic 的子集"
+  },
+  {
+    "id": "RI05",
+    "claim": "通用矩阵的 von Neumann 迹不等式约束 |tr(X^TY)| ≤ Σ σ_i(X)σ_i(Y)",
+    "kind": "mathematical-theorem",
+    "source_url": "https://www.cis.jhu.edu/~younes/machine_learning.pdf",
+    "locator": "§2.2 The Trace Inequality / Theorem 2.1",
+    "status": "verified",
+    "notes": "相同形状实矩阵；复矩阵应共轭转置"
+  },
+  {
+    "id": "RI06",
+    "claim": "三个及更多非负有序序列逐点乘积和由同序配对最大化",
+    "kind": "derivation",
+    "source_url": "https://ashwinkg.com/scientific-spaces/11910/",
+    "locator": "Multiple Sequences",
+    "status": "derived",
+    "notes": "正则性和非负条件明确；按部分求和结合前缀最优性，非负条件对扩展很重要"
+  },
+  {
+    "id": "RI07",
+    "claim": "三列长度为三且每列为 (3,2,1) 时全同序 36、反转第三列 20、最小 18",
+    "kind": "toy-example",
+    "source_url": "https://spaces.ac.cn/archives/11910",
+    "locator": "独立教学算例；不是原文实验或论文表格",
+    "status": "illustrative",
+    "notes": "36 组排列可由 mini_rearrangement.py 全量穷举验证"
+  },
+  {
+    "id": "RI08",
+    "claim": "乘积型成本的三维轴向指派，最大化可多项式时间解决而最小化已知 NP-complete",
+    "kind": "complexity-literature",
+    "source_url": "https://research.tue.nl/en/publications/three-dimensional-axial-assignment-problems-with-decomposable-cos/",
+    "locator": "Burkard, Rudolf, Woeginger (1996), abstract",
+    "status": "verified",
+    "notes": "针对论文定义的 decomposable-cost class；不等于断言所有特定实例 NP-hard"
+  },
+  {
+    "id": "RI09",
+    "claim": "三个半正定秩一矩阵的乘积迹也可以为负",
+    "kind": "counterexample",
+    "source_url": "https://ashwinkg.com/scientific-spaces/11910/",
+    "locator": "Another Generalization；本文反例是独立构造",
+    "status": "derived",
+    "notes": "u=(1,0), v=(1,1), w=(-1,2) 得到 trace = (u·v)(v·w)(w·u)=-1"
+  },
+  {
+    "id": "RI10",
+    "claim": "多矩阵迹绝对值被对应奇异值乘积之和限制",
+    "kind": "derivation",
+    "source_url": "https://ashwinkg.com/scientific-spaces/11910/",
+    "locator": "Multiple Matrices",
+    "status": "derived",
+    "notes": "平方方阵；多矩阵上界通过双矩阵迹不等式和谱乘积弱主化可证明"
+  },
+  {
+    "id": "RI11",
+    "claim": "2025/2026 研究对 Hardy-Littlewood-Polya 重排不等式给出更广的矩阵推广",
+    "kind": "related-work",
+    "source_url": "https://doi.org/10.1007/s10957-025-02884-1",
+    "locator": "Title and abstract, version of record Dec 24 2025",
+    "status": "verified",
+    "notes": "作为进一步阅读，与本篇经典谱界区别"
+  }
+]
