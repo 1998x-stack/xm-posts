@@ -327,5 +327,23 @@
       "bert",
       "rag"
     ]
+  },
+  {
+    "id": "path-37",
+    "title": "从概率分类到类型化决策",
+    "posts": [
+      "logistic-regression",
+      "naive-bayes",
+      "roc-auc",
+      "typed-decision-models"
+    ]
+  },
+  {
+    "id": "path-38",
+    "title": "Agent 的行动与决策控制",
+    "posts": [
+      "react",
+      "typed-decision-models"
+    ]
   }
 ]
