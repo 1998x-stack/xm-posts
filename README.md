@@ -24,6 +24,7 @@
 | **Understanding Pre-LN vs Post-LN** | LayerNorm 改动为何影响残差梯度与 warm-up？ | [`posts/architectures/pre-ln-vs-post-ln/`](posts/architectures/pre-ln-vs-post-ln/index.html) | [Xiong et al. (ICML 2020)](https://proceedings.mlr.press/v119/xiong20b.html) |
 | **Understanding DPO** | 为什么偏好对可以直接训练策略而无需显式奖励模型？ | [`posts/training/dpo/`](posts/training/dpo/index.html) | [Rafailov et al. (NeurIPS 2023)](https://arxiv.org/abs/2305.18290) |
 | **Understanding SVM** | 为什么分对了仍需最大间隔？ | [`posts/classical-ml/svm/`](posts/classical-ml/svm/index.html) | [Cortes & Vapnik (1995)](https://doi.org/10.1007/BF00994018) |
+| **Understanding PCA** | 最大方差为何等价于最小平方重建误差？ | [`posts/classical-ml/pca/`](posts/classical-ml/pca/index.html) | [Pearson (1901)](https://doi.org/10.1080/14786440109462720) · [Hotelling (1933)](https://www.scienceopen.com/document?vid=a0c9b352-1645-4706-9d7c-a76e6534a1b5) |
 | **Understanding Chain-of-Thought Prompting** | Few-shot 的中间推理步骤如何改变复杂任务表现？ | [`posts/reasoning/chain-of-thought/`](posts/reasoning/chain-of-thought/index.html) | [Wei et al. (NeurIPS 2022)](https://arxiv.org/abs/2201.11903) |
 | **Understanding Self-Consistency** | 多路径采样与最终答案投票为何有效？ | [`posts/reasoning/self-consistency/`](posts/reasoning/self-consistency/index.html) | [Wang et al. (2022; ICLR 2023)](https://arxiv.org/abs/2203.11171) |
 | **Understanding DQN** | 为什么像素与奖励足以驱动动作价值学习？ | [`posts/reinforcement-learning/dqn/`](posts/reinforcement-learning/dqn/index.html) | [Mnih et al. (Nature 2015)](https://doi.org/10.1038/nature14236) |
@@ -62,7 +63,7 @@ The Pile 的 22 个来源按原论文 Table 1 给出有效采样权重，配五�
 | 分类 | 路径 | 范围 |
 |---|---|---|
 | 基础理论 | `posts/foundations/` | Adam、Word2Vec、词嵌入、优化器（AdamW）、正则化、表示学习 |
-| **经典机器学习** | `posts/classical-ml/` | SVM、核方法、线性与树模型 |
+| **经典机器学习** | `posts/classical-ml/` | SVM、核方法、线性与树模型、PCA 与无监督降维 |
 | **模型架构** | `posts/architectures/` | AlexNet / CNN、ResNet、Seq2Seq、Transformer、Normalization & Residual Paths、状态空间模型 |
 | **强化学习** | `posts/reinforcement-learning/` | Policy Gradient、Actor–Critic、Off-policy Replay、SAC / Maximum Entropy、PPO/TRPO 与序贯决策 |
 | **数据与语料** | `posts/datasets/` | 预训练语料、数据清洗/去重、混合采样、污染检查与治理 |
