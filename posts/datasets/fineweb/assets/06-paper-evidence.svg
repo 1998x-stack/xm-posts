@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" role="img" viewBox="0 0 920 310" aria-label="论文在特定消融配置中的 MMLU 和 ARC 表现">
+<title>论文在特定消融配置中的 MMLU 和 ARC 表现</title><desc>350B tokens、约 1.71B 参数模型，MMLU FineWeb 33 对 FineWeb-Edu 37；ARC 46 对57。</desc><style>
+text{font-family:system-ui,-apple-system,"Segoe UI",sans-serif;fill:#24444a} .tiny{font-size:13px;fill:#5c777a}.small{font-size:16px}.mid{font-size:20px;font-weight:700}.big{font-size:32px;font-weight:800}.tag{font-size:13px;font-weight:800;letter-spacing:1.6px;fill:#15796e}.base{fill:#f6f9f4;stroke:#cadbd4;stroke-width:2}.teal{fill:#dcefeb;stroke:#52a194;stroke-width:2}.amber{fill:#fff1e5;stroke:#d59c65;stroke-width:2}.purple{fill:#ece8f9;stroke:#a598cf;stroke-width:2}.bar{fill:#368879}.red{fill:#c47a65}.line{stroke:#91ada8;stroke-width:3;stroke-linecap:round}</style><rect width="920" height="310" rx="18" fill="#fdfcf8"/>
+<text x="34" y="42" class="tag">PAPER RESULTS · MATCHED 350B TRAINING TOKENS</text>
+
+<text x="83" y="93" class="mid">MMLU · accuracy (%)</text>
+<rect x="83" y="133" width="247.5" height="34" rx="5" fill="#a9c8c3"/><text x="91" y="155" class="small">FineWeb 33%</text>
+<rect x="83" y="185" width="277.5" height="34" rx="5" fill="#298c7b"/><text x="91" y="207" class="small" fill="#fff">Edu 37%</text>
+<text x="492" y="93" class="mid">ARC · accuracy (%)</text>
+<rect x="492" y="133" width="230.00000000000003" height="34" rx="5" fill="#a9c8c3"/><text x="500" y="155" class="small">FineWeb 46%</text>
+<rect x="492" y="185" width="285" height="34" rx="5" fill="#298c7b"/><text x="500" y="207" class="small" fill="#fff">Edu 57%</text>
+<text x="35" y="272" class="tiny">复刻论文 §4 / Fig.10–11 文字中报告的端点数值；不是完整训练曲线，也不是独立复现。</text></svg>
