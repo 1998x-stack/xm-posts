@@ -9,7 +9,7 @@
 <g fill="#235a5b" font-weight="700"><text x="54" y="90">3</text><text x="54" y="159">2</text><text x="54" y="228">1</text><text x="211" y="90">3</text><text x="211" y="159">2</text><text x="211" y="228">1</text></g>
 <text x="133" y="261" fill="#557b7d">9 + 4 + 1</text></g>
 <g transform="translate(318,65)"><rect width="265" height="285" rx="13" fill="#f3f5f4"/>
-<text x="133" y="30" font-size="20" fill="#5e7880" font-weight="700">错序：12</text>
+<text x="133" y="30" font-size="20" fill="#5e7880" font-weight="700">错序：13</text>
 <g stroke="#668d9d" stroke-width="6" stroke-linecap="round"><path d="M83 84L181 153"/><path d="M83 153L181 84"/><path d="M83 222H181"/></g>
 <g fill="#345d69" font-weight="700"><text x="54" y="90">3</text><text x="54" y="159">2</text><text x="54" y="228">1</text><text x="211" y="90">3</text><text x="211" y="159">2</text><text x="211" y="228">1</text></g>
 <text x="133" y="261" fill="#557b7d">6 + 6 + 1 = 13</text></g>
