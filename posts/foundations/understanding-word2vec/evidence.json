@@ -1,0 +1,56 @@
+[
+  {
+    "id": "W1",
+    "claim": "CBOW predicts a target word from surrounding context; Skip-gram predicts context words from the center word",
+    "kind": "architecture",
+    "source_url": "https://arxiv.org/abs/1301.3781",
+    "locator": "Section 3, Figure 1",
+    "status": "verified",
+    "notes": "Architecture labels; distinction does not prescribe negative sampling"
+  },
+  {
+    "id": "W2",
+    "claim": "Full-vocabulary softmax has vocabulary-dependent output scoring cost, while negative sampling trains sampled binary comparisons",
+    "kind": "equation",
+    "source_url": "https://arxiv.org/abs/1310.4546",
+    "locator": "Section 2.2",
+    "status": "verified",
+    "notes": "SGNS changes the objective; complexity comparison omits embedding lookup and sampling overhead"
+  },
+  {
+    "id": "W3",
+    "claim": "Negative sampling draws negatives from a smoothed unigram distribution, with word frequency raised to 3/4",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/abs/1310.4546",
+    "locator": "Section 2.2",
+    "status": "verified",
+    "notes": "Paper-specific empirical design, not a universally optimal probability"
+  },
+  {
+    "id": "W4",
+    "claim": "Frequent-word subsampling is another training modification separate from CBOW/Skip-gram choice",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/abs/1310.4546",
+    "locator": "Section 2.3",
+    "status": "verified",
+    "notes": "Toy NumPy implementation intentionally omits subsampling"
+  },
+  {
+    "id": "W5",
+    "claim": "Vector analogies are an evaluated emergent property under specified experimental conditions",
+    "kind": "experiment",
+    "source_url": "https://arxiv.org/abs/1301.3781",
+    "locator": "Section 5",
+    "status": "verified",
+    "notes": "The two-dimensional analogy illustration is synthetic and no original benchmark score was reproduced"
+  },
+  {
+    "id": "W6",
+    "claim": "The source implementation maintains distinct input and negative-sampling output embedding tables",
+    "kind": "implementation-reference",
+    "source_url": "https://github.com/tmikolov/word2vec/blob/master/word2vec.c",
+    "locator": "TrainModelThread; syn0; syn1neg",
+    "status": "verified",
+    "notes": "Minimal NumPy code is independently authored for education"
+  }
+]

@@ -84,6 +84,8 @@ def post_card(p,rel,ordinal=0):
         icon, art = 'attention', '<span class="math-mark">softmax(QKᵀ / √dₖ)V</span><span class="attention-dots">● · ● · ● · ● · ●</span>'
     elif p['slug'] == 'svm':
         icon, art = 'margin', '<span class="math-mark">margin = 2 / ||w||</span><span class="svm-boundary svm-left"></span><span class="svm-boundary svm-center"></span><span class="svm-boundary svm-right"></span><span class="svm-point point-blue"></span><span class="svm-point point-orange"></span>'
+    elif p['slug'] == 'understanding-word2vec':
+        icon, art = 'embedding', '<span class="math-mark">P(context | center)</span><span class="embedding-dots">● ● ● ● ●</span><span class="embedding-eq">positive + k negatives</span>'
     else:
         icon, art = 'generic', '<span class="math-mark">Observe → Derive → Verify</span>'
     poster=f'<div class="figure-abstract figure-{icon}" aria-hidden="true"><span class="accent-label">FIG. {ordinal or 1:02d}</span>{art}</div>'
