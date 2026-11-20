@@ -80,6 +80,7 @@ def run(output:Path, site:Path):
                         assert all(visible.nth(i).get_attribute('data-category')=='architectures' for i in range(visible.count()))
                         category.select_option('')
                         search=page.locator('[data-search-input]')
+                        # Search results grow as new articles mention existing concepts; validate matches, not a frozen count.
                         search.fill('ResNet')
                         matching=page.locator('[data-post-card]:visible')
                         shown=matching.count()
