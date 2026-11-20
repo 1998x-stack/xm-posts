@@ -283,5 +283,15 @@
       "swe-agent",
       "agent-memory-components"
     ]
+  },
+  {
+    "id": "path-31",
+    "title": "自回归解码的延迟与显存",
+    "posts": [
+      "transformer",
+      "kv-cache",
+      "pagedattention",
+      "speculative-decoding"
+    ]
   }
 ]
