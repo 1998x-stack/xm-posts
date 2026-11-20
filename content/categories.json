@@ -46,6 +46,10 @@
         "title": "Probabilistic Models"
       },
       {
+        "slug": "mixture-models-density-estimation",
+        "title": "Mixture Models & Density Estimation"
+      },
+      {
         "slug": "margin-kernels",
         "title": "Margin Methods & Kernels"
       },
