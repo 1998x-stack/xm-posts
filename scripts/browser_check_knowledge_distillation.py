@@ -27,7 +27,7 @@ def audit_page(page, width: int) -> dict:
       const mathNamespaces = maths.every(node =>
         node.namespaceURI === 'http://www.w3.org/1998/Math/MathML'
       );
-      const rawLatex = document.body.innerText.includes("\\(") || document.body.innerText.includes("\\)");
+      const rawLatex = document.body.innerText.includes("\\\\(") || document.body.innerText.includes("\\\\)");
       const mathInsideSvg = [...document.querySelectorAll('svg math')].length;
       return {
         h1: document.querySelectorAll('h1').length,
