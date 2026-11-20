@@ -1,0 +1,74 @@
+[
+  {
+    "id": "GMM01",
+    "claim": "A finite Gaussian mixture density is a convex combination of component Gaussian densities",
+    "kind": "theory",
+    "source_url": "https://www.microsoft.com/en-us/research/wp-content/uploads/2006/01/Bishop-Pattern-Recognition-and-Machine-Learning-2006.pdf",
+    "locator": "§9.2; mixture formulation",
+    "status": "verified",
+    "notes": "K nonnegative weights normalized to 1"
+  },
+  {
+    "id": "GMM02",
+    "claim": "EM alternates conditional expectations and parameter maximization, with monotonic likelihood behavior under its standard conditions",
+    "kind": "paper-claim",
+    "source_url": "https://doi.org/10.1111/j.2517-6161.1977.tb01600.x",
+    "locator": "Abstract; §§1–3",
+    "status": "verified",
+    "notes": "Dempster et al. provide the general EM method; not the invention of GMM"
+  },
+  {
+    "id": "GMM03",
+    "claim": "The GMM E-step posterior responsibility and M-step updates for weights, means, covariances",
+    "kind": "theory",
+    "source_url": "https://www.microsoft.com/en-us/research/wp-content/uploads/2006/01/Bishop-Pattern-Recognition-and-Machine-Learning-2006.pdf",
+    "locator": "§9.2.2, equations (9.23)–(9.27)",
+    "status": "verified",
+    "notes": "Explicit unregularized full-covariance ML update"
+  },
+  {
+    "id": "GMM04",
+    "claim": "Modern GaussianMixture supports full, tied, diag and spherical covariance structures",
+    "kind": "modern-implementation",
+    "source_url": "https://scikit-learn.org/stable/modules/mixture.html",
+    "locator": "§2.1 Gaussian Mixture",
+    "status": "verified",
+    "notes": "Parameters and geometry described in article"
+  },
+  {
+    "id": "GMM05",
+    "claim": "Number of components and covariance type can be selected by minimizing BIC across candidates",
+    "kind": "modern-implementation",
+    "source_url": "https://scikit-learn.org/stable/auto_examples/mixture/plot_gmm_selection.html",
+    "locator": "Gaussian Mixture Model Selection / Model training and selection",
+    "status": "verified",
+    "notes": "BIC penalizes model complexity; selection context depends on assumptions"
+  },
+  {
+    "id": "GMM06",
+    "claim": "Unregularized GMM likelihood can become singular as covariance collapses",
+    "kind": "limitation",
+    "source_url": "https://scikit-learn.org/stable/modules/mixture.html",
+    "locator": "§2.1.1 Pros and cons / Singularities",
+    "status": "verified",
+    "notes": "Exact EM monotonicity not claimed for clipped or modified M steps"
+  },
+  {
+    "id": "GMM07",
+    "claim": "One-dimensional symmetric two-component demonstration gives 50 percent posterior at x=0",
+    "kind": "toy-derivation",
+    "source_url": "https://www.microsoft.com/en-us/research/wp-content/uploads/2006/01/Bishop-Pattern-Recognition-and-Machine-Learning-2006.pdf",
+    "locator": "Independently computed using §9.2 posterior equation",
+    "status": "derived",
+    "notes": "Equal weights and variance, means opposite, not a historical experimental result"
+  },
+  {
+    "id": "GMM08",
+    "claim": "Full covariance GMM has (K-1)+Kd+K*d*(d+1)/2 free parameters",
+    "kind": "toy-derivation",
+    "source_url": "https://www.microsoft.com/en-us/research/wp-content/uploads/2006/01/Bishop-Pattern-Recognition-and-Machine-Learning-2006.pdf",
+    "locator": "Independent parameter count from §9.2 model definition",
+    "status": "derived",
+    "notes": "Assumes unconstrained full covariance for each component"
+  }
+]
