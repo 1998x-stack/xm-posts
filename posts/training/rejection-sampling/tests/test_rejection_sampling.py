@@ -1,7 +1,10 @@
 from collections import Counter
+from pathlib import Path
+import sys
 
 import pytest
 
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from rejection_sampling import best_of_n, rejection_sample
 
 
