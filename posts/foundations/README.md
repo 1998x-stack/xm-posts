@@ -8,6 +8,8 @@
 
 ## 已发布文章
 
+- [Understanding SentencePiece](sentencepiece/index.html)：原始文本、可见空格、BPE/Unigram、Viterbi、子词采样与论文实验；归入 `Tokenization & Subword Units` 二级专题。
+
 - [Understanding Word2Vec](understanding-word2vec/index.html)：从自监督词窗到 CBOW / Skip-gram、Negative Sampling 和词向量几何。配套 `assets/`、`evidence.json`、`code/train_sgns.py` 与测试。
 
 - [Understanding AdamW](adamw/index.html)：解耦权重衰减，从 SGD 中的等价性到 Adam 的逐坐标更新。配套六幅 SVG、`mini_adamw.py` 与原论文证据。
