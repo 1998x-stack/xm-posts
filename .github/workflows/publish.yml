@@ -44,6 +44,7 @@ jobs:
           python scripts/browser_check_site.py --output reports/site
           python scripts/browser_check_svm_math.py --output reports/svm-math
           python scripts/browser_check_three_guides.py
+          python scripts/browser_check_second_batch.py --output reports/second-batch
       - name: Upload browser QA evidence
         if: always()
         uses: actions/upload-artifact@v4
