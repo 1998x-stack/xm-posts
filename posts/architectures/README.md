@@ -21,6 +21,11 @@ RoPE 位于 `posts/architectures/rope/`，主题为 **Positional Encoding**；�
 - [Understanding ResNet](resnet/index.html)：从网络深度的优化退化与 shortcut 切入，承接 AlexNet 到残差学习的历史发展。
 - 该主题作为模型架构的二级轨道，不增设新的顶层分类；后续 VGG、Inception、EfficientNet 可依此归档。
 
+## Gating & Multiplicative Interactions
+
+- [Understanding Neural Gating](neural-gating/index.html)：从 LSTM/GRU 到 Highway、GLU、SwiGLU 的跨论文门控机制，区分可学习的 sigmoid 保留门与非概率的乘性 FFN 门。
+- [专题规划与术语边界](_topics/gating-multiplicative-interactions/README.md)：控制信息流而非独立建一级分类；与 Attention、MoE Routing 进行方法学区分。
+
 ## Recurrent Networks / LSTM
 
 - [Understanding LSTM](lstm/index.html)：从普通 RNN 的长期梯度问题到 1997 CEC / 输入与输出门；明确区分 2000 年遗忘门、2002 年 peephole 和现代四门实现。

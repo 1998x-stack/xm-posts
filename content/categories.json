@@ -5,16 +5,30 @@
     "english": "Foundations",
     "description": "从线性代数、矩阵分解、优化器、正则化、词嵌入、表示学习与数学直觉出发，加入 BPE 子词与 Tokenization，建立理解现代模型训练的共同语言。",
     "topics": [
-      "Optimization & Optimizers",
-      "Optimization & Regularization",
-      "Representation",
-      "Tokenization & Subword Units",
-      "Representation Learning & Embeddings",
-      "Math",
-      "Word Embeddings",
-      "Linear Algebra & Matrix Factorization",
-      "Monte Carlo & Importance Sampling",
-      "Softmax, LogSumExp & Numerical Approximation"
+      {
+        "slug": "linear-algebra",
+        "title": "Linear Algebra & Matrix Factorization"
+      },
+      {
+        "slug": "optimization",
+        "title": "Optimization & Optimizers"
+      },
+      {
+        "slug": "representation",
+        "title": "Representation Learning & Embeddings"
+      },
+      {
+        "slug": "tokenization",
+        "title": "Tokenization & Subword Units"
+      },
+      {
+        "slug": "importance-sampling",
+        "title": "Monte Carlo & Importance Sampling"
+      },
+      {
+        "slug": "numerical-stability",
+        "title": "Numerical Stability & Mathematical Functions"
+      }
     ]
   },
   {
@@ -23,11 +37,26 @@
     "english": "Classical Machine Learning",
     "description": "从最大间隔与核技巧，到朴素贝叶斯概率分类、线性模型、树模型和集成方法，梳理经典学习算法的数学机制与论文证据。",
     "topics": [
-      "SVM & Kernels",
-      "Linear Models",
-      "Trees & Ensembles",
-      "Unsupervised Learning & Dimensionality Reduction",
-      "Probabilistic Models & Bayesian Classification"
+      {
+        "slug": "linear-models",
+        "title": "Linear Models"
+      },
+      {
+        "slug": "probabilistic-models",
+        "title": "Probabilistic Models"
+      },
+      {
+        "slug": "margin-kernels",
+        "title": "Margin Methods & Kernels"
+      },
+      {
+        "slug": "trees-ensembles",
+        "title": "Decision Trees & Ensembles"
+      },
+      {
+        "slug": "dimensionality-reduction",
+        "title": "Dimensionality Reduction"
+      }
     ]
   },
   {
@@ -36,20 +65,55 @@
     "english": "Architectures",
     "description": "拆开模型的信息路径：CNN、循环网络、Transformer、MoE、状态空间模型、高效注意力与长上下文架构，明确结构变化与工程实现的边界。",
     "topics": [
-      "Convolutional Neural Networks & Vision",
       "Efficient & Mobile CNNs",
-      "Sequence-to-Sequence / Encoder–Decoder",
-      "ResNet",
-      "Transformer",
-      "Attention Mechanisms & Multi-Head Attention",
-      "State Space Models",
-      "Normalization & Residual Paths",
-      "Positional Encoding",
-      "Recurrent Networks / LSTM",
-      "Attention Head Sharing",
-      "Mixture of Experts (MoE)",
-      "Efficient Attention",
-      "Long-context Architectures"
+      {
+        "slug": "convolutional-vision",
+        "title": "Convolutional Networks & Vision"
+      },
+      {
+        "slug": "recurrent-networks",
+        "title": "Recurrent Networks & LSTM"
+      },
+      {
+        "slug": "encoder-decoder",
+        "title": "Sequence-to-Sequence & Encoder–Decoder"
+      },
+      {
+        "slug": "transformers",
+        "title": "Transformers & Self-Attention"
+      },
+      {
+        "slug": "attention-variants",
+        "title": "Attention Heads & KV Sharing"
+      },
+      {
+        "slug": "positional-encoding",
+        "title": "Positional Encoding"
+      },
+      {
+        "slug": "normalization",
+        "title": "Normalization & Residual Paths"
+      },
+      {
+        "slug": "moe",
+        "title": "Mixture of Experts (MoE)"
+      },
+      {
+        "slug": "state-space-models",
+        "title": "State Space Models"
+      },
+      {
+        "slug": "efficient-attention",
+        "title": "Efficient Attention Architectures"
+      },
+      {
+        "slug": "long-context-architectures",
+        "title": "Long-context Architectures"
+      },
+      {
+        "slug": "gating-mechanisms",
+        "title": "Gating & Multiplicative Interactions"
+      }
     ]
   },
   {
@@ -58,19 +122,46 @@
     "english": "Reinforcement Learning",
     "description": "从 Bellman 方程、DQN 的价值学习与经验回放，到 Policy Gradient、Actor–Critic、GAE 和 PPO，拆解经验回放与最大熵控制等序贯决策的学习信号，并延伸至 AlphaGo 的神经网络引导搜索与 MCTS 规划，并解析参数空间噪声探索。",
     "topics": [
-      "Policy Gradient",
-      "Actor–Critic",
-      "Asynchronous & Parallel RL",
-      "RL Optimization",
-      "Value-based RL",
-      "Deep Q-Learning",
-      "Off-policy & Experience Replay",
-      "Maximum Entropy RL",
-      "Continuous Control",
-      "Off-policy Actor–Critic",
-      "Planning & Tree Search",
-      "Exploration & Parameter Noise",
-      "Off-policy Evaluation & Importance Sampling"
+      {
+        "slug": "value-learning",
+        "title": "Value-based Learning"
+      },
+      {
+        "slug": "policy-gradient",
+        "title": "Policy Gradient"
+      },
+      {
+        "slug": "on-policy-optimization",
+        "title": "On-policy Actor–Critic & PPO"
+      },
+      {
+        "slug": "off-policy-control",
+        "title": "Off-policy Continuous Control"
+      },
+      {
+        "slug": "maximum-entropy",
+        "title": "Maximum Entropy RL"
+      },
+      {
+        "slug": "advantage-estimation",
+        "title": "Advantage Estimation & GAE"
+      },
+      {
+        "slug": "planning-search",
+        "title": "Planning & Tree Search"
+      },
+      {
+        "slug": "asynchronous-parallel",
+        "title": "Asynchronous & Parallel RL"
+      },
+      {
+        "slug": "exploration-noise",
+        "title": "Exploration & Parameter Noise"
+      },
+      {
+        "slug": "off-policy-evaluation",
+        "title": "Off-policy Evaluation & Importance Sampling"
+      }
     ]
   },
   {
@@ -79,11 +170,26 @@
     "english": "Datasets & Data Curation",
     "description": "预训练语料从哪里来？系统研究数据采集、清洗去重、混合采样、数据污染与许可证治理，并用分领域证据衡量数据质量。",
     "topics": [
-      "Pretraining Corpora",
-      "Data Curation & Filtering",
-      "Dataset Mixing & Sampling",
-      "Data Governance & Licensing",
-      "Data Contamination"
+      {
+        "slug": "pretraining-corpora",
+        "title": "Pretraining Corpora"
+      },
+      {
+        "slug": "curation-filtering",
+        "title": "Data Curation, Filtering & Deduplication"
+      },
+      {
+        "slug": "mixing-sampling",
+        "title": "Dataset Mixing & Sampling"
+      },
+      {
+        "slug": "governance",
+        "title": "Data Governance & Licensing"
+      },
+      {
+        "slug": "contamination",
+        "title": "Data Contamination"
+      }
     ]
   },
   {
@@ -92,20 +198,50 @@
     "english": "Training & Alignment",
     "description": "从预训练、Scaling Laws 与参数高效微调，到分布式训练、训练并行、混合精度、检查点与偏好对齐，系统拆解模型训练的数学目标和工程实现。 增加 BERT 双向 Encoder 的 MLM / NSP 预训练与迁移学习。",
     "topics": [
-      "Pretraining",
-      "Scaling Laws / Compute-Optimal Training",
-      "Fine-tuning",
-      "PEFT / LoRA",
-      "Quantized Fine-tuning / QLoRA",
-      "Preference Alignment",
-      "RL / Policy Optimization",
-      "Preference Optimization",
-      "RLHF",
-      "Distributed Training",
-      "Training Parallelism",
-      "Mixed Precision",
-      "Checkpointing",
-      "Bidirectional Encoder Pretraining / BERT"
+      {
+        "slug": "pretraining",
+        "title": "Pretraining & Language Modeling"
+      },
+      {
+        "slug": "scaling-laws",
+        "title": "Scaling Laws & Compute-Optimal Training"
+      },
+      {
+        "slug": "parameter-efficient",
+        "title": "Parameter-Efficient Fine-tuning (PEFT)"
+      },
+      {
+        "slug": "quantized-finetuning",
+        "title": "Quantized Fine-tuning"
+      },
+      {
+        "slug": "rlhf",
+        "title": "RLHF & Reward Modeling"
+      },
+      {
+        "slug": "preference-optimization",
+        "title": "Direct Preference Optimization"
+      },
+      {
+        "slug": "rl-post-training",
+        "title": "RL Post-training & Policy Optimization"
+      },
+      {
+        "slug": "distributed-training",
+        "title": "Distributed Training"
+      },
+      {
+        "slug": "checkpointing",
+        "title": "Checkpointing & Fault Tolerance"
+      },
+      {
+        "slug": "training-parallelism",
+        "title": "Training Parallelism"
+      },
+      {
+        "slug": "mixed-precision",
+        "title": "Mixed Precision"
+      }
     ]
   },
   {
@@ -114,10 +250,22 @@
     "english": "Reasoning & Test-time Compute",
     "description": "从 Chain-of-Thought、多路径采样、自一致性到搜索、验证与推理预算，研究如何在测试时提升答案质量。",
     "topics": [
-      "Chain-of-Thought",
-      "Self-Consistency",
-      "Search & Verification",
-      "Test-time Scaling"
+      {
+        "slug": "chain-of-thought",
+        "title": "Chain-of-Thought Prompting"
+      },
+      {
+        "slug": "self-consistency",
+        "title": "Self-Consistency & Multi-sample Reasoning"
+      },
+      {
+        "slug": "search-verification",
+        "title": "Search & Verification"
+      },
+      {
+        "slug": "test-time-scaling",
+        "title": "Test-time Compute & Scaling"
+      }
     ]
   },
   {
@@ -126,16 +274,42 @@
     "english": "Inference & Serving",
     "description": "关注单次请求与在线服务：自回归解码、KV Cache、动态批处理、请求调度、推测解码、Prefill/Decode 解耦，以及端到端延迟、吞吐与服务质量。",
     "topics": [
-      "KV Cache",
-      "Batching",
-      "Decoding",
-      "PagedAttention",
-      "Continuous Batching",
-      "Prefix Caching",
-      "Request Scheduling",
-      "Speculative Decoding",
-      "Prefill / Decode Disaggregation",
-      "Serving Performance"
+      {
+        "slug": "kv-cache",
+        "title": "KV Cache Lifecycle"
+      },
+      {
+        "slug": "paged-memory",
+        "title": "Paged KV Memory"
+      },
+      {
+        "slug": "decoding",
+        "title": "Decoding & Sampling"
+      },
+      {
+        "slug": "prefix-caching",
+        "title": "Prefix Caching"
+      },
+      {
+        "slug": "continuous-batching",
+        "title": "Continuous Batching"
+      },
+      {
+        "slug": "request-scheduling",
+        "title": "Request Scheduling"
+      },
+      {
+        "slug": "speculative-decoding",
+        "title": "Speculative Decoding"
+      },
+      {
+        "slug": "prefill-decode-disaggregation",
+        "title": "Prefill / Decode Disaggregation"
+      },
+      {
+        "slug": "serving-performance",
+        "title": "Serving Performance & Throughput"
+      }
     ]
   },
   {
@@ -144,14 +318,42 @@
     "english": "Systems & Kernels",
     "description": "关注 GPU 与底层运行时：内存层级、CUDA/Triton、算子和编译优化、分布式通信、计算与访存性能建模；区别于面向请求的 Inference & Serving。",
     "topics": [
-      "CUDA",
-      "Triton",
-      "Parallelism",
-      "Attention Kernels",
-      "GPU Architecture & Memory Hierarchy",
-      "Compiler & Kernel Optimization",
-      "Distributed Communication",
-      "Performance Modeling"
+      {
+        "slug": "attention-kernels",
+        "title": "Attention Kernels"
+      },
+      {
+        "slug": "gpu-kernels",
+        "title": "GPU Kernels & Memory Hierarchy"
+      },
+      {
+        "slug": "compilers",
+        "title": "Compilers & Graph Optimization"
+      },
+      {
+        "slug": "communication",
+        "title": "GPU Communication"
+      },
+      {
+        "slug": "performance",
+        "title": "Systems Performance & Benchmarking"
+      },
+      {
+        "slug": "gpu-memory",
+        "title": "GPU Architecture & Memory Hierarchy"
+      },
+      {
+        "slug": "compiler-kernel-optimization",
+        "title": "Compiler & Kernel Optimization"
+      },
+      {
+        "slug": "distributed-communication",
+        "title": "GPU Communication"
+      },
+      {
+        "slug": "performance-modeling",
+        "title": "Systems Performance & Benchmarking"
+      }
     ]
   },
   {
@@ -160,12 +362,30 @@
     "english": "Retrieval & RAG",
     "description": "围绕外部知识访问与检索增强生成，研究向量检索、近似最近邻、重排序、稀疏/稠密融合、证据溯源与回答可靠性。",
     "topics": [
-      "Embedding Retrieval",
-      "ANN",
-      "Reranking",
-      "RAG",
-      "Grounding",
-      "Hybrid Search"
+      {
+        "slug": "embedding-retrieval",
+        "title": "Embedding Retrieval"
+      },
+      {
+        "slug": "hybrid-search",
+        "title": "Hybrid & Sparse-Dense Search"
+      },
+      {
+        "slug": "reranking",
+        "title": "Reranking"
+      },
+      {
+        "slug": "ann",
+        "title": "Approximate Nearest Neighbors (ANN)"
+      },
+      {
+        "slug": "rag",
+        "title": "Retrieval-Augmented Generation"
+      },
+      {
+        "slug": "grounding",
+        "title": "Grounding & Citation"
+      }
     ]
   },
   {
@@ -174,11 +394,26 @@
     "english": "Agents & Tool Use",
     "description": "围绕模型与外部环境交互的闭环，研究 ReAct、任务规划、工具调用、状态与记忆，以及端到端的 Agent 评测。",
     "topics": [
-      "ReAct",
-      "Planning",
-      "Tool Calling",
-      "Memory",
-      "Agent Evaluation"
+      {
+        "slug": "react",
+        "title": "ReAct & Reasoning–Acting"
+      },
+      {
+        "slug": "planning",
+        "title": "Agent Planning"
+      },
+      {
+        "slug": "tool-calling",
+        "title": "Tool Calling"
+      },
+      {
+        "slug": "memory",
+        "title": "Agent Memory"
+      },
+      {
+        "slug": "agent-evaluation",
+        "title": "Agent Evaluation"
+      }
     ]
   },
   {
@@ -187,9 +422,18 @@
     "english": "Multimodal",
     "description": "视觉、语言、音频等模态如何编码、对齐与交互。",
     "topics": [
-      "Vision",
-      "Audio",
-      "Fusion"
+      {
+        "slug": "vision-language",
+        "title": "Vision–Language Models"
+      },
+      {
+        "slug": "audio",
+        "title": "Audio & Speech"
+      },
+      {
+        "slug": "fusion",
+        "title": "Multimodal Alignment & Fusion"
+      }
     ]
   },
   {
@@ -198,9 +442,18 @@
     "english": "Evaluation",
     "description": "实验证据、Benchmark 设计、基线公平性与可重复性。",
     "topics": [
-      "Benchmarks",
-      "Reproduction",
-      "Ablations"
+      {
+        "slug": "benchmarks",
+        "title": "Benchmarks & Metrics"
+      },
+      {
+        "slug": "reproduction",
+        "title": "Experimental Reproduction"
+      },
+      {
+        "slug": "ablations",
+        "title": "Ablations & Evidence"
+      }
     ]
   }
 ]
