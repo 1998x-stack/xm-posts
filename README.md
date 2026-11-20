@@ -9,11 +9,14 @@
 ## 已发布的长文
 
 | Post | 解释的问题 | 文章源码 | 核心资料 |
-|---|---|---|
+|---|---|---|---|
+| **Understanding SentencePiece** | 原始文字如何编码为子词 ID？BPE、Unigram、归一化与解码边界 | [`posts/foundations/sentencepiece/`](posts/foundations/sentencepiece/index.html) | [Kudo & Richardson (EMNLP 2018)](https://aclanthology.org/D18-2012/) |
+| **Understanding GAE** | 一步 TD 与全轨迹回报之间，如何权衡偏差与方差？ | [`posts/reinforcement-learning/gae/`](posts/reinforcement-learning/gae/index.html) | [Schulman et al. (ICLR 2016)](https://arxiv.org/abs/1506.02438) |
 | **Understanding AlphaGo** | 为什么策略网络与价值网络能引导树搜索，避免只靠遍历下围棋？ | [`posts/reinforcement-learning/alphago/`](posts/reinforcement-learning/alphago/index.html) | [Silver et al. (Nature 2016)](https://doi.org/10.1038/nature16961) |
 | **Understanding The Pile** | 为什么 22 种语料混合能增强跨领域文本建模？ | [`posts/datasets/the-pile/`](posts/datasets/the-pile/index.html) | [Gao et al. (2020)](https://arxiv.org/abs/2101.00027) |
 | **Understanding Chinchilla** | 在固定训练 FLOPs 下，参数量与训练 tokens 如何均衡？ | [`posts/training/chinchilla/`](posts/training/chinchilla/index.html) | [Hoffmann et al. (NeurIPS 2022)](https://arxiv.org/abs/2203.15556) |
 | **Understanding FineWeb** | 跨快照去重越强，为什么训练效果反而可能更差？ | [`posts/datasets/fineweb/`](posts/datasets/fineweb/index.html) | [Penedo et al. (NeurIPS 2024)](https://arxiv.org/abs/2406.17557) |
+| **Understanding Multi-Head Attention** | 为什么多个 Q/K/V 投影比单个注意力汇总更有表达空间？ | [`posts/architectures/multi-head-attention/`](posts/architectures/multi-head-attention/index.html) | [Vaswani et al. (NeurIPS 2017)](https://arxiv.org/abs/1706.03762) |
 | **Understanding GQA** | 为什么共享 KV Head 能降低 Decode 带宽又保留 Query 多头？ | [`posts/architectures/gqa/`](posts/architectures/gqa/index.html) | [Ainslie et al. (EMNLP 2023)](https://aclanthology.org/2023.emnlp-main.298/) |
 | **Understanding FlashAttention** | Attention 的 FLOPs 没变，为什么 GPU 仍能提速？ | [`posts/systems/flashattention/`](posts/systems/flashattention/index.html) | [Dao et al. (2022)](https://arxiv.org/abs/2205.14135) |
 | **Understanding AlexNet** | 为什么深层 CNN 能在 2012 ImageNet 上突破？卷积、ReLU、双 GPU 与真实集成指标 | [`posts/architectures/alexnet/`](posts/architectures/alexnet/index.html) | [Krizhevsky et al. (NeurIPS 2012)](https://papers.nips.cc/paper_files/paper/2012/file/c399862d3b9d6b76c8436e924a68c45b-Paper.pdf) |
@@ -107,6 +110,8 @@ LSTM 归入 `architectures` 的 **Recurrent Networks / LSTM** 二级主题，区
 
 Seq2Seq 归入 `architectures`，补充 **Sequence-to-Sequence / Encoder–Decoder** 二级主题；无需为一篇论文新建一级分类，后续 RNN、LSTM、Attention 与机器翻译架构可延伸此主题。
 
+MHA 归入 `architectures` 下新增的 **Attention Mechanisms & Multi-Head Attention** 二级专题，不另设一级分类；与 Transformer 机制总览和 GQA 的 Head Sharing 文章相互链接。文章对应 Vaswani et al. 2017 §3.2、Table 3，含六幅 SVG、原生 MathML、交互与确定性数值自检。
+
 GQA 归入 `architectures` 下新增的 **Attention Head Sharing** 专题，不新增一级分类；它对 KV Cache 的推理开销有直接影响，相关实现与 Serving 主题仍归入 `inference`。
 
 RoPE 归入 `architectures`，补充 **Positional Encoding** 主题；不为单篇位置编码论文增设顶层分类，后续 ALiBi、PI、YaRN 可以继续沿此脉络整理。
@@ -116,6 +121,8 @@ AdamW 继续使用 `foundations` 中的 **Optimization & Regularization** 主题
 XGBoost 归入 `classical-ml` 既有 **Trees & Ensembles** 主题，不新建顶层分类；KDD 2016 原论文与当前 `hist` 方法分开描述。文章包含 14 节、6 幅独立 SVG、7 组原生 MathML 公式、交互式阈值/正则化实验和确定性 Python 单元测试。
 
 BPE 放在 `foundations` → **Tokenization & Subword Units**（新增二级专题，沿用现有一级分类），而不是再新增一级目录；对应 `posts/foundations/bpe/` 包含原论文证据、六幅独立 SVG、交互训练/编码演示、MathML 与纯 Python 回归测试。明确区分 Gage 1994、Sennrich et al. ACL 2016 与 GPT-2 byte-level BPE。
+
+SentencePiece 继续归入 `foundations` → **Tokenization & Subword Units**，与 BPE 共享已有二级专题；包含 Unigram 动态规划、子词采样、原生 MathML、五幅 SVG 与原论文实证核验。
 
 ## 仓库结构
 
@@ -251,3 +258,12 @@ python scripts/sync_skills.py --check
 协作请先阅读 [`AGENTS.md`](AGENTS.md)、[`docs/editorial.md`](docs/editorial.md) 和 [`CONTRIBUTING.md`](CONTRIBUTING.md)。除非明确核验并添加仓库许可证，否则不要推断第三方论文、图像、代码享有与本站相同的再分发许可。
 
 QLoRA 归入 Training → PEFT / LoRA → Quantized Fine-tuning / QLoRA，不新建顶层分类；提供 12 节机制解读、6 幅 SVG、MathML、权重显存交互与论文证据表。
+
+GAE 归入 `reinforcement-learning` 下已有的 **Policy Gradient / Actor–Critic** 主题，不新增顶层分类；文章包含 14 节、五幅独立 SVG、原生 MathML、λ 交互、终止/截断算例和确定性 Python 验证，明确区分 2016 GAE + TRPO 与后续 GAE + PPO。
+
+### Agents & Tool Use — ReAct
+
+ReAct（Yao et al., ICLR 2023）收录于 `posts/agents/react/`：解释 Thought / Action / Observation 的闭环、论文实验口径、MathML 形式化、可交互轨迹与有限状态 Python 验证。该目录属于 `Agents & Tool Use`，不同于 `reasoning` 的 CoT 与 Self-Consistency；专题规划位于 `posts/agents/_topics/react/`，不单独发布。
+
+
+TD3 归入 `reinforcement-learning` → **Continuous Control / Off-policy Actor–Critic** 既有分类，不新建一级或重复二级分类；论文精读位于 [`posts/reinforcement-learning/td3/`](posts/reinforcement-learning/td3/index.html)。内容以 Fujimoto et al. ICML 2018 为准，包含 15 节机制解释、五幅独立 SVG、五组原生 MathML、交互式 clipped double-Q 算例、Table 1 与 Table 2 分指标实验对照、纯 Python 数学核验及证据台账，区别原始研究与现代实现惯例。

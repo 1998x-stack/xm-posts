@@ -1,0 +1,173 @@
+[
+  {
+    "id": "T01",
+    "claim": "TD3 is the single-actor twin-critic extension of DDPG",
+    "kind": "paper-claim",
+    "source_url": "https://proceedings.mlr.press/v80/fujimoto18a/fujimoto18a.pdf",
+    "locator": "§1 and §6 Algorithm 1",
+    "status": "verified",
+    "notes": "The full method uses one actor, two critics, three target networks."
+  },
+  {
+    "id": "T02",
+    "claim": "Deterministic actor-critic may exploit overestimation caused by approximate critic",
+    "kind": "paper-claim",
+    "source_url": "https://proceedings.mlr.press/v80/fujimoto18a/fujimoto18a.pdf",
+    "locator": "§4.1 Figure 1 and Figure 2",
+    "status": "verified",
+    "notes": "Not restricted to discrete-action max operators."
+  },
+  {
+    "id": "T03",
+    "claim": "Clipped double-Q uses the minimum of two target critics on the same target action",
+    "kind": "equation",
+    "source_url": "https://proceedings.mlr.press/v80/fujimoto18a/fujimoto18a.pdf",
+    "locator": "§4.2 Eq.(10); §6 Eq.(15)",
+    "status": "verified",
+    "notes": "Both critics regress toward the same minimum target; possible underestimation."
+  },
+  {
+    "id": "T04",
+    "claim": "Target policy smoothing adds clipped Gaussian noise to the target action",
+    "kind": "equation",
+    "source_url": "https://proceedings.mlr.press/v80/fujimoto18a/fujimoto18a.pdf",
+    "locator": "§5.3 Eq.(13)-(14); Algorithm 1",
+    "status": "verified",
+    "notes": "Action bound clipping is noted as modern implementation practice."
+  },
+  {
+    "id": "T05",
+    "claim": "Delayed actor and target updates every d critic steps",
+    "kind": "equation",
+    "source_url": "https://proceedings.mlr.press/v80/fujimoto18a/fujimoto18a.pdf",
+    "locator": "§5.2 and Algorithm 1",
+    "status": "verified",
+    "notes": "Experimental choice d=2; two time scales are not a universal theorem."
+  },
+  {
+    "id": "T06",
+    "claim": "Polyak target rate follows target <- tau online +(1-tau) target",
+    "kind": "equation",
+    "source_url": "https://proceedings.mlr.press/v80/fujimoto18a/fujimoto18a.pdf",
+    "locator": "§5.2; §6.1",
+    "status": "verified",
+    "notes": "Paper tau=0.005; parameter name differs from rho near one."
+  },
+  {
+    "id": "T07",
+    "claim": "Algorithm 1 updates both critics before delayed actor and targets",
+    "kind": "paper-claim",
+    "source_url": "https://proceedings.mlr.press/v80/fujimoto18a/fujimoto18a.pdf",
+    "locator": "Algorithm 1",
+    "status": "verified",
+    "notes": "Gradient target is detached in modern implementations."
+  },
+  {
+    "id": "T08",
+    "claim": "Experiments used 400 and 300 hidden units and Adam 1e-3",
+    "kind": "experiment",
+    "source_url": "https://proceedings.mlr.press/v80/fujimoto18a/fujimoto18a.pdf",
+    "locator": "§6.1 Evaluation",
+    "status": "verified",
+    "notes": "Original 2018 paper architecture and optimizer, not universal settings."
+  },
+  {
+    "id": "T09",
+    "claim": "Experiments use batch size 100, delay 2, tau 0.005, target noise 0.2 clipped 0.5",
+    "kind": "experiment",
+    "source_url": "https://proceedings.mlr.press/v80/fujimoto18a/fujimoto18a.pdf",
+    "locator": "§6.1 Evaluation",
+    "status": "verified",
+    "notes": "Historical hyperparameter choices."
+  },
+  {
+    "id": "T10",
+    "claim": "After random warmup, exploration Gaussian noise 0.1; OU not beneficial in authors setup",
+    "kind": "experiment",
+    "source_url": "https://proceedings.mlr.press/v80/fujimoto18a/fujimoto18a.pdf",
+    "locator": "§6.1 Evaluation",
+    "status": "verified",
+    "notes": "Exploration noise distinct from target policy smoothing noise."
+  },
+  {
+    "id": "T11",
+    "claim": "Each task uses 1M steps; evaluations every 5000 steps over 10 episodes and 10 seeds",
+    "kind": "experiment",
+    "source_url": "https://proceedings.mlr.press/v80/fujimoto18a/fujimoto18a.pdf",
+    "locator": "§6.1 Evaluation",
+    "status": "verified",
+    "notes": "Gym/MuJoCo v1; do not compare with later versions unqualified."
+  },
+  {
+    "id": "T12",
+    "claim": "Table 1 maximum average return for HalfCheetah is TD3 9636.95±859.065 and DDPG 3305.60",
+    "kind": "experiment",
+    "source_url": "https://proceedings.mlr.press/v80/fujimoto18a/fujimoto18a.pdf",
+    "locator": "Table 1",
+    "status": "verified",
+    "notes": "Metric is max average return over ten 1M-step trials."
+  },
+  {
+    "id": "T13",
+    "claim": "Table 1 Hopper is TD3 3564.07±114.74 DDPG 2020.46",
+    "kind": "experiment",
+    "source_url": "https://proceedings.mlr.press/v80/fujimoto18a/fujimoto18a.pdf",
+    "locator": "Table 1",
+    "status": "verified",
+    "notes": "No DDPG standard deviation reproduced."
+  },
+  {
+    "id": "T14",
+    "claim": "Table 1 Walker2d is TD3 4682.82±539.64 DDPG 1843.85",
+    "kind": "experiment",
+    "source_url": "https://proceedings.mlr.press/v80/fujimoto18a/fujimoto18a.pdf",
+    "locator": "Table 1",
+    "status": "verified",
+    "notes": "Gym-v1 historical metric."
+  },
+  {
+    "id": "T15",
+    "claim": "Table 2 reports TD3, TD3-DP, TD3-TPS, TD3-CDQ ablations on Hopper, Walker2d, Ant",
+    "kind": "experiment",
+    "source_url": "https://proceedings.mlr.press/v80/fujimoto18a/fujimoto18a.pdf",
+    "locator": "Table 2 §6.2",
+    "status": "verified",
+    "notes": "Last-ten-evaluations average over 10 trials; different from Table 1."
+  },
+  {
+    "id": "T16",
+    "claim": "An ablation can outperform full TD3 in a specific environment",
+    "kind": "experiment",
+    "source_url": "https://proceedings.mlr.press/v80/fujimoto18a/fujimoto18a.pdf",
+    "locator": "Table 2 Walker2d TD3-DP=4695.50 vs TD3=4565.24",
+    "status": "verified",
+    "notes": "Avoid claiming each component is always beneficial."
+  },
+  {
+    "id": "T17",
+    "claim": "Terminal bootstrap mask and action clipping are explicitly described in modern implementations",
+    "kind": "modern-implementation",
+    "source_url": "https://spinningup.openai.com/en/latest/algorithms/td3.html",
+    "locator": "OpenAI Spinning Up TD3 documentation",
+    "status": "verified",
+    "notes": "Not literal original Algorithm 1 notation."
+  },
+  {
+    "id": "T18",
+    "claim": "Standalone SVG diagrams and numerical calculator illustrate mechanisms rather than paper results",
+    "kind": "illustration",
+    "source_url": "https://proceedings.mlr.press/v80/fujimoto18a/fujimoto18a.pdf",
+    "locator": "assets/01–05 and inline lab",
+    "status": "illustrative",
+    "notes": "Independently constructed teaching examples."
+  },
+  {
+    "id": "T19",
+    "claim": "Minimal Python checks target, clipping, delay and Polyak without training an agent",
+    "kind": "toy-derivation",
+    "source_url": "https://proceedings.mlr.press/v80/fujimoto18a/fujimoto18a.pdf",
+    "locator": "mini_td3.py; tests/test_td3.py",
+    "status": "derived",
+    "notes": "No claim to have reproduced MuJoCo benchmarks."
+  }
+]

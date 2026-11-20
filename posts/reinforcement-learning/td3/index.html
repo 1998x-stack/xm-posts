@@ -1,0 +1,293 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><meta name="description" content="TD3 原论文精读：双 Critic、延迟策略更新、目标策略平滑、MathML 数学推导、原始消融实验、可交互目标值与可验证示例。"><title>Understanding TD3 · xm-posts</title><style>
+
+:root{--paper:#fffefa;--bg:#f5f8f5;--ink:#263f44;--muted:#5f7474;--line:#d8e5de;--accent:#217c75;--warm:#ba7148;--purple:#775d9a}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.88 system-ui,-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}
+a{color:#236f71;text-decoration-color:#a5c9c1;text-underline-offset:4px}
+a:focus-visible,button:focus-visible,input:focus-visible,.math-scroll:focus-visible{outline:3px solid #c6804b;outline-offset:3px}
+.skip{position:absolute;top:-100px;left:12px;z-index:5;background:#234a4b;color:white;padding:10px}.skip:focus{top:8px}
+.masthead{border-bottom:1px solid var(--line);background:var(--paper)}
+.mast-inner{max-width:1260px;margin:auto;padding:16px 24px;display:flex;justify-content:space-between;align-items:center;gap:14px}
+.brand{font-weight:850;font-size:19px;letter-spacing:-.06em;color:var(--ink);text-decoration:none}
+.brand span{color:var(--warm)}
+.site-nav{display:flex;gap:19px;font-size:13px}
+.shell{max-width:1180px;margin:auto;display:grid;grid-template-columns:223px minmax(0,830px);gap:54px;padding:58px 24px 110px}
+.toc{position:sticky;top:28px;align-self:start;max-height:calc(100vh - 56px);overflow:auto;font-size:12px}
+.toc strong{font-size:11px;letter-spacing:.15em;color:#778e8a;display:block;margin-bottom:12px}
+.toc a{display:block;padding:6px 11px;border-left:2px solid var(--line);color:#557073;text-decoration:none}
+.toc a:hover{border-color:var(--accent);color:var(--accent)}
+article,main{min-width:0}
+.eyebrow{font-size:11px;color:var(--accent);font-weight:850;letter-spacing:.17em}
+h1{font-size:clamp(45px,5.7vw,68px);line-height:1.16;margin:14px 0 16px;letter-spacing:-.07em}
+h2{font-size:clamp(27px,3vw,37px);line-height:1.35;letter-spacing:-.04em;margin:0 0 21px}
+h3{font-size:20px;line-height:1.5;margin:28px 0 10px}
+.dek{font-size:21px;line-height:1.73;color:#43646b;max-width:700px}
+.meta{font-size:13px;color:#718c8b;display:flex;gap:16px;flex-wrap:wrap;border-top:1px solid var(--line);padding:13px 0;margin:25px 0 53px}
+section{margin-bottom:78px;scroll-margin-top:15px}
+p{margin:0 0 18px}
+.lead{font-size:19px}
+strong{color:#23595a}
+.note{background:#fbf0e6;border-left:4px solid #cb8959;padding:18px 21px;margin:25px 0;font-size:15px}
+.diagram{margin:27px 0;padding:10px;background:white;border:1px solid var(--line);border-radius:12px}
+.diagram-scene svg{width:100%;height:auto;display:block}
+figcaption{font-size:13px;color:#5e7977;line-height:1.73;padding:11px 8px 4px}
+.figure-no{font-size:11px;font-weight:850;letter-spacing:.08em;color:var(--warm);margin-right:10px}
+.math-equation{max-width:100%;min-width:0;border-left:4px solid var(--accent);background:#eaf4ef;margin:26px 0;padding:16px 19px}
+.math-scroll{overflow-x:auto;overflow-y:hidden;max-width:100%;min-width:0;border-radius:3px}
+.math-scroll math[display="block"]{font-family:"Cambria Math","STIX Two Math","Latin Modern Math",serif;font-size:1.2rem;width:max-content;min-width:100%;padding:6px 0}
+.eq-foot{border-top:1px solid #c7ddd4;color:#5c7874;font-size:13px;line-height:1.65;margin-top:14px;padding-top:12px}
+.eq-foot span{font-weight:800;color:#26796e;margin-right:10px}
+.math-inline{font-family:"Cambria Math","STIX Two Math","Latin Modern Math",serif}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:15px;margin:24px 0}
+.pair>div{padding:17px;border:1px solid var(--line);background:white;border-radius:9px}
+.pair p{font-size:14px;line-height:1.7;color:var(--muted);margin:8px 0 0}
+.steps{border-top:1px solid var(--line)}
+.step{display:grid;grid-template-columns:92px 1fr;gap:20px;border-bottom:1px solid var(--line);padding:15px 0}
+.step b{color:var(--accent);font-size:13px}
+.step p{margin:0}
+.table-scroll{overflow-x:auto}
+.results{width:100%;border-collapse:collapse;font-size:13px;line-height:1.5;margin:21px 0;min-width:550px}
+.results td,.results th{border-bottom:1px solid var(--line);padding:13px;text-align:left}
+.results th{background:#eaf3ee;white-space:nowrap}
+.results td:not(:first-child){font-variant-numeric:tabular-nums;text-align:right}
+.results th:not(:first-child){text-align:right}
+.results tr td:nth-child(2){font-weight:750;color:var(--accent)}
+.play{border:1px solid var(--line);border-radius:12px;padding:22px;background:white;margin:25px 0}
+.controls{display:flex;gap:11px;flex-wrap:wrap;margin:12px 0}
+.controls button{cursor:pointer;background:#f4f9f5;border:1px solid #bcd4ca;border-radius:7px;padding:9px 13px;color:#27665f;font-weight:650}
+.controls button[aria-pressed="true"]{background:#237870;color:white;border-color:#237870}
+.controls button:disabled{cursor:not-allowed;opacity:.6}
+.sliders{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin:13px 0}
+.sliders label{font-size:13px;font-weight:700;color:#436969;display:block}
+.sliders input{display:block;width:100%;accent-color:var(--accent);margin-top:8px}
+.readout{font-size:15px;font-variant-numeric:tabular-nums;background:#edf5ef;border-radius:7px;padding:15px 18px;color:#285d58}
+.readout strong{font-size:21px}
+.code{background:#203941;color:#e8f7f2;border-radius:10px;padding:18px;max-width:100%;overflow:auto;font:13px/1.7 ui-monospace,Consolas,monospace}
+.code code{white-space:pre}
+.refs li{margin:10px 0;font-size:15px}
+.footer{font-size:13px;color:#6a8581;border-top:1px solid var(--line);padding-top:25px}
+.callout{font-size:15px;border:1px solid var(--line);padding:15px 19px;background:white;border-radius:8px}
+@media(max-width:1000px){.shell{display:block;max-width:860px;padding-top:30px}.toc{position:static;max-height:none;display:flex;flex-wrap:wrap;gap:5px;padding-bottom:18px;margin-bottom:34px;border-bottom:1px solid var(--line)}.toc strong{flex-basis:100%}.toc a{border:none;background:#e6f0e9;border-radius:5px;padding:6px 10px}}
+@media(max-width:540px){.diagram-scene{max-width:100%;overflow-x:auto;overflow-y:hidden}.diagram-scene svg{min-width:650px}body{font-size:16px}.shell{padding:26px 16px 60px}.mast-inner{padding:12px 16px}.site-nav{font-size:12px;gap:9px}h1{font-size:44px}.dek{font-size:18px}.pair,.sliders{grid-template-columns:1fr}.play{padding:15px}.math-equation{padding:12px}.math-scroll math[display="block"]{font-size:1.08rem}.step{grid-template-columns:1fr;gap:4px}.diagram{padding:3px}.controls button{flex:1}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto!important}*,*:before,*:after{animation:none!important;transition:none!important}}
+@media print{body{background:white;font-size:11pt}.masthead,.toc,.skip,.controls,.sliders{display:none!important}.shell{display:block;max-width:none;padding:0}.diagram{break-inside:avoid}.math-scroll{overflow:visible}.math-scroll math[display="block"]{font-size:1rem}.play{break-inside:avoid}}
+
+.small{font-size:13px;color:var(--muted)}.diagram-scene{max-width:100%;overflow-x:auto;overflow-y:hidden}.diagram-scene:focus-visible{outline:3px solid #c6804b;outline-offset:2px}.diagram-scene svg{display:block;width:100%;height:auto}.table-scroll{max-width:100%}.results td:not(:first-child),.results th:not(:first-child){text-align:left}.play output{font-variant-numeric:tabular-nums;color:var(--accent)}.math-scroll math[display="block"]{max-width:none}
+</style></head><body>
+<a class="skip" href="#content">跳到正文</a>
+<header class="masthead"><div class="mast-inner"><a class="brand" href="../../../">xm<span>·</span>posts</a><nav class="site-nav" aria-label="站点导航"><a href="../../../">首页</a><a href="../../../categories/reinforcement-learning/">强化学习</a><a href="../../../archive/">文章归档</a></nav></div></header>
+<div class="shell"><nav class="toc" aria-label="本文目录"><strong>IN THIS ARTICLE</strong><a href="#problem">01 为什么 DDPG 会被自己的 Critic 误导？</a>
+<a href="#ddpg">02 基线：DDPG 的一个 Actor 与一个 Critic</a>
+<a href="#double">03 第一处改造：双 Critic 与截断双 Q</a>
+<a href="#delay">04 第二处改造：延迟 Actor 更新</a>
+<a href="#smooth">05 第三处改造：目标策略平滑</a>
+<a href="#whole">06 把三处改造拼成一张计算图</a>
+<a href="#algorithm">07 训练循环：每一步谁更新、何时更新？</a>
+<a href="#interactive">08 动手实验：看双 Q 与终止掩码如何改变目标</a>
+<a href="#explore">09 为什么「目标噪声」不等于「探索噪声」？</a>
+<a href="#hyper">10 论文使用哪些关键实验约定？</a>
+<a href="#evidence">11 实验：TD3 是否真的优于 DDPG？</a>
+<a href="#ablation">12 消融：三项机制是否能简单相加？</a>
+<a href="#code">13 可执行的最小数学核验</a>
+<a href="#limits">14 容易混淆的边界与失败模式</a>
+<a href="#context">15 与 DDPG、SAC 的研究脉络</a>
+<a href="#references">16 资料与核查路径</a></nav>
+<main id="content"><article><div class="eyebrow">REINFORCEMENT LEARNING / ICML 2018 / PAPER EXPLAINED</div>
+<h1>Understanding TD3</h1>
+<p class="dek">为什么让一个 Critic 少犯错还不够？从 DDPG 的「高估—策略追逐」闭环，理解双 Q 截断、延迟策略更新与目标策略平滑如何协同稳定连续控制。</p>
+<div class="meta"><span>Fujimoto · van Hoof · Meger，ICML 2018</span><span>约 38 分钟</span><span>论文：<a href="https://proceedings.mlr.press/v80/fujimoto18a.html">PMLR 80:1587–1596</a></span></div>
+<section id="problem" aria-labelledby="problem-heading"><h2 id="problem-heading">01 · 为什么 DDPG 会被自己的 Critic 误导？</h2>
+<p class="lead">连续控制里，Actor 不必枚举所有动作，而是直接沿 Critic 给出的价值梯度移动。但如果 Critic 的函数逼近在某处出现<strong>虚假的高峰</strong>，Actor 就会认真地朝错误方向优化；反过来，这些被偏爱的动作又进入 bootstrap 目标，误差可能继续扩大。</p>
+<figure class="diagram"><div class="diagram-scene" role="region" tabindex="0" aria-label="图示可在窄屏横向滚动"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 345" role="img" aria-labelledby="td3-fig1-title td3-fig1-desc" style="font-family:system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif"><title id="td3-fig1-title">近似误差如何诱使策略追逐虚假峰值</title><desc id="td3-fig1-desc">真实价值平缓，估计 Critic 在偏移的动作位置形成噪声高峰；策略可能选择估计峰而非真实最优动作。</desc><rect width="900" height="345" rx="18" fill="#f7faf8"/><text x="30" y="35" font-size="21" font-weight="600" fill="#294d53" text-anchor="start">真实 Q(a) 与有误差的 Q̂(a)</text>
+<path d="M66 287L866 287" stroke="#6d9292" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M66 287L66 65" stroke="#6d9292" stroke-width="3" fill="none" stroke-linecap="round"/>
+<text x="82" y="75" font-size="13" font-weight="600" fill="#63817e" text-anchor="start">价值 Q</text><text x="850" y="309" font-size="14" font-weight="600" fill="#63817e" text-anchor="end">动作 a</text>
+<path d="M75 260 C185 238 235 137 367 126 S570 171 679 228 S814 265 860 272" stroke="#249282" stroke-width="5" fill="none"/>
+<path d="M75 260 C185 242 235 143 367 127 S490 192 558 176 L614 64 L650 202 C705 242 799 260 860 272" stroke="#c57a51" stroke-width="5" fill="none" stroke-linejoin="round"/>
+<path d="M610 68V285" stroke="#c57a51" stroke-width="2" stroke-dasharray="7 6"/>
+<path d="M365 128V285" stroke="#249282" stroke-width="2" stroke-dasharray="7 6"/>
+<rect x="188" y="46" width="165" height="45" rx="9" fill="#e3f3ec" stroke="#b3dccc" stroke-width="1.6"/><text x="203" y="74" font-size="16" font-weight="600" fill="#1e7d6c" text-anchor="start">真实最优附近</text>
+<rect x="648" y="42" width="200" height="48" rx="9" fill="#fff1e7" stroke="#e8c6af" stroke-width="1.6"/><text x="660" y="69" font-size="16" font-weight="600" fill="#a86542" text-anchor="start">估计的虚假尖峰</text>
+<text x="361" y="330" font-size="14" font-weight="800" fill="#1e7d6c" text-anchor="middle">a*</text><text x="613" y="330" font-size="14" font-weight="800" fill="#b96e47" text-anchor="middle">â</text>
+<path d="M86 99L125 99" stroke="#249282" stroke-width="4" fill="none" stroke-linecap="round"/><text x="140" y="105" font-size="14" font-weight="600" fill="#294d53" text-anchor="start">真实价值</text><path d="M86 120L125 120" stroke="#c57a51" stroke-width="4" fill="none" stroke-linecap="round"/><text x="140" y="126" font-size="14" font-weight="600" fill="#294d53" text-anchor="start">有误差的 Critic</text></svg></div><figcaption><span class="figure-no">FIG 01</span>绿色是真实但不可直接观测的动作价值轮廓，橙色是有逼近误差的估计；图示构造了狭窄虚假峰，说明策略为何可能优化「估计误差」而不是回报。</figcaption></figure>
+<p>原论文 §4.1 讨论确定性策略梯度中的高估现象，Figure 1–2 对比不同 Actor–Critic 变体的估值偏差。<strong>不要把所有错误都归因于 max 运算：</strong>连续动作的 Actor 用梯度最大化近似 Q，同样可能主动寻求估计偏差。</p>
+<div class="note">TD3 的目标不是让 Q 永远精确，而是压低高估造成的反馈增益，并减少高噪声估计对下一次策略更新的破坏。</div></section>
+<section id="ddpg" aria-labelledby="ddpg-heading"><h2 id="ddpg-heading">02 · 基线：DDPG 的一个 Actor 与一个 Critic</h2>
+<p>先固定名词：状态 <code>s ∈ ℝᵈˢ</code>、动作 <code>a ∈ ℝᵈᵃ</code>；确定性 Actor <code>πφ(s)</code> 将一个 batch <code>[B,dₛ]</code> 映射成 <code>[B,dₐ]</code>，Critic <code>Qθ(s,a)</code> 把它们映射成 <code>[B,1]</code>。DDPG 从经验回放 <code>𝔅</code> 抽取转移，用目标网络为 Q 提供监督，再通过 Q 对动作的导数更新 Actor。</p>
+<div class="pair"><div><strong>DDPG 的优势</strong><p>不需要在连续空间里做显式 argmax；可以离策略复用历史交互，并用 Polyak 目标网络缓和训练的移动靶问题。</p></div><div><strong>DDPG 的隐患</strong><p>单 Critic 的估计误差可能被 Actor 利用；Actor 和 Critic 同步频繁更新时，错误监督与策略会相互放大。</p></div></div>
+<p>TD3 保留了<strong>单一确定性 Actor、经验回放、目标网络</strong>，改造的是价值目标、更新节奏、目标动作附近的估值方式。这不是 PPO 的 clip surrogate，也不是 SAC 的熵正则策略。</p></section>
+<section id="double" aria-labelledby="double-heading"><h2 id="double-heading">03 · 第一处改造：双 Critic 与截断双 Q</h2>
+<p>用两套独立初始化并分别训练的 Critic <code>Qθ₁、Qθ₂</code> 评估同一个目标动作。它们都朝同一个<strong>较小值</strong> Bellman target 回归，Actor 仍只沿 <code>Qθ₁</code> 的动作梯度更新。</p>
+<figure class="diagram"><div class="diagram-scene" role="region" tabindex="0" aria-label="图示可在窄屏横向滚动"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 306" role="img" aria-labelledby="td3-fig2-title td3-fig2-desc" style="font-family:system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif"><title id="td3-fig2-title">两个 Critic 为同一动作评分并选取较小值</title><desc id="td3-fig2-desc">两个独立训练的目标 Critic 对同一目标动作评分，取最小值形成 Bellman 目标，两个在线 Critic 仍共同拟合该目标。</desc><rect width="900" height="306" rx="18" fill="#f7faf8"/>
+<rect x="35" y="103" width="170" height="93" rx="14" fill="#e7f1f5" stroke="#c7dce3" stroke-width="1.6"/><text x="120" y="136" font-size="21" font-weight="800" fill="#337184" text-anchor="middle">(s′, ã)</text><text x="120" y="164" font-size="14" font-weight="500" fill="#5e7f86" text-anchor="middle">相同目标输入</text>
+<path d="M205 148L285 95" stroke="#6d9292" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M274 89L285 95L274 101" fill="none" stroke="#6d9292" stroke-width="2.5" stroke-linejoin="round"/><path d="M205 148L285 221" stroke="#6d9292" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M274 215L285 221L274 227" fill="none" stroke="#6d9292" stroke-width="2.5" stroke-linejoin="round"/>
+<rect x="285" y="44" width="202" height="94" rx="14" fill="#e7f4ef" stroke="#bdddcf" stroke-width="1.6"/><text x="386" y="79" font-size="21" font-weight="800" fill="#277f6c" text-anchor="middle">目标 Q′₁</text><text x="386" y="111" font-size="16" font-weight="600" fill="#277f6c" text-anchor="middle">例如 10</text>
+<rect x="285" y="169" width="202" height="94" rx="14" fill="#edf0fb" stroke="#cfd5e9" stroke-width="1.6"/><text x="386" y="204" font-size="21" font-weight="800" fill="#6b65a3" text-anchor="middle">目标 Q′₂</text><text x="386" y="237" font-size="16" font-weight="600" fill="#6b65a3" text-anchor="middle">例如 6</text>
+<path d="M487 92L585 148" stroke="#6d9292" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M574 142L585 148L574 154" fill="none" stroke="#6d9292" stroke-width="2.5" stroke-linejoin="round"/><path d="M487 216L585 157" stroke="#6d9292" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M574 151L585 157L574 163" fill="none" stroke="#6d9292" stroke-width="2.5" stroke-linejoin="round"/>
+<rect x="585" y="112" width="170" height="87" rx="14" fill="#fff0e3" stroke="#edc9a8" stroke-width="1.6"/><text x="670" y="145" font-size="19" font-weight="800" fill="#ae6e43" text-anchor="middle">min(10, 6)</text><text x="670" y="172" font-size="24" font-weight="800" fill="#ae6e43" text-anchor="middle">= 6</text>
+<path d="M755 156L842 156" stroke="#6d9292" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M831 150L842 156L831 162" fill="none" stroke="#6d9292" stroke-width="2.5" stroke-linejoin="round"/>
+<text x="869" y="132" font-size="16" font-weight="800" fill="#46736f" text-anchor="end">TD</text><text x="869" y="182" font-size="16" font-weight="800" fill="#46736f" text-anchor="end">目标</text>
+<text x="38" y="286" font-size="15" font-weight="600" fill="#5e7374" text-anchor="start">这是教学数值示意：取最小值可降低高估，但不保证无偏，也可能低估。</text></svg></div><figcaption><span class="figure-no">FIG 02</span>两个 Critic 看同一个后继状态和动作；min(10,6)=6 是教学算例，不是论文中的某次实验估值。</figcaption></figure>
+<div class="math-equation" role="group" aria-label="TD3 双 Critic 最小化的单步目标"><div class="math-scroll" data-math-scroll role="region" tabindex="0" aria-label="TD3 双 Critic 最小化的单步目标，可横向滚动"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block" aria-label="TD3 双 Critic 最小化的单步目标"><mrow><mi>y</mi><mo>=</mo><mi>r</mi><mo>+</mo><mi>γ</mi><mo>(</mo><mn>1</mn><mo>−</mo><mi>d</mi><mo>)</mo><msub><mi>min</mi><mrow><mi>i</mi><mo>∈</mo><mo>{</mo><mn>1</mn><mo>,</mo><mn>2</mn><mo>}</mo></mrow></msub><msub><mi>Q</mi><mrow><msup><mi>θ</mi><mo>′</mo></msup><mi>i</mi></mrow></msub><mo>(</mo><msup><mi>s</mi><mo>′</mo></msup><mo>,</mo><mover><mi>a</mi><mo>~</mo></mover><mo>)</mo></mrow></math></div><div class="eq-foot"><span>Eq 01</span>论文 §6 Eq.(15) 的最小目标，加上现代实现中明确的真正终止掩码 d。tilde a 是目标策略平滑动作，非当前行为策略动作。</div></div>
+<p>最小运算<strong>倾向于抑制高估，但允许低估</strong>。只有两个 Critic 就并不意味着误差独立或消除偏差；若二者同时高估、都依赖相同经验，取最小值依旧可能高估。论文 §4.2 Eq.(10) 先建立 clipped double Q 的形式，§6 将其装入完整 TD3。</p></section>
+<section id="delay" aria-labelledby="delay-heading"><h2 id="delay-heading">04 · 第二处改造：延迟 Actor 更新</h2>
+<p>如果 Critic 还没学稳就立即让 Actor 爬升，下一次 Critic 又得追着移动的策略学习。TD3 把两种更新分到不同频率：<strong>Critic 每次训练，Actor 与全部目标网络每隔 d 次 Critic 更新才训练一次</strong>。论文实验取 <code>d = 2</code>。</p>
+<figure class="diagram"><div class="diagram-scene" role="region" tabindex="0" aria-label="图示可在窄屏横向滚动"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 290" role="img" aria-labelledby="td3-fig3-title td3-fig3-desc" style="font-family:system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif"><title id="td3-fig3-title">两个 Critic 步进一次后才允许一次 Actor 更新</title><desc id="td3-fig3-desc">当策略延迟 d 等于 2 时，Critic 每步更新；Actor 与目标网络仅在第二、第四、第六步同步更新。</desc><rect width="900" height="290" rx="18" fill="#f7faf8"/><text x="40" y="45" font-size="20" font-weight="800" fill="#2b6f70" text-anchor="start">Critic 每一步都更新</text>
+<text x="40" y="95" font-size="17" font-weight="700" fill="#a46a42" text-anchor="start">Actor / targets</text>
+
+<rect x="248" y="28" width="78" height="69" rx="12" fill="#e4f4ed" stroke="#afd7c5" stroke-width="1.6"/><text x="287" y="68" font-size="22" font-weight="800" fill="#267b69" text-anchor="middle">1</text>
+<rect x="248" y="123" width="78" height="69" rx="12" fill="#f0f2f0" stroke="#dfe5e0" stroke-width="1.6"/><text x="287" y="162" font-size="17" font-weight="800" fill="#98a9a7" text-anchor="middle">等待</text>
+<rect x="348" y="28" width="78" height="69" rx="12" fill="#e4f4ed" stroke="#afd7c5" stroke-width="1.6"/><text x="387" y="68" font-size="22" font-weight="800" fill="#267b69" text-anchor="middle">2</text>
+<rect x="348" y="123" width="78" height="69" rx="12" fill="#fff0dd" stroke="#e6c098" stroke-width="1.6"/><text x="387" y="162" font-size="17" font-weight="800" fill="#a7683c" text-anchor="middle">更新</text>
+<rect x="448" y="28" width="78" height="69" rx="12" fill="#e4f4ed" stroke="#afd7c5" stroke-width="1.6"/><text x="487" y="68" font-size="22" font-weight="800" fill="#267b69" text-anchor="middle">3</text>
+<rect x="448" y="123" width="78" height="69" rx="12" fill="#f0f2f0" stroke="#dfe5e0" stroke-width="1.6"/><text x="487" y="162" font-size="17" font-weight="800" fill="#98a9a7" text-anchor="middle">等待</text>
+<rect x="548" y="28" width="78" height="69" rx="12" fill="#e4f4ed" stroke="#afd7c5" stroke-width="1.6"/><text x="587" y="68" font-size="22" font-weight="800" fill="#267b69" text-anchor="middle">4</text>
+<rect x="548" y="123" width="78" height="69" rx="12" fill="#fff0dd" stroke="#e6c098" stroke-width="1.6"/><text x="587" y="162" font-size="17" font-weight="800" fill="#a7683c" text-anchor="middle">更新</text>
+<rect x="648" y="28" width="78" height="69" rx="12" fill="#e4f4ed" stroke="#afd7c5" stroke-width="1.6"/><text x="687" y="68" font-size="22" font-weight="800" fill="#267b69" text-anchor="middle">5</text>
+<rect x="648" y="123" width="78" height="69" rx="12" fill="#f0f2f0" stroke="#dfe5e0" stroke-width="1.6"/><text x="687" y="162" font-size="17" font-weight="800" fill="#98a9a7" text-anchor="middle">等待</text>
+<rect x="748" y="28" width="78" height="69" rx="12" fill="#e4f4ed" stroke="#afd7c5" stroke-width="1.6"/><text x="787" y="68" font-size="22" font-weight="800" fill="#267b69" text-anchor="middle">6</text>
+<rect x="748" y="123" width="78" height="69" rx="12" fill="#fff0dd" stroke="#e6c098" stroke-width="1.6"/><text x="787" y="162" font-size="17" font-weight="800" fill="#a7683c" text-anchor="middle">更新</text>
+<path d="M222 104L833 104" stroke="#9cb8b0" stroke-width="2" fill="none" stroke-linecap="round"/><text x="41" y="235" font-size="22" font-weight="800" fill="#a46a42" text-anchor="start">d = 2</text><text x="142" y="238" font-size="16" font-weight="600" fill="#5e7374" text-anchor="start">六次 Critic 更新对应三次 Actor 更新；目标网络也随 Actor 一起软更新。</text>
+<text x="41" y="267" font-size="13" font-weight="600" fill="#6d8281" text-anchor="start">论文 §5.2 + Algorithm 1；不要误读为「每两次环境交互才训练 Q 网络」。</text></svg></div><figcaption><span class="figure-no">FIG 03</span>按 Critic 梯度更新次数计数；偶数步更新 Actor 与目标网络。与「每两步才读一条新环境数据」不是同一件事。</figcaption></figure>
+<div class="math-equation" role="group" aria-label="Actor 最大化第一个在线 Critic 的估值"><div class="math-scroll" data-math-scroll role="region" tabindex="0" aria-label="Actor 最大化第一个在线 Critic 的估值，可横向滚动"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block" aria-label="Actor 最大化第一个在线 Critic 的估值"><mrow><mi>J</mi><mo>(</mo><mi>φ</mi><mo>)</mo><mo>=</mo><msub><mi>𝔼</mi><mrow><mi>s</mi><mo>∼</mo><mi>𝔅</mi></mrow></msub><mo>[</mo><msub><mi>Q</mi><msub><mi>θ</mi><mn>1</mn></msub></msub><mo>(</mo><mi>s</mi><mo>,</mo><msub><mi>π</mi><mi>φ</mi></msub><mo>(</mo><mi>s</mi><mo>)</mo><mo>)</mo><mo>]</mo></mrow></math></div><div class="eq-foot"><span>Eq 02</span>实际以 J 的负值作为 actor loss 做梯度下降；Critic 参数在 Actor 更新步骤中固定。</div></div>
+<p>这里的两时间尺度不是对训练稳定性的数学保证。<code>d</code> 太大使策略更新次数不足；<code>d = 2</code> 是论文实验选择，不是所有环境的最优超参。</p></section>
+<section id="smooth" aria-labelledby="smooth-heading"><h2 id="smooth-heading">05 · 第三处改造：目标策略平滑</h2>
+<p>真实连续控制通常希望相近动作有相近的合理价值。若后继 Critic 恰好在 <code>π′(s′)</code> 出现很窄的尖峰，单点 bootstrap 会放大不可靠的估计。TD3 在<strong>目标 Actor 的动作</strong>加小幅截断高斯噪声，再让双目标 Critic 评估它。</p>
+<figure class="diagram"><div class="diagram-scene" role="region" tabindex="0" aria-label="图示可在窄屏横向滚动"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 322" role="img" aria-labelledby="td3-fig4-title td3-fig4-desc" style="font-family:system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif"><title id="td3-fig4-title">目标策略平滑避免在单个尖峰上 bootstrap</title><desc id="td3-fig4-desc">围绕确定性目标动作的邻域采样，减少对 Q 值局部窄峰的依赖；噪声在目标网络上使用，不等于行为探索噪声。</desc><rect width="900" height="322" rx="18" fill="#f7faf8"/><text x="38" y="37" font-size="21" font-weight="600" fill="#294d53" text-anchor="start">目标动作周围的局部邻域</text>
+<path d="M55 256L845 256" stroke="#6d9292" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M55 256L55 66" stroke="#6d9292" stroke-width="3" fill="none" stroke-linecap="round"/>
+<path d="M62 238 C185 219 272 167 335 161 C391 155 433 184 472 172 L507 58 L540 190 C608 194 693 233 839 241" stroke="#bb7951" stroke-width="5" fill="none"/>
+<rect x="320" y="51" width="330" height="204" rx="18" fill="#77bfb0" opacity=".12"/>
+<circle cx="350" cy="255" r="7" fill="#248a7a" opacity="0.40"/><circle cx="392" cy="246" r="7" fill="#248a7a" opacity="0.48"/><circle cx="434" cy="237" r="7" fill="#248a7a" opacity="0.56"/><circle cx="476" cy="255" r="7" fill="#248a7a" opacity="0.64"/><circle cx="518" cy="246" r="7" fill="#248a7a" opacity="0.72"/><circle cx="560" cy="237" r="7" fill="#248a7a" opacity="0.80"/><circle cx="602" cy="255" r="7" fill="#248a7a" opacity="0.88"/>
+<path d="M486 260V70" stroke="#288d7b" stroke-dasharray="7 6" stroke-width="3"/>
+<text x="485" y="286" font-size="16" font-weight="800" fill="#268874" text-anchor="middle">π′(s′)</text>
+<text x="548" y="88" font-size="16" font-weight="800" fill="#b7744e" text-anchor="start">窄尖峰</text>
+<text x="666" y="143" font-size="17" font-weight="800" fill="#277c6f" text-anchor="start">对 ã = π′ + ε</text>
+<text x="666" y="170" font-size="16" font-weight="600" fill="#5d7b77" text-anchor="start">计算 Q′₁、Q′₂</text>
+<text x="38" y="301" font-size="14" font-weight="600" fill="#687d7c" text-anchor="start">绿色点表示邻近目标动作：图为机制示意，不是原论文实验曲线。</text></svg></div><figcaption><span class="figure-no">FIG 04</span>绿色阴影代表目标动作邻域；对邻近动作评估的目标分布可以缓和对极窄估计尖峰的依赖。抽样点为示意，非论文曲线。</figcaption></figure>
+<div class="math-equation" role="group" aria-label="目标动作上的截断噪声"><div class="math-scroll" data-math-scroll role="region" tabindex="0" aria-label="目标动作上的截断噪声，可横向滚动"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block" aria-label="目标动作上的截断噪声"><mrow><mover><mi>a</mi><mo>~</mo></mover><mo>=</mo><msub><mi>π</mi><msup><mi>φ</mi><mo>′</mo></msup></msub><mo>(</mo><msup><mi>s</mi><mo>′</mo></msup><mo>)</mo><mo>+</mo><mi>clip</mi><mo>(</mo><mi>ε</mi><mo>,</mo><mo>−</mo><mi>c</mi><mo>,</mo><mi>c</mi><mo>)</mo></mrow></math></div><div class="eq-foot"><span>Eq 03</span>论文 §5.3 Eq.(14)、Algorithm 1；ε 从均值为零的高斯分布采样。实际实现通常再把 ã 限制到合法动作区间。</div></div>
+<p>请区分两种噪声：<strong>行为探索噪声</strong>加在与环境交互的当前 Actor 动作上，用于探索；<strong>目标策略平滑噪声</strong>只在构造 TD target 时作用于目标 Actor，影响 Critic 的训练监督。原论文 §6.1 的行为探索采用独立高斯噪声，而非原始 DDPG 常用的 OU 噪声。</p></section>
+<section id="whole" aria-labelledby="whole-heading"><h2 id="whole-heading">06 · 把三处改造拼成一张计算图</h2>
+<figure class="diagram"><div class="diagram-scene" role="region" tabindex="0" aria-label="图示可在窄屏横向滚动"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 367" role="img" aria-labelledby="td3-fig5-title td3-fig5-desc" style="font-family:system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif"><title id="td3-fig5-title">TD3 网络与更新的完整路径</title><desc id="td3-fig5-desc">经验回放批次先由目标 Actor 和截断噪声产生目标动作，双目标 Critic 的最小值训练双在线 Critic，在线 Actor 只在延迟时刻沿 Q1 梯度更新，最后软更新目标网络。</desc><rect width="900" height="367" rx="18" fill="#f7faf8"/>
+<rect x="24" y="128" width="144" height="94" rx="14" fill="#e7f1f5" stroke="#b7d8df" stroke-width="1.6"/><text x="96" y="164" font-size="21" font-weight="800" fill="#337384" text-anchor="middle">Replay</text><text x="96" y="194" font-size="14" font-weight="500" fill="#4c7983" text-anchor="middle">(s,a,r,s′,d)</text>
+<path d="M168 176L245 176" stroke="#6d9292" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M234 170L245 176L234 182" fill="none" stroke="#6d9292" stroke-width="2.5" stroke-linejoin="round"/>
+<rect x="245" y="45" width="200" height="88" rx="14" fill="#e7f4eb" stroke="#b5d6c7" stroke-width="1.6"/><text x="345" y="79" font-size="18" font-weight="800" fill="#267f6a" text-anchor="middle">目标 Actor π′</text><text x="345" y="107" font-size="14" font-weight="500" fill="#3c8171" text-anchor="middle">ã = π′(s′)+ε</text>
+<rect x="245" y="217" width="200" height="103" rx="14" fill="#dff1ea" stroke="#b5d6c7" stroke-width="1.6"/><text x="345" y="257" font-size="18" font-weight="800" fill="#267f6a" text-anchor="middle">在线 Critic</text><text x="345" y="281" font-size="18" font-weight="800" fill="#267f6a" text-anchor="middle">Q₁ 与 Q₂</text>
+<path d="M445 87L536 110" stroke="#6d9292" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M525 104L536 110L525 116" fill="none" stroke="#6d9292" stroke-width="2.5" stroke-linejoin="round"/><path d="M445 271L535 246" stroke="#6d9292" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M524 240L535 246L524 252" fill="none" stroke="#6d9292" stroke-width="2.5" stroke-linejoin="round"/>
+<rect x="536" y="64" width="205" height="91" rx="14" fill="#edf0fb" stroke="#d0d5e9" stroke-width="1.6"/><text x="639" y="101" font-size="18" font-weight="800" fill="#7066a5" text-anchor="middle">双目标 Critic</text><text x="639" y="128" font-size="17" font-weight="700" fill="#7066a5" text-anchor="middle">min(Q′₁,Q′₂)</text>
+<rect x="536" y="207" width="205" height="94" rx="14" fill="#fff1e4" stroke="#e9c7a5" stroke-width="1.6"/><text x="639" y="244" font-size="18" font-weight="800" fill="#a86943" text-anchor="middle">在线 Actor π</text><text x="639" y="270" font-size="15" font-weight="700" fill="#a86943" text-anchor="middle">每 d 步更新</text>
+<path d="M639 155L639 207" stroke="#a88aa6" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M628 201L639 207L628 213" fill="none" stroke="#a88aa6" stroke-width="2.5" stroke-linejoin="round"/>
+<path d="M741 251L838 251" stroke="#b47748" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M827 245L838 251L827 257" fill="none" stroke="#b47748" stroke-width="2.5" stroke-linejoin="round"/>
+<text x="855" y="229" font-size="15" font-weight="800" fill="#a86943" text-anchor="end">软</text><text x="855" y="273" font-size="15" font-weight="800" fill="#a86943" text-anchor="end">更新</text>
+<text x="36" y="340" font-size="15" font-weight="600" fill="#587572" text-anchor="start">注：两条 Q 路径的更新不是两个 Actor；在线 Actor 只利用 Q₁ 的动作梯度。</text></svg></div><figcaption><span class="figure-no">FIG 05</span>从 Replay 到双目标 Critic、双在线 Critic、在线 Actor，再到软更新的完整依赖结构。图示省略了梯度断开与参数优化器的细节。</figcaption></figure>
+<p>每条转移 <code>(s,a,r,s′,d)</code> 一次训练同时影响两个 Q 网络；只有满足延迟条件时才更新 Actor。目标网络在此之后进行缓慢追踪，并且计算 y 时<strong>停止梯度</strong>，不对目标网络反向传播。</p>
+<div class="math-equation" role="group" aria-label="两套 Critic 使用同一个 Bellman 回归目标"><div class="math-scroll" data-math-scroll role="region" tabindex="0" aria-label="两套 Critic 使用同一个 Bellman 回归目标，可横向滚动"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block" aria-label="两套 Critic 使用同一个 Bellman 回归目标"><mrow><msub><mi>L</mi><mi>i</mi></msub><mo>=</mo><mfrac><mn>1</mn><mi>B</mi></mfrac><munderover><mo>∑</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mi>B</mi></munderover><msup><mrow><mo>(</mo><msub><mi>Q</mi><msub><mi>θ</mi><mi>i</mi></msub></msub><mo>(</mo><msub><mi>s</mi><mi>j</mi></msub><mo>,</mo><msub><mi>a</mi><mi>j</mi></msub><mo>)</mo><mo>−</mo><msub><mi>y</mi><mi>j</mi></msub><mo>)</mo></mrow><mn>2</mn></msup></mrow></math></div><div class="eq-foot"><span>Eq 04</span>i∈{1,2}；B 是 batch 大小。两个 critic 分别优化，但监督 target y 相同。</div></div>
+<div class="math-equation" role="group" aria-label="目标网络的 Polyak 软更新"><div class="math-scroll" data-math-scroll role="region" tabindex="0" aria-label="目标网络的 Polyak 软更新，可横向滚动"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block" aria-label="目标网络的 Polyak 软更新"><mrow><msup><mi>θ</mi><mo>′</mo></msup><mo>←</mo><mi>τ</mi><mi>θ</mi><mo>+</mo><mo>(</mo><mn>1</mn><mo>−</mo><mi>τ</mi><mo>)</mo><msup><mi>θ</mi><mo>′</mo></msup></mrow></math></div><div class="eq-foot"><span>Eq 05</span>每个 target critic 和 target actor 都使用此形式；原论文取 τ=0.005，采用较小 τ 乘在线参数的定义。</div></div>
+<p>张量形状：对 batch <code>B</code>，<code>π′(s′)</code> 是 <code>[B,dₐ]</code>，两套目标 Q 的输出都是 <code>[B,1]</code>，按元素取 min 仍是 <code>[B,1]</code>；奖励与终止掩码应先整理为 <code>[B,1]</code> 再计算，不得与 <code>[B]</code> 意外广播成 <code>[B,B]</code>。</p></section>
+<section id="algorithm" aria-labelledby="algorithm-heading"><h2 id="algorithm-heading">07 · 训练循环：每一步谁更新、何时更新？</h2>
+<div class="steps"><div class="step"><b>01 · 收集</b><p>用当前确定性 Actor 加行为探索噪声与环境交互，将有效动作与转移写入 Replay Buffer。</p></div>
+<div class="step"><b>02 · 采样</b><p>从 Replay 均匀抽样；每个 batch 用目标 Actor 构造带截断噪声的下一动作。</p></div>
+<div class="step"><b>03 · 估值</b><p>从两个目标 Critic 取最小值，用奖励、折扣和终止掩码产生 y。</p></div>
+<div class="step"><b>04 · 更新 Q</b><p>每一步分别最小化两个 Critic 的 MSE；detach 目标分支。</p></div>
+<div class="step"><b>05 · 延迟更新</b><p>当计数满足 <code>t % d == 0</code>，让 Actor 最大化 <code>Q₁(s,π(s))</code>，然后同步软更新三个 target 网络。</p></div></div>
+<p>这正是论文 Algorithm 1 的核心顺序。采集与更新的比率、并行环境数，以及时间限制截断的处理策略属于具体工程实现，需要在实验配置中注明。</p></section>
+<section id="interactive" aria-labelledby="interactive-heading"><h2 id="interactive-heading">08 · 动手实验：看双 Q 与终止掩码如何改变目标</h2>
+<p>调整下面的教学数值。奖励、折扣与两个目标 Q 决定训练标签；Actor 更新节奏与该标签数值<strong>互相独立</strong>，但会决定策略何时开始利用新学到的估值。</p>
+<div class="play" id="td3-lab">
+<div class="sliders">
+<label>奖励 r：<output id="td3-reward-out">1.00</output><input id="td3-reward" type="range" min="-3" max="3" step=".25" value="1"></label>
+<label>折扣 γ：<output id="td3-gamma-out">0.90</output><input id="td3-gamma" type="range" min="0" max="1" step=".05" value=".9"></label>
+<label>目标 Critic Q′₁：<output id="td3-q1-out">10.00</output><input id="td3-q1" type="range" min="-6" max="14" step=".5" value="10"></label>
+<label>目标 Critic Q′₂：<output id="td3-q2-out">6.00</output><input id="td3-q2" type="range" min="-6" max="14" step=".5" value="6"></label>
+</div>
+<div class="controls"><button id="td3-terminal" type="button" aria-pressed="false">切换：终止转移</button><button id="td3-preset" type="button">换一组示例</button></div>
+<div class="readout" id="td3-result" aria-live="polite">未终止：min(10.00, 6.00) = 6.00；y = 1.00 + 0.90 × 6.00 = 6.40。</div>
+<p class="small">数值是人工设定的近似 Q 值，不能当作 MuJoCo 训练回报。若真正终止，bootstrap 项为 0。对时间限制截断通常需要依环境协议决定是否 bootstrap。</p>
+</div></section>
+<section id="explore" aria-labelledby="explore-heading"><h2 id="explore-heading">09 · 为什么「目标噪声」不等于「探索噪声」？</h2>
+<div class="pair"><div><strong>收集数据时</strong><p>动作取 <code>clip(π(s)+η, action bounds)</code>，η 是行为探索噪声；原论文 §6.1 在热身后选 Gaussian <code>N(0,0.1)</code>，前 1000 或 10000 步随机探索。</p></div><div><strong>学习目标时</strong><p>动作取 <code>clip(π′(s′)+clip(ε,-c,c), bounds)</code>；目标平滑参数实验取标准差 <code>0.2</code>，噪声裁剪 <code>±0.5</code>。</p></div></div>
+<p>当评估部署好的确定性 Actor，通常不给它额外的探索噪声。TD3 不需要把随机分布作为 Actor 的输出；它与 SAC 的最大熵随机策略有本质区别。</p></section>
+<section id="hyper" aria-labelledby="hyper-heading"><h2 id="hyper-heading">10 · 论文使用哪些关键实验约定？</h2>
+<div class="table-scroll"><table class="results"><thead><tr><th>参数 / 协议</th><th>ICML 2018 论文 §6.1</th></tr></thead><tbody>
+<tr><td>算法结构</td><td>单 Actor、双 Critic 与对应目标网络</td></tr>
+<tr><td>隐藏层</td><td>400、300 个单元；ReLU，Actor 末端 tanh</td></tr>
+<tr><td>Adam 学习率</td><td>10⁻³</td></tr>
+<tr><td>Replay mini-batch</td><td>100，均匀采样</td></tr>
+<tr><td>延迟 d / τ</td><td>2 / 0.005</td></tr>
+<tr><td>Target smoothing</td><td>高斯标准差 0.2，噪声截断到 ±0.5</td></tr>
+<tr><td>行为探索</td><td>随机热身 1000 或 10000 步；之后独立高斯噪声 0.1</td></tr>
+<tr><td>评估口径</td><td>每 5000 步评估一次，每次 10 episode；10 个随机种子；总计 1M steps</td></tr>
+</tbody></table></div>
+<p>注意：论文描述的是作者在当时 Gym/MuJoCo 环境、网络与协议下的结果。现代 Gymnasium 环境版本、奖励函数、终止语义、动作缩放和随机种子不同，<strong>不能未经控制就把数值逐项横比</strong>。</p></section>
+<section id="evidence" aria-labelledby="evidence-heading"><h2 id="evidence-heading">11 · 实验：TD3 是否真的优于 DDPG？</h2>
+<p>下面摘录原论文 Table 1 的三项环境（<strong>10 trials、各 1 million time steps 的 maximum average return</strong>）；它不是每个种子最后一次的成绩。为防止误读，右列仅展示论文的 DDPG 均值，不替它补写未列出的误差条。</p>
+<div class="table-scroll"><table class="results"><thead><tr><th>Gym/MuJoCo v1</th><th>TD3（均值 ± SD）</th><th>DDPG（均值）</th></tr></thead><tbody>
+<tr><td>HalfCheetah</td><td>9636.95 ± 859.065</td><td>3305.60</td></tr>
+<tr><td>Hopper</td><td>3564.07 ± 114.74</td><td>2020.46</td></tr>
+<tr><td>Walker2d</td><td>4682.82 ± 539.64</td><td>1843.85</td></tr>
+</tbody></table></div>
+<p>这支持论文在指定环境/协议中 TD3 表现较强的结论，但不是「TD3 在所有连续控制任务上永远优于 SAC/PPO」的证据。原论文同时列有重调参的 <em>Our DDPG</em>，与未调参 DDPG 分开，避免把超参数收益全归给三项机制。</p></section>
+<section id="ablation" aria-labelledby="ablation-heading"><h2 id="ablation-heading">12 · 消融：三项机制是否能简单相加？</h2>
+<p>原论文 Table 2 衡量<strong>最后 10 次评估回报的平均值，跨 10 trials</strong>，与上一节 Table 1 的最大平均回报是<strong>不同指标</strong>。对比完整 TD3 与分别移除组件的版本：</p>
+<div class="table-scroll"><table class="results"><thead><tr><th>变体</th><th>Hopper</th><th>Walker2d</th><th>Ant</th></tr></thead><tbody>
+<tr><td>完整 TD3</td><td>3304.75</td><td>4565.24</td><td>4185.06</td></tr>
+<tr><td>移除双 Q（−CDQ）</td><td>1837.32</td><td>2579.39</td><td>849.75</td></tr>
+<tr><td>移除延迟（−DP）</td><td>2407.42</td><td>4695.50</td><td>3754.26</td></tr>
+<tr><td>移除平滑（−TPS）</td><td>2392.59</td><td>4033.67</td><td>4155.24</td></tr>
+</tbody></table></div>
+<p>Walker2d 的 <code>−DP</code> 在这份表上反而比完整 TD3 略高，说明「每个组件在每个任务必有正收益」是不成立的。总体而言，三项机制的联合作用有价值，改善的大小随任务而变。请勿把 Table 1、Table 2 混用得出因果结论。</p></section>
+<section id="code" aria-labelledby="code-heading"><h2 id="code-heading">13 · 可执行的最小数学核验</h2>
+<p>仓库附有无第三方依赖的 <a href="mini_td3.py"><code>mini_td3.py</code></a>，用标量样例检查 min-target、终止掩码、动作边界、截断噪声、软更新及延迟调度。它<strong>不是</strong>完整 MuJoCo trainer，不能复现实验回报。运行 <code>python posts/reinforcement-learning/td3/mini_td3.py</code> 或 <code>pytest tests/test_td3.py</code>。</p>
+<pre class="code"><code># 目标值：两套目标 Critic 共用一个 label
+noise = clip(gaussian, -noise_clip, noise_clip)
+next_action = clip(actor_target(next_state) + noise, low, high)
+target_q = reward + gamma * (1 - terminated) * min(
+    q1_target(next_state, next_action),
+    q2_target(next_state, next_action),
+)
+# 每步都优化两套 Q；每 policy_delay 步更新 actor &amp; targets
+if step % policy_delay == 0:
+    actor_loss = -q1(state, actor(state)).mean()
+    polyak_update_targets(tau=0.005)</code></pre>
+<p>尤其要检查 <code>terminated</code> 与 <code>truncated</code> 的区别，Critic loss 的数组形状、target 路径是否 detach、以及 actor loss 是否意外经过 Q₂。</p></section>
+<section id="limits" aria-labelledby="limits-heading"><h2 id="limits-heading">14 · 容易混淆的边界与失败模式</h2>
+<div class="steps"><div class="step"><b>双 Q 不是无偏</b><p>取 min 降低单侧高估风险，却可能向下偏，尤其当两个 Critic 都不准或高度相关时。</p></div>
+<div class="step"><b>Actor 只有一个</b><p>两个 Critic 不是「两个 actor」；论文 §4.2 讨论了双 actor 的 Double Q 变体，但最终 TD3 使用单 Actor。</p></div>
+<div class="step"><b>目标网络并非每步同步</b><p>标准 TD3 中，Actor 与目标网络一起延迟软更新，而不是每次 Critic 梯度步后立即更新所有 targets。</p></div>
+<div class="step"><b>噪声来自不同路径</b><p>行为探索 noise 与 target policy smoothing 的使用位置和含义不同；测试时通常关闭两者。</p></div>
+<div class="step"><b>运行代码不是论文复现</b><p>标量断言只证实局部数学关系，完整复现还需要精确环境、奖励、随机性、网络和训练预算。</p></div></div></section>
+<section id="context" aria-labelledby="context-heading"><h2 id="context-heading">15 · 与 DDPG、SAC 的研究脉络</h2>
+<p><a href="../ddpg/index.html">DDPG</a> 给出确定性连续控制的深度 Actor–Critic 基线；TD3（2018）专门处理估值误差、更新耦合和目标策略附近尖峰；<a href="../sac/index.html">SAC</a> 通过最大熵目标与随机策略建立另一条稳定连续控制路线。它们都可使用 Replay Buffer，但策略目标和训练细节并不相同。</p>
+<p>阅读顺序建议：先理解 DPG 的链式导数，再理解 DDPG 的 Replay/Target，随后对照 TD3 的 clipped double Q、delay、smoothing，最后考察 SAC 的 soft Bellman backup；不要把后来的 SAC twin-Q 版本倒灌到 2018 原始 SAC 论文中。</p></section>
+<section id="references" aria-labelledby="references-heading"><h2 id="references-heading">16 · 资料与核查路径</h2>
+<ol class="refs">
+<li><a href="https://proceedings.mlr.press/v80/fujimoto18a.html">Fujimoto, van Hoof &amp; Meger (ICML 2018) — Addressing Function Approximation Error in Actor-Critic Methods</a>。§4 clipped Q、§5 延迟与平滑、Algorithm 1、§6 Table 1/2。</li>
+<li><a href="https://proceedings.mlr.press/v80/fujimoto18a/fujimoto18a.pdf">PMLR 原论文 PDF</a>。本文所有历史实验指标均以此为准。</li>
+<li><a href="https://github.com/sfujim/TD3">作者公开实现</a>。源码用于核查工程路径，不将当前仓库版本等同于 2018 论文快照。</li>
+<li><a href="https://arxiv.org/abs/1509.02971">Lillicrap et al. — Continuous Control with Deep Reinforcement Learning</a>，DDPG 基础。</li>
+<li><a href="https://spinningup.openai.com/en/latest/algorithms/td3.html">OpenAI Spinning Up — TD3</a>。现代终止掩码、target action bounds 与实现提示。</li>
+<li><a href="https://arxiv.org/abs/1801.01290">Haarnoja et al. — Soft Actor-Critic</a>。区分随机最大熵方法与确定性 TD3。</li>
+</ol></section>
+<div class="footer">Understanding TD3 · <a href="../../../categories/reinforcement-learning/">Reinforcement Learning</a> · <a href="../../../">xm-posts</a></div>
+</article></main></div>
+<script>(function(){
+"use strict";
+const keys=["reward","gamma","q1","q2"];
+const inputs=Object.fromEntries(keys.map(k=>[k,document.getElementById("td3-"+k)]));
+let terminated=false,caseNo=0;
+const cases=[{reward:1,gamma:.9,q1:10,q2:6},{reward:-1,gamma:.95,q1:-3,q2:4},{reward:2,gamma:.8,q1:2,q2:2}];
+const fmt=n=>Number(n).toFixed(2);
+function render(){
+  const v=Object.fromEntries(keys.map(k=>[k,Number(inputs[k].value)]));
+  for(const k of keys) document.getElementById("td3-"+k+"-out").textContent=fmt(v[k]);
+  const smaller=Math.min(v.q1,v.q2);
+  const y=v.reward+(terminated?0:v.gamma*smaller);
+  const label=terminated?"真正终止":"非终止";
+  document.getElementById("td3-result").textContent=label+": min("+fmt(v.q1)+", "+fmt(v.q2)+") = "+fmt(smaller)+"；y = "+fmt(v.reward)+" + "+(terminated?"0（终止掩码）":fmt(v.gamma)+" × "+fmt(smaller))+" = "+fmt(y)+"。";
+  document.getElementById("td3-terminal").setAttribute("aria-pressed",String(terminated));
+}
+keys.forEach(k=>inputs[k].addEventListener("input",render));
+document.getElementById("td3-terminal").addEventListener("click",()=>{terminated=!terminated;render();});
+document.getElementById("td3-preset").addEventListener("click",()=>{caseNo=(caseNo+1)%cases.length;for(const k of keys)inputs[k].value=cases[caseNo][k];render();});
+render();
+})();</script></body></html>
