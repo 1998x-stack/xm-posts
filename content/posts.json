@@ -901,5 +901,27 @@
     "summary": "从有限预算下的树搜索困境出发，拆解选择、扩展、模拟和回传，推导 UCB1/UCT，交互比较探索系数，解释双人博弈回传，并区分经典 MCTS 与 AlphaZero 的 PUCT。",
     "paper": "https://aima.cs.berkeley.edu/~russell/classes/cs294/s11/readings/Kocsis%2BSzepesvari%3A2006.pdf",
     "illustration": "mcts"
+  },
+  {
+    "slug": "reinforce",
+    "title": "Understanding REINFORCE",
+    "subtitle": "为什么不需要对环境求导，就能从随机行动和回报中学习？",
+    "category": "reinforcement-learning",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 26,
+    "tags": [
+      "REINFORCE",
+      "Policy Gradient",
+      "Score Function",
+      "Monte Carlo",
+      "Variance Reduction",
+      "Baseline",
+      "Williams 1992"
+    ],
+    "summary": "从两动作概率学习切入，以 Williams 1992 原文为证据推导 score-function 梯度、伯努利 logit、原始 eligibility 规则，再区分现代 reward-to-go 与 baseline，配五幅机制图、精确枚举交互及可复现 Python 测试。",
+    "paper": "https://doi.org/10.1007/BF00992696",
+    "illustration": "reinforce"
   }
 ]
