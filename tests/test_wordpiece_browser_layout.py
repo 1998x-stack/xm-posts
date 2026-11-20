@@ -34,6 +34,9 @@ def test_wordpiece_narrow_mobile_document_width():
                  offenders: overflowing.slice(0,50)
               };
             }""")
-            assert report["scrollWidth"] <= report["innerWidth"] + 1, (\n                "document width=" + str(report["scrollWidth"]) + " at viewport " + str(report["innerWidth"]) +\n                "; overflowing HTML elements: " + repr(report["offenders"][:12])\n            )
+            assert report["scrollWidth"] <= report["innerWidth"] + 1, (
+                "document width=" + str(report["scrollWidth"]) + " at viewport " + str(report["innerWidth"]) +
+                "; overflowing HTML elements: " + repr(report["offenders"][:12])
+            )
         finally:
             browser.close()
