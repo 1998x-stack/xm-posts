@@ -1499,5 +1499,31 @@
     "summary": "从二维点云到 Lloyd 的分配—更新交替最小化，推导平方误差与均值更新、完整手算四点示例、k-means++ D² 初始化和 O(nkdT) 计算成本；以五幅可独立查看的 SVG、原生 MathML、交互迭代、纯标准库 Python 测试和原论文证据解释聚类的能力与边界。",
     "paper": "https://doi.org/10.1109/TIT.1982.1056489",
     "illustration": "k-means"
+  },
+  {
+    "slug": "bellman-equations",
+    "title": "Understanding Bellman Equations",
+    "subtitle": "为什么一步奖励加下一状态价值就能决定长期最优行动？",
+    "category": "reinforcement-learning",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 30,
+    "tags": [
+      "Bellman Equation",
+      "Bellman Expectation Equation",
+      "Bellman Optimality Equation",
+      "Markov Decision Process",
+      "Value Iteration",
+      "Policy Iteration",
+      "Dynamic Programming",
+      "Contraction Mapping",
+      "Temporal-Difference Learning",
+      "Q-learning"
+    ],
+    "summary": "以 Bellman 1952 动态规划论文和 Sutton & Barto 强化学习教材为核心，从折扣回报与四种 Bellman 方程推导最优决策、矩阵策略评估与 γ 收缩固定点；通过六幅原创机制图、八组原生 MathML、可交互的一状态 MDP、确定性 Python 测试连接动态规划、TD 与 DQN，并明确 γ=1、终止/截断及函数逼近的适用边界。",
+    "paper": "https://doi.org/10.1073/pnas.38.8.716",
+    "illustration": "bellman",
+    "topic": "value-learning"
   }
 ]
