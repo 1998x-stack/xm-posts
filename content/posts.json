@@ -53,5 +53,26 @@
     "summary": "从支持超平面的几何距离出发，推导硬间隔和对偶、软间隔的历史与现代形式，图解核映射和 RBF 参数，并用可验证的一维解析例子落实公式。",
     "paper": "https://doi.org/10.1007/BF00994018",
     "illustration": "svm"
+  },
+  {
+    "slug": "adam",
+    "title": "Understanding Adam",
+    "subtitle": "为什么梯度需要两份记忆？从自适应矩估计到 AdamW 与收敛边界",
+    "category": "foundations",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 32,
+    "tags": [
+      "Adam",
+      "Optimization",
+      "Adaptive Moments",
+      "Bias Correction",
+      "AdamW",
+      "AMSGrad"
+    ],
+    "summary": "从随机梯度的方向与尺度出发，以七幅机制图、逐步推导、时间步交互和纯 Python 单元测试解释 Adam，并区分 AdamW、AMSGrad 与原论文证据。",
+    "paper": "https://arxiv.org/abs/1412.6980",
+    "illustration": "adam"
   }
 ]
