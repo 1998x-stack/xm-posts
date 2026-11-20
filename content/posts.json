@@ -2049,5 +2049,31 @@
       "src": "assets/cover-mixture.svg",
       "caption": "RAG-Sequence 整句共享文档，RAG-Token 逐词混合证据"
     }
+  },
+  {
+    "slug": "q-learning",
+    "title": "Understanding Q-learning",
+    "subtitle": "从一次 TD 更新到 Watkins–Dayan 的表格型收敛定理",
+    "category": "reinforcement-learning",
+    "topic": "value-learning",
+    "status": "draft",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 18,
+    "tags": [
+      "Q-learning",
+      "Off-policy TD Control",
+      "Watkins and Dayan 1992",
+      "Bellman Optimality",
+      "Temporal Difference",
+      "Tabular Reinforcement Learning"
+    ],
+    "summary": "精读 Watkins 与 Dayan 1992 Q-learning：通过一步奖励与下一状态最大 Q 值的手算、可交互学习率滑块、原创备份机制图和证据账本解释离策略 TD 控制，并严谨区分表格型收敛定理与后续 DQN 的函数逼近。",
+    "paper": "https://doi.org/10.1007/BF00992698",
+    "illustration": "q-learning",
+    "cover": {
+      "src": "assets/q-learning-backup.svg",
+      "caption": "奖励与下一状态最大动作价值共同修正当前 Q 值"
+    }
   }
 ]
