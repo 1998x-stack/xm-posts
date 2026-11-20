@@ -991,5 +991,28 @@
     "summary": "以 Kahn–Marshall 1953 为历史起点，从稀有事件与换测度推导无偏性、方差、最优提议分布、SNIS/ESS 和离策略比率；包含五幅独立 SVG、离线 MathML、解析交互以及 Python 确定性检验。",
     "paper": "https://doi.org/10.1287/opre.1.5.263",
     "illustration": "importance-sampling"
+  },
+  {
+    "slug": "gae",
+    "title": "Understanding GAE",
+    "subtitle": "为什么同一条轨迹的优势，既需要短期 TD，又需要远期真实奖励？",
+    "category": "reinforcement-learning",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 32,
+    "tags": [
+      "GAE",
+      "Generalized Advantage Estimation",
+      "Policy Gradient",
+      "Actor–Critic",
+      "TD Residual",
+      "Bias–Variance Tradeoff",
+      "TRPO",
+      "PPO"
+    ],
+    "summary": "精读 Schulman et al. ICLR 2016：从延迟信用分配与 γ-just 定义推导 TD residual、k-step 优势与指数加权的 GAE(γ,λ)，解释反向递推、terminal/truncation、reward shaping、原论文 TRPO 及 MuJoCo 实验；附五幅独立 SVG、原生 MathML、λ 交互与 Python 数值核验。",
+    "paper": "https://arxiv.org/abs/1506.02438",
+    "illustration": "gae"
   }
 ]

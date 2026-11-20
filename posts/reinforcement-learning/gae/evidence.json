@@ -1,0 +1,98 @@
+[
+  {
+    "id": "G01",
+    "claim": "Undiscounted return is the original objective and gamma is used as a bias-variance parameter",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/pdf/1506.02438",
+    "locator": "Section 2 and footnote 1",
+    "status": "verified"
+  },
+  {
+    "id": "G02",
+    "claim": "Gamma-just estimator is defined in the sense of the discounted policy gradient",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/pdf/1506.02438",
+    "locator": "Section 2, Definition 1 and Proposition 1, Equations (7)-(8)",
+    "status": "verified"
+  },
+  {
+    "id": "G03",
+    "claim": "TD residual and k-step advantages telescope",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/pdf/1506.02438",
+    "locator": "Section 3, Equations (10)-(15)",
+    "status": "verified"
+  },
+  {
+    "id": "G04",
+    "claim": "GAE weighted sum and lambda endpoints",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/pdf/1506.02438",
+    "locator": "Section 3, Equations (16)-(18)",
+    "status": "verified"
+  },
+  {
+    "id": "G05",
+    "claim": "Reward shaping interpretation takes value function as potential",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/pdf/1506.02438",
+    "locator": "Section 4, Equations (20)-(25)",
+    "status": "verified"
+  },
+  {
+    "id": "G06",
+    "claim": "Original work optimizes value estimates using trust-region method",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/pdf/1506.02438",
+    "locator": "Section 5, Equations (28)-(30)",
+    "status": "verified"
+  },
+  {
+    "id": "G07",
+    "claim": "Policy update uses TRPO and old critic for advantages before critic update",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/pdf/1506.02438",
+    "locator": "Section 6.1, Equation (31), algorithm and notes",
+    "status": "verified"
+  },
+  {
+    "id": "G08",
+    "claim": "Cart-pole results use 21 runs and favor intermediate gamma/lambda settings",
+    "kind": "experiment",
+    "source_url": "https://arxiv.org/pdf/1506.02438",
+    "locator": "Sections 6.3.1, Figure 2",
+    "status": "verified"
+  },
+  {
+    "id": "G09",
+    "claim": "Biped uses 9 trials; quadruped 5 trials with different batch sizes",
+    "kind": "experiment",
+    "source_url": "https://arxiv.org/pdf/1506.02438",
+    "locator": "Sections 6.2.2, 6.3.2 and 6.3.3, Figure 3",
+    "status": "verified"
+  },
+  {
+    "id": "G10",
+    "claim": "PPO later adopts truncated GAE for advantage estimates",
+    "kind": "later-work",
+    "source_url": "https://arxiv.org/pdf/1707.06347",
+    "locator": "Section 5, Equations (11)-(12)",
+    "status": "verified"
+  },
+  {
+    "id": "G11",
+    "claim": "Toy trajectory computation in gae.py is an independent illustration, not an original benchmark",
+    "kind": "toy-derivation",
+    "source_url": "https://arxiv.org/pdf/1506.02438",
+    "locator": "Equations (10), (16) and gae.py",
+    "status": "derived"
+  },
+  {
+    "id": "G12",
+    "claim": "Illustration assets are original explanatory diagrams rather than paper charts",
+    "kind": "illustration",
+    "source_url": "https://arxiv.org/pdf/1506.02438",
+    "locator": "Sections 2-6 mechanism storyboard",
+    "status": "illustrative"
+  }
+]
