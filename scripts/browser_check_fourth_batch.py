@@ -40,14 +40,14 @@ def check_naive_bayes(page) -> None:
 def check_svm(page) -> None:
     assert "w = 0.5" in page.locator("#svm-c-candidates .best").inner_text()
     assert "0.225" in page.locator("#svm-c-result").inner_text()
-    assert page.locator('.heat-cell[data-i="0"][data-j="2"] .heat-value').inner_text() == "0.05"
+    assert page.locator('.heat-cell[data-i="0"][data-j="2"] .heat-value').text_content() == "0.05"
     page.locator('.svm-c-btn[data-c="1"]').focus()
     page.keyboard.press("Enter")
     assert page.locator('.svm-c-btn[data-c="1"]').get_attribute("aria-pressed") == "true"
     assert "w = 1" in page.locator("#svm-c-result").inner_text()
     assert "0.500" in page.locator("#svm-c-result").inner_text()
     page.locator('.gamma-btn[data-gamma="0.15"]').click()
-    assert page.locator('.heat-cell[data-i="0"][data-j="2"] .heat-value').inner_text() == "0.55"
+    assert page.locator('.heat-cell[data-i="0"][data-j="2"] .heat-value').text_content() == "0.55"
     assert page.locator('.gamma-btn[data-gamma="0.15"]').get_attribute("aria-pressed") == "true"
 
 
