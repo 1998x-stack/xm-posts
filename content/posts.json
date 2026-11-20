@@ -53,5 +53,25 @@
     "summary": "从支持超平面的几何距离出发，推导硬间隔和对偶、软间隔的历史与现代形式，图解核映射和 RBF 参数，并用可验证的一维解析例子落实公式。",
     "paper": "https://doi.org/10.1007/BF00994018",
     "illustration": "svm"
+  },
+  {
+    "slug": "adamw",
+    "title": "Understanding AdamW",
+    "subtitle": "为什么 Adam 中的 L₂ 正则化，不等于真正的 Weight Decay？",
+    "category": "foundations",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 29,
+    "tags": [
+      "AdamW",
+      "Optimization",
+      "Decoupled Weight Decay",
+      "L2 Regularization",
+      "Adaptive Optimizers"
+    ],
+    "summary": "从 SGD 的 L₂ 等价推导出发，逐坐标追踪 Adam 动量和衰减的两条路径，对照 ICLR 2019 原论文实验、现代 PyTorch 语义，并用可交互的二维例子与确定性代码验证差异。",
+    "paper": "https://arxiv.org/abs/1711.05101",
+    "illustration": "adamw"
   }
 ]

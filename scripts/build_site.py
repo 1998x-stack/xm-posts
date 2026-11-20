@@ -82,6 +82,8 @@ def post_card(p,rel,ordinal=0):
         icon, art = 'residual', '<span class="math-mark">H(x) = x + F(x)</span><span class="pathline pathline-a"></span><span class="pathline pathline-b"></span><span class="pathline pathline-c"></span>'
     elif p['slug'] == 'transformer':
         icon, art = 'attention', '<span class="math-mark">softmax(QKᵀ / √dₖ)V</span><span class="attention-dots">● · ● · ● · ● · ●</span>'
+    elif p['slug'] == 'adamw':
+        icon, art = 'generic', '<span class="math-mark">θ ← θ − α·Adam(g) − α·λθ</span>'
     elif p['slug'] == 'svm':
         icon, art = 'margin', '<span class="math-mark">margin = 2 / ||w||</span><span class="svm-boundary svm-left"></span><span class="svm-boundary svm-center"></span><span class="svm-boundary svm-right"></span><span class="svm-point point-blue"></span><span class="svm-point point-orange"></span>'
     else:
