@@ -1,0 +1,92 @@
+[
+  {
+    "id": "KM01",
+    "claim": "Lloyd's 1982 quantization article describes least-squares distortion and nearest-neighbor/centroid conditions.",
+    "kind": "paper-claim",
+    "source_url": "https://doi.org/10.1109/TIT.1982.1056489",
+    "locator": "Least Squares Quantization in PCM, Sections II–IV / stationarity conditions",
+    "status": "verified",
+    "notes": "Original quantization formulation; published 1982; earlier Bell Labs work not dated as 1982 invention."
+  },
+  {
+    "id": "KM02",
+    "claim": "MacQueen described k-means methods for grouping multivariate observations in 1967.",
+    "kind": "paper-claim",
+    "source_url": "https://www.cs.cmu.edu/~bhiksha/courses/mlsp.fall2010/class14/macqueen.pdf",
+    "locator": "Title and methods",
+    "status": "verified",
+    "notes": "Historical k-means work, not identical to Lloyd batch assignment algorithm."
+  },
+  {
+    "id": "KM03",
+    "claim": "k-means++ initializes centers with D-squared sampling and yields an expected O(log k) approximation to optimal k-means objective.",
+    "kind": "paper-claim",
+    "source_url": "https://research.google/pubs/k-means-the-advantages-of-careful-seeding/",
+    "locator": "SODA 2007, Algorithm 1; expected approximation result",
+    "status": "verified",
+    "notes": "Guarantee in expectation for randomized seeding; not global optimality of subsequent Lloyd iteration."
+  },
+  {
+    "id": "KM04",
+    "claim": "The original k-means++ selection rule samples centers with probabilities proportional to squared distance to the nearest selected center.",
+    "kind": "paper-claim",
+    "source_url": "https://research.google/pubs/k-means-the-advantages-of-careful-seeding/",
+    "locator": "Algorithm 1",
+    "status": "verified",
+    "notes": "Distinct from greedy k-means++ trials in scikit-learn."
+  },
+  {
+    "id": "KM05",
+    "claim": "scikit-learn KMeans supports Lloyd and Elkan algorithms, and has n_init auto behavior dependent on init.",
+    "kind": "modern-implementation",
+    "source_url": "https://scikit-learn.org/stable/modules/generated/sklearn.cluster.KMeans.html",
+    "locator": "Parameters init, n_init, algorithm",
+    "status": "verified",
+    "notes": "Modern documentation, not historical Lloyd claim."
+  },
+  {
+    "id": "KM06",
+    "claim": "The inertia criterion favors convex, isotropic clusters and is not normalized across cluster numbers.",
+    "kind": "modern-implementation",
+    "source_url": "https://scikit-learn.org/stable/modules/clustering.html",
+    "locator": "K-means section: inertia limitations",
+    "status": "verified",
+    "notes": "Guide warning; cartoon figure is not measured benchmark."
+  },
+  {
+    "id": "KM07",
+    "claim": "For X=[0,2,8,10], initialization centers=(0,2) follows intermediate J=100,104/3,152/9,4, ending at (1,9).",
+    "kind": "toy-derivation",
+    "source_url": "https://doi.org/10.1109/TIT.1982.1056489",
+    "locator": "Independently calculated four-point illustration; not an experiment in paper",
+    "status": "derived",
+    "notes": "Arithmetic derived explicitly, with deterministic Python tests."
+  },
+  {
+    "id": "KM08",
+    "claim": "For a nonempty cluster, the arithmetic mean uniquely minimizes the within-cluster sum of squared Euclidean distances.",
+    "kind": "toy-derivation",
+    "source_url": "https://doi.org/10.1109/TIT.1982.1056489",
+    "locator": "Centroid optimality; gradient/Hessian shown in article",
+    "status": "derived",
+    "notes": "Hessian 2|C|I, positive definite for nonempty cluster."
+  },
+  {
+    "id": "KM09",
+    "claim": "A simple Lloyd assignment sweep costs O(n*k*d) distance operations, assuming dense d-dimensional data.",
+    "kind": "derived-complexity",
+    "source_url": "https://scikit-learn.org/stable/modules/clustering.html",
+    "locator": "Algorithm description; direct operation count",
+    "status": "derived",
+    "notes": "Not a worst-case iteration-count theorem."
+  },
+  {
+    "id": "KM10",
+    "claim": "scikit-learn uses greedy k-means++ rather than exactly the original one-trial D-squared sampling.",
+    "kind": "modern-implementation",
+    "source_url": "https://scikit-learn.org/stable/modules/generated/sklearn.cluster.KMeans.html",
+    "locator": "init parameter / greedy k-means++ description",
+    "status": "verified",
+    "notes": "Separate modern implementation from theoretical result."
+  }
+]
