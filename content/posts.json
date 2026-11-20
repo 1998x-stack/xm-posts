@@ -1,5 +1,28 @@
 [
   {
+    "slug": "gmm",
+    "title": "Understanding Gaussian Mixture Models (GMM)",
+    "subtitle": "从隐变量与软责任出发，理解混合密度、EM、协方差约束与 BIC 模型选择",
+    "category": "classical-ml",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 29,
+    "tags": [
+      "GMM",
+      "Gaussian Mixture Model",
+      "Mixture Models & Density Estimation",
+      "Expectation-Maximization",
+      "EM",
+      "Probabilistic Clustering",
+      "BIC",
+      "Covariance"
+    ],
+    "summary": "精读 Dempster–Laird–Rubin (1977) EM 方法与 Bishop PRML §9.2 的 GMM：从隐变量生成过程、软后验责任和对数似然出发，推导 E/M 步的均值、权重、协方差更新；配四幅可独立打开的原创 SVG、六组原生 MathML、固定参数后验交互、BIC 与协方差选型，以及纯 Python 数值不变量测试。",
+    "paper": "https://doi.org/10.1111/j.2517-6161.1977.tb01600.x",
+    "illustration": "gmm"
+  },
+  {
     "slug": "multi-head-attention",
     "title": "Understanding Multi-Head Attention",
     "subtitle": "为什么一个 Attention 不够？从独立 Q/K/V 投影、因果 Mask 到原论文 Head 消融",

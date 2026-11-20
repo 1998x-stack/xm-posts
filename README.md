@@ -10,6 +10,7 @@
 
 | Post | 解释的问题 | 文章源码 | 核心资料 |
 |---|---|---|---|
+| **Understanding GMM** | 为什么隐变量无法观察，仍能通过软责任估计多峰密度？EM、协方差与 BIC | [`posts/classical-ml/gmm/`](posts/classical-ml/gmm/index.html) | [Dempster et al. (1977)](https://doi.org/10.1111/j.2517-6161.1977.tb01600.x) · [Bishop §9.2](https://www.microsoft.com/en-us/research/wp-content/uploads/2006/01/Bishop-Pattern-Recognition-and-Machine-Learning-2006.pdf) |
 | **Understanding SentencePiece** | 原始文字如何编码为子词 ID？BPE、Unigram、归一化与解码边界 | [`posts/foundations/sentencepiece/`](posts/foundations/sentencepiece/index.html) | [Kudo & Richardson (EMNLP 2018)](https://aclanthology.org/D18-2012/) |
 | **Understanding GAE** | 一步 TD 与全轨迹回报之间，如何权衡偏差与方差？ | [`posts/reinforcement-learning/gae/`](posts/reinforcement-learning/gae/index.html) | [Schulman et al. (ICLR 2016)](https://arxiv.org/abs/1506.02438) |
 | **Understanding AlphaGo** | 15 幅 SVG 解析 AlphaGo：19×19×48 特征、APV-MCTS、虚拟损失与 BayesElo 消融 | [`posts/reinforcement-learning/alphago/`](posts/reinforcement-learning/alphago/index.html) | [Silver et al. (Nature 2016)](https://doi.org/10.1038/nature16961) |
