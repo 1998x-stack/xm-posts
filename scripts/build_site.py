@@ -330,10 +330,20 @@ def build_category(c,posts,categories,base):
 def build_archive(posts,categories,base):
     published=sorted([p for p in posts if p['status']=='published'],key=lambda p:(p['published'],p['title']),reverse=True)
     labels=topic_labels(categories)
-    cards=''.join(f'''<li><span class="timeline-date">{H(p['published'])}</span><div><h2><a href="../{article_url(p)}">{H(p['title'])}</a></h2><p>{H(p['subtitle'])}</p><a class="archive-topic" href="../categories/{H(p['category'])}/#topic-{H(p['topic'])}">{H(labels[(p['category'],p['topic'])])}</a></div><span class="timeline-time">{p['reading_minutes']} min <span aria-hidden="true">↗</span></span></li>''' for p in published)
-    body=f'''<div class="container archive-page"><div class="breadcrumb"><a href="../">首页</a> <span>/</span> 文章归档</div><div class="eyebrow muted">ALL EXPLAINERS · CHRONOLOGICAL</div><h1>研究笔记归档<span class="count">{len(published):02d}</span></h1><p class="category-description">所有已发布的长文。草稿与目录占位不会出现在这里。</p><ol class="timeline">{cards}</ol></div>'''
+    # Every published post already has an individually curated SVG cover in the
+    # manifest. Reuse it: no separate archive image mapping or generic fallback.
+    cards=''.join(
+        f'''<li class="archive-entry">
+        <time class="timeline-date" datetime="{H(p['published'])}">{H(p['published'])}</time>
+        <a class="archive-cover" href="../{article_url(p)}" aria-label="阅读 {H(p['title'],quote=True)}" title="{H(p['cover']['caption'],quote=True)}">{cover_art(p,'../',compact=True)}</a>
+        <div class="archive-entry-copy"><h2><a href="../{article_url(p)}">{H(p['title'])}</a></h2>
+        <p>{H(p['subtitle'])}</p>
+        <a class="archive-topic" href="../categories/{H(p['category'])}/#topic-{H(p['topic'])}">{H(labels[(p['category'],p['topic'])])}</a></div>
+        <span class="timeline-time">{p['reading_minutes']} min <span aria-hidden="true">↗</span></span></li>'''
+        for p in published
+    )
+    body=f'''<div class="container archive-page"><div class="breadcrumb"><a href="../">首页</a> <span>/</span> 文章归档</div><div class="eyebrow muted">ALL EXPLAINERS · CHRONOLOGICAL</div><h1>研究笔记归档<span class="count">{len(published):02d}</span></h1><p class="category-description">按发布时间浏览全部正式发布的文章。每篇配有独立的核心机制 SVG 缩略图；草稿与目录占位不会出现在这里。</p><ol class="timeline">{cards}</ol></div>'''
     return html_page(title='文章归档 · xm-posts',description='按时间浏览 xm-posts 全部深度学习论文图解文章。',canonical=url_join(base,'archive/'),body=body,depth=1,active='archive')
-
 
 def write(out:Path,path:str,content:str):
     dest=out/path;dest.parent.mkdir(parents=True,exist_ok=True);dest.write_text(content,encoding='utf-8')
