@@ -65,10 +65,13 @@ def test_taxonomy_topic_placeholders_are_not_published(tmp_path):
             stub = ROOT / 'posts' / category / '_topics' / slug / 'README.md'
             assert stub.is_file(), stub
             assert not (stub.parent / 'index.html').exists()
-    assert not [p for p in posts if p['category'] in {'retrieval-rag', 'agents'}]
+    assert not [p for p in posts if p['category'] == 'retrieval-rag']
+    assert any(p['category'] == 'agents' and p['slug'] == 'react' and p['status'] == 'published' for p in posts)
     output = tmp_path / 'site'
     build(ROOT, output, DEFAULT_URL)
     for slug in ('retrieval-rag', 'agents'):
         assert (output / 'categories' / slug / 'index.html').exists()
-        assert not (output / 'posts' / slug).exists()
+        if slug == 'retrieval-rag':
+            assert not (output / 'posts' / slug).exists()
+    assert (output / 'posts' / 'agents' / 'react' / 'index.html').is_file()
     assert not any('_topics' in path.parts for path in output.rglob('*'))

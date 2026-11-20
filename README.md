@@ -260,3 +260,7 @@ python scripts/sync_skills.py --check
 QLoRA 归入 Training → PEFT / LoRA → Quantized Fine-tuning / QLoRA，不新建顶层分类；提供 12 节机制解读、6 幅 SVG、MathML、权重显存交互与论文证据表。
 
 GAE 归入 `reinforcement-learning` 下已有的 **Policy Gradient / Actor–Critic** 主题，不新增顶层分类；文章包含 14 节、五幅独立 SVG、原生 MathML、λ 交互、终止/截断算例和确定性 Python 验证，明确区分 2016 GAE + TRPO 与后续 GAE + PPO。
+
+### Agents & Tool Use — ReAct
+
+ReAct（Yao et al., ICLR 2023）收录于 `posts/agents/react/`：解释 Thought / Action / Observation 的闭环、论文实验口径、MathML 形式化、可交互轨迹与有限状态 Python 验证。该目录属于 `Agents & Tool Use`，不同于 `reasoning` 的 CoT 与 Self-Consistency；专题规划位于 `posts/agents/_topics/react/`，不单独发布。
