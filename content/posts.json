@@ -1766,6 +1766,41 @@
     }
   },
   {
+    "slug": "llm-as-a-judge",
+    "title": "Understanding LLM-as-a-Judge",
+    "subtitle": "从评价标准、结构化评分与成对比较，到偏差审计、人工一致性和评审器的元评测",
+    "category": "evaluation",
+    "topic": "llm-as-a-judge",
+    "status": "published",
+    "published": "2026-11-21",
+    "updated": "2026-11-21",
+    "reading_minutes": 42,
+    "tags": [
+      "LLM-as-a-Judge",
+      "LLM Evaluation",
+      "Judge Reliability",
+      "Meta-Evaluation",
+      "G-Eval",
+      "MT-Bench",
+      "Chatbot Arena",
+      "JudgeBench",
+      "Human Agreement",
+      "Position Bias",
+      "Calibration",
+      "Evaluation Rubrics",
+      "Pairwise Comparison",
+      "Reward Modeling",
+      "RLAIF"
+    ],
+    "summary": "从为什么需要模型评审器出发，拆解 pointwise、pairwise、listwise 与 critique/verifier 任务，推导 rubric 加权评分、Bradley–Terry 偏好模型、人工一致性与 Cohen's kappa；结合 G-Eval、MT-Bench、JudgeBench、位置偏差研究和 2026 前沿工作，构建覆盖可靠性、一致性、公平性、校准与对抗鲁棒性的 meta-evaluation 流程，并提供可交互的顺序交换实验、原创 SVG 和纯 Python 指标测试。",
+    "paper": "https://arxiv.org/abs/2306.05685",
+    "illustration": "llm-as-a-judge",
+    "cover": {
+      "src": "assets/00-cover.svg",
+      "caption": "评价标准约束 Judge，人工与测试再验证其输出"
+    }
+  },
+  {
     "slug": "k-means",
     "title": "Understanding K-Means",
     "subtitle": "为什么“最近的中心”与“重新求平均”交替进行，就能把数据分成簇？",
