@@ -56,6 +56,15 @@
     ]
   },
   {
+    "id": "neural-rendering-nerf",
+    "title": "从二维视觉到三维神经场景表示",
+    "posts": [
+      "cnn",
+      "resnet",
+      "nerf"
+    ]
+  },
+  {
     "id": "path-07",
     "title": "序列建模主线",
     "posts": [
