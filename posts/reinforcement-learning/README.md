@@ -3,6 +3,7 @@
 从环境反馈、信用分配与值函数到策略优化，系统解释 Policy Gradient、Actor–Critic、GAE、TRPO、PPO 及其与 LLM 偏好对齐的联系。
 
 ## 已发布
+- [Understanding Imitation Learning](imitation-learning/index.html)：从行为克隆与协变量偏移出发，深入 DAgger、IRL、GAIL、Diffusion Policy，以及模仿学习与强化学习的边界。
 - [Understanding GAE](gae/index.html)：Schulman et al. ICLR 2016，TD residual、γ-just、k-step / λ-return、终止与截断、TRPO 原始实验。
 - [Understanding NoisyNet](noisynet/index.html)：可学习的参数空间噪声、Factorised Gaussian Noise、DQN/Dueling/A3C 采样时序与 Atari-57 证据。
 - [Understanding MCTS](mcts/index.html)：UCT 树搜索、四阶段模拟、探索系数与 PUCT 对比。

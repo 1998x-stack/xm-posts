@@ -10,7 +10,7 @@
 | `foundations` | 线性代数、数值稳定、优化与正则化、表示与分词基础 | 具体的学习算法归 `classical-ml`；训练过程与分布式实现归 `training` |
 | `classical-ml` | 线性/概率模型、树与集成、核方法、聚类、降维等经典算法 | 深度网络信息路径归 `architectures` |
 | `architectures` | CNN、RNN、Transformer、门控、MoE、状态空间与高效注意力结构 | GPU 算子实现归 `systems`，线上请求管理归 `inference` |
-| `reinforcement-learning` | MDP、Bellman、Policy Gradient、Actor–Critic、探索与搜索 | RLHF/GRPO 等模型后训练方案的训练目标与流程归 `training` |
+| `reinforcement-learning` | MDP、Bellman、Policy Gradient、Actor–Critic、探索与搜索，以及专家示范驱动的策略学习（Imitation Learning） | 模仿学习以示范、纠错或偏好为监督信号，不等同于 reward-driven RL；RLHF/GRPO 等模型后训练方案的训练目标与流程仍归 `training` |
 | `datasets` | 语料来源、清洗去重、混合、污染与数据治理 | 任务指标、Benchmark 设计与可重复性归 `evaluation` |
 | `training` | 预训练、Scaling Laws、PEFT、偏好对齐、分布式与混合精度 | 权重衰减的基础推导可以在 `foundations`，但工程训练管线在此 |
 | `reasoning` | CoT、自一致性、推理采样、验证与测试时计算 | 涉及工具和环境反馈闭环时归 `agents` |

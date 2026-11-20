@@ -327,5 +327,15 @@
       "bert",
       "rag"
     ]
+  },
+  {
+    "id": "path-36",
+    "title": "从奖励反馈到专家示范：策略学习的两种信号",
+    "posts": [
+      "bellman-equations",
+      "ppo",
+      "imitation-learning",
+      "alphago"
+    ]
   }
 ]
