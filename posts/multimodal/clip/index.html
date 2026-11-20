@@ -380,7 +380,7 @@ candidates = {
     "cat": [0.1, 0.9],
 }
 print(zero_shot_scores([1.0, 0.0], candidates, temperature=0.1))</code></pre>
-<p>实现与测试文件：<a href="clip_toy.py">clip_toy.py</a> · <a href="tests/test_clip_toy.py">tests/test_clip_toy.py</a>。测试检查正配对分数更高、对称损失有限且非负、零样本排序符合预期，并拒绝非法温度与零向量。</p>
+<p>实现与测试文件：<a href="clip_toy.py">clip_toy.py</a> · <a href="../../../tests/test_clip_toy.py">tests/test_clip_toy.py</a>。测试检查正配对分数更高、对称损失有限且非负、零样本排序符合预期，并拒绝非法温度与零向量。</p>
 <h3>阅读代码时，重点检查四个不变量</h3>
 <ol><li>图像和文本特征维度必须一致，且 batch 中配对数量相同。</li><li>向量归一化后，点积才对应 cosine similarity。</li><li>图像到文本的 softmax 沿文本候选维度计算；文本到图像沿图像候选维度计算。</li><li>损失是两个方向交叉熵的平均值，而不是只计算一行或一个方向。</li></ol>
 </section>
