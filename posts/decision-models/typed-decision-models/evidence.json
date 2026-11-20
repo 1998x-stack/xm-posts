@@ -1,0 +1,218 @@
+[
+  {
+    "id": "E01",
+    "kind": "vendor_positioning",
+    "claim": "TypeSafe announced Jev as its first System One model: typed probabilistic decisions from unstructured state, optimized for structured outputs rather than free-form text generation; RLCD is the vendor's named training approach.",
+    "source_url": "https://typesafe.ai/blog/introducing-system-one-models-and-jev",
+    "locator": "2026-09-15 launch announcement; 'Frontiers, Old and New'",
+    "status": "verified",
+    "notes": "Verified as a vendor statement, not an independently established architectural fact. Do not infer unpublished architecture or training details."
+  },
+  {
+    "id": "E02",
+    "kind": "version",
+    "claim": "As of 2026-11-21, the official model page lists Jev 1.14.0 as the newest stable release and jev-latest as an alias pointing to jev-1.14.0.",
+    "source_url": "https://docs.typesafe.ai/models",
+    "locator": "Current models; Aliases",
+    "status": "verified",
+    "notes": "Versioned model identifiers should be logged; pin a version when thresholds have been tuned."
+  },
+  {
+    "id": "E03",
+    "kind": "interface",
+    "claim": "A System One request contains state, model and named questions; Choice returns a selected option and probabilities, Score returns a probability-weighted ordinal score and level probabilities, and Noul returns P(Yes).",
+    "source_url": "https://docs.typesafe.ai/introduction",
+    "locator": "TypeSafe primitives table; linked Choice, Score and Noul pages",
+    "status": "verified",
+    "notes": "The official docs also list Box as a Jev 1.14 question type; Box is a spatial output, not a class-probability distribution."
+  },
+  {
+    "id": "E04",
+    "kind": "parallel_execution",
+    "claim": "Questions in one request are evaluated in parallel and independently against the same state.",
+    "source_url": "https://docs.typesafe.ai/concepts/system-one",
+    "locator": "Fast judgments inside a larger workflow; official docs also describe this in Models",
+    "status": "verified",
+    "notes": "This describes the API's question evaluation, not statistical independence of real-world variables and not a joint probability distribution."
+  },
+  {
+    "id": "E05",
+    "kind": "confidence_formula",
+    "claim": "For a Choice with n options, TypeSafe defines confidence as (p_max - 1/n) / (1 - 1/n), a normalized concentration statistic derived from the probability distribution.",
+    "source_url": "https://docs.typesafe.ai/confidence",
+    "locator": "Confidence is derived from the probabilities; How confidence is calculated > Choice",
+    "status": "verified",
+    "notes": "The same documentation explicitly warns that confidence is not the probability that the selected answer is correct."
+  },
+  {
+    "id": "E06",
+    "kind": "score_semantics",
+    "claim": "Score returns a probability distribution over ordered rubric levels and a probability-weighted position on the levels axis.",
+    "source_url": "https://docs.typesafe.ai/primitives/score",
+    "locator": "Overview; Levels; Response structure",
+    "status": "verified",
+    "notes": "The score is an expected ordinal position, not a precise measurement on a naturally continuous scale unless the rubric justifies that interpretation."
+  },
+  {
+    "id": "E07",
+    "kind": "noul_semantics",
+    "claim": "Noul returns the probability that a yes/no statement is true, in [0,1], and does not return a separate confidence field.",
+    "source_url": "https://docs.typesafe.ai/primitives/noul",
+    "locator": "Overview; Response structure",
+    "status": "verified",
+    "notes": "The Noul probability itself expresses the model's yes/no uncertainty."
+  },
+  {
+    "id": "E08",
+    "kind": "experimental_capability",
+    "claim": "Box returns normalized image bounding-box edges and is marked by TypeSafe as preview/dreamer-ready rather than production-ready; it requires Jev 1.14.",
+    "source_url": "https://docs.typesafe.ai/primitives/box",
+    "locator": "Overview; Request structure; Reading a Box",
+    "status": "verified",
+    "notes": "The article intentionally treats Box as a boundary note rather than a mature core probability primitive."
+  },
+  {
+    "id": "E09",
+    "kind": "calibration_definition",
+    "claim": "Calibration is a group-level property: among predictions assigned probability p, the observed correctness rate should be approximately p; it does not guarantee any individual prediction is correct.",
+    "source_url": "https://docs.typesafe.ai/concepts/system-one",
+    "locator": "How it differs from an LLM",
+    "status": "verified",
+    "notes": "Official definition; the article recommends measuring calibration on the deployment distribution."
+  },
+  {
+    "id": "E10",
+    "kind": "foundational_research",
+    "claim": "Modern neural networks can be poorly calibrated; temperature scaling is a simple and often effective post-hoc calibration method in the studied settings.",
+    "source_url": "https://proceedings.mlr.press/v70/guo17a.html",
+    "locator": "Guo et al. (2017), abstract and experiments",
+    "status": "verified",
+    "notes": "Foundational calibration paper; its results do not directly measure Jev."
+  },
+  {
+    "id": "E11",
+    "kind": "decision_theory",
+    "claim": "Under binary classification with false-positive cost C_FP and false-negative cost C_FN, the Bayes-optimal positive-action threshold is C_FP / (C_FP + C_FN).",
+    "source_url": "https://statproofbook.github.io/P/bc-thr",
+    "locator": "Theorem and derivation, equations (2)–(4)",
+    "status": "verified",
+    "notes": "The article derives the rule from posterior expected loss and labels its cost values as a teaching example."
+  },
+  {
+    "id": "E12",
+    "kind": "independent_benchmark",
+    "claim": "An independent preprint evaluates Jev 1.13.0 on 37 datasets and 346,009 requests; it reports strong performance on several tasks but degradation on low-resource languages, noisy/fine-grained labels and rubric scoring.",
+    "source_url": "https://arxiv.org/abs/2609.37647",
+    "locator": "Abstract; §3 methodology; §4 results",
+    "status": "verified",
+    "notes": "Preprint and version-specific evidence, not a guarantee for Jev 1.14.0 or a user's deployment distribution."
+  },
+  {
+    "id": "E13",
+    "kind": "independent_calibration_audit",
+    "claim": "A 2026 exploratory audit of Jev 1.13.0 reports 3,244 evaluations over 2,372 texts; calibration varied by task and wording, with a 0.071 difference between two question forms and an overconfident middle class in one four-class setting.",
+    "source_url": "https://escholarship.org/uc/item/4t4449jv",
+    "locator": "Meng (2026) preprint, abstract",
+    "status": "verified",
+    "notes": "Scope is two public classification tasks and one model version. The author explicitly cautions against treating the narrow study as a general safety verdict."
+  },
+  {
+    "id": "E14",
+    "kind": "independent_bias_study",
+    "claim": "A 2026 preprint evaluates Jev 1.13.0 using 41,500 responses and reports sensitivity to irrelevant numerical information and answer order; one adapted conjunction task showed a 54% rule-violation rate.",
+    "source_url": "https://arxiv.org/abs/2610.19619",
+    "locator": "Abstract; §3 evaluation setup; §4 findings",
+    "status": "verified",
+    "notes": "Preprint findings are task- and formulation-specific; they do not establish a universal bias rate."
+  },
+  {
+    "id": "E15",
+    "kind": "vendor_limitations",
+    "claim": "TypeSafe's Model Jaggedness page lists literal reading, math/counting, date comparison, indirection, irrelevant context, adversarial content, contradictory instructions and Choice option order among known failure modes.",
+    "source_url": "https://docs.typesafe.ai/model-jaggedness",
+    "locator": "Failure modes in detail",
+    "status": "verified",
+    "notes": "Vendor-published limitations; follow the documented advice to keep arithmetic and exact comparisons in code."
+  },
+  {
+    "id": "E16",
+    "kind": "data_handling",
+    "claim": "TypeSafe states that Jev is not trained on customer requests or responses; the hosted API still receives request state, so non-training should not be confused with data staying inside the caller's infrastructure.",
+    "source_url": "https://docs.typesafe.ai/models",
+    "locator": "Data handling",
+    "status": "verified",
+    "notes": "Users should review the applicable DPA, retention, region and enterprise ZDR terms before sending sensitive data."
+  },
+  {
+    "id": "E17",
+    "kind": "illustrative_derivation",
+    "claim": "The three-class probability vector, loss matrix, expected-risk values and review-cost slider are invented teaching values used to demonstrate Bayes-risk decision making.",
+    "source_url": "https://statproofbook.github.io/P/bc-thr",
+    "locator": "Pedagogical extension of the general expected-loss rule; values are not a Jev benchmark",
+    "status": "illustrative",
+    "notes": "The article's Python helper computes these values deterministically; no model call or empirical model result is involved."
+  },
+  {
+    "id": "E18",
+    "kind": "illustrative_visualization",
+    "claim": "Reliability curves, risk-coverage curves and SVG pipeline diagrams are original instructional schematics, not measured Jev results or reproductions of third-party figures.",
+    "source_url": "https://proceedings.mlr.press/v70/guo17a.html",
+    "locator": "Original diagrams authored for this explainer; calibration and selective-prediction concepts grounded in cited literature",
+    "status": "illustrative",
+    "notes": "All plotted curves and displayed toy probabilities are explicitly labelled as illustrative."
+  },
+  {
+    "id": "E19",
+    "kind": "architecture_recommendation",
+    "claim": "The hybrid Agent architecture separating state construction, typed model judgment, deterministic policy, tool permissions and human review is an engineering recommendation, not a measured Jev feature.",
+    "source_url": "https://docs.typesafe.ai/concepts/system-one",
+    "locator": "Fast judgments inside a larger workflow; caller-defined code combines model answers",
+    "status": "illustrative",
+    "notes": "The recommendation preserves policy enforcement and side-effect authorization outside the model."
+  },
+  {
+    "id": "E20",
+    "kind": "survey_and_scope",
+    "claim": "A 2026 survey on typed decision models organizes prior work across routing, zero-shot classification, safety guards and label-probability readout; the authors' version is marked accepted to ACM SIGKDD Explorations and discloses author involvement in AnyJev.",
+    "source_url": "https://evan-py-chen.github.io/jev-survey/jev-survey.pdf",
+    "locator": "Abstract; §1 scope and sources; author disclosure",
+    "status": "verified",
+    "notes": "Use as a research map, not as a neutral consensus or independent benchmark; the authors disclose development work on AnyJev and CARGO."
+  },
+  {
+    "id": "E21",
+    "kind": "risk_control",
+    "claim": "A 2026 study across six moderation, safety and reranking datasets reports that naive threshold selection exceeded the target false-omission risk in 42.0% of defined test-risk settings, compared with 7.8% for Learn Then Test (LTT).",
+    "source_url": "https://arxiv.org/abs/2610.19811",
+    "locator": "Abstract; §4 results and risk-budget tables",
+    "status": "verified",
+    "notes": "Preprint. Denominators include only settings with defined test risk; LTT can fail to certify a threshold and relies on fixed scorer/threshold candidates plus an i.i.d. calibration/deployment assumption."
+  },
+  {
+    "id": "E22",
+    "kind": "selective_reasoning",
+    "claim": "A 2026 study on 768 ProofWriter, LogiQA 2.0 and ARC-Challenge questions reports 70.96% direct-read accuracy and 84.38% with selective reasoning; against 1,024-token terminal reading it reports 46.30% lower pipeline time with a -1.17 percentage-point accuracy difference.",
+    "source_url": "https://arxiv.org/abs/2610.19644",
+    "locator": "Abstract; §4 results",
+    "status": "verified",
+    "notes": "Preprint about a research architecture that adds benefit-gated, interruptible reasoning; not a built-in Jev feature."
+  },
+  {
+    "id": "E23",
+    "kind": "tabular_robustness",
+    "claim": "A 2026 study of four typed decision models and three LLMs on tabular tasks uses 21 content-preserving rewrites and reports sensitivity to table organization; at least one third of row decisions change under some tested rewrite.",
+    "source_url": "https://arxiv.org/abs/2610.19536",
+    "locator": "Abstract; rewrite robustness results",
+    "status": "verified",
+    "notes": "Preprint; task and rewrite-specific findings. The result motivates testing serialization, column order, row layout and option descriptions."
+  },
+  {
+    "id": "E24",
+    "kind": "score_confidence_formula",
+    "claim": "TypeSafe's Score confidence formula uses probability-weighted distance from the most likely ordinal level, normalized by the mean absolute deviation under a uniform distribution and floored at zero.",
+    "source_url": "https://docs.typesafe.ai/confidence",
+    "locator": "How confidence is calculated > Score",
+    "status": "verified",
+    "notes": "This is a concentration/spread summary, not the probability that the numeric score is correct."
+  }
+]
