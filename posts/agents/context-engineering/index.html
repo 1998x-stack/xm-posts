@@ -63,7 +63,25 @@ code{font-size:.9em;background:#edf3f0;padding:2px 5px;border-radius:4px}pre{mar
 <h2>01 · 一个反直觉的问题：为什么给 Agent 更多信息，反而可能让它更差？</h2>
 <p class="lead">设想你正在让一个代码 Agent 修复一个线上 Bug。它已经读取了 80 个文件、执行了 14 次命令、收到 30 多段工具输出，并且经历了多轮方案修改。此时你再把整个仓库、所有日志和完整聊天记录都塞进模型，真的会让它更聪明吗？</p>
 <p>不一定。模型可能忘记最初的验收条件，混淆已经废弃的方案与当前方案，在冗长日志中漏掉关键错误，或者把旧版本文档当成最新事实。问题并不一定是模型“没有读到”，而可能是<strong>重要信息被低价值信息淹没，或者信息之间缺少明确的关系与可信度标记</strong>。</p>
-<figure class="figure"><div class="figscroll"><img src="assets/01-context-lifecycle.svg" alt="Context Engineering 六阶段生命周期：定义目标、检索、处理、组装、执行和持久化，形成反馈闭环"></div><figcaption><strong>图 1｜上下文不是一段静态 Prompt，而是一个持续更新的系统。</strong> 每次模型调用前都要决定哪些信息进入工作上下文；执行产生的新状态又会成为下一轮的候选信息。</figcaption></figure>
+<figure class="figure"><div class="figscroll"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 430" role="img" aria-labelledby="ce-lifecycle-intro-title ce-lifecycle-intro-desc">
+<title id="ce-lifecycle-intro-title">Context Engineering 六阶段生命周期</title><desc id="ce-lifecycle-intro-desc">定义目标、检索信息、处理信息、组装上下文、执行动作、持久化状态，形成反馈循环。</desc>
+<rect width="1080" height="430" rx="24" fill="#f7fbf8"/>
+<text x="540" y="48" text-anchor="middle" font-size="24" font-weight="700" fill="#24484c" font-family="system-ui,sans-serif">Context is a lifecycle, not a prompt string</text>
+<g font-family="system-ui,'Microsoft YaHei',sans-serif" text-anchor="middle">
+<rect x="48" y="115" width="285" height="94" rx="15" fill="#e7f3ef" stroke="#7fb5a9" stroke-width="2"/><text x="190" y="151" font-size="23" font-weight="700" fill="#176f67">1 · DEFINE</text><text x="190" y="181" font-size="16" fill="#385e5d">目标 · 约束 · 验收标准</text>
+<rect x="397" y="115" width="285" height="94" rx="15" fill="#eaf2f8" stroke="#8bb0c8" stroke-width="2"/><text x="539" y="151" font-size="23" font-weight="700" fill="#3e7092">2 · RETRIEVE</text><text x="539" y="181" font-size="16" fill="#405d70">RAG · JIT · 工具查询</text>
+<rect x="746" y="115" width="285" height="94" rx="15" fill="#fff0e7" stroke="#d7a17d" stroke-width="2"/><text x="888" y="151" font-size="23" font-weight="700" fill="#a75e3d">3 · PROCESS</text><text x="888" y="181" font-size="16" fill="#775744">过滤 · 排序 · 压缩</text>
+<rect x="746" y="268" width="285" height="94" rx="15" fill="#f0edfa" stroke="#a99bd0" stroke-width="2"/><text x="888" y="304" font-size="23" font-weight="700" fill="#6a5a9d">4 · ASSEMBLE</text><text x="888" y="334" font-size="16" fill="#5d5478">预算 · 结构 · 指令边界</text>
+<rect x="397" y="268" width="285" height="94" rx="15" fill="#eaf2f8" stroke="#8bb0c8" stroke-width="2"/><text x="539" y="304" font-size="23" font-weight="700" fill="#3e7092">5 · EXECUTE</text><text x="539" y="334" font-size="16" fill="#405d70">模型 · 工具 · 观察</text>
+<rect x="48" y="268" width="285" height="94" rx="15" fill="#e7f3ef" stroke="#7fb5a9" stroke-width="2"/><text x="190" y="304" font-size="23" font-weight="700" fill="#176f67">6 · PERSIST</text><text x="190" y="334" font-size="16" fill="#385e5d">状态 · 日志 · 记忆</text>
+</g>
+<g fill="none" stroke="#648e88" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+<path d="M333 162 H397 M682 162 H746 M888 209 V268 M746 315 H682 M397 315 H333"/>
+<path d="M190 268 V239 H20 V162 H48" stroke-dasharray="8 7"/>
+</g>
+<g fill="#648e88"><path d="M388 154 L398 162 L388 170Z"/><path d="M737 154 L747 162 L737 170Z"/><path d="M880 258 L888 269 L896 258Z"/><path d="M692 307 L682 315 L692 323Z"/><path d="M343 307 L333 315 L343 323Z"/><path d="M40 154 L50 162 L40 170Z"/></g>
+<text x="540" y="405" text-anchor="middle" font-size="14" fill="#6a8181" font-family="system-ui,sans-serif">每轮推理都重新组装工作上下文；新观察进入状态，再影响下一轮检索</text>
+</svg></div><figcaption><strong>图 1｜上下文不是一段静态 Prompt，而是一个持续更新的系统。</strong> 每次模型调用前都要决定哪些信息进入工作上下文；执行产生的新状态又会成为下一轮的候选信息。</figcaption></figure>
 <figure class="figure"><div class="figscroll"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 250" role="img" aria-labelledby="ce-inline-title ce-inline-desc"><title id="ce-inline-title">外部知识库与模型工作上下文的区别</title><desc id="ce-inline-desc">文件、数据库和历史日志留在外部知识层，选择器按任务抽取少量相关证据进入有限的模型上下文窗口。</desc><rect width="920" height="250" rx="18" fill="#f7fbf8"/><g font-family="system-ui,'Microsoft YaHei',sans-serif"><rect x="35" y="65" width="225" height="120" rx="13" fill="#eaf2f8" stroke="#8bb3ca" stroke-width="2"/><text x="147" y="100" text-anchor="middle" font-size="18" font-weight="700" fill="#3e7092">外部知识空间</text><text x="147" y="132" text-anchor="middle" font-size="14" fill="#536f7d">文件 · 数据库 · 日志</text><text x="147" y="156" text-anchor="middle" font-size="14" fill="#536f7d">知识库 · 记忆 · 索引</text><rect x="342" y="82" width="220" height="86" rx="13" fill="#fff0e7" stroke="#d8a27d" stroke-width="2"/><text x="452" y="117" text-anchor="middle" font-size="18" font-weight="700" fill="#a85e3d">Context Selector</text><text x="452" y="143" text-anchor="middle" font-size="13" fill="#765d4d">检索 · 排序 · 预算</text><rect x="650" y="65" width="235" height="120" rx="13" fill="#e7f3ef" stroke="#83b5a8" stroke-width="2"/><text x="767" y="100" text-anchor="middle" font-size="18" font-weight="700" fill="#176f67">模型工作上下文</text><text x="767" y="132" text-anchor="middle" font-size="14" fill="#486e68">当前目标 + 必要证据</text><text x="767" y="156" text-anchor="middle" font-size="14" fill="#486e68">有限 Token Budget</text></g><g fill="none" stroke="#648e88" stroke-width="3" stroke-linecap="round"><path d="M260 125 H342 M562 125 H650"/></g><g fill="#648e88"><path d="M332 117 L343 125 L332 133Z"/><path d="M640 117 L651 125 L640 133Z"/></g><text x="460" y="220" text-anchor="middle" font-size="13" fill="#6a8181" font-family="system-ui,sans-serif">存储可以完整，工作集必须经过选择</text></svg></div><figcaption><strong>图 2｜外部存储与工作上下文的分离。</strong> 文件系统和数据库负责保存完整信息；上下文选择器负责把当前任务所需的少量信息装入模型窗口。</figcaption></figure>
 <div class="callout"><strong>核心问题：</strong>在有限的上下文窗口、延迟和成本预算下，怎样让模型在当前这一步获得足够、相关、可信、不过时的信息，同时避免被历史噪声和不必要的细节干扰？</div>
 <p><a href="https://www.anthropic.com/research/effective-context-engineering-for-ai-agents" target="_blank" rel="noopener noreferrer">Anthropic 在 2025 年的 Engineering 文章</a>中把上下文视为有限的注意力资源，并讨论了随着输入变长，模型在信息召回与长程推理方面可能出现的性能退化。这类现象常被称为 <em>context rot</em>。需要注意，它不是一个所有模型、所有任务都遵循同一曲线的定律：不同模型、位置、任务和检索方式会有不同表现；更准确的理解是，窗口容量增大并不自动保证有效利用率同步增长。</p>
@@ -83,7 +101,26 @@ code{font-size:.9em;background:#edf3f0;padding:2px 5px;border-radius:4px}pre{mar
 <tr><td><strong>Harness Engineering</strong></td><td>Agent 在什么环境中运行、观察和完成工作？</td><td>工具、沙箱、文件系统、执行计划、评测、权限</td><td>提供运行时与治理结构；上下文工程是其中的关键组成</td></tr>
 </tbody></table></div>
 <p>一个容易记住的关系是：Prompt 是上下文中的一部分；RAG 是上下文的一个来源；Memory 是可跨时间复用的状态；Harness 则提供工具和执行环境，让 Agent 能够读取、修改并验证外部世界。</p>
-<figure class="figure"><div class="figscroll"><img src="assets/02-context-budget.svg" alt="上下文预算分配图：系统约束、工具定义、当前目标、检索证据、近期状态、历史摘要和输出预留共同占据窗口"></div><figcaption><strong>图 2｜Context Window 是工作台，不是知识仓库。</strong> 外部文件、数据库和索引可以保存大量信息，但每次推理只应把当前所需的高价值片段装入工作台。</figcaption></figure>
+<figure class="figure"><div class="figscroll"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 470" role="img" aria-labelledby="ce-budget-title ce-budget-desc">
+<title id="ce-budget-title">Context Window 预算分配</title><desc id="ce-budget-desc">上下文窗口由系统规则、工具定义、当前目标、检索证据、近期状态、历史摘要、输出预留和安全余量构成。</desc>
+<rect width="960" height="470" rx="22" fill="#f8fbf9"/>
+<text x="480" y="48" text-anchor="middle" font-size="24" font-weight="700" fill="#24484c" font-family="system-ui,sans-serif">A context window is a constrained working set</text>
+<text x="70" y="102" font-size="15" fill="#60797a" font-family="system-ui,sans-serif">可用模型上下文预算（示意）</text>
+<rect x="70" y="125" width="820" height="66" rx="10" fill="#e8eeea"/>
+<g>
+<rect x="70" y="125" width="112" height="66" rx="8" fill="#1b8077"/><rect x="182" y="125" width="118" height="66" fill="#4b91a0"/><rect x="300" y="125" width="104" height="66" fill="#d58a5e"/><rect x="404" y="125" width="190" height="66" fill="#7b6eaf"/><rect x="594" y="125" width="108" height="66" fill="#6b9b8c"/><rect x="702" y="125" width="82" height="66" fill="#b3c3bc"/><rect x="784" y="125" width="106" height="66" rx="8" fill="#d9a16d"/>
+</g>
+<g text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" font-weight="700" fill="#fff">
+<text x="126" y="164">System</text><text x="241" y="164">Tools</text><text x="352" y="164">Goal</text><text x="499" y="164">Retrieval</text><text x="648" y="164">Recent</text><text x="743" y="164">Notes</text><text x="837" y="164">Output</text>
+</g>
+<text x="70" y="230" font-size="14" fill="#5d7777" font-family="system-ui,sans-serif">预算设计要点</text>
+<g font-family="system-ui,'Microsoft YaHei',sans-serif">
+<rect x="70" y="253" width="390" height="72" rx="12" fill="#e7f3ef" stroke="#8cb9ac"/><text x="92" y="282" font-size="18" font-weight="700" fill="#246d65">高优先级 · 稳定核心</text><text x="92" y="306" font-size="14" fill="#476b68">身份、权限、目标、不可丢失约束</text>
+<rect x="500" y="253" width="390" height="72" rx="12" fill="#eaf2f8" stroke="#9ab9cd"/><text x="522" y="282" font-size="18" font-weight="700" fill="#3e7092">按需加载 · 动态证据</text><text x="522" y="306" font-size="14" fill="#536d7b">当前相关文档、日志、数据与工具结果</text>
+<rect x="70" y="348" width="390" height="72" rx="12" fill="#fff0e7" stroke="#d8a27d"/><text x="92" y="377" font-size="18" font-weight="700" fill="#a85e3d">谨慎保留 · 历史状态</text><text x="92" y="401" font-size="14" fill="#775d4d">决策摘要、未完成事项、近期交互</text>
+<rect x="500" y="348" width="390" height="72" rx="12" fill="#f0edfa" stroke="#ada1ce"/><text x="522" y="377" font-size="18" font-weight="700" fill="#6b5b9b">必须预留 · 输出与缓冲</text><text x="522" y="401" font-size="14" fill="#615b78">答案、下一轮工具调用与不确定开销</text>
+</g>
+</svg></div><figcaption><strong>图 2｜Context Window 是工作台，不是知识仓库。</strong> 外部文件、数据库和索引可以保存大量信息，但每次推理只应把当前所需的高价值片段装入工作台。</figcaption></figure>
 <p>Anthropic 将 Context Engineering 描述为对推理时全部信息的持续策划；OpenAI 的 Agents SDK Cookbook 则从 Session 层面给出了历史裁剪与摘要压缩的具体方法。两者关注点不同，但都指向同一件事：模型每一步获得的信息状态，需要被主动管理，而不是无限累积。</p>
 </section>
 
@@ -151,7 +188,25 @@ code{font-size:.9em;background:#edf3f0;padding:2px 5px;border-radius:4px}pre{mar
 <section id="lifecycle">
 <h2>05 · 六阶段上下文生命周期：把抽象概念变成工程流程</h2>
 <p>下面这套六阶段流程是本文的综合模型。它强调每个阶段都有输入、输出和质量检查点，因此可以被记录、评测和迭代。</p>
-<figure class="figure"><div class="figscroll"><img src="assets/01-context-lifecycle.svg" alt="Define、Retrieve、Process、Assemble、Execute、Persist 六阶段循环"></div><figcaption><strong>图 3｜六阶段生命周期。</strong> 注意 Persist 不只是“保存对话”，而是将不同寿命的信息写入合适的外部层；下一轮再根据任务需要选择性读取。</figcaption></figure>
+<figure class="figure"><div class="figscroll"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 430" role="img" aria-labelledby="ce-lifecycle-deep-title ce-lifecycle-deep-desc">
+<title id="ce-lifecycle-deep-title">Context Engineering 六阶段生命周期</title><desc id="ce-lifecycle-deep-desc">定义目标、检索信息、处理信息、组装上下文、执行动作、持久化状态，形成反馈循环。</desc>
+<rect width="1080" height="430" rx="24" fill="#f7fbf8"/>
+<text x="540" y="48" text-anchor="middle" font-size="24" font-weight="700" fill="#24484c" font-family="system-ui,sans-serif">Context is a lifecycle, not a prompt string</text>
+<g font-family="system-ui,'Microsoft YaHei',sans-serif" text-anchor="middle">
+<rect x="48" y="115" width="285" height="94" rx="15" fill="#e7f3ef" stroke="#7fb5a9" stroke-width="2"/><text x="190" y="151" font-size="23" font-weight="700" fill="#176f67">1 · DEFINE</text><text x="190" y="181" font-size="16" fill="#385e5d">目标 · 约束 · 验收标准</text>
+<rect x="397" y="115" width="285" height="94" rx="15" fill="#eaf2f8" stroke="#8bb0c8" stroke-width="2"/><text x="539" y="151" font-size="23" font-weight="700" fill="#3e7092">2 · RETRIEVE</text><text x="539" y="181" font-size="16" fill="#405d70">RAG · JIT · 工具查询</text>
+<rect x="746" y="115" width="285" height="94" rx="15" fill="#fff0e7" stroke="#d7a17d" stroke-width="2"/><text x="888" y="151" font-size="23" font-weight="700" fill="#a75e3d">3 · PROCESS</text><text x="888" y="181" font-size="16" fill="#775744">过滤 · 排序 · 压缩</text>
+<rect x="746" y="268" width="285" height="94" rx="15" fill="#f0edfa" stroke="#a99bd0" stroke-width="2"/><text x="888" y="304" font-size="23" font-weight="700" fill="#6a5a9d">4 · ASSEMBLE</text><text x="888" y="334" font-size="16" fill="#5d5478">预算 · 结构 · 指令边界</text>
+<rect x="397" y="268" width="285" height="94" rx="15" fill="#eaf2f8" stroke="#8bb0c8" stroke-width="2"/><text x="539" y="304" font-size="23" font-weight="700" fill="#3e7092">5 · EXECUTE</text><text x="539" y="334" font-size="16" fill="#405d70">模型 · 工具 · 观察</text>
+<rect x="48" y="268" width="285" height="94" rx="15" fill="#e7f3ef" stroke="#7fb5a9" stroke-width="2"/><text x="190" y="304" font-size="23" font-weight="700" fill="#176f67">6 · PERSIST</text><text x="190" y="334" font-size="16" fill="#385e5d">状态 · 日志 · 记忆</text>
+</g>
+<g fill="none" stroke="#648e88" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+<path d="M333 162 H397 M682 162 H746 M888 209 V268 M746 315 H682 M397 315 H333"/>
+<path d="M190 268 V239 H20 V162 H48" stroke-dasharray="8 7"/>
+</g>
+<g fill="#648e88"><path d="M388 154 L398 162 L388 170Z"/><path d="M737 154 L747 162 L737 170Z"/><path d="M880 258 L888 269 L896 258Z"/><path d="M692 307 L682 315 L692 323Z"/><path d="M343 307 L333 315 L343 323Z"/><path d="M40 154 L50 162 L40 170Z"/></g>
+<text x="540" y="405" text-anchor="middle" font-size="14" fill="#6a8181" font-family="system-ui,sans-serif">每轮推理都重新组装工作上下文；新观察进入状态，再影响下一轮检索</text>
+</svg></div><figcaption><strong>图 3｜六阶段生命周期。</strong> 注意 Persist 不只是“保存对话”，而是将不同寿命的信息写入合适的外部层；下一轮再根据任务需要选择性读取。</figcaption></figure>
 <div class="table-wrap"><table>
 <thead><tr><th>阶段</th><th>关键问题</th><th>典型操作</th><th>输出</th><th>质量检查</th></tr></thead>
 <tbody>
@@ -171,7 +226,32 @@ code{font-size:.9em;background:#edf3f0;padding:2px 5px;border-radius:4px}pre{mar
 <p>传统 RAG 常在模型推理前完成检索：把用户问题转成向量，召回 Top-K 文档，再把片段放入 Prompt。优点是路径短、容易控制延迟，也适合知识范围明确、查询模式稳定的任务。缺点是 Top-K 不一定等于当前真正需要的信息；预取过多会增加噪声，索引也可能落后于真实数据。</p>
 <h3>6.2 JIT：先拿到地图，需要时再读取细节</h3>
 <p><a href="https://www.anthropic.com/research/effective-context-engineering-for-ai-agents" target="_blank" rel="noopener noreferrer">Anthropic 的 Context Engineering 文章</a>强调 Just-in-Time Context：Agent 不必预先加载全部数据，可以先持有轻量级标识符，例如文件路径、查询、URL 或索引；当任务推进到某一步，再通过工具读取最相关的内容。这样既能减少初始 Token 消耗，也能使用文件名、目录结构、时间戳和 Schema 等元数据辅助判断。</p>
-<figure class="figure"><div class="figscroll"><img src="assets/03-jit-retrieval.svg" alt="预加载、Just-in-Time 和混合检索策略的对比示意图"></div><figcaption><strong>图 4｜三种检索策略。</strong> 预加载适合稳定且高概率会用到的信息；JIT 适合大规模、动态且可探索的数据；混合策略先放入稳定规则和索引，再按需取回具体证据。</figcaption></figure>
+<figure class="figure"><div class="figscroll"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1020 470" role="img" aria-labelledby="ce-jit-title ce-jit-desc">
+<title id="ce-jit-title">预加载、Just-in-Time 和混合上下文检索策略</title><desc id="ce-jit-desc">比较三种策略：预加载大量文档、运行时按需读取、以及固定核心加动态检索的混合策略。</desc>
+<rect width="1020" height="470" rx="22" fill="#f8fbf9"/>
+<text x="510" y="48" text-anchor="middle" font-size="24" font-weight="700" fill="#24484c" font-family="system-ui,sans-serif">Where should context come from?</text>
+<g font-family="system-ui,'Microsoft YaHei',sans-serif">
+<rect x="35" y="90" width="295" height="320" rx="16" fill="#fff0e7" stroke="#d8a27d" stroke-width="2"/>
+<text x="182" y="128" text-anchor="middle" font-size="21" font-weight="700" fill="#a85e3d">PRELOAD</text><text x="182" y="153" text-anchor="middle" font-size="14" fill="#765d4d">预先召回 / 全量加载</text>
+<g fill="#e9c1a7" stroke="#c58d69"><rect x="75" y="185" width="215" height="36" rx="7"/><rect x="75" y="231" width="215" height="36" rx="7"/><rect x="75" y="277" width="215" height="36" rx="7"/><rect x="75" y="323" width="215" height="36" rx="7"/></g>
+<g text-anchor="middle" font-size="14" fill="#704c3b"><text x="182" y="209">Top-K 片段</text><text x="182" y="255">历史对话</text><text x="182" y="301">文档摘要</text><text x="182" y="347">其他候选资料</text></g>
+<text x="182" y="390" text-anchor="middle" font-size="12" fill="#805f4d">快启动 · 可能引入噪声</text>
+<rect x="362" y="90" width="295" height="320" rx="16" fill="#eaf2f8" stroke="#8bb2ca" stroke-width="2"/>
+<text x="509" y="128" text-anchor="middle" font-size="21" font-weight="700" fill="#3e7092">JUST-IN-TIME</text><text x="509" y="153" text-anchor="middle" font-size="14" fill="#526f7e">按需发现 / 动态读取</text>
+<rect x="411" y="185" width="196" height="48" rx="8" fill="#cbdfea" stroke="#88afc5"/><text x="509" y="214" text-anchor="middle" font-size="15" fill="#315d78">轻量索引 / 文件路径</text>
+<path d="M509 234 V270" stroke="#5e91ae" stroke-width="3"/><path d="M502 263 L509 273 L516 263" fill="none" stroke="#5e91ae" stroke-width="3"/>
+<rect x="411" y="278" width="196" height="54" rx="8" fill="#d9e9f2" stroke="#88afc5"/><text x="509" y="301" text-anchor="middle" font-size="15" fill="#315d78">当前需要的证据</text><text x="509" y="321" text-anchor="middle" font-size="12" fill="#526f7e">通过工具读取</text>
+<text x="509" y="390" text-anchor="middle" font-size="12" fill="#526f7e">节省窗口 · 探索有延迟</text>
+<rect x="689" y="90" width="295" height="320" rx="16" fill="#e7f3ef" stroke="#83b6a9" stroke-width="2"/>
+<text x="836" y="128" text-anchor="middle" font-size="21" font-weight="700" fill="#176f67">HYBRID</text><text x="836" y="153" text-anchor="middle" font-size="14" fill="#486e68">固定核心 + 动态证据</text>
+<rect x="738" y="183" width="196" height="48" rx="8" fill="#c7e4d9" stroke="#7fb5a9"/><text x="836" y="212" text-anchor="middle" font-size="15" fill="#24675f">目标 / 规则 / 工具</text>
+<path d="M836 232 V260" stroke="#438e83" stroke-width="3"/><path d="M829 253 L836 263 L843 253" fill="none" stroke="#438e83" stroke-width="3"/>
+<rect x="738" y="268" width="196" height="48" rx="8" fill="#d9eee6" stroke="#7fb5a9"/><text x="836" y="297" text-anchor="middle" font-size="15" fill="#24675f">索引 / 状态摘要</text>
+<path d="M836 317 V344" stroke="#438e83" stroke-width="3"/><path d="M829 337 L836 347 L843 337" fill="none" stroke="#438e83" stroke-width="3"/>
+<rect x="738" y="350" width="196" height="35" rx="8" fill="#b8d9cb" stroke="#7fb5a9"/><text x="836" y="373" text-anchor="middle" font-size="14" fill="#24675f">本轮证据按需加载</text>
+<text x="836" y="399" text-anchor="middle" font-size="12" fill="#486e68">平衡速度、规模与相关性</text>
+</g>
+</svg></div><figcaption><strong>图 4｜三种检索策略。</strong> 预加载适合稳定且高概率会用到的信息；JIT 适合大规模、动态且可探索的数据；混合策略先放入稳定规则和索引，再按需取回具体证据。</figcaption></figure>
 <h3>6.3 混合策略：固定核心 + 按需发现</h3>
 <p>对复杂 Agent，通常更合理的做法不是“全部预加载”或“全部现场搜索”，而是：</p>
 <ul>
@@ -246,7 +326,19 @@ code{font-size:.9em;background:#edf3f0;padding:2px 5px;border-radius:4px}pre{mar
 <section id="long-horizon">
 <h2>09 · 长任务：Trim、Summary、Compaction 与 Sub-agents</h2>
 <p>当 Agent 连续工作几十分钟、数小时，甚至跨越多个上下文窗口时，历史消息会不断增长。此时必须决定哪些内容继续保留、哪些内容可以压缩、哪些任务应该隔离到独立上下文。</p>
-<figure class="figure"><div class="figscroll"><img src="assets/05-context-management.svg" alt="Trim、Summary、Compaction、Memory 和 Sub-agent context isolation 五种策略比较"></div><figcaption><strong>图 5｜长时任务的五类上下文管理手段。</strong> 它们不是互相替代的按钮：裁剪、压缩、持久化记忆和上下文隔离可以组合使用，但解决的问题不同。</figcaption></figure>
+<figure class="figure"><div class="figscroll"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 470" role="img" aria-labelledby="ce-management-title ce-management-desc">
+<title id="ce-management-title">长时任务的五类上下文管理策略</title><desc id="ce-management-desc">比较 Trimming、Summarization、Compaction、Persistent Memory 和 Sub-agent Isolation 各自解决的问题。</desc>
+<rect width="1040" height="470" rx="22" fill="#f8fbf9"/>
+<text x="520" y="46" text-anchor="middle" font-size="24" font-weight="700" fill="#24484c" font-family="system-ui,sans-serif">Five levers for long-horizon context</text>
+<g font-family="system-ui,'Microsoft YaHei',sans-serif">
+<g transform="translate(36 92)"><rect width="178" height="278" rx="13" fill="#fff0e7" stroke="#d8a27d" stroke-width="2"/><text x="89" y="37" text-anchor="middle" font-size="18" font-weight="700" fill="#a85e3d">TRIMMING</text><rect x="24" y="66" width="130" height="23" rx="5" fill="#e7c2aa"/><rect x="24" y="96" width="130" height="23" rx="5" fill="#e7c2aa"/><rect x="24" y="126" width="130" height="23" rx="5" fill="#e7c2aa"/><rect x="24" y="156" width="130" height="23" rx="5" fill="#bd8766"/><rect x="24" y="186" width="130" height="23" rx="5" fill="#bd8766"/><path d="M24 224 H154" stroke="#b06b48" stroke-width="2" stroke-dasharray="5 4"/><text x="89" y="251" text-anchor="middle" font-size="12" fill="#765d4d">删除旧轮次</text></g>
+<g transform="translate(239 92)"><rect width="178" height="278" rx="13" fill="#eaf2f8" stroke="#8bb3ca" stroke-width="2"/><text x="89" y="37" text-anchor="middle" font-size="18" font-weight="700" fill="#3e7092">SUMMARY</text><rect x="25" y="72" width="128" height="31" rx="6" fill="#c8dce8"/><rect x="25" y="114" width="128" height="31" rx="6" fill="#c8dce8"/><rect x="25" y="156" width="128" height="31" rx="6" fill="#c8dce8"/><text x="89" y="92" text-anchor="middle" font-size="11" fill="#315d78">目标</text><text x="89" y="134" text-anchor="middle" font-size="11" fill="#315d78">决策</text><text x="89" y="176" text-anchor="middle" font-size="11" fill="#315d78">待办</text><path d="M89 200 V222" stroke="#5c91ae" stroke-width="2"/><path d="M82 215 L89 224 L96 215" fill="none" stroke="#5c91ae" stroke-width="2"/><text x="89" y="251" text-anchor="middle" font-size="12" fill="#526f7e">压缩旧历史</text></g>
+<g transform="translate(442 92)"><rect width="178" height="278" rx="13" fill="#f0edfa" stroke="#aa9dce" stroke-width="2"/><text x="89" y="37" text-anchor="middle" font-size="18" font-weight="700" fill="#6b5b9d">COMPACTION</text><rect x="23" y="73" width="132" height="45" rx="7" fill="#d7d0ed"/><text x="89" y="101" text-anchor="middle" font-size="12" fill="#5c5087">旧窗口</text><path d="M89 121 V153" stroke="#8072ad" stroke-width="2"/><path d="M82 146 L89 155 L96 146" fill="none" stroke="#8072ad" stroke-width="2"/><rect x="23" y="161" width="132" height="35" rx="7" fill="#bdb2df"/><text x="89" y="183" text-anchor="middle" font-size="12" fill="#4e427c">紧凑状态</text><path d="M89 198 V222" stroke="#8072ad" stroke-width="2"/><text x="89" y="251" text-anchor="middle" font-size="12" fill="#615b7b">跨窗口续跑</text></g>
+<g transform="translate(645 92)"><rect width="178" height="278" rx="13" fill="#e7f3ef" stroke="#83b5a8" stroke-width="2"/><text x="89" y="37" text-anchor="middle" font-size="18" font-weight="700" fill="#176f67">MEMORY</text><rect x="23" y="73" width="132" height="32" rx="7" fill="#c7e4d9"/><rect x="23" y="115" width="132" height="32" rx="7" fill="#b7d9cc"/><rect x="23" y="157" width="132" height="32" rx="7" fill="#a6cdbd"/><text x="89" y="94" text-anchor="middle" font-size="12" fill="#24675f">事件</text><text x="89" y="136" text-anchor="middle" font-size="12" fill="#24675f">笔记</text><text x="89" y="178" text-anchor="middle" font-size="12" fill="#24675f">知识索引</text><text x="89" y="251" text-anchor="middle" font-size="12" fill="#486e68">跨会话复用</text></g>
+<g transform="translate(848 92)"><rect width="156" height="278" rx="13" fill="#edf1f0" stroke="#a7b9b4" stroke-width="2"/><text x="78" y="37" text-anchor="middle" font-size="17" font-weight="700" fill="#526c69">SUB-AGENT</text><rect x="18" y="74" width="120" height="48" rx="7" fill="#d8e5e0"/><rect x="18" y="135" width="120" height="48" rx="7" fill="#c7dcd5"/><rect x="18" y="196" width="120" height="35" rx="7" fill="#b6d1c7"/><text x="78" y="103" text-anchor="middle" font-size="12" fill="#355d57">独立上下文 A</text><text x="78" y="164" text-anchor="middle" font-size="12" fill="#355d57">独立上下文 B</text><text x="78" y="218" text-anchor="middle" font-size="12" fill="#355d57">摘要交接</text><text x="78" y="251" text-anchor="middle" font-size="12" fill="#526c69">任务隔离</text></g>
+</g>
+<text x="520" y="420" text-anchor="middle" font-size="14" fill="#6a8181" font-family="system-ui,sans-serif">可组合使用，但需要分别评估信息丢失、压缩失真、记忆陈旧与交接成本</text>
+</svg></div><figcaption><strong>图 5｜长时任务的五类上下文管理手段。</strong> 它们不是互相替代的按钮：裁剪、压缩、持久化记忆和上下文隔离可以组合使用，但解决的问题不同。</figcaption></figure>
 <div class="table-wrap"><table>
 <thead><tr><th>策略</th><th>做法</th><th>优点</th><th>主要风险</th><th>适用场景</th></tr></thead>
 <tbody>
@@ -281,7 +373,21 @@ stale_or_rejected: 已废弃方案与原因</code></pre>
 <section id="memory">
 <h2>10 · Agent Memory：跨会话知识如何形成？</h2>
 <p><a href="https://www.anthropic.com/research/components-of-agent-memory" target="_blank" rel="noopener noreferrer">Anthropic 在 2026 年 11 月发布的《The components of agent memory》</a>中给出了一个更细的层次结构：会话记录、记忆笔记、记忆表示（例如 Wiki）和预先注入到新会话的上下文。它还讨论了 Dreaming：Agent 在任务间隙回看日志、验证笔记、修正错误、合并重复信息，并把更稳定的知识整理成可导航的表示。</p>
-<figure class="figure"><div class="figscroll"><img src="assets/04-memory-hierarchy.svg" alt="Agent Memory 分层：会话日志、记忆笔记、知识表示和新会话注入层；Dreaming 负责回看、验证与整理"></div><figcaption><strong>图 6｜从经历到可复用知识。</strong> 底层保存可追溯记录，上层保存经过整理的结构；最顶层只放少量每次会话都值得加载的信息。</figcaption></figure>
+<figure class="figure"><div class="figscroll"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 500" role="img" aria-labelledby="ce-memory-title ce-memory-desc">
+<title id="ce-memory-title">Agent Memory 四层结构与 Dreaming 整理过程</title><desc id="ce-memory-desc">会话日志、记忆笔记、知识表示和注入上下文形成层次；Dreaming 从原始记录回顾、验证、纠错并更新上层记忆。</desc>
+<rect width="980" height="500" rx="22" fill="#f8fbf9"/>
+<text x="490" y="46" text-anchor="middle" font-size="24" font-weight="700" fill="#24484c" font-family="system-ui,sans-serif">From experience to reusable knowledge</text>
+<g font-family="system-ui,'Microsoft YaHei',sans-serif">
+<rect x="90" y="82" width="800" height="72" rx="13" fill="#eaf2f8" stroke="#8bb3ca" stroke-width="2"/><text x="120" y="112" font-size="19" font-weight="700" fill="#3e7092">04 · INJECTED CONTEXT</text><text x="120" y="136" font-size="14" fill="#536f7d">每轮会话预先加载的少量目标、约束与知识入口</text>
+<rect x="150" y="174" width="680" height="72" rx="13" fill="#f0edfa" stroke="#aa9dce" stroke-width="2"/><text x="180" y="204" font-size="19" font-weight="700" fill="#6b5b9d">03 · MEMORY REPRESENTATIONS</text><text x="180" y="228" font-size="14" fill="#615b7b">Wiki、主题索引、关系图与可导航知识结构</text>
+<rect x="210" y="266" width="560" height="72" rx="13" fill="#e7f3ef" stroke="#83b5a8" stroke-width="2"/><text x="240" y="296" font-size="19" font-weight="700" fill="#176f67">02 · MEMORY NOTES</text><text x="240" y="320" font-size="14" fill="#486e68">已提炼的事实、决策、规则、偏好与失败经验</text>
+<rect x="270" y="358" width="440" height="72" rx="13" fill="#fff0e7" stroke="#d8a27d" stroke-width="2"/><text x="300" y="388" font-size="19" font-weight="700" fill="#a85e3d">01 · TRANSCRIPTS / EVENT LOG</text><text x="300" y="412" font-size="14" fill="#765d4d">可追溯的用户消息、工具调用与观察结果</text>
+<path d="M490 358 V338 M490 266 V246 M490 174 V154" stroke="#688e87" stroke-width="3" stroke-dasharray="6 6"/><path d="M483 347 L490 357 L497 347 M483 255 L490 265 L497 255 M483 163 L490 173 L497 163" fill="none" stroke="#688e87" stroke-width="3"/>
+<rect x="28" y="180" width="104" height="172" rx="12" fill="#fff" stroke="#d8e3df"/><text x="80" y="218" text-anchor="middle" font-size="15" font-weight="700" fill="#a85e3d">DREAMING</text><text x="80" y="247" text-anchor="middle" font-size="12" fill="#60797a">回看</text><text x="80" y="269" text-anchor="middle" font-size="12" fill="#60797a">验证</text><text x="80" y="291" text-anchor="middle" font-size="12" fill="#60797a">纠错</text><text x="80" y="313" text-anchor="middle" font-size="12" fill="#60797a">整理</text>
+<path d="M132 267 H195" stroke="#c17a52" stroke-width="3" stroke-dasharray="5 5"/><path d="M185 260 L196 267 L185 274" fill="none" stroke="#c17a52" stroke-width="3"/>
+</g>
+<text x="490" y="472" text-anchor="middle" font-size="14" fill="#6a8181" font-family="system-ui,sans-serif">底层保留证据与历史，上层保留更精炼的可复用知识；注入层应保持最小</text>
+</svg></div><figcaption><strong>图 6｜从经历到可复用知识。</strong> 底层保存可追溯记录，上层保存经过整理的结构；最顶层只放少量每次会话都值得加载的信息。</figcaption></figure>
 <h3>10.1 四层记忆结构</h3>
 <ul>
 <li><strong>Transcript / Event Log：</strong>原始事件、用户消息、工具调用和观察结果。优点是保留事实来源，缺点是体积大、噪声多。</li>
