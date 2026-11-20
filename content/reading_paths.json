@@ -317,5 +317,14 @@
       "gmm",
       "gan"
     ]
+  },
+  {
+    "id": "path-35",
+    "title": "从向量表示到检索增强生成",
+    "posts": [
+      "embeddings",
+      "bert",
+      "rag"
+    ]
   }
 ]

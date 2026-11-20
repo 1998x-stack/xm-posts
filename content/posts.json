@@ -1991,5 +1991,34 @@
       "src": "assets/01-adversarial-loop.svg",
       "caption": "生成器制造样本，判别器比较真假并将反馈传回生成器"
     }
+  },
+  {
+    "slug": "rag",
+    "title": "Understanding RAG",
+    "subtitle": "从 DPR 检索到 RAG-Sequence 和 RAG-Token：两篇文档、两个词算明白",
+    "category": "retrieval-rag",
+    "topic": "rag",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 22,
+    "tags": [
+      "RAG",
+      "Retrieval-Augmented Generation",
+      "DPR",
+      "BART",
+      "RAG-Sequence",
+      "RAG-Token",
+      "Marginalization",
+      "Dense Retrieval",
+      "Knowledge-Intensive NLP"
+    ],
+    "summary": "解读 Lewis et al. NeurIPS 2020 RAG：DPR 最大内积检索、BART 条件生成、Sequence 与 Token 边际化公式、0.226/0.310 教学算例及交互滑块；说明固定文档索引的训练细节、实验边界和现代 RAG 的区别。",
+    "paper": "https://arxiv.org/abs/2005.11401",
+    "illustration": "rag",
+    "cover": {
+      "src": "assets/cover-mixture.svg",
+      "caption": "RAG-Sequence 整句共享文档，RAG-Token 逐词混合证据"
+    }
   }
 ]
