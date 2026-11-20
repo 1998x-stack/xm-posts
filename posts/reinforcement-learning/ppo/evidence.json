@@ -106,5 +106,14 @@
     "locator": "Independent diagram storyboard based on Sections 2–5",
     "status": "illustrative",
     "notes": "Intentionally not historical chart reproductions"
+  },
+  {
+    "id": "P13",
+    "claim": "In a fixed two-action, two-sample toy batch, clipped surrogate plateaus at 0.2 while KL(old||new) keeps increasing",
+    "kind": "toy-derivation",
+    "source_url": "https://arxiv.org/abs/1707.06347",
+    "locator": "Section 3 Eq. (7); this article's probability-versus-KL lab",
+    "status": "derived",
+    "notes": "Synthetic old p=(.5,.5), advantages=(+1,-1), epsilon=.2. PPO-Clip is not a hard KL trust region."
   }
 ]
