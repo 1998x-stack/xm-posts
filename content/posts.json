@@ -2081,5 +2081,35 @@
       "src": "assets/03-llm-rejection-pipeline.svg",
       "caption": "同一提示生成多个回答，经奖励模型排序后保留高分样本并用于 SFT"
     }
+  },
+  {
+    "slug": "sft",
+    "title": "Understanding SFT",
+    "subtitle": "从下一个 Token 预测到指令遵循：监督目标、数据构建、Loss Mask 与工程训练",
+    "category": "training",
+    "topic": "supervised-finetuning",
+    "status": "published",
+    "published": "2026-11-21",
+    "updated": "2026-11-21",
+    "reading_minutes": 30,
+    "tags": [
+      "SFT",
+      "Supervised Fine-Tuning",
+      "Instruction Tuning",
+      "LLM Post-training",
+      "Causal Language Modeling",
+      "Response-only Loss",
+      "Data Curation",
+      "Teacher Forcing",
+      "LoRA",
+      "RLHF"
+    ],
+    "summary": "系统拆解大语言模型监督微调：从条件负对数似然与 Token 级 Loss Mask，到 FLAN、InstructGPT、LIMA、Self-Instruct 的数据配方，再到训练工程、失败模式与评估方法。",
+    "paper": "https://arxiv.org/abs/2203.02155",
+    "illustration": "sft-response-loss-mask",
+    "cover": {
+      "src": "assets/03-response-loss-mask.svg",
+      "caption": "提示词提供上下文，回答 Token 与结束标记进入监督损失"
+    }
   }
 ]

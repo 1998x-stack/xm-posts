@@ -12,7 +12,7 @@
 | `architectures` | CNN、RNN、Transformer、门控、MoE、状态空间与高效注意力结构 | GPU 算子实现归 `systems`，线上请求管理归 `inference` |
 | `reinforcement-learning` | MDP、Bellman、Policy Gradient、Actor–Critic、探索与搜索 | RLHF/GRPO 等模型后训练方案的训练目标与流程归 `training` |
 | `datasets` | 语料来源、清洗去重、混合、污染与数据治理 | 任务指标、Benchmark 设计与可重复性归 `evaluation` |
-| `training` | 预训练、Scaling Laws、PEFT、偏好对齐、分布式与混合精度 | 权重衰减的基础推导可以在 `foundations`，但工程训练管线在此 |
+| `training` | 预训练、SFT / 指令微调、Scaling Laws、PEFT、偏好对齐、分布式与混合精度 | 权重衰减的基础推导可以在 `foundations`，但模型训练目标与训练管线在此 |
 | `reasoning` | CoT、自一致性、推理采样、验证与测试时计算 | 涉及工具和环境反馈闭环时归 `agents` |
 | `inference` | KV Cache、解码、Batching、服务调度和 Prefill/Decode | 硬件 kernel/编译与通讯归 `systems` |
 | `systems` | GPU 内存、算子、编译、通信、性能分析及底层优化 | 服务请求、token 调度、端到端 serving 归 `inference` |
@@ -29,6 +29,20 @@
 3. 对确有不同边界的二级主题，要求标题与描述不同；不得让两个 topic 共享同一展示标题。当前 Systems 已区分 Kernel 编程、GPU 内存、编译/内核优化、Collectives、分布式通信和 Roofline/Benchmark。
 4. 占位目录必须使用精确的注册 slug。新增 Topic 优先写分类元数据，再添加 `_topics/` 的 README；单篇新文章通常不值得新增一级分类。
 5. Draft 必须继续以 `status: draft` 保持离线，不要将规划中的 README 当作 `published` 条目。
+
+## 2026-11 SFT / Instruction Tuning 专题归属
+
+新增稳定二级主题：`training → supervised-finetuning`（`Supervised Fine-Tuning & Instruction Tuning`）。
+
+- **SFT 是监督目标 / 数据范式**：使用输入—目标输出样本，优化目标 Token 的条件负对数似然。
+- **Instruction Tuning 是 SFT 的重要子类**：输入以自然语言指令为核心，通常包含可选上下文与示范回答；领域微调也可以采用 SFT，但不必都归为通用指令微调。
+- **不新增一级分类**：它与预训练、PEFT、偏好优化、RL 后训练共同属于模型训练与对齐。
+- **与 PEFT 分开**：SFT 描述监督信号；LoRA / QLoRA 描述参数更新与显存策略，二者可以组合。
+- **与 RLHF / DPO 分开**：SFT 直接模仿示范回答；偏好学习使用回答排序或奖励信号。SFT 常作为后续偏好优化的初始化，但不能替代偏好目标。
+- **数据来源作为专题内部子分类**：人工策展、任务集合 / 模板转换、教师模型蒸馏与自我改进合成数据是数据构建维度，不为每种来源另建一级分类。
+- **跨域关系使用 tags 与 reading paths**：预训练、Teacher Forcing、LoRA、RLHF、DPO 与 GRPO 保持各自稳定主专题，通过阅读路径连接。
+
+这套边界避免把“训练目标”“参数更新方式”“数据生成方法”混成同一层分类。
 
 ## 2026-11 分类占位整合
 

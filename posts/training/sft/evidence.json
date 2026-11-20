@@ -1,0 +1,110 @@
+[
+  {
+    "id": "SFT01",
+    "claim": "SFT uses supervised demonstrations to fine-tune a pretrained language model; in the InstructGPT pipeline it is the first stage before reward modeling and PPO.",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/pdf/2203.02155",
+    "locator": "Abstract; Figure 2; Sections 3.1 and 3.5",
+    "status": "verified",
+    "notes": "The article's pipeline is independently redrawn. SFT is not synonymous with the entire RLHF procedure."
+  },
+  {
+    "id": "SFT02",
+    "claim": "The InstructGPT SFT training set contained about 13k training prompts drawn from API prompts and labeler-written prompts.",
+    "kind": "dataset",
+    "source_url": "https://arxiv.org/pdf/2203.02155",
+    "locator": "Section 3.2, PDF p. 6; Appendix A.3, Table 6",
+    "status": "verified",
+    "notes": "Specific to the InstructGPT study, not a general recommended SFT dataset size."
+  },
+  {
+    "id": "SFT03",
+    "claim": "InstructGPT SFT baselines were trained for 16 epochs with cosine learning-rate decay and residual dropout 0.2; validation loss overfit after one epoch while reward-model scores and human preferences improved with more epochs.",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/pdf/2203.02155",
+    "locator": "Section 3.5, PDF p. 8; Appendix C.2",
+    "status": "verified",
+    "notes": "Distinguishes this baseline from the separate 2-epoch plus 10% pretraining-mix RLHF initialization configuration."
+  },
+  {
+    "id": "SFT04",
+    "claim": "The original FLAN study instruction-tuned a 137B model on more than 60 NLP tasks and reported zero-shot improvements on unseen task types.",
+    "kind": "experiment",
+    "source_url": "https://arxiv.org/abs/2109.01652",
+    "locator": "Abstract; experimental setup and results",
+    "status": "verified",
+    "notes": "Results are tied to the study's model, task set and evaluation protocol."
+  },
+  {
+    "id": "SFT05",
+    "claim": "The Flan Collection ablations found task balancing and enrichment important; mixing zero-shot, few-shot and chain-of-thought prompt settings produced equivalent or stronger results in the reported settings.",
+    "kind": "experiment",
+    "source_url": "https://proceedings.mlr.press/v202/longpre23a.html",
+    "locator": "Abstract; ablation analysis",
+    "status": "verified",
+    "notes": "The article reports the paper's approximate 2% prompt-setting result without treating it as universal."
+  },
+  {
+    "id": "SFT06",
+    "claim": "LIMA fine-tuned a 65B LLaMA model on 1,000 curated prompt-response examples, totaling approximately 750,000 tokens, without RL or human preference modeling.",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/pdf/2305.11206",
+    "locator": "Abstract; Table 1; Sections 1–3",
+    "status": "verified",
+    "notes": "The Superficial Alignment Hypothesis is the authors' hypothesis supported by this study, not a universal law."
+  },
+  {
+    "id": "SFT07",
+    "claim": "Self-Instruct generates instructions, inputs and outputs with a language model, then filters invalid or similar examples before fine-tuning the original model.",
+    "kind": "paper-claim",
+    "source_url": "https://aclanthology.org/2023.acl-long.754/",
+    "locator": "Abstract; Method",
+    "status": "verified",
+    "notes": "Synthetic data still requires correctness, bias and duplication checks."
+  },
+  {
+    "id": "SFT08",
+    "claim": "A 2026 survey groups instruction-tuning data construction into human-crafted data, synthetic data via distillation, and synthetic data via self-improvement.",
+    "kind": "survey-taxonomy",
+    "source_url": "https://doi.org/10.1145/3777411",
+    "locator": "Sections 2–3, dataset construction taxonomy",
+    "status": "verified",
+    "notes": "Used as an internal article taxonomy; no new top-level repository category is implied."
+  },
+  {
+    "id": "SFT09",
+    "claim": "The response-only masked causal language-model objective is a token-level negative log-likelihood over selected target positions; prompt tokens can remain visible as context while excluded from loss.",
+    "kind": "derived",
+    "source_url": "https://arxiv.org/pdf/2305.11206",
+    "locator": "LIMA standard supervised loss; independently derived token-mask formulation",
+    "status": "derived",
+    "notes": "Response-only masking is a common implementation choice, not a universal requirement for every SFT dataset or trainer."
+  },
+  {
+    "id": "SFT10",
+    "claim": "Attention masks and loss masks serve different purposes: one controls visibility in the forward pass, the other controls which target tokens contribute to the objective.",
+    "kind": "implementation-note",
+    "source_url": "https://arxiv.org/pdf/2305.11206",
+    "locator": "Independent causal-LM implementation explanation",
+    "status": "derived",
+    "notes": "The diagram and explanation are original teaching material; framework-specific conventions must be checked against the model implementation."
+  },
+  {
+    "id": "SFT11",
+    "claim": "SFT is an objective/supervision regime, while LoRA and QLoRA describe parameter-update and memory strategies that can be used to implement fine-tuning.",
+    "kind": "conceptual-distinction",
+    "source_url": "https://arxiv.org/abs/2106.09685",
+    "locator": "LoRA method; compared with standard supervised fine-tuning objective",
+    "status": "verified",
+    "notes": "This is a taxonomy distinction rather than a claim that LoRA is limited to SFT."
+  },
+  {
+    "id": "SFT12",
+    "claim": "The InstructGPT API prompt use-case distribution is generation 45.6%, open QA 12.4%, brainstorming 11.2%, chat 8.4%, rewrite 6.6%, summarization 4.2%, classification 3.5%, other 3.5%, closed QA 2.6%, and extraction 1.9%.",
+    "kind": "experiment",
+    "source_url": "https://arxiv.org/pdf/2203.02155",
+    "locator": "Table 1, PDF p. 5",
+    "status": "verified",
+    "notes": "The chart is independently redrawn and explicitly describes the paper's API prompt distribution, not a general SFT recipe."
+  }
+]

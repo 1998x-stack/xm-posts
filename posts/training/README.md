@@ -28,3 +28,10 @@
 - [Checkpointing](_topics/checkpointing/README.md)
 
 上述 `_topics/` 是研究路线占位目录，正式文章仍遵循 `posts/training/<slug>/index.html`；只有 `content/posts.json` 中的 `published` 文章才会被发布。
+
+
+## 新增专题入口：Supervised Fine-Tuning
+
+- [Understanding SFT](sft/index.html) — 监督目标、Response-only Loss Mask、指令数据配方，以及 InstructGPT / FLAN / LIMA / Self-Instruct 的研究证据。
+- 稳定主专题：`training → supervised-finetuning`。
+- 分类边界：SFT 是监督信号与优化目标；LoRA / QLoRA 是参数更新策略；RLHF / DPO 是偏好或奖励驱动的后训练目标。三者可以组合，但不能混为同一层级。

@@ -338,5 +338,17 @@
       "rlhf",
       "dpo"
     ]
+  },
+  {
+    "id": "path-37",
+    "title": "从自回归训练到指令对齐",
+    "posts": [
+      "gpt-1",
+      "teacher-forcing",
+      "sft",
+      "rlhf",
+      "dpo",
+      "grpo"
+    ]
   }
 ]
