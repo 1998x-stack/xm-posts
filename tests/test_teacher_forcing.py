@@ -25,7 +25,7 @@ def test_invalid_sequence_is_not_silently_shifted():
 
 
 def test_cross_entropy_uses_log_probability_and_token_mean():
-    assert isclose(module.token_cross_entropy([0.8, 0.7, 0.6]), 0.3635494, abs_tol=1e-6)
+    assert isclose(module.token_cross_entropy([0.8, 0.7, 0.6]), 0.3635480, abs_tol=1e-6)
     assert module.token_cross_entropy([1.0, 1.0]) == 0.0
     with pytest.raises(ValueError):
         module.token_cross_entropy([0.8, 0.0])
