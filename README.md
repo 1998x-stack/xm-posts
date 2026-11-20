@@ -42,6 +42,7 @@
 | **Understanding AdamW** | 为什么 Adam 的 L₂ 与 Weight Decay 不等价？ | [`posts/foundations/adamw/`](posts/foundations/adamw/index.html) | [Loshchilov & Hutter (ICLR 2019)](https://arxiv.org/abs/1711.05101) |
 | **Understanding KV Cache** | 自回归 Decode 为什么要保存历史 K/V？ | [`posts/inference/kv-cache/`](posts/inference/kv-cache/index.html) | [Kwon et al. (SOSP 2023)](https://doi.org/10.1145/3600006.3613165) |
 | **Understanding GPT-1** | 为什么预测下一个 token 能迁移到多种语言理解任务？ | [`posts/training/gpt-1/`](posts/training/gpt-1/index.html) | [Radford et al. (2018)](https://cdn.openai.com/research-covers/language-unsupervised/language_understanding_paper.pdf) |
+| **Understanding QLoRA** | 为什么 65B 模型可以在一张 48GB GPU 上微调？NF4、双重量化与 Paged Optimizers | [`posts/training/qlora/`](posts/training/qlora/index.html) | [Dettmers et al. (NeurIPS 2023)](https://arxiv.org/abs/2305.14314) |
 | **Understanding LoRA** | 为什么低秩矩阵足以适配部分下游任务？ | [`posts/training/lora/`](posts/training/lora/index.html) | [Hu et al. (ICLR 2022)](https://arxiv.org/abs/2106.09685) |
 
 Pre-LN vs Post-LN 具有 12 节解读、5 幅独立 SVG、交互式平移实验和纯 Python 的 Jacobian 数值检查；SGD 具有 14 节渐进推导、7 幅独立 SVG、Mini-batch 抽样交互与纯 Python 随机梯度单元测试；ResNet 具有 11 节解读与 10 幅独立 SVG；Transformer 具有 16 节解读与 13 幅独立 SVG，另有最小 PyTorch Attention 示例；Naive Bayes 具有 13 节渐进解释、6 幅独立 SVG、原生 MathML、Multinomial/Bernoulli 对照交互与确定性 Python 断言；SVM 具有 12 节机制推导、6 幅独立 SVG、可调 RBF 相似度矩阵和纯 Python 一维解析示例，采用离线原生 MathML 排版分式、上下标和求和范围；Word2Vec 具有 12 节精读、5 幅内嵌原创图、7 份独立 SVG、SGNS 训练器和数值梯度校验。AdamW 具有 14 节渐进推导、6 幅独立 SVG、二维预条件器交互实验与纯 Python Adam/AdamW 代码断言。GRPO 具有 11 节深度解读、4 幅独立 SVG、可交互优势示例和 Python 断言测试。RLHF 从 SFT、奖励模型与 PPO 出发，包含 12 节推导、4 幅机制图、2 个交互实验和最小数学断言；Adam 具有 14 节机制讲解、7 幅独立 SVG、时间步交互及含 AdamW/AMSGrad 分支的纯 Python 最小实现与单元测试。LoRA 具有 12 节论文精读、6 幅独立 SVG、rank 参数预算交互与纯 Python 合并等价性算例。DPO 具有 12 节机制推导、6 幅独立 SVG、可调 β 交互与最小 Python 公式检验。KV Cache 具有 13 节解读、6 幅独立 SVG、KV 显存交互计算器与纯 Python 数值一致性测试。RoPE 具有 12 节机制推导、4 幅独立 SVG、平移交互演示、纯 Python 旋转验证与长上下文扩展比较。Self-Consistency 提供 12 节解读、5 幅独立 SVG、答案计票交互、数学推导及可执行 Python 示例。教学简化、原论文和后续变体需明确区分；每篇文章的发布状态以 CI 和浏览器验证结果为准。
@@ -222,3 +223,5 @@ python scripts/sync_skills.py --check
 主要研究方法来自 Christopher Olah 的 [Understanding LSTM Networks](https://colah.github.io/posts/2015-08-Understanding-LSTMs/) 与 Harvard NLP 的 [The Annotated Transformer](https://nlp.seas.harvard.edu/annotated-transformer/) **教学组织思路**，而不是复制其文字、代码或图片。论文实验数字标注原论文出处；示意与推导区分教学简化与论文结果；生成的文章不应出现“单文件离线”“原创 SVG”“参考某某风格”等制作过程小字。
 
 协作请先阅读 [`AGENTS.md`](AGENTS.md)、[`docs/editorial.md`](docs/editorial.md) 和 [`CONTRIBUTING.md`](CONTRIBUTING.md)。除非明确核验并添加仓库许可证，否则不要推断第三方论文、图像、代码享有与本站相同的再分发许可。
+
+QLoRA 归入 Training → PEFT / LoRA → Quantized Fine-tuning / QLoRA，不新建顶层分类；提供 12 节机制解读、6 幅 SVG、MathML、权重显存交互与论文证据表。
