@@ -43,8 +43,8 @@ p{margin:0 0 17px;color:#3d5960}
 strong{color:#245f5c}
 ul,ol{padding-left:23px}
 li{margin:8px 0;color:#3d5960}
-figure{margin:25px 0 30px;padding:12px 12px 0;border:1px solid var(--line);border-radius:14px;background:#fff;max-width:100%;min-width:0}
-figure svg{display:block;width:100%;height:auto;max-width:100%}
+figure{margin:25px 0 30px;padding:12px 12px 0;border:1px solid var(--line);border-radius:14px;background:#fff;max-width:100%;min-width:0;overflow-x:auto}
+figure svg{display:block;width:100%;height:auto;max-width:100%;min-width:720px}
 figcaption{padding:12px 8px 14px;border-top:1px solid #edf1ed;color:#607a7e;font-size:13px;line-height:1.7}
 .figure-title{padding:3px 5px 10px;color:var(--teal);font-size:11px;font-weight:800;letter-spacing:.1em}
 .callout{margin:22px 0;padding:15px 19px;border-left:4px solid var(--terra);background:#fff3e9;color:#76513d;font-size:15px}
@@ -94,7 +94,7 @@ pre code{font-size:inherit}
 @media(max-width:960px){.layout{display:block;max-width:900px;padding-top:30px}.toc{position:static;max-height:none;display:flex;gap:6px;flex-wrap:wrap;margin-bottom:28px}.toc strong{width:100%}.toc a{border:1px solid var(--line);border-radius:6px;padding:5px 9px}}
 @media(max-width:600px){body{font-size:16px}.site-inner{padding:10px 14px}.site-links{gap:10px}.layout{padding:24px 14px 65px}h1{font-size:clamp(37px,11vw,46px)}.dek{font-size:19px}section{margin-top:52px}.two{grid-template-columns:1fr}.experiment{padding:13px}.math-equation{padding:10px 7px;gap:5px}.math-scroll math[display=block]{font-size:1rem}figure{padding:7px 6px 0}.range-row{grid-template-columns:1fr}}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
-@media print{body{background:#fff;font-size:11pt}.site-head,.toc,.skip,.controls,.range-row input{display:none!important}.layout{display:block;padding:0}.math-scroll{overflow:visible}.math-scroll math[display=block]{font-size:1rem}.experiment,figure{break-inside:avoid}.matrix-wrap,.table-wrap,.code-wrap{overflow:visible}pre{background:#f1f3f1;color:#203f45;white-space:pre-wrap;overflow-wrap:anywhere}section{margin-top:25px}h2,h3{break-after:avoid}.bar{print-color-adjust:exact}}
+@media print{body{background:#fff;font-size:11pt}.site-head,.toc,.skip,.controls,.range-row input{display:none!important}.layout{display:block;padding:0}.math-scroll{overflow:visible}.math-scroll math[display=block]{font-size:1rem}.experiment{break-inside:avoid}figure{break-inside:avoid;overflow:visible}figure svg{min-width:0;width:100%}.matrix-wrap,.table-wrap,.code-wrap{overflow:visible}pre{background:#f1f3f1;color:#203f45;white-space:pre-wrap;overflow-wrap:anywhere}section{margin-top:25px}h2,h3{break-after:avoid}.bar{print-color-adjust:exact}}
 </style>
 </head>
 <body>
@@ -180,6 +180,7 @@ pre code{font-size:inherit}
 <tr><td>文本汇聚</td><td><code>[EOS]</code> 位置表示</td><td>最大序列长度 76；取最后一层 EOS 表示，LayerNorm 后线性投影。</td></tr>
 <tr><td>共同空间</td><td>线性投影 + L2 归一化</td><td>最终比较图像向量与文本向量的余弦相似度。</td></tr>
 </tbody></table></div>
+<p class="small">编码器配置与文本汇聚细节来自 <a href="https://arxiv.org/abs/2103.00020">原论文 §2.4</a>。</p>
 <p>因此，“CLIP 就是 ViT”并不准确。CLIP 是一种图文对比预训练方法；图像编码器可以是 ResNet，也可以是 ViT。论文中表现最好的配置是 <code>ViT-L/14@336px</code>，它在 ViT-L/14 的基础上又以 336 像素分辨率额外预训练一个 epoch。</p>
 </section>
 
@@ -219,7 +220,7 @@ pre code{font-size:inherit}
 <math display="block" aria-label="s i j 等于归一化图像向量 z i I 的转置乘归一化文本向量 z j T，再除以温度 tau">
 <mrow><msub><mi>s</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>=</mo><mfrac><mrow><msup><mrow><mo>(</mo><msubsup><mi>z</mi><mi>i</mi><mi>I</mi></msubsup><mo>)</mo></mrow><mo>⊤</mo></msup><msubsup><mi>z</mi><mi>j</mi><mi>T</mi></msubsup></mrow><mi>τ</mi></mfrac></mrow>
 </math></div><span class="eq-num">(2)</span></div>
-<p><code>τ</code> 是温度参数。它控制 softmax 对相似度差异的敏感程度。由于向量已经归一化，分子点积就是 cosine similarity；除以温度相当于放大或缩小 logits。</p>
+<p><code>τ</code> 是温度参数。它控制 softmax 对相似度差异的敏感程度。以上 batch 目标与对称交叉熵对应 <a href="https://arxiv.org/abs/2103.00020">原论文 §2.3</a>。由于向量已经归一化，分子点积就是 cosine similarity；除以温度相当于放大或缩小 logits。</p>
 <h3>为什么要做两个方向？</h3>
 <p>只训练“给定图像找文本”还不够。CLIP 同时训练图像到文本（I→T）与文本到图像（T→I）：对每张图像，正确文本应该在这一行得分最高；对每段文本，正确图像也应该在这一列得分最高。</p>
 <div class="math-equation" role="group" aria-label="图像到文本与文本到图像的条件概率"><div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="两个方向的 softmax 公式，可横向滚动">
@@ -291,22 +292,22 @@ pre code{font-size:inherit}
 <mrow><mover><mi>y</mi><mo>^</mo></mover><mo>=</mo><munder><mi>argmax</mi><mi>c</mi></munder><mtext> cos</mtext><mo>(</mo><msup><mi>z</mi><mi>I</mi></msup><mo>,</mo><msup><mi>z</mi><mrow><mi>T</mi><mo>,</mo><mi>c</mi></mrow></msup><mo>)</mo></mrow>
 </math></div><span class="eq-num">(5)</span></div>
 <p>从分类器角度看，这很巧妙：传统线性分类器的权重通常是训练出来的一组参数；CLIP 则让文本编码器根据类别描述生成这些权重。因此，增加一个新类别不必重新训练图像分类头，只需要增加一条候选文本。</p>
-<p>原论文将零样本分类解释为：把数据集的类别名称当作候选图文配对，比较每张图像与所有候选类别文本的相似度，再经 softmax 得到分布。类别文本可以提前编码并缓存，不必每张图重复计算。</p>
+<p>原论文 <a href="https://arxiv.org/abs/2103.00020">§3.1.2</a> 将零样本分类解释为：把数据集的类别名称当作候选图文配对，比较每张图像与所有候选类别文本的相似度，再经 softmax 得到分布。类别文本可以提前编码并缓存，不必每张图重复计算。</p>
 </section>
 
 <section id="prompt">
 <h2>06 · Prompt 与温度：文字写法会改变分类边界</h2>
 <p>一个常见误解是“把类别名直接交给文本编码器就行”。但训练数据中的文本通常是完整描述，而不是孤立单词。论文发现，给类别补上自然语言上下文通常更贴近训练分布。例如把 <code>dog</code> 写成 <code>a photo of a dog</code>，在 ImageNet 上比只输入类别名高出约 1.3 个百分点。</p>
-<p>词义歧义也会影响结果：<code>crane</code> 可能是起重机，也可能是鹤；<code>boxer</code> 可能是拳击手，也可能是犬种。加入任务语境，例如“a photo of a {label}, a type of pet”，可以帮助文本编码器确定词义。论文还报告了多模板集成的收益：ImageNet 使用 80 个上下文模板进行集成，比单一默认提示又提升约 3.5 个百分点。见原论文 §3.1.4。</p>
+<p>词义歧义也会影响结果：<code>crane</code> 可能是起重机，也可能是鹤；<code>boxer</code> 可能是拳击手，也可能是犬种。加入任务语境，例如“a photo of a {label}, a type of pet”，可以帮助文本编码器确定词义。论文还报告了多模板集成的收益：ImageNet 使用 80 个上下文模板进行集成，比单一默认提示又提升约 3.5 个百分点。见 <a href="https://arxiv.org/abs/2103.00020">原论文 §3.1.4</a>。</p>
 <h3>温度参数如何改变概率分布？</h3>
 <p>下面固定三个教学相似度：狗 0.82、狼 0.76、猫 0.35。拖动温度，观察 softmax 如何改变分布尖锐程度。这里的相似度是演示输入，不代表任何实际 CLIP 模型对某张图片的预测。</p>
 <div class="experiment">
 <h3>Softmax 温度实验</h3>
 <div class="range-row"><label for="temperature">温度 τ：<output id="temperature-value" for="temperature">0.07</output></label><input id="temperature" type="range" min="0.03" max="0.30" step="0.01" value="0.07" aria-label="调整 softmax 温度"></div>
 <div class="prob-list">
-<div class="prob-row"><span>狗</span><div class="track"><div class="bar" id="prob-dog"></div></div><output id="value-dog">—</output></div>
-<div class="prob-row"><span>狼</span><div class="track"><div class="bar" id="prob-wolf"></div></div><output id="value-wolf">—</output></div>
-<div class="prob-row"><span>猫</span><div class="track"><div class="bar" id="prob-cat"></div></div><output id="value-cat">—</output></div>
+<div class="prob-row"><span>狗</span><div class="track"><div class="bar" id="prob-dog" style="width:70.1%"></div></div><output id="value-dog">70.1%</output></div>
+<div class="prob-row"><span>狼</span><div class="track"><div class="bar" id="prob-wolf" style="width:29.8%"></div></div><output id="value-wolf">29.8%</output></div>
+<div class="prob-row"><span>猫</span><div class="track"><div class="bar" id="prob-cat" style="width:0.1%"></div></div><output id="value-cat">0.1%</output></div>
 </div>
 <p id="temperature-note" class="status" aria-live="polite">较低温度会放大相似度差异，使分布更尖锐。</p>
 </div>
@@ -322,19 +323,20 @@ pre code{font-size:inherit}
 <tr><td>优化器</td><td>Adam + decoupled weight decay，cosine learning-rate schedule</td><td>优化双编码器和投影层；温度参数也参与学习。</td></tr>
 <tr><td>计算资源</td><td>最大 ResNet 版本 RN50x64：592 张 V100、18 天；最大 ViT：256 张 V100、12 天</td><td>大规模图文预训练仍然需要非常高的计算投入。</td></tr>
 </tbody></table></div>
+<p class="small">训练规模、优化器与温度设置见 <a href="https://arxiv.org/abs/2103.00020">原论文 §2.5</a>。</p>
 <p>这里要避免一个误读：CLIP 的“zero-shot”说的是<strong>下游分类时不使用该任务的训练样本来拟合分类器</strong>，并不意味着预训练阶段没有数据、没有监督或没有巨大的算力成本。</p>
 <p>对比目标之所以有吸引力，是因为它不要求模型逐字生成一条描述。模型只需在当前 batch 的 N 段文本中识别哪一段与给定图像配对。论文报告，在小到中等规模实验里，contrastive objective 的零样本 ImageNet 学习效率相较其图像描述生成基线高约 4–10 倍；ViT 图像编码器相较标准 ResNet 还带来额外计算效率收益。这里是论文实验中的特定对比，不应当理解成所有任务、所有模型都恒定加速。</p>
 </section>
 
 <section id="evidence">
 <h2>08 · 原论文结果：它真正证明了什么？</h2>
-<p>论文最有代表性的结果之一，是零样本 CLIP 在 ImageNet 上达到 76.2% accuracy，top-5 accuracy 达到 95%，与当时原始 ResNet-50 的 ImageNet accuracy 相当；这一结果没有使用 ImageNet 的 128 万张人工标注训练图片来拟合下游分类器。</p>
+<p>论文 <a href="https://arxiv.org/abs/2103.00020">Table 1 / §3.1.3</a> 的代表性结果之一，是零样本 CLIP 在 ImageNet 上达到 76.2% accuracy，top-5 accuracy 达到 95%，与当时原始 ResNet-50 的 ImageNet accuracy 相当；这一结果没有使用 ImageNet 的 128 万张人工标注训练图片来拟合下游分类器。</p>
 <div class="table-wrap"><table class="data-table"><thead><tr><th>模型 / 方法</th><th>ImageNet accuracy</th><th>解释与比较边界</th></tr></thead><tbody>
 <tr><td>Visual N-Grams（2017）</td><td>11.5%</td><td>较早的自然语言零样本迁移方法，数据规模、架构和计算预算与 CLIP 不同。</td></tr>
 <tr><td>CLIP（论文最佳配置）</td><td>76.2%</td><td>零样本分类；论文另报告 top-5 accuracy 为 95%。</td></tr>
 </tbody></table></div>
 <p class="note">这张表用于展示研究进展，不是严格控制变量的算法对比。原论文明确提醒：CLIP 使用了约 10 倍规模的数据集、不同的模型与更多训练计算，因此不能把全部差距都归因于单一损失函数。</p>
-<p>更广泛的评测也说明 CLIP 不是只会 ImageNet：论文在 30 多个数据集上评估了零样本迁移，覆盖细粒度分类、视频动作识别、OCR、地理定位等任务；在 27 个数据集的一个比较中，zero-shot CLIP 在其中 16 个数据集上超过了基于 ResNet-50 特征训练的监督线性分类器。不同任务之间的表现差异仍然很大。</p>
+<p>更广泛的评测也说明 CLIP 不是只会 ImageNet：论文在 30 多个数据集上评估了零样本迁移，覆盖细粒度分类、视频动作识别、OCR、地理定位等任务；在 <a href="https://arxiv.org/abs/2103.00020">Figure 5 / §3.1.5</a> 的 27 个数据集比较中，zero-shot CLIP 在其中 16 个数据集上超过了基于 ResNet-50 特征训练的监督线性分类器。不同任务之间的表现差异仍然很大。</p>
 </section>
 
 <section id="limits">
@@ -359,7 +361,7 @@ pre code{font-size:inherit}
 <ul><li>在候选文本中检索与图片最匹配的描述。</li><li>用自然语言指定类别，完成零样本图像分类。</li><li>抽取图像或文本表示，用于相似度检索、线性探测或其他迁移任务。</li></ul>
 <h3>哪些任务不能直接交给它？</h3>
 <ul><li><strong>自由形式图像描述：</strong>CLIP 本身输出向量与相似度，不是自回归文本生成器。</li><li><strong>精确定位：</strong>全局向量相似度不会自动给出物体框、像素分割或图像中的证据位置。</li><li><strong>计数与细粒度判断：</strong>论文发现它在抽象计数、距离估计以及部分细粒度类别上表现较弱。</li><li><strong>提示稳定性：</strong>同一类别换一种措辞，分数和排序可能发生变化；prompt 设计不是无关紧要的包装。</li></ul>
-<p>还要重视训练数据与分类标签带来的社会偏差。论文指出，模型从未经充分筛选的网络图文数据中学习，类别集合如何设计会明显影响分类结果和偏差表现。模型卡也提醒，细粒度分类、计数和公平性仍是重要限制。不能把“无需下游标注”误解为“没有偏差”或“可以无条件用于高风险决策”。</p>
+<p>还要重视训练数据与分类标签带来的社会偏差。论文指出，模型从未经充分筛选的网络图文数据中学习，类别集合如何设计会明显影响分类结果和偏差表现。<a href="https://github.com/openai/CLIP/blob/main/model-card.md">官方模型卡</a>也提醒，细粒度分类、计数和公平性仍是重要限制。不能把“无需下游标注”误解为“没有偏差”或“可以无条件用于高风险决策”。</p>
 <div class="callout"><strong>边界判断：</strong>CLIP 是强大的跨模态表示与检索基础模块，不是完整的视觉问答、目标检测或图像生成系统。后续系统可以把 CLIP 编码器与区域特征、检测器、生成式语言模型或跨注意力模块组合起来，但那已经是更大的架构。</div>
 </section>
 
@@ -390,7 +392,7 @@ print(zero_shot_scores([1.0, 0.0], candidates, temperature=0.1))</code></pre>
 <ol class="sources">
 <li><strong>原始论文：</strong>Radford et al. (2021), <a href="https://arxiv.org/abs/2103.00020">Learning Transferable Visual Models From Natural Language Supervision</a>. 重点阅读 §2.2–2.5（数据、目标、编码器与训练）、§3.1（zero-shot transfer）、§7（broader impacts）。</li>
 <li><strong>作者解读：</strong>OpenAI, <a href="https://openai.com/index/clip/">CLIP: Connecting text and images</a>（2021-01-05）。适合快速了解动机、主要结果和局限。</li>
-<li><strong>官方代码与模型卡：</strong><a href="https://github.com/openai/CLIP">openai/CLIP</a>。模型卡记录适用场景、数据与已知风险；不要把代码仓库当前实现细节全部反推成 2021 年论文的训练设置。</li>
+<li><strong>官方代码：</strong><a href="https://github.com/openai/CLIP">openai/CLIP</a>；<strong>模型卡：</strong><a href="https://github.com/openai/CLIP/blob/main/model-card.md">CLIP model card</a>。模型卡记录适用场景、数据与已知风险；不要把当前代码实现细节全部反推成 2021 年论文的训练设置。</li>
 <li><strong>相关基础：</strong><a href="../../foundations/embeddings/">Understanding Embeddings</a> 解释向量表示、对比学习与语义检索；<a href="../../architectures/transformer/">Understanding Transformer</a> 补充文本编码器所依赖的注意力结构。</li>
 </ol>
 </section>

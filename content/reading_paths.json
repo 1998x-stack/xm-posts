@@ -327,5 +327,13 @@
       "bert",
       "rag"
     ]
+  },
+  {
+    "id": "path-36",
+    "title": "从语义向量到跨模态图文对齐",
+    "posts": [
+      "embeddings",
+      "clip"
+    ]
   }
 ]

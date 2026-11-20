@@ -2056,7 +2056,7 @@
     "subtitle": "双编码器如何把图像与文本映射到同一语义空间，并通过对比学习实现零样本分类？",
     "category": "multimodal",
     "topic": "vision-language",
-    "status": "draft",
+    "status": "published",
     "published": "2026-11-21",
     "updated": "2026-11-21",
     "reading_minutes": 26,

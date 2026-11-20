@@ -97,5 +97,14 @@
     "locator": "Independent teaching example based on §2.3 and §3.1.2",
     "status": "illustrative",
     "notes": "The accompanying tests validate mathematical invariants only; they do not benchmark a trained CLIP model."
+  },
+  {
+    "id": "CLIP-12",
+    "claim": "The official CLIP model card documents intended use, dataset caveats, limitations, and risks including bias and fairness considerations.",
+    "kind": "model-card-claim",
+    "source_url": "https://github.com/openai/CLIP/blob/main/model-card.md",
+    "locator": "Model Card: Intended Use, Limitations, Bias and Fairness",
+    "status": "verified",
+    "notes": "The article uses the model card as a cautionary companion to the original 2021 paper, not as evidence for the paper's historical architecture settings."
   }
 ]
