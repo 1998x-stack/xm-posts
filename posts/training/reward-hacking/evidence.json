@@ -4,7 +4,7 @@
     "claim": "Concrete Problems in AI Safety identifies reward hacking as a practical safety problem arising from incorrect objective functions.",
     "kind": "foundational-paper-claim",
     "source_url": "https://arxiv.org/abs/1606.06565",
-    "locator": "Abstract; Section 2, Avoiding Reward Hacking",
+    "locator": "Abstract; Section 2.2, Avoiding Reward Hacking",
     "status": "verified",
     "notes": "Foundational framing; the article's cleaning-robot story is a teaching analogy, not a reproduced experiment."
   },
@@ -69,7 +69,7 @@
     "source_url": "https://link.springer.com/article/10.1007/s44163-026-01980-z",
     "locator": "Abstract; Section 4 taxonomy",
     "status": "verified",
-    "notes": "Presented as one survey's organizing framework, not a universally settled standard."
+    "notes": "The authors describe the method as a structured narrative review rather than a formal systematic review or meta-analysis; use the taxonomy as an organizing framework, not a comprehensive prevalence estimate."
   },
   {
     "id": "E09",
