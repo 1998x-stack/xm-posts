@@ -576,5 +576,26 @@
     "summary": "以 ICML 2018 SAC 原论文为主线，逐步理解离策略 Replay、最大熵 Soft Bellman、随机 Actor 和双 Critic，区分独立 V 原版与后续无 V/自动温度版本；配六幅机制图、α 交互、MathML、纯 Python 检验和证据台账。",
     "paper": "https://proceedings.mlr.press/v80/haarnoja18b.html",
     "illustration": "sac"
+  },
+  {
+    "slug": "xgboost",
+    "title": "Understanding XGBoost",
+    "subtitle": "从二阶梯度、分裂增益到稀疏感知与可扩展树提升系统",
+    "category": "classical-ml",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 34,
+    "tags": [
+      "XGBoost",
+      "Gradient Boosting",
+      "Second-order Optimization",
+      "Split Gain",
+      "Sparsity-aware",
+      "Weighted Quantile Sketch"
+    ],
+    "summary": "以 Chen 与 Guestrin KDD 2016 原论文为证据，渐进推导二阶树目标、叶子权重和分裂增益，图解稀疏缺失值方向、加权分位、排序列块与磁盘 IO，并附阈值/正则化交互和确定性 Python 测试。",
+    "paper": "https://arxiv.org/abs/1603.02754",
+    "illustration": "xgboost"
   }
 ]
