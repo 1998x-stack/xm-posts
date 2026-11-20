@@ -45,10 +45,16 @@ def test_seventh_batch_browser(browser, name, width, height):
         ids = page.locator("[id]").evaluate_all("(nodes)=>nodes.map(n=>n.id)")
         assert len(ids) == len(set(ids))
         assert page.evaluate("document.documentElement.scrollWidth <= window.innerWidth + 2")
-        img = page.locator(".batch7-figure img")
-        assert img.count() == 1
-        img.scroll_into_view_if_needed()
-        page.wait_for_function("() => { const el = document.querySelector(\'.batch7-figure img\'); return el && el.complete && el.naturalWidth > 0; }", timeout=10000)
+        diagram = page.locator(".batch7-figure > svg")
+        assert diagram.count() == 1
+        assert diagram.evaluate("""(el) => {
+            const box = el.getBoundingClientRect();
+            return box.width > 0 && box.height > 0
+                && !!el.querySelector('title') && !!el.querySelector('desc');
+        }""")
+        independent_svg = page.locator(".batch7-figure figcaption a").get_attribute("href")
+        assert independent_svg.endswith(".svg")
+        assert (PAGES[name].parent / independent_svg).is_file()
         if name == "dqn":
             assert "y = 3.60" in page.locator("#ddqn-result").inner_text()
             assert "y = 0.90" in page.locator("#ddqn-result").inner_text()
