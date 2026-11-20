@@ -123,6 +123,10 @@ def run(output:Path, site:Path):
                             page.screenshot(path=str(output/'category-narrow.png'),full_page=False)
                     # Verify the archive at each desktop/tablet/mobile width.
                     # CI uses HTTP mode; the offline sandbox checks layout + DOM.
+                    # Previous article navigation may request its own absent favicon;
+                    # don't misattribute that earlier 404 to the archive itself.
+                    errors.clear()
+                    status.clear()
                     if report['mode']=='http':
                         page.goto(base+'archive/',wait_until='networkidle')
                     else:
