@@ -17,6 +17,10 @@ flowchart LR
 
 `_site/` is disposable and ignored by Git. All category pages, the archive, homepage cards, JSON search index, RSS and sitemap are derived from manifests, not manually maintained. Original paper articles remain self-contained HTML reading artifacts with independent SVG/code sources alongside them.
 
+## Knowledge representation taxonomy
+
+`knowledge-representation` owns ontology engineering, RDF/RDFS/OWL/SKOS/SPARQL standards, knowledge-graph schema and construction, logical reasoning/consistency, and ontology learning/alignment. It is distinct from `foundations` (learned vector representations), `architectures` (GNN message passing), and `retrieval-rag` (retrieval and generation applications).
+
 ## Reasoning and inference taxonomy
 
 `reasoning` covers answer-quality algorithms (CoT, Self-Consistency, test-time search/verification); `inference` covers serving infrastructure (KV Cache, batching, latency/throughput). `retrieval-rag` covers ANN, retrieval/reranking and RAG; `agents` covers Reasoning–Acting, planning, tool calling and memory. `systems` owns kernels, compilers and GPU communication; `training` owns distributed model training, mixed precision and checkpointing. Both share the manifest-driven publishing pipeline.

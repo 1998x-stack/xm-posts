@@ -220,6 +220,34 @@
     ]
   },
   {
+    "slug": "knowledge-representation",
+    "title": "知识表示与语义技术",
+    "english": "Knowledge Representation & Semantic Technologies",
+    "description": "围绕符号知识如何被显式建模、连接、查询与推理，研究 Ontology、RDF/RDFS/OWL、SKOS、Knowledge Graph、语义互操作、规则推理与 LLM 辅助本体工程。",
+    "topics": [
+      {
+        "slug": "ontology-engineering",
+        "title": "Ontology Engineering & Modeling"
+      },
+      {
+        "slug": "semantic-web-standards",
+        "title": "RDF, RDFS, OWL, SKOS & SPARQL"
+      },
+      {
+        "slug": "knowledge-graphs",
+        "title": "Knowledge Graph Construction & Querying"
+      },
+      {
+        "slug": "knowledge-reasoning",
+        "title": "Logical Reasoning & Consistency"
+      },
+      {
+        "slug": "ontology-learning-alignment",
+        "title": "Ontology Learning, Matching & LLM-assisted Engineering"
+      }
+    ]
+  },
+  {
     "slug": "training",
     "title": "训练与对齐",
     "english": "Training & Alignment",

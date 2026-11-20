@@ -361,5 +361,13 @@
       "agentic-rl",
       "swe-agent"
     ]
+  },
+  {
+    "id": "path-39",
+    "title": "显式知识建模与向量语义表示",
+    "posts": [
+      "ontology",
+      "embeddings"
+    ]
   }
 ]

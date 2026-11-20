@@ -37,6 +37,7 @@
 | 强化学习 | [Bellman Equations](posts/reinforcement-learning/bellman-equations/index.html) | [MCTS](posts/reinforcement-learning/mcts/index.html) |
 | Agent 工程化 | [ReAct](posts/agents/react/index.html) | [SWE-agent](posts/agents/swe-agent/index.html) · [Agent Memory](posts/agents/agent-memory-components/index.html) · [Agentic RL](posts/agents/agentic-rl/index.html) · [Harness Engineering](posts/agents/harness-engineering/index.html) |
 | LLM 推理与系统 | [KV Cache](posts/inference/kv-cache/index.html) | [GQA](posts/architectures/gqa/index.html) · [FlashAttention](posts/systems/flashattention/index.html) |
+| 知识表示与语义技术 | [Ontology Engineering](posts/knowledge-representation/ontology/index.html) | [Embeddings](posts/foundations/embeddings/index.html)（向量表示对照） |
 
 **完整且权威的文章清单是 [`content/posts.json`](content/posts.json)**。新文章通过发布门禁后自动进入网站归档与 RSS；不要根据 README 的示例表格统计文章数量。
 
@@ -51,6 +52,7 @@
 - **Retrieval & RAG / Inference**：向量检索、增强生成、解码、KV Cache、请求调度与 Serving。
 - **Systems / Datasets / Evaluation / Multimodal**：算子与 GPU、数据、评测和多模态。
 - **Storage & Indexing**：B+ Tree、存储页、LSM、事务与索引结构。
+- **Knowledge Representation & Semantic Technologies**：Ontology、RDF/OWL、SKOS、知识图谱、逻辑推理与语义互操作。
 
 以上仅是导航概览。**分类、稳定 slug 和二级主题的唯一数据源是 [`content/categories.json`](content/categories.json)**；每篇文章在 `content/posts.json` 中只能有一个主 `category` 和 `topic`，跨领域关系使用 `tags`。详细约定见 [`docs/taxonomy.md`](docs/taxonomy.md)。
 

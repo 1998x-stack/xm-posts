@@ -2150,5 +2150,37 @@
       "src": "assets/01-single-vs-multi-turn.svg",
       "caption": "从一次生成扩展为由环境反馈驱动的多轮决策轨迹"
     }
+  },
+  {
+    "slug": "ontology",
+    "title": "Ontology Engineering：从分类树到可推理的知识模型",
+    "subtitle": "把概念、关系、约束与实例组织成可计算的语义系统",
+    "category": "knowledge-representation",
+    "topic": "ontology-engineering",
+    "status": "published",
+    "published": "2026-11-21",
+    "updated": "2026-11-21",
+    "reading_minutes": 32,
+    "tags": [
+      "Ontology",
+      "Ontology Engineering",
+      "Knowledge Representation",
+      "Knowledge Graph",
+      "Semantic Web",
+      "RDF",
+      "RDFS",
+      "OWL 2",
+      "SKOS",
+      "SPARQL",
+      "SHACL",
+      "LLM for Ontology Engineering"
+    ],
+    "summary": "从 Taxonomy、SKOS 与知识图谱的边界出发，逐层讲解 RDF 三元组、RDFS 类型推理、OWL 公理、开放世界假设、SPARQL 查询和 SHACL 验证；以大学领域本体、原生 MathML、七幅原创 SVG、交互式推理实验与纯 Python 确定性测试，建立从能力问题到可维护语义系统的完整工程方法。",
+    "paper": "https://protege.stanford.edu/publications/ontology_development/ontology101-noy-mcguinness.html",
+    "illustration": "ontology",
+    "cover": {
+      "src": "assets/01-taxonomy-ontology-kg.svg",
+      "caption": "分类树只表达层级，本体还明确关系与逻辑语义"
+    }
   }
 ]
