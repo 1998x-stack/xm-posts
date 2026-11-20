@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 350" role="img" aria-labelledby="rs-fig4-title rs-fig4-desc">
+<title id="rs-fig4-title">Best-of-N 与拒绝采样微调的区别</title>
+<desc id="rs-fig4-desc">两者都生成多个候选并用奖励模型排序；Best-of-N 只在推理时返回最佳答案，拒绝采样微调则把保留样本用于监督微调。</desc>
+<rect width="920" height="350" rx="18" fill="#f7faf9"/>
+<rect x="25" y="30" width="420" height="285" rx="14" fill="#eef5fb" stroke="#c5d8e8" stroke-width="2"/>
+<rect x="475" y="30" width="420" height="285" rx="14" fill="#f2f7f3" stroke="#c7ded2" stroke-width="2"/>
+<g font-family="Arial, PingFang SC, Microsoft YaHei, sans-serif">
+<text x="235" y="68" font-size="21" font-weight="700" text-anchor="middle" fill="#3e6281">Best-of-N · 推理时选择</text>
+<rect x="60" y="103" width="112" height="62" rx="9" fill="#fff" stroke="#c5d8e8"/><text x="116" y="140" font-size="17" text-anchor="middle" fill="#47647a">Prompt</text>
+<path d="M174 134 H211" stroke="#7195ad" stroke-width="3"/><path d="M202 126 L212 134 L202 142" fill="none" stroke="#7195ad" stroke-width="3"/>
+<rect x="216" y="103" width="100" height="62" rx="9" fill="#fff" stroke="#c5d8e8"/><text x="266" y="140" font-size="17" text-anchor="middle" fill="#47647a">N samples</text>
+<path d="M318 134 H350" stroke="#7195ad" stroke-width="3"/><path d="M341 126 L351 134 L341 142" fill="none" stroke="#7195ad" stroke-width="3"/>
+<rect x="355" y="103" width="65" height="62" rx="9" fill="#dcebf5" stroke="#a8c5db"/><text x="387" y="140" font-size="15" text-anchor="middle" fill="#3e6281">Best</text>
+<text x="235" y="215" font-size="17" text-anchor="middle" fill="#3e6281">返回一个答案</text><text x="235" y="250" font-size="15" text-anchor="middle" fill="#617a8a">不更新模型参数</text><text x="235" y="280" font-size="14" text-anchor="middle" fill="#617a8a">代价：每个请求多次生成与打分</text>
+<text x="685" y="68" font-size="21" font-weight="700" text-anchor="middle" fill="#3d6d59">RSFT / RAFT · 训练时学习</text>
+<rect x="510" y="103" width="95" height="62" rx="9" fill="#fff" stroke="#c7ded2"/><text x="557" y="140" font-size="17" text-anchor="middle" fill="#476e5b">Prompt</text>
+<path d="M607 134 H638" stroke="#77a38b" stroke-width="3"/><path d="M629 126 L639 134 L629 142" fill="none" stroke="#77a38b" stroke-width="3"/>
+<rect x="643" y="103" width="95" height="62" rx="9" fill="#fff" stroke="#c7ded2"/><text x="690" y="140" font-size="16" text-anchor="middle" fill="#476e5b">N samples</text>
+<path d="M740 134 H768" stroke="#77a38b" stroke-width="3"/><path d="M759 126 L769 134 L759 142" fill="none" stroke="#77a38b" stroke-width="3"/>
+<rect x="773" y="103" width="90" height="62" rx="9" fill="#e1f1e8" stroke="#b2d4c0"/><text x="818" y="140" font-size="16" text-anchor="middle" fill="#3d6d59">Keep</text>
+<path d="M818 167 V205 H685" stroke="#77a38b" stroke-width="2.5" fill="none"/><path d="M694 197 L684 205 L694 213" fill="none" stroke="#77a38b" stroke-width="2.5"/>
+<rect x="580" y="211" width="210" height="50" rx="9" fill="#e1f1e8" stroke="#b2d4c0"/><text x="685" y="242" font-size="17" font-weight="700" text-anchor="middle" fill="#3d6d59">SFT 更新参数 θ</text>
+<text x="685" y="288" font-size="14" text-anchor="middle" fill="#617d6a">下一轮可用新策略重新采样</text>
+</g>
+</svg>

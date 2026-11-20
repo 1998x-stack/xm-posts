@@ -2049,5 +2049,37 @@
       "src": "assets/cover-mixture.svg",
       "caption": "RAG-Sequence 整句共享文档，RAG-Token 逐词混合证据"
     }
+  },
+  {
+    "slug": "rejection-sampling",
+    "title": "Understanding Rejection Sampling",
+    "subtitle": "从接受—拒绝采样的概率保证，到 LLM 奖励筛选、Best-of-N 与拒绝采样微调",
+    "category": "training",
+    "topic": "rl-post-training",
+    "status": "published",
+    "published": "2026-11-21",
+    "updated": "2026-11-21",
+    "reading_minutes": 30,
+    "tags": [
+      "Rejection Sampling",
+      "接受—拒绝采样",
+      "Monte Carlo",
+      "Reward Model",
+      "RLHF",
+      "RSFT",
+      "Best-of-N",
+      "RAFT",
+      "RSO",
+      "RS-DPO",
+      "RLVR",
+      "Sampling"
+    ],
+    "summary": "从目标分布与提议分布的密度比推导精确拒绝采样的接受率和正确性，再把机制映射到 LLM 的奖励模型筛选、Best-of-N、RSFT/RAFT、RSO 与 RS-DPO；包含离散数值算例、两个交互实验、MathML 推导、五幅原创 SVG、可运行 Python 实现和单元测试。",
+    "paper": "https://arxiv.org/abs/2304.06767",
+    "illustration": "rejection-sampling",
+    "cover": {
+      "src": "assets/03-llm-rejection-pipeline.svg",
+      "caption": "同一提示生成多个回答，经奖励模型排序后保留高分样本并用于 SFT"
+    }
   }
 ]
