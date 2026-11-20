@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light">
+<meta name="description" content="从经典信息检索到 LLM 对话式搜索，系统理解 Query Understanding：意图、语义解析、查询重写、扩展、澄清、分解与 Agent 路由。">
+<link rel="canonical" href="https://1998x-stack.github.io/xm-posts/posts/retrieval-rag/query-understanding/">
+<title>Understanding Query Understanding · xm-posts</title><style>:root{color-scheme:light;--paper:#fffdf9;--ink:#203035;--subtle:#53676d;--accent:#147f80;--transform:#d06d4d;--structure:#7461ba;--annotation:#916c22;--border:#dce8e4;--surface:#f3f9f6;--max-reading:820px}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font:17px/1.85 system-ui,-apple-system,"PingFang SC","Microsoft YaHei",sans-serif}
+a{color:var(--accent);text-underline-offset:.17em}a:hover{color:var(--transform)}
+a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+.skip-link{position:absolute;left:1rem;top:-5rem;background:var(--ink);color:white;padding:.5rem 1rem;z-index:10}.skip-link:focus{top:1rem}
+.layout{max-width:1240px;margin:0 auto;display:grid;grid-template-columns:210px minmax(0,1fr);gap:clamp(2rem,5vw,5rem);padding:4.25rem 2rem 8rem}
+.toc{position:sticky;top:2rem;align-self:start;font-size:.83rem;line-height:1.55;max-height:calc(100vh - 4rem);overflow:auto}
+.toc strong{display:block;font-size:.85rem;letter-spacing:.08em;margin-bottom:.9rem}.toc a{display:block;text-decoration:none;color:var(--subtle);border-left:2px solid var(--border);padding:.4rem .75rem}.toc a:hover{border-color:var(--accent);color:var(--accent);background:var(--surface)}
+main{min-width:0}article{max-width:var(--max-reading);margin:0 auto;min-width:0}
+.article-header{padding-top:.5rem;padding-bottom:1rem}.article-header h1{font-size:clamp(2.65rem,5.7vw,4.5rem);line-height:1.12;letter-spacing:-.04em;margin:.35rem 0 1.15rem}.dek{font-size:clamp(1.12rem,2.2vw,1.35rem);line-height:1.65;color:var(--subtle)}
+section{scroll-margin-top:2rem;margin-top:4.25rem}h2{font-size:clamp(1.55rem,3vw,2rem);line-height:1.4;margin:0 0 1.35rem}h3{font-size:1.25rem;line-height:1.5;margin:2.2rem 0 .8rem}
+p{margin:1rem 0}strong{font-weight:700}code,pre{font-family:ui-monospace,SFMono-Regular,Consolas,monospace}code{font-size:.89em}pre{padding:1.15rem;background:#1c3037;color:#e7f5ef;border-radius:.8rem;overflow:auto;line-height:1.6;font-size:.84rem}
+figure{margin:2.1rem 0;padding:1.2rem;border:1px solid var(--border);border-radius:1rem;background:white}figure svg,figure img{width:100%;height:auto;display:block}figcaption{font-size:.83rem;line-height:1.7;color:var(--subtle);border-top:1px solid var(--border);margin-top:.9rem;padding-top:.8rem}
+.note{margin:1.6rem 0;padding:.9rem 1.1rem;border-left:4px solid var(--accent);background:var(--surface);border-radius:0 .5rem .5rem 0}
+.equation{text-align:center;font:1.35rem/1.5 Georgia,serif;background:var(--surface);border-radius:.7rem;padding:1rem;overflow-x:auto}
+.control-row{display:flex;gap:.65rem;flex-wrap:wrap;margin:1rem 0}button{font:inherit;font-size:.9rem;cursor:pointer;padding:.5rem .8rem;border:1px solid var(--border);border-radius:.5rem;background:white;color:var(--ink)}button[aria-pressed="true"]{background:var(--accent);color:white;border-color:var(--accent)}
+.status{min-height:1.5em;color:var(--accent);font-weight:600}table{width:100%;border-collapse:collapse;font-size:.9rem}th,td{border-bottom:1px solid var(--border);text-align:left;padding:.65rem;vertical-align:top}
+@media(max-width:900px){.layout{display:block;padding:2rem 1.2rem 5rem}.toc{position:static;max-height:none;margin-bottom:2rem;border-bottom:1px solid var(--border);padding-bottom:1rem}.toc a{display:inline-block;border-left:0;border-bottom:2px solid transparent;margin-right:.35rem;padding:.4rem .3rem}}
+@media(max-width:480px){body{font-size:16px}.layout{padding:1.3rem 1rem 4rem}figure{padding:.6rem}section{margin-top:3.25rem}h2{margin-bottom:1rem}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation:none!important;transition:none!important}}
+@media print{body{background:white;color:black;font-size:11pt}.layout{display:block;padding:0}.toc,.control-row,.skip-link{display:none!important}article{max-width:none}figure{break-inside:avoid;box-shadow:none}a{color:#164e54}section{margin-top:1.6rem}}
+.math-inline{font-family:"Cambria Math","STIX Two Math","Latin Modern Math",serif;vertical-align:-.05em}
+.math-equation{max-width:100%;min-width:0;margin:1.6rem 0;padding:.5rem 0;border-block:1px solid #dfe8e4}
+.math-scroll,[data-math-scroll]{display:block;max-width:100%;min-width:0;overflow-x:auto;overflow-y:hidden;scrollbar-width:thin}
+.math-scroll:focus-visible,[data-math-scroll]:focus-visible{outline:3px solid #147f80;outline-offset:2px}
+.math-scroll math[display="block"],[data-math-scroll] math[display="block"]{width:max-content;min-width:100%;font-size:clamp(1.05rem,2.2vw,1.3rem)}
+@media(max-width:480px){.math-scroll math[display="block"],[data-math-scroll] math[display="block"]{font-size:1.03rem}}
+@media print{.math-equation{break-inside:avoid}.math-scroll,[data-math-scroll]{overflow:visible}.math-scroll math[display="block"],[data-math-scroll] math[display="block"]{font-size:1rem}}
+.article-meta{display:flex;flex-wrap:wrap;gap:.55rem 1rem;color:var(--subtle);font-size:.84rem;border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:.8rem 0;margin:1.4rem 0 2rem}
+.eyebrow{color:var(--accent);font-size:.76rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase}
+.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.9rem;margin:1.2rem 0}
+.card{border:1px solid var(--border);border-radius:.8rem;padding:1rem;background:#fff;min-width:0}.card h3{margin:.2rem 0 .55rem;font-size:1.08rem}.card p:last-child{margin-bottom:0}
+.schema{background:#172c34;color:#e8f4ef;border-radius:.8rem;padding:1rem;overflow:auto;font:.84rem/1.65 ui-monospace,SFMono-Regular,Consolas,monospace}
+.demo{border:1px solid #c9ded7;background:#f7fbf8;border-radius:1rem;padding:1.1rem;margin:1.6rem 0}.demo h3{margin:.1rem 0 .5rem}
+.demo-grid{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:1rem;align-items:start}.demo-panel{min-width:0;background:#fff;border:1px solid var(--border);border-radius:.7rem;padding:.8rem}.demo-panel p{margin:.2rem 0 .6rem}.demo-panel pre{margin:.4rem 0 0;max-height:330px}
+.step-list{counter-reset:steps;list-style:none;padding:0}.step-list li{counter-increment:steps;position:relative;padding:.1rem 0 .1rem 2.6rem;margin:1rem 0}.step-list li:before{content:counter(steps);position:absolute;left:0;top:0;width:1.9rem;height:1.9rem;border-radius:50%;background:#dff0e9;color:#17675f;display:grid;place-items:center;font-weight:800}
+.kpi-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.7rem;margin:1rem 0}.kpi{border:1px solid var(--border);border-radius:.7rem;padding:.8rem;background:#fff}.kpi strong{display:block;color:var(--accent);font-size:1.2rem}.kpi span{font-size:.8rem;color:var(--subtle)}
+.note.warning{border-left-color:var(--transform);background:#fff5ed}.note.purple{border-left-color:var(--structure);background:#f5f1ff}
+@media(max-width:640px){.cards,.demo-grid{grid-template-columns:1fr}.kpi-row{grid-template-columns:1fr}.demo{padding:.8rem}}
+</style></head>
+<body><a class="skip-link" href="#content">跳转至正文</a>
+<div class="layout">
+<nav class="toc" aria-label="文章目录"><strong>QUERY UNDERSTANDING</strong>
+<a href="#problem">01 · 问题</a><a href="#definition">02 · 定义</a><a href="#taxonomy">03 · 任务谱系</a><a href="#pipeline">04 · 系统流程</a><a href="#transformation">05 · 查询转换</a><a href="#conversation">06 · 多轮理解</a><a href="#agent-boundary">07 · Agent 边界</a><a href="#evaluation">08 · 评测</a><a href="#failure">09 · 失败模式</a><a href="#summary">10 · 总结</a><a href="#references">参考文献</a></nav>
+<main id="content"><article>
+<header class="article-header"><p class="eyebrow">INFORMATION RETRIEVAL · LANGUAGE UNDERSTANDING · LLM SYSTEMS</p>
+<h1>Understanding Query Understanding</h1>
+<p class="dek">用户说出的句子，不等于系统真正需要解决的问题。Query Understanding 负责把自然语言中的意图、实体、约束和上下文，转换为机器能够检索、比较或安全路由的语义表示。</p>
+<div class="article-meta"><span>研究生专题</span><span>约 32 分钟</span><span>经典 IR → LLM Search → Agent</span><span>更新于 2026-11-21</span></div></header>
+
+<section id="problem"><h2>01 · 为什么“看懂关键词”仍然不等于理解用户？</h2>
+<p class="lead">先看一个真实系统很容易遇到的请求：</p>
+<div class="note"><strong>用户：</strong> Find recent papers about efficient LLM inference, especially methods that reduce KV cache memory.</div>
+<p>如果系统只做关键词匹配，它可能提取出 <code>recent</code>、<code>LLM inference</code>、<code>KV cache</code>，然后把这些词交给搜索引擎。但这仍然没有回答几个关键问题：</p>
+<ul>
+<li><strong>用户要做什么？</strong> 他想找研究论文，而不是运行一个推理服务。</li>
+<li><strong>“recent” 到底多近？</strong> 最近一年、三年，还是最近发表的几篇？这是一项尚未明确的时间约束。</li>
+<li><strong>“reduce memory” 指什么？</strong> 峰值显存、KV Cache 字节数、每 token 内存，还是并发请求下的总显存？</li>
+<li><strong>“especially” 表达什么关系？</strong> KV Cache 优化是核心主题，还是高效推理中的一个优先子方向？</li>
+<li><strong>系统应该返回什么？</strong> 论文列表、方法比较表，还是带有论文证据的技术综述？</li>
+</ul>
+<p>这些差异会直接改变检索结果。Query Understanding（查询理解）研究的不是“把句子改写得更漂亮”，而是恢复用户真正的信息需求，并将它表达为下游系统可以可靠使用的结构。</p>
+<figure><img src="assets/01-query-pipeline.svg" alt="自然语言请求经过上下文理解、语义解析、决策和查询转换，最终进入检索或 Agent 路由的系统流程"><figcaption>图 1：查询理解位于用户语言与下游系统之间。它先形成语义表示，再决定检索、澄清或路由；不是把原始字符串直接交给一个黑盒模型。</figcaption></figure>
+<p>可以把它类比成一位研究助理：听到“帮我找最近的 KV Cache 优化论文”，不会立刻把每个词拆开搜索，而会先确认研究对象、时间范围、优化目标和交付形式。机器系统也需要一个类似的“需求建模层”。</section>
+
+<section id="definition"><h2>02 · Query Understanding 的正式定义</h2>
+<p>在经典信息检索（Information Retrieval, IR）中，查询是用户向系统提交的表达，但查询文本只是信息需求的一个不完美观测。用户可能不知道专业术语、使用缩写、遗漏限定条件，或者依赖上一轮对话中的指代。</p>
+<p>记当前查询为 <code>q</code>，可用的对话历史为 <code>h</code>，系统希望估计的语义表示为 <code>z</code>。一个抽象的理解模型可以写成：</p>
+<div class="math-equation" role="group" aria-label="查询理解的条件概率模型"><div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="查询理解公式，可横向滚动"><math display="block" aria-label="z 的后验概率等于给定当前查询 q 和历史 h 时 z 的条件概率"><mrow><mi>P</mi><mo>(</mo><mi>z</mi><mo>|</mo><mi>q</mi><mo>,</mo><mi>h</mi><mo>)</mo></mrow></math></div></div>
+<p>这不是某一篇论文规定的唯一模型，而是一个统一的建模视角：系统根据当前表达和可信上下文，推断“用户在寻找什么、有哪些限制、哪些地方仍然不确定”。</p>
+<h3>02.1 一个可用的语义表示</h3>
+<p>对检索和 Agent 系统而言，<code>z</code> 不应只是一个 intent label。它通常至少包含以下字段：</p>
+<pre class="schema">{
+  "domain": "information_retrieval",
+  "intent": "research_search",
+  "entities": ["LLM inference", "KV Cache"],
+  "constraints": {
+    "time": {"value": "recent", "resolved": false},
+    "objective": "reduce_memory"
+  },
+  "sub_intents": ["efficient inference", "KV Cache optimization"],
+  "ambiguities": ["recent 的具体时间窗口"],
+  "output_preference": "paper list with evidence",
+  "route": "paper_retrieval"
+}</pre>
+<p>注意 <code>resolved: false</code>。这不是解析失败，而是一个重要的正确性标记：系统识别出了“recent”是时间约束，却没有擅自把它解释成“近三年”。好的查询理解系统不仅要知道自己理解了什么，也要知道自己还不知道什么。</p>
+<div class="cards">
+<div class="card"><h3>意图 Intent</h3><p>用户要完成的动作，例如查找、比较、解释、购买、导航或执行。</p></div>
+<div class="card"><h3>实体 Entities</h3><p>查询涉及的人、产品、模型、组织、地点、论文或技术概念。</p></div>
+<div class="card"><h3>槽位 Slots</h3><p>实体周围的属性和参数，例如时间范围、模型版本、数据集、指标。</p></div>
+<div class="card"><h3>约束 Constraints</h3><p>必须满足或优先满足的条件，例如“仅开源”“不降低精度”“小于 8GB”。</p></div>
+<div class="card"><h3>上下文 Context</h3><p>当前轮省略的信息、代词指向、用户刚刚修正过的偏好。</p></div>
+<div class="card"><h3>不确定性 Uncertainty</h3><p>多种合理解释的候选、置信度、需要澄清的字段和证据来源。</p></div>
+</div>
+<h3>02.2 识别意图不等于决定行动</h3>
+<p>理解层的输出只是对用户需求的估计。系统还需要决定下一步是直接检索、先问一个澄清问题，还是在信息不足时暂不行动。可以把这个决策抽象为：</p>
+<div class="math-equation" role="group" aria-label="在检索、澄清和暂缓之间选择期望效用最高的动作"><div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="动作选择公式，可横向滚动"><math display="block" aria-label="最优动作等于在检索、澄清和暂缓动作中最大化给定查询和历史的期望效用"><mrow><msup><mi>a</mi><mo>*</mo></msup><mo>=</mo><munder><mi>argmax</mi><mrow><mi>a</mi><mo>∈</mo><mo>{</mo><mi>retrieve</mi><mo>,</mo><mi>clarify</mi><mo>,</mo><mi>abstain</mi><mo>}</mo></mrow></munder><mi mathvariant="normal">E</mi><mo>[</mo><mi>U</mi><mo>(</mo><mi>a</mi><mo>,</mo><mi>z</mi><mo>)</mo><mo>|</mo><mi>q</mi><mo>,</mo><mi>h</mi><mo>]</mo></mrow></math></div></div>
+<p>直觉是：如果不确定性不会改变结果，就不必追问；如果缺失字段会改变候选集合或执行后果，澄清的价值就会上升。例如，“找一些 KV Cache 论文”可以先检索；“删除旧数据”则不能在对象和范围不清楚时直接执行。</p>
+</section>
+
+<section id="taxonomy"><h2>03 · 经典 Query Understanding 的任务谱系</h2>
+<p>《Query Understanding for Search Engines》（2020）将相关技术概括为三大类：理解搜索者想要什么、把原查询转换成更有效的查询，以及帮助用户完善查询表达。这个划分适合作为第一层知识地图。<a href="https://link.springer.com/book/10.1007/978-3-030-58334-7">原书与章节目录</a>。</p>
+<figure><img src="assets/02-task-taxonomy.svg" alt="查询理解分为理解、转换、交互三个任务簇，上下文建模和评测贯穿三个任务簇"><figcaption>图 2：经典任务可以归为 Understand、Transform、Interact 三个任务簇；多轮上下文与评测是横切能力，不应被误当成一个孤立算法。</figcaption></figure>
+<h3>03.1 Understand：识别查询表达了什么</h3>
+<ol>
+<li><strong>Query Classification / Intent Classification。</strong> 判断查询属于哪个领域、任务或意图类别。例如 informational（获取信息）、navigational（寻找特定站点/页面）、transactional（准备完成交易）。这只是常见分类之一，不是所有产品都必须采用的固定标签集。</li>
+<li><strong>Query Segmentation。</strong> 将连续词串切分为有意义的短语。例如 <code>new york times subscription</code> 可以切成 <code>New York Times</code> 与 <code>subscription</code>，而不是机械地逐词处理。</li>
+<li><strong>Semantic Tagging / Slot Filling。</strong> 给片段标注语义角色，例如把“明天”识别为时间槽位，把“东京”识别为地点槽位，把“低于 100 美元”识别为价格约束。</li>
+<li><strong>Entity Linking / Query Interpretation。</strong> 将表面提及链接到知识库中的实体，并保留多个合理解释。例如 <code>Jaguar</code> 可能指汽车品牌，也可能指动物；只抽取字符串而不消歧，无法可靠地完成后续检索。</li>
+</ol>
+<h3>03.2 Transform：把原查询转换成更可用的形式</h3>
+<ul><li><strong>Spelling Correction：</strong> 修正拼写错误和常见输入变体，但不能把领域术语误改成常见词。</li><li><strong>Query Rewriting：</strong> 在保持用户意图的前提下，补全省略信息、规范表达或消除指代。</li><li><strong>Query Expansion：</strong> 增加同义词、相关概念或生成的伪文档，扩大检索覆盖。</li><li><strong>Query Decomposition：</strong> 把多方面的复杂请求拆成可分别检索的子查询，再融合结果。</li></ul>
+<h3>03.3 Interact：帮助用户表达尚未说清的需求</h3>
+<ul><li><strong>Autocomplete：</strong> 根据输入前缀预测可能的完整查询。</li><li><strong>Query Suggestion：</strong> 推荐相近主题、细化方向或下一步检索。</li><li><strong>Clarification：</strong> 当多个解释会导致不同结果时，提出一个最有价值的澄清问题。</li><li><strong>Proactive Query Management：</strong> 在多轮搜索中发现需求变化，主动更新查询计划，而不是死守第一轮输入。</li></ul>
+<div class="note purple"><strong>研究边界：</strong> 分类、分词、槽位抽取、实体链接、重写和澄清是不同任务。一个 LLM 可以在一个 prompt 中同时完成它们，但这不意味着它们在理论上是同一个问题，也不意味着它们应该使用同一个评测指标。</div>
+</section>
+
+<section id="pipeline"><h2>04 · 从原始 Query 到可检索表示：完整系统流程</h2>
+<p>将上述任务组合起来，可以得到一个分层管线。工程上不一定需要七个独立模型，但系统接口最好保留这些逻辑阶段，便于定位错误、替换组件和做消融实验。</p>
+<figure><img src="assets/03-semantic-frame.svg" alt="自然语言查询中的研究论文、近期、高效推理、KV Cache 内存目标被映射到意图、时间槽位、领域实体和优化约束"><figcaption>图 3：语义解析不是把句子压缩成几个关键词，而是将原文中的片段映射到可检查的字段，并标记哪些字段仍然含糊。</figcaption></figure>
+<ol class="step-list">
+<li><strong>保留原始输入。</strong> 保存 <code>raw_query</code>，不让后续改写覆盖用户原话。它是审计、纠错和回滚的依据。</li>
+<li><strong>恢复上下文。</strong> 根据可信的对话历史解决“它”“这些方法”“刚才那篇”等指代。只补全有证据支持的省略信息。</li>
+<li><strong>识别领域与意图。</strong> 判断这是研究搜索、事实问答、比较、导航、交易还是工具操作。</li>
+<li><strong>抽取实体与槽位。</strong> 找到模型名、论文名、时间、指标、地点、预算和其他约束，并尽可能链接到规范实体。</li>
+<li><strong>估计歧义和置信度。</strong> 对多义实体、模糊时间和缺失参数保留候选解释，而不是过早拍板。</li>
+<li><strong>选择转换或澄清策略。</strong> 决定直接检索、重写、扩展、分解、追问或暂缓。</li>
+<li><strong>路由到下游。</strong> 将经过验证的查询表示交给 BM25、向量检索、RAG、搜索 API 或 Agent 工具执行层。</li>
+</ol>
+<p>这一结构也解释了为什么 Query Understanding 是一个系统问题，而不只是一个分类器：上游的误判会改变下游的召回、排序和最终答案；下游结果又能反馈给理解层，帮助判断原始解释是否合理。</p>
+<h3>04.1 原始查询、理解结果和检索查询应该分开保存</h3>
+<div class="cards"><div class="card"><h3><code>raw_query</code></h3><p>用户实际输入。只读保留，不能被模型重写覆盖。</p></div><div class="card"><h3><code>query_frame</code></h3><p>结构化语义表示：意图、实体、槽位、约束、候选解释与来源。</p></div><div class="card"><h3><code>retrieval_queries</code></h3><p>面向特定检索器生成的查询变体；每个变体要保留来源和用途。</p></div></div>
+<p>这种分离非常关键：一个为 BM25 生成的词汇扩展查询，不一定适合 Dense Retriever；一个为了消歧而生成的解释，也不应该伪装成用户亲自说过的话。</p>
+</section>
+
+<section id="transformation"><h2>05 · Query Rewriting、Expansion 和 Decomposition 有什么区别？</h2>
+<p>这三个术语经常被混用，但它们解决的是不同问题。最简单的判断方式是：改写在修复表达，扩展在增加匹配线索，分解在拆开多个子目标。</p>
+<figure><img src="assets/04-rewrite-expand-decompose.svg" alt="查询改写保持单一意图并规范表达，查询扩展增加词汇或伪文档，查询分解把复杂请求拆成多个子查询"><figcaption>图 4：Rewrite、Expand、Decompose 三种操作的输入输出不同。它们可以组合，但不能把组合后的效果归因于同一个操作。</figcaption></figure>
+<h3>05.1 Query Rewriting：保持意图，修复表达</h3>
+<p>原始查询：<code>papers about kv cache less memory</code>。</p><p>可能的改写：<code>research papers on methods for reducing KV Cache memory consumption during LLM inference</code>。</p>
+<p>改写让语义更完整，但不应该凭空添加“必须开源”“只看 2025 年以后”等原文和上下文都没有支持的条件。评价改写时，重点检查<strong>意图保持</strong>，而不是只看新句子是否流畅。</p>
+<h3>05.2 Query Expansion：补充匹配线索</h3>
+<p><a href="https://aclanthology.org/2023.emnlp-main.585/">Query2doc（EMNLP 2023）</a>提出用 LLM 根据查询生成伪文档，再把生成内容用于扩展查询。论文报告在 MS MARCO、TREC DL 等 ad-hoc 检索数据集上，BM25 的效果提升约 3%–15%；这是论文特定实验设置下的结果，不是对任意数据集和任意检索器的保证。</p>
+<p>为什么伪文档可能有效？短查询通常只有少数关键词，而伪文档可以补充术语、相关概念和背景描述，让稀疏检索更容易匹配文档中的不同表述。</p>
+<div class="note warning"><strong>扩展的代价是噪声。</strong> Weller 等人的系统研究比较了 11 种扩展方法、12 个数据集和 24 个检索模型，发现扩展带来的收益与检索器原有能力存在明显关系：弱检索器可能获益，强检索器则可能被额外噪声拖累。增加词语不等于增加有效证据。</div>
+<h3>05.3 Query Decomposition：把复杂需求拆成子问题</h3>
+<p>例如“比较近几年降低 LLM 推理成本的方法，分析 KV Cache、量化和投机解码的质量—延迟权衡”至少包含三个子目标：</p>
+<ul><li>KV Cache 优化：显存占用、缓存精度与并发能力。</li><li>量化：权重/激活/缓存量化、精度损失和硬件支持。</li><li>投机解码：额外计算、接受率、端到端延迟和输出一致性。</li></ul>
+<p>2025 年提交、2026 年更新的 ReDI 工作将复杂查询分解为子查询，为每个子查询补充面向稀疏或稠密检索的解释，再分别检索并融合结果。它强调的是“分解后仍要恢复语义”，否则子查询会因为缺少上下文而变得过于短小或含糊。</p>
+<h3>05.4 用交互实验比较三种操作</h3>
+<div class="demo" id="strategy-lab"><h3>查询转换实验室</h3><p>选择一个操作，观察它改变的是表达、匹配线索，还是任务结构。</p>
+<div class="control-row" role="group" aria-label="选择查询转换方式"><button type="button" data-strategy="rewrite" aria-pressed="true">Rewrite</button><button type="button" data-strategy="expand" aria-pressed="false">Expand</button><button type="button" data-strategy="decompose" aria-pressed="false">Decompose</button></div>
+<div class="demo-grid"><div class="demo-panel"><p class="eyebrow">原始需求</p><p>找近期降低 LLM 推理 KV Cache 内存占用的论文。</p></div><div class="demo-panel"><p class="eyebrow">转换结果</p><p id="strategy-output">检索研究论文：降低大语言模型推理阶段 KV Cache 显存占用的方法。</p><p id="strategy-effect" class="status" aria-live="polite">核心意图保持不变，表达更规范。</p></div></div></div>
+</section>
+
+<section id="conversation"><h2>06 · 多轮对话：理解的不再是单个 Query，而是持续变化的信息需求</h2>
+<p>传统 Web 搜索常把每个查询看成相对独立的输入；对话式搜索则不同。用户会逐轮缩小范围、纠正系统、引用前文对象，或者改变最终交付形式。</p>
+<figure><img src="assets/05-conversation-state.svg" alt="多轮对话将当前查询与历史约束合并为持续更新的语义状态，并解决代词指向和省略"><figcaption>图 5：多轮 Query Understanding 需要维护可更新的需求状态，而不是把历史所有文本简单拼接进 prompt。</figcaption></figure>
+<p>看一个三轮例子：</p>
+<div class="cards"><div class="card"><h3>Turn 1</h3><p>“找一些 KV Cache 压缩论文。”</p><p><strong>状态：</strong>主题 = KV Cache 压缩；任务 = 论文检索。</p></div><div class="card"><h3>Turn 2</h3><p>“只看不会明显降低生成质量的方法。”</p><p><strong>状态更新：</strong>增加质量保持约束；“方法”指上一轮的压缩方法。</p></div><div class="card"><h3>Turn 3</h3><p>“把它们和量化比较。”</p><p><strong>状态更新：</strong>比较对象 = 已筛选的 KV Cache 方法与量化；输出 = 对比分析。</p></div></div>
+<p>如果系统只看第三轮，它不知道“它们”指什么；如果系统把全部历史机械拼接，它又可能重复旧约束、引入已被用户撤回的偏好。更稳妥的做法是维护一个结构化的、可追溯的对话状态：</p>
+<ul><li><strong>当前目标：</strong> 当前轮正在推进的任务。</li><li><strong>活动约束：</strong> 用户明确提出、尚未撤回的限制条件。</li><li><strong>实体指代：</strong> “它们”“这篇论文”“上一个方法”指向哪个对象。</li><li><strong>状态来源：</strong> 每个字段来自哪一轮、是否由模型推断、是否被用户确认。</li><li><strong>更新操作：</strong> 新条件是新增、覆盖、删除还是纠正旧条件。</li></ul>
+<p>SIGIR 2025 的 Query Understanding in LLM-based Conversational Information Seeking 教程将上下文感知、歧义消解、查询细化、主动查询管理和多轮评测列为核心议题。这说明对话式查询理解已经超出了单轮关键词分类的边界。</p>
+<h3>06.1 什么时候应该追问？</h3>
+<p>不是每个模糊词都值得追问。一个实用原则是：只有当不同解释会显著改变结果、成本或副作用时，才优先澄清。比如“最近的论文”可以先按产品默认窗口搜索并明确标注；“把旧版本删掉”则必须先确认对象和删除范围。</p>
+<p><a href="https://aclanthology.org/2025.emnlp-main.496/">ICR（EMNLP 2025）</a>提出迭代式 Clarification and Rewriting：系统在澄清问题与重写查询之间交替推进，而不是一次性尝试修复所有模糊片段。其核心启示是：澄清可以是一个逐步收敛的过程。</p>
+</section>
+
+<section id="agent-boundary"><h2>07 · Query Understanding 如何连接 Agent 与 Tool Calling？</h2>
+<p>当系统不只是找文档，还要调用工具时，查询理解就成为自然语言与工具接口之间的语义适配层。例如：</p>
+<div class="note">“帮我比较三个向量数据库，重点关注过滤能力和混合检索；最后整理成表格。”</div>
+<p>理解层可以产出一个候选任务表示：<code>intent=compare_products</code>、<code>entities=vector databases</code>、<code>criteria=[filtering, hybrid search]</code>、<code>output=table</code>。随后由 Agent 规划层决定是否需要搜索、调用哪些工具，以及如何合并结果。</p>
+<figure><img src="assets/06-agent-boundary.svg" alt="查询理解产生结构化意图后进入检索或 Agent 规划；副作用工具调用必须经过参数验证和权限授权"><figcaption>图 6：语义理解、任务规划、参数验证和权限授权是不同责任边界。识别出用户意图，不等于获得执行权限。</figcaption></figure>
+<p>这里必须明确三条边界：</p><ol><li><strong>理解层回答“用户可能想做什么”。</strong> 它给出候选意图、实体和参数，不直接执行副作用。</li><li><strong>规划层回答“怎样完成任务”。</strong> 它将目标拆成检索、计算、比较和生成等步骤。</li><li><strong>执行层回答“是否允许执行”。</strong> 它校验工具 schema、参数范围、身份权限和用户确认；删除、购买、发送等操作尤其不能靠模型猜测授权。</li></ol>
+<p>因此，Query Understanding 与 Function Calling / Tool Calling 密切相关，但并不等价。前者形成语义表示，后者负责按照工具接口提交调用；授权和执行安全还需要独立的控制层。</p>
+</section>
+
+<section id="evaluation"><h2>08 · 如何评测 Query Understanding？</h2>
+<p>一个常见错误是只看意图分类准确率，便声称整个查询理解系统有效。事实上，理解层的局部预测是否正确，与最终检索或任务是否成功，是两个不同层次的问题。</p>
+<figure><img src="assets/07-evaluation.svg" alt="查询理解评测分为内部任务指标、下游检索指标和交互或任务完成指标，并形成误差分析反馈环"><figcaption>图 7：评测需要从字段级理解一直延伸到下游效果；局部指标改善不一定带来最终任务收益。</figcaption></figure>
+<div class="cards"><div class="card"><h3>Intrinsic · 内部指标</h3><ul><li>Intent：Accuracy、Macro-F1</li><li>Slot Filling：Precision / Recall / F1</li><li>Entity Linking：Accuracy、Recall@k</li><li>Rewrite：意图保持、约束保真</li><li>Decomposition：子目标覆盖率、冗余率</li></ul></div><div class="card"><h3>Extrinsic · 下游指标</h3><ul><li>Retrieval：Recall@k、MRR、nDCG@k</li><li>RAG：答案正确性、证据覆盖与引用质量</li><li>Agent：任务成功率、工具参数正确率</li><li>Interaction：澄清轮数、用户修正率</li><li>Systems：延迟、token 成本、吞吐</li></ul></div></div>
+<h3>08.1 为什么局部准确率不够？</h3>
+<p>假设一个模型把查询中的实体识别正确了，却把“只比较开源方法”这一约束漏掉。实体链接准确率可能很好看，但召回结果会混入闭源方法，最终答案仍然失败。因此需要把查询表示和最终结果一起评测，并按错误类型做切片分析。</p>
+<h3>08.2 LLM 是否全面优于传统方法？</h3>
+<p>目前不能这么下结论。Schmidt、Hagen 与 Fröbe 的 2026 年研究比较了 LLM 与传统方法在 Query Intent Prediction、Query Segmentation 和 Query Interpretation 上的表现，同时把它们放入 Robust04 检索流程做端到端评估。作者报告：在内部查询理解评测中，LLM 没有优于传统方法；在端到端检索中，也只有少数方法带来改善。</p>
+<p>这个结果并不意味着 LLM 没有价值。它提示我们要区分表达能力、任务准确率、检索增益和系统收益。传统分类器、规则、词典、实体链接模型和 LLM 并不是简单的新旧替代关系：高吞吐、标签稳定的任务可以由轻量模型处理；复杂、长尾、需要上下文推理的请求则可以进入 LLM 或混合级联。</p>
+</section>
+
+<section id="failure"><h2>09 · 常见失败模式与工程防护</h2>
+<table><thead><tr><th>失败模式</th><th>发生原因</th><th>建议防护</th></tr></thead><tbody>
+<tr><td>意图误判</td><td>短查询、多义词、缺少领域上下文</td><td>保留候选解释；必要时澄清；评测长尾类别</td></tr>
+<tr><td>语义漂移</td><td>重写或扩展加入原需求没有的概念</td><td>保存原文；做约束保真检查；比较原始与改写结果</td></tr>
+<tr><td>实体幻觉</td><td>模型把相似名称误认成确定实体</td><td>实体链接给出候选与证据；未知实体允许 abstain</td></tr>
+<tr><td>上下文污染</td><td>历史偏好已过期，或把旧任务错误带入新任务</td><td>字段级来源、时间戳、用户纠正和显式状态更新</td></tr>
+<tr><td>过度澄清</td><td>把所有不确定性都当作阻塞条件</td><td>用决策价值判断是否追问；优先问最影响结果的一个问题</td></tr>
+<tr><td>过度扩展</td><td>额外词汇增加噪声，压低真正相关文档</td><td>按检索器与数据集评估；设置扩展预算和回退策略</td></tr>
+<tr><td>越权执行</td><td>把推断出的意图误当成用户授权</td><td>执行层独立做权限、参数和副作用确认</td></tr>
+</tbody></table>
+<h3>09.1 一个最小的、可测试的语义解析示例</h3>
+<p>下面的代码不是完整的生产级 Query Understanding 模型，而是一个刻意简化的规则示例。它展示一个重要接口原则：原始查询必须保留；已识别的实体与约束要结构化；不确定的字段要显式标记，而不是偷偷补全。</p>
+<pre><code>from dataclasses import dataclass
+
+@dataclass(frozen=True)
+class QueryFrame:
+    raw_query: str
+    intent: str
+    entities: tuple[str, ...]
+    constraints: tuple[str, ...]
+    unresolved: tuple[str, ...]
+
+    @property
+    def needs_clarification(self) -> bool:
+        return bool(self.unresolved)
+
+
+def parse_query_demo(raw_query: str) -> QueryFrame:
+    if not raw_query.strip():
+        raise ValueError("raw_query must not be empty")
+
+    text = raw_query.casefold()
+    intent = (
+        "research_search"
+        if "paper" in text or "论文" in raw_query
+        else "unknown"
+    )
+
+    entities = []
+    if "llm inference" in text or "大模型推理" in raw_query:
+        entities.append("LLM inference")
+    if "kv cache" in text or "kv缓存" in raw_query:
+        entities.append("KV Cache")
+
+    constraints = []
+    unresolved = []
+    if "recent" in text or "近期" in raw_query:
+        constraints.append("time:recent")
+        unresolved.append("recent 的时间窗口尚未定义")
+
+    if "reduce" in text and "memory" in text:
+        constraints.append("objective:reduce_memory")
+
+    if intent == "unknown":
+        unresolved.append("意图超出本演示规则覆盖范围")
+
+    return QueryFrame(
+        raw_query=raw_query,
+        intent=intent,
+        entities=tuple(entities),
+        constraints=tuple(constraints),
+        unresolved=tuple(unresolved),
+    )</code></pre>
+<p>这个示例的重点不是规则有多聪明，而是接口能否诚实表达边界。生产系统可以将规则替换为分类器、序列标注器、实体链接模型或 LLM，但仍应保留原文、字段来源、未解决问题和验证状态。</p>
+</section>
+
+<section id="summary"><h2>10 · 总结：把 Query Understanding 放在正确的系统位置</h2>
+<div class="kpi-row"><div class="kpi"><strong>Understand</strong><span>理解用户表达了什么</span></div><div class="kpi"><strong>Transform</strong><span>把查询变成可用的表示</span></div><div class="kpi"><strong>Interact</strong><span>通过建议和澄清补足信息</span></div></div>
+<p>可以用五句话总结整篇文章：</p><ol><li>Query 是用户信息需求的表达，不是信息需求本身。</li><li>Query Understanding 将意图、实体、槽位、约束和上下文组织成显式表示。</li><li>Rewriting、Expansion、Decomposition 和 Clarification 是不同操作，应按问题选择。</li><li>LLM 能提升复杂语言的处理灵活性，但不保证在每个内部任务或最终检索指标上胜过传统方法。</li><li>理解层可以提出执行意图，但工具权限、参数验证和副作用确认必须留在独立执行层。</li></ol>
+<p>从知识地图看，Query Understanding 是从用户语言进入检索系统的语义入口；它与 Embeddings、RAG、Conversational Search 和 Agent Routing 相连，但不应与它们混为一谈。</p></section>
+
+<section id="references" class="references"><h2>参考文献与延伸阅读</h2><ol>
+<li>Yi Chang and Hongbo Deng (eds.). <em>Query Understanding for Search Engines</em>. Springer, 2020. <a href="https://doi.org/10.1007/978-3-030-58334-7">DOI / 章节目录</a>.</li>
+<li>Avishek Anand et al. <em>Query Understanding in the Age of Large Language Models</em>. arXiv:2306.16004, 2023. <a href="https://arxiv.org/abs/2306.16004">论文</a>.</li>
+<li>Liang Wang, Nan Yang, and Furu Wei. <em>Query2doc: Query Expansion with Large Language Models</em>. EMNLP 2023, pp. 9414–9423. <a href="https://aclanthology.org/2023.emnlp-main.585/">论文</a>.</li>
+<li>Orion Weller et al. <em>When do Generative Query and Document Expansions Fail?</em> arXiv:2309.08541, 2023. <a href="https://arxiv.org/abs/2309.08541">论文</a>.</li>
+<li>Yifei Yuan et al. <em>Query Understanding in LLM-based Conversational Information Seeking</em>. SIGIR 2025 Tutorial. <a href="https://sigirusertutorial.github.io/">教程材料</a>.</li>
+<li>Zhiyu Cao, Peifeng Li, and Qiaoming Zhu. <em>ICR: Iterative Clarification and Rewriting for Conversational Search</em>. EMNLP 2025, pp. 9810–9824. <a href="https://aclanthology.org/2025.emnlp-main.496/">论文</a>.</li>
+<li>Yunfei Zhong et al. <em>Reason to Retrieve: Enhancing Query Understanding through Decomposition and Interpretation</em>. arXiv:2509.06544, v4, 2026. <a href="https://arxiv.org/abs/2509.06544">论文</a>.</li>
+<li>Eric Oliver Schmidt, Matthias Hagen, and Maik Fröbe. <em>Query Understanding with Large Language Models</em>. 2026 research paper. <a href="https://downloads.webis.de/publications/papers/schmidt_2026.pdf">可获取版本</a>.</li>
+</ol>
+<p>延伸学习：先读 <a href="../../../foundations/embeddings/">Embeddings</a> 理解语义表示，再读本篇建立查询理解视角，最后读 <a href="../rag/">RAG</a> 看结构化查询如何进入检索增强生成。</p></section>
+</article></main></div>
+<script>
+(function(){
+ const data={
+  rewrite:{output:'检索研究论文：降低大语言模型推理阶段 KV Cache 显存占用的方法。',effect:'核心意图保持不变，表达更规范。'},
+  expand:{output:'cache compression; memory footprint; key/value quantization; eviction; cache sparsity; LLM serving memory optimization。',effect:'增加词汇与相关概念以扩大召回；需要防止扩展噪声和语义漂移。'},
+  decompose:{output:'1. KV Cache 压缩如何减少显存？\\n2. 不同方法对生成质量有什么影响？\\n3. 哪些方法适用于高并发 LLM Serving？',effect:'将一个复合需求拆成多个子目标；检索后需要融合与去重。'}
+ };
+ const buttons=Array.from(document.querySelectorAll('[data-strategy]'));
+ const output=document.getElementById('strategy-output');
+ const effect=document.getElementById('strategy-effect');
+ buttons.forEach(function(button){button.addEventListener('click',function(){
+  const key=button.getAttribute('data-strategy');
+  buttons.forEach(function(item){item.setAttribute('aria-pressed',String(item===button));});
+  output.textContent=data[key].output;effect.textContent=data[key].effect;
+ });});
+})();
+</script>
+</body></html>

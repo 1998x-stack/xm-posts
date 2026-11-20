@@ -19,7 +19,7 @@ flowchart LR
 
 ## Reasoning and inference taxonomy
 
-`reasoning` covers answer-quality algorithms (CoT, Self-Consistency, test-time search/verification); `inference` covers serving infrastructure (KV Cache, batching, latency/throughput). `retrieval-rag` covers ANN, retrieval/reranking and RAG; `agents` covers Reasoning–Acting, planning, tool calling and memory. `systems` owns kernels, compilers and GPU communication; `training` owns distributed model training, mixed precision and checkpointing. Both share the manifest-driven publishing pipeline.
+`reasoning` covers answer-quality algorithms (CoT, Self-Consistency, test-time search/verification); `inference` covers serving infrastructure (KV Cache, batching, latency/throughput). `retrieval-rag` covers query understanding, query transformation, ANN, retrieval/reranking and RAG; `agents` covers Reasoning–Acting, planning, tool calling and memory. Query Understanding is the semantic entry layer: it converts raw user language and conversational context into an explicit, uncertainty-aware query representation. It is placed under `retrieval-rag` because its primary downstream contract is retrieval intent and query formulation; Agent routing is a cross-domain integration expressed through tags and reading paths, not a reason to create a duplicate top-level category. `systems` owns kernels, compilers and GPU communication; `training` owns distributed model training, mixed precision and checkpointing. Both share the manifest-driven publishing pipeline.
 
 ## Path layout and routing
 

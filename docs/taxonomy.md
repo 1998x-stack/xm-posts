@@ -17,7 +17,7 @@
 | `inference` | KV Cache、解码、Batching、服务调度和 Prefill/Decode | 硬件 kernel/编译与通讯归 `systems` |
 | `systems` | GPU 内存、算子、编译、通信、性能分析及底层优化 | 服务请求、token 调度、端到端 serving 归 `inference` |
 | `storage-indexing` | B+ Tree、LSM Tree、页与缓冲区管理、事务恢复、MVCC | 数据库磁盘/索引结构归此类；向量语义召回归 `retrieval-rag`，GPU 算子实现归 `systems` |
-| `retrieval-rag` | 向量/ANN、稀疏混合检索、重排序、RAG、证据落地 | Agent 任务计划与工具执行归 `agents`，embedding 基础表征归 `foundations` |
+| `retrieval-rag` | Query Understanding、查询解析/重写/扩展/澄清、向量/ANN、稀疏混合检索、重排序、RAG、证据落地 | Agent 任务计划与工具执行归 `agents`；查询理解产生的工具路由意图可用跨领域标签关联；embedding 基础表征归 `foundations` |
 | `agents` | ReAct、规划、工具调用、记忆、Agent 端到端评估 | 纯推理策略归 `reasoning`；检索方法归 `retrieval-rag` |
 | `multimodal` | 视觉/语言/音频的跨模态建模与对齐 | 通用单模态 CNN 架构仍可归 `architectures` |
 | `evaluation` | 模型/任务 Benchmark、ROC/PR、消融与复现 | 训练数据质量、污染事实与许可证归 `datasets` |
@@ -27,7 +27,7 @@
 1. 每篇文章恰好登记一个 `category` 与一个 **已注册** `topic`。跨学科关联使用 `tags` 与文章链接，不为同一术语复制多个一级分类。
 2. `topic.slug` 是公开锚点的一部分（`#topic-<slug>`），**先保留现有稳定 slug，再改善标题、解释和页面导航**。不要仅因措辞好看而改 slug。
 3. 对确有不同边界的二级主题，要求标题与描述不同；不得让两个 topic 共享同一展示标题。当前 Systems 已区分 Kernel 编程、GPU 内存、编译/内核优化、Collectives、分布式通信和 Roofline/Benchmark。
-4. 占位目录必须使用精确的注册 slug。新增 Topic 优先写分类元数据，再添加 `_topics/` 的 README；单篇新文章通常不值得新增一级分类。
+4. 占位目录必须使用精确的注册 slug。新增 Topic 优先写分类元数据，再添加 `_topics/` 的 README；单篇新文章通常不值得新增一级分类。Query Understanding 是检索前的语义入口层，主归属 `retrieval-rag`；对话上下文与 Agent 路由用 tags/reading paths 表达，不复制出 `agents` 下的同名主专题。
 5. Draft 必须继续以 `status: draft` 保持离线，不要将规划中的 README 当作 `published` 条目。
 
 ## 2026-11 分类占位整合
@@ -50,3 +50,12 @@
 5. PR 先审查完整 diff 和 Actions 结果；只在主分支可无冲突合并且 CI 成功后合并。合并后单独检查 Pages 工作流与在线网址。旧 PR 只有在新 PR 已承接其全部有效变更后才标记 superseded。
 
 自动回归：`tests/test_taxonomy_contract.py` 对重复的 ID/标题、孤儿占位目录、文章主专题和已发布文件路径进行检测。详见根目录 `AGENTS.md` 及 `docs/editorial.md`。
+
+
+## Query Understanding 专题归属（2026-11）
+
+- 主专题：`retrieval-rag/query-understanding`，因为其核心输出是面向检索与信息获取的结构化查询表示。
+- 任务簇：`understand`（意图分类、分词/语义标注、实体链接）、`transform`（纠错、重写、扩展、分解）、`interact`（自动补全、建议、澄清）。
+- 横切维度：多轮上下文解析、歧义与不确定性、评测和鲁棒性；这些不是重复的一级分类。
+- 下游边界：检索系统负责候选召回与排序；Agent 执行层负责工具参数校验、权限和副作用确认。推断出意图不等于获得执行授权。
+- 学习路径：`embeddings → query-understanding → rag`，见 `content/reading_paths.json` 的 `path-36`。
