@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 350" role="img" aria-labelledby="svd-pca-title svd-pca-desc" font-family='system-ui,-apple-system,Segoe UI,PingFang SC,sans-serif'><title id="svd-pca-title">中心化数据矩阵如何连接 SVD 和 PCA</title><desc id="svd-pca-desc">每行一个样本、每列一个特征；经列均值中心化后，右奇异向量 V 的列是 PCA 主方向。</desc><rect x="1" y="1" width="898" height="348" rx="18" fill="#fbfdfb" stroke="#dceae3"/>
+<text x="450" y="43" text-anchor="middle" font-size="23" fill="#253e47" font-weight="700">同一个分解，两种读法</text>
+<g stroke="#d5e3de" stroke-width="2"><rect x="45" y="85" rx="14" width="255" height="195" fill="#eaf3f0"/><rect x="363" y="85" rx="14" width="191" height="195" fill="#eef1fa"/><rect x="618" y="85" rx="14" width="236" height="195" fill="#faf0e7"/></g>
+<g text-anchor="middle"><text x="170" y="155" font-size="30" font-weight="700" fill="#287f79">X centered</text><text x="170" y="197" font-size="19" fill="#546d70">n 个样本 × d 个特征</text><text x="458" y="158" font-size="36" font-weight="700" fill="#507fa8">X = UΣVᵀ</text><text x="458" y="197" font-size="18" fill="#546d70">薄 SVD</text><text x="736" y="155" font-size="34" font-weight="700" fill="#b47a57">V[:, j]</text><text x="736" y="199" font-size="18" fill="#546d70">第 j 个主成分方向</text></g>
+<g stroke="#8da6a6" stroke-width="3"><path d="M301 185H360"/><path d="m360 185 -12 -7v14z" fill="#8da6a6"/><path d="M554 185H616"/><path d="m616 185 -12 -7v14z" fill="#8da6a6"/></g>
+<text x="450" y="320" text-anchor="middle" fill="#526e74" font-size="16">主成分的解释方差：σⱼ² / (n − 1)，仅在按列中心化的样本约定下成立</text>
+</svg>

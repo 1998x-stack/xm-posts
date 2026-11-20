@@ -1,0 +1,110 @@
+[
+  {
+    "id": "SVD01",
+    "claim": "Every real m-by-n matrix admits real singular value decomposition; the singular values are nonnegative",
+    "kind": "mathematical-fact",
+    "source_url": "https://ee263.stanford.edu/archive/ee263_course_reader.pdf",
+    "locator": "SVD lecture and definitions",
+    "status": "derived",
+    "notes": "Real case only; complex requires conjugate transpose"
+  },
+  {
+    "id": "SVD02",
+    "claim": "Nonzero singular values are square roots of eigenvalues of A transpose A and corresponding left vectors are Av/sigma",
+    "kind": "derivation",
+    "source_url": "https://numpy.org/doc/stable/reference/generated/numpy.linalg.svd.html",
+    "locator": "Notes: eigenvectors of A^H A and AA^H",
+    "status": "derived",
+    "notes": "Numerical implementation is not recommended via normal equations"
+  },
+  {
+    "id": "SVD03",
+    "claim": "Thin SVD has U shape (m,q), singular-value vector q and Vh shape (q,n), q=min(m,n)",
+    "kind": "implementation",
+    "source_url": "https://numpy.org/doc/stable/reference/generated/numpy.linalg.svd.html",
+    "locator": "Parameters and Examples: full_matrices=False",
+    "status": "verified",
+    "notes": "For complex data Vh is conjugate transpose"
+  },
+  {
+    "id": "SVD04",
+    "claim": "Every rank-r matrix equals the sum of its r nonzero singular-value dyads",
+    "kind": "derivation",
+    "source_url": "https://ee263.stanford.edu/archive/ee263_course_reader.pdf",
+    "locator": "SVD and dyadic decomposition",
+    "status": "derived",
+    "notes": "Sign choice and repeated subspaces not unique"
+  },
+  {
+    "id": "SVD05",
+    "claim": "Truncated SVD gives an optimal rank-at-most-k approximation in Frobenius and spectral norm",
+    "kind": "historical-theorem",
+    "source_url": "https://doi.org/10.1007/BF02288367",
+    "locator": "Eckart & Young 1936 abstract; lower-rank matrix approximation",
+    "status": "verified",
+    "notes": "Theorem cited as historical source; modern norm formulation corroborated by Stanford lecture"
+  },
+  {
+    "id": "SVD06",
+    "claim": "Proof for a theorem originally stated but not proved in the 1936 work was provided by Johnson in 1963",
+    "kind": "historical",
+    "source_url": "https://doi.org/10.1007/BF02289573",
+    "locator": "Johnson 1963 abstract",
+    "status": "verified",
+    "notes": "Attribution avoids implying a proof was in original 1936 paper"
+  },
+  {
+    "id": "SVD07",
+    "claim": "Squared Frobenius residual sum equals the squared discarded singular values; spectral residual equals sigma_(k+1)",
+    "kind": "derivation",
+    "source_url": "https://ee263.stanford.edu/archive/ee263_course_reader.pdf",
+    "locator": "Low rank approximation and extremal gain",
+    "status": "derived",
+    "notes": "k<r for sigma_(k+1); zero for k=r"
+  },
+  {
+    "id": "SVD08",
+    "claim": "The diagonal(9,4,2,1) example has total energy 102 and k=2 retains 97/102",
+    "kind": "toy-example",
+    "source_url": "https://numpy.org/doc/stable/reference/generated/numpy.linalg.svd.html",
+    "locator": "Independent arithmetic and diagonal property",
+    "status": "illustrative",
+    "notes": "Not source empirical result; rank-k storage k(m+n+1) includes U Sigma V"
+  },
+  {
+    "id": "SVD09",
+    "claim": "For centered n-by-d data, right singular vectors diagonalize sample covariance X^T X/(n-1)",
+    "kind": "derived-connection",
+    "source_url": "https://ee263.stanford.edu/archive/ee263_course_reader.pdf",
+    "locator": "SVD and matrix methods; covariance derivation",
+    "status": "derived",
+    "notes": "n>1, centered columns; no scaling by default"
+  },
+  {
+    "id": "SVD10",
+    "claim": "SVD gives pseudoinverse by inverting nonzero singular values; tiny singular values amplify noise",
+    "kind": "mathematical-fact",
+    "source_url": "https://ee263.stanford.edu/archive/ee263_course_reader.pdf",
+    "locator": "Pseudo-inverse and sensitivity lectures",
+    "status": "derived",
+    "notes": "Rank-deficient full inverse sensitivity is unbounded"
+  },
+  {
+    "id": "SVD11",
+    "claim": "Randomized partial decomposition captures a leading subspace using sampling and then factors compressed matrix",
+    "kind": "later-work",
+    "source_url": "https://doi.org/10.1137/090771806",
+    "locator": "Halko et al 2011 abstract/§1",
+    "status": "verified",
+    "notes": "Approximate, not a general exact SVD"
+  },
+  {
+    "id": "SVD12",
+    "claim": "NumPy example reconstructs (U*s)@Vh and uses full_matrices=False",
+    "kind": "modern-implementation",
+    "source_url": "https://numpy.org/doc/stable/reference/generated/numpy.linalg.svd.html",
+    "locator": "Examples for 2D economy decomposition",
+    "status": "verified",
+    "notes": "Code is an independently authored deterministic demonstration"
+  }
+]
