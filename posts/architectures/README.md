@@ -51,3 +51,8 @@ RoPE 位于 `posts/architectures/rope/`，主题为 **Positional Encoding**；�
 
 - [Understanding Mixture of Experts (MoE)](moe/index.html)：精读 ICLR 2017 的 LSTM+稀疏专家结构，拆解 Noisy Top-K、Importance/Load、容量约束与 Expert Parallelism；区分 GShard、Switch、Mixtral 与 DeepSeekMoE。
 - 复用现有 `Mixture of Experts (MoE)` 二级专题和 [`_topics/moe` 研究规划](_topics/moe/README.md)，不增设重复分类。
+
+## Efficient Attention — DeltaNet
+
+- [Understanding DeltaNet](deltanet/index.html)：精读 Yang et al. NeurIPS 2024，解释 Delta Rule 纠错式关联记忆、单位 Key 下的覆写、WY/Chunkwise 并行与论文对照实验；提供四幅独立 SVG、可交互 β 演示和标准库测试。
+- DeltaNet 是高效注意力与线性 RNN 的交叉模型，复用已有 `Efficient Attention` / `State Space Models` 二级轨道，不新增一级分类；[Gated DeltaNet (2025)](https://arxiv.org/abs/2412.06464) 作为独立后续工作，不能混用实验结果。
