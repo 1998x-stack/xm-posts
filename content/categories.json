@@ -27,14 +27,16 @@
     "slug": "architectures",
     "title": "模型架构",
     "english": "Architectures",
-    "description": "拆开模型的信息路径：ResNet 残差学习、RNN/LSTM Seq2Seq Encoder–Decoder、Attention、Transformer 与规范化布局。",
+    "description": "拆开模型的信息路径：LSTM 循环记忆、AlexNet 与 ResNet 的视觉卷积架构、RNN/LSTM Seq2Seq Encoder–Decoder、Attention、Transformer 注意力、归一化布局与深层架构稳定性。",
     "topics": [
-      "ResNet",
+      "Convolutional Neural Networks & Vision",
       "Sequence-to-Sequence / Encoder–Decoder",
+      "ResNet",
       "Transformer",
       "State Space",
       "Normalization & Residual Paths",
-      "Positional Encoding"
+      "Positional Encoding",
+      "Recurrent Networks / LSTM"
     ]
   },
   {
