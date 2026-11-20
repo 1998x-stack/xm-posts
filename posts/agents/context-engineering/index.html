@@ -1,0 +1,501 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light">
+<meta name="description" content="从 Prompt、RAG、Memory 到 Harness：系统解释 AI Agent 的上下文选择、检索、压缩、组装、执行与持久化，结合 Anthropic 与 OpenAI 工程实践。">
+<link rel="canonical" href="https://1998x-stack.github.io/xm-posts/posts/agents/context-engineering/">
+<title>Context Engineering：构建可靠 AI Agent 的上下文工程 · xm-posts</title>
+<style>
+:root{--bg:#f6f8f6;--paper:#fffefb;--ink:#203c43;--muted:#61777a;--teal:#147d75;--teal-soft:#e7f3ef;--orange:#c16f46;--orange-soft:#fff0e7;--blue:#477b9d;--blue-soft:#eaf2f8;--violet:#7463a8;--violet-soft:#f0edfa;--line:#d8e3df;--shadow:0 16px 44px rgba(29,67,66,.07)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.88 system-ui,-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}
+a{color:#126f70;text-underline-offset:4px}a:hover{color:#a75e3c}a:focus-visible,button:focus-visible,input:focus-visible,[tabindex]:focus-visible{outline:3px solid #c77b4c;outline-offset:3px}
+.skip{position:absolute;left:14px;top:-100px;padding:8px 12px;background:#173e43;color:white;z-index:20}.skip:focus{top:10px}
+.topbar{background:var(--paper);border-bottom:1px solid var(--line)}.topbar-inner{max-width:1240px;margin:auto;padding:12px 22px;min-height:62px;display:flex;align-items:center;justify-content:space-between;gap:16px}.brand{font-size:21px;font-weight:850;letter-spacing:-.05em;color:var(--ink);text-decoration:none}.brand b{color:var(--orange)}.navlinks{display:flex;gap:20px;flex-wrap:wrap;font-size:13px}.navlinks a{text-decoration:none;color:#557175}
+.layout{max-width:1240px;margin:auto;padding:55px 24px 100px;display:grid;grid-template-columns:235px minmax(0,850px);gap:56px}.toc{align-self:start;position:sticky;top:22px;max-height:92vh;overflow-y:auto;font-size:12px}.toc strong{display:block;color:#7b9290;font-size:11px;letter-spacing:.16em;margin:0 0 12px}.toc a{display:block;padding:6px 9px;border-left:2px solid var(--line);color:#5a7475;text-decoration:none;line-height:1.55}.toc a:hover{border-color:var(--teal);color:var(--teal)}main,article{min-width:0}
+.eyebrow{font-size:11px;letter-spacing:.17em;font-weight:800;color:var(--teal)}h1{font-size:clamp(39px,5.7vw,66px);line-height:1.1;letter-spacing:-.065em;margin:14px 0 20px}h2{font-size:clamp(25px,3vw,35px);line-height:1.32;letter-spacing:-.035em;margin:0 0 20px}h3{font-size:21px;line-height:1.42;margin:27px 0 12px}h4{font-size:17px;margin:20px 0 9px}.dek{font-size:21px;line-height:1.7;color:#4c696c;max-width:790px}.meta{display:flex;gap:10px 16px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:17px;margin:26px 0 62px;color:#718587;font-size:12px}.tag{display:inline-block;padding:3px 9px;border-radius:20px;background:var(--teal-soft);color:#236d67;font-size:11px;font-weight:700}
+section{margin:0 0 74px;scroll-margin-top:24px}p{margin:0 0 19px;color:#405b61}.lead{font-size:19px;color:#294b51}.small{font-size:14px;color:var(--muted)}strong{color:#24464c}.callout{border-left:4px solid var(--teal);background:var(--teal-soft);padding:17px 20px;border-radius:4px 11px 11px 4px;margin:22px 0;color:#315d5a}.callout.orange{border-color:var(--orange);background:var(--orange-soft)}.callout.blue{border-color:var(--blue);background:var(--blue-soft)}
+.figure{margin:27px 0 31px;padding:13px;border:1px solid var(--line);border-radius:14px;background:white;box-shadow:var(--shadow)}.figure img,.figure svg{display:block;width:100%;height:auto}.figure figcaption{font-size:13px;color:#61787b;line-height:1.7;padding:11px 5px 1px}.figure figcaption strong{color:#35585d}
+.panel{border:1px solid var(--line);background:white;border-radius:13px;padding:20px 22px;margin:22px 0}.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}.mini{border:1px solid var(--line);border-radius:11px;padding:15px;background:#fff}.mini h3{font-size:16px;margin:0 0 7px}.mini p{font-size:14px;margin:0;line-height:1.7}.mini .kicker{font-size:10px;letter-spacing:.12em;font-weight:800;color:var(--teal)}
+.table-wrap{max-width:100%;overflow-x:auto;border:1px solid var(--line);border-radius:11px;margin:22px 0;background:white}table{width:100%;border-collapse:collapse;min-width:640px;font-size:14px;line-height:1.7}th,td{padding:12px 14px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}th{background:#edf4f1;color:#31555a;font-size:12px}tr:last-child td{border-bottom:0}
+.math-box{border:1px solid var(--line);background:#f1f7f4;border-radius:11px;padding:15px 17px;margin:23px 0}.math-scroll{max-width:100%;overflow-x:auto;overflow-y:hidden}.math-scroll math[display=block]{display:block;width:max-content;min-width:100%;font-family:"Cambria Math","STIX Two Math",serif;font-size:1.16rem}.math-caption{font-size:12px;color:#668082;margin-top:9px}.equation-label{font-size:11px;font-weight:800;letter-spacing:.1em;color:#4c7471;margin-bottom:9px}
+code{font-size:.9em;background:#edf3f0;padding:2px 5px;border-radius:4px}pre{margin:18px 0;padding:20px 22px;border-radius:11px;overflow-x:auto;background:#1d3840;color:#e2f1ed;font:13px/1.8 ui-monospace,SFMono-Regular,Consolas,monospace}pre code{background:none;padding:0;color:inherit}
+.demo{border:1px solid #cbded7;background:#fbfefc;border-radius:15px;padding:21px;margin:28px 0}.demo h3{margin:0 0 7px}.demo-intro{font-size:14px;color:#61777a}.demo-controls{display:flex;gap:8px;flex-wrap:wrap;margin:17px 0}.demo-controls button{border:1px solid #a8c8bd;background:white;color:#316c64;border-radius:8px;padding:9px 12px;font:600 13px system-ui;cursor:pointer}.demo-controls button[aria-pressed=true]{background:#176f68;color:white;border-color:#176f68}.range-row{display:grid;grid-template-columns:1fr auto;align-items:center;gap:12px;margin:18px 0}.range-row input{width:100%;accent-color:#16796f}.range-value{font-weight:800;color:#1d716b;font-variant-numeric:tabular-nums}.budget-track{height:15px;background:#e5ece8;border-radius:99px;overflow:hidden}.budget-fill{height:100%;width:0;background:linear-gradient(90deg,#2b8c80,#e5a26d);transition:width .2s ease}.demo-result{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}.result-card{background:white;border:1px solid var(--line);border-radius:9px;padding:13px}.result-card strong{display:block;margin-bottom:6px;font-size:13px}.result-card p{font-size:13px;line-height:1.6;margin:0}.status{font-size:13px;color:#45686a;margin-top:11px;min-height:24px}.source-note{font-size:13px;color:#647c7d}.refs{padding-left:22px}.refs li{margin:0 0 13px;color:#425d61}.refs a{overflow-wrap:anywhere}.foot{border-top:1px solid var(--line);padding-top:17px;font-size:13px;color:#62797b;display:flex;gap:12px;flex-wrap:wrap}
+@media(max-width:940px){.layout{display:block;max-width:880px;padding:37px 20px 80px}.toc{position:static;max-height:none;margin-bottom:34px;padding:13px 15px;background:white;border:1px solid var(--line);border-radius:11px}.toc a{display:inline-block;border:0;padding:6px 8px}.toc strong{margin-bottom:7px}}
+@media(max-width:620px){body{font-size:16px}.topbar-inner{padding:11px 15px}.navlinks{gap:10px}.layout{padding:28px 15px 65px}.dek{font-size:18px}.meta{margin-bottom:46px}.grid2,.grid3{grid-template-columns:1fr}.demo-result{grid-template-columns:1fr}.figure{padding:8px}.panel{padding:15px}section{margin-bottom:58px}pre{padding:15px;font-size:12px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.budget-fill{transition:none}}
+@media print{body{background:white;color:#111}.topbar,.toc,.skip,.demo-controls,.range-row,.foot{display:none!important}.layout{display:block;max-width:none;padding:0}.figure,.panel,.demo{box-shadow:none;break-inside:avoid}.figure img,.figure svg{max-width:100%}.math-scroll{overflow:visible}a{color:#173f42;text-decoration:none}section{break-inside:auto}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#f3f3f3;color:#111}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">跳至正文</a>
+<header class="topbar"><div class="topbar-inner"><a class="brand" href="../../../">xm<b>.</b>posts</a><nav class="navlinks" aria-label="站点导航"><a href="../../../">首页</a><a href="../../../categories/agents/">智能体与工具使用</a><a href="../../../topics/">知识地图</a><a href="../../../archive/">文章归档</a></nav></div></header>
+<div class="layout">
+<nav class="toc" aria-label="本文目录">
+<strong>ON THIS PAGE</strong>
+<a href="#problem">01 · 一个反直觉的问题</a>
+<a href="#definition">02 · Prompt、Context、RAG 与 Harness</a>
+<a href="#budget">03 · 上下文窗口：容量不是质量</a>
+<a href="#taxonomy">04 · Context Engineering 的技术分类</a>
+<a href="#lifecycle">05 · 六阶段上下文生命周期</a>
+<a href="#retrieval">06 · 检索：预加载、JIT 与混合策略</a>
+<a href="#processing">07 · 处理：过滤、排序、压缩</a>
+<a href="#assembly">08 · 组装：什么应该进入窗口？</a>
+<a href="#long-horizon">09 · 长任务：Trim、Summary、Compaction</a>
+<a href="#memory">10 · Memory：跨会话知识如何形成？</a>
+<a href="#harness">11 · Harness：让知识可发现、可验证</a>
+<a href="#security">12 · 安全：上下文也是攻击面</a>
+<a href="#evaluation">13 · 如何评估上下文质量？</a>
+<a href="#implementation">14 · 一个可落地的工程蓝图</a>
+<a href="#limits">15 · 失败模式与设计边界</a>
+<a href="#references">16 · 参考资料</a>
+</nav>
+<main id="main"><article>
+<header>
+<div class="eyebrow">ENGINEERING DEEP DIVE · AGENTS &amp; TOOL USE</div>
+<h1>Context Engineering</h1>
+<p class="dek">构建可靠 AI Agent 的上下文工程：从 Prompt 到动态信息系统。理解模型每一步究竟应该“看到什么”，以及这些信息如何被检索、压缩、组装、更新和验证。</p>
+<div class="meta"><span>研究与工程综述 · 2026-11-21</span><span>约 35 分钟阅读</span><span class="tag">Context Management</span><span class="tag">Long-horizon Agents</span><span class="tag">Anthropic × OpenAI</span></div>
+</header>
+
+<section id="problem">
+<h2>01 · 一个反直觉的问题：为什么给 Agent 更多信息，反而可能让它更差？</h2>
+<p class="lead">设想你正在让一个代码 Agent 修复一个线上 Bug。它已经读取了 80 个文件、执行了 14 次命令、收到 30 多段工具输出，并且经历了多轮方案修改。此时你再把整个仓库、所有日志和完整聊天记录都塞进模型，真的会让它更聪明吗？</p>
+<p>不一定。模型可能忘记最初的验收条件，混淆已经废弃的方案与当前方案，在冗长日志中漏掉关键错误，或者把旧版本文档当成最新事实。问题并不一定是模型“没有读到”，而可能是<strong>重要信息被低价值信息淹没，或者信息之间缺少明确的关系与可信度标记</strong>。</p>
+<figure class="figure"><img src="assets/01-context-lifecycle.svg" alt="Context Engineering 六阶段生命周期：定义目标、检索、处理、组装、执行和持久化，形成反馈闭环"><figcaption><strong>图 1｜上下文不是一段静态 Prompt，而是一个持续更新的系统。</strong> 每次模型调用前都要决定哪些信息进入工作上下文；执行产生的新状态又会成为下一轮的候选信息。</figcaption></figure>
+<div class="callout"><strong>核心问题：</strong>在有限的上下文窗口、延迟和成本预算下，怎样让模型在当前这一步获得足够、相关、可信、不过时的信息，同时避免被历史噪声和不必要的细节干扰？</div>
+<p>Anthropic 在 2025 年的 Engineering 文章中把上下文视为有限的注意力资源，并讨论了随着输入变长，模型在信息召回与长程推理方面可能出现的性能退化。这类现象常被称为 <em>context rot</em>。需要注意，它不是一个所有模型、所有任务都遵循同一曲线的定律：不同模型、位置、任务和检索方式会有不同表现；更准确的理解是，窗口容量增大并不自动保证有效利用率同步增长。</p>
+<p>因此，Context Engineering 的优化目标不是“塞得更多”，而是“在当前任务中放对信息”。</p>
+</section>
+
+<section id="definition">
+<h2>02 · Prompt Engineering、Context Engineering、RAG、Memory 与 Harness</h2>
+<p>这些术语经常被放在一起讨论，但它们处在不同的抽象层次。把它们混为一谈，会导致工程设计只盯着 Prompt 文案，却忽略工具、检索、状态与持久化。</p>
+<div class="table-wrap"><table>
+<thead><tr><th>概念</th><th>核心问题</th><th>典型对象</th><th>边界</th></tr></thead>
+<tbody>
+<tr><td><strong>Prompt Engineering</strong></td><td>怎样表达任务与行为要求？</td><td>System prompt、指令、few-shot 示例</td><td>主要关注指令设计，不负责管理全部动态状态</td></tr>
+<tr><td><strong>Context Engineering</strong></td><td>本次推理应该获得哪些信息？</td><td>指令、工具、历史、检索结果、记忆、外部状态</td><td>负责信息选择、组织、更新和预算管理</td></tr>
+<tr><td><strong>RAG</strong></td><td>如何从外部知识源找到相关内容？</td><td>索引、Embedding、检索、重排序、引用</td><td>是上下文获取的一类重要机制，不等于整个上下文工程</td></tr>
+<tr><td><strong>Agent Memory</strong></td><td>什么经验值得在未来会话继续使用？</td><td>日志、笔记、知识图谱、索引、持久化状态</td><td>关注跨任务或跨会话的保留与再利用</td></tr>
+<tr><td><strong>Harness Engineering</strong></td><td>Agent 在什么环境中运行、观察和完成工作？</td><td>工具、沙箱、文件系统、执行计划、评测、权限</td><td>提供运行时与治理结构；上下文工程是其中的关键组成</td></tr>
+</tbody></table></div>
+<p>一个容易记住的关系是：Prompt 是上下文中的一部分；RAG 是上下文的一个来源；Memory 是可跨时间复用的状态；Harness 则提供工具和执行环境，让 Agent 能够读取、修改并验证外部世界。</p>
+<figure class="figure"><img src="assets/02-context-budget.svg" alt="上下文预算分配图：系统约束、工具定义、当前目标、检索证据、近期状态、历史摘要和输出预留共同占据窗口"><figcaption><strong>图 2｜Context Window 是工作台，不是知识仓库。</strong> 外部文件、数据库和索引可以保存大量信息，但每次推理只应把当前所需的高价值片段装入工作台。</figcaption></figure>
+<p>Anthropic 将 Context Engineering 描述为对推理时全部信息的持续策划；OpenAI 的 Agents SDK Cookbook 则从 Session 层面给出了历史裁剪与摘要压缩的具体方法。两者关注点不同，但都指向同一件事：模型每一步获得的信息状态，需要被主动管理，而不是无限累积。</p>
+</section>
+
+<section id="budget">
+<h2>03 · 上下文窗口：容量不等于质量</h2>
+<h3>3.1 先理解 Token Budget</h3>
+<p>上下文窗口通常同时容纳输入与输出。工程上不能把全部容量都分配给历史消息：模型还需要输出空间，工具调用也可能产生下一轮输入。因此可以先用一个简单的预算账本来理解：</p>
+<div class="math-box">
+<div class="equation-label">EQUATION 1 · CONTEXT BUDGET</div>
+<div class="math-scroll" tabindex="0" role="region" data-math-scroll aria-label="上下文预算公式，可横向滚动">
+<math display="block" aria-label="B 等于系统指令预算加工具预算加任务预算加检索预算加历史预算加输出预留和安全余量">
+<mrow><mi>B</mi><mo>=</mo><msub><mi>B</mi><mtext>system</mtext></msub><mo>+</mo><msub><mi>B</mi><mtext>tools</mtext></msub><mo>+</mo><msub><mi>B</mi><mtext>goal</mtext></msub><mo>+</mo><msub><mi>B</mi><mtext>retrieval</mtext></msub><mo>+</mo><msub><mi>B</mi><mtext>history</mtext></msub><mo>+</mo><msub><mi>B</mi><mtext>output</mtext></msub><mo>+</mo><msub><mi>B</mi><mtext>margin</mtext></msub></mrow>
+</math></div>
+<div class="math-caption">这是工程预算模型，不是模型内部固定的 token 分区。实际 API 还可能有模型特定的输入/输出上限、缓存规则与工具消息开销。</div>
+</div>
+<p>各项的含义：</p>
+<ul>
+<li><strong>System：</strong>身份、任务边界、稳定规则和安全约束。</li>
+<li><strong>Tools：</strong>当前可用工具的名称、用途、参数和返回结构。</li>
+<li><strong>Goal：</strong>用户当前目标、验收标准、不可违反的约束。</li>
+<li><strong>Retrieval：</strong>本轮真正需要的文档、证据和外部状态。</li>
+<li><strong>History：</strong>近期对话、关键决策、未完成事项。</li>
+<li><strong>Output：</strong>为模型最终回答或下一步工具调用预留的空间。</li>
+<li><strong>Margin：</strong>工具结果膨胀、额外元数据和不可预测开销的缓冲。</li>
+</ul>
+<h3>3.2 为什么“大窗口”不等于“无限工作记忆”？</h3>
+<p>Transformer 的自注意力允许 Token 之间建立关系。对标准稠密全注意力，长度为 <em>n</em> 的序列涉及约 <em>n²</em> 量级的 token-pair 关系；高效注意力、稀疏注意力和其他架构会改变实际计算与访存成本，因此不能把这个数量级直接当作所有模型的推理延迟公式。</p>
+<p>更重要的是，模型的召回能力并非只由窗口上限决定。信息的位置、干扰项、指令冲突、工具输出格式、训练分布和任务难度都会影响模型能否利用这些信息。一个 100 页的文件全部进入窗口，不代表模型能够稳定地定位其中每一个细节。</p>
+<div class="callout orange"><strong>工程启示：</strong>把外部存储视为容量，把上下文窗口视为工作集。数据库可以很大，CPU Cache 不会因此变成整个数据库；同样，Agent 的外部知识库可以很大，但每次推理的上下文仍然需要筛选。</div>
+<h3>3.3 一个优化视角：相关性、成本和风险之间的权衡</h3>
+<p>令 <em>I</em><sub>t</sub> 表示时刻 t 所有可访问的信息候选集合，<em>C</em><sub>t</sub> 表示本次真正装入模型的信息。我们可以把上下文选择写成一个教学用的优化目标：</p>
+<div class="math-box">
+<div class="equation-label">EQUATION 2 · CONTEXT SELECTION OBJECTIVE</div>
+<div class="math-scroll" tabindex="0" role="region" data-math-scroll aria-label="上下文选择优化目标公式，可横向滚动">
+<math display="block" aria-label="选择上下文 C 以最大化期望任务效用，减去 token 成本和信息风险，并满足 token 数不超过预算">
+<mrow><msub><mi>C</mi><mi>t</mi><mo>*</mo></msub><mo>=</mo><munder><mi>arg max</mi><mrow><msub><mi>C</mi><mi>t</mi></msub><mo>⊆</mo><msub><mi>I</mi><mi>t</mi></msub></mrow></munder><mo>[</mo><mi>U</mi><mo>(</mo><mi>Y</mi><mo>|</mo><msub><mi>C</mi><mi>t</mi></msub><mo>,</mo><msub><mi>g</mi><mi>t</mi></msub><mo>)</mo><mo>−</mo><mi>λ</mi><mi>Cost</mi><mo>(</mo><msub><mi>C</mi><mi>t</mi></msub><mo>)</mo><mo>−</mo><mi>μ</mi><mi>Risk</mi><mo>(</mo><msub><mi>C</mi><mi>t</mi></msub><mo>)</mo><mo>]</mo></mrow>
+</math>
+<math display="block" aria-label="约束为上下文 C 的 Token 数不超过预算 B">
+<mrow><mtext>subject to </mtext><mi>Tokens</mi><mo>(</mo><msub><mi>C</mi><mi>t</mi></msub><mo>)</mo><mo>≤</mo><msub><mi>B</mi><mi>t</mi></msub></mrow>
+</math>
+</div>
+<div class="math-caption">这是用于组织工程决策的抽象目标，并非 Anthropic 或 OpenAI 公布的训练损失函数。U 表示任务效用，Cost 包含 Token、延迟和检索开销，Risk 包含过时、错误、注入和隐私风险。</div>
+</div>
+<p>这个模型帮助我们避免两个极端：一味追求最短 Prompt，可能删掉必要约束；一味追求最全历史，又可能带来噪声、成本与错误传播。真正要最大化的是<strong>单位上下文预算带来的任务效用</strong>。</p>
+</section>
+
+<section id="taxonomy">
+<h2>04 · Context Engineering 的技术分类：从基础操作到系统架构</h2>
+<p>Mei 等人的《A Survey of Context Engineering for Large Language Models》提出了一个适合研究者使用的视角：基础组件可以分为 Context Retrieval &amp; Generation、Context Processing 和 Context Management；在此之上，再观察 RAG、Memory、工具集成推理和 Multi-Agent 等系统形态。</p>
+<p>结合 Anthropic 与 OpenAI 的工程实践，可以形成以下教学分类。它是对多种来源的综合归纳，而不是某个厂商的官方产品目录。</p>
+<div class="grid2">
+<div class="mini"><div class="kicker">L1 · INFORMATION ACQUISITION</div><h3>信息获取与生成</h3><p>检索、搜索、文件读取、数据库查询、工具 Schema、计划和状态摘要。</p></div>
+<div class="mini"><div class="kicker">L1 · INFORMATION PROCESSING</div><h3>信息处理</h3><p>过滤、重排序、去重、分块、结构化、摘要、压缩、格式规范化。</p></div>
+<div class="mini"><div class="kicker">L1 · CONTEXT MANAGEMENT</div><h3>上下文管理</h3><p>Token 预算、窗口裁剪、Compaction、会话状态、缓存、持久化与隔离。</p></div>
+<div class="mini"><div class="kicker">L2 · SYSTEM INTEGRATION</div><h3>系统集成模式</h3><p>RAG、Agent Memory、Tool-integrated Reasoning、Multi-Agent 与 Harness。</p></div>
+</div>
+<h3>4.1 不要把“检索”当作全部上下文工程</h3>
+<p>RAG 主要回答“外部资料在哪里、哪段内容相关”；但即使检索命中正确，仍然需要决定：取多少段？如何处理冲突？是否保留来源？是否压缩？怎样与用户最新约束一起传给模型？工具结果是否可信？这些问题已经超出了向量检索本身。</p>
+<h3>4.2 不要把“记忆”当作“把聊天记录存下来”</h3>
+<p>原始日志适合审计和重新检索，但通常不适合每轮全部加载。记忆系统需要从经历中抽取稳定事实、决策、规则和可验证证据，再建立索引或知识表示。更关键的是，记忆必须可以被纠错、更新和降级，而不是一旦写入就永久可信。</p>
+<h3>4.3 不要把“Context Window”当作系统边界</h3>
+<p>OpenAI 的 Harness Engineering 经验强调：让 Agent 能够理解大型代码仓库，关键不在于把一份巨大的说明书全部放进 Prompt，而是给它一张地图，指向结构化、可验证、可持续维护的仓库知识。这个思路把上下文工程从 Token 管理扩展到了知识的可发现性。</p>
+</section>
+
+<section id="lifecycle">
+<h2>05 · 六阶段上下文生命周期：把抽象概念变成工程流程</h2>
+<p>下面这套六阶段流程是本文的综合模型。它强调每个阶段都有输入、输出和质量检查点，因此可以被记录、评测和迭代。</p>
+<figure class="figure"><img src="assets/01-context-lifecycle.svg" alt="Define、Retrieve、Process、Assemble、Execute、Persist 六阶段循环"><figcaption><strong>图 3｜六阶段生命周期。</strong> 注意 Persist 不只是“保存对话”，而是将不同寿命的信息写入合适的外部层；下一轮再根据任务需要选择性读取。</figcaption></figure>
+<div class="table-wrap"><table>
+<thead><tr><th>阶段</th><th>关键问题</th><th>典型操作</th><th>输出</th><th>质量检查</th></tr></thead>
+<tbody>
+<tr><td><strong>1. Define</strong></td><td>本轮要完成什么？</td><td>解析目标、约束、验收标准、风险等级</td><td>Task State</td><td>目标是否可判定？约束是否冲突？</td></tr>
+<tr><td><strong>2. Retrieve</strong></td><td>需要哪些外部信息？</td><td>RAG、JIT 搜索、文件读取、数据库和工具调用</td><td>Evidence Candidates</td><td>相关性、来源、时效、权限</td></tr>
+<tr><td><strong>3. Process</strong></td><td>如何把候选信息变成高信号输入？</td><td>过滤、排序、去重、摘要、结构化、压缩</td><td>Context Pack</td><td>关键事实是否丢失？冲突是否标记？</td></tr>
+<tr><td><strong>4. Assemble</strong></td><td>模型本次具体看到什么？</td><td>组织系统指令、工具、示例、状态和证据</td><td>Inference Context</td><td>Token 预算、优先级、边界、版本</td></tr>
+<tr><td><strong>5. Execute</strong></td><td>模型采取了什么行动？</td><td>推理、调用工具、执行代码、接收观察</td><td>Action &amp; Observation</td><td>输出是否受限？工具是否成功？</td></tr>
+<tr><td><strong>6. Persist</strong></td><td>什么应该留给下一轮或下一会话？</td><td>写日志、更新状态、生成摘要、维护记忆</td><td>Durable State</td><td>是否有证据？是否过期？能否回滚？</td></tr>
+</tbody></table></div>
+<p>这个循环有两个重要的设计原则。第一，<strong>不是所有阶段都必须由 LLM 完成</strong>：权限检查、去重、Token 计数、Schema 校验和文件索引，通常可以交给确定性程序。第二，<strong>上下文不是越动态越好</strong>：稳定的规则与当前任务目标可以预先注入，大体量、易变化的数据则更适合按需获取。</p>
+</section>
+
+<section id="retrieval">
+<h2>06 · 检索：预加载、Just-in-Time Retrieval 与混合策略</h2>
+<h3>6.1 预加载：快，但容易把噪声提前带进来</h3>
+<p>传统 RAG 常在模型推理前完成检索：把用户问题转成向量，召回 Top-K 文档，再把片段放入 Prompt。优点是路径短、容易控制延迟，也适合知识范围明确、查询模式稳定的任务。缺点是 Top-K 不一定等于当前真正需要的信息；预取过多会增加噪声，索引也可能落后于真实数据。</p>
+<h3>6.2 JIT：先拿到地图，需要时再读取细节</h3>
+<p>Anthropic 在 Context Engineering 文章中强调 Just-in-Time Context：Agent 不必预先加载全部数据，可以先持有轻量级标识符，例如文件路径、查询、URL 或索引；当任务推进到某一步，再通过工具读取最相关的内容。这样既能减少初始 Token 消耗，也能使用文件名、目录结构、时间戳和 Schema 等元数据辅助判断。</p>
+<figure class="figure"><img src="assets/03-jit-retrieval.svg" alt="预加载、Just-in-Time 和混合检索策略的对比示意图"><figcaption><strong>图 4｜三种检索策略。</strong> 预加载适合稳定且高概率会用到的信息；JIT 适合大规模、动态且可探索的数据；混合策略先放入稳定规则和索引，再按需取回具体证据。</figcaption></figure>
+<h3>6.3 混合策略：固定核心 + 按需发现</h3>
+<p>对复杂 Agent，通常更合理的做法不是“全部预加载”或“全部现场搜索”，而是：</p>
+<ul>
+<li><strong>固定核心：</strong>系统身份、不可违反的安全规则、当前目标、验收标准。</li>
+<li><strong>轻量地图：</strong>文件目录、文档索引、可用工具列表、数据库 Schema、项目状态摘要。</li>
+<li><strong>动态证据：</strong>只在当前子问题需要时读取具体文件、日志、网页或数据库记录。</li>
+<li><strong>回写状态：</strong>将验证后的关键结果保存到外部状态，而不是每次重放完整工具输出。</li>
+</ul>
+<div class="callout blue"><strong>什么时候选 JIT？</strong> 当数据规模很大、信息更新频繁、任务路径不确定，而且 Agent 有可靠工具可以探索时，JIT 的价值更明显。若数据规模小、查询固定、延迟极敏感，预计算检索可能更合适。Anthropic 也明确指出，运行时探索会带来额外延迟和工具使用成本。</div>
+</section>
+
+<section id="processing">
+<h2>07 · 处理：过滤、排序、去重与压缩</h2>
+<p>检索到的内容只是候选集，不应直接全部进入模型。上下文处理的目标是把原始资料变成有结构、有来源、可比较的证据。</p>
+<h3>7.1 为每个候选片段建立可解释的评分</h3>
+<p>可以为每个信息片段记录六类属性：与当前目标的相关性、时间新鲜度、来源可信度、对下一步行动的价值、Token 成本和安全风险。一个教学用评分式如下：</p>
+<div class="math-box">
+<div class="equation-label">EQUATION 3 · CANDIDATE PRIORITY</div>
+<div class="math-scroll" tabindex="0" role="region" data-math-scroll aria-label="候选信息优先级公式，可横向滚动">
+<math display="block" aria-label="候选片段得分等于相关性、时效性、可信度和行动价值的加权和，减去 Token 成本与风险">
+<mrow><mi>Score</mi><mo>(</mo><msub><mi>d</mi><mi>i</mi></msub><mo>)</mo><mo>=</mo><msub><mi>α</mi><mi>r</mi></msub><msub><mi>R</mi><mi>i</mi></msub><mo>+</mo><msub><mi>α</mi><mi>f</mi></msub><msub><mi>F</mi><mi>i</mi></msub><mo>+</mo><msub><mi>α</mi><mi>p</mi></msub><msub><mi>P</mi><mi>i</mi></msub><mo>+</mo><msub><mi>α</mi><mi>a</mi></msub><msub><mi>A</mi><mi>i</mi></msub><mo>−</mo><mi>λ</mi><msub><mi>T</mi><mi>i</mi></msub><mo>−</mo><mi>μ</mi><msub><mi>S</mi><mi>i</mi></msub></mrow>
+</math></div>
+<div class="math-caption">R：相关性；F：新鲜度；P：来源可信度；A：行动价值；T：Token 成本；S：安全风险。权重应由任务与评测决定，不存在适用于所有系统的固定数值。</div>
+</div>
+<h3>7.2 去重与冲突处理</h3>
+<p>重复内容会浪费预算，还可能造成“多个副本看起来像多个独立证据”的错觉。去重不只看字符串相同，还要识别同一事实的不同表达、相同文档的多个切片，以及来自同一上游来源的转述。</p>
+<p>如果两个可信来源发生冲突，不要简单把它们压成一个“平均事实”。应保留来源、时间、版本和冲突状态；必要时将“尚未确认”显式传递给模型。对于快速变化的数据，时间戳通常比语义相似度更重要。</p>
+<h3>7.3 摘要不是无损压缩</h3>
+<p>摘要能够缩短上下文，但会改变信息的表达形式，也可能丢失边界条件、数字、否定词和来源关系。工程上应区分：</p>
+<ul>
+<li><strong>原文保留：</strong>法律条款、精确参数、用户明确约束、未验证的关键证据。</li>
+<li><strong>结构化提取：</strong>当前目标、决策、已完成步骤、待办、文件路径、实体 ID、证据引用。</li>
+<li><strong>可丢弃信息：</strong>重复工具输出、过期调试日志、与当前目标无关的闲聊。</li>
+<li><strong>仅保留指针：</strong>大文件、数据集、代码仓库、长网页和完整运行日志。</li>
+</ul>
+</section>
+
+<section id="assembly">
+<h2>08 · 组装：究竟哪些信息应该进入模型窗口？</h2>
+<p>完成筛选之后，还需要明确上下文的层次和边界。一个可维护的上下文包通常包括以下部分：</p>
+<div class="panel">
+<p><strong>01 · System / Policy</strong>：身份、行为边界、输出规范与安全约束。</p>
+<p><strong>02 · Task Contract</strong>：本轮目标、验收条件、当前优先级、不能破坏的状态。</p>
+<p><strong>03 · Tool Interface</strong>：工具名称、参数、返回 Schema、失败语义与权限边界。</p>
+<p><strong>04 · Canonical Examples</strong>：少量有代表性的正确行为与边界案例。</p>
+<p><strong>05 · Retrieved Evidence</strong>：按需读取的证据片段，带来源、时间与可信度。</p>
+<p><strong>06 · Recent State</strong>：最近行动、工具观察、当前计划、未完成事项。</p>
+<p><strong>07 · Output Reserve</strong>：为最终答案、结构化结果或下一步动作预留容量。</p>
+</div>
+<p>Anthropic 建议 System Prompt 清楚、直接，并保持适当的抽象层次：太具体会变得脆弱，太宽泛又无法指导行为。工具则应该边界清晰、功能重叠少、输入参数明确、输出尽量节省 Token。Few-shot 示例应优先选择少量典型案例，而不是把所有边缘情况都堆进 Prompt。</p>
+<h3>8.1 交互实验：不同策略如何使用同一个上下文预算？</h3>
+<div class="demo" id="context-demo">
+<h3>Context Pack Simulator</h3>
+<p class="demo-intro">调整可用 Token 预算，并切换上下文策略。下方数字是为教学演示构造的估算值，不代表真实 Tokenizer、某个 API 的固定开销或模型性能。</p>
+<div class="demo-controls" role="group" aria-label="选择上下文管理策略">
+<button type="button" data-mode="all" aria-pressed="false">全量历史预载</button>
+<button type="button" data-mode="trim" aria-pressed="false">最近 N 轮裁剪</button>
+<button type="button" data-mode="summary" aria-pressed="false">摘要 + 近期原文</button>
+<button type="button" data-mode="hybrid" aria-pressed="true">固定核心 + JIT</button>
+</div>
+<div class="range-row"><label for="budget-range">本轮可用上下文预算</label><output id="budget-value" class="range-value" for="budget-range">8,000 tokens</output><input id="budget-range" type="range" min="2500" max="16000" step="500" value="8000" aria-label="上下文 Token 预算"></div>
+<div class="budget-track" role="img" aria-label="当前上下文预算使用比例"><div id="budget-fill" class="budget-fill"></div></div>
+<div class="demo-result">
+<div class="result-card"><strong>已装入上下文</strong><p id="included-items">当前目标、安全规则、工具定义、近期状态、项目索引、目标证据</p></div>
+<div class="result-card"><strong>留在外部或被移除</strong><p id="excluded-items">完整历史、原始日志、无关文档全集</p></div>
+</div>
+<p id="budget-status" class="status" aria-live="polite">混合策略：先固定高优先级约束，再按需装入目标证据。</p>
+</div>
+<p>从实验可以看到：预算很小时，优先保留目标和安全约束；预算增大后，再增加工具定义、近期状态和当前证据。全量历史策略容易把预算花在低价值旧记录上；裁剪策略简单、确定，但可能丢掉远期约束；摘要策略保留长期信息，却引入压缩损失；混合策略在固定核心与动态检索之间取得折中。</p>
+</section>
+
+<section id="long-horizon">
+<h2>09 · 长任务：Trim、Summary、Compaction 与 Sub-agents</h2>
+<p>当 Agent 连续工作几十分钟、数小时，甚至跨越多个上下文窗口时，历史消息会不断增长。此时必须决定哪些内容继续保留、哪些内容可以压缩、哪些任务应该隔离到独立上下文。</p>
+<figure class="figure"><img src="assets/05-context-management.svg" alt="Trim、Summary、Compaction、Memory 和 Sub-agent context isolation 五种策略比较"><figcaption><strong>图 5｜长时任务的五类上下文管理手段。</strong> 它们不是互相替代的按钮：裁剪、压缩、持久化记忆和上下文隔离可以组合使用，但解决的问题不同。</figcaption></figure>
+<div class="table-wrap"><table>
+<thead><tr><th>策略</th><th>做法</th><th>优点</th><th>主要风险</th><th>适用场景</th></tr></thead>
+<tbody>
+<tr><td><strong>Trimming</strong></td><td>删除旧轮次，只保留最近 N 轮</td><td>确定性强、低延迟、不会引入摘要改写</td><td>旧约束、ID 和决策可能突然丢失</td><td>短流程、近期信息最重要的操作型任务</td></tr>
+<tr><td><strong>Summarization</strong></td><td>把旧消息压缩成结构化摘要</td><td>保留长期目标与决策，缩短历史</td><td>细节丢失、摘要偏差、错误传播</td><td>长对话、分析与多阶段协作</td></tr>
+<tr><td><strong>Compaction</strong></td><td>将接近窗口上限的上下文压缩并继续新窗口</td><td>支持长时间连续执行</td><td>压缩后的状态必须经过保真与恢复评测</td><td>长程工具循环、代码迁移、持续研究</td></tr>
+<tr><td><strong>Persistent Memory</strong></td><td>把经验写入会话外存储，未来按需读取</td><td>跨会话复用、可积累知识</td><td>陈旧记忆、错误事实、隐私和权限问题</td><td>重复任务、个性化、长期项目</td></tr>
+<tr><td><strong>Sub-agent Isolation</strong></td><td>将子任务交给独立上下文的专门 Agent</td><td>隔离噪声、并行探索、降低主上下文压力</td><td>摘要交接丢失细节，协调与验证成本增加</td><td>复杂研究、多文件分析、并行代码审查</td></tr>
+</tbody></table></div>
+<h3>9.1 Trimming：保留最近 N 轮</h3>
+<p>OpenAI Agents SDK Cookbook 的一个实现把“一轮”定义为一条用户消息及其后续助手回复、工具调用和工具结果，直到下一条用户消息。系统从历史尾部向前寻找最后 N 个用户轮次，并保留这些轮次之后的全部项目。这样能避免把一次工具调用的结果从它所属的任务中间拆开。</p>
+<p>这种方法的优点是简单、容易复现；缺点也很直接：较早的任务约束、用户偏好或关键实体 ID 可能被整体删除。只保留最近 N 轮，并不意味着最近 N 轮就一定包含所有重要信息。</p>
+<h3>9.2 Summarization：把长历史压成状态摘要</h3>
+<p>摘要更适合长期连续任务，但不能只写“我们讨论了什么”。更有用的结构是：</p>
+<pre><code>current_goal: 当前目标
+hard_constraints: 不可违反的约束
+decisions: 已确认的决策及理由
+verified_facts: 已验证事实与证据位置
+open_questions: 尚未解决的问题
+completed_steps: 已完成工作
+next_actions: 下一步动作
+stale_or_rejected: 已废弃方案与原因</code></pre>
+<p>这里尤其需要保留“已拒绝的方案”和“未验证的假设”，否则后续 Agent 可能重新提出旧方案，或者把猜测误认为事实。</p>
+<h3>9.3 Compaction：跨窗口继续同一项工作</h3>
+<p>Anthropic 将 Compaction 描述为：在上下文接近上限时，高保真地总结当前状态，并在新的上下文窗口中继续任务。OpenAI 在 2026 年介绍 Responses API 的计算环境时，说明其原生 Compaction 可以生成 Token 高效的状态表示，并在后续上下文中保留关键状态与高价值的早期内容。</p>
+<p>要特别区分：Compaction 主要解决<strong>当前长任务如何跨越窗口边界继续</strong>；Persistent Memory 解决<strong>当前会话结束之后，未来任务如何重用经验</strong>。前者不自动等于长期记忆，后者也不应该只是压缩后的聊天记录。</p>
+<h3>9.4 Sub-agents：用隔离换取清晰的工作上下文</h3>
+<p>当一个主 Agent 同时承担文献检索、代码审查、数据分析和报告写作时，所有细节都会争夺同一个窗口。可以把不同工作交给独立的子 Agent：每个子 Agent 负责局部问题，保留自己的检索与推理细节，最后只向协调者返回经过整理的结论、证据和未解决事项。</p>
+<p>隔离并不会自动提升质量。主 Agent 必须验证子 Agent 的结论，交接摘要也应携带来源和不确定性；否则，系统只是把上下文污染从一个窗口转移到了另一个窗口。</p>
+</section>
+
+<section id="memory">
+<h2>10 · Agent Memory：跨会话知识如何形成？</h2>
+<p>Anthropic 在 2026 年 11 月发布的《The components of agent memory》中给出了一个更细的层次结构：会话记录、记忆笔记、记忆表示（例如 Wiki）和预先注入到新会话的上下文。它还讨论了 Dreaming：Agent 在任务间隙回看日志、验证笔记、修正错误、合并重复信息，并把更稳定的知识整理成可导航的表示。</p>
+<figure class="figure"><img src="assets/04-memory-hierarchy.svg" alt="Agent Memory 分层：会话日志、记忆笔记、知识表示和新会话注入层；Dreaming 负责回看、验证与整理"><figcaption><strong>图 6｜从经历到可复用知识。</strong> 底层保存可追溯记录，上层保存经过整理的结构；最顶层只放少量每次会话都值得加载的信息。</figcaption></figure>
+<h3>10.1 四层记忆结构</h3>
+<ul>
+<li><strong>Transcript / Event Log：</strong>原始事件、用户消息、工具调用和观察结果。优点是保留事实来源，缺点是体积大、噪声多。</li>
+<li><strong>Memory Notes：</strong>从经历中抽取的事实、规则、用户偏好、任务经验和失败教训。每条笔记都应该能够追溯到原始证据。</li>
+<li><strong>Memory Representations：</strong>把大量笔记组织成 Wiki、主题索引、关系图或可搜索的知识结构，让 Agent 可以沿着链接逐层发现信息。</li>
+<li><strong>Injected Context：</strong>每个新会话预先注入的极小核心，包括当前目标、重要约束和知识入口。它应当足够小，避免长期占据窗口。</li>
+</ul>
+<h3>10.2 Dreaming：为什么记忆需要离线整理？</h3>
+<p>在会话中即时写入记忆，可以让经验快速留存，但 Agent 当时并不知道未来哪些信息最重要；如果每一步都花大量精力写笔记，又会分散当前任务的注意力。Dreaming 提供了另一种思路：在任务间隙回顾多轮记录，检查事实是否正确、合并重复知识、修正过时笔记，并建立更好的知识导航。</p>
+<p>Anthropic 的文章展示了 Dreaming 用原始会话记录纠正错误记忆、构建 Wiki 表示以及控制注入层规模的案例。它也强调了风险：被注入的错误笔记可能在后续会话中反复影响决策；知识表示需要持续维护，不能把“写进 Memory”当成“已经验证”。</p>
+<div class="callout"><strong>关键原则：</strong>记忆不是“越多越好”，而是对未来有用、能够追溯、可以纠错、适合在正确时机被检索的信息。</div>
+<h3>10.3 Memory、Session State 和 Compaction 的边界</h3>
+<p>Session State 是当前任务的运行状态；Compaction 是为了跨窗口继续任务而做的上下文压缩；Memory 是为了未来会话可复用而保存的经验。一个项目可以同时使用三者，但必须分别定义写入时机、保留期限、更新策略和权限。</p>
+</section>
+
+<section id="harness">
+<h2>11 · Harness Engineering：让知识可发现、可验证、可执行</h2>
+<p>如果说 Context Engineering 关心“哪些信息进入模型”，那么 Harness Engineering 还要回答“模型如何找到这些信息、如何在安全环境中操作、如何知道自己做对了”。</p>
+<p>OpenAI 在 2026 年 2 月的 Harness Engineering 文章中，总结了一个很有代表性的经验：不要把一个超长 <code>AGENTS.md</code> 当作整个知识库，而应该让它成为目录或地图，指向结构化的文档、架构说明、执行计划、质量标准和参考资料。文章还强调通过 Lint、结构测试和文档维护任务，验证这些知识是否仍然有效。</p>
+<div class="grid2">
+<div class="mini"><div class="kicker">KNOWLEDGE LAYER</div><h3>可发现的知识</h3><p>短入口文件、文档索引、架构地图、可搜索的事实库、执行计划和决策日志。</p></div>
+<div class="mini"><div class="kicker">EXECUTION LAYER</div><h3>可验证的环境</h3><p>文件系统、沙箱、测试、日志、指标、工具权限、可重复执行和失败恢复。</p></div>
+</div>
+<p>OpenAI 在 2026 年 3 月的 Responses API 计算环境文章中，还介绍了如何通过 Shell、持久化容器工作区、文件系统、结构化存储和受限网络，让 Agent 执行复杂任务；工具输出可以设置上限，避免把完整日志无差别地塞回模型。</p>
+<h3>11.1 一个好的仓库知识入口应该长什么样？</h3>
+<pre><code>repository/
+├── AGENTS.md                 # 短入口：规则、地图、下一步去哪里
+├── ARCHITECTURE.md           # 系统结构与依赖边界
+├── docs/
+│   ├── index.md              # 文档索引
+│   ├── design/               # 设计决策与核心原则
+│   ├── plans/                # 当前计划、进度、决策日志
+│   ├── references/           # 外部规范与技术参考
+│   └── quality/              # 质量标准、已知缺口
+├── src/
+├── tests/
+└── scripts/                  # 可验证的自动化检查</code></pre>
+<p>这是一种知识组织示例，不是要求每个仓库照搬目录名。关键在于：入口短、索引清楚、事实有来源、计划有状态、规则能自动检查。Agent 应该先读取地图，再按当前任务逐步加载细节。</p>
+<h3>11.2 Harness 与 Context Engineering 的互补关系</h3>
+<p>仅靠上下文拼接无法弥补一个不可观察、不可测试、权限混乱的执行环境；反过来，再好的沙箱和工具，如果没有清晰的上下文管理，也会因为错误状态和大量无关输出而失效。可靠 Agent 需要同时具备<strong>信息组织、工具执行、状态持久化、验证反馈和权限治理</strong>。</p>
+</section>
+
+<section id="security">
+<h2>12 · 安全：上下文也是攻击面</h2>
+<p>上下文越丰富，模型接触到的外部内容也越多。网页、PDF、Issue、代码注释、邮件和工具返回值都可能包含恶意指令或错误信息。检索系统如果把这些内容不加区分地拼接进上下文，就可能让不可信数据伪装成系统指令。</p>
+<div class="table-wrap"><table>
+<thead><tr><th>风险</th><th>发生方式</th><th>缓解措施</th></tr></thead>
+<tbody>
+<tr><td><strong>Prompt Injection</strong></td><td>外部文档包含要求忽略原指令、泄露秘密或调用工具的文本</td><td>标记不可信来源；数据与指令分层；工具执行前做策略检查</td></tr>
+<tr><td><strong>Context Poisoning</strong></td><td>错误工具结果或错误摘要被反复带入后续轮次</td><td>保留来源、时间、验证状态；关键事实回查原文</td></tr>
+<tr><td><strong>Stale Context</strong></td><td>旧配置、过期计划或已废弃 API 被误当作当前事实</td><td>记录版本与更新时间；设置过期策略；读取权威来源</td></tr>
+<tr><td><strong>Data Leakage</strong></td><td>不必要的个人信息、凭据或内部文件进入模型或子 Agent</td><td>最小权限、字段脱敏、按任务隔离、敏感信息不进入持久记忆</td></tr>
+<tr><td><strong>Tool Confusion</strong></td><td>工具名称重叠、Schema 模糊、参数缺少约束</td><td>减少工具重叠；使用严格 Schema；校验参数与副作用</td></tr>
+</tbody></table></div>
+<p>一个实用做法是给每条上下文数据附加元信息：<code>source</code>、<code>timestamp</code>、<code>trust_level</code>、<code>verification_status</code>、<code>scope</code>。模型可以看到必要的证据内容，但不能因为某段文档写着“忽略系统指令”就把它提升为高优先级指令。</p>
+<p>还要注意，摘要与 Memory 都可能成为持久化攻击面。错误信息一旦被压缩成简洁、肯定的陈述，未来的模型可能更难意识到它最初只是一个不可信的工具输出。因此，压缩时必须保留来源和不确定性。</p>
+</section>
+
+<section id="evaluation">
+<h2>13 · 如何评估 Context Engineering 是否真的有效？</h2>
+<p>不能只比较 Prompt 长短或 Token 使用量。一个上下文方案可能更省 Token，却丢失关键约束；也可能召回率很高，但把无关文档塞进模型后降低了最终任务成功率。评估应该从上下文层和任务层同时进行。</p>
+<div class="table-wrap"><table>
+<thead><tr><th>指标维度</th><th>可测量指标</th><th>想回答的问题</th></tr></thead>
+<tbody>
+<tr><td>信息质量</td><td>Recall@K、Evidence Precision、来源覆盖率、冲突识别率</td><td>真正需要的信息有没有被找回来？</td></tr>
+<tr><td>上下文效率</td><td>输入 Token、重复率、压缩率、有效信息密度</td><td>每单位预算保留了多少有用信息？</td></tr>
+<tr><td>任务表现</td><td>任务成功率、约束遵循率、答案准确率、完成时间</td><td>上下文优化是否改善了真实结果？</td></tr>
+<tr><td>工具表现</td><td>工具选择准确率、参数正确率、重试率、无效调用数</td><td>上下文是否帮助模型正确行动？</td></tr>
+<tr><td>长程稳定性</td><td>状态恢复成功率、跨窗口事实保留率、摘要漂移率</td><td>长任务是否还能保持一致？</td></tr>
+<tr><td>安全与治理</td><td>注入成功率、越权调用率、敏感信息暴露率、过期记忆比例</td><td>上下文是否引入新的安全风险？</td></tr>
+</tbody></table></div>
+<h3>13.1 做消融，而不是只看一个总分</h3>
+<p>建议构建至少四个基线：完整历史、最近 N 轮裁剪、结构化摘要、固定核心加 JIT 检索。保持模型、任务、工具和评测集一致，比较任务成功率、Token、延迟、错误类型和证据保留情况。再分别关闭记忆、工具 Schema、检索、压缩和来源标记，观察各组件的独立贡献。</p>
+<h3>13.2 用失败案例驱动上下文改进</h3>
+<p>每次失败都应该回答：信息没有检索到？检索到了但排序太低？摘要把否定条件丢掉了？工具输出太长？旧状态覆盖了新目标？子 Agent 交接时丢失了证据？这些失败属于不同阶段，不能全部归因于“Prompt 写得不好”。</p>
+<div class="callout"><strong>评测闭环：</strong>任务轨迹 → 失败归因 → 上下文策略调整 → 固定回归集 → 再次评测。只有在任务表现和风险指标上都得到改善，才能认为上下文工程真正有效。</div>
+</section>
+
+<section id="implementation">
+<h2>14 · 一个可落地的工程蓝图</h2>
+<p>下面给出一个与具体模型厂商无关的参考控制流程。它强调确定性组件负责筛选和边界检查，模型负责理解任务、选择下一步动作以及处理需要语义判断的内容。</p>
+<pre><code>def run_agent_turn(task, durable_state, tools, token_budget):
+    # 1. Define: 固定本轮目标与不可丢失的约束
+    goal = parse_goal(task)
+    invariants = load_policy_and_project_constraints(goal)
+
+    # 2. Retrieve: 先读轻量索引，再按需取回证据
+    pointers = search_index(goal, durable_state.index)
+    candidates = fetch_relevant_items(pointers, goal)
+
+    # 3. Process: 去重、标记来源、排序并压缩
+    candidates = deduplicate(candidates)
+    candidates = attach_provenance_and_freshness(candidates)
+    candidates = filter_untrusted_or_out_of_scope(candidates)
+    candidates = rank_by_relevance_value_cost_and_risk(candidates)
+
+    # 4. Assemble: 保留输出空间，按预算组装上下文
+    context = pack_context(
+        invariants=invariants,
+        goal=goal,
+        tool_schemas=tools.minimal_schemas(),
+        evidence=candidates,
+        recent_state=durable_state.recent_state,
+        token_budget=token_budget,
+    )
+
+    # 5. Execute: 模型提出行动，Harness 执行并限制返回
+    action = model_step(context)
+    observation = execute_with_permissions_and_output_caps(action)
+
+    # 6. Persist: 保存事件，更新状态；记忆写入需经过验证
+    durable_state.append_event(action, observation)
+    durable_state.update_task_state(goal, action, observation)
+    maybe_consolidate_verified_memory(durable_state)
+
+    return observation, durable_state</code></pre>
+<p>这段伪代码的价值不在于某个函数名，而在于责任边界：</p>
+<ul>
+<li>检索系统负责找候选，不直接决定哪些内容一定可信。</li>
+<li>上下文组装器负责预算和结构，不负责伪造事实。</li>
+<li>工具执行层负责权限、Schema、超时和输出上限。</li>
+<li>状态存储层负责可追溯记录；长期记忆需要单独验证。</li>
+<li>评测层负责判断优化是否改善真实任务，而不是只看 Prompt 是否更短。</li>
+</ul>
+<h3>14.1 建议的最小可用版本</h3>
+<div class="grid3">
+<div class="mini"><div class="kicker">PHASE A</div><h3>先建立状态结构</h3><p>明确 goal、constraints、decisions、evidence、open questions、next actions。</p></div>
+<div class="mini"><div class="kicker">PHASE B</div><h3>再建立检索边界</h3><p>使用轻量索引与按需读取，避免每轮加载完整文件或历史。</p></div>
+<div class="mini"><div class="kicker">PHASE C</div><h3>最后加入长期记忆</h3><p>保存已验证经验，记录来源与版本，并定期清理过期信息。</p></div>
+</div>
+<p>不要一开始就搭建复杂的多 Agent 记忆平台。先用一个结构化状态文件、可检索的外部文档和确定性 Token 预算器，验证它能否解决真实失败案例；只有在单 Agent 的上下文管理已经成为瓶颈时，再引入更复杂的分工与持久化架构。</p>
+</section>
+
+<section id="limits">
+<h2>15 · 失败模式与设计边界：没有一种策略适合所有任务</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>任务特征</th><th>优先考虑</th><th>需要警惕</th></tr></thead>
+<tbody>
+<tr><td>短流程、每轮相对独立</td><td>确定性裁剪、最小工具集</td><td>最近 N 轮仍可能包含大体量工具输出</td></tr>
+<tr><td>长对话、约束需要持续保留</td><td>结构化摘要 + 近期原文</td><td>摘要遗漏精确 ID、否定条件和来源</td></tr>
+<tr><td>大型代码仓库或文档集</td><td>仓库地图 + JIT 搜索 + 文件读取</td><td>工具探索成本、陈旧索引、权限越界</td></tr>
+<tr><td>重复任务、跨会话工作</td><td>分层 Memory + 检索 + 纠错机制</td><td>记忆过期、错误固化和隐私泄漏</td></tr>
+<tr><td>复杂并行研究</td><td>子 Agent 隔离 + 证据化交接</td><td>协调成本、重复工作和交接失真</td></tr>
+<tr><td>严格时延或 Token 成本限制</td><td>预计算检索、缓存、工具输出裁剪</td><td>过度压缩可能降低准确率</td></tr>
+</tbody></table></div>
+<p>还需要明确几个常见误区：</p>
+<ol>
+<li><strong>把所有信息都塞进 System Prompt：</strong>导致指令过长、维护困难、重要约束不突出。</li>
+<li><strong>把所有历史都保存为原文并每轮重放：</strong>把持久化存储与工作上下文混为一谈。</li>
+<li><strong>把摘要当成事实：</strong>摘要是一个新的信息表示，需要来源、验证和更新。</li>
+<li><strong>把 RAG Top-K 当作最终上下文：</strong>召回结果还需要过滤、去重、冲突处理和预算控制。</li>
+<li><strong>把更大的窗口当成架构升级：</strong>更大容量不能自动修复工具、记忆、状态和安全设计问题。</li>
+<li><strong>只优化 Token 成本：</strong>如果任务成功率、可靠性或安全性下降，Token 更少并不是工程进步。</li>
+</ol>
+<div class="callout orange"><strong>最终判断：</strong>Context Engineering 不是一套固定的 Prompt 模板，而是一套围绕任务状态、信息来源、有限预算、执行反馈与长期知识组织的系统设计方法。最好的系统不是拥有最多上下文的系统，而是在正确的时间把正确的信息交给正确的 Agent。</div>
+</section>
+
+<section id="references">
+<h2>16 · 参考资料与进一步阅读</h2>
+<p>本文把论文综述作为概念分类依据，把 Anthropic 与 OpenAI 的官方工程文章作为实践依据。厂商博客描述的是各自的工程经验和产品实现，不能直接推断为所有模型都具备相同机制或性能。</p>
+<ol class="refs">
+<li><strong>Anthropic Engineering.</strong> <a href="https://www.anthropic.com/research/effective-context-engineering-for-ai-agents" target="_blank" rel="noopener noreferrer">Effective context engineering for AI agents</a>, 2025-09-29. Context 定义、注意力预算、JIT 检索、Compaction、结构化笔记与子 Agent。</li>
+<li><strong>OpenAI Cookbook.</strong> <a href="https://developers.openai.com/cookbook/examples/agents_sdk/session_memory" target="_blank" rel="noopener noreferrer">Context Engineering — Short-Term Memory Management with Sessions</a>, 2025-09-09. Agents SDK Session、最近 N 轮裁剪和摘要压缩的实现与权衡。</li>
+<li><strong>OpenAI Engineering.</strong> <a href="https://openai.com/index/harness-engineering/" target="_blank" rel="noopener noreferrer">Harness engineering: leveraging Codex in an agent-first world</a>, 2026-02-11. 仓库知识作为系统事实源、短入口文件、渐进披露、执行计划与机械化验证。</li>
+<li><strong>OpenAI Engineering.</strong> <a href="https://openai.com/index/equip-responses-api-computer-environment/" target="_blank" rel="noopener noreferrer">From model to agent: Equipping the Responses API with a computer environment</a>, 2026-03-11. 工具循环、受限工具输出、持久化容器与原生 Compaction。</li>
+<li><strong>Anthropic Engineering.</strong> <a href="https://www.anthropic.com/research/components-of-agent-memory" target="_blank" rel="noopener noreferrer">The components of agent memory</a>, 2026-11-06. Memory Notes、知识表示、Dreaming、纠错和跨会话上下文注入。</li>
+<li><strong>Mei et al.</strong> <a href="https://arxiv.org/abs/2507.13334" target="_blank" rel="noopener noreferrer">A Survey of Context Engineering for Large Language Models</a>, arXiv:2507.13334, 2025. 从检索与生成、处理、管理到 RAG、Memory、工具推理与多 Agent 的系统综述。</li>
+</ol>
+<p class="source-note">阅读建议：先读 Anthropic 的 Context Engineering 文章建立整体框架，再读 OpenAI Session Cookbook 理解裁剪与摘要的工程取舍；随后结合 OpenAI Harness Engineering 和 Anthropic Agent Memory 文章，研究如何把短期上下文管理扩展到长期项目与可维护的知识系统。</p>
+</section>
+<footer class="foot"><a href="../../../categories/agents/">Agents &amp; Tool Use</a><a href="../../../topics/">知识地图</a><a href="../../../archive/">更多技术文章</a><span>xm-posts · Context Engineering</span></footer>
+</article></main>
+</div>
+<script>
+(function(){
+  const root=document.getElementById('context-demo');
+  if(!root)return;
+  const slider=root.querySelector('#budget-range');
+  const value=root.querySelector('#budget-value');
+  const fill=root.querySelector('#budget-fill');
+  const included=root.querySelector('#included-items');
+  const excluded=root.querySelector('#excluded-items');
+  const status=root.querySelector('#budget-status');
+  const buttons=Array.from(root.querySelectorAll('[data-mode]'));
+  const profiles={
+    all:{label:'全量历史预载',items:[['当前目标与验收标准',450],['安全规则与项目约束',650],['全部工具定义',1100],['近期对话与状态',1500],['旧历史记录',3200],['原始工具日志',4200],['无关文档全集',5200]],note:'全量预载优先保留历史，预算容易被旧记录与原始日志占据。'},
+    trim:{label:'最近 N 轮裁剪',items:[['当前目标与验收标准',450],['安全规则与项目约束',650],['全部工具定义',1100],['最近 N 轮对话',2200],['近期工具结果',1300]],note:'裁剪低成本且确定，但较早的关键约束可能随旧轮次一起消失。'},
+    summary:{label:'摘要 + 近期原文',items:[['当前目标与验收标准',450],['安全规则与项目约束',650],['最小工具定义',700],['结构化历史摘要',900],['最近对话与工具结果',1800],['精确证据片段',1700]],note:'摘要保留长期状态，但压缩过程可能丢失细节或固化错误。'},
+    hybrid:{label:'固定核心 + JIT',items:[['当前目标与验收标准',450],['安全规则与项目约束',650],['最小工具定义',700],['近期任务状态',650],['轻量文件 / 知识索引',350],['本轮目标证据',1500],['必要的原文片段',900]],note:'混合策略先固定核心与地图，再按需读取证据；这是复杂 Agent 常见的折中起点。'}
+  };
+  let mode='hybrid';
+  function render(){
+    const budget=Number(slider.value);
+    const profile=profiles[mode];
+    let used=0,kept=[],dropped=[];
+    profile.items.forEach(item=>{
+      if(used+item[1]<=budget){kept.push(item[0]+'（'+item[1].toLocaleString()+'）');used+=item[1];}
+      else{dropped.push(item[0]);}
+    });
+    value.textContent=budget.toLocaleString()+' tokens';
+    fill.style.width=Math.min(100,used/budget*100)+'%';
+    included.textContent=kept.length?kept.join('、'):'预算不足，无法装入任何候选项';
+    excluded.textContent=dropped.length?dropped.join('、'):'当前策略的候选项均已装入';
+    status.textContent=profile.label+'：'+profile.note+' 当前示例装入 '+used.toLocaleString()+' / '+budget.toLocaleString()+' tokens。';
+  }
+  buttons.forEach(button=>{
+    button.addEventListener('click',function(){
+      mode=button.getAttribute('data-mode');
+      buttons.forEach(item=>item.setAttribute('aria-pressed',item===button?'true':'false'));
+      render();
+    });
+  });
+  slider.addEventListener('input',render);
+  render();
+})();
+</script>
+</body>
+</html>
