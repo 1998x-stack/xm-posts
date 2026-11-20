@@ -272,3 +272,8 @@ Neural Gating 位于 `posts/architectures/neural-gating/`，归入 **Architectur
 ## MobileNet / Efficient & Mobile CNNs
 
 MobileNet 归入 `architectures` → **Convolutional Neural Networks & Vision** → **Efficient & Mobile CNNs**，无需新建一级分类。文章 [`Understanding MobileNet`](posts/architectures/mobilenet/index.html) 位于 `posts/architectures/mobilenet/`，以 2017 原论文为主线，区分 V2 逆残差、V3 NAS/SE 与 V4 UIB/Mobile MQA。包含五幅 SVG、MathML、交互成本分析、Python 验证及证据台账。
+
+
+## SwiGLU · Gated FFN
+
+- [Understanding SwiGLU](posts/architectures/swiglu/index.html)：精读 Shazeer (2020) 的 SiLU 门控、三矩阵参数匹配、T5 实证与现代 LLM 使用；归入已有 `architectures/gating-mechanisms` 二级主题。
