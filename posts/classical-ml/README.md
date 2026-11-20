@@ -6,4 +6,6 @@
 
 已发布文章：[Understanding Decision Tree](decision-tree/index.html)（ID3、CART、C4.5、Gini、回归与剪枝）；[Understanding SVM](svm/index.html)（最大间隔、对偶与核方法）。
 
+[Understanding GMM](gmm/index.html) 从混合密度、潜变量与软责任走到 EM 交替优化、BIC 和协方差选型，作为概率模型下的 **Mixture Models & Density Estimation** 二级主题。
+
 新增文章：[Understanding KNN](knn/index.html)——实例学习、局部投票、距离尺度、k 的选择、Cover–Hart 大样本界，以及 ANN 与精确分类的区别。二级主题 `Instance-based Learning & Nearest Neighbors` 归在经典机器学习，不新建一级分类。

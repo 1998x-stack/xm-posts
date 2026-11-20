@@ -1,5 +1,29 @@
 [
   {
+    "slug": "gmm",
+    "title": "Understanding Gaussian Mixture Models (GMM)",
+    "subtitle": "从隐变量与软责任出发，理解混合密度、EM、协方差约束与 BIC 模型选择",
+    "category": "classical-ml",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 29,
+    "tags": [
+      "GMM",
+      "Gaussian Mixture Model",
+      "Mixture Models & Density Estimation",
+      "Expectation-Maximization",
+      "EM",
+      "Probabilistic Clustering",
+      "BIC",
+      "Covariance"
+    ],
+    "summary": "精读 Dempster–Laird–Rubin (1977) EM 方法与 Bishop PRML §9.2 的 GMM：从隐变量生成过程、软后验责任和对数似然出发，推导 E/M 步的均值、权重、协方差更新；配四幅可独立打开的原创 SVG、六组原生 MathML、固定参数后验交互、BIC 与协方差选型，以及纯 Python 数值不变量测试。",
+    "paper": "https://doi.org/10.1111/j.2517-6161.1977.tb01600.x",
+    "illustration": "gmm",
+    "topic": "mixture-models-density-estimation"
+  },
+  {
     "slug": "multi-head-attention",
     "title": "Understanding Multi-Head Attention",
     "subtitle": "为什么一个 Attention 不够？从独立 Q/K/V 投影、因果 Mask 到原论文 Head 消融",
@@ -1328,6 +1352,33 @@
     "paper": "https://arxiv.org/abs/1704.04861",
     "illustration": "mobilenet",
     "topic": "convolutional-vision"
+  },
+  {
+    "slug": "swiglu",
+    "title": "Understanding SwiGLU",
+    "subtitle": "为什么 Transformer FFN 的两路乘性门控，比单纯替换激活函数更有表现力？",
+    "category": "architectures",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 30,
+    "tags": [
+      "SwiGLU",
+      "GLU",
+      "GEGLU",
+      "ReGLU",
+      "Gated FFN & Activations",
+      "SiLU",
+      "Swish",
+      "Transformer",
+      "T5",
+      "LLaMA",
+      "Feedforward Networks"
+    ],
+    "summary": "精读 Shazeer 2020《GLU Variants Improve Transformer》：从两矩阵 FFN 到 SiLU 门控与三矩阵结构，推导 2/3 参数预算，核验 T5/C4 log-perplexity 与 GEGLU 对照，配六幅独立 SVG、MathML、交互标量门控与纯 Python 梯度/参数检查；明确区分 PaLM、LLaMA 后续实践。",
+    "paper": "https://arxiv.org/abs/2002.05202",
+    "illustration": "swiglu",
+    "topic": "gating-mechanisms"
   },
   {
     "slug": "knn",
