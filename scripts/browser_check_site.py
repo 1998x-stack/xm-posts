@@ -123,7 +123,7 @@ def run(output:Path, site:Path):
                         else:
                             page.set_content(offline_html(site,site/'index.html'))
                         assert page.locator('[data-post-card]').count()>=2
-                        report['navigation']={'search':'passed','category':'passed','article':'passed','back_to_home':'passed'}
+                        report['navigation'].update({'search':'passed','category':'passed','article':'passed','back_to_home':'passed'})
                     if label=='narrow':
                         toggle=page.locator('[data-menu-toggle]')
                         assert toggle.is_visible()
