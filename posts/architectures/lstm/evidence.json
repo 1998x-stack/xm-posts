@@ -70,5 +70,14 @@
     "locator": "Modern equations; direct calculation",
     "status": "derived",
     "notes": "Not experimental results or a paper reproduction."
+  },
+  {
+    "id": "LSTM-MEMORY-DECOMPOSITION",
+    "claim": "Under a fixed modern forget gate f, initial cell c0=1 and constant additive candidate write a, the cell after N steps is f^N + a sum_(k=0)^(N-1) f^k, decomposed into original and accumulated memory.",
+    "kind": "toy-derivation",
+    "source_url": "https://docs.pytorch.org/docs/stable/generated/torch.nn.LSTM.html",
+    "locator": "Article Section 09; simplified modern cell equation and geometric sum",
+    "status": "derived",
+    "notes": "The learnable forget gate is a later LSTM innovation, not part of the original 1997 structure; the chart assumes nonnegative scalar contributions."
   }
 ]
