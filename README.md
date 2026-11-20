@@ -45,7 +45,7 @@
 
 - **Foundations / Classical ML**：数学、优化、表示学习、分词与经典机器学习。
 - **Architectures**：CNN、RNN、Transformer、Attention、MoE、SSM 等模型结构。
-- **Training / Reinforcement Learning**：预训练、对齐、PEFT、价值与策略学习及搜索。
+- **Training / Reinforcement Learning**：预训练、对齐、PEFT、价值与策略学习及搜索；新增 Reward Hacking 专题，连接奖励建模、Goodhart 效应、验证器利用与 Agent 安全。
 - **Reasoning / Agents & Tool Use**：推理策略、工具调用、规划和智能体工作流。
 - **Retrieval & RAG / Inference**：向量检索、增强生成、解码、KV Cache、请求调度与 Serving。
 - **Systems / Datasets / Evaluation / Multimodal**：算子与 GPU、数据、评测和多模态。
