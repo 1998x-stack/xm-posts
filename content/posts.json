@@ -1,5 +1,27 @@
 [
   {
+    "slug": "alphago",
+    "title": "Understanding AlphaGo",
+    "subtitle": "策略网络、价值网络和 Monte Carlo Tree Search 如何协同打破围棋的搜索墙？",
+    "category": "reinforcement-learning",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 35,
+    "tags": [
+      "AlphaGo",
+      "MCTS",
+      "APV-MCTS",
+      "Policy Network",
+      "Value Network",
+      "Self-play",
+      "Planning & Tree Search"
+    ],
+    "summary": "精读 Silver et al. Nature 2016：从围棋的组合搜索难题、KGS 监督策略、自对弈策略梯度与价值学习，推导 APV-MCTS 的 PUCT、双通道价值回传与最终访问次数决策；包含 5 幅独立 SVG、7 组离线 MathML、交互探索实验及确定性 Python 数值验证，并严格区分 AlphaGo Fan、Lee、Zero。",
+    "paper": "https://doi.org/10.1038/nature16961",
+    "illustration": "alphago"
+  },
+  {
     "slug": "flashattention",
     "title": "Understanding FlashAttention",
     "subtitle": "Attention 的复杂度没变，为什么还能更快？从 HBM/SRAM 到 Online Softmax",
@@ -788,5 +810,53 @@
     "summary": "以 QLoRA NeurIPS 2023 为主线，拆解冻结主干的 NF4 存储、BF16 计算、双重量化 0.373 bit/参数、分页优化器和 MMLU 证据；附六幅 SVG、MathML 公式、交互内存账本与纯 Python 验证。",
     "paper": "https://arxiv.org/abs/2305.14314",
     "illustration": "qlora"
+  },
+  {
+    "slug": "decision-tree",
+    "title": "Understanding Decision Tree",
+    "subtitle": "一连串简单的问题，如何组成分类与回归规则？从 ID3、CART 到剪枝",
+    "category": "classical-ml",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 29,
+    "tags": [
+      "Decision Tree",
+      "ID3",
+      "CART",
+      "C4.5",
+      "Information Gain",
+      "Gini Impurity",
+      "Regression Tree",
+      "Pruning"
+    ],
+    "summary": "以原始 CART、ID3 与 C4.5 文献为脉络，渐进图解熵、Gini、连续阈值、回归叶与代价复杂度剪枝，配六幅原创机制图、MathML 推导、交互阈值实验及纯 Python 可验证断言。",
+    "paper": "https://doi.org/10.1007/BF00116251",
+    "illustration": "decision-tree"
+  },
+  {
+    "slug": "embeddings",
+    "title": "Understanding Embeddings",
+    "subtitle": "从离散 token 到连续语义空间：查表、对比学习、句向量与语义检索",
+    "category": "foundations",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 32,
+    "tags": [
+      "Embedding",
+      "Representation Learning",
+      "Word2Vec",
+      "GloVe",
+      "BERT",
+      "Sentence-BERT",
+      "SimCSE",
+      "Contrastive Learning",
+      "Semantic Search",
+      "RAG"
+    ],
+    "summary": "沿 Word2Vec、GloVe、BERT、SBERT、SimCSE 与 E5 的原论文主线，拆解 Embedding lookup、上下文表示、掩码池化、对比损失与检索系统，配七幅原创 SVG、原生 MathML、互动角度实验和可测的纯 Python 示例。",
+    "paper": "https://aclanthology.org/D19-1410/",
+    "illustration": "embedding"
   }
 ]

@@ -8,6 +8,7 @@
       "Optimization & Optimizers",
       "Optimization & Regularization",
       "Representation",
+      "Representation Learning & Embeddings",
       "Math",
       "Word Embeddings",
       "Linear Algebra & Matrix Factorization"
@@ -47,7 +48,7 @@
     "slug": "reinforcement-learning",
     "title": "强化学习",
     "english": "Reinforcement Learning",
-    "description": "从 Bellman 方程、DQN 的价值学习与经验回放，到 Policy Gradient、Actor–Critic、GAE 和 PPO，拆解经验回放与最大熵控制等序贯决策的学习信号。",
+    "description": "从 Bellman 方程、DQN 的价值学习与经验回放，到 Policy Gradient、Actor–Critic、GAE 和 PPO，拆解经验回放与最大熵控制等序贯决策的学习信号，并延伸至 AlphaGo 的神经网络引导搜索与 MCTS 规划。",
     "topics": [
       "Policy Gradient",
       "Actor–Critic",
@@ -57,7 +58,8 @@
       "Off-policy & Experience Replay",
       "Maximum Entropy RL",
       "Continuous Control",
-      "Off-policy Actor–Critic"
+      "Off-policy Actor–Critic",
+      "Planning & Tree Search"
     ]
   },
   {
