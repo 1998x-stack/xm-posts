@@ -836,5 +836,29 @@
     "summary": "沿 Word2Vec、GloVe、BERT、SBERT、SimCSE 与 E5 的原论文主线，拆解 Embedding lookup、上下文表示、掩码池化、对比损失与检索系统，配七幅原创 SVG、原生 MathML、互动角度实验和可测的纯 Python 示例。",
     "paper": "https://aclanthology.org/D19-1410/",
     "illustration": "embedding"
+  },
+  {
+    "slug": "noisynet",
+    "title": "Understanding NoisyNet",
+    "subtitle": "为什么可学习的参数噪声能带来更连贯的强化学习探索？",
+    "category": "reinforcement-learning",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 35,
+    "tags": [
+      "NoisyNet",
+      "Noisy Networks for Exploration",
+      "Exploration",
+      "Parameter Space Noise",
+      "Factorised Gaussian Noise",
+      "NoisyLinear",
+      "DQN",
+      "Dueling",
+      "A3C"
+    ],
+    "summary": "精读 Fortunato et al. ICLR 2018：图解参数噪声的时间一致性、可学习 μ/σ、因子化高斯采样及重参数化梯度，区分 NoisyNet-DQN、Dueling 与 A3C，核验 Atari-57 Table 1。含六幅独立 SVG、MathML、双动作交互与标准库 Python 断言。",
+    "paper": "https://arxiv.org/abs/1706.10295",
+    "illustration": "noisynet"
   }
 ]
