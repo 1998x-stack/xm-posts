@@ -451,7 +451,7 @@
     "slug": "agents",
     "title": "智能体与工具使用",
     "english": "Agents & Tool Use",
-    "description": "围绕模型与外部环境交互的闭环，研究 ReAct、任务规划、工具调用、状态与记忆、软件工程智能体与 Agent-Computer Interface，以及端到端的 Agent 评测。",
+    "description": "围绕模型与外部环境交互的闭环，研究 ReAct、任务规划、工具调用、状态与记忆、上下文工程与长时任务管理、软件工程智能体与 Agent-Computer Interface，以及端到端的 Agent 评测。",
     "topics": [
       {
         "slug": "react",
@@ -468,6 +468,10 @@
       {
         "slug": "memory",
         "title": "Agent Memory"
+      },
+      {
+        "slug": "context-engineering",
+        "title": "Context Engineering & Context Management"
       },
       {
         "slug": "agent-evaluation",
