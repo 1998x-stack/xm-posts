@@ -36,7 +36,8 @@
       "State Space",
       "Normalization & Residual Paths",
       "Positional Encoding",
-      "Recurrent Networks / LSTM"
+      "Recurrent Networks / LSTM",
+      "Attention Head Sharing"
     ]
   },
   {

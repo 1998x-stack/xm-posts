@@ -13,6 +13,7 @@
 | **Understanding The Pile** | 为什么 22 种语料混合能增强跨领域文本建模？ | [`posts/datasets/the-pile/`](posts/datasets/the-pile/index.html) | [Gao et al. (2020)](https://arxiv.org/abs/2101.00027) |
 | **Understanding Chinchilla** | 在固定训练 FLOPs 下，参数量与训练 tokens 如何均衡？ | [`posts/training/chinchilla/`](posts/training/chinchilla/index.html) | [Hoffmann et al. (NeurIPS 2022)](https://arxiv.org/abs/2203.15556) |
 | **Understanding FineWeb** | 跨快照去重越强，为什么训练效果反而可能更差？ | [`posts/datasets/fineweb/`](posts/datasets/fineweb/index.html) | [Penedo et al. (NeurIPS 2024)](https://arxiv.org/abs/2406.17557) |
+| **Understanding GQA** | 为什么共享 KV Head 能降低 Decode 带宽又保留 Query 多头？ | [`posts/architectures/gqa/`](posts/architectures/gqa/index.html) | [Ainslie et al. (EMNLP 2023)](https://aclanthology.org/2023.emnlp-main.298/) |
 | **Understanding FlashAttention** | Attention 的 FLOPs 没变，为什么 GPU 仍能提速？ | [`posts/systems/flashattention/`](posts/systems/flashattention/index.html) | [Dao et al. (2022)](https://arxiv.org/abs/2205.14135) |
 | **Understanding AlexNet** | 为什么深层 CNN 能在 2012 ImageNet 上突破？卷积、ReLU、双 GPU 与真实集成指标 | [`posts/architectures/alexnet/`](posts/architectures/alexnet/index.html) | [Krizhevsky et al. (NeurIPS 2012)](https://papers.nips.cc/paper_files/paper/2012/file/c399862d3b9d6b76c8436e924a68c45b-Paper.pdf) |
 | **Understanding ResNet** | 网络越深，为什么训练反而可能更难？ | [`posts/architectures/resnet/`](posts/architectures/resnet/index.html) | [He et al.](https://arxiv.org/abs/1512.03385) |
@@ -75,6 +76,8 @@ AlexNet 归入 `architectures` 的 **Convolutional Neural Networks & Vision** �
 LSTM 归入 `architectures` 的 **Recurrent Networks / LSTM** 二级主题，区分 1997 原始两门版、2000 年遗忘门与现代标准实现。
 
 Seq2Seq 归入 `architectures`，补充 **Sequence-to-Sequence / Encoder–Decoder** 二级主题；无需为一篇论文新建一级分类，后续 RNN、LSTM、Attention 与机器翻译架构可延伸此主题。
+
+GQA 归入 `architectures` 下新增的 **Attention Head Sharing** 专题，不新增一级分类；它对 KV Cache 的推理开销有直接影响，相关实现与 Serving 主题仍归入 `inference`。
 
 RoPE 归入 `architectures`，补充 **Positional Encoding** 主题；不为单篇位置编码论文增设顶层分类，后续 ALiBi、PI、YaRN 可以继续沿此脉络整理。
 
