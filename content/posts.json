@@ -1154,5 +1154,28 @@
     "summary": "精读 Fujimoto 等 ICML 2018：从 DDPG 的函数逼近高估风险出发，推导 clipped double Q、延迟 Actor 更新与目标策略平滑；含 5 幅独立 SVG、5 组原生 MathML、双 Q 交互实验、原论文 Table 1/2 与确定性 Python 断言。",
     "paper": "https://proceedings.mlr.press/v80/fujimoto18a.html",
     "illustration": "td3"
+  },
+  {
+    "slug": "wordpiece",
+    "title": "Understanding WordPiece",
+    "subtitle": "从子词词表到最长匹配：BERT 如何把文本变成 Token？",
+    "category": "foundations",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 34,
+    "tags": [
+      "WordPiece",
+      "Tokenization",
+      "Subword Units",
+      "BERT",
+      "MaxMatch",
+      "Longest-match-first",
+      "Vocabulary",
+      "Fast WordPiece"
+    ],
+    "summary": "追溯 Schuster & Nakajima 2012、GNMT 2016 与 BERT 2018，严格区分未公开的原始词表训练器、Hugging Face pair-score 教学重建和 BERT 官方 MaxMatch 编码；包含 14 节深度解读、七幅独立 SVG、四组 MathML、双交互实验与纯 Python 断言，并对照 Fast WordPiece 2021。",
+    "paper": "https://research.google/pubs/japanese-and-korean-voice-search/",
+    "illustration": "wordpiece"
   }
 ]

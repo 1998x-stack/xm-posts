@@ -1,0 +1,128 @@
+[
+  {
+    "id": "WP01",
+    "claim": "Schuster and Nakajima (2012) published Japanese and Korean Voice Search at ICASSP 2012",
+    "kind": "historical",
+    "source_url": "https://research.google/pubs/japanese-and-korean-voice-search/",
+    "locator": "Bibliographic record, pp. 5149–5152",
+    "status": "verified",
+    "notes": "Foundational voice-search context, not BERT implementation"
+  },
+  {
+    "id": "WP02",
+    "claim": "GNMT uses limited wordpieces to improve handling of rare words",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/abs/1609.08144",
+    "locator": "Abstract, wordpiece segmentation section",
+    "status": "verified",
+    "notes": "GNMT is a full LSTM/attention system: no isolated gain attributed to tokenizer alone"
+  },
+  {
+    "id": "WP03",
+    "claim": "Multilingual GNMT uses a shared wordpiece vocabulary",
+    "kind": "later-variant",
+    "source_url": "https://arxiv.org/abs/1611.04558",
+    "locator": "Abstract and multilingual vocabulary method",
+    "status": "verified",
+    "notes": "Separate from single-pair toy"
+  },
+  {
+    "id": "WP04",
+    "claim": "BERT reports a 30,000-token WordPiece vocabulary",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/abs/1810.04805",
+    "locator": "§3, Input/Output Representations",
+    "status": "verified",
+    "notes": "Paper-specific size, not universal"
+  },
+  {
+    "id": "WP05",
+    "claim": "BERT masks 15% of WordPiece token positions for masked LM candidate prediction",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/abs/1810.04805",
+    "locator": "§3.1 Task #1",
+    "status": "verified",
+    "notes": "Not a WordPiece algorithm training rule"
+  },
+  {
+    "id": "WP06",
+    "claim": "Google's original WordPiece trainer source is not published in the BERT repository",
+    "kind": "source-status",
+    "source_url": "https://github.com/google-research/bert",
+    "locator": "README, Learning a new WordPiece vocabulary",
+    "status": "verified",
+    "notes": "The official repository says trainer depended on internal C++ code"
+  },
+  {
+    "id": "WP07",
+    "claim": "BERT WordpieceTokenizer uses longest-match-first with ## continuation and whole-word UNK fallback",
+    "kind": "implementation",
+    "source_url": "https://github.com/google-research/bert/blob/master/tokenization.py",
+    "locator": "WordpieceTokenizer.tokenize class",
+    "status": "verified",
+    "notes": "Applies after BasicTokenizer; output for a failed word is one [UNK]"
+  },
+  {
+    "id": "WP08",
+    "claim": "Original BERT WordpieceTokenizer defaults max_input_chars_per_word=200",
+    "kind": "implementation",
+    "source_url": "https://github.com/google-research/bert/blob/master/tokenization.py",
+    "locator": "WordpieceTokenizer.__init__",
+    "status": "verified",
+    "notes": "Other libraries may vary"
+  },
+  {
+    "id": "WP09",
+    "claim": "HF pair score c(a,b)/(c(a)c(b)) is a pedagogical guess and not an exact public Google training recipe",
+    "kind": "educational-reconstruction",
+    "source_url": "https://huggingface.co/learn/llm-course/en/chapter6/6",
+    "locator": "Training algorithm, explicit warning",
+    "status": "verified",
+    "notes": "Do not equate to original likelihood optimizer"
+  },
+  {
+    "id": "WP10",
+    "claim": "Toy corpus hug/pug/pun/bun/hugs gives pair ##u ##g count 20 score 1/36, and ##g ##s count 5 score 1/20",
+    "kind": "toy-derivation",
+    "source_url": "https://huggingface.co/learn/llm-course/en/chapter6/6",
+    "locator": "Training algorithm toy corpus and score example",
+    "status": "derived",
+    "notes": "Toy numbers recomputed with exact Fraction in accompanying Python"
+  },
+  {
+    "id": "WP11",
+    "claim": "Fast WordPiece uses Trie/failure link style algorithm with O(n) complexity",
+    "kind": "later-variant",
+    "source_url": "https://aclanthology.org/2021.emnlp-main.160/",
+    "locator": "Abstract; algorithm section",
+    "status": "verified",
+    "notes": "Does not change vocabulary training"
+  },
+  {
+    "id": "WP12",
+    "claim": "The 8.2x vs HF Tokenizers and 5.1x vs TensorFlow Text are results under the EMNLP 2021 paper benchmarks",
+    "kind": "experiment",
+    "source_url": "https://aclanthology.org/2021.emnlp-main.160/",
+    "locator": "Abstract; evaluation",
+    "status": "verified",
+    "notes": "Historical benchmark, not current measurements"
+  },
+  {
+    "id": "WP13",
+    "claim": "Teaching encoding vocabulary unaffable/hugs/bugs/mug is independently selected and deliberately has no ##g",
+    "kind": "toy-derivation",
+    "source_url": "https://github.com/google-research/bert/blob/master/tokenization.py",
+    "locator": "Teaching example based on encoder control flow",
+    "status": "illustrative",
+    "notes": "Not a dumped BERT vocabulary; test confirms whole-word [UNK]"
+  },
+  {
+    "id": "WP14",
+    "claim": "Tokenization and vocabulary learning are separate; a frozen WordPiece vocabulary is enough to encode",
+    "kind": "implementation",
+    "source_url": "https://huggingface.co/learn/llm-course/en/chapter6/6",
+    "locator": "Tokenization algorithm section",
+    "status": "verified",
+    "notes": "WordPiece encoding does not replay BPE ranks"
+  }
+]
