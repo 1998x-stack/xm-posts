@@ -507,7 +507,7 @@
     "slug": "evaluation",
     "title": "评测与复现",
     "english": "Evaluation",
-    "description": "研究分类评估的 ROC/AUC、Precision-Recall、类别不平衡、概率校准、Benchmark、消融、统计置信区间及可重复性，区分阈值无关排序指标与实际部署决策。",
+    "description": "研究模型与任务 Benchmark、ROC/AUC、Precision-Recall、LLM-as-a-Judge、评审器可靠性、偏差校准、消融、统计置信区间及可重复性，区分自动评价分数与经人工验证的测量结论。",
     "topics": [
       {
         "slug": "benchmarks",
@@ -528,6 +528,10 @@
       {
         "slug": "imbalanced-classification-pr",
         "title": "Imbalanced Classification & PR Analysis"
+      },
+      {
+        "slug": "llm-as-a-judge",
+        "title": "LLM-as-a-Judge & Judge Reliability"
       }
     ]
   }
