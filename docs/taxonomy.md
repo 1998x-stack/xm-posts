@@ -20,7 +20,7 @@
 | `retrieval-rag` | 向量/ANN、稀疏混合检索、重排序、RAG、证据落地 | Agent 任务计划与工具执行归 `agents`，embedding 基础表征归 `foundations` |
 | `agents` | ReAct、规划、工具调用、记忆、Agent 端到端评估 | 纯推理策略归 `reasoning`；检索方法归 `retrieval-rag` |
 | `multimodal` | 视觉/语言/音频的跨模态建模与对齐 | 通用单模态 CNN 架构仍可归 `architectures` |
-| `evaluation` | 模型/任务 Benchmark、ROC/PR、消融与复现 | 训练数据质量、污染事实与许可证归 `datasets` |
+| `evaluation` | 模型/任务 Benchmark、ROC/PR、LLM-as-a-Judge、评审器可靠性、偏差校准、消融与复现 | 训练数据质量、污染事实与许可证归 `datasets`；Agent 端到端任务执行评估归 `agents` |
 
 ## 二级分类治理
 
@@ -50,3 +50,8 @@
 5. PR 先审查完整 diff 和 Actions 结果；只在主分支可无冲突合并且 CI 成功后合并。合并后单独检查 Pages 工作流与在线网址。旧 PR 只有在新 PR 已承接其全部有效变更后才标记 superseded。
 
 自动回归：`tests/test_taxonomy_contract.py` 对重复的 ID/标题、孤儿占位目录、文章主专题和已发布文件路径进行检测。详见根目录 `AGENTS.md` 及 `docs/editorial.md`。
+
+
+## LLM-as-a-Judge 专题边界
+
+`evaluation/llm-as-a-judge` 收录将 LLM 用作评审器的评价方法与可靠性研究：评价 rubric、pointwise / pairwise / listwise 判断、critique / verifier、人工一致性、位置与长度偏差、校准、对抗鲁棒性，以及评审器自身的 meta-evaluation。若重点是 Agent 在工具、环境和多步骤任务中的端到端成功率，主专题仍归 `agents/agent-evaluation`；若重点是偏好标签如何进入 Reward Model / RLHF / DPO 训练，则主专题归 `training/rlhf` 或 `training/preference-optimization`，并用 tags 关联本专题。
