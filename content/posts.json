@@ -2116,5 +2116,39 @@
       "src": "assets/03-llm-rejection-pipeline.svg",
       "caption": "同一提示生成多个回答，经奖励模型排序后保留高分样本并用于 SFT"
     }
+  },
+  {
+    "slug": "typed-decision-models",
+    "title": "Understanding Jev：类型化概率决策模型",
+    "subtitle": "从 Choice、Score、Noul 到校准概率、贝叶斯风险与 Agent 工作流",
+    "category": "decision-models",
+    "topic": "typed-decision-models",
+    "status": "published",
+    "published": "2026-11-21",
+    "updated": "2026-11-21",
+    "reading_minutes": 28,
+    "tags": [
+      "Jev",
+      "System One Models",
+      "Typed Decision Models",
+      "Probabilistic Decisions",
+      "Probability Calibration",
+      "Bayes Risk",
+      "Cost-sensitive Decision Theory",
+      "Risk Budgeting",
+      "Learn Then Test",
+      "Selective Prediction",
+      "Decision Routing",
+      "Robustness",
+      "Agent Systems",
+      "RLCD"
+    ],
+    "summary": "从 Jev 的 Choice、Score、Noul 接口出发，区分概率、confidence 与校准；推导贝叶斯风险和非对称成本阈值，进一步比较 LTT 风险预算、选择性推理、表格鲁棒性与认知偏差，并通过六幅原创 SVG、原生 MathML、交互式成本实验和标准库 Python 单元测试，建立类型化概率决策模型的完整工程视角。",
+    "paper": "https://arxiv.org/abs/2609.37647",
+    "illustration": "typed-decision-models",
+    "cover": {
+      "src": "assets/01-contract-pipeline.svg",
+      "caption": "把自然语言状态映射为类型化概率，再由策略代码决定执行、复核或拒绝"
+    }
   }
 ]

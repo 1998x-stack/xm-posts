@@ -348,5 +348,24 @@
       "agent-memory-components",
       "harness-engineering"
     ]
+  },
+  {
+    "id": "path-38",
+    "title": "从概率分类到类型化决策",
+    "posts": [
+      "logistic-regression",
+      "naive-bayes",
+      "roc-auc",
+      "typed-decision-models"
+    ]
+  },
+  {
+    "id": "path-39",
+    "title": "Agent 的行动与概率决策控制",
+    "posts": [
+      "react",
+      "harness-engineering",
+      "typed-decision-models"
+    ]
   }
 ]

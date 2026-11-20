@@ -16,5 +16,6 @@
 
 - `reasoning` 解释内在推理、搜索与测试时计算；`agents` 关注环境观察、工具执行、状态和实际任务结果。
 - `retrieval-rag` 研究检索质量和依据溯源；当检索被 Agent 作为工具使用时可做跨分类链接。
+- 类型化概率决策模型归 `decision-models`；Agent 工作流调用它们时通过阅读路径交叉链接，不重复归档。
 - 正式文章放在 `posts/agents/<slug>/index.html`，提供独立 SVG、证据账本及真实 QA，并在 `content/posts.json` 注册。
 - `_topics/` 中的 README 仅作规划，占位不创建文章记录，也不会部署为文章。
