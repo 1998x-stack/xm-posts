@@ -136,6 +136,10 @@
       {
         "slug": "graph-neural-networks",
         "title": "Graph Neural Networks & Message Passing"
+      },
+      {
+        "slug": "generative-adversarial-networks",
+        "title": "Generative Adversarial Networks (GAN)"
       }
     ]
   },

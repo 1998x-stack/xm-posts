@@ -1965,6 +1965,34 @@
     }
   },
   {
+    "slug": "gan",
+    "title": "Understanding GAN",
+    "subtitle": "从生成器与判别器的对抗博弈，推导 D*、Jensen–Shannon 散度与非饱和训练",
+    "category": "architectures",
+    "topic": "generative-adversarial-networks",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 26,
+    "tags": [
+      "GAN",
+      "Generative Adversarial Networks",
+      "Generative Models",
+      "Discriminator",
+      "Minimax Game",
+      "Jensen-Shannon Divergence",
+      "Non-saturating Loss",
+      "Mode Collapse"
+    ],
+    "summary": "精读 Goodfellow 等人 NeurIPS 2014 原始 GAN：以三类别分布解释生成器 G 与判别器 D 的交替博弈，推导理论最优 D* 与 JSD 恒等式；通过四幅独立 SVG、原生 MathML、可调概率实验、现代训练代码及标准库数值测试区分原始理论、教学算例与后续实现。",
+    "paper": "https://papers.nips.cc/paper_files/paper/2014/hash/f033ed80deb0234979a61f95710dbe25-Abstract.html",
+    "illustration": "gan",
+    "cover": {
+      "src": "assets/01-adversarial-loop.svg",
+      "caption": "生成器制造样本，判别器比较真假并将反馈传回生成器"
+    }
+  },
+  {
     "slug": "rag",
     "title": "Understanding RAG",
     "subtitle": "从 DPR 检索到 RAG-Sequence 和 RAG-Token：两篇文档、两个词算明白",
