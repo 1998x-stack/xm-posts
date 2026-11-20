@@ -788,5 +788,49 @@
     "summary": "以 QLoRA NeurIPS 2023 为主线，拆解冻结主干的 NF4 存储、BF16 计算、双重量化 0.373 bit/参数、分页优化器和 MMLU 证据；附六幅 SVG、MathML 公式、交互内存账本与纯 Python 验证。",
     "paper": "https://arxiv.org/abs/2305.14314",
     "illustration": "qlora"
+  },
+  {
+    "slug": "decision-tree",
+    "title": "Understanding Decision Tree",
+    "subtitle": "一连串简单的问题，如何组成分类与回归规则？从 ID3、CART 到剪枝",
+    "category": "classical-ml",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 29,
+    "tags": [
+      "Decision Tree",
+      "ID3",
+      "CART",
+      "C4.5",
+      "Information Gain",
+      "Gini Impurity",
+      "Regression Tree",
+      "Pruning"
+    ],
+    "summary": "以原始 CART、ID3 与 C4.5 文献为脉络，渐进图解熵、Gini、连续阈值、回归叶与代价复杂度剪枝，配六幅原创机制图、MathML 推导、交互阈值实验及纯 Python 可验证断言。",
+    "paper": "https://doi.org/10.1007/BF00116251",
+    "illustration": "decision-tree"
+  },
+  {
+    "slug": "mcts",
+    "title": "Understanding MCTS",
+    "subtitle": "不必看完整棵树，也能做出更好的决策？从蒙特卡洛采样到 UCT 与 PUCT",
+    "category": "reinforcement-learning",
+    "status": "draft",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 32,
+    "tags": [
+      "Monte Carlo Tree Search",
+      "UCT",
+      "Planning & Tree Search",
+      "UCB1",
+      "Exploration vs Exploitation",
+      "PUCT"
+    ],
+    "summary": "从有限预算下的树搜索困境出发，拆解选择、扩展、模拟和回传，推导 UCB1/UCT，交互比较探索系数，解释双人博弈回传，并区分经典 MCTS 与 AlphaZero 的 PUCT。",
+    "paper": "https://aima.cs.berkeley.edu/~russell/classes/cs294/s11/readings/Kocsis%2BSzepesvari%3A2006.pdf",
+    "illustration": "mcts"
   }
 ]
