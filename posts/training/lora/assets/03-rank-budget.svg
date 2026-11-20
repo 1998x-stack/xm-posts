@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 285" role="img" aria-labelledby="lora-f03-title lora-f03-desc"><title id="lora-f03-title">rank 可调参数预算示意</title><desc id="lora-f03-desc">在一个输入输出均为4096的线性层中，rank 8 对应65536个低秩参数，占原权重16777216的0.390625%。下方横条以3.125%为上限。</desc><rect width="800" height="285" rx="14" fill="#f9fbf8"/><g font-family="system-ui,-apple-system,'PingFang SC','Microsoft YaHei',sans-serif">
+<text x="34" y="43" font-size="23" fill="#26464b" font-weight="700">一个 4096 × 4096 线性层</text>
+<text x="34" y="76" font-size="17" fill="#576f72" >完整权重：16,777,216 个参数</text>
+<text x="34" y="122" font-size="16" fill="#65787c" >LoRA 额外可训练参数 / 完整权重参数</text>
+<rect x="34" y="140" width="702" height="30" rx="5" fill="#e4e9e7" stroke="none"/>
+<rect id="lora-budget-bar" x="34" y="140" width="87.75" height="30" rx="5" fill="#de885f"/>
+<text x="34" y="194" font-size="13" fill="#6d8381" >0%</text><text x="258" y="194" font-size="13" fill="#6d8381" >1%</text><text x="479" y="194" font-size="13" fill="#6d8381" >2%</text><text x="680" y="194" font-size="13" fill="#6d8381" >3.125%</text>
+<text id="lora-budget-label" x="34" y="229" font-size="21" fill="#9c5f3f" font-weight="700">r = 8 → 65,536 个参数（0.3906%）</text>
+<text x="34" y="261" font-size="14" fill="#65787c" >横条放大到 3.125% 标尺，非完整模型显存比例。</text>
+</g></svg>
