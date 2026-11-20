@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 390" role="img" aria-labelledby="h2-title h2-desc">
+<title id="h2-title">Harness 的七个核心子系统</title>
+<desc id="h2-desc">围绕 Agent Loop 的七个子系统：模型集成、工具与动作、记忆与上下文、安全与权限、编排、扩展性，以及横切的接口和会话底座。</desc>
+<rect width="900" height="390" rx="22" fill="#f6f8f5"/>
+<g font-family="system-ui,-apple-system,Segoe UI,PingFang SC,sans-serif">
+<rect x="350" y="139" width="200" height="106" rx="18" fill="#1e786c"/>
+<text x="450" y="182" text-anchor="middle" font-size="23" font-weight="800" fill="#fff">Agent Loop</text>
+<text x="450" y="211" text-anchor="middle" font-size="14" fill="#e4f4ed">observe → decide → act</text>
+<g fill="#fff" stroke="#bfd7cc" stroke-width="2">
+<rect x="36" y="55" width="190" height="76" rx="13"/><rect x="267" y="34" width="190" height="76" rx="13"/><rect x="503" y="34" width="190" height="76" rx="13"/><rect x="674" y="55" width="190" height="76" rx="13"/>
+<rect x="36" y="266" width="190" height="76" rx="13"/><rect x="267" y="282" width="190" height="76" rx="13"/><rect x="503" y="282" width="190" height="76" rx="13"/>
+</g>
+<g fill="#315f5c" font-size="17" font-weight="750" text-anchor="middle">
+<text x="131" y="86">LLM Integration</text><text x="362" y="65">Tools &amp; Actions</text><text x="598" y="65">Memory &amp; Context</text><text x="769" y="86">Safety &amp; Permissions</text>
+<text x="131" y="297">Orchestration</text><text x="362" y="313">Extensibility</text><text x="598" y="313">Interface / Session</text>
+</g>
+<g fill="#66817b" font-size="12" text-anchor="middle">
+<text x="131" y="109">模型协议、路由、缓存</text><text x="362" y="88">搜索、编辑、执行</text><text x="598" y="88">检索、压缩、持久化</text><text x="769" y="109">沙箱、审批、策略</text>
+<text x="131" y="320">子 Agent 与任务协调</text><text x="362" y="336">Skills、Hooks、MCP</text><text x="598" y="336">CLI、IDE、SDK、恢复</text>
+</g>
+<g stroke="#80a99a" stroke-width="2.2" fill="none">
+<path d="M226 94L350 160 M362 110V139 M598 110L550 160 M674 94L550 160 M226 304L350 225 M362 282V245 M598 282L550 225"/>
+</g>
+<rect x="36" y="365" width="828" height="1" fill="#d7e4dd"/>
+<text x="450" y="382" text-anchor="middle" font-size="12" fill="#70847e">七个子系统是架构观察维度；接口层与会话持久化是跨模块支撑面</text>
+</g></svg>
