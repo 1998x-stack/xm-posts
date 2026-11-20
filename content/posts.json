@@ -788,5 +788,27 @@
     "summary": "以 QLoRA NeurIPS 2023 为主线，拆解冻结主干的 NF4 存储、BF16 计算、双重量化 0.373 bit/参数、分页优化器和 MMLU 证据；附六幅 SVG、MathML 公式、交互内存账本与纯 Python 验证。",
     "paper": "https://arxiv.org/abs/2305.14314",
     "illustration": "qlora"
+  },
+  {
+    "slug": "bpe",
+    "title": "Understanding BPE",
+    "subtitle": "从字符合并到 Token：语言模型如何构建子词词表？",
+    "category": "foundations",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 30,
+    "tags": [
+      "BPE",
+      "Byte Pair Encoding",
+      "Tokenization",
+      "Subword Units",
+      "Byte-level BPE",
+      "Vocabulary",
+      "GPT-2"
+    ],
+    "summary": "以 Gage 1994 与 Sennrich et al. ACL 2016 为证据，图解罕见词困境、带词频的贪心子词合并、训练与推理的规则分离、GPT-2 byte-level 变体和 WordPiece/Unigram 差异；含六幅独立 SVG、四个离线 MathML 公式、交互式合并实验与确定性 Python 测试。",
+    "paper": "https://aclanthology.org/P16-1162/",
+    "illustration": "bpe"
   }
 ]
