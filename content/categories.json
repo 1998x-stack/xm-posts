@@ -3,11 +3,12 @@
     "slug": "foundations",
     "title": "基础理论",
     "english": "Foundations",
-    "description": "从优化与优化器、表示学习和数学直觉出发，建立理解现代模型的共同语言。",
+    "description": "从优化算法与优化器、词嵌入、表示学习和数学直觉出发，建立理解现代模型的共同语言。",
     "topics": [
       "Optimization & Optimizers",
       "Representation",
-      "Math"
+      "Math",
+      "Word Embeddings"
     ]
   },
   {
