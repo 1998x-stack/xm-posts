@@ -45,6 +45,7 @@
 | **Understanding WordPiece** | 词表学习和 BERT MaxMatch 为什么是不同问题？ | [`posts/foundations/wordpiece/`](posts/foundations/wordpiece/index.html) | [Schuster & Nakajima (2012)](https://research.google/pubs/japanese-and-korean-voice-search/) · [BERT tokenizer](https://github.com/google-research/bert/blob/master/tokenization.py) |
 | **Understanding Word2Vec** | 为什么上下文预测能产生词向量？ | [`posts/foundations/understanding-word2vec/`](posts/foundations/understanding-word2vec/index.html) | [Mikolov et al. (2013)](https://arxiv.org/abs/1301.3781) · [NeurIPS 2013](https://arxiv.org/abs/1310.4546) |
 | **Understanding Embeddings** | 为什么词的编号能够变成可比较的语义向量？从 Word2Vec 到对比检索 | [`posts/foundations/embeddings/`](posts/foundations/embeddings/index.html) | [Word2Vec](https://arxiv.org/abs/1301.3781) · [SBERT](https://aclanthology.org/D19-1410/) · [SimCSE](https://aclanthology.org/2021.emnlp-main.552/) |
+| **Understanding Importance Sampling** | 为什么故意改变抽样分布，仍可无偏估计目标概率？稀有事件、SNIS、ESS 与 Off-policy | [`posts/foundations/importance-sampling/`](posts/foundations/importance-sampling/index.html) | [Kahn & Marshall (1953)](https://doi.org/10.1287/opre.1.5.263) · [Owen (2013)](https://artowen.su.domains/mc/Ch-var-is.pdf) |
 | **Understanding SGD** | 为什么带噪梯度也能驱动大规模学习？ | [`posts/foundations/sgd/`](posts/foundations/sgd/index.html) | [Bottou (2010)](https://bottou.org/papers/bottou-2010) |
 | **Understanding Adam** | 梯度为什么需要方向和平方尺度的两份记忆？ | [`posts/foundations/adam/`](posts/foundations/adam/index.html) | [Kingma & Ba (2015)](https://arxiv.org/abs/1412.6980) |
 | **Understanding AdamW** | 为什么 Adam 的 L₂ 与 Weight Decay 不等价？ | [`posts/foundations/adamw/`](posts/foundations/adamw/index.html) | [Loshchilov & Hutter (ICLR 2019)](https://arxiv.org/abs/1711.05101) |
@@ -115,9 +116,9 @@ AdamW 继续使用 `foundations` 中的 **Optimization & Regularization** 主题
 
 XGBoost 归入 `classical-ml` 既有 **Trees & Ensembles** 主题，不新建顶层分类；KDD 2016 原论文与当前 `hist` 方法分开描述。文章包含 14 节、6 幅独立 SVG、7 组原生 MathML 公式、交互式阈值/正则化实验和确定性 Python 单元测试。
 
-WordPiece 继续归于 `foundations` → **Tokenization & Subword Units**，与 BPE 共享二级专题，不新增顶级分类。`posts/foundations/wordpiece/` 提供 14 节论文/源码精读、七幅独立 SVG、MathML、双交互实验、词表评分教学重建与 BERT MaxMatch 纯 Python 测试；明确标出 Google 原版词表训练源码未公开。
-
 BPE 放在 `foundations` → **Tokenization & Subword Units**（新增二级专题，沿用现有一级分类），而不是再新增一级目录；对应 `posts/foundations/bpe/` 包含原论文证据、六幅独立 SVG、交互训练/编码演示、MathML 与纯 Python 回归测试。明确区分 Gage 1994、Sennrich et al. ACL 2016 与 GPT-2 byte-level BPE。
+
+WordPiece 继续归于 `foundations` → **Tokenization & Subword Units**，与 BPE 共享二级专题，不新增顶级分类。`posts/foundations/wordpiece/` 提供 14 节论文/源码精读、七幅独立 SVG、MathML、双交互实验、词表评分教学重建与 BERT MaxMatch 纯 Python 测试；明确标出 Google 原版词表训练源码未公开。
 
 ## 仓库结构
 
