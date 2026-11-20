@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 390" role="img" aria-labelledby="ri-p-title ri-p-desc">
+<title id="ri-p-title">两列数的配对改变乘积和</title><desc id="ri-p-desc">三组配对：同序的乘积和为14，错序为13，反序为10。两侧数字都是3、2、1。</desc>
+<rect x="1" y="1" width="898" height="388" rx="15" fill="#fbfdfb" stroke="#d6e4de"/>
+<text x="450" y="39" font-size="25" text-anchor="middle" fill="#24464c" font-weight="700" font-family="sans-serif">把更大的数与更大的数相配</text>
+<g font-family="sans-serif" text-anchor="middle" font-size="17">
+<g transform="translate(27,65)"><rect width="265" height="285" rx="13" fill="#e8f4ef"/>
+<text x="133" y="30" font-size="20" fill="#276f6a" font-weight="700">同序：14</text>
+<g stroke="#277e75" stroke-width="7" stroke-linecap="round"><path d="M83 84H181"/><path d="M83 153H181"/><path d="M83 222H181"/></g>
+<g fill="#235a5b" font-weight="700"><text x="54" y="90">3</text><text x="54" y="159">2</text><text x="54" y="228">1</text><text x="211" y="90">3</text><text x="211" y="159">2</text><text x="211" y="228">1</text></g>
+<text x="133" y="261" fill="#557b7d">9 + 4 + 1</text></g>
+<g transform="translate(318,65)"><rect width="265" height="285" rx="13" fill="#f3f5f4"/>
+<text x="133" y="30" font-size="20" fill="#5e7880" font-weight="700">错序：13</text>
+<g stroke="#668d9d" stroke-width="6" stroke-linecap="round"><path d="M83 84L181 153"/><path d="M83 153L181 84"/><path d="M83 222H181"/></g>
+<g fill="#345d69" font-weight="700"><text x="54" y="90">3</text><text x="54" y="159">2</text><text x="54" y="228">1</text><text x="211" y="90">3</text><text x="211" y="159">2</text><text x="211" y="228">1</text></g>
+<text x="133" y="261" fill="#557b7d">6 + 6 + 1 = 13</text></g>
+<g transform="translate(609,65)"><rect width="265" height="285" rx="13" fill="#fcf0e7"/>
+<text x="133" y="30" font-size="20" fill="#b46e48" font-weight="700">反序：10</text>
+<g stroke="#be805b" stroke-width="6" stroke-linecap="round"><path d="M83 84L181 222"/><path d="M83 153H181"/><path d="M83 222L181 84"/></g>
+<g fill="#8a5944" font-weight="700"><text x="54" y="90">3</text><text x="54" y="159">2</text><text x="54" y="228">1</text><text x="211" y="90">3</text><text x="211" y="159">2</text><text x="211" y="228">1</text></g>
+<text x="133" y="261" fill="#916a5a">3 + 4 + 3</text></g></g>
+</svg>
