@@ -124,7 +124,7 @@ def main():
                 assert metrics["h1"] == 1 and metrics["duplicateIds"] == 0, (slug, width, metrics)
                 assert metrics["width"] <= width + 1, (slug, width, metrics)
                 assert metrics["brokenSvg"] == 0, (slug, width, metrics)
-                if width == 1440:
+                if width in (1440, 360):  # verify real controls on desktop and narrow mobile
                     {"pca": assert_pca, "k-means": assert_kmeans, "gmm": assert_gmm}[slug](page)
                 assert not errors and not requests, (slug, width, errors, requests)
                 results.append({"article": slug, "width": width, "pass": True})
