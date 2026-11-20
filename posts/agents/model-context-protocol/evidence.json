@@ -75,10 +75,10 @@
     "id": "E09",
     "kind": "security",
     "claim": "Confused deputy, token passthrough, prompt injection and tool poisoning are relevant risks in MCP deployments.",
-    "source_url": "https://modelcontextprotocol.io/docs/2026-07-28/tutorials/security/security_best_practices",
-    "locator": "Attacks and Mitigations",
+    "source_url": "https://cheatsheetseries.owasp.org/cheatsheets/MCP_Security_Cheat_Sheet.html",
+    "locator": "Key Risks: Tool Poisoning, Rug Pull, Tool Shadowing; Prompt Injection via Tool Return Values",
     "status": "verified",
-    "notes": "Threat categories from official MCP security guidance."
+    "notes": "OWASP MCP Security Cheat Sheet; use alongside official MCP authorization guidance."
   },
   {
     "id": "E10",
@@ -115,5 +115,14 @@
     "locator": "Base protocol and tools/call; teaching adapter code",
     "status": "illustrative",
     "notes": "Tested invariants are local demonstrations only, not conformance or security certification."
+  },
+  {
+    "id": "E14",
+    "kind": "security",
+    "claim": "Tool descriptions and schemas can be poisoned or changed after approval; cross-server tool shadowing and prompt injection via tool return values require definition integrity checks and independent authorization.",
+    "source_url": "https://cheatsheetseries.owasp.org/cheatsheets/MCP_Security_Cheat_Sheet.html",
+    "locator": "Key Risks; Tool Description & Schema Integrity; Prompt Injection via Tool Return Values",
+    "status": "verified",
+    "notes": "OWASP MCP Security Cheat Sheet; recommendations are defense-in-depth practices, not guarantees."
   }
 ]
