@@ -75,3 +75,8 @@ Each article needs one H1, semantic `<main>`, anchored navigation, captions, acc
 `scripts/browser_check_all.py --workers 2` partitions all published posts deterministically. Its worker processes each launch one Chromium and call the canonical Skill checker, retaining full four-viewport, SVG/MathML, keyboard/interaction, screenshot and print coverage with isolated contexts. Failures are aggregated and fail the job. The canonical Skill script remains usable as a standalone CLI. The specialized browser batch scripts and site-level Pages navigation QA still run in addition to the all-articles check; worker reuse does not eliminate tests.
 
 **Performance rollout:** first compare the baseline with a warm-cache CI run, then assess the shared-browser browser-all timer and overall build wall time. If worker memory pressure or flaky runtime occurs, set `--workers 1` while retaining all checks. Larger job-level matrix parallelism and deploy queue redesign are a separate subsequent phase.
+
+
+## Query Understanding placement
+
+`query-understanding` is the semantic entry layer between user language and retrieval. It models intent, entities, slots, constraints, ambiguity and conversational context, then chooses rewriting, expansion, decomposition, clarification or retrieval routing. Its primary home is `retrieval-rag` because the core output is a structured retrieval request; Agent planning and side-effectful tool execution remain in `agents`. Cross-domain links are expressed through tags and reading paths rather than duplicate primary categories. In particular, inferring an intent never grants execution permission: schema validation, authorization and confirmation stay in the execution layer.

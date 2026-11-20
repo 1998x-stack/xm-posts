@@ -338,5 +338,14 @@
       "rlhf",
       "dpo"
     ]
+  },
+  {
+    "id": "path-37",
+    "title": "从用户意图到检索增强生成",
+    "posts": [
+      "embeddings",
+      "query-understanding",
+      "rag"
+    ]
   }
 ]
