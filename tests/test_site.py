@@ -65,14 +65,18 @@ def test_taxonomy_topic_placeholders_are_not_published(tmp_path):
             stub = ROOT / 'posts' / category / '_topics' / slug / 'README.md'
             assert stub.is_file(), stub
             assert not (stub.parent / 'index.html').exists()
-    assert not [p for p in posts if p['category'] == 'retrieval-rag']
+    # Planned topic stubs remain unpublished, but this category may now contain
+    # actual peer-reviewed paper explainers with a registered article path.
+    rag_posts = [p for p in posts if p['category'] == 'retrieval-rag' and p['status'] == 'published']
+    assert all((ROOT / 'posts' / p['category'] / p['slug'] / 'index.html').is_file() for p in rag_posts)
     assert any(p['category'] == 'agents' and p['slug'] == 'react' and p['status'] == 'published' for p in posts)
     output = tmp_path / 'site'
     build(ROOT, output, DEFAULT_URL)
     for slug in ('retrieval-rag', 'agents'):
         assert (output / 'categories' / slug / 'index.html').exists()
         if slug == 'retrieval-rag':
-            assert not (output / 'posts' / slug).exists()
+            for p in rag_posts:
+                assert (output / 'posts' / slug / p['slug'] / 'index.html').is_file()
     assert (output / 'posts' / 'agents' / 'react' / 'index.html').is_file()
     assert not any('_topics' in path.parts for path in output.rglob('*'))
 
