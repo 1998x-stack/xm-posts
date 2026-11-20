@@ -191,7 +191,7 @@ def check():
 if __name__ == "__main__":
     check()
 </code></pre>
-<p class="small">仓库文件：<a href="mini_norm.py"><code>mini_norm.py</code></a>（此链接指向文章源码仓库，部署站点仅保留阅读所需页面，示例请从 GitHub 源代码获取）。可运行：<code>python posts/architectures/pre-ln-vs-post-ln/mini_norm.py</code>；独立测试见 <code>tests/test_pre_post_ln.py</code>。</p>
+<p class="small">仓库文件：<a href="https://github.com/1998x-stack/xm-posts/blob/main/posts/architectures/pre-ln-vs-post-ln/mini_norm.py"><code>mini_norm.py</code></a>（示例源码保存在 GitHub，站点本身只发布阅读页面）。可运行：<code>python posts/architectures/pre-ln-vs-post-ln/mini_norm.py</code>；独立测试见 <code>tests/test_pre_post_ln.py</code>。</p>
 <div class="note"><strong>和真实模型不同：</strong>真正的 F 包含 Attention / FFN、dropout、可学习参数与非线性，梯度还会与最终损失和 optimizer 耦合。因此数值微分测试只核对这段讲解的数学，不复现 ICML 的训练实验。</div>
 </section>
 <section id="practice"><h2><span class="n">11</span>工程实现时，究竟该检查什么？</h2>
