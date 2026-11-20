@@ -53,10 +53,30 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y fonts-noto-cjk fonts-stix
-      - name: Render downloadable PDFs for all published posts
+      # Cache only validated PDF outputs, not generated _site HTML. The key is
+      # immutable per workflow run; restore-keys picks the latest compatible
+      # prior cache from the branch/default-branch scope.
+      - name: Record installed PDF font versions
+        run: echo "PDF_FONT_SIGNATURE=$(dpkg-query -W -f='${Package}=${Version};' fonts-noto-cjk fonts-stix)" >> "$GITHUB_ENV"
+      - name: Restore incremental PDF cache
+        id: pdf-cache
+        uses: actions/cache/restore@v4
+        continue-on-error: true
+        with:
+          path: .pdf-cache
+          key: xm-posts-pdf-v3-${{ runner.os }}-${{ github.sha }}-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: |
+            xm-posts-pdf-v3-${{ runner.os }}-
+      - name: Restore cached PDFs and render only changed posts
         run: python scripts/render_pdfs.py
-      - name: Validate final site with generated PDFs
-        run: python scripts/validate_site.py
+      - name: Validate final site with complete PDF downloads
+        run: python scripts/validate_site.py --require-pdfs
+      - name: Save validated PDF cache
+        uses: actions/cache/save@v4
+        continue-on-error: true
+        with:
+          path: .pdf-cache
+          key: ${{ steps.pdf-cache.outputs.cache-primary-key }}
       - name: Upload browser QA evidence
         if: always()
         uses: actions/upload-artifact@v4
