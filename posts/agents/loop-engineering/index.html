@@ -1,0 +1,561 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light">
+<meta name="description" content="从 ReAct、Long-running Agent 到 Loop Engineering：深入理解自动触发、任务发现、验证器、状态持久化、预算、停止条件与人类治理。">
+<link rel="canonical" href="https://1998x-stack.github.io/xm-posts/posts/agents/loop-engineering/">
+<title>Understanding Loop Engineering · xm-posts</title>
+<style>
+:root{--paper:#fffdf9;--bg:#f5f8f6;--ink:#234148;--muted:#5d7575;--accent:#137e78;--rule:#d8e2dd;--blue:#456f96;--orange:#a66b43;--purple:#6f5c9c;--red:#a34f4f}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;color:var(--ink);background:var(--bg);font:17px/1.85 system-ui,-apple-system,"Segoe UI","PingFang SC",sans-serif}
+a{color:#19787b;text-underline-offset:4px}
+a:hover{color:#b86d48}
+a:focus-visible,button:focus-visible,input:focus-visible,[tabindex]:focus-visible{outline:3px solid #cf864e;outline-offset:3px}
+.skip{position:absolute;top:-100px;left:10px;padding:8px;background:#153f43;color:#fff;z-index:2}
+.skip:focus{top:10px}
+.bar{background:var(--paper);border-bottom:1px solid var(--rule)}
+.barinner{max-width:1190px;margin:auto;padding:12px 20px;min-height:60px;display:flex;justify-content:space-between;gap:16px;align-items:center}
+.brand{font-size:22px;font-weight:850;text-decoration:none;letter-spacing:-.06em;color:#1d4445}
+.brand b{color:#b66b46}
+.bar nav{display:flex;gap:16px;flex-wrap:wrap;font-size:13px}
+.layout{max-width:1190px;margin:auto;padding:58px 20px 85px;display:grid;grid-template-columns:214px minmax(0,820px);gap:48px}
+.toc{position:sticky;top:20px;align-self:start;max-height:94vh;overflow-y:auto}
+.toc strong{font:750 12px system-ui;letter-spacing:.13em;color:#73908d}
+.toc a{display:block;padding:7px 10px;font-size:12px;text-decoration:none;color:#517275;border-left:2px solid var(--rule);line-height:1.5}
+.toc a:hover{border-color:var(--accent)}
+main,article{min-width:0}
+h1{font-size:clamp(40px,5.4vw,65px);line-height:1.08;letter-spacing:-.06em;margin:16px 0 22px}
+h2{font-size:clamp(25px,3vw,34px);line-height:1.32;letter-spacing:-.035em;margin:0 0 18px}
+h3{font-size:20px;line-height:1.45;margin:22px 0 10px}
+.eyebrow{font:750 12px system-ui;letter-spacing:.16em;color:var(--accent)}
+.deck{font-size:21px;line-height:1.68;color:#47686b}
+.meta{display:flex;flex-wrap:wrap;gap:14px;color:#6e8684;font-size:12px;padding:18px 0;border-top:1px solid var(--rule);margin:28px 0 60px}
+section{margin:0 0 72px;scroll-margin-top:24px}
+p{margin:0 0 19px;color:#456067}
+.lead{font-size:19px;color:#30575a}
+strong{color:#244e50}
+p code,li code{background:#e8f1ec;color:#23615b;border-radius:3px;padding:1px 5px}
+code{font-size:.9em}
+.highlight{background:#eaf5ec;border-left:4px solid #4d9d8b;padding:17px 20px;margin:22px 0}
+.warning{background:#fff3e9;border-left:3px solid #cc8354;padding:15px 18px;margin:24px 0}
+.note{background:#edf2f8;border-left:3px solid #6f91ad;padding:15px 18px;margin:24px 0}
+.figure{border:1px solid var(--rule);background:white;border-radius:14px;padding:12px;margin:29px 0;box-shadow:0 10px 35px #214d3c08}
+.figure-scroll{max-width:100%;overflow-x:auto}
+.figure img,.figure svg{display:block;width:100%;height:auto}
+.figure figcaption{font-size:13px;line-height:1.65;color:#637d7c;padding:8px 4px 0}
+.twocol{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:22px 0}
+.panel{border:1px solid var(--rule);border-radius:12px;background:white;padding:17px 20px;min-width:0}
+.panel h3{margin-top:0}
+.panel p:last-child{margin-bottom:0}
+ul,ol{padding-left:1.5em;color:#456067}
+li{margin-bottom:8px}
+.table-scroll{width:100%;overflow-x:auto;border:1px solid var(--rule);border-radius:10px;margin:21px 0}
+table{border-collapse:collapse;width:100%;min-width:620px;font-size:14px}
+th,td{padding:11px 13px;text-align:left;border-bottom:1px solid var(--rule);vertical-align:top}
+th{background:#eaf3ef}
+tr:last-child td{border-bottom:0}
+.math-wrap{padding:15px;background:#eaf5ee;border:1px solid var(--rule);border-radius:10px;margin:18px 0}
+.math-scroll{max-width:100%;min-width:0;overflow-x:auto;overflow-y:hidden}
+.math-scroll math{display:block;width:max-content;min-width:100%;font-size:1.2rem}
+.math-scroll:focus-visible{outline:3px solid #147f80;outline-offset:2px}
+.math-inline{font-family:"Cambria Math","STIX Two Math","Latin Modern Math",serif}
+pre{padding:18px 20px;background:#223e45;color:#e7f3ea;border-radius:10px;overflow-x:auto;font:13px/1.7 ui-monospace,SFMono-Regular,Consolas,monospace;white-space:pre}
+.demo{border:1px solid #b7d5c9;border-radius:14px;padding:19px;background:white;margin:25px 0}
+.demo-controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.demo button{font:650 14px system-ui;padding:10px 14px;min-height:42px;border-radius:8px;cursor:pointer;border:1px solid #278e82;background:#fff;color:#196c64}
+.demo button.primary{background:#188176;color:#fff}
+.demo button:disabled{opacity:.45;cursor:not-allowed}
+.budget-control{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:12px 0 18px}
+.budget-control input{accent-color:#188176}
+.demo-log{margin-top:13px;border:1px solid var(--rule);background:#f4f9f6;border-radius:9px;padding:12px 15px;min-height:120px}
+.demo-log p{padding:7px 0;border-bottom:1px solid #dce9e1;font-size:14px;line-height:1.6;margin:0}
+.demo-log p:last-child{border:0}
+.demo-status{font-weight:750;color:#196c64}
+.foot{display:flex;gap:12px;flex-wrap:wrap;border-top:1px solid var(--rule);padding-top:15px;font-size:14px}
+@media(max-width:910px){.layout{display:block;max-width:850px;padding:32px 19px 70px}.toc{position:static;max-height:none;margin-bottom:35px;padding:12px;background:white;border:1px solid var(--rule);border-radius:10px}.toc a{display:inline-block;border:none;padding:7px}}
+@media(max-width:480px){body{font-size:16px}.barinner{padding:13px 15px}.layout{padding:25px 16px 50px}.deck{font-size:18px}.twocol{grid-template-columns:1fr}.figure{padding:8px}.figure img,.figure svg{width:760px;max-width:none}.figure-scroll{overscroll-behavior-x:contain}section{margin-bottom:55px}.math-wrap{padding:10px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation:none!important;transition:none!important}}
+@media print{body{background:white}.bar,.toc,.skip,.demo-controls,.budget-control{display:none!important}.layout{display:block;padding:0;max-width:none}.figure{break-inside:avoid;box-shadow:none}.figure-scroll{overflow:visible}.figure img,.figure svg{width:100%;max-width:100%}.math-scroll{overflow:visible}.math-scroll math{font-size:1rem}.demo-log{max-height:none;overflow:visible}a{color:#234148;text-decoration:underline}}
+</style>
+</head>
+<body>
+<a class="skip" href="#content">跳至正文</a>
+<header class="bar"><div class="barinner"><a class="brand" href="../../../">xm<b>.</b>posts</a><nav aria-label="站点导航"><a href="../../../">首页</a><a href="../../../categories/agents/">智能体专题</a><a href="../../../topics/">知识地图</a><a href="../../../archive/">归档</a></nav></div></header>
+<div class="layout">
+<nav class="toc" aria-label="文章目录"><strong>READING GUIDE</strong>
+<a href="#problem">01 · 为什么单次执行不够？</a>
+<a href="#definition">02 · Loop Engineering 是什么？</a>
+<a href="#layers">03 · Prompt / Context / Harness / Loop</a>
+<a href="#architecture">04 · 外层闭环架构</a>
+<a href="#contract">05 · Loop Specification</a>
+<a href="#verification">06 · 验证器与证据门</a>
+<a href="#state">07 · 跨会话状态持久化</a>
+<a href="#governance">08 · 有边界的自主性</a>
+<a href="#math">09 · 重试的数学与经济性</a>
+<a href="#demo">10 · 交互：模拟一次循环</a>
+<a href="#case">11 · 一个端到端工程案例</a>
+<a href="#code">12 · 最小 Python 控制器</a>
+<a href="#evaluation">13 · 如何评估循环质量？</a>
+<a href="#failure">14 · 失败模式与反模式</a>
+<a href="#research">15 · 研究现状与未解决问题</a>
+<a href="#summary">16 · 总结与参考资料</a>
+</nav>
+<main id="content"><article>
+<header>
+<span class="eyebrow">AGENT SYSTEMS / LOOP ENGINEERING / 2026</span>
+<h1>Understanding Loop Engineering</h1>
+<p class="deck">如何把一次 Agent 调用，变成一个能够自动发现任务、持续执行、独立验证、跨会话恢复，并且知道何时停止的工程系统？</p>
+<div class="meta"><span>研究主题：Agent Systems</span><span>建议阅读 28 分钟</span><span>适合本科高年级 / 研究生 / Agent 工程实践者</span></div>
+</header>
+
+<section id="problem">
+<h2>01 · 为什么一个很强的 Agent，仍然不能自动完成长期工作？</h2>
+<p class="lead">假设你让一个编码 Agent 修复仓库中的一个 Bug。它可以读取文件、修改代码、运行测试，甚至在测试失败后再修改一次。单看这一轮，它已经相当聪明。但明天仓库里又出现了新 Issue，或者 CI 又失败了，谁会发现这件事？谁来启动下一轮？谁来记住上一次已经验证过什么？</p>
+<p>这暴露了一个容易被忽略的区别：<strong>能在一次运行中反复行动，不等于能长期负责一个目标。</strong>单次 Agent 的输入通常来自人；长期系统还需要自动产生下一次输入、判断工作是否值得做、保存可恢复状态，并在证据不足或权限不足时停止。</p>
+<div class="twocol">
+<div class="panel"><h3>单次 Agent 任务</h3><p>人给出一个目标；Agent 在当前上下文中规划、调用工具、观察结果；最终返回答案或交付物。</p><p><strong>主要问题：</strong>这一轮能否做好？</p></div>
+<div class="panel"><h3>持续运行的 Agent 系统</h3><p>事件或日程触发运行；系统发现任务、恢复状态、分配工作、验收结果，再决定是否继续或升级。</p><p><strong>主要问题：</strong>系统能否长期、可靠、受控地推进目标？</p></div>
+</div>
+<p>可以把它类比成两种软件：一个函数能正确处理一次输入，不代表整个服务已经具备队列、重试、持久化、监控和故障恢复能力。Agent 的推理能力只是系统的一部分；长期任务还需要控制平面和工程约束。</p>
+<div class="highlight"><strong>本文的核心问题：</strong>不要只优化“让 Agent 这一次做得更好”，还要设计“什么条件下再次启动 Agent、给它什么状态、如何判断结果可信，以及何时必须停止”。</div>
+</section>
+
+<section id="definition">
+<h2>02 · Loop Engineering 到底是什么？</h2>
+<p>Loop Engineering 是 2026 年 6 月开始被实践者使用的新兴术语。Lulla 等人的探索性研究将其描述为：开发者不再每次亲自向 Agent 发出下一条提示，而是设计一个系统，由系统在日程或仓库事件发生时启动 Agent，并通过机器可检查的条件决定何时停止。[1]</p>
+<p>这不是一个已经拥有统一标准、成熟理论体系和充分因果证据的学科名称。更准确的说法是：它正在成为一组工程实践的统称，关注如何把 Agent 的执行组织成<strong>可触发、可验证、可恢复、可治理的重复工作循环</strong>。</p>
+<figure class="figure"><div class="figure-scroll"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 360" role="img" aria-labelledby="outer-title outer-desc">
+<title id="outer-title">Loop Engineering 的外层任务闭环</title><desc id="outer-desc">外部事件触发任务发现与执行，独立验证后进入持久化、重试、人工升级或终止。</desc>
+<rect width="960" height="360" rx="20" fill="#fffdf9" stroke="#d8e2dd"/>
+
+<text x="480" y="38" text-anchor="middle" fill="#52706e" font-size="15" font-weight="700" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">OUTER CONTROL LOOP · 任务级闭环</text>
+<rect x="40" y="100" width="128" height="88" rx="12" fill="#eaf1f8" stroke="#cbd9d3" stroke-width="1.5"/><text x="104" y="136" text-anchor="middle" fill="#456f96" font-size="18" font-weight="700" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">Trigger</text><text x="104" y="163" text-anchor="middle" fill="#486566" font-size="14" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">事件 / 日程</text><rect x="190" y="100" width="128" height="88" rx="12" fill="#e9f4ee" stroke="#cbd9d3" stroke-width="1.5"/><text x="254" y="136" text-anchor="middle" fill="#2d776d" font-size="18" font-weight="700" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">Discover</text><text x="254" y="163" text-anchor="middle" fill="#486566" font-size="14" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">发现 / 去重</text><rect x="340" y="100" width="128" height="88" rx="12" fill="#eeeafa" stroke="#cbd9d3" stroke-width="1.5"/><text x="404" y="136" text-anchor="middle" fill="#6f5c9c" font-size="18" font-weight="700" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">Context</text><text x="404" y="163" text-anchor="middle" fill="#486566" font-size="14" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">状态投影</text><rect x="490" y="100" width="128" height="88" rx="12" fill="#fdf0e5" stroke="#cbd9d3" stroke-width="1.5"/><text x="554" y="136" text-anchor="middle" fill="#a66b43" font-size="18" font-weight="700" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">Execute</text><text x="554" y="163" text-anchor="middle" fill="#486566" font-size="14" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">隔离执行</text><rect x="640" y="100" width="128" height="88" rx="12" fill="#eaf1f8" stroke="#cbd9d3" stroke-width="1.5"/><text x="704" y="136" text-anchor="middle" fill="#456f96" font-size="18" font-weight="700" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">Verify</text><text x="704" y="163" text-anchor="middle" fill="#486566" font-size="14" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">独立验收</text><rect x="790" y="100" width="128" height="88" rx="12" fill="#e9f4ee" stroke="#cbd9d3" stroke-width="1.5"/><text x="854" y="136" text-anchor="middle" fill="#2d776d" font-size="18" font-weight="700" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">Persist</text><text x="854" y="163" text-anchor="middle" fill="#486566" font-size="14" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">写回状态</text>
+<path d="M168 144h18m-7 -6 7 6 -7 6" fill="none" stroke="#4d8a80" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M318 144h18m-7 -6 7 6 -7 6" fill="none" stroke="#4d8a80" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M468 144h18m-7 -6 7 6 -7 6" fill="none" stroke="#4d8a80" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M618 144h18m-7 -6 7 6 -7 6" fill="none" stroke="#4d8a80" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M768 144h18m-7 -6 7 6 -7 6" fill="none" stroke="#4d8a80" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M854 188V279H746" fill="none" stroke="#4d8a80" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M756 271l-10 8 10 8" fill="none" stroke="#4d8a80" stroke-width="2.5"/>
+<rect x="362" y="252" width="384" height="55" rx="10" fill="#f4f7f4" stroke="#d8e2dd"/><text x="554" y="276" text-anchor="middle" fill="#345b5c" font-size="16" font-weight="700" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">DECIDE · 根据证据选择下一步</text><text x="554" y="295" text-anchor="middle" fill="#627a79" font-size="13" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">重试 / 完成 / 人工升级 / 停止</text>
+<path d="M362 279H255V205" fill="none" stroke="#a66b43" stroke-width="2.5" stroke-dasharray="6 5"/><path d="M248 198l7 -10 7 10" fill="none" stroke="#a66b43" stroke-width="2.5"/>
+<text x="40" y="335" fill="#627a79" font-size="13" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">内层 ReAct：Agent 一次运行中的 Thought → Action → Observation；外层 Loop：跨任务 / 跨会话的调度与治理。</text>
+
+</svg></div><figcaption>图 1 · 外层循环并不是简单重复调用模型，而是让每次运行都受任务发现、验证证据、持久化状态和停止策略约束。</figcaption></figure>
+<p>注意三个常见误解：</p>
+<ul>
+<li><strong>它不等于 while True：</strong>无限重启 Agent 只是循环调用，不代表系统知道任务是否完成、是否重复、是否安全。</li>
+<li><strong>它不等于 ReAct：</strong>ReAct 描述一次 Agent 运行内部如何交替思考、行动和观察；Loop Engineering 还要解决运行之间的触发、状态、验收和治理。</li>
+<li><strong>它不等于 Self-Refine：</strong>Self-Refine 主要研究同一个模型如何对当前候选输出进行反馈和改写；Loop Engineering 的对象可以是跨任务、跨会话、跨工具的长期流程。</li>
+</ul>
+<p>一个好记的定义是：<strong>Agent loop 让模型在一次运行中继续行动；Loop Engineering 让系统在多次运行之间持续、受控地推进目标。</strong></p>
+</section>
+
+<section id="layers">
+<h2>03 · 从 Prompt、Context、Harness 到 Loop：四层工程关注点</h2>
+<p>这四个概念不是互相淘汰的技术流派，而是逐层扩大的系统边界。每一层都回答一个不同的问题。</p>
+<figure class="figure"><div class="figure-scroll"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 360" role="img" aria-labelledby="stack-title stack-desc">
+<title id="stack-title">从 Prompt 到 Loop：工程关注点逐层外移</title><desc id="stack-desc">四层工程关注点从单次指令扩展到可持续运行的 Agent 系统。</desc>
+<rect width="960" height="360" rx="20" fill="#fffdf9" stroke="#d8e2dd"/>
+
+<text x="42" y="44" fill="#52706e" font-size="15" font-weight="700" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">ENGINEERING ABSTRACTION</text>
+<rect x="40" y="64" width="880" height="58" rx="11" fill="#e9f4ee" stroke="#d8e2dd"/><rect x="40" y="64" width="9" height="58" rx="4" fill="#2d776d"/><text x="68" y="88" fill="#25484b" font-size="20" font-weight="700" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">Prompt Engineering</text><text x="390" y="88" fill="#345b5c" font-size="16" font-weight="600" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">写清楚这一轮要模型做什么</text><text x="390" y="109" fill="#627a79" font-size="13" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">单次输入与输出</text><rect x="40" y="134" width="880" height="58" rx="11" fill="#eaf1f8" stroke="#d8e2dd"/><rect x="40" y="134" width="9" height="58" rx="4" fill="#456f96"/><text x="68" y="158" fill="#25484b" font-size="20" font-weight="700" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">Context Engineering</text><text x="390" y="158" fill="#345b5c" font-size="16" font-weight="600" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">决定模型这一轮应该看到什么</text><text x="390" y="179" fill="#627a79" font-size="13" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">信息选择、排序与压缩</text><rect x="40" y="204" width="880" height="58" rx="11" fill="#fdf0e5" stroke="#d8e2dd"/><rect x="40" y="204" width="9" height="58" rx="4" fill="#a66b43"/><text x="68" y="228" fill="#25484b" font-size="20" font-weight="700" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">Harness Engineering</text><text x="390" y="228" fill="#345b5c" font-size="16" font-weight="600" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">定义模型能做什么、如何运行</text><text x="390" y="249" fill="#627a79" font-size="13" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">工具、权限、沙箱、测试与观测</text><rect x="40" y="274" width="880" height="58" rx="11" fill="#eeeafa" stroke="#d8e2dd"/><rect x="40" y="274" width="9" height="58" rx="4" fill="#6f5c9c"/><text x="68" y="298" fill="#25484b" font-size="20" font-weight="700" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">Loop Engineering</text><text x="390" y="298" fill="#345b5c" font-size="16" font-weight="600" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">决定系统何时再次启动、何时结束</text><text x="390" y="319" fill="#627a79" font-size="13" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">触发、发现、验证、持久化与升级</text>
+<text x="480" y="350" text-anchor="middle" fill="#617b78" font-size="13" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">不是替代关系：上层系统依赖并编排下层能力</text>
+
+</svg></div><figcaption>图 2 · 工程抽象逐渐外移：从写好一条指令，到设计整个系统何时运行、如何验收和如何结束。</figcaption></figure>
+<div class="table-scroll"><table><thead><tr><th>层次</th><th>核心问题</th><th>典型设计对象</th><th>不负责解决什么</th></tr></thead><tbody>
+<tr><td>Prompt Engineering</td><td>这一轮应该怎样表达任务？</td><td>指令、示例、输出格式、约束</td><td>不会自动发现明天的新任务</td></tr>
+<tr><td>Context Engineering</td><td>模型本轮应该看到哪些信息？</td><td>检索、状态摘要、文件、历史、排序与压缩</td><td>不会自动决定何时再次启动</td></tr>
+<tr><td>Harness Engineering</td><td>模型能调用什么、如何运行？</td><td>工具、沙箱、权限、测试、执行环境、观测</td><td>不会自动形成完整的长期工作计划</td></tr>
+<tr><td>Loop Engineering</td><td>系统何时启动、处理什么、如何验证并继续？</td><td>触发器、任务队列、状态、验证器、预算、升级策略</td><td>不能替代底层模型、上下文和执行环境</td></tr>
+</tbody></table></div>
+<p>OpenAI 对 Codex agent loop 的工程说明，展示了模型推理、工具调用、工具执行和反馈重新进入上下文的内层循环。[2] Anthropic 对 long-running agent harness 的研究，则进一步讨论跨 Context Window 的持续工作：使用 initializer agent 建立环境，再由 coding agent 在每次会话中增量推进，并留下进度文件供下一次恢复。[3]</p>
+<p>因此，Loop Engineering 可以被理解为更高一层的协调设计：它调用 Prompt、Context 和 Harness 的能力，但新增了时间维度、任务生命周期和系统级控制。</p>
+</section>
+
+<section id="architecture">
+<h2>04 · 外层循环的完整架构：不是只有一个 Agent</h2>
+<p>把一个可运行的 Loop 拆成七个阶段，可以得到一张更容易落地的系统图。</p>
+<figure class="figure"><div class="figure-scroll"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 360" role="img" aria-labelledby="contract-title contract-desc">
+<title id="contract-title">Loop Specification 的十个工程契约</title><desc id="contract-desc">每个可运行循环都应明确触发、目标、发现、上下文、策略、权限、验证、停止、状态和预算。</desc>
+<rect width="960" height="360" rx="20" fill="#fffdf9" stroke="#d8e2dd"/>
+
+<text x="480" y="36" text-anchor="middle" fill="#52706e" font-size="15" font-weight="700" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">LOOP SPECIFICATION · 设计前先写清楚</text>
+<rect x="40" y="76" width="164" height="94" rx="12" fill="#eaf1f8" stroke="#d8e2dd"/><circle cx="65" cy="102" r="15" fill="#456f96"/><text x="65" y="107" text-anchor="middle" fill="white" font-size="16" font-weight="700" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">T</text><text x="88" y="108" fill="#294d50" font-size="17" font-weight="700" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">Trigger</text><text x="122" y="142" text-anchor="middle" fill="#567271" font-size="14" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">什么时候启动</text><rect x="220" y="76" width="164" height="94" rx="12" fill="#e9f4ee" stroke="#d8e2dd"/><circle cx="245" cy="102" r="15" fill="#2d776d"/><text x="245" y="107" text-anchor="middle" fill="white" font-size="16" font-weight="700" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">G</text><text x="268" y="108" fill="#294d50" font-size="17" font-weight="700" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">Goal</text><text x="302" y="142" text-anchor="middle" fill="#567271" font-size="14" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">成功是什么</text><rect x="400" y="76" width="164" height="94" rx="12" fill="#eeeafa" stroke="#d8e2dd"/><circle cx="425" cy="102" r="15" fill="#6f5c9c"/><text x="425" y="107" text-anchor="middle" fill="white" font-size="16" font-weight="700" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">D</text><text x="448" y="108" fill="#294d50" font-size="17" font-weight="700" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">Discover</text><text x="482" y="142" text-anchor="middle" fill="#567271" font-size="14" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">任务从哪里来</text><rect x="580" y="76" width="164" height="94" rx="12" fill="#fdf0e5" stroke="#d8e2dd"/><circle cx="605" cy="102" r="15" fill="#a66b43"/><text x="605" y="107" text-anchor="middle" fill="white" font-size="16" font-weight="700" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">C</text><text x="628" y="108" fill="#294d50" font-size="17" font-weight="700" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">Context</text><text x="662" y="142" text-anchor="middle" fill="#567271" font-size="14" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">本轮看到什么</text><rect x="760" y="76" width="164" height="94" rx="12" fill="#eaf1f8" stroke="#d8e2dd"/><circle cx="785" cy="102" r="15" fill="#456f96"/><text x="785" y="107" text-anchor="middle" fill="white" font-size="16" font-weight="700" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">Π</text><text x="808" y="108" fill="#294d50" font-size="17" font-weight="700" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">Policy</text><text x="842" y="142" text-anchor="middle" fill="#567271" font-size="14" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">Agent 如何行动</text><rect x="40" y="194" width="164" height="94" rx="12" fill="#fcecec" stroke="#d8e2dd"/><circle cx="65" cy="220" r="15" fill="#a34f4f"/><text x="65" y="225" text-anchor="middle" fill="white" font-size="16" font-weight="700" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">A</text><text x="88" y="226" fill="#294d50" font-size="17" font-weight="700" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">Authority</text><text x="122" y="260" text-anchor="middle" fill="#567271" font-size="14" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">允许改什么</text><rect x="220" y="194" width="164" height="94" rx="12" fill="#e9f4ee" stroke="#d8e2dd"/><circle cx="245" cy="220" r="15" fill="#2d776d"/><text x="245" y="225" text-anchor="middle" fill="white" font-size="16" font-weight="700" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">V</text><text x="268" y="226" fill="#294d50" font-size="17" font-weight="700" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">Verifier</text><text x="302" y="260" text-anchor="middle" fill="#567271" font-size="14" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">谁来验收</text><rect x="400" y="194" width="164" height="94" rx="12" fill="#eeeafa" stroke="#d8e2dd"/><circle cx="425" cy="220" r="15" fill="#6f5c9c"/><text x="425" y="225" text-anchor="middle" fill="white" font-size="16" font-weight="700" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">S</text><text x="448" y="226" fill="#294d50" font-size="17" font-weight="700" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">Stop</text><text x="482" y="260" text-anchor="middle" fill="#567271" font-size="14" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">何时停止</text><rect x="580" y="194" width="164" height="94" rx="12" fill="#fdf0e5" stroke="#d8e2dd"/><circle cx="605" cy="220" r="15" fill="#a66b43"/><text x="605" y="225" text-anchor="middle" fill="white" font-size="16" font-weight="700" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">M</text><text x="628" y="226" fill="#294d50" font-size="17" font-weight="700" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">Memory</text><text x="662" y="260" text-anchor="middle" fill="#567271" font-size="14" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">状态如何写回</text><rect x="760" y="194" width="164" height="94" rx="12" fill="#eaf1f8" stroke="#d8e2dd"/><circle cx="785" cy="220" r="15" fill="#456f96"/><text x="785" y="225" text-anchor="middle" fill="white" font-size="16" font-weight="700" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">B</text><text x="808" y="226" fill="#294d50" font-size="17" font-weight="700" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">Budget</text><text x="842" y="260" text-anchor="middle" fill="#567271" font-size="14" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">最多花多少</text>
+<rect x="40" y="316" width="880" height="28" rx="7" fill="#f2f5f2"/><text x="480" y="335" text-anchor="middle" fill="#526e6d" font-size="13" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">Human escalation (H) 是贯穿所有环节的升级通道，不是循环结束后才补上的客服按钮。</text>
+
+</svg></div><figcaption>图 3 · 十个设计契约共同定义一个 Loop；Human escalation 是贯穿各阶段的升级通道。</figcaption></figure>
+<h3>4.1 Trigger：触发器</h3>
+<p>触发器回答“什么时候值得运行”。常见类型包括：</p>
+<ul><li><strong>时间触发：</strong>每小时、每天、每周执行一次巡检。</li><li><strong>事件触发：</strong>GitHub Issue 创建、Pull Request 更新、CI 失败、文件变化、部署完成。</li><li><strong>状态触发：</strong>任务队列中出现待处理任务、失败次数达到阈值、审批状态发生变化。</li><li><strong>人工触发：</strong>用户主动要求继续，或批准一个此前被暂停的高风险操作。</li></ul>
+<p>触发器只负责启动候选流程，不应该直接等同于“让 Agent 修改东西”。触发后仍然需要任务发现、去重和权限检查。</p>
+<h3>4.2 Discover：任务发现与去重</h3>
+<p>一个仓库可能同时有 20 个 Issue、3 个失败的 CI、若干过期文档和多个未合并 PR。Agent 不应把所有事情塞进一个上下文。系统首先要把外部事件转换成任务记录：任务 ID、来源、优先级、依赖、截止时间、当前状态和负责角色。</p>
+<p>这里最重要的是 <strong>idempotency（幂等性）</strong>。同一个 Webhook 可能重复送达；定时任务可能重叠运行。如果每次触发都创建一个新任务，就会重复修改同一份文件或重复发出外部请求。可以使用稳定的事件 ID、资源 ID 与版本号构造幂等键，并在领取任务时使用原子状态转换。</p>
+<h3>4.3 Context Projection：上下文投影</h3>
+<p>任务记录通常远小于完整对话历史。系统应根据当前任务，选择必要的上下文：相关文件、Issue 描述、历史决策、最新提交、上一次验证报告、尚未解决的风险。把所有历史都塞回 Prompt，不一定能帮助模型；更重要的是保留<strong>当前事实、来源和版本</strong>。</p>
+<h3>4.4 Execute：隔离执行</h3>
+<p>Worker 在受限环境中执行：读取文件、提出补丁、运行测试、生成文档或调用业务 API。执行环境要明确工作目录、网络策略、凭证范围、可写文件、最大运行时长，以及哪些副作用必须等待审批。</p>
+<h3>4.5 Verify：独立验证</h3>
+<p>Agent 提交的是候选结果，不是已经被证明正确的结果。系统应该运行测试、静态检查、Schema 验证、领域评测，必要时再交给人审查。验证器输出结构化结果，至少包含 pass/fail、证据、失败原因和是否需要人工介入。</p>
+<h3>4.6 Persist：持久化</h3>
+<p>将任务状态、产物版本、验证结果、失败反馈、下一步动作和运行成本写入持久化存储。下一次运行不能依赖“模型应该记得上次说过什么”。</p>
+<h3>4.7 Decide：决策与终止</h3>
+<p>根据证据选择四类结果：通过并完成；有明确可修复反馈时重试；遇到歧义或高风险时升级给人；达到预算或停止条件时终止。<strong>一个健康的循环必须允许停止，并且能解释为什么停止。</strong></p>
+</section>
+
+<section id="contract">
+<h2>05 · Loop Specification：先写契约，再写自动化脚本</h2>
+<p>为了避免把 Loop 设计成一个含糊的“Agent 不断努力直到成功”，可以用一个工程规格描述它：</p>
+<div class="math-wrap"><div class="math-scroll" tabindex="0" role="region" aria-label="Loop Specification 形式化定义，可横向滚动"><math display="block" aria-label="L 等于 T、G、D、C、Pi、A、V、S、M、B、H 的有序元组"><mrow><mi>ℒ</mi><mo>=</mo><mo>(</mo><mi>T</mi><mo>,</mo><mi>G</mi><mo>,</mo><mi>D</mi><mo>,</mo><mi>C</mi><mo>,</mo><mi>Π</mi><mo>,</mo><mi>A</mi><mo>,</mo><mi>V</mi><mo>,</mo><mi>S</mi><mo>,</mo><mi>M</mi><mo>,</mo><mi>B</mi><mo>,</mo><mi>H</mi><mo>)</mo></mrow></math></div></div>
+<p>各符号分别代表：</p>
+<ul>
+<li><strong>T — Trigger：</strong>启动事件、周期或状态条件。</li>
+<li><strong>G — Goal：</strong>目标及可观察的成功标准。</li>
+<li><strong>D — Discover：</strong>任务发现、筛选、分解与去重。</li>
+<li><strong>C — Context：</strong>本轮所需的上下文投影。</li>
+<li><strong>Π — Policy：</strong>Worker 的执行策略、角色和工具选择。</li>
+<li><strong>A — Authority：</strong>权限边界、可访问资源和允许的副作用。</li>
+<li><strong>V — Verifier：</strong>独立验收规则及证据格式。</li>
+<li><strong>S — Stop：</strong>完成、超限、无进展、冲突和风险终止条件。</li>
+<li><strong>M — Memory：</strong>持久状态、决策记录、版本与交接内容。</li>
+<li><strong>B — Budget：</strong>尝试次数、Token、时间、费用和并发上限。</li>
+<li><strong>H — Human escalation：</strong>何时暂停并请求人工判断或授权。</li>
+</ul>
+<p>这不是唯一标准化公式，而是一份设计清单。漏掉任何一项，都可能在运行时暴露出系统性问题：没有 T 就无法自动启动；没有 V 就无法判断结果；没有 M 就无法跨会话恢复；没有 B 和 S 就可能无限消耗；没有 A 和 H 就可能越权执行。</p>
+<p>每次运行可以抽象成状态转移：</p>
+<div class="math-wrap"><div class="math-scroll" tabindex="0" role="region" aria-label="Loop 状态转移公式，可横向滚动"><math display="block" aria-label="下一状态由验证结果、预算和权限策略共同决定"><mrow><msub><mi>s</mi><mrow><mi>k</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><mi>F</mi><mo>(</mo><msub><mi>s</mi><mi>k</mi></msub><mo>,</mo><msub><mi>Δ</mi><mi>k</mi></msub><mo>,</mo><msub><mi>e</mi><mi>k</mi></msub><mo>,</mo><mi>B</mi><mo>,</mo><mi>A</mi><mo>)</mo></mrow></math></div></div>
+<p>其中 <math class="math-inline" aria-label="s 下标 k"><msub><mi>s</mi><mi>k</mi></msub></math> 是第 k 轮开始时的任务状态，<math class="math-inline" aria-label="Delta 下标 k"><msub><mi>Δ</mi><mi>k</mi></msub></math> 是 Agent 产生的候选变更，<math class="math-inline" aria-label="e 下标 k"><msub><mi>e</mi><mi>k</mi></msub></math> 是验证器收集到的证据。F 不是“模型自由发挥”，而是由显式策略决定下一状态。</p>
+<div class="table-scroll"><table><thead><tr><th>Verifier / Policy 结果</th><th>下一状态</th><th>系统动作</th></tr></thead><tbody>
+<tr><td>全部验收条件通过</td><td><code>completed</code></td><td>保存产物与证据，关闭任务</td></tr>
+<tr><td>可修复的确定性失败</td><td><code>retrying</code></td><td>将失败日志作为下一轮反馈</td></tr>
+<tr><td>权限不足、歧义或高风险</td><td><code>needs_human</code></td><td>暂停自动执行，提交证据等待审批</td></tr>
+<tr><td>预算耗尽、无进展或冲突</td><td><code>stopped</code></td><td>保存状态、原因和恢复条件</td></tr>
+</tbody></table></div>
+</section>
+
+<section id="verification">
+<h2>06 · 为什么验证器必须成为一等公民？</h2>
+<p>一个常见设计是让 Agent 先写代码，再问同一个 Agent：“你觉得自己写对了吗？”这可以作为初步自检，但不能作为唯一验收依据。生成器擅长提出候选方案；验证器的工作是根据独立证据判断候选方案是否满足约束。</p>
+<figure class="figure"><div class="figure-scroll"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 360" role="img" aria-labelledby="verify-title verify-desc">
+<title id="verify-title">生成器与验证器分离的证据门</title><desc id="verify-desc">Agent 提交候选变更后，由独立测试、规则或评测器给出可追溯结果；失败反馈用于重试，风险和歧义升级给人。</desc>
+<rect width="960" height="360" rx="20" fill="#fffdf9" stroke="#d8e2dd"/>
+
+<text x="480" y="40" text-anchor="middle" fill="#52706e" font-size="15" font-weight="700" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">GENERATOR ≠ VERIFIER</text>
+<rect x="48" y="105" width="210" height="116" rx="14" fill="#eaf1f8" stroke="#b8cbd8" stroke-width="2"/><text x="153" y="146" text-anchor="middle" fill="#456f96" font-size="22" font-weight="700" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">Generator</text><text x="153" y="178" text-anchor="middle" fill="#3f6264" font-size="15" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">提出候选结果 Δ</text><text x="153" y="199" text-anchor="middle" fill="#627a79" font-size="13" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">Agent / Worker</text>
+<path d="M258 163H354" stroke="#4d8a80" stroke-width="3" fill="none"/><path d="M344 155l10 8 -10 8" stroke="#4d8a80" stroke-width="3" fill="none"/>
+<rect x="355" y="82" width="250" height="162" rx="14" fill="#e9f4ee" stroke="#a8c8bd" stroke-width="2"/><text x="480" y="119" text-anchor="middle" fill="#2d776d" font-size="22" font-weight="700" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">Verifier</text><text x="480" y="151" text-anchor="middle" fill="#3f6264" font-size="15" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">单元 / 集成测试</text><text x="480" y="176" text-anchor="middle" fill="#3f6264" font-size="15" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">Schema / Policy 检查</text><text x="480" y="201" text-anchor="middle" fill="#3f6264" font-size="15" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">Evals / 人工抽检</text>
+<path d="M605 163H688" stroke="#4d8a80" stroke-width="3" fill="none"/><path d="M678 155l10 8 -10 8" stroke="#4d8a80" stroke-width="3" fill="none"/>
+<path d="M688 163V89H738" stroke="#2d776d" stroke-width="2.5" fill="none"/><path d="M728 81l10 8 -10 8" stroke="#2d776d" stroke-width="2.5" fill="none"/><rect x="739" y="54" width="176" height="70" rx="12" fill="#e9f4ee" stroke="#a8c8bd"/><text x="827" y="82" text-anchor="middle" fill="#2d776d" font-size="19" font-weight="700" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">PASS</text><text x="827" y="105" text-anchor="middle" fill="#456b66" font-size="13" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">提交 / 写回</text>
+<path d="M688 163V183H738" stroke="#a66b43" stroke-width="2.5" fill="none"/><path d="M728 175l10 8 -10 8" stroke="#a66b43" stroke-width="2.5" fill="none"/><rect x="739" y="149" width="176" height="70" rx="12" fill="#fdf0e5" stroke="#e3c6ad"/><text x="827" y="177" text-anchor="middle" fill="#a66b43" font-size="19" font-weight="700" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">FAIL</text><text x="827" y="200" text-anchor="middle" fill="#765b48" font-size="13" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">证据反馈 / 重试</text>
+<path d="M480 244V269" stroke="#a34f4f" stroke-width="2.5" fill="none"/><path d="M473 260l7 10 7 -10" stroke="#a34f4f" stroke-width="2.5" fill="none"/><rect x="356" y="278" width="250" height="50" rx="10" fill="#fcecec" stroke="#e5bcbc"/><text x="481" y="309" text-anchor="middle" fill="#a34f4f" font-size="16" font-weight="700" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">ESCALATE · 人工决策</text>
+<text x="48" y="345" fill="#627a79" font-size="13" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">验证器可以是确定性测试、规则、领域评测或人；“另一个 LLM”不自动等于独立验证。</text>
+
+</svg></div><figcaption>图 4 · 候选产物必须通过证据门才能进入已完成状态；失败不是简单的“再想想”，而是要给出可执行反馈。</figcaption></figure>
+<p>验证器不一定是另一个 LLM。根据任务的可判定性，优先使用最可靠、成本最低的证据：</p>
+<div class="table-scroll"><table><thead><tr><th>验证类型</th><th>例子</th><th>可靠性边界</th></tr></thead><tbody>
+<tr><td>确定性测试</td><td>单元测试、集成测试、编译、类型检查</td><td>只能证明被覆盖的行为，不能证明所有需求都满足</td></tr>
+<tr><td>结构约束</td><td>JSON Schema、API 契约、链接检查、文件清单</td><td>结构正确不代表语义正确</td></tr>
+<tr><td>领域评测</td><td>Benchmark、回归集、规则校验、检索命中率</td><td>评测集可能不覆盖真实分布，也可能被过拟合</td></tr>
+<tr><td>模型评审</td><td>LLM-as-judge、独立审查 Agent</td><td>可能存在偏好偏差、提示敏感和共同盲点</td></tr>
+<tr><td>人工审批</td><td>生产发布、资金操作、权限变更、破坏性迁移</td><td>成本较高，但对高后果操作不可随意省略</td></tr>
+</tbody></table></div>
+<p>最重要的原则是：<strong>验证证据应尽量独立于生成过程。</strong>如果 Worker 和 Verifier 使用同一套提示、同一模型、同一份未经核实的上下文，它们可能共享同一个错误假设。增加一个“Reviewer Agent”标签，并不会自动带来独立性。</p>
+<p>OpenAI 的 Codex iterative repair 示例把工作拆成 Review、Repair、Validate 三个阶段，并把验证结果反馈给下一轮；这是一个很实用的工程模式。[4] 但它是工程案例，不应被描述为已经通过受控实验验证的通用最优架构。</p>
+</section>
+
+<section id="state">
+<h2>07 · 跨会话状态持久化：不要让下一轮从聊天记录里猜</h2>
+<p>长期 Agent 经常跨越多个 Context Window。第一轮结束时，模型上下文可能被清空；下一轮可能使用不同模型、不同 Worker，甚至由另一个团队接手。如果任务进度只保存在对话历史中，系统就很难稳定恢复。</p>
+<figure class="figure"><div class="figure-scroll"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 360" role="img" aria-labelledby="handoff-title handoff-desc">
+<title id="handoff-title">跨会话状态交接：让下一轮从事实而不是猜测开始</title><desc id="handoff-desc">第一轮将任务进度、决策、证据、提交版本和下一步写入持久化状态；第二轮据此恢复。</desc>
+<rect width="960" height="360" rx="20" fill="#fffdf9" stroke="#d8e2dd"/>
+
+<text x="480" y="39" text-anchor="middle" fill="#52706e" font-size="15" font-weight="700" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">CROSS-SESSION HANDOFF</text>
+<rect x="42" y="90" width="244" height="180" rx="14" fill="#eaf1f8" stroke="#b8cbd8" stroke-width="2"/><text x="164" y="124" text-anchor="middle" fill="#456f96" font-size="21" font-weight="700" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">Session A</text><text x="164" y="158" text-anchor="middle" fill="#3f6264" font-size="15" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">读取目标与代码</text><text x="164" y="185" text-anchor="middle" fill="#3f6264" font-size="15" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">完成一个可验证增量</text><text x="164" y="212" text-anchor="middle" fill="#3f6264" font-size="15" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">记录失败与下一步</text><text x="164" y="244" text-anchor="middle" fill="#627a79" font-size="13" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">结束本次上下文</text>
+<path d="M286 180H362" stroke="#4d8a80" stroke-width="3" fill="none"/><path d="M352 172l10 8 -10 8" stroke="#4d8a80" stroke-width="3" fill="none"/>
+<rect x="363" y="66" width="234" height="226" rx="14" fill="#e9f4ee" stroke="#a8c8bd" stroke-width="2"/><text x="480" y="101" text-anchor="middle" fill="#2d776d" font-size="20" font-weight="700" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">Durable State</text>
+<rect x="385" y="119" width="190" height="23" rx="5" fill="#fff" stroke="#d8e2dd"/><text x="480" y="135" text-anchor="middle" fill="#3f6264" font-size="13" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">task_id + goal</text><rect x="385" y="149" width="190" height="23" rx="5" fill="#fff" stroke="#d8e2dd"/><text x="480" y="165" text-anchor="middle" fill="#3f6264" font-size="13" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">current status + owner</text><rect x="385" y="179" width="190" height="23" rx="5" fill="#fff" stroke="#d8e2dd"/><text x="480" y="195" text-anchor="middle" fill="#3f6264" font-size="13" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">completed / pending items</text><rect x="385" y="209" width="190" height="23" rx="5" fill="#fff" stroke="#d8e2dd"/><text x="480" y="225" text-anchor="middle" fill="#3f6264" font-size="13" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">commit SHA + test evidence</text><rect x="385" y="239" width="190" height="23" rx="5" fill="#fff" stroke="#d8e2dd"/><text x="480" y="255" text-anchor="middle" fill="#3f6264" font-size="13" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">last feedback + next action</text>
+<path d="M597 180H673" stroke="#4d8a80" stroke-width="3" fill="none"/><path d="M663 172l10 8 -10 8" stroke="#4d8a80" stroke-width="3" fill="none"/>
+<rect x="674" y="90" width="244" height="180" rx="14" fill="#eeeafa" stroke="#c8bfe1" stroke-width="2"/><text x="796" y="124" text-anchor="middle" fill="#6f5c9c" font-size="21" font-weight="700" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">Session B</text><text x="796" y="158" text-anchor="middle" fill="#3f6264" font-size="15" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">恢复状态与版本</text><text x="796" y="185" text-anchor="middle" fill="#3f6264" font-size="15" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">重新检查关键事实</text><text x="796" y="212" text-anchor="middle" fill="#3f6264" font-size="15" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">从 next_action 继续</text><text x="796" y="244" text-anchor="middle" fill="#627a79" font-size="13" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">新上下文 / 同一目标</text>
+<text x="480" y="333" text-anchor="middle" fill="#627a79" font-size="13" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">对话记录可辅助理解，但不能替代版本化、可校验的任务状态。</text>
+
+</svg></div><figcaption>图 5 · 让状态跨越上下文窗口：保存任务事实、版本、验证证据和下一步，而不是只依赖一段长对话。</figcaption></figure>
+<p>一个最小的持久化状态至少应包含：</p>
+<ul>
+<li><strong>Identity：</strong>task_id、来源事件 ID、幂等键、创建时间。</li>
+<li><strong>Goal & Scope：</strong>成功标准、允许修改的范围、不能触碰的资源。</li>
+<li><strong>Progress：</strong>已完成事项、待办事项、依赖关系、当前状态。</li>
+<li><strong>Version：</strong>Git commit SHA、文档版本、输入数据版本或外部资源 ETag。</li>
+<li><strong>Evidence：</strong>测试命令、结果摘要、日志位置、验证器版本和时间戳。</li>
+<li><strong>Handoff：</strong>最近一次失败、下一步建议、需要人回答的问题。</li>
+<li><strong>Budget：</strong>已经消耗的尝试次数、Token、费用和时间。</li>
+</ul>
+<p>Anthropic 的 long-running agent 研究指出，跨会话任务的困难不只是上下文长度，还包括新一轮 Agent 不知道前一轮做了什么、可能重复实现或过早宣布完成。其工程方案使用初始化阶段和增量编码阶段，并留下进度文件与 Git 历史，帮助下一轮快速恢复。[3]</p>
+<div class="note"><strong>工程建议：</strong>把对话历史视为辅助材料，把任务状态视为正式数据。状态文件需要版本、来源和校验；关键决策要能追溯到具体提交或验证结果。对于共享状态的并发 Worker，还需要锁、租约或原子任务领取机制。</div>
+</section>
+
+<section id="governance">
+<h2>08 · 有边界的自主性：为什么“自动化程度越高越好”是错误目标？</h2>
+<p>Loop 的目标不是让 Agent 永远运行，而是在明确范围内自动推进，并在不确定性、风险和权限边界前停下来。一个持续运行但无法停止、无法审计、无法撤销的 Agent，不是更先进的系统，而是一个扩大了故障半径的系统。</p>
+<figure class="figure"><div class="figure-scroll"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 360" role="img" aria-labelledby="bounded-title bounded-desc">
+<title id="bounded-title">自主性必须被权限、预算和终止条件包围</title><desc id="bounded-desc">循环执行被限制在任务范围、工具权限、隔离环境、尝试次数、时间和费用预算之内。</desc>
+<rect width="960" height="360" rx="20" fill="#fffdf9" stroke="#d8e2dd"/>
+
+<text x="480" y="40" text-anchor="middle" fill="#52706e" font-size="15" font-weight="700" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">BOUNDED AUTONOMY · 允许自动，但不允许无限</text>
+<rect x="245" y="88" width="470" height="204" rx="18" fill="#f4f7f4" stroke="#9fbab0" stroke-width="2.5" stroke-dasharray="8 5"/>
+<text x="480" y="118" text-anchor="middle" fill="#456b66" font-size="17" font-weight="700" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">ISOLATED EXECUTION BOUNDARY</text>
+<rect x="348" y="143" width="264" height="105" rx="14" fill="#eaf1f8" stroke="#b8cbd8" stroke-width="2"/><text x="480" y="179" text-anchor="middle" fill="#456f96" font-size="22" font-weight="700" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">Agent Worker</text><text x="480" y="208" text-anchor="middle" fill="#3f6264" font-size="15" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">限定任务 · 限定工具</text><text x="480" y="231" text-anchor="middle" fill="#627a79" font-size="13" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">无默认生产写权限</text>
+<rect x="40" y="100" width="190" height="72" rx="11" fill="#e9f4ee" stroke="#d8e2dd"/><text x="135" y="127" text-anchor="middle" fill="#2d776d" font-size="17" font-weight="700" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">Scope</text><text x="135" y="151" text-anchor="middle" fill="#526e6d" font-size="13" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">文件 / API 范围</text><rect x="40" y="210" width="190" height="72" rx="11" fill="#fdf0e5" stroke="#d8e2dd"/><text x="135" y="237" text-anchor="middle" fill="#a66b43" font-size="17" font-weight="700" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">Permissions</text><text x="135" y="261" text-anchor="middle" fill="#526e6d" font-size="13" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">读写 / 网络权限</text><rect x="730" y="100" width="190" height="72" rx="11" fill="#eeeafa" stroke="#d8e2dd"/><text x="825" y="127" text-anchor="middle" fill="#6f5c9c" font-size="17" font-weight="700" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">Budget</text><text x="825" y="151" text-anchor="middle" fill="#526e6d" font-size="13" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">Token / 时间 / 费用</text><rect x="730" y="210" width="190" height="72" rx="11" fill="#fcecec" stroke="#d8e2dd"/><text x="825" y="237" text-anchor="middle" fill="#a34f4f" font-size="17" font-weight="700" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">Stop rules</text><text x="825" y="261" text-anchor="middle" fill="#526e6d" font-size="13" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">通过 / 超限 / 无进展</text>
+<path d="M230 136H245M230 246H245M715 136H730M715 246H730" stroke="#7e9c92" stroke-width="2" fill="none"/>
+<rect x="260" y="310" width="440" height="34" rx="8" fill="#fcecec" stroke="#e5bcbc"/><text x="480" y="332" text-anchor="middle" fill="#a34f4f" font-size="14" font-weight="700" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">高风险 / 权限不足 / 预算耗尽 → STOP 或 HUMAN</text>
+
+</svg></div><figcaption>图 6 · 自主性应当被隔离环境、权限、预算和终止规则包围，而不是由模型自己决定边界。</figcaption></figure>
+<h3>8.1 Authority：最小权限</h3>
+<p>把权限分为只读、工作区写入、创建 PR、合并、生产发布等不同等级。低风险步骤可以自动执行；合并主分支、删除数据、发起付款、修改访问控制等高后果操作，应要求明确审批。不要把“Agent 能调用工具”理解成“Agent 有权执行任何工具动作”。</p>
+<h3>8.2 Budget：多维预算</h3>
+<p>只限制最大迭代次数是不够的。一个 Agent 可能在一次尝试中运行很久，或并行启动多个昂贵任务。建议同时限制最大尝试次数、总 Token、墙钟时间、费用、并发数、工具调用数和每个子任务的资源配额。</p>
+<h3>8.3 Stop：终止条件</h3>
+<ul><li>目标验收条件全部通过。</li><li>连续若干轮没有产生可验证进展。</li><li>失败反馈不再具有可操作性，或验证器出现冲突。</li><li>触及权限边界、风险阈值或人工审批条件。</li><li>达到预算、超时、重复任务或依赖不可用。</li></ul>
+<p>停止不等于失败。一个好的终止状态可以是 <code>completed</code>、<code>needs_human</code>、<code>budget_exhausted</code> 或 <code>blocked</code>。它们都比无限重试、静默退出或伪造成功更好。</p>
+</section>
+
+<section id="math">
+<h2>09 · 重试的数学：多跑几轮，成功概率一定更高吗？</h2>
+<p>先构造一个简单模型，帮助理解为什么重试可能提高成功概率，也为什么预算仍然必要。</p>
+<p>假设每次尝试相互独立，并且每次尝试成功概率都相同，记为 <math class="math-inline" aria-label="p"><mi>p</mi></math>。单次失败概率是 <math class="math-inline" aria-label="一减 p"><mrow><mn>1</mn><mo>−</mo><mi>p</mi></mrow></math>。连续 n 次都失败的概率是 <math class="math-inline" aria-label="一减 p 的 n 次方"><msup><mrow><mo>(</mo><mn>1</mn><mo>−</mo><mi>p</mi><mo>)</mo></mrow><mi>n</mi></msup></math>，因此至少成功一次的概率为：</p>
+<div class="math-wrap"><div class="math-scroll" tabindex="0" role="region" aria-label="n 次独立尝试至少成功一次的概率公式"><math display="block" aria-label="P 成功于 n 次以内等于一减去一减 p 的 n 次方"><mrow><mi>P</mi><mo>(</mo><mtext>success by n</mtext><mo>)</mo><mo>=</mo><mn>1</mn><mo>−</mo><msup><mrow><mo>(</mo><mn>1</mn><mo>−</mo><mi>p</mi><mo>)</mo></mrow><mi>n</mi></msup></mrow></math></div></div>
+<p>例如，假设 <math class="math-inline" aria-label="p 等于零点三零"><mi>p</mi><mo>=</mo><mn>0.30</mn></math>，则 1、2、3、4 次尝试的累计成功概率分别约为 30%、51%、65.7%、76.0%。</p>
+<figure class="figure"><div class="figure-scroll"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 360" role="img" aria-labelledby="economics-title economics-desc">
+<title id="economics-title">有限重试的成功概率示例</title><desc id="economics-desc">假设每次尝试独立且成功概率恒定为百分之三十，成功概率随尝试次数增加但边际收益递减。</desc>
+<rect width="960" height="360" rx="20" fill="#fffdf9" stroke="#d8e2dd"/>
+
+<text x="480" y="40" text-anchor="middle" fill="#52706e" font-size="15" font-weight="700" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">ILLUSTRATIVE MODEL · p = 0.30, independent attempts</text>
+<text x="48" y="82" fill="#345b5c" font-size="15" font-weight="700" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">尝试次数 n</text><text x="330" y="82" fill="#345b5c" font-size="15" font-weight="700" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">至少成功一次的概率</text>
+<text x="64" y="133" fill="#456f96" font-size="19" font-weight="700" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">1</text><rect x="150" y="112" width="570" height="30" rx="7" fill="#edf2ee"/><rect x="150" y="112" width="171" height="30" rx="7" fill="#78b5a4"/><text x="744" y="133" fill="#2d776d" font-size="17" font-weight="700" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">30.0%</text><text x="64" y="187" fill="#456f96" font-size="19" font-weight="700" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">2</text><rect x="150" y="166" width="570" height="30" rx="7" fill="#edf2ee"/><rect x="150" y="166" width="290.7" height="30" rx="7" fill="#78b5a4"/><text x="744" y="187" fill="#2d776d" font-size="17" font-weight="700" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">51.0%</text><text x="64" y="241" fill="#456f96" font-size="19" font-weight="700" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">3</text><rect x="150" y="220" width="570" height="30" rx="7" fill="#edf2ee"/><rect x="150" y="220" width="374.49" height="30" rx="7" fill="#78b5a4"/><text x="744" y="241" fill="#2d776d" font-size="17" font-weight="700" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">65.7%</text><text x="64" y="295" fill="#456f96" font-size="19" font-weight="700" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">4</text><rect x="150" y="274" width="570" height="30" rx="7" fill="#edf2ee"/><rect x="150" y="274" width="433.14300000000003" height="30" rx="7" fill="#78b5a4"/><text x="744" y="295" fill="#2d776d" font-size="17" font-weight="700" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">76.0%</text>
+<path d="M150 332H720" stroke="#cbd9d3" stroke-width="1.5"/><text x="480" y="351" text-anchor="middle" fill="#627a79" font-size="12" font-family="system-ui,-apple-system,'Segoe UI','PingFang SC',sans-serif">教学假设，不是实测 Agent 成功率；真实尝试通常相关且质量不恒定。</text>
+
+</svg></div><figcaption>图 7 · 教学算例：假设每次尝试独立且成功概率恒定为 0.30；这些数值不是任何 Agent Benchmark 的实测结果。</figcaption></figure>
+<p>但是，Agent 的真实重试通常不满足独立同分布假设：下一轮会看到上一轮失败反馈，成功概率可能上升；也可能因为上下文污染、错误方向和资源耗尽而下降。更一般地，如果第 k 次尝试在此前失败条件下的成功概率是 <math class="math-inline" aria-label="p 下标 k"><msub><mi>p</mi><mi>k</mi></msub></math>，则：</p>
+<div class="math-wrap"><div class="math-scroll" tabindex="0" role="region" aria-label="条件成功概率的累计公式"><math display="block" aria-label="累计成功概率等于一减去每一轮条件失败概率的乘积"><mrow><mi>P</mi><mo>(</mo><mtext>success by n</mtext><mo>)</mo><mo>=</mo><mn>1</mn><mo>−</mo><munderover><mo>∏</mo><mrow><mi>k</mi><mo>=</mo><mn>1</mn></mrow><mi>n</mi></munderover><mo>(</mo><mn>1</mn><mo>−</mo><msub><mi>p</mi><mi>k</mi></msub><mo>)</mo></mrow></math></div></div>
+<h3>9.1 把成本和风险加入目标函数</h3>
+<p>设成功带来的收益为 R，每轮平均成本为 c，风险成本随重试次数 n 增加为 r(n)，风险权重为 λ。简化后的期望效用可以写成：</p>
+<div class="math-wrap"><div class="math-scroll" tabindex="0" role="region" aria-label="有限重试的期望效用公式"><math display="block" aria-label="U n 等于 R 乘以一减去一减 p 的 n 次方，再减去 n c 和 lambda r n"><mrow><mi>U</mi><mo>(</mo><mi>n</mi><mo>)</mo><mo>=</mo><mi>R</mi><mo>[</mo><mn>1</mn><mo>−</mo><msup><mrow><mo>(</mo><mn>1</mn><mo>−</mo><mi>p</mi><mo>)</mo></mrow><mi>n</mi></msup><mo>]</mo><mo>−</mo><mi>n</mi><mi>c</mi><mo>−</mo><mi>λ</mi><mi>r</mi><mo>(</mo><mi>n</mi><mo>)</mo></mrow></math></div></div>
+<p>第一项是至少成功一次的期望收益；第二项是执行成本；第三项是失败副作用、误操作概率和验证负担等风险成本。增加一次尝试的边际收益会逐渐下降，因此不能仅凭“还有机会”就无限继续。</p>
+<p>在这个简化模型中，从 n 次增加到 n+1 次值得考虑的条件是：新增成功机会的预期收益，大于新增执行成本和风险成本。若每轮独立且成功率恒定，边际收益项为 <math class="math-inline" aria-label="R 乘 p 乘以一减 p 的 n 次方"><mi>R</mi><mi>p</mi><msup><mrow><mo>(</mo><mn>1</mn><mo>−</mo><mi>p</mi><mo>)</mo></mrow><mi>n</mi></msup></math>。</p>
+<div class="highlight"><strong>工程含义：</strong>重试预算应由任务价值、失败反馈质量、验证可靠性和副作用共同决定。对可回滚的文档格式修复，可以允许少量自动重试；对不可逆的数据删除或资金操作，不能因为重试次数还没用完就继续执行。</div>
+<p class="small">以上是独立性假设下的教学推导，用于解释重试成本，不是 Loop Engineering 论文中的实测模型，也不能直接用来预测真实 Agent 的成功率。</p>
+</section>
+
+<section id="demo">
+<h2>10 · 交互实验：亲自观察一个有预算的 Loop</h2>
+<p>下面用一个完全确定的玩具任务模拟代码修复：第一次测试失败，第二次仍有错误，第三次通过。你可以调整最大尝试次数，观察系统如何在“继续尝试”和“预算耗尽”之间做选择。</p>
+<div class="demo" id="loop-demo">
+<div class="budget-control"><label for="max-attempts"><strong>最大尝试次数：</strong><output id="budget-value">3</output></label><input id="max-attempts" type="range" min="1" max="5" value="3" step="1"><span class="small">范围 1–5</span></div>
+<div class="demo-controls"><button class="primary" id="run-loop" type="button">运行模拟循环</button><button id="reset-loop" type="button">重置</button></div>
+<div class="demo-log" id="loop-log" aria-live="polite" aria-label="循环运行记录"><p>等待启动：系统将按顺序读取测试结果，并在通过、升级或预算耗尽时停止。</p></div>
+</div>
+<p>试着把预算设为 1：第一次验证失败，系统就必须停止，不能假装完成。设为 2：第二次仍失败，依然无法完成。设为 3 或更高：第三次才会通过。真实系统还需要判断失败是否可修复、是否值得继续、是否触发人工升级；本演示只隔离“预算与停止条件”这一变量。</p>
+</section>
+
+<section id="case">
+<h2>11 · 端到端案例：自动维护一个软件仓库</h2>
+<p>假设团队希望 Agent 每天巡检一个开源仓库，自动修复低风险问题，并将高风险问题交给维护者。一个有边界的 Loop 可以这样设计：</p>
+<div class="table-scroll"><table><thead><tr><th>阶段</th><th>具体动作</th><th>验收 / 安全要求</th></tr></thead><tbody>
+<tr><td>触发</td><td>每天定时运行；收到 CI 失败事件时额外触发</td><td>同一事件 ID 只进入一次队列</td></tr>
+<tr><td>发现</td><td>读取开放 Issue、失败工作流和未解决告警</td><td>去重；排除已关闭、已修复和超出范围的任务</td></tr>
+<tr><td>上下文</td><td>加载 Issue、相关文件、最近提交、历史失败与项目规范</td><td>固定基线 commit SHA，记录证据来源</td></tr>
+<tr><td>执行</td><td>在隔离分支中修改代码、文档或测试</td><td>只允许写入白名单路径；不直接写生产环境</td></tr>
+<tr><td>验证</td><td>运行格式化、静态检查、单元测试与相关集成测试</td><td>测试结果关联本次 commit；禁止只根据 Agent 自评通过</td></tr>
+<tr><td>写回</td><td>保存 diff、测试报告、成本、状态和下一步</td><td>状态记录不可覆盖来源和版本信息</td></tr>
+<tr><td>决策</td><td>低风险且通过则创建 PR；失败则有限重试；权限或语义不确定则升级</td><td>合并与生产部署默认保留人工审批</td></tr>
+</tbody></table></div>
+<p>这个案例体现出 Loop Engineering 的重点：不是让一个 Agent 拥有无限权限，而是把任务划分成多个有明确输入、输出和验收条件的步骤。系统可以自动做大量低风险工作，但最终交付仍然要有可审计的证据链。</p>
+<p>OpenAI 的迭代修复示例展示了“检查 → 修复 → 验证 → 把剩余问题反馈给下一轮”的工作流。[4] OpenAI 的 Agent Improvement Loop 示例则把真实运行轨迹、人工反馈、模型反馈、评测集和下一轮 Harness 修改连接起来，强调让每次运行的经验沉淀为可重复执行的评测。[5]</p>
+</section>
+
+<section id="code">
+<h2>12 · 最小 Python 控制器：让成功、失败和升级成为显式状态</h2>
+<p>下面的代码不是完整的 LLM Runtime，而是一个小型控制器。<code>act</code> 代表执行 Agent，<code>verify</code> 代表验证器；控制器负责限制尝试次数、把失败反馈传给下一轮、持久化状态，并在通过、升级或预算耗尽时停止。</p>
+<pre><code>from dataclasses import dataclass
+from pathlib import Path
+
+@dataclass(frozen=True)
+class Verdict:
+    passed: bool
+    feedback: str = ""
+    escalate: bool = False
+
+def run_loop(task_id, act, verify, state_path: Path, max_attempts=3):
+    state = _load(state_path, task_id)
+
+    if state["status"] in {
+        "completed", "needs_human", "budget_exhausted"
+    }:
+        return state
+
+    while state["attempts"] &lt; max_attempts:
+        state["attempts"] += 1
+        state["status"] = "running"
+        _save(state_path, state)
+
+        proposal = act(
+            state["last_feedback"], state["attempts"]
+        )
+        verdict = verify(proposal)
+
+        if verdict.escalate:
+            state["status"] = "needs_human"
+            state["last_feedback"] = verdict.feedback
+            _save(state_path, state)
+            return state
+
+        if verdict.passed:
+            state["status"] = "completed"
+            state["artifact"] = proposal
+            _save(state_path, state)
+            return state
+
+        state["last_feedback"] = verdict.feedback
+        state["status"] = "retrying"
+        _save(state_path, state)
+
+    state["status"] = "budget_exhausted"
+    _save(state_path, state)
+    return state</code></pre>
+<p>仓库中的配套实现 <a href="https://github.com/1998x-stack/xm-posts/blob/main/posts/agents/loop-engineering/loop_engine.py">loop_engine.py</a> 补充了 JSON 状态读写、原子替换、任务 ID 校验和终态防重复执行；<a href="https://github.com/1998x-stack/xm-posts/blob/main/tests/test_loop_engineering.py">测试文件</a>覆盖重试后通过、预算耗尽、人工升级、终态不重复执行和状态文件错配。</p>
+<h3>12.1 为什么先保存 running 状态？</h3>
+<p>执行前写入状态，可以让系统知道任务已经开始，并记录已消耗的预算。每次验证后再保存反馈与终态。这样即使进程中断，下一次也有机会识别上一次停在什么位置。但这并不自动解决分布式并发或外部副作用的恰好一次执行问题。</p>
+<h3>12.2 这个玩具控制器没有解决什么？</h3>
+<ul><li>没有任务租约、并发锁和分布式队列。</li><li>没有把外部 API 副作用与状态写入放进同一个事务。</li><li>没有 exactly-once 语义；真实系统通常需要幂等键和可恢复操作。</li><li>没有真正的容器沙箱、网络隔离、密钥管理和权限策略。</li><li>没有实现独立验证器的身份、模型隔离或验证器自身的评估。</li></ul>
+<p class="warning">因此它是教学控制器，不是生产级自主 Agent 平台。不要把一个 JSON 文件和 while 循环直接部署成有生产写权限的守护进程。</p>
+</section>
+
+<section id="evaluation">
+<h2>13 · 如何评估一个 Loop 是否真的更好？</h2>
+<p>如果只统计 Agent 调用了多少次工具、写了多少行代码，容易把忙碌误认为进展。评估至少要同时覆盖最终结果、过程质量、资源成本和治理效果。</p>
+<div class="table-scroll"><table><thead><tr><th>维度</th><th>指标示例</th><th>要回答的问题</th></tr></thead><tbody>
+<tr><td>结果质量</td><td>任务成功率、人工验收通过率、回归缺陷率</td><td>最后交付的东西是否真的正确？</td></tr>
+<tr><td>验证器质量</td><td>False Pass、False Fail、覆盖率、人工复核一致率</td><td>系统是否会错误地宣布完成？</td></tr>
+<tr><td>执行效率</td><td>平均尝试次数、端到端耗时、每个成功任务的成本</td><td>为得到一个正确结果付出了多少代价？</td></tr>
+<tr><td>状态质量</td><td>恢复成功率、重复任务率、状态冲突率</td><td>下一轮是否能准确接上上一轮？</td></tr>
+<tr><td>人类参与</td><td>人工升级率、审批等待时间、人工返工率</td><td>自动化减少了多少重复工作，又把什么交给人？</td></tr>
+<tr><td>安全治理</td><td>越权尝试数、预算超限数、不可逆副作用数</td><td>系统是否在边界内行动？</td></tr>
+</tbody></table></div>
+<p>比较两套 Loop 时，必须固定任务集合、模型版本、工具权限、预算和验证器，或者明确报告这些变量的差异。否则，成功率提升可能来自更大的 Token 预算、更宽松的测试标准或不同的任务难度，而不是 Loop 设计本身。</p>
+<p>还应做消融：去掉持久化、去掉独立验证、去掉去重、缩小预算、取消人工升级，分别观察结果变化。对长期运行系统，除了平均成功率，还要报告失败分布、尾延迟、成本分位数和最坏情况下的行为。</p>
+</section>
+
+<section id="failure">
+<h2>14 · 失败模式：Loop 为什么可能越跑越差？</h2>
+<h3>14.1 Infinite Retry：无限重试</h3><p>没有硬性预算或终止条件，失败就反复执行。结果可能是成本失控、工具限流，甚至对外部系统造成重复副作用。</p>
+<h3>14.2 Reward / Verifier Hacking：迎合验证器</h3><p>如果只检查“测试是否通过”，Agent 可能通过删除失败测试、弱化断言或缩小覆盖范围来制造假成功。验证器必须检查目标完整性，而不只是执行退出码。</p>
+<h3>14.3 Stale State：状态过期</h3><p>上一轮基于 commit A 的结论，不能直接套用到已经变化的 commit B。审批和测试证据应绑定具体版本；关键输入变化时，旧证据需要失效或重新验证。</p>
+<h3>14.4 Context Drift：上下文漂移</h3><p>状态摘要可能遗漏约束，旧记忆可能被误当成当前事实。恢复时应重新检查关键文件、版本和外部资源，而不是无条件相信摘要。</p>
+<h3>14.5 Oscillation：来回振荡</h3><p>Agent 在两个方案之间反复切换。可以记录已尝试的方案、失败证据和状态指纹；若连续几轮没有新证据或目标指标没有改善，应停止并升级。</p>
+<h3>14.6 Trigger Storm：触发风暴</h3><p>一个任务的写回又触发新的事件，导致循环自我放大。需要事件来源过滤、幂等键、去抖动、并发上限和明确的触发白名单。</p>
+<h3>14.7 Human Comprehension Debt：理解债务</h3><p>如果 Agent 持续产出大量没人审阅的变更，系统虽然“跑得动”，维护者却逐渐失去对仓库的理解。需要结构化变更记录、可读 diff、风险摘要和定期人工抽检。</p>
+<div class="highlight"><strong>关键原则：</strong>一个循环不应只优化“继续运行的能力”，还要优化“识别无效进展、保留证据、停止错误动作和向人交接”的能力。</div>
+</section>
+
+<section id="research">
+<h2>15 · 研究现状：哪些已经有证据，哪些仍然只是工程假设？</h2>
+<p>Loop Engineering 作为术语很新，但它所依赖的机制并不是从 2026 年才开始出现。可以沿着研究谱系理解它：</p>
+<div class="table-scroll"><table><thead><tr><th>工作</th><th>贡献</th><th>与 Loop Engineering 的关系</th></tr></thead><tbody>
+<tr><td><a href="https://arxiv.org/abs/2210.03629">ReAct (2022 / ICLR 2023)</a></td><td>交错生成推理轨迹、外部行动和环境观察</td><td>提供单次 Agent 运行的内层行动反馈机制</td></tr>
+<tr><td><a href="https://arxiv.org/abs/2303.11366">Reflexion (2023)</a></td><td>将环境反馈转化为语言反思，并存入 episodic memory</td><td>说明失败经验可以被显式记录并影响后续尝试</td></tr>
+<tr><td><a href="https://arxiv.org/abs/2303.17651">Self-Refine (2023)</a></td><td>同一个模型交替生成反馈与改进候选输出</td><td>提供单任务迭代改进的基础模式</td></tr>
+<tr><td><a href="https://www.anthropic.com/research/effective-harnesses-for-long-running-agents">Anthropic long-running harness (2025)</a></td><td>通过初始化、进度文件和增量会话支持跨上下文持续工作</td><td>展示状态交接和长期任务分段的工程设计</td></tr>
+<tr><td><a href="https://openai.com/index/unrolling-the-codex-agent-loop/">OpenAI Codex agent loop (2026)</a></td><td>解释模型推理、工具调用和反馈如何组成内层循环</td><td>展示 Agent Runtime 的循环结构</td></tr>
+<tr><td><a href="https://arxiv.org/abs/2608.21884">Loop Engineering: Building Blocks, Adoption, and Impact (2026)</a></td><td>梳理实践构件，并开展仓库挖掘探索</td><td>直接研究新兴 Loop Engineering 实践及其证据缺口</td></tr>
+</tbody></table></div>
+<p>这项 2026 年预印本报告分析了 36,710 个软件仓库，并在启发式筛选的 256 个候选仓库中确认了 217 个自主循环案例。研究还指出：虽然仓库里可以看到循环配置，但几乎没有仓库提交实践讨论中所建议的持久状态文件；受控实验仍是计划中的研究方向。[1]</p>
+<div class="note"><strong>如何正确解读这组数字？</strong>217 / 256 是在启发式筛选候选集中的确认比例，不是“全球 84.8% 的仓库都在使用 Loop Engineering”。36,710 是被挖掘的仓库规模，也不是受控实验样本。该研究支持“这种实践已经出现在开源仓库中”，但不证明“Loop Engineering 一定提高开发效率或代码质量”。</div>
+<p>还有一个容易被忽略的细节：论文报告的 217 个已确认循环中，有 180 个只由仓库事件触发，其中很多是在每个新 Pull Request 到来时运行一次审查，然后结束。下一轮处理的是另一个 PR，因此并不一定需要把跨轮进度写入仓库文件；部分 Issue Triage 循环则直接把 Issue Tracker 当作状态来源。<strong>所以，缺少一个名为 STATE.md 的文件，不等于循环设计必然不合格；是否需要持久状态，取决于任务是否真的跨运行延续。</strong></p>
+<p>作者也明确讨论了构念效度风险：不同来源对 Loop 的定义并不完全一致，普通自动化与工程化循环之间存在判断边界；启发式可能漏掉采用其他约定的循环，也可能把普通自动化误识别为 Loop。因而这组仓库挖掘结果应视为探索性证据，而不是无偏的全 GitHub 采用率。</p>
+<h3>15.1 仍然值得研究的问题</h3>
+<ul>
+<li><strong>自主等级：</strong>只允许自动分析、自动修改、自动开 PR、自动合并和自动部署，哪一种授权边界最合适？</li>
+<li><strong>验证器独立性：</strong>如何测量验证器的漏检率、偏差和与生成器共享的错误？</li>
+<li><strong>状态一致性：</strong>多 Agent 并行时，如何处理竞争写入、过期审批、重复事件和状态冲突？</li>
+<li><strong>停止策略：</strong>如何根据剩余成功概率、边际收益、成本和风险决定是否再试一次？</li>
+<li><strong>长期效应：</strong>自动循环是否会积累理解债务、评测债务和维护负担？</li>
+<li><strong>跨领域迁移：</strong>代码修复中的测试门，如何迁移到研究、数据治理、文档维护或运营流程？</li>
+</ul>
+</section>
+
+<section id="summary">
+<h2>16 · 总结：把“持续运行”变成“持续负责”</h2>
+<p>Loop Engineering 的价值不在于让 Agent 永远不停止，而在于让每一次运行都成为一个有边界、有证据、有状态、有成本记录的工作单元，并让系统知道下一步应该继续、交付、暂停还是升级。</p>
+<div class="twocol">
+<div class="panel"><h3>记住四个层次</h3><p>Prompt 决定怎么说；Context 决定看什么；Harness 决定能做什么；Loop 决定何时再次运行、如何验收和何时结束。</p></div>
+<div class="panel"><h3>记住五条底线</h3><p>可验证的成功标准、独立证据、持久状态、硬性预算、人工升级与明确停止条件。</p></div>
+</div>
+<p>如果要设计自己的第一个 Loop，不妨从一个低风险、可验证、可回滚的任务开始：例如每天检查文档链接、每次 CI 失败后生成诊断报告，或自动整理待处理 Issue。先让触发、状态和验证链条可靠，再逐步增加 Agent 的执行权限。</p>
+<h3>参考资料</h3>
+<ol>
+<li>Jai Lal Lulla, Vahram Nersesyan, Seyedmoein Mohsenimofidi, Christoph Treude, Sebastian Baltes. <a href="https://arxiv.org/abs/2608.21884">Loop Engineering: Building Blocks, Adoption, and Impact</a>. 2026. Preprint submitted to the 2nd Journal Ahead Workshop (JAWs@ASE 2026); the arXiv record marks it under review.</li>
+<li>Michael Bolin. <a href="https://openai.com/index/unrolling-the-codex-agent-loop/">Unrolling the Codex agent loop</a>. OpenAI Engineering, 2026-01-23.</li>
+<li>Anthropic. <a href="https://www.anthropic.com/research/effective-harnesses-for-long-running-agents">Effective harnesses for long-running agents</a>. 2025-11-26.</li>
+<li>OpenAI. <a href="https://developers.openai.com/cookbook/examples/codex/build_iterative_repair_loops_with_codex">Build iterative repair loops with Codex</a>. 2026-05-11.</li>
+<li>OpenAI. <a href="https://developers.openai.com/cookbook/examples/agents_sdk/agent_improvement_loop">Build an Agent Improvement Loop with Traces, Evals, and Codex</a>. 2026-05-12.</li>
+<li>Shunyu Yao et al. <a href="https://arxiv.org/abs/2210.03629">ReAct: Synergizing Reasoning and Acting in Language Models</a>. ICLR 2023.</li>
+<li>Noah Shinn et al. <a href="https://arxiv.org/abs/2303.11366">Reflexion: Language Agents with Verbal Reinforcement Learning</a>. 2023.</li>
+<li>Aman Madaan et al. <a href="https://arxiv.org/abs/2303.17651">Self-Refine: Iterative Refinement with Self-Feedback</a>. 2023.</li>
+</ol>
+<div class="foot"><a href="../react/">前置：Understanding ReAct</a><a href="../swe-agent/">延伸：Understanding SWE-agent</a><a href="../agent-memory-components/">延伸：Understanding Agent Memory</a><a href="../../../topics/">返回知识地图</a></div>
+</section>
+</article></main></div>
+<script>
+(function(){
+  var root=document.getElementById("loop-demo");
+  if(!root)return;
+  var range=document.getElementById("max-attempts");
+  var value=document.getElementById("budget-value");
+  var log=document.getElementById("loop-log");
+  var run=document.getElementById("run-loop");
+  var reset=document.getElementById("reset-loop");
+  var outcomes=[
+    {pass:false,reason:"单元测试失败：expected 4, got 12。验证器给出可操作反馈。"},
+    {pass:false,reason:"边界测试仍失败：空列表分支没有处理。系统把反馈写入状态。"},
+    {pass:true,reason:"所有必需测试通过。候选补丁绑定当前版本与验证报告。"}
+  ];
+  range.addEventListener("input",function(){value.textContent=range.value;});
+  function addLine(text){
+    var p=document.createElement("p");
+    p.textContent=text;
+    log.appendChild(p);
+  }
+  function clearLog(){while(log.firstChild)log.removeChild(log.firstChild);}
+  run.addEventListener("click",function(){
+    clearLog();
+    var budget=Number(range.value);
+    var finished=false;
+    addLine("Trigger：收到 CI 失败事件，创建任务 loop-demo-01。");
+    addLine("Discover：确认任务未重复执行，加载仓库版本与测试范围。");
+    for(var i=0;i<budget && i<outcomes.length;i++){
+      var outcome=outcomes[i];
+      addLine("Attempt "+(i+1)+"：执行候选修复并运行独立测试。");
+      addLine((outcome.pass?"PASS：":"FAIL：")+outcome.reason);
+      if(outcome.pass){
+        addLine("Persist：保存补丁、commit 版本与验证证据。");
+        addLine("STOP：目标满足，状态 = completed。");
+        finished=true;
+        break;
+      }
+      addLine("Persist：保存失败日志与下一轮反馈。");
+    }
+    if(!finished){
+      addLine("STOP：已达到最大尝试次数 "+budget+"，状态 = budget_exhausted。");
+      addLine("系统不会把未通过的任务伪装成成功；可等待人工检查或新证据。");
+    }
+    run.disabled=true;
+  });
+  reset.addEventListener("click",function(){
+    clearLog();
+    addLine("等待启动：系统将按顺序读取测试结果，并在通过、升级或预算耗尽时停止。");
+    run.disabled=false;
+  });
+})();
+</script>
+</body>
+</html>
