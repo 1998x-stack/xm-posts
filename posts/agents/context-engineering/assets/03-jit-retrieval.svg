@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1020 470" role="img" aria-labelledby="title desc">
+<title id="title">预加载、Just-in-Time 和混合上下文检索策略</title><desc id="desc">比较三种策略：预加载大量文档、运行时按需读取、以及固定核心加动态检索的混合策略。</desc>
+<rect width="1020" height="470" rx="22" fill="#f8fbf9"/>
+<text x="510" y="48" text-anchor="middle" font-size="24" font-weight="700" fill="#24484c" font-family="system-ui,sans-serif">Where should context come from?</text>
+<g font-family="system-ui,'Microsoft YaHei',sans-serif">
+<rect x="35" y="90" width="295" height="320" rx="16" fill="#fff0e7" stroke="#d8a27d" stroke-width="2"/>
+<text x="182" y="128" text-anchor="middle" font-size="21" font-weight="700" fill="#a85e3d">PRELOAD</text><text x="182" y="153" text-anchor="middle" font-size="14" fill="#765d4d">预先召回 / 全量加载</text>
+<g fill="#e9c1a7" stroke="#c58d69"><rect x="75" y="185" width="215" height="36" rx="7"/><rect x="75" y="231" width="215" height="36" rx="7"/><rect x="75" y="277" width="215" height="36" rx="7"/><rect x="75" y="323" width="215" height="36" rx="7"/></g>
+<g text-anchor="middle" font-size="14" fill="#704c3b"><text x="182" y="209">Top-K 片段</text><text x="182" y="255">历史对话</text><text x="182" y="301">文档摘要</text><text x="182" y="347">其他候选资料</text></g>
+<text x="182" y="390" text-anchor="middle" font-size="12" fill="#805f4d">快启动 · 可能引入噪声</text>
+<rect x="362" y="90" width="295" height="320" rx="16" fill="#eaf2f8" stroke="#8bb2ca" stroke-width="2"/>
+<text x="509" y="128" text-anchor="middle" font-size="21" font-weight="700" fill="#3e7092">JUST-IN-TIME</text><text x="509" y="153" text-anchor="middle" font-size="14" fill="#526f7e">按需发现 / 动态读取</text>
+<rect x="411" y="185" width="196" height="48" rx="8" fill="#cbdfea" stroke="#88afc5"/><text x="509" y="214" text-anchor="middle" font-size="15" fill="#315d78">轻量索引 / 文件路径</text>
+<path d="M509 234 V270" stroke="#5e91ae" stroke-width="3"/><path d="M502 263 L509 273 L516 263" fill="none" stroke="#5e91ae" stroke-width="3"/>
+<rect x="411" y="278" width="196" height="54" rx="8" fill="#d9e9f2" stroke="#88afc5"/><text x="509" y="301" text-anchor="middle" font-size="15" fill="#315d78">当前需要的证据</text><text x="509" y="321" text-anchor="middle" font-size="12" fill="#526f7e">通过工具读取</text>
+<text x="509" y="390" text-anchor="middle" font-size="12" fill="#526f7e">节省窗口 · 探索有延迟</text>
+<rect x="689" y="90" width="295" height="320" rx="16" fill="#e7f3ef" stroke="#83b6a9" stroke-width="2"/>
+<text x="836" y="128" text-anchor="middle" font-size="21" font-weight="700" fill="#176f67">HYBRID</text><text x="836" y="153" text-anchor="middle" font-size="14" fill="#486e68">固定核心 + 动态证据</text>
+<rect x="738" y="183" width="196" height="48" rx="8" fill="#c7e4d9" stroke="#7fb5a9"/><text x="836" y="212" text-anchor="middle" font-size="15" fill="#24675f">目标 / 规则 / 工具</text>
+<path d="M836 232 V260" stroke="#438e83" stroke-width="3"/><path d="M829 253 L836 263 L843 253" fill="none" stroke="#438e83" stroke-width="3"/>
+<rect x="738" y="268" width="196" height="48" rx="8" fill="#d9eee6" stroke="#7fb5a9"/><text x="836" y="297" text-anchor="middle" font-size="15" fill="#24675f">索引 / 状态摘要</text>
+<path d="M836 317 V344" stroke="#438e83" stroke-width="3"/><path d="M829 337 L836 347 L843 337" fill="none" stroke="#438e83" stroke-width="3"/>
+<rect x="738" y="350" width="196" height="35" rx="8" fill="#b8d9cb" stroke="#7fb5a9"/><text x="836" y="373" text-anchor="middle" font-size="14" fill="#24675f">本轮证据按需加载</text>
+<text x="836" y="399" text-anchor="middle" font-size="12" fill="#486e68">平衡速度、规模与相关性</text>
+</g>
+</svg>
