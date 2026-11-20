@@ -193,3 +193,10 @@ python scripts/validate_site.py
 项目借鉴 [Christopher Olah](https://colah.github.io/) 与 [The Annotated Transformer](https://nlp.seas.harvard.edu/annotated-transformer/) 的**教学组织方式**，不是其文字、代码或插图的复制品。实验指标须标明论文、模型版本、数据集、实验设置和出处，教学简化不能冒充论文结论。
 
 **许可注意**：不同引用来源可能具有不同的许可条款；未经过核实，不应推断论文图像或第三方代码可自由重新分发。
+
+
+## 文章索引与归档分页
+
+为避免随着文章数量增加而一次性渲染大量 SVG 缩略图，首页索引每页只创建 **8 张**文章卡片；点击页码、搜索或按研究领域筛选时，通过构建生成的轻量 `posts.json` 检索完整已发布文章，再只创建当前页的 DOM/图片。不开启 JavaScript 时，首页仍展示首批文章并保留归档入口。
+
+时间归档按 **16 篇/页** 在构建时生成独立 HTML：第一页为 `/archive/`，后续为 `/archive/page/2/`、`/archive/page/3/` 等。普通链接、浏览器返回、SEO canonical、站点地图及无 JavaScript 浏览都可正常工作。原有缩略图均为文章专属 SVG，保留 lazy loading；其他分页的图片不会进入当前页面 HTML。该规范与对应测试见 `AGENTS.md`、`tests/test_site.py`、`scripts/browser_check_site.py`。
