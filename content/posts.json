@@ -163,6 +163,35 @@
     }
   },
   {
+    "slug": "teacher-forcing",
+    "title": "Understanding Teacher Forcing",
+    "subtitle": "训练时看真实前缀，生成时用自己的预测：从目标右移到 Exposure Bias",
+    "category": "training",
+    "topic": "pretraining",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 22,
+    "tags": [
+      "Teacher Forcing",
+      "Autoregressive Language Modeling",
+      "Sequence-to-Sequence",
+      "Exposure Bias",
+      "Scheduled Sampling",
+      "Cross Entropy",
+      "Causal Mask",
+      "RNN",
+      "Transformer"
+    ],
+    "summary": "解释 Teacher Forcing 如何让序列模型在真实历史上预测下一词，对比推理自回馈及 exposure bias；包含右移目标、条件似然、因果 mask、四张专属 SVG、逐步交互、概率损失实验和确定性 Python 算例，并区分 Scheduled Sampling 与 Professor Forcing。",
+    "paper": "https://doi.org/10.1162/neco.1989.1.2.270",
+    "illustration": "teacher-forcing",
+    "cover": {
+      "src": "assets/01-feedback-paths.svg",
+      "caption": "训练采用真实上一词，而生成将模型预测回馈到下一步"
+    }
+  },
+  {
     "slug": "transformer",
     "title": "Understanding Transformer",
     "subtitle": "从循环记忆到 Attention：序列中的信息如何彼此连接？",
