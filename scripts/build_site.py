@@ -66,7 +66,7 @@ def html_page(*,title,description,canonical,body,depth=0,active='home',lang='zh-
 <title>{H(title)}</title></head><body>
 <a class="skip-link" href="#main">跳至正文</a>
 <header class="site-header"><div class="container header-row"><a class="wordmark" href="{rel}" aria-label="xm.posts 首页">xm<span>.</span>posts</a>
-<nav class="top-nav" aria-label="主导航"><a {'aria-current="page"' if active=='home' else ''} href="{rel}">首页</a><a {'aria-current="page"' if active=='archive' else ''} href="{rel}archive/">文章归档</a><a href="{rel}#categories">分类</a><a href="https://github.com/1998x-stack/xm-posts" target="_blank" rel="noopener noreferrer">GitHub ↗</a></nav></div></header>
+<nav class="top-nav" aria-label="主导航"><a {'aria-current="page"' if active=='home' else ''} href="{rel}">首页</a><a {'aria-current="page"' if active=='archive' else ''} href="{rel}archive/">文章归档</a><a href="{rel}#categories">分类</a><a href="{rel}#reading-paths">学习路径</a><a href="https://github.com/1998x-stack/xm-posts" target="_blank" rel="noopener noreferrer">GitHub ↗</a></nav></div></header>
 <main id="main">{body}</main>
 <footer class="site-footer"><div class="container footer-main"><div><a class="wordmark" href="{rel}">xm<span>.</span>posts</a><p>从问题出发，经由图示、数学与实验，真正理解模型。</p></div><div><p class="footer-label">EXPLORE</p><a href="{rel}archive/">所有文章</a><a href="{rel}feed.xml">RSS 订阅</a><a href="https://github.com/1998x-stack/xm-posts">源代码</a></div></div><div class="container legal"><span>© xm-posts · Independent technical notes</span><span>Read deeply. Build carefully.</span></div></footer>
 </body></html>'''
@@ -101,7 +101,7 @@ def post_card(p,rel,ordinal=0):
 <a class="card-hit" href="{path}" aria-label="阅读 {H(p['title'],quote=True)}">{poster}</a>
 <div class="card-body"><div class="card-topline"><span>MODEL STUDY / {H(p['category']).upper()}</span><span>{H(p['published'])}</span></div>
 <h3><a href="{path}">{H(p['title'])}</a></h3><p class="card-subtitle">{H(p['subtitle'])}</p>
-<p class="card-summary">{H(p['summary'])}</p><div class="card-bottom"><span>{p['reading_minutes']} 分钟阅读</span><a href="{path}" aria-label="阅读 {H(p['title'],quote=True)}">阅读全文 <span aria-hidden="true">↗</span></a></div></div></article>'''
+<p class="card-summary">{H(p['summary'])}</p><div class="card-bottom"><span>{p['reading_minutes']} 分钟阅读</span><span class="card-actions"><a class="paper-source" href="{H(p.get('paper',''),quote=True)}" target="_blank" rel="noopener noreferrer" aria-label="原始论文：{H(p['title'],quote=True)}">原论文</a><a href="{path}" aria-label="阅读 {H(p['title'],quote=True)}">阅读全文 <span aria-hidden="true">↗</span></a></span></div></div></article>'''
 
 
 def build_home(categories,posts,base):
@@ -110,13 +110,34 @@ def build_home(categories,posts,base):
     cats=''.join(category_pill(c,'./',sum(p['category']==c['slug'] for p in published)) for c in categories)
     cards=''.join(post_card(p,'./',i+1) for i,p in enumerate(published))
     count=len(published)
+
+    by_slug={p['slug']:p for p in published}
+    learning_paths=[
+        ('01 · 经典机器学习与数学直觉','从线性模型、概率假设、间隔到树集成。',['linear-regression','naive-bayes','svm','pca','xgboost']),
+        ('02 · 视觉、序列与 Attention','沿 CNN、残差、循环记忆与序列转换理解 Transformer。',['cnn','resnet','rnn','lstm','seq2seq','transformer']),
+        ('03 · 优化、预训练与微调','理解梯度优化、语言模型训练，以及参数高效适配。',['sgd','adam','adamw','gpt-1','lora','qlora']),
+        ('04 · 数据与计算最优训练','从多来源语料治理走向训练数据与模型规模权衡。',['the-pile','fineweb','chinchilla']),
+        ('05 · 对齐、策略与推理','连接 CoT 采样、偏好目标与强化学习优化。',['chain-of-thought','self-consistency','ppo','rlhf','dpo','grpo']),
+        ('06 · 高效 Attention 与 Serving','从基础注意力进入旋转位置、GPU Kernel 和 KV 内存管理。',['transformer','rope','gqa','flashattention','kv-cache','pagedattention']),
+        ('07 · 深度强化学习','由 DQN 价值学习，走向确定性与随机 Actor–Critic。',['dqn','ddpg','ppo','sac'])
+    ]
+    path_cards=''.join(
+        '<article class="learning-card"><div class="learning-number">'+H(title)+'</div>'
+        +'<p>'+H(description)+'</p><ol>'
+        +''.join('<li><a href="'+article_url(by_slug[slug])+'">'+H(by_slug[slug]['title'])+'</a></li>'
+                 for slug in slugs if slug in by_slug)
+        +'</ol></article>'
+        for title,description,slugs in learning_paths
+        if all(slug in by_slug for slug in slugs)
+    )
     body=f'''<section class="hero container"><div class="hero-left"><div class="eyebrow"><span class="eyebrow-dot"></span> RESEARCH NOTES · TECHNICAL EXPLAINERS</div>
 <h1>把模型的<span class="marker">「为什么」</span><br>讲到<span class="serif-ital">可计算。</span></h1>
 <p class="hero-text">不从繁复符号开始，而从一个具体困惑开始。沿着原始论文的证据、逐步展开的结构图与可运行代码，理解深度学习的关键思想。</p>
 <div class="hero-actions"><a class="primary-link" href="#latest">开始阅读 <span>↗</span></a><a class="secondary-link" href="archive/">浏览全部 {count} 篇 ↗</a></div>
 </div><div class="hero-visual" aria-hidden="true"><div class="visual-caption">ANATOMY OF AN IDEA <span>№ 001</span></div><div class="visual-model"><div class="diagram-node">Input<br><small>x</small></div><div class="diagram-mid"><span class="thin-line">Identity</span><div class="diagram-box">Transformation<br><small>F(x)</small></div></div><div class="diagram-node out">Output<br><small>x + F(x)</small></div></div><div class="visual-bottom">OBSERVE → FORMALIZE → IMPLEMENT<span>·</span>VERIFY</div></div></section>
 <section id="categories" class="category-band"><div class="container"><div class="section-header"><div><div class="eyebrow muted">EXPLORE BY SUBJECT</div><h2>沿着问题脉络阅读</h2></div><p>持续生长的研究主题，而不只是按时间堆叠的文章。</p></div><div class="category-grid">{cats}</div></div></section>
-<section id="latest" class="container latest"><div class="section-header"><div><div class="eyebrow muted">ESSAYS & VISUAL EXPLANATIONS</div><h2>最新解读 <span class="count">{count:02d}</span></h2></div><p>完整文章、可独立查看的 SVG 与论文证据。</p></div>
+<section id="reading-paths" class="container learning-paths"><div class="section-header"><div><div class="eyebrow muted">GUIDED STUDY ROUTES</div><h2>按学习目标，串起论文</h2></div><p>每条路线由已发布文章组成；不是用目录占位凑篇数。</p></div><div class="learning-grid">{path_cards}</div></section>
+<section id="latest" class="container latest"><div class="section-header"><div><div class="eyebrow muted">ESSAYS & VISUAL EXPLANATIONS</div><h2>全部论文解读 <span class="count">{count:02d}</span></h2></div><p>完整文章、可独立查看的 SVG 与论文证据。</p></div>
 <div class="browse-controls"><label class="search-field" for="search-posts"><span aria-hidden="true">⌕</span><input id="search-posts" type="search" placeholder="搜索模型、术语或论文关键词" autocomplete="off" data-search-input></label><span class="visible-count" aria-live="polite" data-visible-count>共 {count} 篇文章</span></div>
 <div class="post-grid" data-post-grid>{cards}</div><p class="empty-result" hidden data-no-results>没有找到匹配的文章，可以尝试其他关键词。</p>
 <div class="section-more"><a href="archive/">查看所有文章与时间索引 <span>↗</span></a></div></section>
@@ -151,6 +172,29 @@ def write(out:Path,path:str,content:str):
     dest=out/path;dest.parent.mkdir(parents=True,exist_ok=True);dest.write_text(content,encoding='utf-8')
 
 
+def enrich_article_head(html:str,p:dict,base:str)->str:
+    """Add missing social/canonical tags to deployed articles, never duplicate existing ones."""
+    canonical=url_join(base,article_url(p))
+    head=html.split('</head>',1)[0] if '</head>' in html else html.split('</HEAD>',1)[0]
+    specs=[
+        (r'<link\b[^>]*rel=[^ >]+canonical[^ >]*',
+         '<link rel="canonical" href="'+H(canonical,quote=True)+'">'),
+        (r'<meta\b[^>]*property=[^ >]+og:url[^ >]*',
+         '<meta property="og:url" content="'+H(canonical,quote=True)+'">'),
+        (r'<meta\b[^>]*property=[^ >]+og:type[^ >]*',
+         '<meta property="og:type" content="article">'),
+        (r'<meta\b[^>]*property=[^ >]+og:title[^ >]*',
+         '<meta property="og:title" content="'+H(p['title'],quote=True)+'">'),
+        (r'<meta\b[^>]*property=[^ >]+og:description[^ >]*',
+         '<meta property="og:description" content="'+H(p['summary'],quote=True)+'">'),
+        (r'<meta\b[^>]*name=[^ >]+twitter:card[^ >]*',
+         '<meta name="twitter:card" content="summary">'),
+    ]
+    additions=[value for regex,value in specs if not re.search(regex,head,re.I)]
+    if not additions:return html
+    return re.sub(r'</head>',lambda m:'\n'.join(additions)+'\n'+m.group(0),html,count=1,flags=re.I)
+
+
 def build(root:Path,out:Path,base:str):
     base=base.rstrip('/')+'/'
     assert base.startswith('https://') or base.startswith('http://localhost:'), 'Provide valid HTTPS base URL'
@@ -164,6 +208,8 @@ def build(root:Path,out:Path,base:str):
     for p in published:
         src=root/'posts'/p['category']/p['slug'];dst=out/'posts'/p['category']/p['slug']
         shutil.copytree(src,dst,ignore=shutil.ignore_patterns('README.md','*.pyc','__pycache__','*.py','evidence.json'))
+        published_html=dst/'index.html'
+        published_html.write_text(enrich_article_head(published_html.read_text(encoding='utf-8'),p,base),encoding='utf-8')
     shutil.copytree(root/'site/assets',out/'assets')
     write(out,'.nojekyll','')
     write(out,'404.html',html_page(title='页面未找到 · xm-posts',description='你访问的页面不存在。',canonical=url_join(base,'404.html'),body='<div class="container category-empty not-found"><h1>这条路径尚未被写下。</h1><p>页面可能移动了，或文章尚未正式发布。</p><a href="./">回到首页 ↗</a></div>'))

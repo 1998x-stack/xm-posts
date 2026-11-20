@@ -903,6 +903,28 @@
     "illustration": "mcts"
   },
   {
+    "slug": "reinforce",
+    "title": "Understanding REINFORCE",
+    "subtitle": "为什么不需要对环境求导，就能从随机行动和回报中学习？",
+    "category": "reinforcement-learning",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 26,
+    "tags": [
+      "REINFORCE",
+      "Policy Gradient",
+      "Score Function",
+      "Monte Carlo",
+      "Variance Reduction",
+      "Baseline",
+      "Williams 1992"
+    ],
+    "summary": "从两动作概率学习切入，以 Williams 1992 原文为证据推导 score-function 梯度、伯努利 logit、原始 eligibility 规则，再区分现代 reward-to-go 与 baseline，配五幅机制图、精确枚举交互及可复现 Python 测试。",
+    "paper": "https://doi.org/10.1007/BF00992696",
+    "illustration": "reinforce"
+  },
+  {
     "slug": "noisynet",
     "title": "Understanding NoisyNet",
     "subtitle": "为什么可学习的参数噪声能带来更连贯的强化学习探索？",
