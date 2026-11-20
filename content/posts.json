@@ -1350,6 +1350,7 @@
     ],
     "summary": "精读 Fawcett 2006、Hanley–McNeil 1982、Davis–Goadrich 2006，从混淆矩阵、阈值 ROC、积分面积与成对排序、并列得分、类别基率和 PR/AP 区别到阈值决策、校准与不确定性；包含五幅独立 SVG、原生 MathML、交互阈值实验、证据账本及 Python 确定性测试。",
     "paper": "https://doi.org/10.1016/j.patrec.2005.10.010",
-    "illustration": "roc-auc"
+    "illustration": "roc-auc",
+    "topic": "classification-metrics-roc"
   }
 ]

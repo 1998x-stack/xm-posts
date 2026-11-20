@@ -457,8 +457,14 @@
         "slug": "ablations",
         "title": "Ablations & Evidence"
       },
-      "Classification Metrics & ROC Analysis",
-      "Imbalanced Classification & PR Analysis"
+      {
+        "slug": "classification-metrics-roc",
+        "title": "Classification Metrics & ROC Analysis"
+      },
+      {
+        "slug": "imbalanced-classification-pr",
+        "title": "Imbalanced Classification & PR Analysis"
+      }
     ]
   }
 ]

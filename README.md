@@ -272,3 +272,7 @@ Neural Gating 位于 `posts/architectures/neural-gating/`，归入 **Architectur
 ## MobileNet / Efficient & Mobile CNNs
 
 MobileNet 归入 `architectures` → **Convolutional Neural Networks & Vision** → **Efficient & Mobile CNNs**，无需新建一级分类。文章 [`Understanding MobileNet`](posts/architectures/mobilenet/index.html) 位于 `posts/architectures/mobilenet/`，以 2017 原论文为主线，区分 V2 逆残差、V3 NAS/SE 与 V4 UIB/Mobile MQA。包含五幅 SVG、MathML、交互成本分析、Python 验证及证据台账。
+
+### 新增：Classification Evaluation / ROC-AUC
+
+- **Understanding ROC-AUC**：从混淆矩阵、阈值扫描与成对排序推导 ROC-AUC，并比较 PR / AP、基率、校准及实际工作点。源文件：[`posts/evaluation/roc-auc/`](posts/evaluation/roc-auc/index.html)；主要文献：Fawcett (2006), https://doi.org/10.1016/j.patrec.2005.10.010。
