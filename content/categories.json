@@ -372,6 +372,38 @@
     ]
   },
   {
+    "slug": "storage-indexing",
+    "title": "存储与索引",
+    "english": "Storage & Indexing",
+    "description": "从页式存储、B+ Tree 有序索引到 LSM Tree、日志与并发控制，理解数据库和存储引擎如何在读写、空间与一致性之间权衡。区别于 GPU 算子系统与面向向量语义召回的 Retrieval & RAG。",
+    "topics": [
+      {
+        "slug": "ordered-tree-indexes",
+        "title": "Ordered Tree Indexes & B+ Trees"
+      },
+      {
+        "slug": "lsm-write-path",
+        "title": "LSM Trees, SSTables & Compaction"
+      },
+      {
+        "slug": "hash-and-probabilistic-indexes",
+        "title": "Hash Indexes & Probabilistic Filters"
+      },
+      {
+        "slug": "pages-buffer-management",
+        "title": "Pages, Buffer Pools & Storage Layout"
+      },
+      {
+        "slug": "transactions-recovery",
+        "title": "Transactions, WAL & Recovery"
+      },
+      {
+        "slug": "concurrency-mvcc",
+        "title": "Concurrency, Latching & MVCC"
+      }
+    ]
+  },
+  {
     "slug": "retrieval-rag",
     "title": "检索与 RAG",
     "english": "Retrieval & RAG",

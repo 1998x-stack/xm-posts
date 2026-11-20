@@ -1,0 +1,92 @@
+[
+  {
+    "id": "BT01",
+    "claim": "Bayer and McCreight's classic multiway balanced index appeared in a 1970 workshop and a 1972 Acta Informatica paper; paper is on B-trees, not every later B+ tree variant.",
+    "kind": "paper-claim",
+    "source_url": "https://doi.org/10.1007/BF00288683",
+    "locator": "Acta Informatica 1 (1972), 173–189, title and abstract",
+    "status": "verified",
+    "notes": "1970 conference version DOI 10.1145/1734663.1734671. Avoid attributing linked leaves to the original B-tree paper."
+  },
+  {
+    "id": "BT02",
+    "claim": "B+ trees use linked leaves with full searchable entries at leaves; internal nodes retain routing copies, improving range traversal.",
+    "kind": "course-material",
+    "source_url": "https://cs.brown.edu/courses/csci1270/website_2021/project/b%2Btree.html",
+    "locator": "CSCI 1270 B+Trees and Cursors",
+    "status": "verified",
+    "notes": "Brown's teaching variant. Real engines have differing separator/fence key representations."
+  },
+  {
+    "id": "BT03",
+    "claim": "On a B+ leaf split, the right leaf's separator key is copied into the parent while the key remains at leaf level.",
+    "kind": "course-material",
+    "source_url": "https://cs.brown.edu/courses/csci1270/website_2021/project/b%2Btree.html",
+    "locator": "B+Trees > Insertion",
+    "status": "verified",
+    "notes": "Explained for the min-right-child separator convention used by the toy algorithm."
+  },
+  {
+    "id": "BT04",
+    "claim": "PostgreSQL B-Tree index pages form doubly linked levels and page splitting may cascade through parent pages and create new root.",
+    "kind": "modern-implementation",
+    "source_url": "https://www.postgresql.org/docs/current/btree.html",
+    "locator": "Section 65.1.4.1 Structure and Section 65.1.4.2",
+    "status": "verified",
+    "notes": "Implementation terminology says B-Tree; does not claim direct correspondence to every didactic invariant."
+  },
+  {
+    "id": "BT05",
+    "claim": "PostgreSQL MVCC version churn and deduplication affect physical leaf index contents.",
+    "kind": "modern-implementation",
+    "source_url": "https://www.postgresql.org/docs/current/btree.html",
+    "locator": "Section 65.1.4.2 and 65.1.4.3",
+    "status": "verified",
+    "notes": "A tuple points to a table row; duplicate keys can be represented as posting lists."
+  },
+  {
+    "id": "BT06",
+    "claim": "Leading equality constraints are generally most useful for PostgreSQL multicolumn B-Tree indexes.",
+    "kind": "modern-implementation",
+    "source_url": "https://www.postgresql.org/docs/current/indexes-multicolumn.html",
+    "locator": "Multicolumn indexes section",
+    "status": "verified",
+    "notes": "Avoid universal claims about query planners and index-only scans."
+  },
+  {
+    "id": "BT07",
+    "claim": "SQLite distinguishes table B-trees and index B-trees with different leaf and interior cell formats.",
+    "kind": "modern-implementation",
+    "source_url": "https://www.sqlite.org/fileformat.html",
+    "locator": "B-tree Pages section and page cell formats",
+    "status": "verified",
+    "notes": "Counterexample to unqualified assertions about physical row placement."
+  },
+  {
+    "id": "BT08",
+    "claim": "For max internal children C=4 and leaf capacity L=3, inserting 35 into [20,25,30] splits into [20,25] and [30,35], copying 30 to the parent.",
+    "kind": "toy-derivation",
+    "source_url": "https://cs.brown.edu/courses/csci1270/website_2021/project/b%2Btree.html",
+    "locator": "Independent worked example following B+ split algorithm",
+    "status": "derived",
+    "notes": "Arithmetic/invariant demonstration only; not a database benchmark."
+  },
+  {
+    "id": "BT09",
+    "claim": "With root [20,30,40], inserting 37 and 38 induces leaf split at 37 and root separator overflow, yielding root [37].",
+    "kind": "toy-derivation",
+    "source_url": "https://cs.brown.edu/courses/csci1270/website_2021/project/b%2Btree.html",
+    "locator": "Independent worked example and Python tests",
+    "status": "derived",
+    "notes": "The internal split promotes 37; the leaf retains 37."
+  },
+  {
+    "id": "BT10",
+    "claim": "Point lookup uses O(log_F N) pages; a dense ordered range scan has an indicative O(log_F N + K/L) page cost under stated assumptions.",
+    "kind": "derived-complexity",
+    "source_url": "https://cs.brown.edu/courses/csci1270/website_2021/project/b%2Btree.html",
+    "locator": "Page-oriented B+ tree structure; asymptotic derivation from fanout and leaf chain",
+    "status": "derived",
+    "notes": "Not a wall-clock benchmark; ignores heap fetch, cache, fragmentation, and I/O concurrency."
+  }
+]
