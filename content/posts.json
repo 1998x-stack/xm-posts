@@ -1128,5 +1128,27 @@
     "summary": "精读 Devlin et al. NAACL 2019：从因果注意力与双向上下文的矛盾出发，逐层图解 Encoder、输入三重嵌入、MLM 15%/80-10-10、NSP、任务微调及原论文消融；含六幅独立 SVG、原生 MathML、交互式遮蔽实验、证据账本与纯 Python 测试，并区分 RoBERTa 的后续研究。",
     "paper": "https://aclanthology.org/N19-1423/",
     "illustration": "bert"
+  },
+  {
+    "slug": "rearrangement-inequalities",
+    "title": "Understanding Rearrangement Inequalities",
+    "subtitle": "从同序配对、von Neumann 迹不等式到多序列最小值为何困难？",
+    "category": "foundations",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 25,
+    "tags": [
+      "Rearrangement Inequalities",
+      "Matrix Trace Inequalities",
+      "von Neumann",
+      "Doubly Stochastic Matrices",
+      "Singular Values",
+      "Three-dimensional Assignment",
+      "Math"
+    ],
+    "summary": "以苏剑林《重排不等式及其推广》为线索，重建局部交换证明、双随机矩阵与迹不等式的谱桥梁，区分对称特征值版和一般奇异值版；通过三序列均衡反例、半正定三矩阵迹负值反例及36种排列交互/纯 Python 断言核对适用边界。",
+    "paper": "https://spaces.ac.cn/archives/11910",
+    "illustration": "rearrangement"
   }
 ]
