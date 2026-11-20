@@ -361,5 +361,26 @@
     "summary": "以 Bottou 2010 为主线，拆解全批量与随机梯度的计算路径、条件无偏、Mini-batch 方差、步长计划与有限算力权衡；配七幅图、可交互一维算例和纯 Python 测试。",
     "paper": "https://bottou.org/papers/bottou-2010",
     "illustration": "sgd"
+  },
+  {
+    "slug": "rnn",
+    "title": "Understanding RNN",
+    "subtitle": "从循环记忆到时间反向传播：一条状态链为何既有力量也有局限？",
+    "category": "architectures",
+    "status": "published",
+    "published": "2026-11-20",
+    "updated": "2026-11-20",
+    "reading_minutes": 30,
+    "tags": [
+      "RNN",
+      "Recurrent Neural Network",
+      "Elman Network",
+      "Sequence Modeling",
+      "BPTT",
+      "Vanishing Gradient"
+    ],
+    "summary": "以 Elman 1990 为起点，从时间反馈、时序 XOR、状态方程、BPTT 与梯度消失/爆炸渐进解析 RNN；含 12 节正文、4 幅原创独立 SVG、离线 MathML、互动数值演示、纯 Python 梯度校验与论文证据台账。",
+    "paper": "https://doi.org/10.1207/S15516709COG1402_1",
+    "illustration": "rnn"
   }
 ]
