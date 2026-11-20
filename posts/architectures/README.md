@@ -66,3 +66,9 @@ RoPE 位于 `posts/architectures/rope/`，主题为 **Positional Encoding**；�
 ## Efficient & Mobile CNNs
 
 - [Understanding MobileNet](mobilenet/index.html)：从深度可分离卷积、α/ρ 与 V1 原论文实验到 V2/V3/V4 演进；后续接纳 ShuffleNet、MnasNet、EfficientNet，不设重复一级分类。
+
+
+## Gating & Multiplicative Interactions — SwiGLU
+
+- [Understanding SwiGLU](swiglu/index.html)：Shazeer 2020 的三投影 FFN、SiLU 门控、GEGLU/ReGLU 对照、T5 证据与现代 PaLM/LLaMA。
+- 与 [Understanding Neural Gating](neural-gating/index.html) 共享现有 `gating-mechanisms` 二级主题，不重复增设一级分类。

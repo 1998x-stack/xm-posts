@@ -5,3 +5,5 @@
 新文章放在 `posts/classical-ml/<slug>/index.html`，配套 `assets/*.svg` 和 `evidence.json`。只有在 `content/posts.json` 中标记为 `published` 的完整文章才进入 GitHub Pages。
 
 已发布文章：[Understanding Decision Tree](decision-tree/index.html)（ID3、CART、C4.5、Gini、回归与剪枝）；[Understanding SVM](svm/index.html)（最大间隔、对偶与核方法）。
+
+[Understanding GMM](gmm/index.html) 从混合密度、潜变量与软责任走到 EM 交替优化、BIC 和协方差选型，作为概率模型下的 **Mixture Models & Density Estimation** 二级主题。
