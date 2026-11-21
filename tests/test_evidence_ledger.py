@@ -21,6 +21,8 @@ def test_every_published_article_has_a_traceable_evidence_ledger():
         result = validate_evidence_ledger(evidence)
         assert result["pass"], f"{post['slug']}: {result['failures']}"
         assert result["claim_count"] >= 1, post["slug"]
+        missing_notes = [warning for warning in result["warnings"] if "notes should explain" in warning]
+        assert not missing_notes, f"{post['slug']}: {missing_notes}"
 
 
 def test_evidence_ledger_rejects_untraceable_claims(tmp_path):
@@ -44,5 +46,4 @@ def test_unverified_evidence_is_visible_as_a_warning_not_silently_passed(tmp_pat
     ]), encoding="utf-8")
     result = validate_evidence_ledger(path)
     assert result["pass"]
-    assert any("unverified" in warning for warning in result["warnings"])
     assert any("unverified" in warning for warning in result["warnings"])
