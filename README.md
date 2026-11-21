@@ -50,7 +50,9 @@
 - **Training / Reinforcement Learning**：预训练、知识蒸馏与教师—学生迁移、对齐、PEFT、价值与策略学习及搜索。
 - **Reasoning / Agents & Tool Use**：推理策略、工具调用、规划、Agent Memory、Context Engineering、Agentic RL、Harness Engineering 与可验证智能体工作流。
 - **Retrieval & RAG / Inference**：向量检索、增强生成、解码、KV Cache、请求调度与 Serving。
-- **Systems / Datasets / Evaluation / Multimodal**：算子与 GPU、数据、评测和多模态。
+- **Systems / Datasets / Evaluation / Multimodal**：GPU 算子、训练语料、模型评测与多模态表示。
+- **Knowledge Representation**：Ontology、RDF/OWL、知识图谱、语义互操作与逻辑推理。
+- **Decision Models**：概率校准、代价敏感决策、风险预算、选择性预测与模型路由。
 - **Storage & Indexing**：B+ Tree、存储页、LSM、事务与索引结构。
 
 以上仅是导航概览。**分类、稳定 slug 和二级主题的唯一数据源是 [`content/categories.json`](content/categories.json)**；每篇文章在 `content/posts.json` 中只能有一个主 `category` 和 `topic`，跨领域关系使用 `tags`。详细约定见 [`docs/taxonomy.md`](docs/taxonomy.md)。
