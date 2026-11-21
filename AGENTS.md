@@ -8,6 +8,8 @@ Create evidence-grounded, pedagogically progressive, illustrated technical artic
 
 ## 2. Know your boundaries
 
+- **Cross-repository cleanup standard:** use [`docs/repository-cleanup.md`](docs/repository-cleanup.md) as the canonical per-article and whole-site audit checklist. Keep machine-verifiable results separate from human scientific/editorial judgments; never describe an automated pass as scientific verification. Record `PASS`, `FAIL`, `NOT VERIFIED`, or `N/A` with evidence, and prioritize P0/P1 defects before cosmetic cleanup.
+
 - **Source of truth** for categories and stable second-level topic IDs: `content/categories.json` (`topics: [{slug,title}]`); for post publication, explicit `category` + `topic`, cards, RSS and sitemap: `content/posts.json`.
 - **Source of truth** for article HTML and assets: `posts/<category>/<slug>/index.html`, `assets/*.svg`, `evidence.json`; optional minimal code lives beside the article.
 - **Source of truth for article card covers:** published entries in `content/posts.json` must contain `cover.src` (a real, local `assets/*.svg` from that same article) and `cover.caption` (one distinctive, concept-specific explanatory sentence). The builder uses these for homepage and category cards. Do not add a fallback cover in `scripts/build_site.py`.
