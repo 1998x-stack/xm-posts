@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 330" role="img" aria-labelledby="clip-fig3-title clip-fig3-desc">
+<title id="clip-fig3-title">CLIP 零样本分类推理流程</title>
+<desc id="clip-fig3-desc">一张新图像和多个候选类别提示分别通过图像与文本编码器，计算归一化向量余弦相似度，再经 softmax 得到类别分布。</desc>
+<defs><marker id="clip3-arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0 0 L9 3 L0 6 Z" fill="#527a7b"/></marker></defs>
+<rect x="18" y="18" width="864" height="294" rx="18" fill="#f7f8f5"/>
+<rect x="45" y="78" width="132" height="70" rx="12" fill="#e7f0ff" stroke="#91afd9" stroke-width="2"/><text x="111" y="108" text-anchor="middle" fill="#294c70" font-size="16" font-weight="700">新图像</text><text x="111" y="130" text-anchor="middle" fill="#456784" font-size="13">未见过的样本</text>
+<rect x="45" y="205" width="132" height="70" rx="12" fill="#fff0e7" stroke="#d8a27f" stroke-width="2"/><text x="111" y="232" text-anchor="middle" fill="#805337" font-size="15" font-weight="700">候选文本</text><text x="111" y="254" text-anchor="middle" fill="#956642" font-size="12">狗 / 狼 / 猫 …</text>
+<path d="M177 113 H222" stroke="#527a7b" stroke-width="3" marker-end="url(#clip3-arrow)"/><path d="M177 240 H222" stroke="#527a7b" stroke-width="3" marker-end="url(#clip3-arrow)"/>
+<rect x="232" y="78" width="156" height="70" rx="12" fill="#dce9ff" stroke="#86a8d8" stroke-width="2"/><text x="310" y="108" text-anchor="middle" fill="#294c70" font-size="16" font-weight="700">图像编码器</text><text x="310" y="130" text-anchor="middle" fill="#456784" font-size="12">Image Encoder</text>
+<rect x="232" y="205" width="156" height="70" rx="12" fill="#ffeadb" stroke="#d69a6d" stroke-width="2"/><text x="310" y="235" text-anchor="middle" fill="#805337" font-size="16" font-weight="700">文本编码器</text><text x="310" y="257" text-anchor="middle" fill="#956642" font-size="12">Text Encoder</text>
+<path d="M388 113 H435 V165 H470" fill="none" stroke="#527a7b" stroke-width="3" marker-end="url(#clip3-arrow)"/><path d="M388 240 H435 V190 H470" fill="none" stroke="#527a7b" stroke-width="3" marker-end="url(#clip3-arrow)"/>
+<rect x="480" y="132" width="166" height="92" rx="13" fill="#e2f2e9" stroke="#78ae93" stroke-width="2"/><text x="563" y="164" text-anchor="middle" fill="#245f4b" font-size="16" font-weight="700">余弦相似度</text><text x="563" y="190" text-anchor="middle" fill="#34745d" font-size="14">÷ τ → Softmax</text>
+<path d="M646 178 H686" stroke="#527a7b" stroke-width="3" marker-end="url(#clip3-arrow)"/>
+<rect x="696" y="102" width="158" height="150" rx="13" fill="#fff" stroke="#9fc5b0" stroke-width="2"/>
+<text x="775" y="128" text-anchor="middle" fill="#245f4b" font-size="16" font-weight="700">类别概率</text>
+<text x="714" y="158" fill="#526d70" font-size="13">狗</text><rect x="744" y="146" width="88" height="14" rx="7" fill="#dce8e1"/><rect x="744" y="146" width="70" height="14" rx="7" fill="#3f9474"/>
+<text x="714" y="190" fill="#526d70" font-size="13">狼</text><rect x="744" y="178" width="88" height="14" rx="7" fill="#dce8e1"/><rect x="744" y="178" width="16" height="14" rx="7" fill="#d39a63"/>
+<text x="714" y="222" fill="#526d70" font-size="13">猫</text><rect x="744" y="210" width="88" height="14" rx="7" fill="#dce8e1"/><rect x="744" y="210" width="5" height="14" rx="7" fill="#9a91c8"/>
+<text x="450" y="295" text-anchor="middle" fill="#526d70" font-size="14">类别名称由任务提供；模型不需要为每个新类别重新训练分类头</text>
+</svg>

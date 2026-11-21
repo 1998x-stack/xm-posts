@@ -1,0 +1,119 @@
+[
+  {
+    "id": "E01",
+    "kind": "method",
+    "claim": "Ralph is presented as a technique whose purest form is a Bash loop that repeatedly invokes a coding agent with the same prompt.",
+    "source_url": "https://ghuntley.com/ralph/",
+    "locator": "Original article, opening definition; 2025-07-14",
+    "status": "verified",
+    "notes": "Primary source by Geoffrey Huntley; an engineering-method description, not a peer-reviewed paper."
+  },
+  {
+    "id": "E02",
+    "kind": "task_decomposition",
+    "claim": "The author emphasizes one item per loop and deterministic allocation of the specification and prioritized plan to each iteration.",
+    "source_url": "https://ghuntley.com/ralph/",
+    "locator": "Sections 'first some fundamentals' and 'one item per loop'",
+    "status": "verified",
+    "notes": "Author's stated practice; not a universal theorem about optimal task size."
+  },
+  {
+    "id": "E03",
+    "kind": "verification",
+    "claim": "The original method uses tests/builds, type checking and other forms of backpressure to reject invalid code generation.",
+    "source_url": "https://ghuntley.com/ralph/",
+    "locator": "Sections 'phase two: backpressure' and 'capture the importance of tests in the moment'",
+    "status": "verified",
+    "notes": "Primary source; recommendations are reported as the author's engineering practice."
+  },
+  {
+    "id": "E04",
+    "kind": "failure_modes",
+    "claim": "The author describes incorrect code search conclusions, duplicate implementations, incorrect specifications, placeholder implementations and broken builds as failure modes.",
+    "source_url": "https://ghuntley.com/ralph/",
+    "locator": "Sections 'don't assume it's not implemented', 'no cheating' and 'you will wake up to a broken code base'",
+    "status": "verified",
+    "notes": "Qualitative examples from the author's project experience; not a measured failure-rate study."
+  },
+  {
+    "id": "E05",
+    "kind": "scope",
+    "claim": "The original author expresses a preference for greenfield projects and cautions against directly applying the technique to an existing codebase.",
+    "source_url": "https://ghuntley.com/ralph/",
+    "locator": "Closing discussion, lines discussing existing codebases and greenfield scope",
+    "status": "verified",
+    "notes": "This is the author's personal scope judgment, not a universal restriction."
+  },
+  {
+    "id": "E06",
+    "kind": "implementation",
+    "claim": "The official Claude Code plugin implements an iterative loop through a Stop hook that re-feeds the same prompt in the current session.",
+    "source_url": "https://github.com/anthropics/claude-plugins-official/tree/main/plugins/ralph-loop",
+    "locator": "Plugin README, Core Concept and Quick Start",
+    "status": "verified",
+    "notes": "Product-specific implementation; unlike a fresh-process shell loop, this does not imply a new context window per iteration."
+  },
+  {
+    "id": "E07",
+    "kind": "implementation",
+    "claim": "The official Stop Hook reads a project state file, checks iteration limits, session ID and completion promise, then either allows exit or blocks exit and re-injects the prompt.",
+    "source_url": "https://github.com/anthropics/claude-plugins-official/blob/main/plugins/ralph-loop/hooks/stop-hook.sh",
+    "locator": "stop-hook.sh: state file, session isolation, max iteration, promise comparison and continuation sections",
+    "status": "verified",
+    "notes": "Implementation detail; exact behavior can change with plugin versions."
+  },
+  {
+    "id": "E08",
+    "kind": "product",
+    "claim": "The official marketplace describes the plugin as suitable for well-defined tasks with clear success criteria and automated verification.",
+    "source_url": "https://claude.com/marketplace/plugins/ralph-loop",
+    "locator": "Plugin description and usage guidance",
+    "status": "verified",
+    "notes": "Vendor product guidance, not an independent benchmark."
+  },
+  {
+    "id": "E09",
+    "kind": "derivation",
+    "claim": "The state tuple, update equations and completion predicate are a teaching abstraction for reasoning about Ralph's outer control loop.",
+    "source_url": "https://ghuntley.com/ralph/",
+    "locator": "Independent mathematical abstraction based on the described execution process",
+    "status": "illustrative",
+    "notes": "Not equations from Huntley's article and not a proof of convergence."
+  },
+  {
+    "id": "E10",
+    "kind": "visualization",
+    "claim": "The SVGs and interactive trajectories illustrate task decomposition, context/state separation, verification feedback and possible oscillation.",
+    "source_url": "https://ghuntley.com/ralph/",
+    "locator": "Independent instructional diagrams and deterministic browser simulation",
+    "status": "illustrative",
+    "notes": "No empirical measurements are encoded in these diagrams."
+  },
+  {
+    "id": "E11",
+    "kind": "code",
+    "claim": "The Python stop-gate example and tests demonstrate how to keep a completion promise separate from objective verification.",
+    "source_url": "https://github.com/anthropics/claude-plugins-official/tree/main/plugins/ralph-loop",
+    "locator": "Independent minimal deterministic teaching implementation",
+    "status": "illustrative",
+    "notes": "Tests only the local decision predicate; it is not a production Ralph orchestrator."
+  },
+  {
+    "id": "E12",
+    "kind": "engineering",
+    "claim": "Worktree isolation, least privilege, budget limits and human approval for irreversible operations are recommended safety controls.",
+    "source_url": "https://claude.com/marketplace/plugins/ralph-loop",
+    "locator": "Independent engineering recommendations; not measured by the original technique",
+    "status": "illustrative",
+    "notes": "General safety guidance; do not attribute these controls to the original Bash loop."
+  },
+  {
+    "id": "E13",
+    "kind": "safety",
+    "claim": "The official plugin README documents an unlimited default for --max-iterations and recommends an explicit finite iteration cap as an escape hatch.",
+    "source_url": "https://github.com/anthropics/claude-plugins-official/blob/main/plugins/ralph-loop/README.md",
+    "locator": "Options: --max-iterations default; Prompt Writing Best Practices / Escape Hatches",
+    "status": "verified",
+    "notes": "Product-specific README behavior; verify the installed plugin version before relying on defaults."
+  }
+]

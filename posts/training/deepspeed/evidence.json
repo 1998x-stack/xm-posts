@@ -1,0 +1,128 @@
+[
+  {
+    "id": "D01",
+    "claim": "在论文采用的混合精度 Adam 训练假设下，模型参数相关状态包含 FP16 参数 2Ψ、FP16 梯度 2Ψ、FP32 主参数 4Ψ、Adam 一阶矩 4Ψ 与二阶矩 4Ψ，总计 16Ψ bytes。",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/abs/1910.02054",
+    "locator": "Section 3.1, Mixed-Precision Training",
+    "status": "verified",
+    "notes": "这是论文中特定 mixed-precision Adam 状态布局，不是所有优化器/精度配置的通用常数。"
+  },
+  {
+    "id": "D02",
+    "claim": "ZeRO Stage 1 将 optimizer states 分片，模型状态显存从 16Ψ 降至 4Ψ + 12Ψ/N；论文报告模型状态约 4× reduction。",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/abs/1910.02054",
+    "locator": "Section 5.1, P_os: Optimizer State Partitioning",
+    "status": "verified",
+    "notes": "N 是 data-parallel degree；不包括 activation 与其他 residual memory。"
+  },
+  {
+    "id": "D03",
+    "claim": "ZeRO Stage 2 再将 gradients 分片，模型状态显存降至 2Ψ + 14Ψ/N；论文报告约 8× reduction。",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/abs/1910.02054",
+    "locator": "Section 5.2, P_g: Gradient Partitioning",
+    "status": "verified",
+    "notes": "论文中的 Reduce-Scatter 将归约梯度分配到负责更新相应参数分片的 rank。"
+  },
+  {
+    "id": "D04",
+    "claim": "ZeRO Stage 3 将 optimizer states、gradients 与 parameters 全部切分，理想模型状态显存为 16Ψ/N；论文分析通信量约为 DP 基线的 1.5×。",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/abs/1910.02054",
+    "locator": "Section 5.3, P_p: Parameter Partitioning; Section 7 Communication Analysis",
+    "status": "verified",
+    "notes": "1.5× 是原论文通信模型下的分析值，不是所有版本与集群的固定实测倍率。"
+  },
+  {
+    "id": "D05",
+    "claim": "在 7.5B 参数、64 路数据并行的论文示例中，ZeRO Stage 0/1/2/3 的模型状态显存估算分别约为 120/31.4/16.6/1.88 GB per device。",
+    "kind": "experiment",
+    "source_url": "https://arxiv.org/abs/1910.02054",
+    "locator": "Figure 1; Table 1; Sections 5.1–5.3",
+    "status": "verified",
+    "notes": "表中数值是模型状态内存估算，不是包含 activation 与 temporary buffers 的完整峰值显存。"
+  },
+  {
+    "id": "D06",
+    "claim": "原始 ZeRO 论文报告在 400 张 NVIDIA V100 上训练 100B 级模型，aggregate throughput 超过 15 PFLOPs。",
+    "kind": "experiment",
+    "source_url": "https://arxiv.org/abs/1910.02054",
+    "locator": "Abstract; Section 1; Section 10",
+    "status": "verified",
+    "notes": "历史实验结果，硬件与系统环境不可直接外推为当前 GPU 的 benchmark。"
+  },
+  {
+    "id": "D07",
+    "claim": "ZeRO-Offload 通过将数据与优化器计算卸载到 CPU，论文报告可在单张 V100 上训练超过 13B 参数模型，并给出 10B 模型的特定吞吐实验。",
+    "kind": "experiment",
+    "source_url": "https://arxiv.org/abs/2101.06840",
+    "locator": "Abstract; system design and evaluation",
+    "status": "verified",
+    "notes": "只保留论文摘要级别的结果；性能依赖特定 V100、模型、batch 与实现。"
+  },
+  {
+    "id": "D08",
+    "claim": "ZeRO-Infinity 利用 GPU、CPU 与 NVMe 异构内存，并通过 bandwidth-centric partitioning 与 overlap-centric design 隐藏数据移动成本。",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/abs/2104.07857",
+    "locator": "Abstract; Sections 5–6",
+    "status": "verified",
+    "notes": "Offload 并非免费扩容；PCIe、CPU、NVMe 带宽和调度决定效率。"
+  },
+  {
+    "id": "D09",
+    "claim": "ZeRO-Infinity 论文报告在 512 张 NVIDIA V100 上实现超过 25 PFLOPs、约 40% peak throughput。",
+    "kind": "experiment",
+    "source_url": "https://arxiv.org/abs/2104.07857",
+    "locator": "Abstract",
+    "status": "verified",
+    "notes": "历史论文硬件配置，不代表任意 offload 配置均有相同效率。"
+  },
+  {
+    "id": "D10",
+    "claim": "ZeRO++ 由 qwZ、hpZ 与 qgZ 三项通信优化组成；论文摘要报告通信量相对 ZeRO 基线减少约 4×，并在 384 GPU 实验中报告最高约 2.16× throughput。",
+    "kind": "experiment",
+    "source_url": "https://arxiv.org/abs/2306.10209",
+    "locator": "Abstract; Sections 3–5",
+    "status": "verified",
+    "notes": "论文中不同实验段落有不同的最高吞吐对照；文章采用摘要中 384-GPU 结果，不与其他表格混合。"
+  },
+  {
+    "id": "D11",
+    "claim": "DeepSpeed 官方大模型训练指南将 ZeRO-based training 与 3D Parallelism 作为两条主要路线，并说明 3D Parallelism 组合 DP、TP 与 PP。",
+    "kind": "modern-implementation",
+    "source_url": "https://www.deepspeed.ai/tutorials/large-models-w-deepspeed/",
+    "locator": "Possible ways to train a large model",
+    "status": "verified",
+    "notes": "当前官方文档用于解释工程选型，不作为原始 ZeRO 论文结论。"
+  },
+  {
+    "id": "D12",
+    "claim": "DeepSpeed 官方训练文档提供 Automatic Tensor Parallelism、Ulysses/sequence parallelism、profiling 与 checkpointing 等扩展能力。",
+    "kind": "modern-implementation",
+    "source_url": "https://www.deepspeed.ai/tutorials/",
+    "locator": "Tutorial index; Automatic Tensor Parallelism (Training); Ulysses tutorials",
+    "status": "verified",
+    "notes": "功能与兼容性随 DeepSpeed 版本、PyTorch、CUDA 与模型适配情况变化。"
+  },
+  {
+    "id": "D13",
+    "claim": "DeepSpeed 官方旧版 Inference 文档提示 DeepSpeed-Inference v2 已演进为 DeepSpeed-FastGen。",
+    "kind": "modern-implementation",
+    "source_url": "https://www.deepspeed.ai/inference/",
+    "locator": "Inference Overview and Features notice",
+    "status": "verified",
+    "notes": "用于区分训练优化与现代推理服务路线；不要将旧 API 当成当前唯一推荐方案。"
+  },
+  {
+    "id": "D14",
+    "claim": "7.5B 参数、64 路 DP 的 Stage 0/1/2/3 十进制 GB 结果分别为 120、31.40625、16.640625、1.875。",
+    "kind": "toy-derivation",
+    "source_url": "https://arxiv.org/abs/1910.02054",
+    "locator": "Equations derived from Sections 3.1 and 5.1–5.3; independently checked in tests/test_deepspeed_memory.py",
+    "status": "derived",
+    "notes": "根据论文状态分片公式独立计算；仅代表模型状态，不是端到端峰值显存测量。"
+  }
+]

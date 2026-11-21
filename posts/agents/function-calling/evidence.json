@@ -1,0 +1,164 @@
+[
+  {
+    "id": "E01",
+    "kind": "protocol",
+    "claim": "OpenAI documents the tool-calling interaction as a multi-step flow: provide tools, receive a call, execute application code, return tool output, and receive a final answer or more calls.",
+    "source_url": "https://developers.openai.com/api/docs/guides/function-calling",
+    "locator": "The tool calling flow",
+    "status": "verified",
+    "notes": "Current official API guide checked 2026-11-21; describes the application-side execution boundary."
+  },
+  {
+    "id": "E02",
+    "kind": "schema",
+    "claim": "OpenAI strict function calling requires additionalProperties=false for each object and every property to be required; optional semantics need schema-compatible representation.",
+    "source_url": "https://developers.openai.com/api/docs/guides/function-calling",
+    "locator": "Strict mode",
+    "status": "verified",
+    "notes": "Provider-specific schema behavior; do not generalize this exact constraint to every vendor."
+  },
+  {
+    "id": "E03",
+    "kind": "protocol",
+    "claim": "Anthropic client tools return tool_use blocks and stop_reason tool_use; the application runs the tool and sends tool_result, while server tools may execute on Anthropic infrastructure.",
+    "source_url": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview",
+    "locator": "How tool use works; client and server tools",
+    "status": "verified",
+    "notes": "Current official Anthropic platform documentation checked 2026-11-21."
+  },
+  {
+    "id": "E04",
+    "kind": "research-method",
+    "claim": "Toolformer trains a language model to decide which APIs to call, when to call them, what arguments to pass, and how to incorporate returned results into future token prediction.",
+    "source_url": "https://arxiv.org/abs/2302.04761",
+    "locator": "Abstract and Figure 2",
+    "status": "verified",
+    "notes": "Primary paper; historical research result, not a claim about current hosted model behavior."
+  },
+  {
+    "id": "E05",
+    "kind": "dataset-and-evaluation",
+    "claim": "ToolLLM reports ToolBench with 16,464 real-world RESTful APIs across 49 categories, plus instruction construction, solution-path annotation and ToolEval.",
+    "source_url": "https://arxiv.org/abs/2307.16789",
+    "locator": "Abstract",
+    "status": "verified",
+    "notes": "Paper-reported dataset statistics; not a current API catalogue size."
+  },
+  {
+    "id": "E06",
+    "kind": "research-method",
+    "claim": "Gorilla combines API-call generation with document retrieval to adapt to changing API documentation and introduces APIBench using Hugging Face, TorchHub and TensorHub APIs.",
+    "source_url": "https://arxiv.org/abs/2305.15334",
+    "locator": "Abstract",
+    "status": "verified",
+    "notes": "Primary paper; retrieval is discussed as a way to ground API use in changing documentation."
+  },
+  {
+    "id": "E07",
+    "kind": "engineering-pattern",
+    "claim": "Anthropic Advanced Tool Use describes on-demand tool discovery, programmatic tool calling and tool-use examples to reduce context pressure and improve tool use.",
+    "source_url": "https://www.anthropic.com/research/advanced-tool-use",
+    "locator": "Introduction; Tool Search Tool; Programmatic Tool Calling",
+    "status": "verified",
+    "notes": "Anthropic Engineering article published 2025-11-24; internal performance figures are intentionally not generalized in this article."
+  },
+  {
+    "id": "E08",
+    "kind": "engineering-principle",
+    "claim": "Anthropic recommends choosing tools deliberately, namespacing capabilities, returning meaningful and token-efficient context, and evaluating tool descriptions and behavior with agents.",
+    "source_url": "https://www.anthropic.com/research/writing-tools-for-agents",
+    "locator": "Principles for writing effective tools",
+    "status": "verified",
+    "notes": "Anthropic Engineering article published 2025-09-11."
+  },
+  {
+    "id": "E09",
+    "kind": "protocol",
+    "claim": "MCP tools are discovered through tools/list and invoked through tools/call; the specification describes tools as model-controlled and recommends a human ability to deny invocations.",
+    "source_url": "https://modelcontextprotocol.io/specification/2025-06-18/server/tools",
+    "locator": "User Interaction Model; Listing Tools; Calling Tools",
+    "status": "verified",
+    "notes": "Protocol-level tool discovery and invocation do not themselves replace application authorization."
+  },
+  {
+    "id": "E10",
+    "kind": "security-guidance",
+    "claim": "OWASP recommends validating tool calls against user permissions, enforcing tool-specific parameter validation and least privilege, and treating retrieved/tool content as untrusted input.",
+    "source_url": "https://cheatsheetseries.owasp.org/cheatsheets/LLM_Prompt_Injection_Prevention_Cheat_Sheet.html",
+    "locator": "Agent-Specific Defenses; Least Privilege; Secure Implementation Pipeline",
+    "status": "verified",
+    "notes": "Security guidance; defenses must be enforced at the execution boundary rather than by prompt wording alone."
+  },
+  {
+    "id": "E11",
+    "kind": "evaluation-guidance",
+    "claim": "OpenAI recommends evaluating programmatic tool calling using task quality, evidence coverage, tokens, latency, cost, calls, retries, recovery and safety outcomes.",
+    "source_url": "https://developers.openai.com/api/docs/guides/tools-programmatic-tool-calling",
+    "locator": "Evaluate Programmatic Tool Calling",
+    "status": "verified",
+    "notes": "Official platform guidance; article adapts these dimensions into a broader end-to-end tool-use checklist."
+  },
+  {
+    "id": "E12",
+    "kind": "security-guidance",
+    "claim": "OpenAI guardrail and human-review guidance distinguishes automatic validation from approval pauses before high-impact side effects.",
+    "source_url": "https://developers.openai.com/api/docs/guides/agents/guardrails-approvals",
+    "locator": "Choose the right control; human-in-the-loop approvals",
+    "status": "verified",
+    "notes": "Official OpenAI developer documentation."
+  },
+  {
+    "id": "E13",
+    "kind": "teaching-example",
+    "claim": "The interactive weather tool and Python executor use a fixed local fixture and an explicit allowlist; they are illustrative and do not access live weather or prove production authorization.",
+    "source_url": "https://developers.openai.com/api/docs/guides/function-calling",
+    "locator": "Independent teaching example based on the documented tool-calling round trip",
+    "status": "illustrative",
+    "notes": "Deterministic pedagogy; not a real API integration or benchmark."
+  },
+  {
+    "id": "E14",
+    "kind": "derived-model",
+    "claim": "The success-probability decomposition is a conditional-probability chain-rule representation of tool selection, argument validity, execution and result integration.",
+    "source_url": "https://developers.openai.com/api/docs/guides/function-calling",
+    "locator": "Independent pedagogical decomposition of the multi-step call flow",
+    "status": "illustrative",
+    "notes": "No independence assumption is made; the terms are conditional probabilities."
+  },
+  {
+    "id": "E15",
+    "kind": "derived-model",
+    "claim": "The sequential-versus-parallel latency equations are simplified explanatory models that omit queueing, orchestration, retries and service contention.",
+    "source_url": "https://developers.openai.com/api/docs/guides/function-calling",
+    "locator": "Independent pedagogical latency model",
+    "status": "illustrative",
+    "notes": "Not a platform performance guarantee or measured benchmark."
+  },
+  {
+    "id": "E16",
+    "kind": "visualization",
+    "claim": "The five SVG figures are original diagrams illustrating the call loop, schema validation, parallel dependencies, tool ecosystem layers and security gates.",
+    "source_url": "https://developers.openai.com/api/docs/guides/function-calling",
+    "locator": "Original SVG files under posts/agents/function-calling/assets/",
+    "status": "illustrative",
+    "notes": "Teaching diagrams, not reproduced figures from the cited papers or vendor documentation."
+  },
+  {
+    "id": "E17",
+    "kind": "api-configuration",
+    "claim": "OpenAI tool_choice supports automatic selection, required calls, forcing a named function, restricting calls to allowed_tools, and none to disable tool use.",
+    "source_url": "https://developers.openai.com/api/docs/guides/function-calling",
+    "locator": "Additional configurations → Tool choice",
+    "status": "verified",
+    "notes": "Provider-specific configuration checked 2026-11-21; forcing selection does not grant runtime authorization."
+  },
+  {
+    "id": "E18",
+    "kind": "implementation-boundary",
+    "claim": "The Python teaching executor performs explicit hand-written checks for one fixed input shape and is not a general JSON Schema validator.",
+    "source_url": "https://developers.openai.com/api/docs/guides/function-calling",
+    "locator": "Independent teaching implementation",
+    "status": "illustrative",
+    "notes": "Production deployments should use a tested schema validator and then perform business and authorization checks."
+  }
+]

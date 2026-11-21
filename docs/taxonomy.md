@@ -101,3 +101,59 @@
 - 不新增一级分类。Loop Engineering 依赖 Harness 提供的工具、权限、沙箱和观测能力，但重点是跨运行的任务生命周期；Harness 主要描述单次运行时及其执行环境。
 - 与 ReAct（单次 Thought–Action–Observation）、Planning（计划生成与更新）、Memory（状态与经验保存）、Context Engineering（本轮信息选择与组装）、Agentic RL（训练与优化 Agent 策略）和 Agent Evaluation（任务结果测量）有关联但不等价。
 - 2026 年 Loop Engineering 文献仍处于探索阶段。引用仓库挖掘比例时必须说明启发式筛选分母；不能把观察性采用数据写成因果效率提升，也不能把预印本提出的构件称为统一行业标准。
+
+## 2026-11-21 知识体系扩展
+
+本批次以“先明确知识对象，再连接可验证的学习路径”为原则扩展专题。新增两个一级知识域，并为 Agent、训练、检索与评测补充边界清晰的二级专题。
+
+### 新增一级知识域
+
+- **`knowledge-representation` — Knowledge Representation & Semantic Technologies**
+  - `ontology-engineering`：本体工程与建模。
+  - `semantic-web-standards`：RDF、RDFS、OWL、SKOS 与 SPARQL。
+  - `knowledge-graphs`：知识图谱构建与查询。
+  - `knowledge-reasoning`：逻辑推理与一致性。
+  - `ontology-learning-alignment`：本体学习、匹配与 LLM 辅助工程。
+  - 边界：研究符号知识的显式语义建模、关系约束、查询与推理；不等同于向量检索或普通 RAG。
+
+- **`decision-models` — Probabilistic Decision Models**
+  - `typed-decision-models`：类型化决策模型。
+  - `cost-sensitive-decision-theory`：代价敏感决策理论。
+  - `probability-calibration`：概率校准。
+  - `risk-budgeting`：风险预算与统计保证。
+  - `selective-prediction`：选择性预测与拒绝决策。
+  - `decision-routing`：决策路由与委派。
+  - `robustness-and-bias`：鲁棒性、偏差与不变性。
+  - 边界：研究如何把模型输出的概率转化为可审计的行动决策；不把“最大概率类别”直接等同于“最优动作”。
+
+### 既有一级知识域的二级专题扩展
+
+- **`agents`**
+  - `reflection`：反思、自我批评与语言反馈。
+  - `autonomous-agents`：自主 Agent 系统与框架。
+  - `autonomous-execution`：自主执行与迭代控制。
+  - `tool-integration-protocols`：工具集成与互操作协议（含 MCP）。
+  - 与 `tool-calling` 的边界：Function Calling 关注单次结构化工具调用；MCP 关注 Host / Client / Server 间的协议互操作。
+  - 与 `harness-engineering` 的边界：Reflection 关注如何利用反馈修正行为；Harness 关注运行时、权限、工具、环境和验证基础设施。
+
+- **`training`**
+  - `supervised-finetuning`：监督微调与指令微调。
+  - `reward-hacking`：奖励黑客与规格博弈。
+  - 与 `distributed-training`、`checkpointing` 共同构成从训练目标、数据、优化到系统可靠性的学习路径。
+
+- **`retrieval-rag`**
+  - `query-understanding`：查询理解与对话式搜索。
+  - 先解析用户意图、实体、约束与上下文，再进入 Query Rewriting、Retrieval、Reranking 与 RAG；避免把查询理解和检索执行混为一谈。
+
+- **`evaluation`**
+  - `llm-as-a-judge`：LLM 评审器与 Judge 可靠性。
+  - 与 `agent-evaluation` 配合：前者研究评审器如何测量质量，后者研究 Agent 系统的任务成功、轨迹、可靠性、安全与成本。
+
+### 跨专题关系原则
+
+- **Function Calling → MCP → Harness Engineering**：从调用接口到协议互操作，再到受控运行时。
+- **Query Understanding → Retrieval / RAG → Context Engineering**：从理解需求到检索证据，再到组织推理上下文。
+- **SFT → Preference Optimization → Reward Hacking / Evaluation**：从监督目标到偏好优化，再到目标错配与测量审计。
+- **Ontology → Knowledge Graph → Retrieval / RAG**：显式语义知识与统计检索互补，不互相替代。
+- **Probability Calibration → Cost-sensitive Decision → Selective Prediction → Agent Routing**：从可信概率到风险敏感的执行、复核或拒绝。
+

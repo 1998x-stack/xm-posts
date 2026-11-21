@@ -1,0 +1,87 @@
+[
+  {
+    "id": "E01",
+    "claim": "MT-Bench and Chatbot Arena evaluate open-ended assistant quality with strong LLM judges and human preference comparisons; the paper reports over 80% agreement in its studied settings, comparable to human agreement.",
+    "kind": "primary-paper",
+    "source_url": "https://arxiv.org/abs/2306.05685",
+    "locator": "Zheng et al., NeurIPS 2023, Abstract and Sections 3–5",
+    "status": "verified",
+    "scope_note": "The reported agreement is specific to the paper's models, prompts, tasks and datasets; it is not a universal guarantee for every evaluation task."
+  },
+  {
+    "id": "E02",
+    "claim": "G-Eval uses an LLM-generated evaluation-step chain and a form-filling output format; GPT-4 achieved Spearman correlation 0.514 with human judgments on the paper's summarization setting.",
+    "kind": "primary-paper",
+    "source_url": "https://aclanthology.org/2023.emnlp-main.153/",
+    "locator": "Liu et al., EMNLP 2023, Abstract and Method",
+    "status": "verified",
+    "scope_note": "The 0.514 value is for the reported summarization experiment, not a generic score for all LLM judges."
+  },
+  {
+    "id": "E03",
+    "claim": "JudgeBench constructs 350 challenging response pairs across general knowledge, reasoning, mathematics and coding; it prioritizes instruction following, factual/logical correctness and style in a hierarchy.",
+    "kind": "primary-paper",
+    "source_url": "https://arxiv.org/abs/2410.12784",
+    "locator": "Tan et al., ICLR 2025, Abstract, Introduction and benchmark construction",
+    "status": "verified",
+    "scope_note": "The benchmark intentionally uses difficult correctness contrasts; its results should not be conflated with subjective preference evaluation."
+  },
+  {
+    "id": "E04",
+    "claim": "A systematic position-bias study evaluates 15 LLM judges across MT-Bench and DevBench with more than 150,000 evaluation instances and defines repetition stability, position consistency and preference fairness.",
+    "kind": "primary-paper",
+    "source_url": "https://aclanthology.org/2025.ijcnlp-long.18/",
+    "locator": "Shi et al., IJCNLP-AACL 2025, Abstract and Sections 2–4",
+    "status": "verified"
+  },
+  {
+    "id": "E05",
+    "claim": "A 2026 survey synthesizes LLM judging across text and code tasks, prompt and pipeline methods, systematic biases, calibration, fairness, reproducibility and meta-evaluation.",
+    "kind": "survey",
+    "source_url": "https://doi.org/10.1007/s10462-026-11652-0",
+    "locator": "Nadăş, Artificial Intelligence Review, published 2026-08-22, Abstract and Sections 7–8",
+    "status": "verified"
+  },
+  {
+    "id": "E06",
+    "claim": "A June 2026 arXiv preprint reports that exact-match agreement can overstate judge agreement relative to Cohen's kappa, judge rankings vary across benchmarks, and high test-retest reliability can coexist with position bias.",
+    "kind": "recent-preprint",
+    "source_url": "https://arxiv.org/abs/2606.19544",
+    "locator": "Norman, Rivera and Hughes, 2026, Abstract",
+    "status": "verified",
+    "scope_note": "This is an arXiv preprint; the abstract's large-scale findings are presented as the authors' reported results, not as a settled universal constant."
+  },
+  {
+    "id": "E07",
+    "claim": "A June 2026 arXiv study argues that agreement among LLM judges is not sufficient evidence of human alignment and studies judge-human score geometry across Indic datasets and languages.",
+    "kind": "recent-preprint",
+    "source_url": "https://www.microsoft.com/en-us/research/publication/the-geometry-of-llm-as-judge-why-inter-llm-consensus-is-not-human-alignment/",
+    "locator": "Mukherjee et al., June 2026, Abstract",
+    "status": "verified",
+    "scope_note": "The reported study scope is four community-built Indic datasets and eight Indic languages; avoid generalizing its numeric estimates to all languages or tasks."
+  },
+  {
+    "id": "E08",
+    "claim": "A weighted rubric score is the normalized weighted sum of criterion scores; it is an explicit aggregation design rather than a guarantee of measurement validity.",
+    "kind": "independent-derivation",
+    "source_url": "https://doi.org/10.1007/s10462-026-11652-0",
+    "locator": "Independent mathematical definition used in this explainer",
+    "status": "derived"
+  },
+  {
+    "id": "E09",
+    "claim": "A position-swap audit distinguishes candidate consistency from first-slot or second-slot preference by mapping the swapped output back to candidate identity.",
+    "kind": "independent-derivation",
+    "source_url": "https://aclanthology.org/2025.ijcnlp-long.18/",
+    "locator": "Independent teaching implementation based on the pairwise swap protocol in Section 2.1",
+    "status": "derived"
+  },
+  {
+    "id": "E10",
+    "claim": "Cohen's kappa corrects observed categorical agreement for agreement expected from the raters' marginal label frequencies.",
+    "kind": "standard-metric",
+    "source_url": "https://doi.org/10.1177/001316446002000104",
+    "locator": "Cohen, 1960, A coefficient of agreement for nominal scales",
+    "status": "verified"
+  }
+]

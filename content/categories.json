@@ -76,6 +76,42 @@
     ]
   },
   {
+    "slug": "decision-models",
+    "title": "概率决策模型",
+    "description": "研究如何把有限答案空间中的模型判断转化为可审计、可校准、可执行的概率决策，包括类型化决策模型、贝叶斯风险、概率校准、风险预算、选择性预测、模型路由与鲁棒性。",
+    "topics": [
+      {
+        "slug": "typed-decision-models",
+        "title": "Typed Decision Models & System One"
+      },
+      {
+        "slug": "cost-sensitive-decision-theory",
+        "title": "Cost-sensitive Decision Theory"
+      },
+      {
+        "slug": "probability-calibration",
+        "title": "Probability Calibration"
+      },
+      {
+        "slug": "risk-budgeting",
+        "title": "Risk Budgeting & Statistical Guarantees"
+      },
+      {
+        "slug": "selective-prediction",
+        "title": "Selective Prediction & Abstention"
+      },
+      {
+        "slug": "decision-routing",
+        "title": "Decision Routing & Delegation"
+      },
+      {
+        "slug": "robustness-and-bias",
+        "title": "Robustness, Bias & Invariance"
+      }
+    ],
+    "english": "Probabilistic Decision Models"
+  },
+  {
     "slug": "architectures",
     "title": "模型架构",
     "english": "Architectures",
@@ -227,7 +263,7 @@
     "slug": "training",
     "title": "训练与对齐",
     "english": "Training & Alignment",
-    "description": "从预训练、Scaling Laws 与参数高效微调，到知识蒸馏、教师—学生知识迁移、分布式训练、训练并行、混合精度、检查点与偏好对齐，系统拆解模型训练的数学目标和工程实现。",
+    "description": "从预训练、Scaling Laws、监督微调与指令数据，到参数高效微调、分布式训练、训练并行、混合精度、检查点、偏好对齐、奖励建模与 Reward Hacking，系统拆解模型训练的数学目标、优化机制和安全边界。",
     "topics": [
       {
         "slug": "pretraining",
@@ -276,6 +312,14 @@
       {
         "slug": "knowledge-distillation",
         "title": "Knowledge Distillation & Teacher–Student Transfer"
+      },
+      {
+        "slug": "reward-hacking",
+        "title": "Reward Hacking & Specification Gaming"
+      },
+      {
+        "slug": "supervised-finetuning",
+        "title": "Supervised Fine-Tuning & Instruction Tuning"
       }
     ]
   },
@@ -427,7 +471,7 @@
     "slug": "retrieval-rag",
     "title": "检索与 RAG",
     "english": "Retrieval & RAG",
-    "description": "围绕外部知识访问与检索增强生成，研究向量检索、近似最近邻、重排序、稀疏/稠密融合、证据溯源与回答可靠性。",
+    "description": "从用户信息需求的理解、查询分类与语义解析，到查询重写、扩展、澄清和复杂查询分解，再到稀疏/稠密检索、ANN、重排序、RAG 与证据落地，建立从自然语言到可靠检索的完整链路。",
     "topics": [
       {
         "slug": "embedding-retrieval",
@@ -452,6 +496,38 @@
       {
         "slug": "grounding",
         "title": "Grounding & Citation"
+      },
+      {
+        "slug": "query-understanding",
+        "title": "Query Understanding & Conversational Search"
+      }
+    ]
+  },
+  {
+    "slug": "knowledge-representation",
+    "title": "知识表示与语义技术",
+    "english": "Knowledge Representation & Semantic Technologies",
+    "description": "围绕符号知识如何被显式建模、连接、查询与推理，研究 Ontology、RDF/RDFS/OWL、SKOS、Knowledge Graph、语义互操作、规则推理与 LLM 辅助本体工程。",
+    "topics": [
+      {
+        "slug": "ontology-engineering",
+        "title": "Ontology Engineering & Modeling"
+      },
+      {
+        "slug": "semantic-web-standards",
+        "title": "RDF, RDFS, OWL, SKOS & SPARQL"
+      },
+      {
+        "slug": "knowledge-graphs",
+        "title": "Knowledge Graph Construction & Querying"
+      },
+      {
+        "slug": "knowledge-reasoning",
+        "title": "Logical Reasoning & Consistency"
+      },
+      {
+        "slug": "ontology-learning-alignment",
+        "title": "Ontology Learning, Matching & LLM-assisted Engineering"
       }
     ]
   },
@@ -459,7 +535,7 @@
     "slug": "agents",
     "title": "智能体与工具使用",
     "english": "Agents & Tool Use",
-    "description": "围绕模型与外部环境交互的行动闭环，研究 ReAct、任务规划、工具调用、状态与记忆、Context Engineering、软件工程智能体、Agent-Computer Interface、Harness Engineering、Agentic RL、Loop Engineering 与端到端评测。",
+    "description": "围绕模型与外部环境交互的闭环，研究 ReAct、Reflection、自主 Agent 系统与迭代执行、任务规划、Function Calling、MCP 等工具互操作协议、状态与记忆、软件工程智能体、Harness Engineering、Agentic RL 与端到端评测。",
     "topics": [
       {
         "slug": "react",
@@ -500,6 +576,22 @@
       {
         "slug": "loop-engineering",
         "title": "Loop Engineering & Autonomous Workflows"
+      },
+      {
+        "slug": "autonomous-execution",
+        "title": "Autonomous Execution & Iterative Control"
+      },
+      {
+        "slug": "reflection",
+        "title": "Reflection, Self-Critique & Verbal Feedback"
+      },
+      {
+        "slug": "autonomous-agents",
+        "title": "Autonomous Agent Systems & Frameworks"
+      },
+      {
+        "slug": "tool-integration-protocols",
+        "title": "Tool Integration & Interoperability Protocols"
       }
     ]
   },
@@ -527,7 +619,7 @@
     "slug": "evaluation",
     "title": "评测与复现",
     "english": "Evaluation",
-    "description": "研究分类评估的 ROC/AUC、Precision-Recall、类别不平衡、概率校准、Benchmark、消融、统计置信区间及可重复性，区分阈值无关排序指标与实际部署决策。",
+    "description": "研究模型与任务 Benchmark、ROC/AUC、Precision-Recall、Agent Evaluation、LLM-as-a-Judge、评审器可靠性、偏差校准、消融、统计置信区间及可重复性，区分自动评价分数与经人工验证的测量结论。",
     "topics": [
       {
         "slug": "benchmarks",
@@ -548,6 +640,10 @@
       {
         "slug": "imbalanced-classification-pr",
         "title": "Imbalanced Classification & PR Analysis"
+      },
+      {
+        "slug": "llm-as-a-judge",
+        "title": "LLM-as-a-Judge & Judge Reliability"
       }
     ]
   }

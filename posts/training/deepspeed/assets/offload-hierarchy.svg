@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 390" role="img" aria-labelledby="offload-title offload-desc">
+<title id="offload-title">ZeRO-Offload 与 ZeRO-Infinity 的异构内存层次</title>
+<desc id="offload-desc">GPU HBM 容量较小但访问快，CPU DRAM 容量较大，NVMe 容量更大但延迟和带宽更受限。ZeRO-Offload 把优化器状态和更新计算迁移到 CPU；ZeRO-Infinity 在 ZeRO-3 基础上还可把参数、梯度和优化器状态分层卸载到 CPU 与 NVMe，并通过预取和计算通信重叠减少等待。</desc>
+<rect width="960" height="390" rx="22" fill="#f5f8f4"/>
+<g font-family="system-ui,-apple-system,'PingFang SC','Microsoft YaHei',sans-serif">
+<text x="34" y="45" font-size="22" font-weight="750" fill="#203c3e">显存不够时：把状态放到不同层级，而不是假装搬运没有成本</text>
+<rect x="40" y="87" width="250" height="150" rx="14" fill="#e1f2ed" stroke="#83bcb0" stroke-width="1.5"/>
+<rect x="355" y="87" width="250" height="150" rx="14" fill="#e9eafa" stroke="#a6abd5" stroke-width="1.5"/>
+<rect x="670" y="87" width="250" height="150" rx="14" fill="#fbefe3" stroke="#d9b08a" stroke-width="1.5"/>
+<g font-size="20" font-weight="800" text-anchor="middle"><text x="165" y="122" fill="#1c746c">GPU · HBM</text><text x="480" y="122" fill="#5f65a4">CPU · DRAM</text><text x="795" y="122" fill="#a86f3e">NVMe SSD</text></g>
+<g font-size="14" text-anchor="middle" fill="#526b67"><text x="165" y="155">小容量 / 高带宽</text><text x="165" y="180">执行前向、反向与算子</text><text x="480" y="155">更大容量 / 较低带宽</text><text x="480" y="180">优化器更新、缓存与卸载</text><text x="795" y="155">大容量 / 更高访问代价</text><text x="795" y="180">承载更大规模的冷状态</text></g>
+<g fill="none" stroke="#728e87" stroke-width="3" stroke-linecap="round"><path d="M290 162 H355"/><path d="M605 162 H670"/><path d="M355 192 H290"/><path d="M670 192 H605"/></g>
+<g fill="#728e87"><path d="M347 155 L355 162 L347 169 Z"/><path d="M298 185 L290 192 L298 199 Z"/><path d="M662 155 L670 162 L662 169 Z"/><path d="M613 185 L605 192 L613 199 Z"/></g>
+<rect x="40" y="265" width="880" height="83" rx="12" fill="#fff" stroke="#d8e3dc"/>
+<g font-size="14" fill="#355b57"><text x="60" y="294" font-weight="800">ZeRO-Offload</text><text x="60" y="320">常见路径：ZeRO-2 + optimizer state / optimizer step 放到 CPU</text><text x="495" y="294" font-weight="800">ZeRO-Infinity</text><text x="495" y="320">ZeRO-3 + CPU/NVMe 分层卸载 + 动态预取 + 通信/计算重叠</text></g>
+<text x="40" y="374" font-size="12" fill="#7a8c85">关键瓶颈从“容量够不够”转向 PCIe、CPU 内存带宽、NVMe I/O、预取粒度与重叠效率。</text>
+</g>
+</svg>

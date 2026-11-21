@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="440" viewBox="0 0 1100 440" role="img" aria-labelledby="agent-eval-06-title agent-eval-06-desc">
+<title id="agent-eval-06-title">Agent Evaluation 实验协议流程</title><desc id="agent-eval-06-desc">定义任务契约、冻结 Agent 配置、分层任务集、重复运行、记录轨迹、独立评分、统计分析和发布可复现报告的流程。</desc>
+<rect width="1100" height="440" rx="20" fill="#f8fbf9"/>
+<text x="42" y="43" font-family="system-ui,sans-serif" font-size="17" font-weight="800" fill="#247e73" letter-spacing="2">REPRODUCIBLE EVALUATION PROTOCOL</text>
+<text x="42" y="80" font-family="system-ui,sans-serif" font-size="26" font-weight="800" fill="#203b3c">从任务定义到可复现报告</text>
+<g font-family="system-ui,sans-serif">
+<rect x="42" y="125" width="230" height="82" rx="12" fill="#e9f4ee" stroke="#91bca9" stroke-width="2"/><text x="157" y="159" text-anchor="middle" font-size="18" font-weight="800" fill="#214f49">1 · 任务契约</text><text x="157" y="185" text-anchor="middle" font-size="14" fill="#52736b">初始状态 / 成功条件</text>
+<rect x="304" y="125" width="230" height="82" rx="12" fill="#eaf1f8" stroke="#9cb8d1" stroke-width="2"/><text x="419" y="159" text-anchor="middle" font-size="18" font-weight="800" fill="#254d68">2 · 冻结配置</text><text x="419" y="185" text-anchor="middle" font-size="14" fill="#58768c">模型 / Prompt / Tools</text>
+<rect x="566" y="125" width="230" height="82" rx="12" fill="#fff2e8" stroke="#d9ae8b" stroke-width="2"/><text x="681" y="159" text-anchor="middle" font-size="18" font-weight="800" fill="#85583b">3 · 分层任务集</text><text x="681" y="185" text-anchor="middle" font-size="14" fill="#94715a">难度 / 风险 / 长度</text>
+<rect x="828" y="125" width="230" height="82" rx="12" fill="#f8eceb" stroke="#d7aaa5" stroke-width="2"/><text x="943" y="159" text-anchor="middle" font-size="18" font-weight="800" fill="#89524c">4 · 重复运行</text><text x="943" y="185" text-anchor="middle" font-size="14" fill="#98716d">Seeds / k 次 / Reset</text>
+<g stroke="#7ea99b" stroke-width="3" fill="none"><path d="M272 166 H300"/><path d="M292 158 L302 166 L292 174"/><path d="M534 166 H562"/><path d="M554 158 L564 166 L554 174"/><path d="M796 166 H824"/><path d="M816 158 L826 166 L816 174"/></g>
+<path d="M943 207 V260 H157 V235" fill="none" stroke="#7ea99b" stroke-width="2.5" stroke-dasharray="7 6"/><path d="M149 244 L157 232 L165 244" fill="none" stroke="#7ea99b" stroke-width="2.5"/>
+<text x="550" y="252" text-anchor="middle" font-size="13" fill="#68857d">每次运行都重置到可比较的环境初始状态</text>
+<rect x="42" y="290" width="230" height="82" rx="12" fill="#fff" stroke="#b6cbc1" stroke-width="2"/><text x="157" y="324" text-anchor="middle" font-size="18" font-weight="800" fill="#315f57">5 · Trace 记录</text><text x="157" y="350" text-anchor="middle" font-size="14" fill="#66817a">Actions / State / Cost</text>
+<rect x="304" y="290" width="230" height="82" rx="12" fill="#fff" stroke="#b6cbc1" stroke-width="2"/><text x="419" y="324" text-anchor="middle" font-size="18" font-weight="800" fill="#315f57">6 · 独立评分</text><text x="419" y="350" text-anchor="middle" font-size="14" fill="#66817a">State Checker / Judge</text>
+<rect x="566" y="290" width="230" height="82" rx="12" fill="#fff" stroke="#b6cbc1" stroke-width="2"/><text x="681" y="324" text-anchor="middle" font-size="18" font-weight="800" fill="#315f57">7 · 统计分析</text><text x="681" y="350" text-anchor="middle" font-size="14" fill="#66817a">CI / Slices / Failure Modes</text>
+<rect x="828" y="290" width="230" height="82" rx="12" fill="#203b40"/><text x="943" y="324" text-anchor="middle" font-size="18" font-weight="800" fill="#eaf5ee">8 · 可复现报告</text><text x="943" y="350" text-anchor="middle" font-size="14" fill="#b7d2c6">Versions / Data / Logs</text>
+<g stroke="#7ea99b" stroke-width="3" fill="none"><path d="M272 331 H300"/><path d="M292 323 L302 331 L292 339"/><path d="M534 331 H562"/><path d="M554 323 L564 331 L554 339"/><path d="M796 331 H824"/><path d="M816 323 L826 331 L816 339"/></g>
+</g>
+<text x="550" y="412" text-anchor="middle" font-family="system-ui,sans-serif" font-size="14" fill="#6b8580">没有版本、状态、轨迹和评分依据的单个数字，不是可复现的实验结果。</text>
+</svg>

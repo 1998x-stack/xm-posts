@@ -402,5 +402,186 @@
       "lora",
       "qlora"
     ]
+  },
+  {
+    "id": "path-44",
+    "title": "显式知识建模与向量语义表示",
+    "posts": [
+      "ontology",
+      "embeddings"
+    ]
+  },
+  {
+    "id": "path-45",
+    "title": "提示推理到 Agent",
+    "posts": [
+      "chain-of-thought",
+      "self-consistency",
+      "tree-of-thoughts",
+      "react",
+      "swe-agent"
+    ]
+  },
+  {
+    "id": "path-46",
+    "title": "提示推理到 Agent",
+    "posts": [
+      "chain-of-thought",
+      "self-consistency",
+      "react",
+      "reflection",
+      "swe-agent"
+    ]
+  },
+  {
+    "id": "path-47",
+    "title": "从 Agent 行动到跨会话记忆",
+    "posts": [
+      "react",
+      "swe-agent",
+      "reflection",
+      "agent-memory-components"
+    ]
+  },
+  {
+    "id": "path-48",
+    "title": "从 Agent 行动机制到系统评测与可靠性",
+    "posts": [
+      "react",
+      "agent-evaluation",
+      "swe-agent",
+      "agent-memory-components"
+    ]
+  },
+  {
+    "id": "path-49",
+    "title": "从 ReAct 到自主 Agent 系统",
+    "posts": [
+      "react",
+      "autogpt",
+      "agent-memory-components",
+      "swe-agent",
+      "harness-engineering"
+    ]
+  },
+  {
+    "id": "path-llm-as-a-judge",
+    "title": "从模型评审到偏好对齐",
+    "posts": [
+      "llm-as-a-judge",
+      "rlhf",
+      "dpo",
+      "grpo"
+    ]
+  },
+  {
+    "id": "path-50",
+    "title": "从语义向量到跨模态图文对齐",
+    "posts": [
+      "embeddings",
+      "clip"
+    ]
+  },
+  {
+    "id": "path-51",
+    "title": "提示推理到 Agent",
+    "posts": [
+      "chain-of-thought",
+      "self-consistency",
+      "react",
+      "function-calling",
+      "swe-agent"
+    ]
+  },
+  {
+    "id": "path-52",
+    "title": "检索式规划与工具使用",
+    "posts": [
+      "mcts",
+      "react",
+      "function-calling",
+      "swe-agent"
+    ]
+  },
+  {
+    "id": "path-53",
+    "title": "从工具调用到可验证的软件工程 Agent",
+    "posts": [
+      "react",
+      "function-calling",
+      "swe-agent",
+      "agent-memory-components",
+      "harness-engineering"
+    ]
+  },
+  {
+    "id": "path-54",
+    "title": "从 Agent 推理到工具协议互操作",
+    "posts": [
+      "react",
+      "model-context-protocol",
+      "swe-agent"
+    ]
+  },
+  {
+    "id": "path-55",
+    "title": "从用户意图到检索增强生成",
+    "posts": [
+      "embeddings",
+      "query-understanding",
+      "rag"
+    ]
+  },
+  {
+    "id": "path-56",
+    "title": "从自回归训练到指令对齐",
+    "posts": [
+      "gpt-1",
+      "teacher-forcing",
+      "sft",
+      "rlhf",
+      "dpo",
+      "grpo"
+    ]
+  },
+  {
+    "id": "path-57",
+    "title": "从模型规模到分布式训练系统",
+    "posts": [
+      "transformer",
+      "chinchilla",
+      "deepspeed",
+      "flashattention"
+    ]
+  },
+  {
+    "id": "path-42",
+    "title": "从概率分类到类型化决策",
+    "posts": [
+      "logistic-regression",
+      "naive-bayes",
+      "roc-auc",
+      "typed-decision-models"
+    ]
+  },
+  {
+    "id": "path-43",
+    "title": "Agent 的行动与概率决策控制",
+    "posts": [
+      "react",
+      "harness-engineering",
+      "typed-decision-models"
+    ]
+  },
+  {
+    "id": "path-58",
+    "title": "从偏好优化到奖励投机与 Agent 可靠性",
+    "posts": [
+      "rlhf",
+      "dpo",
+      "reward-hacking",
+      "agent-evaluation",
+      "ralph-loop"
+    ]
   }
 ]

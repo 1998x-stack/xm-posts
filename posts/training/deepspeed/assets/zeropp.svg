@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 370" role="img" aria-labelledby="zeropp-title zeropp-desc">
+<title id="zeropp-title">ZeRO++ 的三类通信优化</title>
+<desc id="zeropp-desc">qwZ 对参数 all-gather 使用分块量化，hpZ 通过层级分区与数据重映射减少跨节点反向参数聚合，qgZ 使用量化梯度 all-to-all 替代传统 reduce-scatter 路径。论文报告组合后通信量可降至 ZeRO 基线的四分之一。</desc>
+<rect width="960" height="370" rx="22" fill="#f5f8f4"/>
+<g font-family="system-ui,-apple-system,'PingFang SC','Microsoft YaHei',sans-serif">
+<text x="34" y="45" font-size="22" font-weight="750" fill="#203c3e">ZeRO++：当瓶颈从显存转向网络通信</text>
+<g fill="#fff" stroke="#d7e2dc"><rect x="34" y="83" width="278" height="205" rx="13"/><rect x="341" y="83" width="278" height="205" rx="13"/><rect x="648" y="83" width="278" height="205" rx="13"/></g>
+<g font-size="18" font-weight="800" text-anchor="middle"><text x="173" y="119" fill="#1b786f">qwZ · 量化权重</text><text x="480" y="119" fill="#6b64a8">hpZ · 分层分区</text><text x="787" y="119" fill="#b36f45">qgZ · 量化梯度</text></g>
+<g fill="#e4f2ed"><rect x="58" y="143" width="230" height="34" rx="6"/><rect x="58" y="188" width="115" height="34" rx="6"/></g>
+<g font-size="13" text-anchor="middle" fill="#376b64"><text x="173" y="165">FP16 All-Gather</text><text x="115" y="210">INT8</text><text x="210" y="210">约 1/2 通信量</text></g>
+<g fill="#eeeefa"><rect x="365" y="143" width="230" height="34" rx="6"/><rect x="365" y="188" width="112" height="34" rx="6"/></g>
+<g font-size="13" text-anchor="middle" fill="#5e5b8e"><text x="480" y="165">跨节点反向参数聚合</text><text x="421" y="210">本地层级</text><text x="530" y="210">重映射 / 重算</text></g>
+<g fill="#fbefe5"><rect x="672" y="143" width="230" height="34" rx="6"/><rect x="672" y="188" width="115" height="34" rx="6"/></g>
+<g font-size="13" text-anchor="middle" fill="#93623e"><text x="787" y="165">FP16 梯度归约</text><text x="729" y="210">量化 All-to-All</text><text x="844" y="210">降低网络字节</text></g>
+<g font-size="13" fill="#526d67"><text x="58" y="254">块量化：降低权重传输字节数</text><text x="365" y="254">以额外内存 / 重计算换跨节点通信</text><text x="672" y="254">低精度通信 + 层级化梯度归约</text></g>
+<rect x="34" y="310" width="892" height="40" rx="9" fill="#e5f2ed"/>
+<text x="480" y="336" font-size="16" text-anchor="middle" font-weight="800" fill="#216f67">论文报告：组合优化使通信量相对 ZeRO 基线降低约 4×（具体收益依集群与配置而变）</text>
+</g>
+</svg>

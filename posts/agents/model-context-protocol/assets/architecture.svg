@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="560" viewBox="0 0 1200 560" role="img" aria-labelledby="arch-title arch-desc">
+<title id="arch-title">MCP 的 Host、Client、Server 与外部系统架构</title>
+<desc id="arch-desc">Host 管理模型、用户交互和权限策略；多个 MCP Client 分别连接专门的 MCP Server；Server 再访问数据库、文件系统和 SaaS API。服务器只接收 Host 显式发送的请求和上下文。</desc>
+<defs>
+  <marker id="arch-arrow-a" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0 0 L9 3 L0 6" fill="none" stroke="#3d7772" stroke-width="1.5"/></marker>
+  <marker id="arch-arrow-b" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0 0 L9 3 L0 6" fill="none" stroke="#a46c43" stroke-width="1.5"/></marker>
+</defs>
+<rect x="22" y="22" width="1156" height="516" rx="22" fill="#f7faf7" stroke="#d4e1dc" stroke-width="2"/>
+<text x="52" y="62" fill="#244b50" font-size="24" font-weight="700" font-family="system-ui, sans-serif">AI 应用进程 / MCP Host</text>
+<rect x="48" y="88" width="1104" height="154" rx="16" fill="#e8f3ee" stroke="#8db8aa" stroke-width="2"/>
+<rect x="76" y="119" width="250" height="91" rx="12" fill="#ffffff" stroke="#83aaa0" stroke-width="2"/>
+<text x="201" y="154" text-anchor="middle" fill="#244b50" font-size="22" font-weight="700" font-family="system-ui, sans-serif">Model Runtime</text>
+<text x="201" y="183" text-anchor="middle" fill="#56736f" font-size="16" font-family="system-ui, sans-serif">理解请求 · 选择工具</text>
+<rect x="475" y="119" width="250" height="91" rx="12" fill="#ffffff" stroke="#83aaa0" stroke-width="2"/>
+<text x="600" y="154" text-anchor="middle" fill="#244b50" font-size="22" font-weight="700" font-family="system-ui, sans-serif">MCP Client(s)</text>
+<text x="600" y="183" text-anchor="middle" fill="#56736f" font-size="16" font-family="system-ui, sans-serif">协议发现 · 请求 / 响应</text>
+<rect x="874" y="119" width="250" height="91" rx="12" fill="#ffffff" stroke="#83aaa0" stroke-width="2"/>
+<text x="999" y="154" text-anchor="middle" fill="#244b50" font-size="22" font-weight="700" font-family="system-ui, sans-serif">Policy &amp; UX</text>
+<text x="999" y="183" text-anchor="middle" fill="#56736f" font-size="16" font-family="system-ui, sans-serif">授权 · 确认 · 审计</text>
+<path d="M326 164 H475" stroke="#3d7772" stroke-width="3" fill="none" marker-end="url(#arch-arrow-a)"/>
+<path d="M874 164 H725" stroke="#3d7772" stroke-width="3" fill="none" marker-end="url(#arch-arrow-a)"/>
+<text x="600" y="276" text-anchor="middle" fill="#617a76" font-size="16" font-family="system-ui, sans-serif">Host 可以管理多个 Client；通常每个 Client 对应一个 MCP Server</text>
+<path d="M600 242 V302 H208 V350" stroke="#3d7772" stroke-width="3" fill="none" marker-end="url(#arch-arrow-a)"/>
+<path d="M600 242 V350" stroke="#3d7772" stroke-width="3" fill="none" marker-end="url(#arch-arrow-a)"/>
+<path d="M600 302 H992 V350" stroke="#3d7772" stroke-width="3" fill="none" marker-end="url(#arch-arrow-a)"/>
+<rect x="76" y="354" width="264" height="103" rx="13" fill="#e8f0f8" stroke="#91aec8" stroke-width="2"/>
+<text x="208" y="391" text-anchor="middle" fill="#274b64" font-size="22" font-weight="700" font-family="system-ui, sans-serif">Files MCP Server</text>
+<text x="208" y="422" text-anchor="middle" fill="#5c7689" font-size="16" font-family="system-ui, sans-serif">文件 / Git / 文档工具</text>
+<rect x="468" y="354" width="264" height="103" rx="13" fill="#e8f0f8" stroke="#91aec8" stroke-width="2"/>
+<text x="600" y="391" text-anchor="middle" fill="#274b64" font-size="22" font-weight="700" font-family="system-ui, sans-serif">Database MCP Server</text>
+<text x="600" y="422" text-anchor="middle" fill="#5c7689" font-size="16" font-family="system-ui, sans-serif">查询 / 写入 / 事务</text>
+<rect x="860" y="354" width="264" height="103" rx="13" fill="#e8f0f8" stroke="#91aec8" stroke-width="2"/>
+<text x="992" y="391" text-anchor="middle" fill="#274b64" font-size="22" font-weight="700" font-family="system-ui, sans-serif">SaaS MCP Server</text>
+<text x="992" y="422" text-anchor="middle" fill="#5c7689" font-size="16" font-family="system-ui, sans-serif">Calendar / CRM / Issue</text>
+<path d="M208 457 V484" stroke="#a46c43" stroke-width="3" fill="none" marker-end="url(#arch-arrow-b)"/>
+<path d="M600 457 V484" stroke="#a46c43" stroke-width="3" fill="none" marker-end="url(#arch-arrow-b)"/>
+<path d="M992 457 V484" stroke="#a46c43" stroke-width="3" fill="none" marker-end="url(#arch-arrow-b)"/>
+<text x="208" y="516" text-anchor="middle" fill="#855d3c" font-size="16" font-family="system-ui, sans-serif">Local filesystem</text>
+<text x="600" y="516" text-anchor="middle" fill="#855d3c" font-size="16" font-family="system-ui, sans-serif">SQL / Vector DB</text>
+<text x="992" y="516" text-anchor="middle" fill="#855d3c" font-size="16" font-family="system-ui, sans-serif">External API</text>
+</svg>

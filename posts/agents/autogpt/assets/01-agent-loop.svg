@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 500" role="img" aria-labelledby="autogpt-loop-title autogpt-loop-desc">
+<title id="autogpt-loop-title">AutoGPT Classic 的目标驱动执行闭环</title>
+<desc id="autogpt-loop-desc">用户目标进入 LLM 控制器，控制器提出结构化动作；权限门禁批准后调用工具，环境返回观察结果，历史与上下文更新后进入下一轮，直到终止条件触发。</desc>
+<defs><marker id="autogpt-loop-arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0 0 L8 3 L0 6" fill="none" stroke="#397c78" stroke-width="1.6"/></marker></defs>
+<rect width="1000" height="500" rx="22" fill="#f5f8f5"/>
+<rect x="34" y="45" width="172" height="82" rx="14" fill="#e8edf8" stroke="#98a9d2" stroke-width="2"/>
+<text x="120" y="78" text-anchor="middle" font-size="21" font-weight="700" fill="#2b3d5c">用户目标 g</text><text x="120" y="105" text-anchor="middle" font-size="14" fill="#5d6f91">目标 / 约束 / 完成条件</text>
+<rect x="275" y="45" width="210" height="82" rx="14" fill="#e4f2ed" stroke="#80b7a6" stroke-width="2"/>
+<text x="380" y="78" text-anchor="middle" font-size="21" font-weight="700" fill="#20574e">LLM 控制器</text><text x="380" y="105" text-anchor="middle" font-size="14" fill="#527a72">读取上下文并提出动作</text>
+<rect x="560" y="45" width="180" height="82" rx="14" fill="#fff0df" stroke="#d9a36d" stroke-width="2"/>
+<text x="650" y="78" text-anchor="middle" font-size="21" font-weight="700" fill="#79502d">权限门禁</text><text x="650" y="105" text-anchor="middle" font-size="14" fill="#936b49">校验工具与副作用</text>
+<rect x="795" y="45" width="170" height="82" rx="14" fill="#f4e9e7" stroke="#cf9a90" stroke-width="2"/>
+<text x="880" y="78" text-anchor="middle" font-size="21" font-weight="700" fill="#79483f">工具执行</text><text x="880" y="105" text-anchor="middle" font-size="14" fill="#986b62">Search / Browser / Code</text>
+<path d="M206 86 H275 M485 86 H560 M740 86 H795" stroke="#397c78" stroke-width="3" fill="none" marker-end="url(#autogpt-loop-arrow)"/>
+<rect x="795" y="222" width="170" height="78" rx="14" fill="#e8f0f8" stroke="#93afc8" stroke-width="2"/>
+<text x="880" y="254" text-anchor="middle" font-size="21" font-weight="700" fill="#31516b">环境结果</text><text x="880" y="279" text-anchor="middle" font-size="14" fill="#607d96">Observation / Error</text>
+<path d="M880 127 V222" stroke="#397c78" stroke-width="3" fill="none" marker-end="url(#autogpt-loop-arrow)"/>
+<rect x="520" y="222" width="220" height="78" rx="14" fill="#eeeafa" stroke="#aaa0d2" stroke-width="2"/>
+<text x="630" y="254" text-anchor="middle" font-size="21" font-weight="700" fill="#4e447d">历史与上下文</text><text x="630" y="279" text-anchor="middle" font-size="14" fill="#71699a">动作记录 / 摘要 / 记忆</text>
+<path d="M795 261 H740" stroke="#397c78" stroke-width="3" fill="none" marker-end="url(#autogpt-loop-arrow)"/>
+<path d="M520 261 C455 261 420 210 420 127" stroke="#397c78" stroke-width="3" fill="none" marker-end="url(#autogpt-loop-arrow)"/>
+<rect x="275" y="222" width="210" height="78" rx="14" fill="#edf3e5" stroke="#a5b88c" stroke-width="2"/>
+<text x="380" y="254" text-anchor="middle" font-size="21" font-weight="700" fill="#4c6337">终止判定</text><text x="380" y="279" text-anchor="middle" font-size="14" fill="#71845d">完成 / 预算 / 人工中止</text>
+<path d="M520 261 H485" stroke="#397c78" stroke-width="3" fill="none" marker-end="url(#autogpt-loop-arrow)"/>
+<path d="M380 300 V365 H650 V300" stroke="#397c78" stroke-width="2.5" stroke-dasharray="7 6" fill="none" marker-end="url(#autogpt-loop-arrow)"/>
+<rect x="270" y="365" width="430" height="72" rx="13" fill="#fff" stroke="#d7e1dc" stroke-width="1.5"/>
+<text x="485" y="394" text-anchor="middle" font-size="18" font-weight="700" fill="#365b57">下一轮：基于新 Observation 重新决策</text>
+<text x="485" y="418" text-anchor="middle" font-size="14" fill="#6c807a">不是一次生成完整答案，而是反复读取状态、选择动作、观察结果</text>
+<text x="42" y="475" font-size="13" fill="#74847f">教学抽象：突出控制流；不同 AutoGPT 版本的组件与策略并不完全相同。</text>
+</svg>

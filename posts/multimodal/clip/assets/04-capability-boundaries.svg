@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 300" role="img" aria-labelledby="clip-fig4-title clip-fig4-desc">
+<title id="clip-fig4-title">CLIP 的能力边界</title>
+<desc id="clip-fig4-desc">双编码器通过全局图文向量对齐，适合候选文本排序和零样本分类；它本身不生成自由文本、不提供像素级定位，也不能保证计数和细粒度判断可靠。</desc>
+<rect x="18" y="18" width="864" height="264" rx="18" fill="#f7f8f5"/>
+<rect x="52" y="58" width="366" height="182" rx="15" fill="#e4f2e9" stroke="#83b89b" stroke-width="2"/>
+<text x="235" y="91" text-anchor="middle" fill="#245f4b" font-size="19" font-weight="700">适合的任务</text>
+<circle cx="94" cy="130" r="7" fill="#3f9474"/><text x="116" y="136" fill="#315d4c" font-size="16">候选图文匹配与检索</text>
+<circle cx="94" cy="171" r="7" fill="#3f9474"/><text x="116" y="177" fill="#315d4c" font-size="16">开放词汇 / 零样本分类</text>
+<circle cx="94" cy="212" r="7" fill="#3f9474"/><text x="116" y="218" fill="#315d4c" font-size="16">冻结特征上的迁移学习</text>
+<rect x="482" y="58" width="366" height="182" rx="15" fill="#f7e9e3" stroke="#d8a28d" stroke-width="2"/>
+<text x="665" y="91" text-anchor="middle" fill="#8c5c4b" font-size="19" font-weight="700">不能直接保证</text>
+<circle cx="524" cy="130" r="7" fill="#c47b61"/><text x="546" y="136" fill="#80584d" font-size="16">生成完整、自由形式的描述</text>
+<circle cx="524" cy="171" r="7" fill="#c47b61"/><text x="546" y="177" fill="#80584d" font-size="16">精确框选或像素级定位</text>
+<circle cx="524" cy="212" r="7" fill="#c47b61"/><text x="546" y="218" fill="#80584d" font-size="16">稳定计数、细粒度与公平性</text>
+<text x="450" y="265" text-anchor="middle" fill="#687e7e" font-size="12">这是原始双编码器 CLIP 的能力边界，不代表后续组合系统永远无法完成这些任务。</text>
+</svg>

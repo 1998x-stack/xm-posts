@@ -1,0 +1,372 @@
+<!doctype html>
+<html lang="zh-CN"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light">
+<meta name="description" content="从 Toolformer、Gorilla、ToolLLM 到 OpenAI Function Calling、Anthropic Tool Use 与 MCP，系统解释工具选择、JSON Schema、调用协议、运行时执行、安全边界和 Agent 评测。">
+<link rel="canonical" href="https://1998x-stack.github.io/xm-posts/posts/agents/function-calling/">
+<title>Understanding Function Calling · xm-posts</title>
+<style>
+:root{--bg:#f7f9f6;--paper:#fffefb;--ink:#203f46;--muted:#5b7074;--teal:#187e75;--border:#d6e1de;--orange:#b46744;--purple:#7461ba;--red:#a94f4f}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.83 system-ui,-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}
+a{color:#146f75;text-underline-offset:4px}a:hover{color:#955537}a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,[tabindex]:focus-visible{outline:3px solid #cb8246;outline-offset:3px}
+.skip{position:absolute;left:12px;top:-100px;padding:7px 12px;background:#123f48;color:#fff;z-index:9}.skip:focus{top:10px}
+.bar{background:var(--paper);border-bottom:1px solid var(--border)}.barin{max-width:1210px;margin:auto;min-height:64px;padding:10px 20px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.brand{font-size:21px;text-decoration:none;color:var(--ink);font-weight:850;letter-spacing:-.04em}.brand b{color:var(--orange)}.links{font-size:13px;display:flex;gap:20px;flex-wrap:wrap}
+.page{max-width:1210px;margin:auto;padding:58px 22px 95px;display:grid;grid-template-columns:228px minmax(0,810px);gap:55px}
+.toc{align-self:start;position:sticky;top:26px;max-height:92vh;overflow-y:auto;font-size:12px}.toc>strong{font-size:11px;letter-spacing:.15em;color:#758d8e}.toc a{display:block;color:#58767a;text-decoration:none;padding:6px 9px;border-left:2px solid var(--border);line-height:1.5}.toc a:hover{color:var(--teal);border-color:var(--teal)}
+main,article{min-width:0}header .eyebrow{font:700 12px system-ui;letter-spacing:.15em;color:var(--teal)}h1{font-size:clamp(41px,5.8vw,67px);line-height:1.08;letter-spacing:-.06em;margin:14px 0 20px}
+h2{font-size:clamp(25px,3vw,34px);line-height:1.32;letter-spacing:-.035em;margin:0 0 20px}h3{font-size:20px;line-height:1.4;margin:18px 0 12px}
+.dek{font-size:21px;line-height:1.67;color:#4a676a}.meta{display:flex;gap:14px;flex-wrap:wrap;border-top:1px solid var(--border);font-size:12px;color:#728587;padding-top:18px;margin:26px 0 66px}
+section{margin-bottom:76px;scroll-margin-top:25px}p{margin:0 0 19px;color:#415a61}.lead{font-size:19px;color:#284a50}strong{color:#24484c}
+.figure{margin:27px 0 30px;padding:12px;border:1px solid var(--border);border-radius:13px;background:#fff;box-shadow:0 14px 40px #1f59550b}.figscroll{max-width:100%;overflow-x:auto;overflow-y:hidden}.figure svg{display:block;width:100%;height:auto;min-width:0}.figure figcaption{font-size:13px;color:var(--muted);line-height:1.7;padding:10px 5px 0}
+.panel{border:1px solid var(--border);border-radius:13px;padding:20px 22px;background:white;margin:24px 0}.twocol{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.insight{border-left:3px solid var(--teal);background:#edf6f1;padding:15px 18px;border-radius:3px;margin:18px 0;color:#345f5d}.note{border-left-color:var(--orange);background:#fff3eb}.warning{border-left-color:var(--red);background:#fff0ef}
+.math-equation{min-width:0;max-width:100%;border:1px solid var(--border);background:#eff6f2;border-radius:10px;padding:13px 15px;margin:22px 0}.math-scroll{min-width:0;max-width:100%;overflow-x:auto;overflow-y:hidden}.math-scroll math[display=block]{display:block;width:max-content;min-width:100%;font-size:1.16rem;font-family:"Cambria Math","STIX Two Math",serif}.math-caption{color:#587477;font-size:12px;margin-top:6px}
+.table-scroll{max-width:100%;overflow-x:auto;border:1px solid var(--border);border-radius:10px;margin:22px 0}table{border-collapse:collapse;min-width:620px;width:100%;font-size:14px}th,td{padding:11px 13px;border-bottom:1px solid var(--border);text-align:left;vertical-align:top}th{background:#edf4f1}tr:last-child td{border-bottom:0}.hint{font-size:13px;color:#698183}
+pre{overflow-x:auto;white-space:pre;font:13px/1.75 ui-monospace,SFMono-Regular,Consolas,monospace;background:#1f3940;color:#e2f2ed;border-radius:10px;padding:21px;max-width:100%}code{font-size:.9em}
+.controls{display:flex;gap:9px;flex-wrap:wrap;margin:15px 0}.controls button{font:600 14px system-ui;border:1px solid #2a817b;background:#fff;color:#226a68;border-radius:8px;padding:10px 15px;cursor:pointer;min-height:42px}.controls button.primary{background:#187e75;color:#fff}.controls button:disabled{opacity:.5;cursor:not-allowed}
+.demo-inputs{display:flex;gap:12px;flex-wrap:wrap;align-items:end;margin:18px 0}.demo-field{display:flex;flex-direction:column;gap:5px;min-width:180px;flex:1}.demo-field label{font-size:13px;font-weight:700;color:#45666b}.demo-field input,.demo-field select{min-height:42px;border:1px solid #b9ceca;border-radius:8px;background:white;padding:8px 10px;font:inherit;font-size:14px;color:var(--ink);width:100%}
+.trace{background:#f4f8f6;border:1px solid #d9e5e0;border-radius:10px;min-height:180px;padding:15px}.trace h3{margin:0 0 8px;font-size:17px}.trace p{font-size:14px;line-height:1.65;margin:0 0 9px}.trace pre{margin:10px 0;font-size:12px}.status{font-size:13px;color:#587477;margin:10px 0}.pill{display:inline-block;border-radius:99px;background:#e6f3ef;color:#286b63;padding:2px 9px;font-size:12px;font-weight:700}.pill.bad{background:#fff0ef;color:#a34e4e}
+.foot{border-top:1px solid var(--border);padding-top:16px;font-size:13px;display:flex;flex-wrap:wrap;gap:12px}.foot a{white-space:normal}
+@media(max-width:930px){.page{display:block;max-width:850px;padding:38px 20px 75px}.toc{position:static;max-height:none;margin-bottom:36px;background:white;border:1px solid var(--border);padding:12px;border-radius:10px}.toc a{display:inline-block;border:none;padding:7px}}
+@media(max-width:480px){body{font-size:16px}.barin{padding:12px 15px}.links{gap:10px}.page{padding:27px 15px 65px}.dek{font-size:18px}.twocol{grid-template-columns:1fr}.figure{padding:8px}.figure svg{width:900px;max-width:none}.panel{padding:15px}section{margin-bottom:60px}.demo-field{min-width:100%}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+@media print{body{background:white}.bar,.toc,.skip,.controls,.demo-inputs{display:none!important}.page{display:block;max-width:none;padding:0}.figure{break-inside:avoid;box-shadow:none}.figscroll{overflow:visible}.figure svg{width:100%;max-width:100%;min-width:0}.math-scroll{overflow:visible}.panel{break-inside:avoid}a{color:#183f42;text-decoration:underline}}
+</style></head><body>
+<a class="skip" href="#main">跳至正文</a><header class="bar"><div class="barin"><a class="brand" href="../../../">xm<b>.</b>posts</a><nav class="links" aria-label="站点导航"><a href="../../../">首页</a><a href="../../../categories/agents/">智能体与工具使用</a><a href="../../../archive/">文章归档</a></nav></div></header>
+<div class="page">
+<nav class="toc" aria-label="本文目录"><strong>ON THIS PAGE</strong>
+<a href="#problem">01 · 为什么模型需要工具？</a><a href="#definition">02 · Function Calling 是什么？</a><a href="#loop">03 · 完整调用闭环</a><a href="#message">04 · 调用消息</a><a href="#schema">05 · Schema 契约</a><a href="#formats">06 · JSON 与工具调用</a><a href="#parallel">07 · 顺序与并行</a><a href="#providers">08 · OpenAI 与 Anthropic</a><a href="#research">09 · Toolformer 到 ToolLLM</a><a href="#modern">10 · MCP 与程序化调用</a><a href="#design">11 · 工具设计</a><a href="#security">12 · 安全与失败恢复</a><a href="#interactive">13 · 交互演示</a><a href="#code">14 · Python 执行器</a><a href="#evaluation">15 · 评测</a><a href="#limits">16 · 总结</a><a href="#references">17 · 参考资料</a></nav>
+<main id="main"><article>
+<header><div class="eyebrow">AGENT SYSTEMS · TOOL USE · 2023—2026</div><h1>Understanding Function Calling</h1><p class="dek">模型如何把一句自然语言，变成一个可验证、可授权、可执行的外部动作？从 JSON Schema、工具调用协议到 Agent Runtime，理解 LLM 与真实软件系统之间的接口。</p><div class="meta"><span>研究专题 · Tool Use &amp; Function Calling</span><span>约 35 分钟</span><span>OpenAI · Anthropic · Toolformer · MCP</span></div></header>
+
+<section id="problem"><h2>01 · 为什么模型需要工具？</h2>
+<p class="lead">一个语言模型可以解释“如何查询天气”，但如果它没有访问天气服务的能力，它就不能知道东京此刻的真实天气；它可以写出一封邮件，却不能仅凭文字生成就证明邮件已经发送。</p>
+<p>这不是简单的知识缺失，而是<strong>模型内部计算与外部世界状态之间存在边界</strong>。模型参数保存的是训练形成的统计规律，不是一个持续更新的数据库；模型输出的是 token 序列，不会自动变成数据库查询、支付请求或文件修改。</p>
+<div class="insight"><strong>先建立正确直觉：</strong>Function Calling 不是“让模型直接运行 Python”，而是让模型用一种约定好的结构，向宿主应用提出工具调用请求。真正访问网络、读写文件或修改业务状态的，是应用侧的执行环境。</div>
+<div class="twocol"><div class="panel"><h3>读取信息</h3><p>“查一下东京今天的天气。”</p><p class="hint">需要外部数据源；模型不能凭训练记忆保证实时性。</p></div><div class="panel"><h3>执行动作</h3><p>“把周五下午三点的会议改到四点。”</p><p class="hint">需要身份验证、日历权限、冲突检查和实际写入。</p></div></div>
+<p>这两类任务都可以通过工具接口连接外部系统，但风险完全不同：读取天气通常是低风险查询；修改日历已经产生副作用，必须检查调用者身份、授权范围和时间冲突。</p>
+<p>因此，真正的问题不是“模型能否输出一个 JSON”，而是：<strong>模型能否选对工具、填对参数，应用能否安全执行，并且双方能否正确传递结果？</strong></p></section>
+
+<section id="definition"><h2>02 · Function Calling 究竟是什么？</h2>
+<p>Function Calling（也常称 Tool Calling）是一种模型—应用协作机制：开发者向模型声明一组可用工具及其输入契约，模型根据当前任务选择是否调用，并生成结构化的工具名称和参数；应用接收请求、执行真实函数，再把结果返回模型。</p>
+<p>它至少包含四个不同对象：</p><ol><li><strong>Tool definition：</strong>工具名称、用途说明、输入 Schema，有时还有输出 Schema。</li><li><strong>Tool call：</strong>模型提出的调用意图，通常包含调用 ID、工具名称和参数。</li><li><strong>Tool execution：</strong>应用或工具运行时执行的真实代码。</li><li><strong>Tool result：</strong>执行结果，以与调用 ID 对应的消息返回模型。</li></ol>
+<p>把它写成一个抽象调用记录：</p>
+<div class="math-equation" role="group" aria-label="工具调用记录的抽象结构"><div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="调用记录公式，可横向滚动"><math display="block" aria-label="调用 q 等于调用标识、工具名称和参数三元组"><mrow><mi>q</mi><mo>=</mo><mo>(</mo><msub><mi>call</mi><mi>id</mi></msub><mo>,</mo><msub><mi>tool</mi><mi>name</mi></msub><mo>,</mo><mi>arguments</mi><mo>)</mo></mrow></math></div><div class="math-caption">式 1 · 这是本文用于解释协议的抽象表示，不是某一家厂商的原始消息类型定义。</div></div>
+<p>这里的 <code>call_id</code> 不是装饰字段。一次模型回复可能包含多个工具调用，执行器必须把每个结果准确地关联回对应请求；否则在并发或多轮执行中，模型可能把 A 工具的结果误认为 B 工具的结果。</p>
+<p>OpenAI 将函数定义为一种特定类型的工具：它通过 JSON Schema 描述参数，由模型把调用数据交给应用；平台还提供内置工具和其他自定义工具形式。Anthropic 的 Tool Use 采用相近的协作思想，但消息块与执行边界有自己的协议定义。参见 <a href="https://developers.openai.com/api/docs/guides/function-calling">OpenAI Function Calling 文档</a>与 <a href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview">Anthropic Tool Use 文档</a>。</p></section>
+
+<section id="loop"><h2>03 · 一次完整调用：模型只负责提出，运行时负责执行</h2>
+<p>最重要的心智模型是一个闭环，而不是一次性“问答”。模型收到工具定义后，可能选择普通回答，也可能输出一个或多个工具调用；应用执行后把结果送回模型，模型再决定回答、继续调用，或者报告失败。</p>
+<figure class="figure"><div class="figscroll"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 430" role="img" aria-labelledby="fc-flow-title fc-flow-desc" data-export="01-call-loop.svg">
+<title id="fc-flow-title">Function Calling 的模型与应用执行闭环</title><desc id="fc-flow-desc">用户请求进入模型，模型产生结构化工具调用；应用侧验证参数和权限后执行外部工具，再把带调用标识的结果交回模型，最终由模型生成回答或下一次调用。</desc>
+<defs><marker id="fc-flow-arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0 0 L9 3 L0 6 Z" fill="#187e75"/></marker><marker id="fc-flow-orange" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0 0 L9 3 L0 6 Z" fill="#b46744"/></marker></defs><rect width="1120" height="430" rx="18" fill="#f8fbf9"/><text x="560" y="38" text-anchor="middle" font-size="21" font-weight="700" fill="#24484c">模型决定“调用什么”；宿主应用决定“是否执行、如何执行”</text>
+<rect x="28" y="150" width="128" height="86" rx="12" fill="#e8f1f5" stroke="#91b1bf" stroke-width="2"/><text x="92" y="184" text-anchor="middle" font-size="17" font-weight="700" fill="#24484c">用户请求</text><text x="92" y="210" text-anchor="middle" font-size="13" fill="#49666e">自然语言</text>
+<rect x="200" y="150" width="160" height="86" rx="12" fill="#dff1eb" stroke="#78b9a8" stroke-width="2"/><text x="280" y="184" text-anchor="middle" font-size="18" font-weight="700" fill="#205e56">LLM</text><text x="280" y="210" text-anchor="middle" font-size="13" fill="#49666e">选择工具 / 生成参数</text>
+<rect x="408" y="150" width="160" height="86" rx="12" fill="#fff0df" stroke="#d9a36e" stroke-width="2"/><text x="488" y="184" text-anchor="middle" font-size="17" font-weight="700" fill="#89552f">Tool Call</text><text x="488" y="210" text-anchor="middle" font-size="13" fill="#805f45">name + arguments + id</text>
+<rect x="616" y="132" width="190" height="122" rx="12" fill="#eee9fb" stroke="#a99bd5" stroke-width="2"/><text x="711" y="166" text-anchor="middle" font-size="17" font-weight="700" fill="#574b8d">应用 / Runtime</text><text x="711" y="194" text-anchor="middle" font-size="13" fill="#5f5b79">解析 · Schema 校验</text><text x="711" y="216" text-anchor="middle" font-size="13" fill="#5f5b79">权限 · 审批 · 执行</text>
+<rect x="856" y="150" width="132" height="86" rx="12" fill="#e5f0f7" stroke="#8aaec4" stroke-width="2"/><text x="922" y="184" text-anchor="middle" font-size="17" font-weight="700" fill="#355c73">外部工具</text><text x="922" y="210" text-anchor="middle" font-size="13" fill="#49666e">API / DB / 文件</text>
+<rect x="1010" y="150" width="88" height="86" rx="12" fill="#f8e9e2" stroke="#d5a18b" stroke-width="2"/><text x="1054" y="184" text-anchor="middle" font-size="15" font-weight="700" fill="#8b4f39">结果</text><text x="1054" y="210" text-anchor="middle" font-size="12" fill="#805f45">Output</text>
+<path d="M156 193 H196 M360 193 H404 M568 193 H612 M806 193 H852 M988 193 H1006" fill="none" stroke="#187e75" stroke-width="3" marker-end="url(#fc-flow-arrow)"/>
+<path d="M1054 238 V332 H280 V240" fill="none" stroke="#b46744" stroke-width="3" marker-end="url(#fc-flow-orange)"/><text x="675" y="322" text-anchor="middle" font-size="15" font-weight="700" fill="#a45e3c">tool result：带着原 call_id 返回模型</text>
+<rect x="220" y="355" width="120" height="42" rx="9" fill="#e0f0e9" stroke="#8bbcae"/><text x="280" y="382" text-anchor="middle" font-size="14" font-weight="700" fill="#205e56">最终回答 / 再调用</text><path d="M280 355 V240" fill="none" stroke="#187e75" stroke-width="2" stroke-dasharray="5 5"/>
+<text x="560" y="414" text-anchor="middle" font-size="12" fill="#667b7c">任何校验失败、权限拒绝或工具错误，都必须形成明确结果，而不是假装执行成功。</text></svg></div><figcaption>图 1 · Function Calling 的核心闭环。箭头区分了模型提出请求、应用执行和结果回传三个不同责任域。</figcaption></figure>
+<p>OpenAI 官方文档把标准流程概括为五步：向模型提供工具定义、接收工具调用、在应用侧执行、将工具输出再次提交模型、接收最终回答或更多调用。注意第 3 步明确发生在应用侧，而不是模型输出 token 的瞬间。[<a href="https://developers.openai.com/api/docs/guides/function-calling">OpenAI Function Calling · Tool calling flow</a>]</p>
+<ol><li><strong>声明能力：</strong>应用把可用工具、参数结构和说明传给模型。</li><li><strong>选择与生成：</strong>模型根据用户目标决定是否调用，并给出工具名称和参数。</li><li><strong>校验与执行：</strong>应用解析调用，验证结构、业务规则和权限，再调用真实函数。</li><li><strong>结果关联：</strong>执行器用原调用 ID 回传成功数据或结构化错误。</li><li><strong>继续决策：</strong>模型读取结果，生成答案，或提出下一次调用。</li></ol>
+<div class="insight note"><strong>边界提醒：</strong>模型说“我已经帮你取消订单”，只有在执行器确认取消操作成功、并返回可核验结果后，才有事实依据。模型生成的自然语言不是外部系统的执行回执。</div></section>
+
+<section id="message"><h2>04 · 调用消息长什么样？</h2>
+<p>以一个只读天气查询为例。应用声明 <code>get_weather</code>，模型返回一个结构化调用。下面是便于理解的 Responses API 风格示意，重点是字段关系，而不是要求所有 SDK 都使用完全相同的封装方式。</p>
+<pre><code>{
+  "type": "function_call",
+  "call_id": "call_7f31",
+  "name": "get_weather",
+  "arguments": "{\"location\":\"Tokyo\",\"unit\":\"celsius\"}"
+}</code></pre>
+<p>这里有三个关键点：<code>name</code> 必须匹配已声明且当前可用的工具；<code>arguments</code> 在某些 API 响应中是 JSON 编码的字符串，应用必须解析并校验；<code>call_id</code> 用于关联后续工具结果，不能丢失或由执行器随意替换。</p>
+<p>应用执行后，向模型回传与该调用 ID 对应的输出。Responses API 中可使用 <code>function_call_output</code> 项：</p>
+<pre><code>{
+  "type": "function_call_output",
+  "call_id": "call_7f31",
+  "output": "{\"temperature_c\":18,\"condition\":\"cloudy\"}"
+}</code></pre>
+<p>模型收到结果后才有依据生成最终说明。如果工具返回超时、权限拒绝或业务错误，也应回传可辨识的错误状态；不要把错误文本包装成成功数据。</p>
+<p class="hint">协议差异：较早的 Chat Completions 使用 <code>tool_calls</code> 数组与 <code>tool</code> 角色消息；Responses 使用类型化的 output items，并用 <code>call_id</code> 关联输入输出。迁移时应按当前 API 文档处理，不要把两套消息外形混写。[<a href="https://developers.openai.com/api/docs/guides/migrate-to-responses">OpenAI Responses API migration guide</a>]</p></section>
+
+<section id="schema"><h2>05 · Schema：它是结构化契约，不是安全边界</h2>
+<p>工具定义不是给模型看的随意备注，而是一份接口契约。好的定义至少回答四个问题：工具做什么、何时使用、参数如何组织、结果代表什么。</p>
+<figure class="figure"><div class="figscroll"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 390" role="img" aria-labelledby="fc-schema-title fc-schema-desc" data-export="02-schema-contract.svg">
+<title id="fc-schema-title">工具 Schema 与执行校验的多层契约</title><desc id="fc-schema-desc">工具定义包含名称、描述、参数结构；模型生成调用后，运行时依次进行 JSON 解析、Schema 结构校验、业务规则检查和权限验证，最后才允许执行。</desc>
+<defs><marker id="fc-schema-arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0 0 L9 3 L0 6 Z" fill="#187e75"/></marker></defs><rect width="1000" height="390" rx="18" fill="#f8fbf9"/><text x="500" y="36" text-anchor="middle" font-size="21" font-weight="700" fill="#24484c">结构正确 ≠ 业务允许 ≠ 操作安全</text>
+<rect x="35" y="88" width="205" height="220" rx="13" fill="#e7f2ee" stroke="#88bcae" stroke-width="2"/><text x="137" y="121" text-anchor="middle" font-size="17" font-weight="700" fill="#205e56">Tool Definition</text><text x="58" y="160" font-size="14" fill="#345f5d">① name</text><text x="58" y="190" font-size="14" fill="#345f5d">② description</text><text x="58" y="220" font-size="14" fill="#345f5d">③ input schema</text><text x="58" y="250" font-size="14" fill="#345f5d">④ output / errors</text><text x="58" y="280" font-size="14" fill="#345f5d">⑤ usage examples</text>
+<path d="M240 198 H286" stroke="#187e75" stroke-width="3" marker-end="url(#fc-schema-arrow)"/>
+<rect x="292" y="115" width="148" height="166" rx="13" fill="#fff0df" stroke="#d9a36e" stroke-width="2"/><text x="366" y="151" text-anchor="middle" font-size="17" font-weight="700" fill="#89552f">Model Call</text><text x="366" y="186" text-anchor="middle" font-size="13" fill="#805f45">tool name</text><text x="366" y="210" text-anchor="middle" font-size="13" fill="#805f45">JSON arguments</text><text x="366" y="234" text-anchor="middle" font-size="13" fill="#805f45">call_id</text>
+<path d="M440 198 H482" stroke="#187e75" stroke-width="3" marker-end="url(#fc-schema-arrow)"/>
+<rect x="488" y="77" width="455" height="252" rx="14" fill="#fff" stroke="#b9c9c4" stroke-width="2"/><text x="715" y="108" text-anchor="middle" font-size="17" font-weight="700" fill="#24484c">Application-side gates</text>
+<rect x="515" y="132" width="190" height="65" rx="9" fill="#e7f2f8" stroke="#8aaec4"/><text x="610" y="158" text-anchor="middle" font-size="15" font-weight="700" fill="#355c73">1 · JSON Parse</text><text x="610" y="180" text-anchor="middle" font-size="12" fill="#49666e">语法是否合法？</text>
+<rect x="726" y="132" width="190" height="65" rx="9" fill="#e7f2f8" stroke="#8aaec4"/><text x="821" y="158" text-anchor="middle" font-size="15" font-weight="700" fill="#355c73">2 · Schema</text><text x="821" y="180" text-anchor="middle" font-size="12" fill="#49666e">类型 / 字段 / 枚举</text>
+<rect x="515" y="220" width="190" height="65" rx="9" fill="#eee9fb" stroke="#a99bd5"/><text x="610" y="246" text-anchor="middle" font-size="15" font-weight="700" fill="#574b8d">3 · Business Rules</text><text x="610" y="268" text-anchor="middle" font-size="12" fill="#5f5b79">范围 / 状态 / 约束</text>
+<rect x="726" y="220" width="190" height="65" rx="9" fill="#fff0df" stroke="#d9a36e"/><text x="821" y="246" text-anchor="middle" font-size="15" font-weight="700" fill="#89552f">4 · Authorization</text><text x="821" y="268" text-anchor="middle" font-size="12" fill="#805f45">身份 / 权限 / 审批</text>
+<text x="500" y="365" text-anchor="middle" font-size="14" font-weight="700" fill="#a34e4e">任一关失败：拒绝执行，并返回可诊断的错误</text></svg></div><figcaption>图 2 · Schema 约束的是数据形状；业务规则、身份权限和人工审批仍然需要由应用执行。</figcaption></figure>
+<p>下面是一个 OpenAI Responses API 风格的函数定义。这里把 <code>location</code> 和 <code>unit</code> 都设为必填，并关闭额外字段，以便演示严格的结构契约：</p>
+<pre><code>{
+  "type": "function",
+  "name": "get_weather",
+  "description": "Get current weather for a city. Use only for current conditions.",
+  "parameters": {
+    "type": "object",
+    "properties": {
+      "location": {"type": "string", "description": "City name, e.g. Tokyo"},
+      "unit": {"type": "string", "enum": ["celsius", "fahrenheit"]}
+    },
+    "required": ["location", "unit"],
+    "additionalProperties": false
+  },
+  "strict": true
+}</code></pre>
+<h3>Strict Mode 到底保证什么？</h3>
+<p>OpenAI 文档建议对 function tools 使用 <code>strict: true</code>。其严格模式基于 Structured Outputs，并要求对象的 <code>additionalProperties</code> 为 <code>false</code>，且 <code>properties</code> 中的字段都出现在 <code>required</code> 中。若要表达“可选”，通常要把字段类型设计为可空，而不是简单地从 <code>required</code> 删掉。[<a href="https://developers.openai.com/api/docs/guides/function-calling">OpenAI · Strict mode</a>]</p>
+<p>这能显著降低结构错误，却不能证明参数真实、操作合法或用户已授权。模型可以生成一个结构完全合规、但业务上错误的订单 ID；也可以在 Schema 合规的情况下，提出用户从未授权的删除操作。</p>
+<h3>Tool Choice：控制模型“是否调用、能调用哪些工具”</h3>
+<p>工具 Schema 定义“工具长什么样”；<code>tool_choice</code> 则控制本轮模型可以如何选择工具。以 OpenAI Function Calling 为例，<code>auto</code> 允许模型决定不调用、调用一个或多个工具；<code>required</code> 要求至少调用一个；指定函数对象会强制选择一个具体函数；<code>allowed_tools</code> 可以把可调用集合限制为已声明工具的子集；<code>none</code> 则禁止本轮工具调用。[<a href="https://developers.openai.com/api/docs/guides/function-calling">OpenAI · Tool choice</a>]</p>
+<pre><code>tool_choice: "auto"       // 模型自行决定
+tool_choice: "required"   // 至少调用一个工具
+tool_choice: {
+  "type": "function",
+  "name": "get_weather"
+}                         // 指定一个函数
+tool_choice: "none"       // 本轮不调用工具</code></pre>
+<p>注意：强制选择函数只约束模型输出，不代表应用已经授予该工具权限。执行器仍要做身份、资源和副作用检查；<code>tool_choice</code> 不是授权机制。工具搜索场景还可以先加载工具子集，再通过 <code>allowed_tools</code> 限定本轮可调用集合。</p>
+<div class="insight warning"><strong>安全原则：</strong>不要把“模型输出符合 JSON Schema”当成“可以直接执行”。Schema 是第一道门，不是授权系统。</div>
+<p>可以把应用侧的最低验证条件写成一个逻辑合取：</p>
+<div class="math-equation" role="group" aria-label="工具调用验证条件"><div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="验证条件公式，可横向滚动"><math display="block" aria-label="Valid 等于 JSON 解析、Schema 校验、业务规则和权限校验四者同时成立"><mrow><mi>Valid</mi><mo>(</mo><mi>q</mi><mo>)</mo><mo>=</mo><mi>J</mi><mo>(</mo><mi>q</mi><mo>)</mo><mo>∧</mo><mi>S</mi><mo>(</mo><mi>q</mi><mo>)</mo><mo>∧</mo><mi>B</mi><mo>(</mo><mi>q</mi><mo>)</mo><mo>∧</mo><mi>P</mi><mo>(</mo><mi>q</mi><mo>)</mo></mrow></math></div><div class="math-caption">式 2 · J = JSON 可解析，S = Schema 合法，B = 业务规则通过，P = 调用者权限允许。</div></div>
+<p>这里的四个条件是工程检查清单，不是模型训练目标。即使使用 Strict Mode，应用也必须在真实执行边界重新验证。</p></section>
+
+<section id="formats"><h2>06 · JSON Mode、Structured Outputs 与 Function Calling 有什么区别？</h2>
+<p>这三个概念经常被放在一起讨论，因为它们都可能输出 JSON；但它们解决的是不同问题。</p>
+<div class="table-scroll"><table><thead><tr><th>机制</th><th>核心问题</th><th>是否选择工具</th><th>是否执行外部动作</th></tr></thead><tbody>
+<tr><td><strong>JSON Mode</strong></td><td>尽量保证输出是合法 JSON</td><td>不负责</td><td>不负责</td></tr><tr><td><strong>Structured Outputs</strong></td><td>让输出符合指定结构 Schema</td><td>不必然</td><td>不负责</td></tr><tr><td><strong>Function Calling</strong></td><td>从可用工具中选择，并生成调用参数</td><td>是</td><td>由应用或托管工具运行时负责</td></tr></tbody></table></div>
+<p>举例：如果你希望模型把一段简历解析成固定字段，Structured Outputs 可能已经足够；如果你希望模型查找某个候选人的日历空档，并创建会议，就需要工具调用以及真正的日历执行逻辑。</p>
+<p>它们也可以组合使用：Function Calling 使用 JSON Schema 描述工具参数；某些平台的严格模式会借助结构化输出约束参数格式。但“输出格式受约束”仍然不等于“业务动作被授权”。</p></section>
+
+<section id="parallel"><h2>07 · 一次调用还是多次调用？顺序与并行</h2>
+<p>用户的一句话可能对应多个工具动作。比如“查一下东京和大阪的天气，再比较哪个更冷”：两个城市的天气查询互不依赖，可以并行；但“先查询库存，再按库存结果创建订单”有数据依赖，必须先后执行。</p>
+<figure class="figure"><div class="figscroll"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 390" role="img" aria-labelledby="fc-parallel-title fc-parallel-desc" data-export="03-parallel-vs-sequential.svg">
+<title id="fc-parallel-title">工具调用的并行与顺序依赖</title><desc id="fc-parallel-desc">上半部分展示两个独立查询同时执行后聚合；下半部分展示先查询库存，再依据结果创建订单，后一步依赖前一步。</desc>
+<defs><marker id="fc-par-arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0 0 L9 3 L0 6 Z" fill="#187e75"/></marker></defs><rect width="1000" height="390" rx="18" fill="#f8fbf9"/><text x="500" y="37" text-anchor="middle" font-size="21" font-weight="700" fill="#24484c">是否并行，取决于数据依赖和副作用，而不只是模型能否一次输出多个调用</text>
+<text x="42" y="89" font-size="16" font-weight="700" fill="#205e56">A · 独立查询：可以并行</text><rect x="42" y="116" width="150" height="54" rx="10" fill="#e8f1f5" stroke="#91b1bf"/><text x="117" y="149" text-anchor="middle" font-size="14" font-weight="700" fill="#355c73">模型发起 2 calls</text>
+<path d="M192 143 H245 V116 H294 M245 143 V174 H294" fill="none" stroke="#187e75" stroke-width="2.5" marker-end="url(#fc-par-arrow)"/>
+<rect x="300" y="91" width="180" height="52" rx="10" fill="#e0f1eb" stroke="#83b9a9"/><text x="390" y="123" text-anchor="middle" font-size="14" font-weight="700" fill="#205e56">get_weather(Tokyo)</text><rect x="300" y="151" width="180" height="52" rx="10" fill="#e0f1eb" stroke="#83b9a9"/><text x="390" y="183" text-anchor="middle" font-size="14" font-weight="700" fill="#205e56">get_weather(Osaka)</text>
+<path d="M480 117 H555 V146 H622 M480 177 H555 V146" fill="none" stroke="#187e75" stroke-width="2.5" marker-end="url(#fc-par-arrow)"/><rect x="628" y="118" width="180" height="56" rx="10" fill="#eee9fb" stroke="#a99bd5"/><text x="718" y="152" text-anchor="middle" font-size="14" font-weight="700" fill="#574b8d">聚合 / 比较结果</text>
+<text x="42" y="250" font-size="16" font-weight="700" fill="#89552f">B · 有依赖：必须顺序执行</text><rect x="42" y="278" width="150" height="54" rx="10" fill="#e8f1f5" stroke="#91b1bf"/><text x="117" y="311" text-anchor="middle" font-size="14" font-weight="700" fill="#355c73">用户下单请求</text>
+<rect x="300" y="278" width="170" height="54" rx="10" fill="#fff0df" stroke="#d9a36e"/><text x="385" y="311" text-anchor="middle" font-size="14" font-weight="700" fill="#89552f">查询库存</text><rect x="580" y="278" width="170" height="54" rx="10" fill="#fff0df" stroke="#d9a36e"/><text x="665" y="311" text-anchor="middle" font-size="14" font-weight="700" fill="#89552f">创建订单</text>
+<path d="M192 305 H296 M470 305 H576" fill="none" stroke="#b46744" stroke-width="2.5" marker-end="url(#fc-par-arrow)"/><text x="520" y="360" text-anchor="middle" font-size="13" fill="#805f45">第二步必须读取第一步的库存结果；不能把依赖关系当成并行任务。</text></svg></div><figcaption>图 3 · 两个独立查询可以并行；存在真实数据依赖或共享副作用时，应保留顺序。</figcaption></figure>
+<p>若每次模型往返耗时为 <em>t</em>，工具执行耗时分别为 <em>e₁, e₂, …, eₙ</em>，忽略调度和聚合开销时：</p>
+<div class="math-equation" role="group" aria-label="顺序和并行工具执行的延迟比较"><div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="顺序延迟公式，可横向滚动"><math display="block" aria-label="顺序延迟约为 n 次往返时间加执行时间之和"><mrow><msub><mi>T</mi><mi>seq</mi></msub><mo>≈</mo><mi>n</mi><mi>t</mi><mo>+</mo><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>n</mi></munderover><msub><mi>e</mi><mi>i</mi></msub></mrow></math></div><div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="并行延迟公式，可横向滚动"><math display="block" aria-label="并行延迟约为一次往返时间加各工具执行时间的最大值"><mrow><msub><mi>T</mi><mi>parallel</mi></msub><mo>≈</mo><mi>t</mi><mo>+</mo><munder><mo>max</mo><mrow><mn>1</mn><mo>≤</mo><mi>i</mi><mo>≤</mo><mi>n</mi></mrow></munder><msub><mi>e</mi><mi>i</mi></msub></mrow></math></div><div class="math-caption">式 3 · 这是解释延迟结构的简化模型，不是平台性能承诺；真实系统还受排队、限流、重试和模型调度影响。</div></div>
+<p>并行调用不是越多越好。需要确认调用之间没有写入冲突、资源竞争、速率限制或顺序依赖。即使模型能在一个回复里提出多个工具调用，执行器也必须逐个检查其权限和副作用。OpenAI 文档说明可通过 <code>parallel_tool_calls</code> 控制并行工具调用行为；不同模型和 API 的支持范围应以当前文档为准。[<a href="https://developers.openai.com/api/docs/guides/function-calling">OpenAI · Parallel function calling</a>]</p></section>
+
+<section id="providers"><h2>08 · OpenAI 与 Anthropic：相同思想，不同消息协议</h2>
+<p>两家平台都把工具使用视为模型与外部执行环境之间的结构化交互，但具体字段、消息角色、工具定义方式和执行位置并不完全相同。阅读 SDK 代码时，应该区分“共同的系统概念”和“某家 API 的消息格式”。</p>
+<div class="table-scroll"><table><thead><tr><th>维度</th><th>OpenAI Responses API</th><th>Anthropic Messages API</th></tr></thead><tbody>
+<tr><td>工具定义</td><td><code>type: function</code>、<code>name</code>、<code>description</code>、<code>parameters</code></td><td><code>name</code>、<code>description</code>、<code>input_schema</code></td></tr>
+<tr><td>模型调用表示</td><td>output item 中的 <code>function_call</code></td><td>assistant 内容中的 <code>tool_use</code> block</td></tr>
+<tr><td>调用停止信号</td><td>检查响应中的工具调用项和状态</td><td>客户端工具通常以 <code>stop_reason: tool_use</code> 表示</td></tr>
+<tr><td>结果回传</td><td><code>function_call_output</code>，使用原 <code>call_id</code></td><td><code>tool_result</code> block，引用 <code>tool_use_id</code></td></tr>
+<tr><td>执行位置</td><td>自定义函数通常由应用执行；内置工具可由平台执行</td><td>客户端工具由应用执行；Anthropic 托管工具可由 Anthropic 执行</td></tr>
+<tr><td>核心工程责任</td><td>执行前验证参数、权限和副作用</td><td>执行前验证参数、权限和副作用</td></tr></tbody></table></div>
+<p>Anthropic 的 Tool Use 文档明确区分 client tools 和 server tools：对于用户自定义的客户端工具，Claude 返回 <code>tool_use</code> block，应用执行操作后再提交 <code>tool_result</code>；托管工具则可以在 Anthropic 基础设施上运行。[<a href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview">Anthropic · Tool use with Claude</a>]</p>
+<p>因此，不能只凭“模型输出了一个 tool call”就假设执行位置相同。集成前要回答：谁拥有凭据？谁执行函数？谁保存状态？工具输出如何回到模型？错误和拒绝如何表达？</p>
+<div class="insight"><strong>跨平台抽象建议：</strong>在自己的应用内部定义统一的 ToolCall / ToolResult 类型，再由 OpenAI、Anthropic 或 MCP adapter 负责协议转换。业务执行器不应被某一家供应商的消息字段绑死。</div></section>
+
+<section id="research"><h2>09 · 从 Toolformer 到 ToolLLM：模型怎样学会使用工具？</h2>
+<p>API 协议解决的是“怎样表达调用”。但模型为什么会在合适的时候选对工具、填对参数？这属于模型能力与训练数据问题。Function Calling 并不等于某一种训练算法；它既可以通过提示和 Schema 驱动，也可以通过 SFT、偏好优化、工具轨迹训练等方式提升。</p>
+<h3>Toolformer：让模型自监督地学习何时调用</h3>
+<p>Schick 等人在 2023 年提出 Toolformer。其核心问题是：语言模型擅长生成文本，却可能不擅长精确计算、查询最新事实或调用外部服务。Toolformer 让模型学习何时调用 API、调用时传入什么参数，以及如何把工具结果纳入后续 token 预测。论文使用少量工具示例，通过候选调用和损失变化筛选有用调用，而不是把所有工具调用都视为有益。[<a href="https://arxiv.org/abs/2302.04761">Toolformer, NeurIPS 2023</a>]</p>
+<p>这揭示了工具使用的三个可学习子问题：<strong>是否调用、调用哪个工具、如何组织参数</strong>。工具结果还必须以适当方式融入后续生成，否则“调用成功”并不保证“任务完成”。</p>
+<h3>Gorilla：API 文档变化时，不能只靠记忆</h3>
+<p>Gorilla 研究大规模 API 调用生成，并结合检索系统让模型在测试时参考更新的 API 文档。其动机之一是 API 版本、参数和用法会变化，模型仅凭参数记忆容易幻觉出错误的调用形式。论文使用 Hugging Face、TorchHub、TensorHub API 相关数据构建 APIBench。[<a href="https://arxiv.org/abs/2305.15334">Gorilla, 2023</a>]</p>
+<p>工程启示是：当工具库频繁变化时，工具说明和文档检索可能比继续堆叠旧提示词更可靠；模型必须看到当前版本的真实契约。</p>
+<h3>ToolLLM / ToolBench：工具使用需要规模化数据和评测</h3>
+<p>ToolLLM 提出由数据构造、模型训练和评估组成的工具使用框架。论文报告其 ToolBench 收集了 <strong>16,464 个真实 RESTful API，覆盖 49 个类别</strong>，并构造单工具和多工具指令及调用路径，再以 ToolEval 评估任务完成情况。[<a href="https://arxiv.org/abs/2307.16789">ToolLLM / ToolBench, 2023</a>]</p>
+<p>这个数字说明工具空间本身就可能非常庞大，但不能据此推断“工具越多，Agent 越强”。大量相似、描述含糊或低质量的工具会增加选择难度、提示 token 和错误机会；工具检索、命名空间、分层暴露与评测因此变得重要。</p>
+<div class="panel"><h3>把研究问题拆开看</h3><div class="table-scroll"><table><thead><tr><th>能力</th><th>研究问题</th><th>常见错误</th></tr></thead><tbody><tr><td>Tool selection</td><td>什么时候应该调用？选哪个工具？</td><td>不必要调用、错选工具</td></tr><tr><td>Argument generation</td><td>参数值和结构是否正确？</td><td>字段缺失、参数幻觉、类型错误</td></tr><tr><td>API grounding</td><td>是否符合当前文档和版本？</td><td>旧参数、虚构接口、错误端点</td></tr><tr><td>Result integration</td><td>是否正确理解工具返回？</td><td>误读错误、忽略证据、错误总结</td></tr><tr><td>Multi-step planning</td><td>能否在依赖关系中安排调用？</td><td>循环调用、遗漏步骤、错误停止</td></tr></tbody></table></div></div></section>
+
+<section id="modern"><h2>10 · MCP、工具发现与程序化调用：从单个函数走向工具生态</h2>
+<p>当一个 Agent 只有两三个工具时，把所有 Schema 一起放进上下文可能很简单；当它需要连接 GitHub、数据库、搜索、文件系统、监控平台和企业内部服务时，问题就从“能否调用一个函数”变成“如何发现、管理和编排一整个工具生态”。</p>
+<h3>MCP：标准化工具如何被发现和调用</h3>
+<p>Model Context Protocol（MCP）把工具能力放在客户端与服务器之间的协议层。服务器可以通过 <code>tools/list</code> 暴露工具列表，客户端通过 <code>tools/call</code> 请求执行。MCP 解决的是工具发现和互操作问题；它不是 Function Calling 的同义词，也不会替应用自动解决模型决策、权限验证和审批策略。[<a href="https://modelcontextprotocol.io/specification/2025-06-18/server/tools">MCP Tools Specification</a>]</p>
+<h3>Tool Search：不要一开始就把几百个 Schema 全塞进上下文</h3>
+<p>Anthropic 在 2025 年的 Advanced Tool Use 工程文章中介绍了按需工具发现：把不常用工具延迟加载，模型先搜索相关工具，再把匹配的工具定义加入上下文。其动机是大量工具定义会占用上下文预算，并可能让真正相关的工具更难被模型关注。文中还介绍 Tool Use Examples，让工具定义不仅包含字段结构，也包含正确使用方式。[<a href="https://www.anthropic.com/research/advanced-tool-use">Anthropic · Advanced Tool Use</a>]</p>
+<h3>Programmatic Tool Calling：让代码承担确定性的编排</h3>
+<p>当任务需要几十次重复调用、循环、条件判断、数据过滤或聚合时，每一步都让模型重新推理，可能产生大量往返和中间结果。Anthropic 与 OpenAI 的程序化工具调用方案都在探索：让模型生成一段受控代码，在执行环境中组合工具调用，只把必要的最终结果交回模型。[<a href="https://www.anthropic.com/research/advanced-tool-use">Anthropic Advanced Tool Use</a>] [<a href="https://developers.openai.com/api/docs/guides/tools-programmatic-tool-calling">OpenAI Programmatic Tool Calling</a>]</p>
+<figure class="figure"><div class="figscroll"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 365" role="img" aria-labelledby="fc-stack-title fc-stack-desc" data-export="04-tool-ecosystem.svg">
+<title id="fc-stack-title">现代工具生态的三个互补层次</title><desc id="fc-stack-desc">模型能力负责判断何时调用以及生成参数；工具协议负责结构化调用和工具发现；运行时负责编排、权限、执行、重试和评测。</desc>
+<rect width="1000" height="365" rx="18" fill="#f8fbf9"/><text x="500" y="36" text-anchor="middle" font-size="21" font-weight="700" fill="#24484c">工具生态不是一个 API：它由能力、协议和运行时共同构成</text>
+<rect x="110" y="70" width="780" height="75" rx="12" fill="#e0f1eb" stroke="#83b9a9" stroke-width="2"/><text x="145" y="101" font-size="17" font-weight="700" fill="#205e56">模型能力层</text><text x="145" y="125" font-size="13" fill="#49666e">Toolformer · ReAct · SFT / tool traces · tool selection · argument generation</text>
+<rect x="110" y="158" width="780" height="75" rx="12" fill="#e7f2f8" stroke="#8aaec4" stroke-width="2"/><text x="145" y="189" font-size="17" font-weight="700" fill="#355c73">协议与发现层</text><text x="145" y="213" font-size="13" fill="#49666e">Function Calling · JSON Schema · MCP · tool search · call/result correlation</text>
+<rect x="110" y="246" width="780" height="75" rx="12" fill="#eee9fb" stroke="#a99bd5" stroke-width="2"/><text x="145" y="277" font-size="17" font-weight="700" fill="#574b8d">运行时与治理层</text><text x="145" y="301" font-size="13" fill="#5f5b79">Execution · authorization · approval · sandbox · retries · observability · evals</text><path d="M500 145 V154 M500 233 V242" stroke="#187e75" stroke-width="3"/><text x="500" y="348" text-anchor="middle" font-size="12" fill="#667b7c">每一层解决不同问题；任何一层都不能替代其他层。</text></svg></div><figcaption>图 4 · Tool Use 的系统分层。模型会调用工具，不代表协议已解决连接问题；协议标准化也不代表执行已安全。</figcaption></figure>
+<p>OpenAI 的 Programmatic Tool Calling 指南强调：代码适合确定性的循环、条件和数据处理；直接工具调用则适合单次操作或需要模型重新判断的步骤。无论调用来自模型还是程序，应用仍需检查参数、权限，并在高影响操作前执行审批；尽可能设计幂等操作，避免重试导致重复副作用。[<a href="https://developers.openai.com/api/docs/guides/tools-programmatic-tool-calling">OpenAI · Programmatic Tool Calling</a>]</p></section>
+
+<section id="design"><h2>11 · 如何设计模型真正会用的工具？</h2>
+<p>Anthropic Engineering 在《Writing effective tools for agents》中提出一个重要视角：传统函数主要面向确定性程序员；Agent 工具则要面对非确定性的模型。模型可能误解用途、漏掉可选参数、选择错误工具，或把工具返回中的无关文本当成指令。因此，工具的“可用性”不仅由代码实现决定，也由接口和上下文设计决定。[<a href="https://www.anthropic.com/research/writing-tools-for-agents">Anthropic · Writing effective tools for agents</a>]</p>
+<ul><li><strong>名字具体：</strong><code>search_customer_orders</code> 比 <code>search</code> 更能说明对象与动作。</li><li><strong>说明何时用：</strong>写清适用场景、数据范围和不适用情况。</li><li><strong>参数有语义：</strong>不仅说明 <code>date</code> 是字符串，还要说明时区、格式、是否包含边界。</li><li><strong>返回可行动：</strong>给出稳定字段、状态码、分页游标和明确错误，不返回大段无法解析的自然语言。</li><li><strong>工具职责单一：</strong>避免一个工具同时承担查询、删除、付款和发通知等不同权限。</li></ul>
+<h3>工具数量与上下文预算</h3>
+<p>工具定义本身会消耗上下文。名称、描述、参数 Schema、示例和历史调用都会成为模型可见信息。工具过多时，可以按领域命名空间分组，或用检索按需加载；工具太少、过于宽泛时，模型又可能需要在一个工具中组合大量不相关参数。</p>
+<p>Anthropic 的工程建议包括：选择真正需要的工具、通过命名空间表达边界、返回有意义且节省 token 的上下文，并通过 Agent 评测反复改进工具描述。工具设计不能只凭开发者感觉，应使用真实任务集验证模型是否能正确选择和完成操作。</p>
+<div class="panel"><h3>一个工具接口的审查清单</h3><ul><li>输入字段是否最少且足够？</li><li>枚举、范围、单位、时区是否明确？</li><li>空值、缺失值、默认值是否有清楚语义？</li><li>返回是否包含机器可读状态和可诊断错误？</li><li>是否能通过工具名和描述区分相似能力？</li><li>权限和副作用是否可以在执行器侧单独控制？</li><li>调用结果是否足够小，能支持下一步决策？</li></ul></div></section>
+
+<section id="security"><h2>12 · 安全边界：工具调用会把语言错误变成真实副作用</h2>
+<p>普通聊天中的错误回答可能只是信息质量问题；接入工具后，错误可能变成错误付款、错误删文件、越权查询或敏感信息外泄。工具调用因此必须把模型输出视为<strong>不可信输入</strong>，即使模型来自可信供应商、Schema 使用严格模式也不例外。</p>
+<figure class="figure"><div class="figscroll"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 390" role="img" aria-labelledby="fc-security-title fc-security-desc" data-export="05-security-gates.svg">
+<title id="fc-security-title">高影响工具调用的安全闸门</title><desc id="fc-security-desc">模型提出动作后，系统依次检查原始用户意图、参数和目标、权限、人工审批、沙箱执行和审计结果；任何一步失败都停止动作。</desc>
+<defs><marker id="fc-sec-arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0 0 L9 3 L0 6 Z" fill="#187e75"/></marker></defs><rect width="1000" height="390" rx="18" fill="#f8fbf9"/><text x="500" y="36" text-anchor="middle" font-size="21" font-weight="700" fill="#24484c">模型提出动作 ≠ 系统授予权限</text>
+<rect x="34" y="125" width="130" height="72" rx="10" fill="#fff0df" stroke="#d9a36e" stroke-width="2"/><text x="99" y="154" text-anchor="middle" font-size="15" font-weight="700" fill="#89552f">Tool Call</text><text x="99" y="177" text-anchor="middle" font-size="12" fill="#805f45">模型提议</text>
+<rect x="200" y="125" width="140" height="72" rx="10" fill="#e7f2f8" stroke="#8aaec4"/><text x="270" y="154" text-anchor="middle" font-size="14" font-weight="700" fill="#355c73">意图校验</text><text x="270" y="177" text-anchor="middle" font-size="12" fill="#49666e">是否符合用户目标？</text>
+<rect x="376" y="125" width="140" height="72" rx="10" fill="#e7f2f8" stroke="#8aaec4"/><text x="446" y="154" text-anchor="middle" font-size="14" font-weight="700" fill="#355c73">权限校验</text><text x="446" y="177" text-anchor="middle" font-size="12" fill="#49666e">身份 / 资源 / 范围</text>
+<rect x="552" y="125" width="140" height="72" rx="10" fill="#eee9fb" stroke="#a99bd5"/><text x="622" y="154" text-anchor="middle" font-size="14" font-weight="700" fill="#574b8d">人工审批</text><text x="622" y="177" text-anchor="middle" font-size="12" fill="#5f5b79">高风险操作</text>
+<rect x="728" y="125" width="112" height="72" rx="10" fill="#e0f1eb" stroke="#83b9a9"/><text x="784" y="154" text-anchor="middle" font-size="14" font-weight="700" fill="#205e56">隔离执行</text><text x="784" y="177" text-anchor="middle" font-size="12" fill="#49666e">沙箱 / 限额</text>
+<rect x="876" y="125" width="92" height="72" rx="10" fill="#e0f1eb" stroke="#83b9a9"/><text x="922" y="154" text-anchor="middle" font-size="14" font-weight="700" fill="#205e56">审计</text><text x="922" y="177" text-anchor="middle" font-size="12" fill="#49666e">日志</text>
+<path d="M164 161 H196 M340 161 H372 M516 161 H548 M692 161 H724 M840 161 H872" fill="none" stroke="#187e75" stroke-width="2.5" marker-end="url(#fc-sec-arrow)"/>
+<path d="M270 197 V257 H622 V202 M446 197 V257 M622 197 V257 M784 197 V257" fill="none" stroke="#b46744" stroke-width="2" stroke-dasharray="5 5"/>
+<rect x="350" y="276" width="300" height="58" rx="11" fill="#fff0ef" stroke="#d5a1a1" stroke-width="2"/><text x="500" y="301" text-anchor="middle" font-size="15" font-weight="700" fill="#a34e4e">拒绝 / 暂停 / 请求澄清</text><text x="500" y="321" text-anchor="middle" font-size="12" fill="#805b5b">任一闸门失败，不执行副作用</text><text x="500" y="367" text-anchor="middle" font-size="12" fill="#667b7c">执行结果还要验证，并将成功、失败或待审批状态准确回传。</text></svg></div><figcaption>图 5 · 高影响动作的多道控制。具体闸门应根据工具风险和业务场景配置。</figcaption></figure>
+<ul><li><strong>最小权限：</strong>只授予工具完成当前任务所需的最小 API scope、文件目录和数据访问权。</li><li><strong>服务端重新验证：</strong>检查调用者身份、资源归属、参数范围、速率限制和当前状态，不能依赖模型自己判断。</li><li><strong>人工确认：</strong>付款、删除、外发邮件、生产变更等高影响动作，应在执行前展示具体对象和参数并取得批准。</li><li><strong>幂等与重试：</strong>为写操作设计幂等键，区分超时、可重试错误和不可重试错误，防止重复扣款或重复创建。</li><li><strong>隔离与审计：</strong>限制网络、文件系统和凭据暴露范围；记录调用者、参数摘要、审批、执行结果和追踪 ID。</li><li><strong>不可信内容隔离：</strong>网页、邮件、文档和工具输出都可能包含间接提示注入。把外部内容当数据而非系统指令，并在动作前重新检查原始用户意图。</li></ul>
+<p>OpenAI 的 Agent 安全文档强调对高影响工具调用设置审批和工具级检查；OWASP 的 Prompt Injection 指南也建议在应用侧执行权限验证、参数验证和最小权限控制。结构化调用可以减少自由文本命令带来的歧义，但不能单独消除提示注入。[<a href="https://developers.openai.com/api/docs/guides/agents/guardrails-approvals">OpenAI · Guardrails and human review</a>] [<a href="https://cheatsheetseries.owasp.org/cheatsheets/LLM_Prompt_Injection_Prevention_Cheat_Sheet.html">OWASP · Prompt Injection Prevention</a>]</p></section>
+
+<section id="interactive"><h2>13 · 交互：一步步执行一次 Function Call</h2>
+<p>下面用一个确定性的天气工具模拟一次调用。它不会访问真实天气服务，也不会调用真实模型；目的是把模型输出、运行时校验、工具执行和结果回传这四件事分开观察。</p>
+<div class="panel"><div class="demo-inputs"><div class="demo-field"><label for="demo-city">查询城市</label><input id="demo-city" type="text" value="Tokyo" maxlength="80"></div><div class="demo-field"><label for="demo-case">调用参数场景</label><select id="demo-case"><option value="valid">合法参数</option><option value="invalid">额外传入未声明字段</option></select></div></div>
+<div class="controls"><button class="primary" id="demo-next" type="button">执行下一步</button><button id="demo-reset" type="button">重置演示</button></div><p class="status" id="demo-status" aria-live="polite">步骤 0 / 5 · 等待开始</p>
+<div class="trace" id="demo-trace" aria-live="polite"><h3>当前状态：用户请求</h3><p>用户希望查询 Tokyo 的当前天气。模型尚未发出调用。</p><p class="hint">点击“执行下一步”，观察调用 ID 如何贯穿整个闭环。</p></div></div>
+<p>切换到“额外传入未声明字段”，你会看到：即使模型提出了工具调用，执行器也可以在工具运行之前拒绝它。Strict Schema 的价值不是让模型永不出错，而是让结构错误更容易被发现和拦截。</p></section>
+
+<section id="code"><h2>14 · Python 最小执行器：Allowlist、参数校验与 call_id</h2>
+<p>最小执行器不需要复杂 Agent 框架。它至少应该做四件事：只允许调用已注册工具、解析参数、验证字段和类型、把执行结果绑定回原始调用 ID。</p>
+<pre><code>from __future__ import annotations
+
+import json
+from dataclasses import dataclass
+from typing import Any, Callable
+
+
+@dataclass(frozen=True)
+class ToolResult:
+    call_id: str
+    output: dict[str, Any]
+
+
+def get_weather(location: str) -> dict[str, Any]:
+    # 固定教学数据：不访问网络，不代表真实天气。
+    return {
+        "location": location,
+        "temperature_c": 18,
+        "condition": "cloudy",
+    }
+
+
+TOOLS: dict[str, Callable[[str], dict[str, Any]]] = {
+    "get_weather": get_weather,
+}
+
+
+def execute_function_call(call: dict[str, Any]) -> ToolResult:
+    if not isinstance(call, dict) or set(call) != {"call_id", "name", "arguments"}:
+        raise ValueError("invalid call envelope")
+
+    call_id = call["call_id"]
+    name = call["name"]
+    raw_arguments = call["arguments"]
+
+    if not isinstance(call_id, str) or not call_id:
+        raise ValueError("missing call_id")
+    if not isinstance(name, str) or name not in TOOLS:
+        raise ValueError("tool is not allowlisted")
+    if not isinstance(raw_arguments, str):
+        raise ValueError("arguments must be a JSON string")
+
+    try:
+        arguments = json.loads(raw_arguments)
+    except json.JSONDecodeError as exc:
+        raise ValueError("arguments are not valid JSON") from exc
+
+    if not isinstance(arguments, dict):
+        raise ValueError("arguments must be an object")
+    if set(arguments) != {"location"}:
+        raise ValueError("expected exactly one field: location")
+
+    location = arguments["location"]
+    if not isinstance(location, str) or not location.strip():
+        raise ValueError("location must be a non-empty string")
+    if len(location) > 80:
+        raise ValueError("location is too long")
+
+    output = TOOLS[name](location.strip())
+    return ToolResult(call_id=call_id, output=output)
+
+
+if __name__ == "__main__":
+    request = {
+        "call_id": "call_demo_001",
+        "name": "get_weather",
+        "arguments": "{\"location\":\"Tokyo\"}",
+    }
+    result = execute_function_call(request)
+    print(json.dumps({
+        "call_id": result.call_id,
+        "output": result.output,
+    }, ensure_ascii=False, indent=2))</code></pre>
+<p class="hint">实现边界：这里用手工检查演示一个很小的固定参数 Schema，并不是通用 JSON Schema 验证器。生产代码应使用经过测试的 Schema 校验库，并在 Schema 校验后继续执行业务规则、用户授权和副作用控制。</p>
+<p>完整示例与测试可以在文章目录中运行：</p><pre><code>python posts/agents/function-calling/tool_call_demo.py
+python -m pytest -q posts/agents/function-calling/test_tool_call_demo.py</code></pre>
+<p>这个例子只演示一个只读、确定性的本地工具。它没有实现真实用户认证、数据库事务、网络超时、速率限制或人工审批。生产系统必须把这些能力放在真实执行器边界，而不是从这个教学例子推断“已经安全”。</p></section>
+
+<section id="evaluation"><h2>15 · 如何评测工具调用？不要只看 JSON 能不能解析</h2>
+<p>一个调用的 JSON 格式正确，不等于模型选对了工具；工具执行成功，也不等于最终任务已经完成。评测应该沿着完整闭环拆开，而不是只统计 Schema pass rate。</p>
+<div class="table-scroll"><table><thead><tr><th>评测层</th><th>建议指标</th><th>典型失败</th></tr></thead><tbody>
+<tr><td>工具选择</td><td>Precision / Recall、无必要调用率</td><td>工具选错或不该调用却调用</td></tr><tr><td>参数生成</td><td>Schema pass rate、字段准确率、语义匹配</td><td>参数格式正确但目标 ID 错误</td></tr><tr><td>执行可靠性</td><td>执行成功率、超时率、重试成功率</td><td>工具不可用、限流、事务失败</td></tr><tr><td>结果理解</td><td>结果引用正确率、错误解释率</td><td>把失败结果当成功、忽略关键字段</td></tr><tr><td>任务完成</td><td>End-to-end success、完成时间、成本</td><td>调用都成功但用户目标没有完成</td></tr><tr><td>安全性</td><td>越权率、审批绕过率、注入成功率</td><td>模型被外部内容诱导执行未授权动作</td></tr></tbody></table></div>
+<p>一个实用的可靠性分解可以从条件概率链式法则出发。把任务成功分为工具选择、参数正确、执行成功和结果正确整合几个阶段：</p>
+<div class="math-equation" role="group" aria-label="端到端工具调用成功率分解"><div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="条件概率分解公式，可横向滚动"><math display="block" aria-label="任务成功概率等于选对工具概率乘以选对工具条件下参数有效的概率，再乘以执行成功和结果正确整合的条件概率"><mrow><mi>P</mi><mo>(</mo><mi>success</mi><mo>)</mo><mo>=</mo><mi>P</mi><mo>(</mo><mi>T</mi><mo>)</mo><mo>·</mo><mi>P</mi><mo>(</mo><mi>A</mi><mo>|</mo><mi>T</mi><mo>)</mo><mo>·</mo><mi>P</mi><mo>(</mo><mi>E</mi><mo>|</mo><mi>T</mi><mo>,</mo><mi>A</mi><mo>)</mo><mo>·</mo><mi>P</mi><mo>(</mo><mi>I</mi><mo>|</mo><mi>E</mi><mo>,</mo><mi>T</mi><mo>,</mo><mi>A</mi><mo>)</mo></mrow></math></div><div class="math-caption">式 4 · T = 工具选择正确，A = 参数有效，E = 执行成功，I = 结果被正确整合。这是链式分解，不假设各阶段相互独立。</div></div>
+<p>这个分解能帮助定位问题：如果 Schema pass rate 很高但任务成功率低，问题可能在工具选择、业务参数、外部服务或结果解释，而不是 JSON 格式。评测集还应包含不该调用工具的任务、相似工具之间的选择、缺失参数需要追问的任务、工具报错和恶意工具输出等边界案例。</p>
+<p>Anthropic 的工具工程文章建议先建立真实任务评测，再迭代工具原型和描述；OpenAI 的程序化调用指南也建议同时衡量最终正确性、token、延迟、工具调用次数、重试和安全结果，而不是只看执行效率。[<a href="https://www.anthropic.com/research/writing-tools-for-agents">Anthropic tool design</a>] [<a href="https://developers.openai.com/api/docs/guides/tools-programmatic-tool-calling">OpenAI programmatic tool calling</a>]</p></section>
+
+<section id="limits"><h2>16 · 局限与总结：Function Calling 不是 Agent 的全部</h2>
+<div class="twocol"><div class="panel"><h3>它擅长解决</h3><ul><li>把模型意图转成结构化调用。</li><li>通过 Schema 限定参数形状。</li><li>连接外部 API、数据和执行能力。</li><li>让调用结果进入后续模型推理。</li></ul></div><div class="panel"><h3>它本身不保证</h3><ul><li>工具选择一定正确。</li><li>参数在业务上一定真实。</li><li>调用者拥有执行权限。</li><li>外部系统一定成功。</li><li>Agent 最终完成用户目标。</li></ul></div></div>
+<p>把 Function Calling 放回 Agent 系统中，可以得到一个清晰的分工：</p>
+<ol><li><strong>ReAct / Planning</strong> 讨论模型如何在推理、行动和观察之间组织步骤。</li><li><strong>Function Calling</strong> 定义模型如何把一个行动意图表达成结构化调用。</li><li><strong>MCP / Tool Search</strong> 解决工具如何被发现、连接和按需加载。</li><li><strong>Runtime / Guardrails</strong> 负责真实执行、权限、审批、隔离和失败恢复。</li><li><strong>Agent Evaluation</strong> 衡量完整任务是否可靠完成，而不只是调用格式是否正确。</li></ol>
+<div class="insight"><strong>最终心智模型：</strong>Function Calling 是 LLM 与软件世界之间的“动作接口”。模型负责提出有上下文的调用建议；Schema 负责描述结构；Runtime 负责验证和执行；工具结果负责提供新证据；评测负责确认整条链路是否真正完成任务。</div>
+<p>继续学习可以沿着这条路线阅读：先看 <a href="../react/">ReAct</a> 理解 Thought–Action–Observation，再看本文理解调用协议，然后阅读 <a href="../swe-agent/">SWE-agent</a> 理解工具接口如何影响真实任务执行，最后连接 <a href="../agent-memory-components/">Agent Memory</a> 研究长期任务中的上下文管理。</p></section>
+
+<section id="references"><h2>17 · 参考资料与证据边界</h2>
+<p>本文将论文结论、平台协议和工程建议分开使用。平台文档会持续更新；代码字段和模型支持范围应以实际使用时的官方文档为准。论文实验结果只用于解释研究问题，不应直接当作当前模型的排行榜。</p>
+<ol>
+<li>Schick, T. et al. <cite>Toolformer: Language Models Can Teach Themselves to Use Tools</cite>. NeurIPS 2023. <a href="https://arxiv.org/abs/2302.04761">arXiv:2302.04761</a>.</li>
+<li>Patil, S. G. et al. <cite>Gorilla: Large Language Model Connected with Massive APIs</cite>. 2023. <a href="https://arxiv.org/abs/2305.15334">arXiv:2305.15334</a>.</li>
+<li>Qin, Y. et al. <cite>ToolLLM: Facilitating Large Language Models to Master 16000+ Real-world APIs</cite>. 2023. <a href="https://arxiv.org/abs/2307.16789">arXiv:2307.16789</a>.</li>
+<li>Yao, S. et al. <cite>ReAct: Synergizing Reasoning and Acting in Language Models</cite>. ICLR 2023. <a href="https://arxiv.org/abs/2210.03629">arXiv:2210.03629</a>.</li>
+<li>OpenAI. <cite>Function calling</cite>. <a href="https://developers.openai.com/api/docs/guides/function-calling">Developer Guide</a>.</li>
+<li>OpenAI. <cite>Programmatic Tool Calling</cite>. <a href="https://developers.openai.com/api/docs/guides/tools-programmatic-tool-calling">Developer Guide</a>.</li>
+<li>OpenAI. <cite>Guardrails and human review</cite>. <a href="https://developers.openai.com/api/docs/guides/agents/guardrails-approvals">Developer Guide</a>.</li>
+<li>Anthropic. <cite>Tool use with Claude</cite>. <a href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview">Platform Documentation</a>.</li>
+<li>Wu, B. et al. <cite>Introducing advanced tool use on the Claude Developer Platform</cite>. Anthropic Engineering, Nov. 24, 2025. <a href="https://www.anthropic.com/research/advanced-tool-use">Engineering Article</a>.</li>
+<li>Anthropic. <cite>Writing effective tools for agents — with agents</cite>. Sep. 11, 2025. <a href="https://www.anthropic.com/research/writing-tools-for-agents">Engineering Article</a>.</li>
+<li>Model Context Protocol. <cite>Tools Specification</cite>. <a href="https://modelcontextprotocol.io/specification/2025-06-18/server/tools">Protocol Specification</a>.</li>
+<li>OWASP. <cite>LLM Prompt Injection Prevention Cheat Sheet</cite>. <a href="https://cheatsheetseries.owasp.org/cheatsheets/LLM_Prompt_Injection_Prevention_Cheat_Sheet.html">Security Guidance</a>.</li>
+</ol>
+<div class="foot"><a href="https://arxiv.org/abs/2302.04761">Toolformer</a><a href="https://arxiv.org/abs/2305.15334">Gorilla</a><a href="https://arxiv.org/abs/2307.16789">ToolLLM</a><a href="https://developers.openai.com/api/docs/guides/function-calling">OpenAI Function Calling</a><a href="https://www.anthropic.com/research/advanced-tool-use">Anthropic Advanced Tool Use</a><a href="https://modelcontextprotocol.io/">MCP</a></div></section>
+</article></main></div>
+<script>
+(()=>{"use strict";
+const city=document.getElementById("demo-city"),scenario=document.getElementById("demo-case"),next=document.getElementById("demo-next"),reset=document.getElementById("demo-reset"),status=document.getElementById("demo-status"),trace=document.getElementById("demo-trace");
+let step=0,call=null,result=null,blocked=false;
+function makeCall(){const args={location:city.value.trim()};if(scenario.value==="invalid")args.forecast_days=3;call={call_id:"call_demo_001",name:"get_weather",arguments:args};}
+function show(title,paragraphs,code,kind){trace.replaceChildren();const h=document.createElement("h3");h.textContent=title;trace.append(h);paragraphs.forEach(value=>{const p=document.createElement("p");p.textContent=value;trace.append(p)});if(code){const pre=document.createElement("pre"),c=document.createElement("code");c.textContent=code;pre.append(c);trace.append(pre)}if(kind){const badge=document.createElement("span");badge.className="pill"+(kind==="bad"?" bad":"");badge.textContent=kind==="bad"?"已拒绝":"校验通过";trace.append(badge)}}
+function render(){status.textContent="步骤 "+step+" / 5";
+if(step===0)show("当前状态：用户请求",["用户希望查询 "+(city.value.trim()||"某个城市")+" 的当前天气。模型尚未发出调用。","点击下一步，先观察模型生成的结构化调用。"]);
+if(step===1)show("模型输出：function_call",["模型选择 get_weather，并为本次调用生成唯一标识。","注意：此时外部天气服务尚未被访问。"],JSON.stringify(call,null,2));
+if(step===2){const valid=!!call.arguments.location&&Object.keys(call.arguments).every(k=>k==="location");blocked=!valid;if(valid)show("应用校验：Schema 通过",["location 是非空字符串，且没有额外字段。","这是只读教学工具；生产系统还需独立完成业务规则和权限检查。"],"required: [\"location\"]\nadditionalProperties: false","ok");else show("应用校验：拒绝执行",[city.value.trim()?"发现未声明字段 forecast_days。":"location 不能为空，缺少必需参数。","Strict Schema 不允许额外字段；工具没有执行，模型也不能把它描述成已成功查询。"],"Unexpected field: forecast_days","bad");}
+if(step===3)show("工具执行：返回教学数据",["执行器调用本地固定函数，不访问真实天气 API。","工具返回 "+call.arguments.location+" 的教学数据：18°C，cloudy。"],JSON.stringify(result,null,2));
+if(step===4)show("结果回传：关联原 call_id",["应用把工具结果交回模型，并保留 call_demo_001。","模型现在可以基于工具结果生成回答。"],JSON.stringify({type:"function_call_output",call_id:call.call_id,output:result},null,2));
+if(step===5)show("模型最终回答",["教学演示："+call.arguments.location+" 的示例天气为 18°C，多云。","这个结论来自工具返回的固定教学数据，不代表实时天气。"]);
+next.disabled=step===5||(step===2&&blocked);next.textContent=blocked?"调用已被拦截":(step===5?"演示完成":"执行下一步");}
+next.addEventListener("click",()=>{if(step===0){makeCall();step=1}else if(step===1)step=2;else if(step===2&&!blocked){result={location:call.arguments.location,temperature_c:18,condition:"cloudy"};step=3}else if(step===3)step=4;else if(step===4)step=5;render();});
+reset.addEventListener("click",()=>{step=0;call=null;result=null;blocked=false;render()});render();
+})();
+</script></body></html>

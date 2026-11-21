@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 430" role="img" aria-labelledby="title-01 desc-01">
+<title id="title-01">LLM-as-a-Judge evaluation pipeline</title><desc id="desc-01">A task and candidate answers are converted into a rubric, evaluated by a judge model, checked against human anchors and bias audits, then aggregated into a report.</desc>
+<defs><marker id="arrow-01" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0 0 L9 3 L0 6 Z" fill="#557b78"/></marker></defs>
+<rect width="1000" height="430" rx="24" fill="#f7faf7"/>
+<text x="42" y="52" font-size="23" font-weight="700" fill="#25464b">从“给分”到“可审计的测量系统”</text>
+<g font-family="Arial, sans-serif" text-anchor="middle">
+<rect x="38" y="112" width="160" height="112" rx="16" fill="#e7f0f4" stroke="#8daeba" stroke-width="2"/><text x="118" y="151" font-size="19" font-weight="700" fill="#315a66">任务与样本</text><text x="118" y="180" font-size="14" fill="#45666e">Question · Context</text><text x="118" y="201" font-size="14" fill="#45666e">Candidate outputs</text>
+<rect x="242" y="112" width="160" height="112" rx="16" fill="#fff0df" stroke="#d9a56d" stroke-width="2"/><text x="322" y="151" font-size="19" font-weight="700" fill="#80552d">评价 Rubric</text><text x="322" y="180" font-size="14" fill="#795f47">Dimensions · Weights</text><text x="322" y="201" font-size="14" fill="#795f47">Anchors · Evidence</text>
+<rect x="446" y="112" width="160" height="112" rx="16" fill="#e9e7f7" stroke="#a49acb" stroke-width="2"/><text x="526" y="151" font-size="19" font-weight="700" fill="#51447d">Judge LLM</text><text x="526" y="180" font-size="14" fill="#5e5780">Score / Compare</text><text x="526" y="201" font-size="14" fill="#5e5780">Critique / Verify</text>
+<rect x="650" y="112" width="160" height="112" rx="16" fill="#e4f3e9" stroke="#8ab99a" stroke-width="2"/><text x="730" y="151" font-size="19" font-weight="700" fill="#32694a">偏差审计</text><text x="730" y="180" font-size="14" fill="#4b745b">Swap · Repeat</text><text x="730" y="201" font-size="14" fill="#4b745b">Human anchor</text>
+<rect x="854" y="112" width="108" height="112" rx="16" fill="#f3e8ee" stroke="#c99aaf" stroke-width="2"/><text x="908" y="151" font-size="18" font-weight="700" fill="#78465b">报告</text><text x="908" y="180" font-size="13" fill="#82586a">Score</text><text x="908" y="200" font-size="13" fill="#82586a">CI · Caveat</text>
+<path d="M198 168 H236 M402 168 H440 M606 168 H644 M810 168 H848" fill="none" stroke="#557b78" stroke-width="3" marker-end="url(#arrow-01)"/>
+<rect x="270" y="294" width="460" height="82" rx="15" fill="#fff" stroke="#7ea99e" stroke-width="2"/><text x="500" y="327" font-size="18" font-weight="700" fill="#2f6660">人工校准集 + 领域验证器</text><text x="500" y="353" font-size="14" fill="#52716c">专家标注 · 单元测试 · 检索证据 · 安全审查</text>
+<path d="M730 224 V264 H730 V286 M500 286 V264 H526 V230" fill="none" stroke="#8b8066" stroke-width="2.5" stroke-dasharray="7 6" marker-end="url(#arrow-01)"/>
+<text x="500" y="405" font-size="13" fill="#647b78">闭环：发现偏差 → 修订 Rubric / Judge → 在独立样本上重新验证</text>
+</g></svg>

@@ -33,3 +33,8 @@
 - [Knowledge Distillation](_topics/knowledge-distillation/README.md)
 
 上述 `_topics/` 是研究路线占位目录，正式文章仍遵循 `posts/training/<slug>/index.html`；只有 `content/posts.json` 中的 `published` 文章才会被发布。
+## 2026-11-21 新增专题
+- [Reward Hacking & Specification Gaming](./_topics/reward-hacking/README.md)
+- [Supervised Fine-Tuning & Instruction Tuning](./sft/index.html)
+- [Distributed Training](./_topics/distributed-training/README.md)：新增 DeepSpeed / ZeRO 深度解析。
+- 关联文章：Checkpoint Optimization、SFT、Reward Hacking、DeepSpeed。

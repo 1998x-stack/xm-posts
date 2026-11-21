@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="500" viewBox="0 0 1080 500" role="img" aria-labelledby="jev-primitives-title jev-primitives-desc">
+<title id="jev-primitives-title">Choice、Score 与 Noul 三种决策原语</title>
+<desc id="jev-primitives-desc">Choice 在无序类别间分配概率，Score 在有序等级间分配概率并计算期望位置，Noul 返回一个命题为真的概率。</desc>
+<rect width="1080" height="500" rx="22" fill="#fbfdfb"/>
+<g font-family="system-ui,'PingFang SC','Microsoft YaHei',sans-serif">
+<rect x="30" y="34" width="326" height="390" rx="18" fill="#f0f7f4" stroke="#cbded5" stroke-width="2"/>
+<text x="58" y="78" font-size="26" font-weight="750" fill="#147f80">CHOICE</text><text x="58" y="111" font-size="16" fill="#53676d">无序类别 · 选择一个选项</text>
+<text x="58" y="162" font-size="18" font-weight="650" fill="#203035">P(team | state)</text>
+<text x="58" y="210" font-size="16" fill="#53676d">Billing</text><rect x="145" y="190" width="160" height="26" rx="7" fill="#e0e9e5"/><rect x="145" y="190" width="112" height="26" rx="7" fill="#147f80"/><text x="315" y="210" font-size="16" fill="#203035">0.70</text>
+<text x="58" y="258" font-size="16" fill="#53676d">Support</text><rect x="145" y="238" width="160" height="26" rx="7" fill="#e0e9e5"/><rect x="145" y="238" width="32" height="26" rx="7" fill="#6656a6"/><text x="315" y="258" font-size="16" fill="#203035">0.20</text>
+<text x="58" y="306" font-size="16" fill="#53676d">Delivery</text><rect x="145" y="286" width="160" height="26" rx="7" fill="#e0e9e5"/><rect x="145" y="286" width="16" height="26" rx="7" fill="#c36a45"/><text x="315" y="306" font-size="16" fill="#203035">0.10</text>
+<text x="58" y="370" font-size="15" fill="#426c69">输出：choice + 全部分布</text>
+<rect x="377" y="34" width="326" height="390" rx="18" fill="#f5f2fb" stroke="#d9d1ef" stroke-width="2"/>
+<text x="405" y="78" font-size="26" font-weight="750" fill="#6656a6">SCORE</text><text x="405" y="111" font-size="16" fill="#625b7d">有序等级 · 估计标尺位置</text>
+<text x="405" y="162" font-size="18" font-weight="650" fill="#203035">P(severity level)</text>
+<text x="405" y="210" font-size="16" fill="#53676d">0 · Low</text><rect x="505" y="190" width="145" height="26" rx="7" fill="#e5e0f1"/><rect x="505" y="190" width="14.5" height="26" rx="7" fill="#6656a6"/><text x="660" y="210" font-size="16" fill="#203035">0.10</text>
+<text x="405" y="258" font-size="16" fill="#53676d">1 · Mid</text><rect x="505" y="238" width="145" height="26" rx="7" fill="#e5e0f1"/><rect x="505" y="238" width="87" height="26" rx="7" fill="#6656a6"/><text x="660" y="258" font-size="16" fill="#203035">0.60</text>
+<text x="405" y="306" font-size="16" fill="#53676d">2 · High</text><rect x="505" y="286" width="145" height="26" rx="7" fill="#e5e0f1"/><rect x="505" y="286" width="43.5" height="26" rx="7" fill="#6656a6"/><text x="660" y="306" font-size="16" fill="#203035">0.30</text>
+<text x="405" y="370" font-size="15" fill="#625b7d">score = 0×.1 + 1×.6 + 2×.3 = 1.2</text>
+<rect x="724" y="34" width="326" height="390" rx="18" fill="#fff5ec" stroke="#efd4c1" stroke-width="2"/>
+<text x="752" y="78" font-size="26" font-weight="750" fill="#b35e3d">NOUL</text><text x="752" y="111" font-size="16" fill="#8a624e">二元事件 · 返回 P(Yes)</text>
+<text x="752" y="162" font-size="18" font-weight="650" fill="#203035">P(refund requested)</text>
+<rect x="752" y="206" width="270" height="34" rx="10" fill="#f0e8e2"/>
+<rect x="752" y="206" width="245.7" height="34" rx="10" fill="#c36a45"/>
+<text x="752" y="281" font-size="17" fill="#53676d">Yes probability</text><text x="1022" y="281" text-anchor="end" font-size="22" font-weight="750" fill="#8a472e">0.91</text>
+<text x="752" y="370" font-size="15" fill="#8a624e">输出：noul（0 到 1）</text>
+<rect x="30" y="444" width="1020" height="34" rx="9" fill="#eef2f1"/>
+<text x="540" y="467" text-anchor="middle" font-size="15" fill="#53676d">教学示例：Choice 最多 255 个选项；Score 通常 2–10 个有序等级；Box 是 1.14 的图像定位预览扩展。</text>
+</g>
+</svg>

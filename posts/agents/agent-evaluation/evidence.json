@@ -1,0 +1,137 @@
+[
+  {
+    "id": "A01",
+    "claim": "LLM Agent evaluation is organized along two dimensions: evaluation objectives (behavior, capabilities, reliability, safety/alignment) and evaluation process (interaction mode, data, metric computation, tooling, context).",
+    "kind": "survey-taxonomy",
+    "source_url": "https://arxiv.org/abs/2507.21504",
+    "locator": "§2, Taxonomy for LLM-based Agent Evaluation; Figure 1",
+    "status": "verified",
+    "notes": "The article adapts this published taxonomy into an operational scorecard; it does not claim the six-metric presentation is the survey's exact taxonomy."
+  },
+  {
+    "id": "A02",
+    "claim": "AgentBench reports eight distinct interactive environments and multi-turn open-ended evaluation.",
+    "kind": "benchmark-description",
+    "source_url": "https://arxiv.org/abs/2308.03688",
+    "locator": "Abstract and §1",
+    "status": "verified",
+    "notes": "Historical benchmark design fact; not a current leaderboard result."
+  },
+  {
+    "id": "A03",
+    "claim": "The initial GAIA benchmark contains 466 questions and emphasizes multi-step general assistant tasks with verifiable answers.",
+    "kind": "benchmark-description",
+    "source_url": "https://arxiv.org/abs/2311.12983",
+    "locator": "Abstract and §1",
+    "status": "verified",
+    "notes": "Dataset-size and design fact; no historical model score is reproduced in the article."
+  },
+  {
+    "id": "A04",
+    "claim": "WebArena includes realistic websites across e-commerce, social forums, collaborative software development, and content management, targeting long-horizon web interaction.",
+    "kind": "benchmark-description",
+    "source_url": "https://proceedings.iclr.cc/paper_files/paper/2024/hash/4410c0711e9154a7a2d26f9b3816d1ef-Abstract-Conference.html",
+    "locator": "Abstract",
+    "status": "verified",
+    "notes": "The article avoids reproducing historical model-versus-human percentages without a split-specific scorecard."
+  },
+  {
+    "id": "A05",
+    "claim": "The initial OSWorld benchmark contains 369 computer tasks across real web and desktop applications.",
+    "kind": "benchmark-description",
+    "source_url": "https://proceedings.neurips.cc/paper_files/paper/2024/hash/5d413e48f84dc61244b6be550f1cd8f5-Abstract-Datasets_and_Benchmarks_Track.html",
+    "locator": "Abstract",
+    "status": "verified",
+    "notes": "The article avoids reproducing historical model-versus-human percentages without a split-specific scorecard."
+  },
+  {
+    "id": "A06",
+    "claim": "The original tau-bench evaluates retail and airline user-agent interactions using tool APIs and domain policies, compares final database state to annotated goal state, and introduces Pass^k.",
+    "kind": "benchmark-method",
+    "source_url": "https://proceedings.iclr.cc/paper_files/paper/2025/hash/1b126cc38b8638e07bef37e7b2bb72bf-Abstract-Conference.html",
+    "locator": "Abstract",
+    "status": "verified",
+    "notes": "The article describes the original tau-bench paper and distinguishes its historical results from current extensions."
+  },
+  {
+    "id": "A08",
+    "claim": "BFCL evaluates serial and parallel function calls across programming languages using AST-based evaluation, and also evaluates abstention and stateful multi-step agentic behavior.",
+    "kind": "benchmark-method",
+    "source_url": "https://proceedings.mlr.press/v267/patil25a.html",
+    "locator": "Abstract",
+    "status": "verified",
+    "notes": "The article explicitly distinguishes syntactic/structural checks from semantic correctness of real-world side effects."
+  },
+  {
+    "id": "A09",
+    "claim": "SWE-bench Verified consists of 500 samples screened by human annotators; SWE-bench evaluates FAIL_TO_PASS and PASS_TO_PASS tests.",
+    "kind": "benchmark-method",
+    "source_url": "https://openai.com/index/introducing-swe-bench-verified/",
+    "locator": "Background on SWE-bench; SWE-bench Verified",
+    "status": "verified",
+    "notes": "The source reports 500 samples and discusses benchmark task-quality limitations."
+  },
+  {
+    "id": "A10",
+    "claim": "The OpenAI SWE-bench Verified analysis reports that 68.3% of its 1,699 annotated random samples were filtered due to underspecification, unfair tests, or other issues.",
+    "kind": "benchmark-quality-analysis",
+    "source_url": "https://openai.com/index/introducing-swe-bench-verified/",
+    "locator": "Annotation Results",
+    "status": "verified",
+    "notes": "This percentage refers to the annotated sample analysis, not the final 500-sample Verified set."
+  },
+  {
+    "id": "A11",
+    "claim": "AgentDojo's NeurIPS 2024 benchmark includes 97 realistic tasks and 629 security test cases for evaluating prompt-injection attacks and defenses.",
+    "kind": "security-benchmark",
+    "source_url": "https://proceedings.neurips.cc/paper_files/paper/2024/hash/97091a5177d8dc64b1da8bf3e1f6fb54-Abstract-Datasets_and_Benchmarks_Track.html",
+    "locator": "Abstract",
+    "status": "verified",
+    "notes": "Tasks include email, e-banking and travel-booking settings."
+  },
+  {
+    "id": "A12",
+    "claim": "METR's time horizon page defines task duration using human expert completion time and estimates the duration at which an agent is predicted to succeed with a selected reliability level.",
+    "kind": "evaluation-method",
+    "source_url": "https://evals.alignment.org/time-horizons/",
+    "locator": "Task-Completion Time Horizons and Methodological Details; page last updated 2026-09-08",
+    "status": "verified",
+    "notes": "Time horizon is a task difficulty measure, not the wall-clock time the AI agent spends running."
+  },
+  {
+    "id": "A13",
+    "claim": "The 2026 Survey on Evaluation of LLM-based Agents organizes research through core capabilities, application-specific benchmarks, generalist agents, benchmark dimensions, and evaluation frameworks/tools.",
+    "kind": "survey-scope",
+    "source_url": "https://aclanthology.org/2026.findings-acl.1330.pdf",
+    "locator": "Abstract and Introduction",
+    "status": "verified",
+    "notes": "Used as a high-level synthesis of the 2026 research landscape."
+  },
+  {
+    "id": "A14",
+    "claim": "For p=0.8 and k=5 under independent identical Bernoulli attempts, Pass@5 equals 1-(1-p)^5=0.99968 and Pass^5 equals p^5=0.32768.",
+    "kind": "derived",
+    "source_url": "https://arxiv.org/abs/2406.12045",
+    "locator": "Pass^k definition; arithmetic independently recomputed in article and interactive calculator",
+    "status": "derived",
+    "notes": "Illustrative mathematical example, not an empirical benchmark result. Independence and identical success probability are explicit assumptions."
+  },
+  {
+    "id": "A15",
+    "claim": "The helper computes empirical Pass@1, Pass@k, Pass^k, and pooled attempt success from equally sized repeated-run rows.",
+    "kind": "implementation",
+    "source_url": "https://arxiv.org/abs/2406.12045",
+    "locator": "posts/agents/agent-evaluation/agent_eval_metrics.py and tests/test_agent_eval_metrics.py",
+    "status": "derived",
+    "notes": "The implementation uses standard-library Python and direct empirical counts; it does not estimate independence or infer metrics from a single pass rate."
+  },
+  {
+    "id": "A16",
+    "claim": "BrowserGym provides a unified, gym-like environment and shared observation/action spaces for standardized and reproducible evaluation of web agents across benchmarks.",
+    "kind": "benchmark-framework",
+    "source_url": "https://arxiv.org/abs/2412.05467",
+    "locator": "Abstract and Introduction",
+    "status": "verified",
+    "notes": "Used as a supporting framework reference; not presented as a standalone task score."
+  }
+]
