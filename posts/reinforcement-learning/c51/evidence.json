@@ -1,0 +1,34 @@
+[
+  {
+    "id": "C01",
+    "claim": "Bellemare, Dabney and Munos published A Distributional Perspective on Reinforcement Learning in ICML 2017, PMLR volume 70, pages 449–458.",
+    "kind": "bibliography",
+    "source_url": "https://proceedings.mlr.press/v70/bellemare17a.html",
+    "locator": "PMLR official proceedings",
+    "status": "verified"
+  },
+  {
+    "id": "C02",
+    "claim": "C51 models the categorical distribution of discounted returns using 51 fixed atoms, applies distributional Bellman targets and projects to fixed support.",
+    "kind": "algorithm",
+    "source_url": "https://arxiv.org/abs/1707.06887",
+    "locator": "Sections 3–4, categorical algorithm",
+    "status": "verified"
+  },
+  {
+    "id": "C03",
+    "claim": "The paper distinguishes contraction in distributional policy evaluation from non-contraction issues in control under the distributional metric.",
+    "kind": "theory",
+    "source_url": "https://proceedings.mlr.press/v70/bellemare17a.html",
+    "locator": "Theoretical analysis",
+    "status": "verified"
+  },
+  {
+    "id": "C04",
+    "claim": "A mass of 0.6 at 1.4 projected to support atoms 1 and 2 yields 0.36 and 0.24.",
+    "kind": "toy-derivation",
+    "source_url": "https://arxiv.org/abs/1707.06887",
+    "locator": "Independent pedagogical arithmetic based on linear projection, not experimental data",
+    "status": "derived"
+  }
+]

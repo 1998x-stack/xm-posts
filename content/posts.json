@@ -2937,5 +2937,32 @@
       "src": "assets/02-token-budget.svg",
       "caption": "每轮先保留 Decode token 槽位，其余 token budget 才填入一个 Prefill 分块"
     }
+  },
+  {
+    "slug": "c51",
+    "title": "Understanding C51: Distributional Reinforcement Learning",
+    "subtitle": "从回报分布到 51 个固定原子：理解分布式 Bellman 更新与概率质量投影",
+    "category": "reinforcement-learning",
+    "topic": "value-learning",
+    "status": "published",
+    "published": "2026-11-21",
+    "updated": "2026-11-21",
+    "reading_minutes": 24,
+    "tags": [
+      "C51",
+      "Distributional Reinforcement Learning",
+      "Categorical Distribution",
+      "Bellman Operator",
+      "Projection",
+      "Atari",
+      "Value Learning"
+    ],
+    "summary": "精读 Bellemare、Dabney、Munos 的 ICML 2017 论文：对比同均值不同回报分布，推导固定原子与分布式 Bellman 更新、线性概率质量投影、交叉熵训练，并以独立 SVG 和可核算算例明确理论及工程边界。",
+    "paper": "https://proceedings.mlr.press/v70/bellemare17a.html",
+    "illustration": "c51",
+    "cover": {
+      "src": "assets/return-distributions.svg",
+      "caption": "同一期望回报可以对应不同分布，C51 学习固定原子上的概率质量"
+    }
   }
 ]
