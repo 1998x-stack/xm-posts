@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 420" role="img" aria-labelledby="title desc">
+<title id="title">相机射线和深度采样</title>
+<desc id="desc">相机中心发出一条射线穿过像素，在近端和远端之间取多个三维采样点，并计算相邻采样距离。</desc>
+<defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#4f817d"/></marker></defs>
+<rect x="1" y="1" width="1198" height="418" rx="22" fill="#f8fbf9" stroke="#d9e7e1" stroke-width="2"/>
+<text x="40" y="48" font-size="22" font-weight="750" fill="#29434b" font-family="system-ui,'PingFang SC',sans-serif">一个像素，对应一条从相机中心出发的射线</text>
+<g transform="translate(70 138)">
+<path d="M0 40 L72 0 L72 80 Z" fill="#dce9e3" stroke="#6b9b8d" stroke-width="3"/>
+<rect x="-20" y="25" width="20" height="30" rx="4" fill="#4c7e7a"/>
+<text x="22" y="112" text-anchor="middle" font-size="16" fill="#315b5b" font-family="system-ui">Camera</text>
+<text x="22" y="135" text-anchor="middle" font-size="14" fill="#647d80" font-family="system-ui">origin o</text>
+</g>
+<path d="M145 178 L1080 178" stroke="#4f817d" stroke-width="4" fill="none" marker-end="url(#arrow)"/>
+<path d="M145 178 L1080 78" stroke="#c4d5cf" stroke-width="2" stroke-dasharray="8 7"/>
+<path d="M145 178 L1080 280" stroke="#c4d5cf" stroke-width="2" stroke-dasharray="8 7"/>
+<text x="1090" y="166" font-size="17" fill="#276a63" font-weight="750" font-family="system-ui">d</text>
+<line x1="310" y1="93" x2="310" y2="263" stroke="#c47a42" stroke-width="3" stroke-dasharray="7 6"/>
+<line x1="1000" y1="93" x2="1000" y2="263" stroke="#7566a7" stroke-width="3" stroke-dasharray="7 6"/>
+<text x="310" y="72" text-anchor="middle" font-size="16" font-weight="700" fill="#a76535" font-family="system-ui">near · tₙ</text>
+<text x="1000" y="72" text-anchor="middle" font-size="16" font-weight="700" fill="#7566a7" font-family="system-ui">far · t_f</text>
+<g fill="#e3a45e" stroke="#9d6536" stroke-width="2">
+<circle cx="310" cy="178" r="11"/><circle cx="450" cy="178" r="11"/><circle cx="590" cy="178" r="11"/><circle cx="730" cy="178" r="11"/><circle cx="870" cy="178" r="11"/><circle cx="1000" cy="178" r="11"/>
+</g>
+<g font-size="14" fill="#526d70" font-family="system-ui" text-anchor="middle">
+<text x="310" y="215">x₁</text><text x="450" y="215">x₂</text><text x="590" y="215">x₃</text><text x="730" y="215">x₄</text><text x="870" y="215">x₅</text><text x="1000" y="215">x₆</text>
+</g>
+<path d="M450 242 L590 242" stroke="#3e7594" stroke-width="3"/><path d="M450 235 L450 249 M590 235 L590 249" stroke="#3e7594" stroke-width="3"/>
+<text x="520" y="270" text-anchor="middle" font-size="16" fill="#3e7594" font-weight="700" font-family="system-ui">δᵢ = tᵢ₊₁ − tᵢ</text>
+<rect x="290" y="318" width="730" height="54" rx="12" fill="#edf6f1" stroke="#c5ddd3"/>
+<text x="655" y="352" text-anchor="middle" font-size="17" fill="#315b5b" font-family="system-ui">在每个像素的射线上，重复执行：采样位置 → 查询场景 → 合成颜色</text>
+</svg>

@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 560" role="img" aria-labelledby="s3-title s3-desc">
+<title id="s3-title">两阶段异步检查点时间线</title><desc id="s3-desc">在训练 step i 更新后捕获一致快照，快照 staging 完成前不得更新源参数；随后后台持久化可以与后续计算重叠，上传完成后才能安全开始新的检查点请求。</desc>
+<rect x="1" y="1" width="998" height="558" rx="20" fill="#fbfdfb" stroke="#d9e6df"/>
+<g font-family="system-ui,'PingFang SC','Microsoft YaHei',sans-serif">
+<text x="40" y="50" font-size="26" fill="#29454a" font-weight="750">把“快照”和“写入”拆开，才能真正隐藏保存成本</text>
+<text x="42" y="112" font-size="18" fill="#187c72" font-weight="800">GPU / TRAINING</text>
+<text x="42" y="248" font-size="18" fill="#a65e43" font-weight="800">SNAPSHOT / STAGING</text>
+<text x="42" y="380" font-size="18" fill="#7165a7" font-weight="800">PERSIST / STORAGE</text>
+<g stroke="#d9e5df" stroke-width="1"><path d="M240 90V445"/><path d="M420 90V445"/><path d="M600 90V445"/><path d="M780 90V445"/><path d="M930 90V445"/></g>
+<g fill="#e0f0e9" stroke="#82b9a9" stroke-width="2"><rect x="240" y="130" width="150" height="64" rx="9"/><rect x="420" y="130" width="150" height="64" rx="9"/><rect x="600" y="130" width="150" height="64" rx="9"/><rect x="780" y="130" width="150" height="64" rx="9"/></g>
+<g fill="#29454a" font-size="17" font-weight="700" text-anchor="middle"><text x="315" y="169">Step i update</text><text x="495" y="169">Step i+1 F/B</text><text x="675" y="169">Next update</text><text x="855" y="169">Step i+2</text></g>
+<rect x="240" y="270" width="150" height="58" rx="9" fill="#f7e9df" stroke="#d9a98f" stroke-width="2"/>
+<text x="315" y="305" text-anchor="middle" font-size="17" fill="#8d543d" font-weight="700">Capture snapshot</text>
+<rect x="420" y="270" width="150" height="58" rx="9" fill="#f7e9df" stroke="#d9a98f" stroke-width="2"/>
+<text x="495" y="305" text-anchor="middle" font-size="17" fill="#8d543d" font-weight="700">D2H staging</text>
+<path d="M390 299H420" stroke="#a65e43" stroke-width="3"/><path d="M410 290L421 299L410 308" fill="none" stroke="#a65e43" stroke-width="3"/>
+<rect x="600" y="270" width="150" height="58" rx="9" fill="#e8f2ed" stroke="#82b9a9" stroke-width="2" stroke-dasharray="5 4"/>
+<text x="675" y="305" text-anchor="middle" font-size="17" fill="#187c72" font-weight="700">Staging complete</text>
+<path d="M570 299H600" stroke="#a65e43" stroke-width="3"/><path d="M590 290L601 299L590 308" fill="none" stroke="#a65e43" stroke-width="3"/>
+<rect x="420" y="400" width="330" height="58" rx="9" fill="#eeebf8" stroke="#aaa1d0" stroke-width="2"/>
+<text x="585" y="435" text-anchor="middle" font-size="18" fill="#5d548f" font-weight="700">Background write / upload</text>
+<path d="M495 328V400" stroke="#7165a7" stroke-width="3" stroke-dasharray="6 5"/>
+<path d="M750 429H780" stroke="#7165a7" stroke-width="3"/><path d="M770 420L781 429L770 438" fill="none" stroke="#7165a7" stroke-width="3"/>
+<rect x="780" y="400" width="150" height="58" rx="9" fill="#e8f2ed" stroke="#82b9a9" stroke-width="2"/>
+<text x="855" y="435" text-anchor="middle" font-size="17" fill="#187c72" font-weight="700">Upload complete</text>
+<path d="M570 185V245" stroke="#b86b49" stroke-width="3"/><path d="M560 235L570 247L580 235" fill="none" stroke="#b86b49" stroke-width="3"/>
+<text x="585" y="230" font-size="14" fill="#a65e43">下一次参数更新前，快照必须稳定</text>
+<path d="M855 458V490H675V470" fill="none" stroke="#7165a7" stroke-width="2" stroke-dasharray="5 4"/>
+<text x="620" y="520" font-size="15" fill="#5d548f">完成后再启动下一次异步请求，避免无限堆积</text>
+</g></svg>

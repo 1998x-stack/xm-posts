@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 420" role="img" aria-labelledby="title desc">
+<title id="title">NeRF 粗到细分层采样</title>
+<desc id="desc">Coarse 阶段在射线上均匀采样，得到权重分布，Fine 阶段把额外采样集中到高权重的可见表面附近。</desc>
+<rect x="1" y="1" width="1198" height="418" rx="22" fill="#f8fbf9" stroke="#d9e7e1" stroke-width="2"/>
+<text x="40" y="48" font-size="22" font-weight="750" fill="#29434b" font-family="system-ui,'PingFang SC',sans-serif">先粗略探路，再把查询放到可能影响像素的位置</text>
+<text x="65" y="106" font-size="18" font-weight="750" fill="#315b5b" font-family="system-ui">① Coarse：均匀采样</text>
+<line x1="85" y1="165" x2="1115" y2="165" stroke="#789c93" stroke-width="4"/>
+<g fill="#dba05f" stroke="#9b6b3d" stroke-width="2"><circle cx="120" cy="165" r="10"/><circle cx="250" cy="165" r="10"/><circle cx="380" cy="165" r="10"/><circle cx="510" cy="165" r="10"/><circle cx="640" cy="165" r="10"/><circle cx="770" cy="165" r="10"/><circle cx="900" cy="165" r="10"/><circle cx="1030" cy="165" r="10"/></g>
+<text x="65" y="225" font-size="18" font-weight="750" fill="#315b5b" font-family="system-ui">② 估计权重：哪里更可能贡献最终颜色？</text>
+<line x1="85" y1="338" x2="1115" y2="338" stroke="#a9c2b9" stroke-width="2"/>
+<g fill="#7caea0">
+<rect x="100" y="325" width="38" height="13" rx="4"/><rect x="230" y="318" width="38" height="20" rx="4"/><rect x="360" y="293" width="38" height="45" rx="4"/><rect x="490" y="258" width="38" height="80" rx="4"/><rect x="620" y="236" width="38" height="102" rx="4"/><rect x="750" y="283" width="38" height="55" rx="4"/><rect x="880" y="315" width="38" height="23" rx="4"/><rect x="1010" y="326" width="38" height="12" rx="4"/>
+</g>
+<path d="M640 227 L640 205" stroke="#c47a42" stroke-width="3"/>
+<text x="640" y="194" text-anchor="middle" font-size="14" fill="#a76535" font-family="system-ui">高权重区域</text>
+<text x="65" y="386" font-size="18" font-weight="750" fill="#315b5b" font-family="system-ui">③ Fine：按权重分布增加采样</text>
+<g fill="#3e7594" stroke="#285d7b" stroke-width="2"><circle cx="120" cy="165" r="0"/><circle cx="445" cy="165" r="8"/><circle cx="525" cy="165" r="8"/><circle cx="580" cy="165" r="8"/><circle cx="625" cy="165" r="8"/><circle cx="675" cy="165" r="8"/><circle cx="730" cy="165" r="8"/><circle cx="820" cy="165" r="8"/></g>
+<rect x="836" y="72" width="280" height="48" rx="10" fill="#e4edf5" stroke="#bfd0df"/>
+<text x="976" y="102" text-anchor="middle" font-size="15" fill="#3e6d8b" font-family="system-ui">额外样本集中在高权重附近</text>
+<path d="M836 96 L785 139" stroke="#3e7594" stroke-width="2" fill="none"/>
+</svg>

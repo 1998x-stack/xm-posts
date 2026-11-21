@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 500" role="img" aria-labelledby="s5-title s5-desc">
+<title id="s5-title">检查点的安全提交协议</title><desc id="s5-desc">检查点写入唯一临时目录，等待全部 rank 分片完成并校验，再写入 manifest 和 commit 标记，最后原子更新 latest 指针并清理旧版本。</desc>
+<rect x="1" y="1" width="998" height="498" rx="20" fill="#fbfdfb" stroke="#d9e6df"/>
+<g font-family="system-ui,'PingFang SC','Microsoft YaHei',sans-serif">
+<text x="42" y="52" font-size="26" fill="#29454a" font-weight="750">先完成，再发布；不要原地覆盖唯一备份</text>
+<g stroke="#66858a" stroke-width="3" fill="none"><path d="M250 150H350"/><path d="M450 150H550"/><path d="M650 150H750"/><path d="M450 300H550"/><path d="M650 300H750"/></g>
+<g fill="#e0f0e9" stroke="#82b9a9" stroke-width="2"><rect x="55" y="105" width="195" height="90" rx="12"/><rect x="350" y="105" width="200" height="90" rx="12"/><rect x="550" y="105" width="200" height="90" rx="12"/><rect x="750" y="105" width="195" height="90" rx="12"/></g>
+<g fill="#29454a" text-anchor="middle"><text x="152" y="143" font-size="19" font-weight="800">1 · 新版本目录</text><text x="152" y="170" font-size="14">step-128000.tmp</text><text x="450" y="143" font-size="19" font-weight="800">2 · 写入所有 shards</text><text x="450" y="170" font-size="14">各 rank 并行写入</text><text x="650" y="143" font-size="19" font-weight="800">3 · 校验元数据</text><text x="650" y="170" font-size="14">size / checksum / rank</text><text x="847" y="143" font-size="19" font-weight="800">4 · 写 manifest</text><text x="847" y="170" font-size="14">complete = true</text></g>
+<path d="M847 195V250H650V285" fill="none" stroke="#66858a" stroke-width="3"/><path d="M641 275L650 287L659 275" fill="none" stroke="#66858a" stroke-width="3"/>
+<rect x="550" y="290" width="200" height="75" rx="12" fill="#e6edf8" stroke="#9aaed1" stroke-width="2"/>
+<text x="650" y="322" text-anchor="middle" font-size="19" fill="#29454a" font-weight="800">5 · Commit marker</text><text x="650" y="346" text-anchor="middle" font-size="14" fill="#60797c">持久化确认</text>
+<path d="M550 327H450" stroke="#66858a" stroke-width="3"/><path d="M460 318L448 327L460 336" fill="none" stroke="#66858a" stroke-width="3"/>
+<rect x="250" y="290" width="200" height="75" rx="12" fill="#e2f0e7" stroke="#91bea0" stroke-width="2"/>
+<text x="350" y="322" text-anchor="middle" font-size="19" fill="#29454a" font-weight="800">6 · 更新 latest</text><text x="350" y="346" text-anchor="middle" font-size="14" fill="#60797c">只指向完整版本</text>
+<path d="M250 327H152V220" stroke="#66858a" stroke-width="3" fill="none"/>
+<rect x="55" y="290" width="195" height="75" rx="12" fill="#f7e9df" stroke="#d9a98f" stroke-width="2"/>
+<text x="152" y="322" text-anchor="middle" font-size="19" fill="#8d543d" font-weight="800">7 · 保留旧版本</text><text x="152" y="346" text-anchor="middle" font-size="14" fill="#8d543d">提交后再清理</text>
+<text x="55" y="430" font-size="16" fill="#60797c">失败发生在任意中间步骤时，恢复流程仍能读取上一份已提交版本。</text>
+<text x="55" y="462" font-size="14" fill="#9a762c">注意：原子 rename 适用于满足相应语义的文件系统；对象存储需要使用其自身的提交与一致性机制。</text>
+</g></svg>

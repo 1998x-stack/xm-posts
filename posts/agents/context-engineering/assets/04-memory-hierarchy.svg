@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 500" role="img" aria-labelledby="title desc">
+<title id="title">Agent Memory 四层结构与 Dreaming 整理过程</title><desc id="desc">会话日志、记忆笔记、知识表示和注入上下文形成层次；Dreaming 从原始记录回顾、验证、纠错并更新上层记忆。</desc>
+<rect width="980" height="500" rx="22" fill="#f8fbf9"/>
+<text x="490" y="46" text-anchor="middle" font-size="24" font-weight="700" fill="#24484c" font-family="system-ui,sans-serif">From experience to reusable knowledge</text>
+<g font-family="system-ui,'Microsoft YaHei',sans-serif">
+<rect x="90" y="82" width="800" height="72" rx="13" fill="#eaf2f8" stroke="#8bb3ca" stroke-width="2"/><text x="120" y="112" font-size="19" font-weight="700" fill="#3e7092">04 · INJECTED CONTEXT</text><text x="120" y="136" font-size="14" fill="#536f7d">每轮会话预先加载的少量目标、约束与知识入口</text>
+<rect x="150" y="174" width="680" height="72" rx="13" fill="#f0edfa" stroke="#aa9dce" stroke-width="2"/><text x="180" y="204" font-size="19" font-weight="700" fill="#6b5b9d">03 · MEMORY REPRESENTATIONS</text><text x="180" y="228" font-size="14" fill="#615b7b">Wiki、主题索引、关系图与可导航知识结构</text>
+<rect x="210" y="266" width="560" height="72" rx="13" fill="#e7f3ef" stroke="#83b5a8" stroke-width="2"/><text x="240" y="296" font-size="19" font-weight="700" fill="#176f67">02 · MEMORY NOTES</text><text x="240" y="320" font-size="14" fill="#486e68">已提炼的事实、决策、规则、偏好与失败经验</text>
+<rect x="270" y="358" width="440" height="72" rx="13" fill="#fff0e7" stroke="#d8a27d" stroke-width="2"/><text x="300" y="388" font-size="19" font-weight="700" fill="#a85e3d">01 · TRANSCRIPTS / EVENT LOG</text><text x="300" y="412" font-size="14" fill="#765d4d">可追溯的用户消息、工具调用与观察结果</text>
+<path d="M490 358 V338 M490 266 V246 M490 174 V154" stroke="#688e87" stroke-width="3" stroke-dasharray="6 6"/><path d="M483 347 L490 357 L497 347 M483 255 L490 265 L497 255 M483 163 L490 173 L497 163" fill="none" stroke="#688e87" stroke-width="3"/>
+<rect x="28" y="180" width="104" height="172" rx="12" fill="#fff" stroke="#d8e3df"/><text x="80" y="218" text-anchor="middle" font-size="15" font-weight="700" fill="#a85e3d">DREAMING</text><text x="80" y="247" text-anchor="middle" font-size="12" fill="#60797a">回看</text><text x="80" y="269" text-anchor="middle" font-size="12" fill="#60797a">验证</text><text x="80" y="291" text-anchor="middle" font-size="12" fill="#60797a">纠错</text><text x="80" y="313" text-anchor="middle" font-size="12" fill="#60797a">整理</text>
+<path d="M132 267 H195" stroke="#c17a52" stroke-width="3" stroke-dasharray="5 5"/><path d="M185 260 L196 267 L185 274" fill="none" stroke="#c17a52" stroke-width="3"/>
+</g>
+<text x="490" y="472" text-anchor="middle" font-size="14" fill="#6a8181" font-family="system-ui,sans-serif">底层保留证据与历史，上层保留更精炼的可复用知识；注入层应保持最小</text>
+</svg>

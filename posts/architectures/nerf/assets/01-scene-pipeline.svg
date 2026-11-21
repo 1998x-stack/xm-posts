@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 420" role="img" aria-labelledby="title desc">
+<title id="title">NeRF 从多视角照片学习连续场景并生成新视角</title>
+<desc id="desc">左侧多张带相机位姿的输入图像，中央连续神经场与射线查询，右侧新相机视角和合成图像。</desc>
+<defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#4f817d"/></marker></defs>
+<rect x="1" y="1" width="1198" height="418" rx="22" fill="#f8fbf9" stroke="#d9e7e1" stroke-width="2"/>
+<text x="42" y="48" font-family="system-ui,'PingFang SC',sans-serif" font-size="22" font-weight="750" fill="#29434b">从已观测视角学习一个可查询的场景函数</text>
+<rect x="38" y="92" width="292" height="250" rx="18" fill="#fffefa" stroke="#cddfd8" stroke-width="2"/>
+<text x="64" y="128" font-family="system-ui,'PingFang SC',sans-serif" font-size="18" font-weight="750" fill="#315b5b">输入图像 + 相机位姿</text>
+<g transform="translate(66 155)">
+<rect width="105" height="74" rx="8" fill="#e6f0eb" stroke="#a9c8bd"/><path d="M9 57 L36 27 L55 44 L76 18 L97 57 Z" fill="#78a69a"/><circle cx="79" cy="16" r="8" fill="#d79a55"/><text x="52" y="96" text-anchor="middle" font-size="14" fill="#536e70" font-family="system-ui">View 1</text>
+</g>
+<g transform="translate(190 155)">
+<rect width="105" height="74" rx="8" fill="#eaf0f7" stroke="#b7cbd8"/><path d="M8 57 L28 35 L48 49 L75 19 L98 57 Z" fill="#6d91aa"/><circle cx="79" cy="17" r="8" fill="#d79a55"/><text x="52" y="96" text-anchor="middle" font-size="14" fill="#536e70" font-family="system-ui">View 2</text>
+</g>
+<g transform="translate(66 267)">
+<rect width="105" height="48" rx="7" fill="#f7eee6" stroke="#dfc7ae"/><text x="52" y="30" text-anchor="middle" font-size="15" fill="#8b603b" font-family="system-ui">K, R, t</text>
+</g>
+<g transform="translate(190 267)">
+<rect width="105" height="48" rx="7" fill="#f7eee6" stroke="#dfc7ae"/><text x="52" y="30" text-anchor="middle" font-size="15" fill="#8b603b" font-family="system-ui">K, R, t</text>
+</g>
+<path d="M345 216 L415 216" stroke="#4f817d" stroke-width="4" fill="none" marker-end="url(#arrow)"/>
+<rect x="432" y="92" width="340" height="250" rx="18" fill="#edf6f1" stroke="#a9cfc2" stroke-width="2"/>
+<text x="602" y="130" text-anchor="middle" font-size="20" font-weight="750" fill="#1c6967" font-family="system-ui,'PingFang SC',sans-serif">连续神经辐射场 Fθ</text>
+<g transform="translate(472 158)">
+<rect width="90" height="48" rx="9" fill="#d9e9e2" stroke="#9bbdb0"/><text x="45" y="29" text-anchor="middle" font-size="15" fill="#315b5b" font-family="system-ui">位置 x</text>
+<rect x="105" width="90" height="48" rx="9" fill="#dce8f1" stroke="#a9c1d2"/><text x="150" y="29" text-anchor="middle" font-size="15" fill="#365f7c" font-family="system-ui">方向 d</text>
+<path d="M195 24 L225 24" stroke="#4f817d" stroke-width="3" marker-end="url(#arrow)"/>
+<rect x="235" y="-2" width="92" height="52" rx="10" fill="#fffefa" stroke="#c7d8d0"/><text x="281" y="29" text-anchor="middle" font-size="16" font-weight="700" fill="#315b5b" font-family="system-ui">MLP</text>
+</g>
+<path d="M602 213 L602 245" stroke="#4f817d" stroke-width="3" marker-end="url(#arrow)"/>
+<rect x="480" y="258" width="120" height="50" rx="9" fill="#f8eadc" stroke="#dcb58f"/><text x="540" y="289" text-anchor="middle" font-size="17" font-weight="700" fill="#935d35" font-family="system-ui">密度 σ(x)</text>
+<rect x="614" y="258" width="120" height="50" rx="9" fill="#e3edf5" stroke="#b3c9d8"/><text x="674" y="289" text-anchor="middle" font-size="17" font-weight="700" fill="#3e6d8b" font-family="system-ui">颜色 c(x,d)</text>
+<path d="M788 216 L866 216" stroke="#4f817d" stroke-width="4" fill="none" marker-end="url(#arrow)"/>
+<rect x="882" y="92" width="280" height="250" rx="18" fill="#fffefa" stroke="#cddfd8" stroke-width="2"/>
+<text x="1022" y="130" text-anchor="middle" font-size="19" font-weight="750" fill="#315b5b" font-family="system-ui,'PingFang SC',sans-serif">新相机视角</text>
+<g transform="translate(922 154)">
+<path d="M18 46 L116 46 L164 93 L67 93 Z" fill="#e8f1ec" stroke="#8eb2a7" stroke-width="2"/>
+<path d="M67 93 L67 159 L164 159 L164 93" fill="#dbe9e2" stroke="#8eb2a7" stroke-width="2"/>
+<path d="M18 46 L18 112 L67 159 L67 93" fill="#c7ddd3" stroke="#8eb2a7" stroke-width="2"/>
+<path d="M39 60 L80 60 L80 94 L39 94 Z" fill="#e5b77d" stroke="#c68c4d"/>
+<path d="M91 106 L141 106 L141 143 L91 143 Z" fill="#7fa6b9" stroke="#527f98"/>
+</g>
+<text x="1022" y="333" text-anchor="middle" font-size="14" fill="#607b7e" font-family="system-ui">沿新射线采样并合成像素</text>
+</svg>

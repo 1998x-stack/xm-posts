@@ -56,6 +56,15 @@
     ]
   },
   {
+    "id": "neural-rendering-nerf",
+    "title": "从二维视觉到三维神经场景表示",
+    "posts": [
+      "cnn",
+      "resnet",
+      "nerf"
+    ]
+  },
+  {
     "id": "path-07",
     "title": "序列建模主线",
     "posts": [
@@ -351,6 +360,51 @@
   },
   {
     "id": "path-38",
+    "title": "从策略优化到 Agentic RL",
+    "posts": [
+      "bellman-equations",
+      "gae",
+      "ppo",
+      "grpo",
+      "react",
+      "agentic-rl",
+      "swe-agent"
+    ]
+  },
+  {
+    "id": "path-39",
+    "title": "从 Agent Memory 到 Context Engineering 与 Harness",
+    "posts": [
+      "react",
+      "swe-agent",
+      "agent-memory-components",
+      "context-engineering",
+      "harness-engineering"
+    ]
+  },
+  {
+    "id": "path-40",
+    "title": "从 Agent 上下文到 Harness 与持续自主执行",
+    "posts": [
+      "react",
+      "agent-memory-components",
+      "context-engineering",
+      "harness-engineering",
+      "loop-engineering"
+    ]
+  },
+  {
+    "id": "path-41",
+    "title": "预训练模型的知识迁移与高效适配",
+    "posts": [
+      "bert",
+      "knowledge-distillation",
+      "lora",
+      "qlora"
+    ]
+  },
+  {
+    "id": "path-42",
     "title": "从概率分类到类型化决策",
     "posts": [
       "logistic-regression",
@@ -360,7 +414,7 @@
     ]
   },
   {
-    "id": "path-39",
+    "id": "path-43",
     "title": "Agent 的行动与概率决策控制",
     "posts": [
       "react",

@@ -1,0 +1,42 @@
+[
+  {
+    "id": "Q01",
+    "claim": "Watkins and Dayan published Technical Note: Q-Learning in Machine Learning volume 8 pages 279–292 in 1992",
+    "kind": "bibliography",
+    "source_url": "https://doi.org/10.1007/BF00992698",
+    "locator": "Journal metadata, title and abstract",
+    "status": "verified"
+  },
+  {
+    "id": "Q02",
+    "claim": "The 1992 paper proves almost-sure convergence for discrete tabular Q-values under sufficient repeated sampling and other theorem conditions",
+    "kind": "theory",
+    "source_url": "https://www.gatsby.ucl.ac.uk/~dayan/papers/cjch.pdf",
+    "locator": "Abstract and convergence theorem",
+    "status": "verified"
+  },
+  {
+    "id": "Q03",
+    "claim": "Q-learning uses sampled reward and the maximum estimated next-state action value",
+    "kind": "algorithm",
+    "source_url": "https://doi.org/10.1007/BF00992698",
+    "locator": "Algorithm description",
+    "status": "verified"
+  },
+  {
+    "id": "Q04",
+    "claim": "A toy transition with Q=2, r=1, gamma=.9, max next Q=4 and alpha=.5 yields target 4.6 and updated Q=3.3",
+    "kind": "toy-derivation",
+    "source_url": "https://doi.org/10.1007/BF00992698",
+    "locator": "Independent arithmetic illustration of update rule; not a paper experiment",
+    "status": "derived"
+  },
+  {
+    "id": "Q05",
+    "claim": "DQN adds neural function approximation, replay and target networks, and is not covered by the 1992 tabular theorem",
+    "kind": "later-method",
+    "source_url": "https://www.nature.com/articles/nature14236",
+    "locator": "Mnih et al. 2015, algorithm and methods",
+    "status": "verified"
+  }
+]

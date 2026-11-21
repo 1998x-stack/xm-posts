@@ -1,0 +1,596 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light">
+<meta name="description" content="从 Young–Daly 检查点间隔模型、CheckFreq 两阶段快照，到 PyTorch DCP、FSDP、ZeRO 与 Megatron 分布式恢复，理解大模型训练如何平衡保存成本、故障恢复和状态一致性。">
+<title>Understanding Checkpoint Optimization · xm-posts</title>
+<style>
+:root{--paper:#fffdfa;--bg:#f4f7f4;--ink:#243c43;--muted:#5d777b;--teal:#17796f;--teal2:#dff0e9;--rust:#b86b49;--rust2:#f7e9df;--violet:#7165a7;--line:#d7e4dc;--gold:#9a762c}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.88 system-ui,-apple-system,"PingFang SC","Microsoft YaHei",sans-serif}
+a{color:#176f69;text-underline-offset:4px;overflow-wrap:anywhere}
+a:hover{color:#a85e40}
+:focus-visible{outline:3px solid var(--rust);outline-offset:3px}
+.skip{position:absolute;top:-100px;left:15px;z-index:30;padding:8px 14px;background:#234c4a;color:#fff}
+.skip:focus{top:8px}
+.sitebar{background:var(--paper);border-bottom:1px solid var(--line)}
+.sitebar-inner{max-width:1240px;margin:auto;padding:12px 22px;display:flex;justify-content:space-between;gap:18px;align-items:center;flex-wrap:wrap}
+.brand{font-size:19px;font-weight:900;letter-spacing:-.06em;text-decoration:none;color:#264b4a}
+.brand span{color:var(--rust)}
+.site-links{display:flex;gap:16px;flex-wrap:wrap}
+.site-links a{text-decoration:none;font-size:13px;font-weight:750}
+.layout{max-width:1240px;margin:auto;padding:48px 24px 100px;display:grid;grid-template-columns:230px minmax(0,850px);gap:52px}
+.toc{position:sticky;top:18px;align-self:start;max-height:calc(100vh - 36px);overflow:auto}
+.toc b{font-size:11px;color:#71898a;letter-spacing:.12em}
+.toc a{display:block;border-left:2px solid #d4e4dd;padding:6px 11px;color:#5b7779;text-decoration:none;font-size:12px;line-height:1.55}
+.toc a:hover{border-color:var(--teal);color:var(--teal)}
+main,article{min-width:0}
+.eyebrow{font-size:12px;color:var(--teal);font-weight:850;letter-spacing:.14em}
+h1{font-size:clamp(40px,5vw,66px);line-height:1.12;letter-spacing:-.06em;margin:15px 0 20px}
+h2{font-size:clamp(26px,3vw,35px);line-height:1.34;letter-spacing:-.04em;margin:0 0 22px}
+h3{font-size:20px;line-height:1.45;margin:25px 0 12px}
+p{margin:0 0 18px;color:#3b5559}
+.dek{font-size:21px;line-height:1.72;color:#49666a}
+.meta{border-top:1px solid var(--line);padding-top:15px;margin:28px 0 48px;font-size:12px;color:#71898a;display:flex;gap:14px;flex-wrap:wrap}
+section{scroll-margin-top:20px;margin:0 0 72px}
+.lead{font-size:19px;color:#2d5356}
+.figure{margin:26px 0;background:#fff;border:1px solid var(--line);padding:12px;border-radius:11px}
+.figure img,.figure svg.diagram{display:block;width:100%;height:auto;max-width:100%}
+.figure-scroll{max-width:100%;overflow-x:auto}
+.figure-scroll:focus-visible{outline:3px solid var(--rust);outline-offset:2px}
+figcaption{font-size:13px;line-height:1.75;color:#617c7d;padding:12px 8px 5px}
+.fig-number{color:var(--rust);font-weight:850;letter-spacing:.1em;margin-right:9px}
+.callout{border-left:4px solid var(--rust);background:#fcf1e7;padding:16px 20px;margin:22px 0;font-size:15px;line-height:1.82}
+.note{border-left:4px solid var(--teal);background:#eaf5ef;padding:16px 20px;margin:22px 0;font-size:15px;line-height:1.82}
+.warning{border-left:4px solid var(--gold);background:#f8f2df;padding:16px 20px;margin:22px 0;font-size:15px;line-height:1.82}
+.math-equation{background:#e8f3ee;border-left:4px solid var(--teal);border-radius:6px;margin:24px 0;padding:16px 18px;max-width:100%;min-width:0}
+.eq-label{display:block;font-size:11px;color:var(--teal);font-weight:850;letter-spacing:.12em;margin-bottom:8px}
+.math-scroll{max-width:100%;min-width:0;overflow-x:auto;overflow-y:hidden}
+.math-scroll math[display=block]{font-family:"Cambria Math","STIX Two Math",serif;width:max-content;min-width:100%;font-size:1.25rem;color:#23494d}
+.eq-caption{margin:8px 0 0;font-size:13px;line-height:1.7;color:#557572}
+.table-wrap{max-width:100%;overflow-x:auto;border:1px solid var(--line);border-radius:9px;margin:22px 0}
+table{width:100%;border-collapse:collapse;background:#fff;min-width:620px;font-size:14px}
+caption{text-align:left;background:#f0f5ef;font-size:12px;color:#657b7c;padding:10px 13px}
+th,td{padding:12px 14px;text-align:left;vertical-align:top;border-bottom:1px solid #e4ede8}
+th{background:#eef5f1;color:#28595a}
+tr:last-child td{border-bottom:none}
+ul,ol{padding-left:25px;color:#3b5559}
+li{padding:5px 0}
+.state-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:22px 0}
+.state-grid>div{background:#fff;border:1px solid var(--line);border-radius:9px;padding:15px}
+.state-grid b{display:block;color:#176f69;font-size:15px}
+.state-grid p{font-size:14px;line-height:1.72;margin:7px 0 0}
+.demo{padding:23px;background:#fff;border:1px solid #c3ded4;border-radius:12px;margin:25px 0}
+.demo h3{margin:0 0 8px}
+.demo-intro{font-size:14px;color:#61797b}
+.demo label{display:block;font-size:14px;font-weight:750;margin:14px 0 5px}
+.demo input[type=range]{display:block;width:100%;accent-color:#197c72;cursor:pointer;margin:12px 0}
+.controls{display:flex;gap:9px;flex-wrap:wrap;margin:14px 0}
+.controls button{padding:9px 15px;background:#f7fbf9;color:#196f69;border:1px solid #a9cfc7;border-radius:7px;font-size:14px;font-weight:750;cursor:pointer}
+.controls button[aria-pressed=true]{background:#237e73;color:#fff;border-color:#237e73}
+.results{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:16px 0}
+.results>div{border:1px solid #d9e9e0;border-radius:8px;background:#f2f8f4;padding:13px}
+.results small{display:block;color:#617b79;font-size:12px}
+.results strong{display:block;color:#146e66;font-size:23px;line-height:1.4;margin-top:5px}
+.chart-wrap{border:1px solid #e0ebe4;border-radius:8px;padding:10px;background:#fbfdfb;margin:16px 0;max-width:100%;overflow-x:auto}
+.chart-wrap svg{display:block;width:100%;height:auto}
+.chart-caption{font-size:12px;color:#637b7b;margin:6px 4px 0}
+.demo-note{font-size:13px;color:#5a7375;margin:10px 0 0}
+pre{max-width:100%;overflow-x:auto;background:#21383c;color:#e5f1e9;padding:17px;border-radius:9px;font:13px/1.7 ui-monospace,SFMono-Regular,Consolas,monospace;tab-size:4}
+code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace}
+.inline-code{background:#e9f1ed;border-radius:4px;padding:1px 5px;color:#255c58;font-size:.92em}
+.refs{padding-left:22px;font-size:14px}
+.refs li{padding:7px 0}
+.takeaways li{padding:7px 0}
+.footer{border-top:1px solid var(--line);padding:20px 0 0;color:#6b8583;font-size:13px}
+@media(max-width:1030px){.layout{grid-template-columns:1fr;max-width:900px;padding-top:32px;gap:25px}.toc{position:static;max-height:none;display:flex;gap:6px;flex-wrap:wrap;border-bottom:1px solid var(--line);padding-bottom:17px}.toc b{width:100%}.toc a{border:0;background:#eaf3ee;border-radius:4px;padding:6px 9px}}
+@media(max-width:560px){.figure-scroll svg.diagram{min-width:680px}.chart-wrap svg{min-width:680px}body{font-size:16px}.layout{padding:23px 16px 68px}h1{font-size:40px}.dek{font-size:18px}.meta{margin-bottom:34px}.figure{padding:5px}.figure img{min-width:0}.figure figcaption{font-size:12px}.state-grid,.results{grid-template-columns:1fr}.results strong{font-size:22px}.math-equation{padding:12px 9px}.math-scroll math[display=block]{font-size:1.05rem}section{margin-bottom:55px}.demo{padding:15px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+@media print{body{background:#fff}.skip,.sitebar,.toc,.controls,.demo input[type=range]{display:none!important}.layout{display:block;max-width:none;padding:0}.figure,.state-grid>div,.math-equation{break-inside:avoid}.math-scroll{overflow:visible}.math-scroll math[display=block]{font-size:1rem}a{color:#23484a}pre{white-space:pre-wrap;overflow-wrap:anywhere}}
+</style>
+</head>
+<body>
+<a href="#article-content" class="skip">跳转正文</a>
+<header class="sitebar"><div class="sitebar-inner"><a class="brand" href="../../../">xm<span>.</span>posts</a><nav class="site-links" aria-label="站点导航"><a href="../../../categories/training/">训练与对齐</a><a href="../../../archive/">全部文章</a></nav></div></header>
+<div class="layout">
+<nav class="toc" aria-label="文章目录">
+<b>TRAINING CHECKPOINTS / FAULT TOLERANCE</b>
+<a href="#problem">01 · 训练被中断，究竟丢失了什么？</a>
+<a href="#state">02 · 一个真正可恢复的检查点包含什么？</a>
+<a href="#interval">03 · Young–Daly：多久保存一次最划算？</a>
+<a href="#checkfreq">04 · CheckFreq：把保存拆成快照与持久化</a>
+<a href="#distributed">05 · 分布式训练：每张 GPU 保存什么？</a>
+<a href="#consistency">06 · 正确性：文件写完不等于检查点可恢复</a>
+<a href="#storage">07 · 存储、带宽与检查点体积</a>
+<a href="#distinction">08 · Training Checkpoint 与 Activation Checkpoint</a>
+<a href="#experiment">09 · 交互实验：寻找最合适的保存间隔</a>
+<a href="#implementation">10 · 用代码验证检查点策略</a>
+<a href="#operations">11 · 真实训练任务的工程决策清单</a>
+<a href="#summary">12 · 总结：从保存文件到恢复训练系统</a>
+<a href="#references">参考资料</a>
+</nav>
+<main id="article-content"><article>
+<header>
+<div class="eyebrow">PAPER STUDY / TRAINING SYSTEMS / FAULT TOLERANCE</div>
+<h1>Understanding Checkpoint Optimization</h1>
+<p class="dek">训练一个大模型，为什么不能只在训练结束时保存权重？从最优检查点间隔、两阶段异步快照，到 FSDP、ZeRO 和跨拓扑恢复，理解如何在训练开销、故障风险与状态一致性之间做工程权衡。</p>
+<div class="meta"><span>Mohan et al. · USENIX FAST 2021</span><span>预计阅读 30 分钟</span><span>Checkpointing / Distributed Training</span><span>PyTorch DCP · Megatron · DeepSpeed</span></div>
+</header>
+
+<section id="problem" aria-labelledby="problem-heading">
+<h2 id="problem-heading">01 · 训练被中断，究竟丢失了什么？</h2>
+<p class="lead">假设你正在 256 张 GPU 上训练一个语言模型。训练已经运行了 19 个小时，集群发生故障，任务被迫重启。你重新加载了上一次保存的模型权重，但发现训练曲线、学习率和数据顺序都接不上。这说明：<strong>保存模型参数，不等于保存了训练现场。</strong></p>
+<p>训练是一个持续演化的状态机。每一步都会改变模型参数、优化器内部状态、学习率调度器、随机数生成器以及数据读取位置。故障恢复真正需要的是某个一致时刻的<strong>训练状态快照</strong>，而不是一份孤立的权重文件。</p>
+<figure class="figure"><div class="figure-scroll" role="region" tabindex="0" aria-label="图解，可横向滚动查看"><svg class="diagram" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 500" role="img" aria-labelledby="s1-title s1-desc">
+<title id="s1-title">训练状态如何组成一个检查点</title><desc id="s1-desc">模型参数、优化器、调度器、随机数和数据进度在一致训练边界汇聚成状态快照，再序列化为检查点。</desc>
+<rect x="1" y="1" width="998" height="498" rx="20" fill="#fbfdfb" stroke="#d9e6df"/>
+<g font-family="system-ui,'PingFang SC','Microsoft YaHei',sans-serif" fill="#29454a">
+<text x="42" y="55" font-size="26" font-weight="750">训练不是一个权重文件，而是一组共同演化的状态</text>
+<rect x="48" y="105" width="270" height="78" rx="13" fill="#dff0e9" stroke="#92c7b8" stroke-width="2"/>
+<text x="72" y="139" font-size="20" font-weight="700">Model parameters</text><text x="72" y="164" font-size="15">θ · buffers · weights</text>
+<rect x="48" y="207" width="270" height="78" rx="13" fill="#f7e9df" stroke="#d9a98f" stroke-width="2"/>
+<text x="72" y="241" font-size="20" font-weight="700">Optimizer state</text><text x="72" y="266" font-size="15">Adam m / v · momentum</text>
+<rect x="48" y="309" width="270" height="78" rx="13" fill="#eeebf8" stroke="#b3abd5" stroke-width="2"/>
+<text x="72" y="343" font-size="20" font-weight="700">Scheduler / scaler</text><text x="72" y="368" font-size="15">learning rate · AMP scale</text>
+<rect x="355" y="156" width="270" height="78" rx="13" fill="#f8f1df" stroke="#d8c58a" stroke-width="2"/>
+<text x="379" y="190" font-size="20" font-weight="700">RNG / data progress</text><text x="379" y="215" font-size="15">seed · sampler · cursor</text>
+<g fill="none" stroke="#66858a" stroke-width="3" stroke-linecap="round">
+<path d="M318 144H338V195H355"/><path d="M318 246H355"/><path d="M318 348H338V195"/><path d="M490 234V264"/>
+</g>
+<rect x="355" y="264" width="270" height="92" rx="14" fill="#e4f1ef" stroke="#72aaa2" stroke-width="2"/>
+<text x="490" y="300" text-anchor="middle" font-size="22" font-weight="800">Consistent snapshot</text><text x="490" y="329" text-anchor="middle" font-size="15">one logical training step</text>
+<path d="M625 310H685" fill="none" stroke="#66858a" stroke-width="3"/><path d="M675 301L687 310L675 319" fill="none" stroke="#66858a" stroke-width="3"/>
+<rect x="690" y="260" width="260" height="102" rx="14" fill="#e6edf8" stroke="#9aaed1" stroke-width="2"/>
+<text x="820" y="299" text-anchor="middle" font-size="22" font-weight="800">Checkpoint artifact</text><text x="820" y="330" text-anchor="middle" font-size="15">shards + manifest + metadata</text>
+<path d="M820 362V406" fill="none" stroke="#66858a" stroke-width="3"/><path d="M811 396L820 408L829 396" fill="none" stroke="#66858a" stroke-width="3"/>
+<rect x="690" y="410" width="260" height="55" rx="10" fill="#e2f0e7" stroke="#91bea0"/>
+<text x="820" y="445" text-anchor="middle" font-size="18" font-weight="750">可恢复的训练现场</text>
+<text x="48" y="440" font-size="15" fill="#60797c">保存边界必须与 optimizer update / gradient accumulation 状态相匹配。</text>
+</g></svg></div><figcaption><span class="fig-number">FIG. 01</span>训练检查点应覆盖能够决定下一步训练行为的状态。只保存模型权重，通常只能用于推理或重新初始化优化器，不能保证无缝续训。</figcaption></figure>
+<p>先区分三个经常被混为一谈的概念：</p>
+<div class="state-grid">
+<div><b>Model Weights</b><p>模型参数本身，决定当前网络的函数映射。用于推理发布时通常是最重要的部分。</p></div>
+<div><b>Training State</b><p>模型、优化器、调度器、随机数和数据进度等联合状态。用于从训练中断点继续学习。</p></div>
+<div><b>Checkpoint Artifact</b><p>经过序列化、分片、写入、校验和提交后，能够被可靠加载的一组文件及其元数据。</p></div>
+<div><b>Recovery Protocol</b><p>故障后如何定位最近的完整版本、重新映射分片、恢复状态并继续执行。</p></div>
+</div>
+<p>这篇文章的核心问题因此变成了四个连续问题：<strong>保存什么、何时保存、怎样保存、如何证明恢复正确。</strong></p>
+<div class="callout"><strong>阅读边界：</strong>本文讨论的是训练过程的持久化检查点（training checkpoint）。它不是把 Transformer 的激活值暂时存入 CPU，也不是为了减少反向传播显存而进行的 activation recomputation。两者会在第 8 节严格区分。</div>
+</section>
+
+<section id="state" aria-labelledby="state-heading">
+<h2 id="state-heading">02 · 一个真正可恢复的检查点包含什么？</h2>
+<p>以 AdamW 训练为例。设第 (t) 步的模型参数为 (	heta_t)，一阶与二阶矩估计分别为 mₜ、vₜ。优化器更新并不只依赖当前参数，还依赖历史梯度的统计量：</p>
+<div class="math-equation"><span class="eq-label">ADAM STATE · UPDATE EQUATIONS</span><div class="math-scroll" role="region" tabindex="0" aria-label="Adam 优化器状态更新公式"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block" aria-label="Adam 一阶矩、二阶矩与参数更新公式"><mtable columnalign="right center left" rowspacing="0.6em"><mtr><mtd><msub><mi>m</mi><mi>t</mi></msub></mtd><mtd><mo>=</mo></mtd><mtd><msub><mi>β</mi><mn>1</mn></msub><msub><mi>m</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>+</mo><mo stretchy="false">(</mo><mn>1</mn><mo>−</mo><msub><mi>β</mi><mn>1</mn></msub><mo stretchy="false">)</mo><msub><mi>g</mi><mi>t</mi></msub></mtd></mtr><mtr><mtd><msub><mi>v</mi><mi>t</mi></msub></mtd><mtd><mo>=</mo></mtd><mtd><msub><mi>β</mi><mn>2</mn></msub><msub><mi>v</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>+</mo><mo stretchy="false">(</mo><mn>1</mn><mo>−</mo><msub><mi>β</mi><mn>2</mn></msub><mo stretchy="false">)</mo><msubsup><mi>g</mi><mi>t</mi><mn>2</mn></msubsup></mtd></mtr><mtr><mtd><msub><mi>θ</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub></mtd><mtd><mo>=</mo></mtd><mtd><msub><mi>θ</mi><mi>t</mi></msub><mo>−</mo><mi>η</mi><mfrac><mover><mi>m</mi><mo>^</mo></mover><mrow><msqrt><mover><mi>v</mi><mo>^</mo></mover></msqrt><mo>+</mo><mi>ε</mi></mrow></mfrac></mtd></mtr></mtable></math></div><p class="eq-caption">这里省略了 bias correction 与 decoupled weight decay 的完整项。关键在于：下一步更新依赖历史状态 (m_t,v_t)，而不只是 (	heta_t)。</p></div>
+<p>如果只恢复 (	heta_t)，却把 mₜ 和 vₜ 重置为零，优化器实际上从一个新的历史起点继续运行。即使代码没有报错，训练轨迹也已经改变。</p>
+<div class="table-wrap"><table><caption>表 1 · 训练检查点的状态清单与遗漏后果</caption><thead><tr><th>状态</th><th>为什么需要保存</th><th>遗漏可能造成的后果</th></tr></thead><tbody>
+<tr><td>模型参数 / buffers</td><td>当前模型状态与非参数缓冲区</td><td>模型回退到更早状态，或 BatchNorm 等缓冲区不一致</td></tr>
+<tr><td>优化器状态</td><td>Adam 的一阶、二阶矩，动量与参数组信息</td><td>优化轨迹改变，短期 loss 可能突变</td></tr>
+<tr><td>LR Scheduler</td><td>当前 step、warmup、衰减阶段</td><td>学习率重复 warmup 或错误衰减</td></tr>
+<tr><td>GradScaler / AMP</td><td>混合精度动态 loss scale</td><td>恢复后溢出、跳步或数值稳定性变化</td></tr>
+<tr><td>Global Step / Samples</td><td>训练进度与调度位置</td><td>日志、评估、学习率与进度错位</td></tr>
+<tr><td>RNG States</td><td>Python、NumPy、CPU/CUDA 随机状态</td><td>dropout、采样、数据增强序列发生变化</td></tr>
+<tr><td>Sampler / Data Iterator</td><td>epoch、shuffle seed、样本游标与分片位置</td><td>数据重复、遗漏，或恢复后样本顺序改变</td></tr>
+<tr><td>Distributed Metadata</td><td>rank、mesh、分片描述、并行策略和格式版本</td><td>分片无法映射，或错误地加载到不同 rank</td></tr>
+</tbody></table></div>
+<p>这里有一个容易忽略的边界：如果只在一次完整的 optimizer update 之后保存，通常不需要保存尚未产生的下一步梯度；但如果允许在 gradient accumulation 的微批次中间保存，就还需要保存累积梯度、micro-batch 进度及相应的数据状态。<strong>保存边界决定了必须持久化的状态集合。</strong></p>
+<div class="note">工程上应先定义一个一致的训练边界（例如 optimizer step 完成、梯度累积清零之后），再定义 checkpoint schema。不要先把一堆对象序列化，再假设它们天然属于同一时刻。</div>
+</section>
+
+<section id="interval" aria-labelledby="interval-heading">
+<h2 id="interval-heading">03 · Young–Daly：多久保存一次最划算？</h2>
+<p>保存太频繁，每次 I/O 都会消耗时间；保存太稀疏，一旦故障就会重做更多训练。我们需要把“保存开销”和“故障损失”放进同一个目标函数。</p>
+<figure class="figure"><div class="figure-scroll" role="region" tabindex="0" aria-label="图解，可横向滚动查看"><svg class="diagram" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 520" role="img" aria-labelledby="s2-title s2-desc">
+<title id="s2-title">检查点间隔的成本权衡</title><desc id="s2-desc">频繁保存导致检查点成本较高，稀疏保存导致故障重做成本较高，两者相加得到 U 形总开销，并在最优间隔附近达到最低。</desc>
+<rect x="1" y="1" width="998" height="518" rx="20" fill="#fbfdfb" stroke="#d9e6df"/>
+<g font-family="system-ui,'PingFang SC','Microsoft YaHei',sans-serif">
+<text x="42" y="52" fill="#29454a" font-size="26" font-weight="750">为什么最优间隔不是“越频繁越好”？</text>
+<path d="M115 95V410H915" fill="none" stroke="#678187" stroke-width="3"/>
+<g stroke="#e5ede7" stroke-width="1"><path d="M115 155H915"/><path d="M115 215H915"/><path d="M115 275H915"/><path d="M115 335H915"/></g>
+<path d="M145 120 C210 190 270 275 430 335 C540 370 700 386 890 395" fill="none" stroke="#b86b49" stroke-width="5" stroke-linecap="round"/>
+<path d="M145 395 C300 392 440 365 560 320 C690 270 800 180 890 115" fill="none" stroke="#7165a7" stroke-width="5" stroke-linecap="round"/>
+<path d="M145 95 C250 165 335 260 470 275 C620 290 760 220 890 130" fill="none" stroke="#187c72" stroke-width="6" stroke-linecap="round"/>
+<path d="M560 110V410" stroke="#b86b49" stroke-width="2.5" stroke-dasharray="8 7"/>
+<circle cx="560" cy="282" r="9" fill="#b86b49" stroke="#fff" stroke-width="3"/>
+<g fill="#29454a" font-size="17"><text x="480" y="455">保存间隔 τ</text><text x="36" y="92">开销</text><text x="130" y="445">短</text><text x="875" y="445">长</text></g>
+<g font-size="18" font-weight="700"><text x="175" y="185" fill="#a65f43">保存成本 C / τ</text><text x="680" y="175" fill="#7165a7">故障重做 τ / 2M</text><text x="670" y="320" fill="#187c72">总开销 H(τ)</text></g>
+<rect x="470" y="70" width="180" height="45" rx="10" fill="#f7e9df" stroke="#d9a98f"/>
+<text x="560" y="99" text-anchor="middle" font-size="17" fill="#9b5d43" font-weight="750">τ* = √(2CM)</text>
+<text x="115" y="490" font-size="15" fill="#60797c">示意曲线：帮助理解方向与权衡；具体形状取决于成本、故障率和模型假设。</text>
+</g></svg></div><figcaption><span class="fig-number">FIG. 02</span>左侧是保存过于频繁的 I/O 成本，右侧是保存过于稀疏的故障重做成本。两者相加形成一个近似 U 形的总开销曲线。</figcaption></figure>
+<h3>3.1 建立一个一阶成本模型</h3>
+<p>先做一个理想化假设：故障以近似恒定的速率随机发生（Poisson failure model），每次检查点成本固定为 C，平均故障间隔为 M，两次检查点之间的训练时间为 (	au)。</p>
+<div class="math-equation"><span class="eq-label">YOUNG–DALY · FIRST-ORDER APPROXIMATION</span><div class="math-scroll" role="region" tabindex="0" aria-label="Young Daly 检查点开销公式"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block" aria-label="总开销等于检查点成本除以间隔加上间隔除以两倍平均故障间隔"><mi>H</mi><mo stretchy="false">(</mo><mi>τ</mi><mo stretchy="false">)</mo><mo>≈</mo><mfrac><mi>C</mi><mi>τ</mi></mfrac><mo>+</mo><mfrac><mi>τ</mi><mrow><mn>2</mn><mi>M</mi></mrow></mfrac></math></div><p class="eq-caption">把开销表示为单位训练时间的近似损失比例。第一项是周期性保存成本，第二项是故障发生时平均丢失半个间隔的训练工作。</p></div>
+<p>为什么第二项是 (	au/(2M))？如果故障在一个保存间隔内均匀发生，那么从上一次成功保存到故障点的平均距离为：</p>
+<div class="math-equation"><span class="eq-label">EXPECTED LOST WORK</span><div class="math-scroll" role="region" tabindex="0" aria-label="平均丢失训练时间"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block" aria-label="均匀故障时平均丢失的训练时间等于检查点间隔的一半"><msub><mi>R</mi><mtext>avg</mtext></msub><mo>=</mo><mfrac><mn>1</mn><mi>τ</mi></mfrac><msubsup><mo>∫</mo><mn>0</mn><mi>τ</mi></msubsup><mi>t</mi><mi>d</mi><mi>t</mi><mo>=</mo><mfrac><mi>τ</mi><mn>2</mn></mfrac></math></div></div>
+<p>单位时间内的期望故障次数约为 1 / M，所以故障导致的平均重做开销约为 (	au/(2M))。这个推导是便于理解的第一阶近似；Daly 的工作进一步研究了包含写入时间、恢复时间等因素的更完整模型。</p>
+<h3>3.2 对保存间隔求最优值</h3>
+<p>对 (	au) 求导，并令导数为零：</p>
+<div class="math-equation"><span class="eq-label">OPTIMAL CHECKPOINT INTERVAL</span><div class="math-scroll" role="region" tabindex="0" aria-label="最优检查点间隔推导"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block" aria-label="对成本函数求导得到最优间隔为平方根下的二乘检查点成本乘平均故障间隔"><mtable columnalign="center" rowspacing="0.55em"><mtr><mtd><mfrac><mrow><mi>d</mi><mi>H</mi></mrow><mrow><mi>d</mi><mi>τ</mi></mrow></mfrac><mo>=</mo><mo>−</mo><mfrac><mi>C</mi><msup><mi>τ</mi><mn>2</mn></msup></mfrac><mo>+</mo><mfrac><mn>1</mn><mrow><mn>2</mn><mi>M</mi></mrow></mfrac><mo>=</mo><mn>0</mn></mtd></mtr><mtr><mtd><msup><mi>τ</mi><mn>2</mn></msup><mo>=</mo><mn>2</mn><mi>C</mi><mi>M</mi></mtd></mtr><mtr><mtd><mrow><mover><mi>τ</mi><mo>*</mo></mover><mo>=</mo><msqrt><mn>2</mn><mi>C</mi><mi>M</mi></msqrt></mrow></mtd></mtr></mtable></math></div><p class="eq-caption">最优间隔随检查点成本和平均故障间隔的平方根增长。保存成本越高，应该保存得越稀疏；故障越频繁，应该保存得越频繁。</p></div>
+<h3>3.3 一个可以手算的例子</h3>
+<p>假设一次检查点的<strong>有效成本</strong>为 30 秒，集群平均 10 小时发生一次会中断任务的故障。则：</p>
+<ul>
+<li>C = 30 秒；</li>
+<li>M = 10 × 3600 = 36,000 秒；</li>
+<li>(	au^*=√(2 × 30 × 36,000) ≈ 1,469.7) 秒，约 24.5 分钟。</li>
+</ul>
+<p>在这个一阶模型下，平均每次故障丢失约 12.25 分钟的训练工作。保存开销与故障重做开销在最优点附近达到平衡。</p>
+<div class="warning"><strong>不要把公式当成固定配置：</strong>Young–Daly 假设故障过程和检查点成本相对稳定。真实训练任务中，存储竞争、节点批量失效、抢占通知、异步写入积压和恢复耗时都会改变成本结构。它适合作为初始估计，而不是跳过 profiling 的理由。</div>
+</section>
+
+<section id="checkfreq" aria-labelledby="checkfreq-heading">
+<h2 id="checkfreq-heading">04 · CheckFreq：把保存拆成快照与持久化</h2>
+<p>频繁保存的主要障碍，是保存操作会阻塞训练关键路径。2021 年 FAST 论文 <a href="https://www.usenix.org/conference/fast21/presentation/mohan" target="_blank" rel="noopener">CheckFreq: Frequent, Fine-Grained DNN Checkpointing</a> 给出一个很重要的思路：不要把“拿到一个一致的状态副本”和“把副本写入持久存储”当成一个不可分割的同步操作。</p>
+<p>它把 checkpoint 拆成两个阶段：</p>
+<ol>
+<li><strong>snapshot()：</strong>在一个一致的训练边界捕获状态副本。此后训练可以继续更新原始参数。</li>
+<li><strong>persist()：</strong>后台把快照写入持久存储，并在确认完成后将其视为可恢复检查点。</li>
+</ol>
+<figure class="figure"><div class="figure-scroll" role="region" tabindex="0" aria-label="图解，可横向滚动查看"><svg class="diagram" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 560" role="img" aria-labelledby="s3-title s3-desc">
+<title id="s3-title">两阶段异步检查点时间线</title><desc id="s3-desc">在训练 step i 更新后捕获一致快照，快照 staging 完成前不得更新源参数；随后后台持久化可以与后续计算重叠，上传完成后才能安全开始新的检查点请求。</desc>
+<rect x="1" y="1" width="998" height="558" rx="20" fill="#fbfdfb" stroke="#d9e6df"/>
+<g font-family="system-ui,'PingFang SC','Microsoft YaHei',sans-serif">
+<text x="40" y="50" font-size="26" fill="#29454a" font-weight="750">把“快照”和“写入”拆开，才能真正隐藏保存成本</text>
+<text x="42" y="112" font-size="18" fill="#187c72" font-weight="800">GPU / TRAINING</text>
+<text x="42" y="248" font-size="18" fill="#a65e43" font-weight="800">SNAPSHOT / STAGING</text>
+<text x="42" y="380" font-size="18" fill="#7165a7" font-weight="800">PERSIST / STORAGE</text>
+<g stroke="#d9e5df" stroke-width="1"><path d="M240 90V445"/><path d="M420 90V445"/><path d="M600 90V445"/><path d="M780 90V445"/><path d="M930 90V445"/></g>
+<g fill="#e0f0e9" stroke="#82b9a9" stroke-width="2"><rect x="240" y="130" width="150" height="64" rx="9"/><rect x="420" y="130" width="150" height="64" rx="9"/><rect x="600" y="130" width="150" height="64" rx="9"/><rect x="780" y="130" width="150" height="64" rx="9"/></g>
+<g fill="#29454a" font-size="17" font-weight="700" text-anchor="middle"><text x="315" y="169">Step i update</text><text x="495" y="169">Step i+1 F/B</text><text x="675" y="169">Next update</text><text x="855" y="169">Step i+2</text></g>
+<rect x="240" y="270" width="150" height="58" rx="9" fill="#f7e9df" stroke="#d9a98f" stroke-width="2"/>
+<text x="315" y="305" text-anchor="middle" font-size="17" fill="#8d543d" font-weight="700">Capture snapshot</text>
+<rect x="420" y="270" width="150" height="58" rx="9" fill="#f7e9df" stroke="#d9a98f" stroke-width="2"/>
+<text x="495" y="305" text-anchor="middle" font-size="17" fill="#8d543d" font-weight="700">D2H staging</text>
+<path d="M390 299H420" stroke="#a65e43" stroke-width="3"/><path d="M410 290L421 299L410 308" fill="none" stroke="#a65e43" stroke-width="3"/>
+<rect x="600" y="270" width="150" height="58" rx="9" fill="#e8f2ed" stroke="#82b9a9" stroke-width="2" stroke-dasharray="5 4"/>
+<text x="675" y="305" text-anchor="middle" font-size="17" fill="#187c72" font-weight="700">Staging complete</text>
+<path d="M570 299H600" stroke="#a65e43" stroke-width="3"/><path d="M590 290L601 299L590 308" fill="none" stroke="#a65e43" stroke-width="3"/>
+<rect x="420" y="400" width="330" height="58" rx="9" fill="#eeebf8" stroke="#aaa1d0" stroke-width="2"/>
+<text x="585" y="435" text-anchor="middle" font-size="18" fill="#5d548f" font-weight="700">Background write / upload</text>
+<path d="M495 328V400" stroke="#7165a7" stroke-width="3" stroke-dasharray="6 5"/>
+<path d="M750 429H780" stroke="#7165a7" stroke-width="3"/><path d="M770 420L781 429L770 438" fill="none" stroke="#7165a7" stroke-width="3"/>
+<rect x="780" y="400" width="150" height="58" rx="9" fill="#e8f2ed" stroke="#82b9a9" stroke-width="2"/>
+<text x="855" y="435" text-anchor="middle" font-size="17" fill="#187c72" font-weight="700">Upload complete</text>
+<path d="M570 185V245" stroke="#b86b49" stroke-width="3"/><path d="M560 235L570 247L580 235" fill="none" stroke="#b86b49" stroke-width="3"/>
+<text x="585" y="230" font-size="14" fill="#a65e43">下一次参数更新前，快照必须稳定</text>
+<path d="M855 458V490H675V470" fill="none" stroke="#7165a7" stroke-width="2" stroke-dasharray="5 4"/>
+<text x="620" y="520" font-size="15" fill="#5d548f">完成后再启动下一次异步请求，避免无限堆积</text>
+</g></svg></div><figcaption><span class="fig-number">FIG. 03</span>关键不是简单地把 torch.save 放进线程，而是先形成不会被后续训练更新污染的一致快照，再异步持久化。</figcaption></figure>
+<h3>4.1 为什么不能任意异步复制参数？</h3>
+<p>设一次 optimizer update 会改变模型参数。如果后台线程在复制参数时，训练线程同时执行下一次 update，那么快照可能包含一部分旧参数和一部分新参数。这样的文件即使能够反序列化，也不一定代表任何真实训练时刻。</p>
+<p>因此异步保存必须定义<strong>快照一致性边界</strong>。CheckFreq 利用训练循环的结构，在一次权重更新之后启动快照，并允许它与下一轮 forward/backward 重叠；但在下一次会改变参数的更新之前，必须保证快照复制已经完成。之后才可继续异步写盘。</p>
+<h3>4.2 PyTorch DCP 的异步保存：两层异步，而不是一个开关</h3>
+<p>PyTorch Distributed Checkpoint 提供 <span class="inline-code">torch.distributed.checkpoint.async_save</span>。它将状态先 staging 到 CPU 等内存缓冲区，再在后台执行存储写入。这里有一个非常重要的细节：<strong>传统 async_save 的磁盘写入是异步的，但 GPU 到 CPU 的 staging 仍可能阻塞训练线程。</strong></p>
+<p>PyTorch 2.9 引入 <span class="inline-code">DefaultStager</span> 与 <span class="inline-code">async_stager</span>，可以进一步把 state_dict 构建和 D2H staging 放到后台线程。官方教程给出的时间线是：普通 async_save 仍有同步 CPU copy；完全异步 staging 则可以让 CPU copy 与 GPU compute 重叠。</p>
+<div class="table-wrap"><table><caption>表 2 · 同步、普通异步与异步 staging 的差别</caption><thead><tr><th>方式</th><th>状态快照 / D2H</th><th>磁盘写入</th><th>主要风险</th></tr></thead><tbody>
+<tr><td>同步保存</td><td>训练线程执行</td><td>训练线程等待</td><td>关键路径停顿长</td></tr>
+<tr><td>普通 async_save</td><td>可能仍在调用线程 staging</td><td>后台执行</td><td>D2H copy 仍可能阻塞</td></tr>
+<tr><td>async_save + AsyncStager</td><td>后台 staging，可与计算重叠</td><td>后台执行</td><td>额外 CPU / pinned memory、同步时序和并发管理</td></tr>
+</tbody></table></div>
+<div class="callout"><strong>两个 Future 代表两个不同的完成条件：</strong>现代异步保存返回的响应可以区分 staging 完成和 upload 完成。训练参数在 staging 完成之前不能被下一次更新污染；下一次异步保存启动之前，通常还应等待前一次 upload 完成，避免无限堆积检查点请求。</div>
+<p>异步并不意味着没有成本。PyTorch 文档明确指出，CPU staging 缓冲区会带来额外内存占用，量级与每个 rank 的检查点大小和 rank 数相关；Pinned Memory 还会占用有限的 page-locked memory。官方教程也建议大多数场景限制为一次只有一个未完成的异步保存请求。</p>
+<h3>4.3 CheckFreq 的策略层：测量、设频率、再反馈调整</h3>
+<p>CheckFreq 不使用对所有模型都相同的固定保存间隔。它在线测量 iteration 时间、参数快照成本、存储写入成本、检查点大小与 GPU 剩余显存，选择初始频率；运行过程中再根据实际观察到的 overhead 自适应调整。如果其他任务争抢存储带宽，原本每 14 个 iteration 保存一次可能突然产生 35% 的额外开销；论文展示了反馈调节如何把它控制回 5%。</p>
+<p>论文还把数据迭代器状态纳入恢复协议。它报告在所测试的模型和硬件上，检查点频率比 epoch 级保存高 83–278 倍，同时把运行时开销控制在不超过 3.5%。例如论文 Table 6 中，BERT 在单 V100 设置下的平均恢复时间从 4920 秒降到 85 秒。<strong>这些是 2021 年论文特定实验配置的结果，不应直接当作现代 LLM 集群的性能承诺。</strong></p>
+</section>
+
+<section id="distributed" aria-labelledby="distributed-heading">
+<h2 id="distributed-heading">05 · 分布式训练：每张 GPU 保存什么？</h2>
+<p>当模型状态大于单卡显存，训练框架会把参数、梯度和优化器状态分布到多个 rank。此时检查点不是一份单文件，而是一组具有明确分片关系的状态文件。</p>
+<figure class="figure"><div class="figure-scroll" role="region" tabindex="0" aria-label="图解，可横向滚动查看"><svg class="diagram" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 560" role="img" aria-labelledby="s4-title s4-desc">
+<title id="s4-title">分布式检查点分片与重新分片</title><desc id="s4-desc">四个训练 rank 分别写入参数与优化器状态分片，manifest 描述逻辑状态和源布局，恢复时映射到八个目标 rank。</desc>
+<rect x="1" y="1" width="998" height="558" rx="20" fill="#fbfdfb" stroke="#d9e6df"/>
+<g font-family="system-ui,'PingFang SC','Microsoft YaHei',sans-serif">
+<text x="42" y="52" font-size="26" fill="#29454a" font-weight="750">保存拓扑与恢复拓扑可以不同</text>
+<text x="60" y="110" font-size="18" fill="#187c72" font-weight="800">SAVE · 4 RANKS</text>
+<g stroke="#82b9a9" stroke-width="2">
+<rect x="60" y="140" width="165" height="112" rx="12" fill="#e0f0e9"/><rect x="250" y="140" width="165" height="112" rx="12" fill="#e0f0e9"/><rect x="440" y="140" width="165" height="112" rx="12" fill="#e0f0e9"/><rect x="630" y="140" width="165" height="112" rx="12" fill="#e0f0e9"/>
+</g>
+<g fill="#29454a" text-anchor="middle"><text x="142" y="177" font-size="20" font-weight="800">Rank 0</text><text x="332" y="177" font-size="20" font-weight="800">Rank 1</text><text x="522" y="177" font-size="20" font-weight="800">Rank 2</text><text x="712" y="177" font-size="20" font-weight="800">Rank 3</text><text x="142" y="212" font-size="15">Shard A + optim</text><text x="332" y="212" font-size="15">Shard B + optim</text><text x="522" y="212" font-size="15">Shard C + optim</text><text x="712" y="212" font-size="15">Shard D + optim</text></g>
+<path d="M440 252V302" stroke="#66858a" stroke-width="3"/><path d="M430 292L440 304L450 292" fill="none" stroke="#66858a" stroke-width="3"/>
+<rect x="300" y="305" width="280" height="74" rx="12" fill="#e6edf8" stroke="#9aaed1" stroke-width="2"/>
+<text x="440" y="337" text-anchor="middle" fill="#29454a" font-size="21" font-weight="800">Manifest + shard map</text><text x="440" y="360" text-anchor="middle" fill="#60797c" font-size="14">logical keys · shapes · dtype · source mesh</text>
+<path d="M580 342H650" stroke="#66858a" stroke-width="3"/><path d="M640 333L652 342L640 351" fill="none" stroke="#66858a" stroke-width="3"/>
+<rect x="655" y="305" width="250" height="74" rx="12" fill="#f8f1df" stroke="#d8c58a" stroke-width="2"/>
+<text x="780" y="337" text-anchor="middle" fill="#725b25" font-size="20" font-weight="800">Checkpoint storage</text><text x="780" y="360" text-anchor="middle" fill="#766a4b" font-size="14">shards + metadata</text>
+<path d="M440 379V424" stroke="#66858a" stroke-width="3"/><path d="M430 414L440 426L450 414" fill="none" stroke="#66858a" stroke-width="3"/>
+<text x="60" y="460" font-size="18" fill="#7165a7" font-weight="800">LOAD · 8 RANKS</text>
+<g fill="#eeebf8" stroke="#aaa1d0" stroke-width="1.5">
+<rect x="60" y="480" width="90" height="48" rx="7"/><rect x="160" y="480" width="90" height="48" rx="7"/><rect x="260" y="480" width="90" height="48" rx="7"/><rect x="360" y="480" width="90" height="48" rx="7"/><rect x="460" y="480" width="90" height="48" rx="7"/><rect x="560" y="480" width="90" height="48" rx="7"/><rect x="660" y="480" width="90" height="48" rx="7"/><rect x="760" y="480" width="90" height="48" rx="7"/>
+</g>
+<g fill="#5d548f" font-size="15" text-anchor="middle" font-weight="750"><text x="105" y="510">R0</text><text x="205" y="510">R1</text><text x="305" y="510">R2</text><text x="405" y="510">R3</text><text x="505" y="510">R4</text><text x="605" y="510">R5</text><text x="705" y="510">R6</text><text x="805" y="510">R7</text></g>
+<text x="875" y="510" fill="#60797c" font-size="13">reshard</text>
+</g></svg></div><figcaption><span class="fig-number">FIG. 04</span>分布式检查点记录的是逻辑状态与物理分片之间的映射。恢复时如果 rank 数或并行配置改变，需要按新的布局重新分配数据。</figcaption></figure>
+<h3>5.1 DDP、FSDP 与 ZeRO 的保存视角</h3>
+<div class="table-wrap"><table><caption>表 3 · 不同并行训练方式下的检查点关注点</caption><thead><tr><th>训练策略</th><th>状态分布</th><th>检查点设计重点</th></tr></thead><tbody>
+<tr><td>DDP</td><td>模型参数通常在各数据并行 rank 上复制；数据/RNG 状态仍可能各 rank 不同</td><td>避免重复写入相同模型权重，同时保存必要的 rank-local 训练状态</td></tr>
+<tr><td>FSDP</td><td>参数和优化器状态按策略分片</td><td>保存 shard 元数据、参数名映射和可恢复的分布式 state_dict</td></tr>
+<tr><td>ZeRO</td><td>优化器状态、梯度和参数按 ZeRO stage 分片</td><td>协调各 rank 的分片写入；需要时把分片恢复为完整 FP32 权重</td></tr>
+<tr><td>Tensor / Pipeline Parallel</td><td>模型张量沿维度切片，层也可能分布在不同 pipeline stage</td><td>记录并行维度、rank 映射、分片 shape 与版本兼容性</td></tr>
+</tbody></table></div>
+<h3>5.2 PyTorch Distributed Checkpoint：并行保存与重新分片</h3>
+<p><a href="https://docs.pytorch.org/docs/stable/distributed.checkpoint.html" target="_blank" rel="noopener">PyTorch DCP</a> 支持多个 rank 并行保存和加载。它与 <span class="inline-code">torch.save</span> 的一个重要区别是：一个分布式检查点通常由多个文件组成，每个 rank 至少贡献一个文件；加载时可以根据目标模型预先分配的 state_dict 和分片信息执行 resharding。</p>
+<p>这意味着：检查点的逻辑结构不应被误认为固定的物理文件布局。保存时使用 64 个 rank，恢复时使用 32 个 rank，并不一定意味着必须先拼出一个巨大的单文件再重新切分。支持 resharding 的检查点格式可以直接把源分片映射到目标布局。</p>
+<h3>5.3 Megatron Core：速度与可迁移性之间的取舍</h3>
+<p>Megatron Core 的分布式检查点文档明确区分两类 Distributed Optimizer 格式：</p>
+<ul>
+<li><strong>dp_reshardable：</strong>保存与加载速度较快，但不支持任意改变 model parallelism；适合训练拓扑保持稳定的常规任务。</li>
+<li><strong>fully_reshardable：</strong>支持更灵活的并行配置变化，但保存和加载更慢；适合需要改变 TP/PP/DP 等并行布局的迁移场景。</li>
+</ul>
+<p>工程上并不一定要让每一次保存都付出完全可重分片的成本。可以在日常训练中使用更快的格式，在计划改变并行配置时执行一次可迁移格式的保存与转换。格式选择应当由恢复目标驱动，而不是只看保存速度。</p>
+<h3>5.4 DeepSpeed ZeRO：训练状态与发布权重不是同一个产物</h3>
+<p>DeepSpeed 提供 ZeRO-2 / ZeRO-3 checkpoint 到 FP32 consolidated state_dict 的转换工具。这个转换适合把分片训练状态整理成可供普通 PyTorch 或模型发布流程使用的权重；但它可能需要大量 CPU 内存。DeepSpeed 文档还指出 Universal Checkpoints 用于跨 GPU 数量和并行布局恢复，但其文档状态仍标注为 under development。</p>
+<div class="note"><strong>重要区别：</strong>可用于推理的 consolidated model weights，不一定包含恢复训练所需的 optimizer、scheduler、RNG 与数据状态。发布模型和续训检查点应当作为两个不同的交付目标管理。</div>
+</section>
+
+<section id="consistency" aria-labelledby="consistency-heading">
+<h2 id="consistency-heading">06 · 正确性：文件写完不等于检查点可恢复</h2>
+<p>分布式 checkpoint 可能由几十甚至数百个文件组成。只要某个 rank 的分片丢失、元数据与数据版本不匹配，或者最新指针指向了一个尚未完成的目录，整个检查点就可能无法恢复。</p>
+<figure class="figure"><div class="figure-scroll" role="region" tabindex="0" aria-label="图解，可横向滚动查看"><svg class="diagram" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 500" role="img" aria-labelledby="s5-title s5-desc">
+<title id="s5-title">检查点的安全提交协议</title><desc id="s5-desc">检查点写入唯一临时目录，等待全部 rank 分片完成并校验，再写入 manifest 和 commit 标记，最后原子更新 latest 指针并清理旧版本。</desc>
+<rect x="1" y="1" width="998" height="498" rx="20" fill="#fbfdfb" stroke="#d9e6df"/>
+<g font-family="system-ui,'PingFang SC','Microsoft YaHei',sans-serif">
+<text x="42" y="52" font-size="26" fill="#29454a" font-weight="750">先完成，再发布；不要原地覆盖唯一备份</text>
+<g stroke="#66858a" stroke-width="3" fill="none"><path d="M250 150H350"/><path d="M450 150H550"/><path d="M650 150H750"/><path d="M450 300H550"/><path d="M650 300H750"/></g>
+<g fill="#e0f0e9" stroke="#82b9a9" stroke-width="2"><rect x="55" y="105" width="195" height="90" rx="12"/><rect x="350" y="105" width="200" height="90" rx="12"/><rect x="550" y="105" width="200" height="90" rx="12"/><rect x="750" y="105" width="195" height="90" rx="12"/></g>
+<g fill="#29454a" text-anchor="middle"><text x="152" y="143" font-size="19" font-weight="800">1 · 新版本目录</text><text x="152" y="170" font-size="14">step-128000.tmp</text><text x="450" y="143" font-size="19" font-weight="800">2 · 写入所有 shards</text><text x="450" y="170" font-size="14">各 rank 并行写入</text><text x="650" y="143" font-size="19" font-weight="800">3 · 校验元数据</text><text x="650" y="170" font-size="14">size / checksum / rank</text><text x="847" y="143" font-size="19" font-weight="800">4 · 写 manifest</text><text x="847" y="170" font-size="14">complete = true</text></g>
+<path d="M847 195V250H650V285" fill="none" stroke="#66858a" stroke-width="3"/><path d="M641 275L650 287L659 275" fill="none" stroke="#66858a" stroke-width="3"/>
+<rect x="550" y="290" width="200" height="75" rx="12" fill="#e6edf8" stroke="#9aaed1" stroke-width="2"/>
+<text x="650" y="322" text-anchor="middle" font-size="19" fill="#29454a" font-weight="800">5 · Commit marker</text><text x="650" y="346" text-anchor="middle" font-size="14" fill="#60797c">持久化确认</text>
+<path d="M550 327H450" stroke="#66858a" stroke-width="3"/><path d="M460 318L448 327L460 336" fill="none" stroke="#66858a" stroke-width="3"/>
+<rect x="250" y="290" width="200" height="75" rx="12" fill="#e2f0e7" stroke="#91bea0" stroke-width="2"/>
+<text x="350" y="322" text-anchor="middle" font-size="19" fill="#29454a" font-weight="800">6 · 更新 latest</text><text x="350" y="346" text-anchor="middle" font-size="14" fill="#60797c">只指向完整版本</text>
+<path d="M250 327H152V220" stroke="#66858a" stroke-width="3" fill="none"/>
+<rect x="55" y="290" width="195" height="75" rx="12" fill="#f7e9df" stroke="#d9a98f" stroke-width="2"/>
+<text x="152" y="322" text-anchor="middle" font-size="19" fill="#8d543d" font-weight="800">7 · 保留旧版本</text><text x="152" y="346" text-anchor="middle" font-size="14" fill="#8d543d">提交后再清理</text>
+<text x="55" y="430" font-size="16" fill="#60797c">失败发生在任意中间步骤时，恢复流程仍能读取上一份已提交版本。</text>
+<text x="55" y="462" font-size="14" fill="#9a762c">注意：原子 rename 适用于满足相应语义的文件系统；对象存储需要使用其自身的提交与一致性机制。</text>
+</g></svg></div><figcaption><span class="fig-number">FIG. 05</span>先写入新版本，再验证所有分片，最后提交 manifest 和 latest 指针。故障恢复只读取完整提交的版本，而不猜测哪个目录“看起来最新”。</figcaption></figure>
+<h3>6.1 推荐的提交协议</h3>
+<ol>
+<li><strong>创建唯一版本目录：</strong>例如 <span class="inline-code">step-00128000.tmp</span>，不要直接覆盖上一份可恢复检查点。</li>
+<li><strong>各 rank 写入自己的 shard：</strong>记录 shard ID、shape、dtype、文件大小和校验摘要。</li>
+<li><strong>协调所有 rank：</strong>确认每个参与 rank 已完成本轮快照与写入；任何一个 rank 失败都不能提交成功状态。</li>
+<li><strong>写入 manifest：</strong>记录全局 step、训练配置指纹、并行布局、格式版本、分片清单与必要元数据。</li>
+<li><strong>完成持久化确认：</strong>在本地 POSIX 文件系统上，需要正确处理 flush / fsync / rename 等语义；对象存储则应使用适合其一致性模型的完成标记或条件更新。</li>
+<li><strong>最后更新 latest：</strong>只有 manifest 和所有必要分片确认有效后，才让恢复流程看见这个新版本。</li>
+</ol>
+<h3>6.2 为什么不能原地覆盖 latest checkpoint？</h3>
+<p>假设原来的 latest 是 step 1000。训练开始覆盖它，写到一半机器突然断电。此时 step 900 可能已经被清理，step 1000 又已经损坏，训练就可能退回到更早的备份，甚至完全无法恢复。</p>
+<p>更稳健的做法是保留旧版本，完整写入新版本，验证成功后再切换指针，并按照保留策略清理过期版本。CheckFreq 论文也采用写新文件、持久化确认和限制磁盘上检查点数量的方式来控制损坏风险与空间占用。</p>
+<div class="warning">文件存在、大小非零、甚至能够被 torch.load 读取，都不能单独证明这是一个语义一致的训练快照。恢复验证必须包含模型/优化器状态、分片映射、训练进度和数据状态。</div>
+<h3>6.3 恢复流程也需要成为正式协议</h3>
+<p>可靠的恢复流程应当是：读取最后一个已提交 manifest → 校验格式与配置兼容性 → 初始化目标分布式布局 → 加载并重新映射分片 → 恢复 optimizer / scheduler / RNG / sampler → 验证 global step → 继续训练。任何转换、版本升级或并行布局变化都应当有单独的兼容性测试。</p>
+</section>
+
+<section id="storage" aria-labelledby="storage-heading">
+<h2 id="storage-heading">07 · 存储、带宽与检查点体积</h2>
+<p>当模型达到几十亿或数百亿参数时，检查点写入很容易成为 I/O 密集型任务。先用最简单的估算理解数量级：</p>
+<div class="math-equation"><span class="eq-label">CHECKPOINT WRITE LOWER-BOUND</span><div class="math-scroll" role="region" tabindex="0" aria-label="检查点理论写入时间"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block" aria-label="写入时间不小于检查点字节数除以有效带宽"><msub><mi>T</mi><mtext>write</mtext></msub><mo>≥</mo><mfrac><mtext>checkpoint bytes</mtext><mtext>effective bandwidth</mtext></mfrac></math></div><p class="eq-caption">这是理想化的吞吐下界。真实写入还受元数据、同步、并行文件系统、对象存储请求数、竞争与序列化影响。</p></div>
+<p>例如 1 TB 检查点在有效吞吐 20 GB/s 下，理论写入至少需要约 50 秒。这个时间尚未包括快照复制、文件创建、元数据收集、校验、网络拥塞和恢复时的读取。</p>
+<h3>7.1 模型参数并不是完整训练检查点的全部体积</h3>
+<p>70B 参数模型若以 BF16 保存一份参数，单是权重就约为 140 GB（按十进制 GB 估算）。如果 Adam 的两个 moment 使用 FP32，两个状态张量合计还可能约为 560 GB；若训练实现另外维护 FP32 master weights，体积还会继续增加。实际数字取决于优化器、精度策略、分片方式和 checkpoint schema，不能简单用一个固定的“每参数字节数”套所有系统。</p>
+<h3>7.2 典型的优化方向</h3>
+<div class="state-grid">
+<div><b>并行分片写入</b><p>让多个 rank 同时写自己的 shard，避免单进程串行聚合成为瓶颈。</p></div>
+<div><b>内存 staging</b><p>使用 CPU / pinned memory / shared memory 承接快照，但必须测量内存占用和 D2H 阻塞。</p></div>
+<div><b>分层存储</b><p>先落到本地 NVMe，再异步复制到共享文件系统或对象存储；要明确本地副本何时算作可恢复。</p></div>
+<div><b>减少元数据工作</b><p>复用稳定的 shard metadata 和 writer，降低重复规划与文件管理成本。</p></div>
+<div><b>保留策略</b><p>保留最近若干份、关键里程碑和必要的周期性备份；清理必须发生在新版本提交之后。</p></div>
+<div><b>格式与压缩</b><p>在写入时间、文件数量、恢复时间、CPU 消耗与格式兼容性之间做实测取舍。</p></div>
+</div>
+<p>增量检查点和压缩有时能降低存储量，但对持续变化的 optimizer states 来说，增量链可能让恢复过程变复杂，也可能产生额外 CPU 和 I/O 开销。不要为了减少字节数而牺牲可验证的恢复路径。</p>
+</section>
+
+<section id="distinction" aria-labelledby="distinction-heading">
+<h2 id="distinction-heading">08 · Training Checkpoint 与 Activation Checkpoint</h2>
+<p>“Checkpoint” 在深度学习里有两个常见含义。它们都涉及保存状态，但优化目标完全不同。</p>
+<figure class="figure"><div class="figure-scroll" role="region" tabindex="0" aria-label="图解，可横向滚动查看"><svg class="diagram" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 440" role="img" aria-labelledby="s6-title s6-desc">
+<title id="s6-title">两种 checkpoint 的不同目标</title><desc id="s6-desc">Training checkpoint 把模型、优化器和数据状态持久化用于故障恢复；Activation checkpoint 丢弃中间激活并在 backward 时重计算以节省显存。</desc>
+<rect x="1" y="1" width="998" height="438" rx="20" fill="#fbfdfb" stroke="#d9e6df"/>
+<g font-family="system-ui,'PingFang SC','Microsoft YaHei',sans-serif">
+<text x="40" y="48" font-size="26" fill="#29454a" font-weight="750">同一个词，两个完全不同的优化目标</text>
+<rect x="45" y="90" width="430" height="290" rx="16" fill="#e0f0e9" stroke="#82b9a9" stroke-width="2"/>
+<text x="75" y="132" font-size="23" fill="#176f69" font-weight="850">Training Checkpoint</text>
+<text x="75" y="164" font-size="15" fill="#4d6d69">持久化状态 · 为故障恢复服务</text>
+<g fill="#fff" stroke="#9ccabc" stroke-width="1.5"><rect x="78" y="200" width="150" height="48" rx="8"/><rect x="280" y="200" width="150" height="48" rx="8"/><rect x="78" y="270" width="150" height="48" rx="8"/><rect x="280" y="270" width="150" height="48" rx="8"/></g>
+<g fill="#29454a" text-anchor="middle" font-size="16" font-weight="700"><text x="153" y="230">Model + Optimizer</text><text x="355" y="230">RNG + Data State</text><text x="153" y="300">Serialize / Shard</text><text x="355" y="300">Disk / Object Store</text></g>
+<path d="M228 224H280M153 248V270M355 248V270" stroke="#66858a" stroke-width="2.5"/>
+<rect x="525" y="90" width="430" height="290" rx="16" fill="#eeebf8" stroke="#aaa1d0" stroke-width="2"/>
+<text x="555" y="132" font-size="23" fill="#62568f" font-weight="850">Activation Checkpoint</text>
+<text x="555" y="164" font-size="15" fill="#6c658f">重计算激活 · 为显存优化服务</text>
+<g fill="#fff" stroke="#b8afd8" stroke-width="1.5"><rect x="565" y="200" width="105" height="48" rx="8"/><rect x="690" y="200" width="105" height="48" rx="8"/><rect x="815" y="200" width="105" height="48" rx="8"/></g>
+<g fill="#51487f" text-anchor="middle" font-size="15" font-weight="700"><text x="617" y="230">Forward</text><text x="742" y="230">Boundary</text><text x="867" y="230">Backward</text></g>
+<path d="M670 224H690M795 224H815" stroke="#7165a7" stroke-width="2.5"/>
+<path d="M742 250V278H867V250" fill="none" stroke="#7165a7" stroke-width="2.5" stroke-dasharray="6 4"/>
+<text x="805" y="303" text-anchor="middle" fill="#62568f" font-size="15">重跑部分 forward</text>
+<text x="742" y="346" text-anchor="middle" fill="#6c658f" font-size="14">计算换显存 · 不负责持久化续训</text>
+</g></svg></div><figcaption><span class="fig-number">FIG. 06</span>Training Checkpoint 解决“任务中断后如何继续训练”；Activation Checkpoint 解决“反向传播需要的中间激活太占显存怎么办”。</figcaption></figure>
+<div class="table-wrap"><table><caption>表 4 · 两种 checkpoint 的对照</caption><thead><tr><th>维度</th><th>Training Checkpoint</th><th>Activation Checkpoint</th></tr></thead><tbody>
+<tr><td>核心目的</td><td>故障恢复、任务续训</td><td>减少训练时激活显存</td></tr>
+<tr><td>保存位置</td><td>持久存储（本地盘、共享文件系统、对象存储）</td><td>保留部分输入/边界张量，丢弃部分中间激活</td></tr>
+<tr><td>恢复 / 重建时机</td><td>进程重启或训练任务恢复时</td><td>反向传播需要梯度时</td></tr>
+<tr><td>主要成本</td><td>I/O、序列化、同步、存储空间与恢复时间</td><td>额外 forward recomputation 时间</td></tr>
+<tr><td>典型 API / 系统</td><td>PyTorch DCP、DeepSpeed、Megatron checkpointing</td><td><span class="inline-code">torch.utils.checkpoint</span></td></tr>
+</tbody></table></div>
+<p>PyTorch 对 Activation Checkpointing 的定义是以额外计算换取更低的激活内存：前向阶段不保留某些中间张量，在反向传播需要它们时重新执行对应计算。它不会自动为你提供训练任务的持久化恢复能力。</p>
+<div class="callout">一个实际训练系统可能同时使用两者：Activation Checkpointing 降低每一步训练的显存占用；Training Checkpointing 则把整个训练状态保存到持久存储。不要因为二者名字相同，就把它们的成本模型和实现方案混为一谈。</div>
+</section>
+
+<section id="experiment" aria-labelledby="experiment-heading">
+<h2 id="experiment-heading">09 · 交互实验：寻找最合适的保存间隔</h2>
+<p>下面的实验使用一阶 Young–Daly 模型。你可以改变单次检查点成本、平均故障间隔和保存方式，观察推荐的间隔如何变化。</p>
+<div class="demo" id="checkpoint-demo">
+<h3>Checkpoint Interval Explorer</h3>
+<p class="demo-intro">同步模式使用完整检查点成本；异步模式使用“未被计算重叠隐藏的成本”作为教学近似。真实系统仍需考虑异步写入积压、资源竞争和持久化完成时刻。</p>
+<div class="controls" role="group" aria-label="保存模式">
+<button type="button" id="mode-sync" aria-pressed="true">同步保存</button>
+<button type="button" id="mode-async" aria-pressed="false">异步保存（教学模型）</button>
+</div>
+<label for="checkpoint-cost">一次检查点的总成本：<output id="cost-value">30</output> 秒</label>
+<input id="checkpoint-cost" type="range" min="5" max="180" step="5" value="30">
+<label for="mtbf-hours">平均故障间隔（MTBF）：<output id="mtbf-value">10</output> 小时</label>
+<input id="mtbf-hours" type="range" min="1" max="72" step="1" value="10">
+<label for="overlap">异步模式的计算重叠比例：<output id="overlap-value">50</output>%</label>
+<input id="overlap" type="range" min="0" max="90" step="5" value="50">
+<label for="interval-minutes">当前尝试的保存间隔：<output id="interval-value">25</output> 分钟</label>
+<input id="interval-minutes" type="range" min="5" max="240" step="1" value="25">
+<div class="results" aria-live="polite">
+<div><small>模型推荐间隔</small><strong id="optimal-value">24.5 min</strong></div>
+<div><small>当前估算总开销</small><strong id="overhead-value">4.1%</strong></div>
+<div><small>故障平均重做</small><strong id="lost-value">12.5 min</strong></div>
+</div>
+<div class="chart-wrap" role="region" tabindex="0" aria-label="检查点间隔与期望开销曲线，可横向滚动查看">
+<svg id="overhead-chart" viewBox="0 0 720 300" role="img" aria-labelledby="chart-title chart-desc">
+<title id="chart-title">检查点间隔与期望开销的关系</title>
+<desc id="chart-desc">曲线显示 Young-Daly 模型下的总开销，竖线表示理论最优间隔，圆点表示当前尝试的间隔。</desc>
+<rect x="1" y="1" width="718" height="298" rx="10" fill="#fbfdfb" stroke="#dce9e1"/>
+<g stroke="#e4ece6" stroke-width="1"><path d="M70 50H680M70 100H680M70 150H680M70 200H680M70 250H680"/></g>
+<g fill="#5d777b" font-size="12" font-family="system-ui,sans-serif"><text x="18" y="54">50%</text><text x="18" y="104">40%</text><text x="18" y="154">30%</text><text x="18" y="204">20%</text><text x="18" y="254">10%</text><text x="70" y="280">5 min</text><text x="360" y="280" text-anchor="middle">保存间隔 τ</text><text x="680" y="280" text-anchor="end">240 min</text></g>
+<path id="overhead-path" d="" fill="none" stroke="#187c72" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="optimal-line" d="M120 30V250" stroke="#b86b49" stroke-width="2" stroke-dasharray="6 5"/>
+<circle id="current-point" cx="120" cy="150" r="7" fill="#b86b49" stroke="#fff" stroke-width="3"/>
+<text id="optimal-label" x="128" y="35" fill="#a45d40" font-size="12" font-weight="700">理论最优</text>
+</svg>
+<p class="chart-caption">纵轴为近似总开销百分比；图中为了保持可读性将显示范围截断在 50%。计算结果仍使用完整公式。</p>
+</div>
+<p class="demo-note" id="mode-note">当前为同步保存：全部检查点成本均计入关键路径。</p>
+</div>
+<p>观察三个方向：</p>
+<ul>
+<li>检查点成本 C 增大，推荐间隔变长；如果硬件更慢或状态更大，频繁保存就会更昂贵。</li>
+<li>故障间隔 M 变长，推荐间隔也变长；系统越稳定，就越不需要为恢复频繁付出保存成本。</li>
+<li>异步 staging / I/O 可以降低可见停顿，但不能把一个尚未持久化完成的检查点当成可恢复版本。</li>
+</ul>
+</section>
+
+<section id="implementation" aria-labelledby="implementation-heading">
+<h2 id="implementation-heading">10 · 用代码验证检查点策略</h2>
+<p>下面的最小实现只依赖 Python 标准库，负责计算理论间隔、估算开销、平均重做时间和理想写入下界。它是一个教学模型，不是 PyTorch DCP 或 Megatron 的生产级保存实现。</p>
+<pre><code>from math import sqrt
+
+def young_daly_interval(checkpoint_cost_s, mtbf_s):
+    """First-order optimum interval, in seconds."""
+    if checkpoint_cost_s &lt;= 0 or mtbf_s &lt;= 0:
+        raise ValueError("cost and MTBF must be positive")
+    return sqrt(2.0 * checkpoint_cost_s * mtbf_s)
+
+def expected_overhead_fraction(checkpoint_cost_s, interval_s, mtbf_s):
+    """Approximate checkpoint + rework overhead fraction."""
+    if min(checkpoint_cost_s, interval_s, mtbf_s) &lt;= 0:
+        raise ValueError("all inputs must be positive")
+    return checkpoint_cost_s / interval_s + interval_s / (2.0 * mtbf_s)
+
+def expected_lost_work_s(interval_s):
+    if interval_s &lt;= 0:
+        raise ValueError("interval must be positive")
+    return interval_s / 2.0</code></pre>
+<p>把成本、故障间隔和保存间隔分别作为输入，测试函数是否满足最优性和单调性。完整的可执行文件与 pytest 测试包含在本专题配套代码中。</p>
+<div class="note"><strong>正确的验证方式：</strong>首先验证公式和单位，再用一个极小的训练状态对象验证 save → mutate → load 是否恢复到保存时的状态。分布式系统还需要在不同 world size、rank 故障和部分 shard 丢失时单独测试恢复协议。</div>
+</section>
+
+<section id="operations" aria-labelledby="operations-heading">
+<h2 id="operations-heading">11 · 真实训练任务的工程决策清单</h2>
+<p>在开始调参之前，先把检查点设计拆成五个层次。它们的优先级高于“每隔 1000 step 保存一次”这种固定经验值。</p>
+<div class="table-wrap"><table><caption>表 5 · Checkpoint Optimization 上线前检查表</caption><thead><tr><th>层次</th><th>必须回答的问题</th><th>建议验证指标</th></tr></thead><tbody>
+<tr><td>State Schema</td><td>是否保存模型、优化器、调度器、RNG、数据进度和分布式元数据？</td><td>恢复后 global step、LR、参数与数据游标是否一致</td></tr>
+<tr><td>Policy</td><td>间隔是固定、Young–Daly 初始估计，还是在线自适应？</td><td>checkpoint overhead、平均回滚步数、失败恢复时间</td></tr>
+<tr><td>Mechanism</td><td>同步保存、异步 staging，还是两阶段快照与持久化？</td><td>GPU idle、D2H 时间、持久化延迟、in-flight 数量</td></tr>
+<tr><td>Distributed Format</td><td>是否需要改变 DP / TP / PP / FSDP world size？</td><td>分片校验、reshard 时间、版本兼容性</td></tr>
+<tr><td>Durability & Recovery</td><td>是否只有完整提交的 manifest 才能被恢复流程读取？</td><td>故障注入成功率、恢复正确性、数据损坏检测率</td></tr>
+</tbody></table></div>
+<h3>按训练场景选择策略</h3>
+<ul>
+<li><strong>短时、低故障风险的小规模实验：</strong>简单同步保存可能足够；优先保证状态完整和恢复脚本可运行。</li>
+<li><strong>长时间运行、存储吞吐较高的训练：</strong>从 Young–Daly 得到初始间隔，再根据真实保存时间和故障记录修正。</li>
+<li><strong>超大模型、分片状态、多机多卡：</strong>优先使用分布式 checkpoint API，避免单 rank 聚合所有状态，并明确 resharding 目标。</li>
+<li><strong>抢占式实例或高故障率集群：</strong>需要更频繁的细粒度保存、可靠的数据迭代器状态和可验证的异步提交协议。</li>
+<li><strong>需要频繁改变训练拓扑：</strong>将“日常保存速度”和“跨拓扑可恢复性”作为两个不同目标，选择合适的分片格式。</li>
+</ul>
+</section>
+
+<section id="summary" aria-labelledby="summary-heading">
+<h2 id="summary-heading">12 · 总结：从保存文件到恢复训练系统</h2>
+<p>Checkpoint Optimization 不是单纯提高磁盘写入速度，而是设计一条从训练状态捕获到故障恢复的完整链路。</p>
+<ul class="takeaways">
+<li><strong>保存什么：</strong>保存足以决定下一步训练行为的一致状态，而不只是模型参数。</li>
+<li><strong>何时保存：</strong>Young–Daly 提供初始间隔；CheckFreq 展示如何在线测量并自适应调整。</li>
+<li><strong>怎样保存：</strong>把一致快照与后台持久化分离，合理重叠计算和 I/O，但不破坏状态一致性。</li>
+<li><strong>如何扩展：</strong>通过分布式分片、元数据和 resharding 支持大模型训练与拓扑变化。</li>
+<li><strong>如何证明正确：</strong>使用完整提交协议、恢复测试和故障注入，而不是只检查文件是否存在。</li>
+</ul>
+<div class="callout"><strong>最终的工程判断：</strong>最好的 checkpoint 方案，不是保存得最快或最频繁的方案，而是在可接受的训练开销、存储预算和故障风险下，能够可靠恢复到一个语义一致训练状态的方案。</div>
+</section>
+
+<section id="references" aria-labelledby="references-heading">
+<h2 id="references-heading">参考资料</h2>
+<ol class="refs">
+<li>Mohan, J., Phanishayee, A., &amp; Chidambaram, V. (2021). <a href="https://www.usenix.org/conference/fast21/presentation/mohan" target="_blank" rel="noopener">CheckFreq: Frequent, Fine-Grained DNN Checkpointing</a>. 19th USENIX Conference on File and Storage Technologies (FAST '21), pp. 203–216. 核心依据：§1、§4.3、§5.3–5.5、Tables 4–6。</li>
+<li>Young, J. W. (1974). <a href="https://doi.org/10.1145/361147.361115" target="_blank" rel="noopener">A First Order Approximation to the Optimum Checkpoint Interval</a>. Communications of the ACM, 17(9), 530–531.</li>
+<li>Daly, J. T. (2006). <a href="https://doi.org/10.1016/j.future.2004.11.016" target="_blank" rel="noopener">A Higher Order Estimate of the Optimum Checkpoint Interval for Restart Dumps</a>. Future Generation Computer Systems, 22(3), 303–312.</li>
+<li><a href="https://docs.pytorch.org/tutorials/recipes/distributed_checkpoint_recipe.html" target="_blank" rel="noopener">PyTorch: Getting Started with Distributed Checkpoint (DCP)</a>. 多 rank 保存、加载与重新分片。</li>
+<li><a href="https://docs.pytorch.org/tutorials/recipes/distributed_async_checkpoint_recipe.html" target="_blank" rel="noopener">PyTorch: Asynchronous Saving with Distributed Checkpoint</a>. async_save、staging、DefaultStager 和 Future 管理。</li>
+<li><a href="https://docs.pytorch.org/docs/stable/distributed.checkpoint.html" target="_blank" rel="noopener">PyTorch Distributed Checkpoint API</a>. 分布式 state_dict 与存储接口。</li>
+<li><a href="https://docs.nvidia.com/megatron-core/developer-guide/latest/api-guide/core/dist_checkpointing.html" target="_blank" rel="noopener">NVIDIA Megatron Core: dist_checkpointing</a>. Sharded checkpoint、optimizer format、resharding 与异步保存。</li>
+<li><a href="https://deepspeed.readthedocs.io/en/stable/model-checkpointing.html" target="_blank" rel="noopener">DeepSpeed: Model Checkpointing</a>. ZeRO checkpoint、FP32 权重恢复和 Universal Checkpoints。</li>
+<li><a href="https://docs.pytorch.org/docs/stable/checkpoint.html" target="_blank" rel="noopener">PyTorch: torch.utils.checkpoint</a>. Activation Checkpointing 的重计算机制与 RNG 状态。</li>
+</ol>
+</section>
+<footer class="footer">本篇的教学算例与公式推导均标明假设；论文实验结果保留原始硬件与模型语境，框架 API 行为以所链接的官方文档为准。</footer>
+</article></main>
+</div>
+<script>
+(function(){
+  const $ = id => document.getElementById(id);
+  const cost=$('checkpoint-cost'), mtbf=$('mtbf-hours'), overlap=$('overlap'), interval=$('interval-minutes');
+  const modeSync=$('mode-sync'), modeAsync=$('mode-async');
+  let mode='sync';
+  const path=$('overhead-path'), point=$('current-point'), optLine=$('optimal-line'), optLabel=$('optimal-label');
+  const left=70,right=680,top=40,bottom=250,xMin=5,xMax=240,yMax=50;
+  function percent(v){return (v*100).toFixed(2)+'%';}
+  function calc(){
+    const rawC=Number(cost.value), M=Number(mtbf.value)*3600, tau=Number(interval.value)*60;
+    const ratio=Number(overlap.value)/100;
+    const effectiveC=mode==='sync'?rawC:rawC*(1-ratio);
+    const optimal=Math.sqrt(2*effectiveC*M);
+    const overhead=effectiveC/tau+tau/(2*M);
+    const lost=tau/2;
+    $('cost-value').textContent=rawC;
+    $('mtbf-value').textContent=mtbf.value;
+    $('overlap-value').textContent=overlap.value;
+    $('interval-value').textContent=interval.value;
+    $('optimal-value').textContent=(optimal/60).toFixed(1)+' min';
+    $('overhead-value').textContent=percent(overhead);
+    $('lost-value').textContent=(lost/60).toFixed(1)+' min';
+    $('mode-note').textContent=mode==='sync'
+      ?'当前为同步保存：全部检查点成本均计入关键路径。'
+      :'当前为异步教学模型：只把未被计算重叠隐藏的成本计入公式；持久化是否完成仍需单独管理。';
+    const xMap=m=>left+(m-xMin)/(xMax-xMin)*(right-left);
+    const yMap=p=>bottom-Math.min(yMax,Math.max(0,p*100))/yMax*(bottom-top);
+    let d='';
+    for(let i=0;i<=100;i++){
+      const m=xMin+(xMax-xMin)*i/100;
+      const sec=m*60;
+      const h=effectiveC/sec+sec/(2*M);
+      const x=xMap(m),y=yMap(h);
+      d+=(i===0?'M':'L')+x.toFixed(2)+' '+y.toFixed(2)+' ';
+    }
+    path.setAttribute('d',d.trim());
+    const ox=xMap(optimal/60), oy=yMap(effectiveC/optimal+optimal/(2*M));
+    optLine.setAttribute('d','M'+ox.toFixed(2)+' '+top+'V'+bottom);
+    optLabel.setAttribute('x',Math.min(right-55,Math.max(left+4,ox+7)));
+    optLabel.textContent='最优 '+(optimal/60).toFixed(1)+'m';
+    const px=xMap(Number(interval.value)),py=yMap(overhead);
+    point.setAttribute('cx',px.toFixed(2));point.setAttribute('cy',py.toFixed(2));
+  }
+  modeSync.addEventListener('click',()=>{mode='sync';modeSync.setAttribute('aria-pressed','true');modeAsync.setAttribute('aria-pressed','false');calc();});
+  modeAsync.addEventListener('click',()=>{mode='async';modeSync.setAttribute('aria-pressed','false');modeAsync.setAttribute('aria-pressed','true');calc();});
+  [cost,mtbf,overlap,interval].forEach(el=>el.addEventListener('input',calc));
+  calc();
+})();
+</script>
+</body>
+</html>

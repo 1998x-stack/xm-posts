@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 460" role="img" aria-labelledby="title desc">
+<title id="title">沿射线的前向体渲染合成</title>
+<desc id="desc">五个采样点从近到远排列，每个点的 alpha 和前向透射率决定权重，最终与背景颜色合成。</desc>
+<defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#4f817d"/></marker></defs>
+<rect x="1" y="1" width="1198" height="458" rx="22" fill="#f8fbf9" stroke="#d9e7e1" stroke-width="2"/>
+<text x="40" y="48" font-size="22" font-weight="750" fill="#29434b" font-family="system-ui,'PingFang SC',sans-serif">从近到远：每个样本都会消耗一部分剩余透射率</text>
+<text x="76" y="111" font-size="16" fill="#647d80" font-family="system-ui">Camera</text>
+<path d="M82 173 L1070 173" stroke="#4f817d" stroke-width="4" marker-end="url(#arrow)"/>
+<g>
+<circle cx="210" cy="173" r="20" fill="#d68b56" stroke="#9b6138" stroke-width="2"/><circle cx="400" cy="173" r="20" fill="#d5a15e" stroke="#9b7744" stroke-width="2"/><circle cx="590" cy="173" r="20" fill="#6c9f9a" stroke="#3c746e" stroke-width="2"/><circle cx="780" cy="173" r="20" fill="#4d88a5" stroke="#35657f" stroke-width="2"/><circle cx="970" cy="173" r="20" fill="#8d7eb3" stroke="#63558e" stroke-width="2"/>
+</g>
+<g font-family="system-ui" font-size="15" text-anchor="middle" fill="#315b5b">
+<text x="210" y="128">sample 1</text><text x="400" y="128">sample 2</text><text x="590" y="128">sample 3</text><text x="780" y="128">sample 4</text><text x="970" y="128">sample 5</text>
+</g>
+<g font-family="system-ui" font-size="14" text-anchor="middle">
+<text x="210" y="221" fill="#a76535">α₁</text><text x="400" y="221" fill="#a76535">α₂</text><text x="590" y="221" fill="#276a63">α₃</text><text x="780" y="221" fill="#3e6d8b">α₄</text><text x="970" y="221" fill="#7566a7">α₅</text>
+</g>
+<rect x="74" y="257" width="1050" height="70" rx="13" fill="#fffefa" stroke="#d9e7e1"/>
+<text x="98" y="285" font-size="16" font-weight="700" fill="#315b5b" font-family="system-ui">前向透射率 Tᵢ</text>
+<g font-family="system-ui" font-size="15" text-anchor="middle" fill="#315b5b">
+<rect x="205" y="270" width="130" height="37" rx="7" fill="#d9eee6"/><text x="270" y="294">1.00</text>
+<rect x="395" y="270" width="130" height="37" rx="7" fill="#cce5db"/><text x="460" y="294">0.96</text>
+<rect x="585" y="270" width="130" height="37" rx="7" fill="#b4d8cc"/><text x="650" y="294">0.88</text>
+<rect x="775" y="270" width="130" height="37" rx="7" fill="#9ccabd"/><text x="840" y="294">0.65</text>
+<rect x="965" y="270" width="130" height="37" rx="7" fill="#86b9aa"/><text x="1030" y="294">0.58</text>
+</g>
+<text x="76" y="368" font-size="15" fill="#647d80" font-family="system-ui">每个样本的颜色贡献 = 当前透射率 × 当前 alpha</text>
+<rect x="76" y="387" width="1050" height="48" rx="11" fill="#eaf0f7" stroke="#bfd0df"/>
+<text x="601" y="418" text-anchor="middle" font-size="17" font-weight="700" fill="#3e6d8b" font-family="system-ui">最终像素 = Σ（样本权重 × 样本颜色） + 剩余透射率 × 背景颜色</text>
+</svg>

@@ -1,0 +1,128 @@
+[
+  {
+    "id": "nerf-5d-field",
+    "claim": "原始 NeRF 使用连续五维输入（3D 位置与 2D 观察方向）表示场景，并输出体密度与方向相关的 RGB 辐射。",
+    "kind": "architecture",
+    "source_url": "https://arxiv.org/abs/2003.08934",
+    "locator": "Section 3, pp. 4–5; Figure 2",
+    "status": "verified",
+    "notes": "论文用三维笛卡尔单位向量表示观察方向；方向向量有三个分量但只有两个自由度，因此通常称为 5D 输入。"
+  },
+  {
+    "id": "nerf-density-color",
+    "claim": "原始模型将密度限制为仅依赖空间位置 x，而 RGB 颜色依赖位置 x 与观察方向 d。",
+    "kind": "architecture",
+    "source_url": "https://arxiv.org/abs/2003.08934",
+    "locator": "Section 3, p. 5",
+    "status": "verified",
+    "notes": "这是多视角几何一致性与非朗伯外观表达之间的重要结构约束。"
+  },
+  {
+    "id": "nerf-volume-integral",
+    "claim": "沿相机射线的颜色由透射率、体密度与方向相关辐射的连续积分给出。",
+    "kind": "mathematics",
+    "source_url": "https://arxiv.org/abs/2003.08934",
+    "locator": "Section 4, Equation 1, p. 6",
+    "status": "verified",
+    "notes": "离散采样公式是对该连续体渲染积分的数值近似。"
+  },
+  {
+    "id": "nerf-alpha-compositing",
+    "claim": "离散体渲染使用 alpha_i = 1 - exp(-sigma_i delta_i)，并用前向透射率 T_i 对每个样本颜色加权。",
+    "kind": "mathematics",
+    "source_url": "https://arxiv.org/abs/2003.08934",
+    "locator": "Section 4, Equation 3, p. 6",
+    "status": "verified",
+    "notes": "教学代码使用 -expm1(-sigma * delta) 计算同一表达式，以改善小值时的数值精度。"
+  },
+  {
+    "id": "nerf-positional-encoding",
+    "claim": "原论文对位置使用 L=10 的正弦位置编码，对观察方向使用 L=4 的编码。",
+    "kind": "implementation",
+    "source_url": "https://arxiv.org/abs/2003.08934",
+    "locator": "Section 5.1, Equation 4, p. 8",
+    "status": "verified",
+    "notes": "这里的位置编码用于提升连续坐标高频函数的表达能力，不等同于 Transformer 的离散 token 位置编码。"
+  },
+  {
+    "id": "nerf-hierarchical-sampling",
+    "claim": "原论文使用 coarse 网络生成沿射线的权重分布，再按该分布采样并由 fine 网络评估，以增加可见内容附近的采样密度。",
+    "kind": "algorithm",
+    "source_url": "https://arxiv.org/abs/2003.08934",
+    "locator": "Section 5.2, Equation 5, pp. 8–9",
+    "status": "verified",
+    "notes": "原论文实验采用 N_c=64 个 coarse 样本和 N_f=128 个额外 fine 样本。"
+  },
+  {
+    "id": "nerf-training-setup",
+    "claim": "原始 NeRF 对每个场景单独优化网络，使用已知相机内外参与场景边界；真实数据中的相机参数通过 COLMAP 估计。",
+    "kind": "training",
+    "source_url": "https://arxiv.org/abs/2003.08934",
+    "locator": "Section 5.3, p. 9",
+    "status": "verified",
+    "notes": "原始论文的训练设置是 per-scene optimization，不应与后续跨场景泛化模型混为一谈。"
+  },
+  {
+    "id": "nerf-results-table1",
+    "claim": "在原论文 Realistic Synthetic 360° 数据集上，NeRF 的 PSNR/SSIM/LPIPS 为 31.01/0.947/0.081；在 Real Forward-Facing 数据集上为 26.50/0.811/0.250。",
+    "kind": "experiment",
+    "source_url": "https://arxiv.org/abs/2003.08934",
+    "locator": "Table 1, p. 10",
+    "status": "verified",
+    "notes": "指标方向分别为 PSNR↑、SSIM↑、LPIPS↓；Real Forward-Facing 的 LPIPS 中 LLFF 更优，文章保留该差异而不只挑选有利指标。"
+  },
+  {
+    "id": "nerf-ablation",
+    "claim": "原论文在 Realistic Synthetic 360° 的消融中，去除位置编码、视角相关颜色或分层采样都会降低结果；位置编码和视角相关性贡献尤其明显。",
+    "kind": "ablation",
+    "source_url": "https://arxiv.org/abs/2003.08934",
+    "locator": "Section 6.4, Table 2, pp. 13–14",
+    "status": "verified",
+    "notes": "完整模型 PSNR/SSIM/LPIPS 为 31.01/0.947/0.081；无位置编码为 28.77/0.924/0.108。"
+  },
+  {
+    "id": "mipnerf-antialiasing",
+    "claim": "Mip-NeRF 将像素射线视为圆锥台并通过积分位置编码处理像素足迹，以缓解多尺度场景的混叠。",
+    "kind": "later-work",
+    "source_url": "https://openaccess.thecvf.com/content/ICCV2021/html/Barron_Mip-NeRF_A_Multiscale_Representation_for_Anti-Aliasing_Neural_Radiance_Fields_ICCV_2021_paper.html",
+    "locator": "ICCV 2021 paper abstract and Figure 1",
+    "status": "verified",
+    "notes": "这是对原始 NeRF 单射线采样的后续改进，不属于原始 NeRF 结构。"
+  },
+  {
+    "id": "instant-ngp-encoding",
+    "claim": "Instant-NGP 使用可训练的多分辨率哈希特征表与较小 MLP，并结合 GPU 融合 kernel 降低神经图形基元的训练和查询成本。",
+    "kind": "later-work",
+    "source_url": "https://research.nvidia.com/publication/2022-07_instant-neural-graphics-primitives-multiresolution-hash-encoding",
+    "locator": "SIGGRAPH 2022 research abstract",
+    "status": "verified",
+    "notes": "它是输入编码与系统实现上的加速路线，不应将其性能描述直接套用到原始 NeRF。"
+  },
+  {
+    "id": "gaussian-splatting-contrast",
+    "claim": "3D Gaussian Splatting 以各向异性三维高斯为显式场景基元，并通过可见性感知的 splatting/rasterization 实现实时新视角合成。",
+    "kind": "related-method",
+    "source_url": "https://doi.org/10.1145/3592433",
+    "locator": "ACM TOG 42(4), Article 139, 2023, abstract",
+    "status": "verified",
+    "notes": "3DGS 与 NeRF 面向相近的新视角合成任务，但其场景参数化和渲染路径不同。"
+  },
+  {
+    "id": "nerfstudio-assumptions",
+    "claim": "原始 NeRF 的常见适用假设包括相机位姿已知、场景静态、外观稳定以及足够密集的多视角观测。",
+    "kind": "engineering-limit",
+    "source_url": "https://docs.nerf.studio/nerfology/methods/nerf.html",
+    "locator": "Method overview, assumptions",
+    "status": "verified",
+    "notes": "这是 Nerfstudio 对原始 NeRF 适用条件的工程说明，不是新增的原论文实验结论。"
+  },
+  {
+    "id": "2026-nerf-survey-context",
+    "claim": "2026 年综述将 NeRF 与后 Gaussian Splatting 时期的隐式/混合神经场方法分别讨论，指出 3DGS 已成为新视角合成的重要主流框架之一。",
+    "kind": "survey-context",
+    "source_url": "https://doi.org/10.26599/CVM.2026.9450535",
+    "locator": "Gao et al., Computational Visual Media, 2026, abstract",
+    "status": "verified",
+    "notes": "用于交代领域演进，不作为原始 NeRF 的实验依据。"
+  }
+]

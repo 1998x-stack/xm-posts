@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="920" height="340" viewBox="0 0 920 340" role="img" aria-label="单轮语言模型强化学习与多轮 Agentic RL 的对比">
+<title>从单次回答到环境交互轨迹</title><desc>左侧是一轮提示、模型生成、奖励；右侧是目标、智能体动作、环境观察、再次决策和终局奖励组成的循环。</desc>
+<rect width="920" height="340" rx="18" fill="#f7faf8"/>
+<text x="32" y="42" font-size="21" font-weight="700" fill="#24434a">A · 单轮 LLM-RL</text>
+<rect x="34" y="82" width="150" height="88" rx="12" fill="#e7eef4" stroke="#91aabd" stroke-width="2"/><text x="109" y="117" text-anchor="middle" font-size="19" font-weight="700" fill="#284a56">Prompt</text><text x="109" y="144" text-anchor="middle" font-size="15" fill="#284a56">输入问题</text>
+<path d="M184 126 H218" stroke="#58747c" stroke-width="3"/><path d="M218 126 l-10 -7 v14 z" fill="#58747c"/>
+<rect x="224" y="82" width="150" height="88" rx="12" fill="#e5f2ed" stroke="#79aaa0" stroke-width="2"/><text x="299" y="117" text-anchor="middle" font-size="19" font-weight="700" fill="#244e4b">Policy</text><text x="299" y="144" text-anchor="middle" font-size="15" fill="#244e4b">生成一次</text>
+<path d="M374 126 H408" stroke="#58747c" stroke-width="3"/><path d="M408 126 l-10 -7 v14 z" fill="#58747c"/>
+<rect x="414" y="82" width="150" height="88" rx="12" fill="#fff0e7" stroke="#d69b79" stroke-width="2"/><text x="489" y="117" text-anchor="middle" font-size="19" font-weight="700" fill="#814e36">Answer</text><text x="489" y="144" text-anchor="middle" font-size="15" fill="#814e36">完整回答</text>
+<path d="M489 170 V215" stroke="#b87954" stroke-width="3"/><path d="M489 215 l-7 -10 h14 z" fill="#b87954"/>
+<rect x="414" y="222" width="150" height="66" rx="12" fill="#f8e8e0" stroke="#d69b79" stroke-width="2"/><text x="489" y="250" text-anchor="middle" font-size="17" font-weight="700" fill="#814e36">Reward</text><text x="489" y="272" text-anchor="middle" font-size="14" fill="#814e36">答案级信号</text>
+<text x="34" y="224" font-size="15" fill="#63777b">主要优化：</text><text x="34" y="248" font-size="17" font-weight="700" fill="#24434a">这一次生成是否更好？</text>
+<path d="M602 55 V300" stroke="#d5e0dc" stroke-width="2" stroke-dasharray="6 6"/>
+<text x="632" y="42" font-size="21" font-weight="700" fill="#24434a">B · Agentic RL</text>
+<rect x="632" y="82" width="120" height="76" rx="12" fill="#e7eef4" stroke="#91aabd" stroke-width="2"/><text x="692" y="111" text-anchor="middle" font-size="18" font-weight="700" fill="#284a56">Goal</text><text x="692" y="135" text-anchor="middle" font-size="14" fill="#284a56">任务目标</text>
+<path d="M752 120 H775" stroke="#58747c" stroke-width="3"/><path d="M775 120 l-9 -6 v12 z" fill="#58747c"/>
+<rect x="781" y="82" width="112" height="76" rx="12" fill="#e5f2ed" stroke="#79aaa0" stroke-width="2"/><text x="837" y="111" text-anchor="middle" font-size="18" font-weight="700" fill="#244e4b">Action</text><text x="837" y="135" text-anchor="middle" font-size="14" fill="#244e4b">工具 / 决策</text>
+<path d="M837 158 V194" stroke="#58747c" stroke-width="3"/><path d="M837 194 l-7 -10 h14 z" fill="#58747c"/>
+<rect x="781" y="201" width="112" height="76" rx="12" fill="#fff0e7" stroke="#d69b79" stroke-width="2"/><text x="837" y="230" text-anchor="middle" font-size="18" font-weight="700" fill="#814e36">Observe</text><text x="837" y="254" text-anchor="middle" font-size="14" fill="#814e36">环境反馈</text>
+<path d="M781 239 H755 V170 H837 V158" fill="none" stroke="#187e75" stroke-width="2.5" stroke-dasharray="6 5"/>
+<text x="632" y="315" font-size="15" fill="#63777b">主要优化：</text><text x="742" y="315" font-size="17" font-weight="700" fill="#187e75">整条任务轨迹的长期结果</text>
+</svg>

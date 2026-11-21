@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 500" role="img" aria-labelledby="s1-title s1-desc">
+<title id="s1-title">训练状态如何组成一个检查点</title><desc id="s1-desc">模型参数、优化器、调度器、随机数和数据进度在一致训练边界汇聚成状态快照，再序列化为检查点。</desc>
+<rect x="1" y="1" width="998" height="498" rx="20" fill="#fbfdfb" stroke="#d9e6df"/>
+<g font-family="system-ui,'PingFang SC','Microsoft YaHei',sans-serif" fill="#29454a">
+<text x="42" y="55" font-size="26" font-weight="750">训练不是一个权重文件，而是一组共同演化的状态</text>
+<rect x="48" y="105" width="270" height="78" rx="13" fill="#dff0e9" stroke="#92c7b8" stroke-width="2"/>
+<text x="72" y="139" font-size="20" font-weight="700">Model parameters</text><text x="72" y="164" font-size="15">θ · buffers · weights</text>
+<rect x="48" y="207" width="270" height="78" rx="13" fill="#f7e9df" stroke="#d9a98f" stroke-width="2"/>
+<text x="72" y="241" font-size="20" font-weight="700">Optimizer state</text><text x="72" y="266" font-size="15">Adam m / v · momentum</text>
+<rect x="48" y="309" width="270" height="78" rx="13" fill="#eeebf8" stroke="#b3abd5" stroke-width="2"/>
+<text x="72" y="343" font-size="20" font-weight="700">Scheduler / scaler</text><text x="72" y="368" font-size="15">learning rate · AMP scale</text>
+<rect x="355" y="156" width="270" height="78" rx="13" fill="#f8f1df" stroke="#d8c58a" stroke-width="2"/>
+<text x="379" y="190" font-size="20" font-weight="700">RNG / data progress</text><text x="379" y="215" font-size="15">seed · sampler · cursor</text>
+<g fill="none" stroke="#66858a" stroke-width="3" stroke-linecap="round">
+<path d="M318 144H338V195H355"/><path d="M318 246H355"/><path d="M318 348H338V195"/><path d="M490 234V264"/>
+</g>
+<rect x="355" y="264" width="270" height="92" rx="14" fill="#e4f1ef" stroke="#72aaa2" stroke-width="2"/>
+<text x="490" y="300" text-anchor="middle" font-size="22" font-weight="800">Consistent snapshot</text><text x="490" y="329" text-anchor="middle" font-size="15">one logical training step</text>
+<path d="M625 310H685" fill="none" stroke="#66858a" stroke-width="3"/><path d="M675 301L687 310L675 319" fill="none" stroke="#66858a" stroke-width="3"/>
+<rect x="690" y="260" width="260" height="102" rx="14" fill="#e6edf8" stroke="#9aaed1" stroke-width="2"/>
+<text x="820" y="299" text-anchor="middle" font-size="22" font-weight="800">Checkpoint artifact</text><text x="820" y="330" text-anchor="middle" font-size="15">shards + manifest + metadata</text>
+<path d="M820 362V406" fill="none" stroke="#66858a" stroke-width="3"/><path d="M811 396L820 408L829 396" fill="none" stroke="#66858a" stroke-width="3"/>
+<rect x="690" y="410" width="260" height="55" rx="10" fill="#e2f0e7" stroke="#91bea0"/>
+<text x="820" y="445" text-anchor="middle" font-size="18" font-weight="750">可恢复的训练现场</text>
+<text x="48" y="440" font-size="15" fill="#60797c">保存边界必须与 optimizer update / gradient accumulation 状态相匹配。</text>
+</g></svg>

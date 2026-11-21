@@ -3,47 +3,46 @@
 > 维护对象：`content/categories.json`（一级分类与稳定二级 topic slug）、`content/posts.json`（每篇文章的唯一主分类/主专题）。
 > `posts/<category>/_topics/<topic>/README.md` 是规划占位，不是文章，也不是发布目录；`posts/<category>/<slug>/index.html` 才是文章源文件。
 
-## 15 个一级分类及领域边界
+## 14 个一级分类及领域边界
 
 | 分类 slug | 收录范围 | 与邻近类别的边界 |
 | --- | --- | --- |
 | `foundations` | 线性代数、数值稳定、优化与正则化、表示与分词基础 | 具体的学习算法归 `classical-ml`；训练过程与分布式实现归 `training` |
 | `classical-ml` | 线性/概率模型、树与集成、核方法、聚类、降维等经典算法 | 深度网络信息路径归 `architectures` |
-| `architectures` | CNN、RNN、Transformer、门控、MoE、状态空间与高效注意力结构 | GPU 算子实现归 `systems`，线上请求管理归 `inference` |
+| `architectures` | CNN、RNN、Transformer、门控、MoE、状态空间、高效注意力，以及神经场/三维场景表示与新视角合成 | GPU 算子实现归 `systems`，线上请求管理归 `inference`；跨模态联合建模归 `multimodal` |
 | `reinforcement-learning` | MDP、Bellman、Policy Gradient、Actor–Critic、探索与搜索 | RLHF/GRPO 等模型后训练方案的训练目标与流程归 `training` |
 | `datasets` | 语料来源、清洗去重、混合、污染与数据治理 | 任务指标、Benchmark 设计与可重复性归 `evaluation` |
-| `training` | 预训练、Scaling Laws、PEFT、偏好对齐、分布式与混合精度 | 权重衰减的基础推导可以在 `foundations`，但工程训练管线在此 |
+| `training` | 预训练、Scaling Laws、PEFT、知识蒸馏与教师—学生迁移、偏好对齐、分布式与混合精度 | 权重衰减的基础推导可以在 `foundations`，模型知识迁移训练归此；推理部署优化归 `inference` / `systems` |
 | `reasoning` | CoT、自一致性、推理采样、验证与测试时计算 | 涉及工具和环境反馈闭环时归 `agents` |
 | `inference` | KV Cache、解码、Batching、服务调度和 Prefill/Decode | 硬件 kernel/编译与通讯归 `systems` |
 | `systems` | GPU 内存、算子、编译、通信、性能分析及底层优化 | 服务请求、token 调度、端到端 serving 归 `inference` |
 | `storage-indexing` | B+ Tree、LSM Tree、页与缓冲区管理、事务恢复、MVCC | 数据库磁盘/索引结构归此类；向量语义召回归 `retrieval-rag`，GPU 算子实现归 `systems` |
 | `retrieval-rag` | 向量/ANN、稀疏混合检索、重排序、RAG、证据落地 | Agent 任务计划与工具执行归 `agents`，embedding 基础表征归 `foundations` |
-| `agents` | ReAct、规划、工具调用、记忆、软件工程 Agent、Agent-Computer Interface、Harness Engineering 与端到端评测 | 纯推理策略归 `reasoning`；检索方法归 `retrieval-rag`；Harness 研究模型外部的 Agent Runtime 与工程闭环 |
+| `agents` | ReAct、规划、工具调用、Agent Memory、Context Engineering、软件工程 Agent、Agent-Computer Interface、Harness Engineering、Agentic RL、Loop Engineering 与端到端评测 | 纯推理策略归 `reasoning`；检索算法归 `retrieval-rag`；跨会话知识管理归 `memory`；推理时上下文的选择、组装与生命周期归 `context-engineering`；PPO / GRPO 等优化算法仍按其训练方法归 `training` 或 `reinforcement-learning`；Loop 关注跨运行的触发、验证、持久化与终止 |
 | `multimodal` | 视觉/语言/音频的跨模态建模与对齐 | 通用单模态 CNN 架构仍可归 `architectures` |
 | `evaluation` | 模型/任务 Benchmark、ROC/PR、消融与复现 | 训练数据质量、污染事实与许可证归 `datasets` |
-| `decision-models` | 类型化概率决策模型、贝叶斯风险、成本敏感决策、概率校准、风险预算、选择性预测、模型路由与鲁棒性 | 经典分类器训练归 `classical-ml`；跨模型评测方法归 `evaluation`；Agent 的环境观察与工具执行归 `agents` |
+
+
+### Neural Rendering & 3D Scene Representations
+
+- 稳定专题 slug：`architectures/neural-rendering-3d-vision`。
+- 收录 NeRF、Mip-NeRF、Instant-NGP 等神经场/隐式场景表示，以及用于同一新视角合成任务的显式或混合表示对照（例如 3D Gaussian Splatting）。
+- 不新增一级 `computer-vision` 分类：当前单篇 NeRF 不足以支撑新的顶层领域；`architectures` 可承载其模型信息流与场景表示机制。若未来视觉任务、几何重建、视频理解等形成多个稳定专题，再依据实际内容规模重新评估顶层分类。
+- 术语边界：NeRF 是连续神经场 + 体渲染；3D Gaussian Splatting 是以显式各向异性高斯为基元的竞争性场景表示，不应被写成 NeRF 的一个网络变体。
 
 ## 二级分类治理
 
 1. 每篇文章恰好登记一个 `category` 与一个 **已注册** `topic`。跨学科关联使用 `tags` 与文章链接，不为同一术语复制多个一级分类。
 2. `topic.slug` 是公开锚点的一部分（`#topic-<slug>`），**先保留现有稳定 slug，再改善标题、解释和页面导航**。不要仅因措辞好看而改 slug。
 3. 对确有不同边界的二级主题，要求标题与描述不同；不得让两个 topic 共享同一展示标题。当前 Systems 已区分 Kernel 编程、GPU 内存、编译/内核优化、Collectives、分布式通信和 Roofline/Benchmark。
-4. 占位目录必须使用精确的注册 slug。新增 Topic 优先写分类元数据，再添加 `_topics/` 的 README；单篇新文章通常不值得新增一级分类，只有多个研究方向已形成稳定、可持续的知识簇时才考虑新建领域。
+4. 占位目录必须使用精确的注册 slug。新增 Topic 优先写分类元数据，再添加 `_topics/` 的 README；单篇新文章通常不值得新增一级分类。
 5. Draft 必须继续以 `status: draft` 保持离线，不要将规划中的 README 当作 `published` 条目。
 
-## 2026-11 Decision Models
+### Knowledge Distillation 的分类边界
 
-新增一级分类 `decision-models`，不是因为 Jev 单一产品，而是因为 2026 年已经形成相互关联的研究脉络：类型化决策接口、成本敏感决策、概率校准、有限样本风险控制、选择性推理、模型路由和鲁棒性评估。该分类用于沉淀可复用的模型与决策理论；Agent 只在实际工作流中调用它们，不再作为主归档位置。
+`knowledge-distillation` 注册为 `training` 下的二级专题，不新增 `model-compression` 一级分类。原因是 KD 的核心对象是训练监督与教师—学生知识迁移；它可以服务模型压缩，也可以用于同规模能力迁移、LLM 推理轨迹学习、多模态知识迁移和扩散生成加速。剪枝、量化与低秩分解仍保留各自技术边界，通过 tags、文章链接与阅读路径建立交叉关系。
 
-- `typed-decision-models`：Jev / System One / 其他 typed decision model 的接口与能力边界。
-- `cost-sensitive-decision-theory`：Bayes Risk、Expected Loss、非对称错误成本和动作选择。
-- `probability-calibration`：ECE、Brier Score、reliability diagrams、温度缩放与子群体校准。
-- `risk-budgeting`：Learn Then Test、有限样本风险保证和部署阈值认证。
-- `selective-prediction`：Abstention、Selective Classification、Coverage–Risk 权衡与按需推理。
-- `decision-routing`：模型路由、级联、决策委托和工作流控制。
-- `robustness-and-bias`：选项顺序、措辞、数据布局、对抗输入和群体偏差。
-
-分类边界：传统模型学习机制仍归 `classical-ml`；通用评测协议与跨模型 benchmark 仍归 `evaluation`；Agent 环境交互和工具执行仍归 `agents`。决策模型文章可通过 tags 和 reading paths 连接这些领域，但只登记一个主分类。
+专题采用多维标签而非互斥树：知识信号（response / feature / relation / sequence）、教师访问方式（white-box / black-box）、教师拓扑（single / multi-teacher / self-distillation）、数据机制（offline / online / on-policy / data-free / synthetic）和能力目标（通用任务 / reasoning / multimodal / diffusion / agent）。一篇论文可以同时落在多个轴上；每篇文章仍只有一个主 category/topic。
 
 ## 2026-11 分类占位整合
 
@@ -75,3 +74,30 @@
 - ReAct 主要解释推理—行动—观察循环；SWE-agent / ACI 主要研究操作接口；Agent Memory 主要研究跨会话知识；Harness Engineering 将这些能力置于完整任务生命周期中进行系统设计。
 - Harness 与 Evaluation Harness 必须区分：前者使模型能够行动，后者运行任务并测量结果。
 - 当前专题文献仍在快速演进；对预印本提出的子系统分类，应标注来源和研究状态，不把它们描述为已统一的行业标准。
+
+
+## Agentic RL 专题归属（2026-11）
+
+- **主分类：** `agents`；**二级专题：** `agentic-rl`。
+- 研究多轮、部分可观测环境中的策略学习、工具交互、轨迹奖励、信用分配、长程课程与异步 Rollout。
+- 不新增一级分类：Agentic RL 的任务形态属于 Agent 环境交互闭环；PPO、GAE、GRPO 等算法仍保留在原有强化学习 / 训练专题。
+- 与 ReAct / Tool Calling / Planning 通过阅读路径关联，避免把“行动协议”“优化算法”和“训练系统”混成一个概念。
+
+
+## Context Engineering 专题边界（2026-11）
+
+- **主分类：** `agents`；**二级专题：** `context-engineering`。不新增一级分类。
+- 收录推理时上下文的选择、预算、检索、处理、组装、裁剪、压缩、持久化、隔离、安全与评测。
+- `memory` 继续聚焦跨会话经验的写入、组织、验证、纠错与重用；`context-engineering` 研究每一轮推理时如何组合全部必要信息。
+- `retrieval-rag` 继续聚焦召回、向量索引、重排序与证据检索；`context-engineering` 负责把检索结果纳入完整推理上下文。
+- `tool-calling` 聚焦工具接口与调用协议；`context-engineering` 负责工具 Schema、工具输出与执行状态在上下文中的管理。
+- `harness-engineering` 研究 Agent Runtime 的工具、权限、执行环境、可观测性与治理；Context Engineering 是其中关键的信息管理子系统，两者应互相链接而非合并成同一个 Topic。
+
+
+## Loop Engineering 专题边界
+
+- **主分类：** `agents`；**二级专题：** `loop-engineering`。
+- 研究 Agent 运行之间的外层工作循环：事件 / 日程触发、任务发现与去重、上下文投影、隔离执行、独立验证、持久状态、预算、停止条件与人工升级。
+- 不新增一级分类。Loop Engineering 依赖 Harness 提供的工具、权限、沙箱和观测能力，但重点是跨运行的任务生命周期；Harness 主要描述单次运行时及其执行环境。
+- 与 ReAct（单次 Thought–Action–Observation）、Planning（计划生成与更新）、Memory（状态与经验保存）、Context Engineering（本轮信息选择与组装）、Agentic RL（训练与优化 Agent 策略）和 Agent Evaluation（任务结果测量）有关联但不等价。
+- 2026 年 Loop Engineering 文献仍处于探索阶段。引用仓库挖掘比例时必须说明启发式筛选分母；不能把观察性采用数据写成因果效率提升，也不能把预印本提出的构件称为统一行业标准。
