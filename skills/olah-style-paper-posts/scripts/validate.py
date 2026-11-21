@@ -20,9 +20,6 @@ REQUIRED_EVIDENCE_FIELDS = ("id", "claim", "kind", "source_url", "locator", "sta
 def validate_evidence_ledger(path: Path) -> dict:
     """Validate the traceability structure without pretending to verify claims."""
     failures, warnings = [], []
-    evidence = validate_evidence_ledger(path.parent / 'evidence.json')
-    failures.extend(evidence['failures'])
-    warnings.extend(evidence['warnings'])
     if not path.is_file():
         return {"pass": False, "claim_count": 0,
                 "failures": [f"Missing evidence ledger: {path}"], "warnings": []}
@@ -70,6 +67,9 @@ def validate(path: Path) -> dict:
     html = path.read_text(encoding='utf-8')
     soup = BeautifulSoup(html, 'html.parser')
     failures, warnings = [], []
+    evidence = validate_evidence_ledger(path.parent / 'evidence.json')
+    failures.extend(evidence['failures'])
+    warnings.extend(evidence['warnings'])
     h1 = soup.find_all('h1')
     if len(h1) != 1: failures.append(f'Expected exactly one h1, found {len(h1)}')
     if not soup.find('main'): failures.append('Missing semantic main')
