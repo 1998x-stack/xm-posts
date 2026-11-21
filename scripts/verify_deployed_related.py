@@ -137,7 +137,7 @@ def verify_c51(base: str):
         assert target.startswith(base), f'{url}: external illustration {path}'
         assert fetch(target), f'{url}: empty illustration {target}'
 
-    for suffix in ('archive/', 'topics/', 'feed.xml', 'reinforcement-learning/'):
+    for suffix in ('archive/', 'topics/', 'feed.xml', 'categories/reinforcement-learning/'):
         target = urljoin(base, suffix)
         data = fetch(target)
         assert data, f'{target}: empty index'
