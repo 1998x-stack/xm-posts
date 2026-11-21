@@ -1,0 +1,101 @@
+[
+  {
+    "id": "Q01",
+    "kind": "taxonomy",
+    "claim": "Query understanding literature for search engines is organized around identifying search intent, transforming queries, and helping users refine or suggest queries; the book includes query classification, segmentation/tagging, intent understanding, spelling correction, rewriting, autocomplete and suggestion.",
+    "source_url": "https://doi.org/10.1007/978-3-030-58334-7",
+    "locator": "Book overview and table of contents; chapters 2–10",
+    "status": "verified",
+    "notes": "Classic IR taxonomy; this article groups it into Understand / Transform / Interact for teaching."
+  },
+  {
+    "id": "Q02",
+    "kind": "framework",
+    "claim": "LLM-era query understanding can be framed as interactive query rewriting that makes machine intent explicit and open to user refinement.",
+    "source_url": "https://arxiv.org/abs/2306.16004",
+    "locator": "Abstract and proposed framework",
+    "status": "verified",
+    "notes": "Position paper; not a universal production architecture."
+  },
+  {
+    "id": "Q03",
+    "kind": "method",
+    "claim": "Query2doc generates pseudo-documents with few-shot LLM prompting and uses them to expand queries for sparse and dense retrieval.",
+    "source_url": "https://aclanthology.org/2023.emnlp-main.585/",
+    "locator": "Abstract and Sections 1–2",
+    "status": "verified",
+    "notes": "EMNLP 2023 method."
+  },
+  {
+    "id": "Q04",
+    "kind": "result",
+    "claim": "Query2doc reports 3%–15% BM25 improvements on MS MARCO and TREC DL ad-hoc retrieval datasets in its experimental settings.",
+    "source_url": "https://aclanthology.org/2023.emnlp-main.585/",
+    "locator": "Abstract; EMNLP 2023",
+    "status": "verified",
+    "notes": "Do not generalize the reported range to all datasets or retrievers."
+  },
+  {
+    "id": "Q05",
+    "kind": "limitation",
+    "claim": "A comprehensive study of generative query/document expansion finds gains are not universal and can diminish or reverse for stronger retrievers due to added noise.",
+    "source_url": "https://aclanthology.org/2024.findings-eacl.134/",
+    "locator": "Abstract and experimental overview; Findings of EACL 2024",
+    "status": "verified",
+    "notes": "Peer-reviewed Findings of EACL 2024 version; study covers 11 expansion techniques, 12 datasets and 24 retrieval models."
+  },
+  {
+    "id": "Q06",
+    "kind": "method",
+    "claim": "ICR alternates between generating clarification questions and rewritten queries to iteratively resolve fuzzy expressions in conversational search.",
+    "source_url": "https://aclanthology.org/2025.emnlp-main.496/",
+    "locator": "Abstract and method description",
+    "status": "verified",
+    "notes": "EMNLP 2025; reported on two conversational-search datasets."
+  },
+  {
+    "id": "Q07",
+    "kind": "research_scope",
+    "claim": "LLM-based conversational query understanding emphasizes context-aware intent interpretation, ambiguity resolution, query refinement, proactive query management and multi-turn evaluation.",
+    "source_url": "https://sigirusertutorial.github.io/",
+    "locator": "SIGIR 2025 tutorial overview and schedule",
+    "status": "verified",
+    "notes": "Tutorial scope, not a single model benchmark."
+  },
+  {
+    "id": "Q08",
+    "kind": "method",
+    "claim": "ReDI decomposes complex queries into subqueries, enriches each with retrieval-oriented interpretations, retrieves independently and fuses results.",
+    "source_url": "https://arxiv.org/abs/2509.06544",
+    "locator": "Abstract and v4 methodology",
+    "status": "verified",
+    "notes": "arXiv v4 revised 2026-02-10; method-level description."
+  },
+  {
+    "id": "Q09",
+    "kind": "result",
+    "claim": "A 2026 comparative study evaluates LLMs and traditional methods on query intent prediction, query segmentation and query interpretation, and reports no LLM advantage in intrinsic evaluations; only a few approaches improve end-to-end Robust04 retrieval.",
+    "source_url": "https://downloads.webis.de/publications/papers/schmidt_2026.pdf",
+    "locator": "Abstract and Introduction",
+    "status": "verified",
+    "notes": "Scope is limited to the three studied tasks and the reported Robust04 retrieval setup; not a universal verdict on all LLM query understanding."
+  },
+  {
+    "id": "Q10",
+    "kind": "pedagogy",
+    "claim": "The query-frame schema, pipeline diagrams, conversation-state example and rewrite/expand/decompose comparison are original teaching constructions.",
+    "source_url": "https://doi.org/10.1007/978-3-030-58334-7",
+    "locator": "Article figures 1–7 and Sections 2–7",
+    "status": "illustrative",
+    "notes": "Original diagrams and examples; not reproduced from any cited paper."
+  },
+  {
+    "id": "Q11",
+    "kind": "implementation",
+    "claim": "The Python demo preserves raw input and marks unsupported or underspecified fields instead of inventing values.",
+    "source_url": "https://doi.org/10.1007/978-3-030-58334-7",
+    "locator": "Article Section 9 and examples/query_frame_demo.py",
+    "status": "illustrative",
+    "notes": "Small deterministic rule demo; not a trained query-understanding model or benchmark reproduction."
+  }
+]

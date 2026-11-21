@@ -1,0 +1,405 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light">
+<meta name="description" content="从 Geoffrey Huntley 的原始 Ralph 技术出发，拆解 Agent 迭代执行、上下文边界、持久化状态、测试反馈、停止条件、收敛性与安全工程。">
+<link rel="canonical" href="https://1998x-stack.github.io/xm-posts/posts/agents/ralph-loop/"><link rel="alternate" type="application/rss+xml" title="xm-posts RSS" href="../../../feed.xml">
+<title>Ralph Loop：自主 Agent 的迭代执行与反馈控制 · xm-posts</title>
+<style>
+:root{--bg:#f3f7f5;--paper:#fffefb;--ink:#23464a;--body:#466368;--muted:#6b8583;--line:#d8e4de;--green:#247d70;--blue:#477d9c;--amber:#ad7046;--purple:#786ca6}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.84 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}
+a{color:#176f70;text-underline-offset:4px}a:hover{color:#a35e3c}a:focus-visible,button:focus-visible,[tabindex]:focus-visible{outline:3px solid #c17e4e;outline-offset:3px}
+.skip{position:absolute;top:-120px;left:12px;z-index:5;padding:9px 13px;background:#173f43;color:white}.skip:focus{top:10px}
+.sitebar{background:var(--paper);border-bottom:1px solid var(--line)}.barinner{max-width:1240px;margin:auto;padding:12px 22px;display:flex;align-items:center;justify-content:space-between;gap:18px}
+.brand{font-size:22px;font-weight:850;letter-spacing:-.06em;text-decoration:none;color:#23474a}.brand b{color:var(--amber)}.barinner nav{display:flex;gap:17px;flex-wrap:wrap;font-size:13px}
+.layout{max-width:1240px;margin:auto;padding:54px 22px 90px;display:grid;grid-template-columns:220px minmax(0,850px);gap:52px}
+.toc{position:sticky;top:18px;align-self:start;max-height:92vh;overflow-y:auto;padding-right:4px}.toc strong{display:block;color:#6b8983;font:750 11px/1.5 system-ui;letter-spacing:.16em;margin:0 0 12px}
+.toc a{display:block;border-left:2px solid var(--line);padding:6px 10px;color:#617d7c;text-decoration:none;font-size:12px;line-height:1.55}.toc a:hover{border-color:var(--green);color:#245d5b}
+main,article{min-width:0}.hero{margin:0 0 62px}.eyebrow{font:750 11px/1.5 system-ui;letter-spacing:.18em;color:var(--green)}
+h1{font-size:clamp(37px,5.6vw,66px);line-height:1.1;letter-spacing:-.06em;margin:14px 0 20px}.deck{font-size:21px;line-height:1.68;color:#42666a;max-width:790px}
+.meta{display:flex;gap:13px;flex-wrap:wrap;border-top:1px solid var(--line);padding:16px 0 0;margin:27px 0 0;color:var(--muted);font-size:12px}
+section{margin:0 0 76px;scroll-margin-top:22px}h2{font-size:clamp(25px,3vw,34px);line-height:1.32;letter-spacing:-.035em;margin:0 0 18px}
+h3{font-size:20px;line-height:1.45;margin:27px 0 10px}h4{font-size:16px;margin:20px 0 8px}
+p{margin:0 0 19px;color:var(--body)}strong{color:#244f50}ul,ol{padding-left:25px;color:var(--body)}li{margin:8px 0}
+p code,li code{background:#e8f0ec;color:#235e59;padding:2px 5px;border-radius:4px;font-size:.9em}.lead{font-size:19px;line-height:1.8;color:#31585c}
+.callout{padding:17px 20px;margin:22px 0;border-left:4px solid var(--green);background:#e9f4ee;border-radius:0 10px 10px 0}
+.caution{padding:17px 20px;margin:22px 0;border-left:4px solid var(--amber);background:#fff1e6;border-radius:0 10px 10px 0}
+.note{padding:15px 18px;margin:22px 0;border:1px solid var(--line);border-radius:11px;background:#fff}
+.figure{margin:25px 0 31px;padding:13px;border:1px solid var(--line);border-radius:14px;background:white;box-shadow:0 12px 35px #204c3d0a}
+.figure-scroll{max-width:100%;overflow-x:auto;overscroll-behavior-x:contain}.figure img{display:block;width:100%;height:auto;min-width:0}
+.figure figcaption{font-size:13px;line-height:1.7;color:#657f7d;padding:9px 5px 1px}
+.two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:23px 0}.panel{min-width:0;background:#fff;border:1px solid var(--line);border-radius:12px;padding:17px 19px}
+.panel h3{font-size:17px;margin:0 0 8px}.panel p:last-child{margin-bottom:0}
+.mathbox{padding:17px 19px;margin:23px 0;border:1px solid #d5e4dc;border-radius:12px;background:#f7faf7}
+.math-scroll{max-width:100%;min-width:0;overflow-x:auto;overflow-y:hidden;overscroll-behavior-x:contain;padding:5px 2px}.math-scroll:focus-visible{outline:3px solid #247d70;outline-offset:3px}
+.math-scroll math[display="block"]{display:block;width:max-content;min-width:100%;font-size:1.15rem;font-family:"Cambria Math","STIX Two Math",serif}.mathbox small{display:block;margin-top:8px;color:#6b8583;font-size:12px}
+.code-scroll{max-width:100%;overflow-x:auto;border-radius:12px;margin:20px 0}pre{margin:0;padding:18px 20px;background:#203d45;color:#e8f5ee;font:13px/1.7 ui-monospace,SFMono-Regular,Consolas,monospace;tab-size:2;white-space:pre;overflow-wrap:normal}pre code{font:inherit}
+.table-scroll{max-width:100%;overflow-x:auto;border:1px solid var(--line);border-radius:11px;margin:23px 0;background:#fff}
+table{border-collapse:collapse;width:100%;min-width:620px;font-size:14px;line-height:1.65}th,td{padding:11px 13px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{background:#edf4ef;color:#31585a;font-weight:700}tr:last-child td{border-bottom:0}
+.demo{border:1px solid #cbded4;background:#fff;border-radius:14px;padding:20px;margin:24px 0}
+.demo-head{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap}.demo-head h3{margin:0}
+.demo-controls{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}
+.demo-controls button{appearance:none;border:1px solid #9abbb0;background:#f6faf7;color:#245f5a;border-radius:9px;padding:9px 13px;min-height:42px;font:650 13px system-ui;cursor:pointer}
+.demo-controls button[aria-pressed="true"]{background:#dff0e8;border-color:#3b897a;color:#174f49}.demo-controls button.primary{background:#247d70;color:#fff;border-color:#247d70}.demo-controls button:disabled{opacity:.45;cursor:not-allowed}
+.demo-trace{min-height:150px;border:1px solid var(--line);border-radius:10px;padding:12px 14px;background:#f8faf8}
+.trace-step{padding:10px 4px;border-bottom:1px dashed #d5e1db}.trace-step:last-child{border-bottom:0}
+.trace-step strong{display:block;color:#315f5c;font-size:13px;margin-bottom:3px}.trace-step p{margin:0;font-size:14px}
+.demo-status{font-size:12px;color:#6b8583;margin:11px 0 0}.pill{display:inline-block;padding:3px 8px;border-radius:999px;background:#edf4ef;color:#3e6e67;font-size:11px;font-weight:700}
+.refs{font-size:14px}.refs li{overflow-wrap:anywhere;margin:10px 0}.end{border-top:1px solid var(--line);padding-top:20px;color:#718783;font-size:13px}
+@media(max-width:980px){.layout{grid-template-columns:minmax(0,1fr);gap:20px;padding-top:32px}.toc{position:static;max-height:none;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 12px;border:1px solid var(--line);border-radius:12px;padding:12px;background:#fff}.toc strong{grid-column:1/-1}.barinner nav{gap:10px}.hero{margin-bottom:45px}}
+@media(max-width:650px){body{font-size:16px}.barinner{align-items:flex-start;padding:10px 15px}.barinner nav{max-width:68%;font-size:11px;justify-content:flex-end}.layout{padding:25px 15px 60px}.toc{grid-template-columns:1fr 1fr}.deck{font-size:18px}.two{grid-template-columns:1fr}.figure{padding:8px}.figure-scroll img{min-width:650px}.figure-scroll svg{min-width:760px;max-width:none}.math-scroll math[display="block"]{font-size:1.02rem}.demo{padding:14px}.meta{gap:8px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+@media print{body{background:#fff;color:#111;font-size:11pt}.sitebar,.toc,.skip,.demo-controls{display:none!important}.layout{display:block;max-width:none;padding:0}.hero{margin-bottom:25px}section{break-inside:auto;margin-bottom:28px}.figure,.panel,.callout,.caution,.mathbox{break-inside:avoid;box-shadow:none}.figure img{max-width:100%}.figure-scroll,.math-scroll,.code-scroll,.table-scroll{overflow:visible}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#f2f4f2;color:#111;border:1px solid #ddd}a{color:#111;text-decoration:none}.demo{border:1px solid #bbb}.refs a::after{content:" (" attr(href) ")";font-size:8pt;overflow-wrap:anywhere}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">跳至正文</a>
+<header class="sitebar"><div class="barinner"><a class="brand" href="../../../">xm<b>.</b>posts</a><nav aria-label="主导航"><a href="../../../">首页</a><a href="../../../topics/">知识地图</a><a href="../../../archive/">文章归档</a><a href="../../../feed.xml">RSS</a></nav></div></header>
+<div class="layout">
+<aside class="toc" aria-label="文章目录"><strong>IN THIS EXPLAINER</strong>
+<a href="#problem">01 · 为什么要循环？</a><a href="#definition">02 · Ralph 到底是什么？</a><a href="#state">03 · 上下文与持久状态</a><a href="#formal">04 · 状态机与数学抽象</a><a href="#granularity">05 · One item per loop</a><a href="#feedback">06 · 测试反馈与 Backpressure</a><a href="#memory">07 · 计划、规格与 Git</a><a href="#simulator">08 · 交互实验</a><a href="#nested">09 · Ralph 与 ReAct</a><a href="#variants">10 · 两种实现方式</a><a href="#implementation">11 · 可控 Shell 示例</a><a href="#convergence">12 · 收敛与停止条件</a><a href="#failures">13 · 失败模式</a><a href="#safety">14 · 安全与预算</a><a href="#fit">15 · 适用边界</a><a href="#evaluation">16 · 如何评估效果</a><a href="#summary">17 · 总结与来源</a></aside>
+<main id="main"><article>
+<header class="hero"><span class="eyebrow">AGENT ENGINEERING · AUTONOMOUS EXECUTION</span>
+<h1>Ralph Loop：让 Agent 持续工作，而不是一次性回答</h1>
+<p class="deck">从一个看似简单的 Bash while 循环出发，理解自主 Coding Agent 如何通过任务切片、上下文管理、持久化状态、自动化验证与停止条件，跨越单次会话的限制。</p>
+<div class="meta"><span>工程方法深度解析（非同行评审论文）</span><span>建议阅读 28 分钟</span><span>本科高年级 / 研究生 / Agent 工程实践</span><span>原始技术文章：2025</span></div></header>
+
+<section id="problem"><h2>01 · 为什么一个 Agent 需要反复启动？</h2>
+<p class="lead">设想你要让一个 Coding Agent 从零构建一门编程语言：它需要读规格、写 Lexer、实现 Parser、生成 LLVM IR、补齐标准库、运行测试、修复编译错误，最后构建真实程序。你会把所有要求一次性塞进一个 Prompt，然后期待它连续工作几个小时吗？</p>
+<p>单次长会话的困难不只是“上下文窗口不够大”。更隐蔽的问题是：任务不断增加，历史观察越来越多，早期决策和当前代码逐渐不一致；模型可能重复搜索、重复实现、忘记某个约束，甚至在一个看似合理的局部修复中破坏其他模块。</p>
+<div class="two"><div class="panel"><h3>单次长会话</h3><p>同一个上下文不断累积工具输出、失败日志、计划和解释。模型需要在越来越长的历史中识别当前最重要的状态。</p><span class="pill">上下文持续增长</span></div><div class="panel"><h3>迭代式执行</h3><p>每一轮只处理一个有边界的任务。完成后把代码、测试、计划和结果写回仓库，再启动下一轮。</p><span class="pill">工作单元受控</span></div></div>
+<p>Ralph 的关键变化不是“让模型变得更聪明”，而是把软件工程中的任务调度、状态持久化和验证环节放到模型外部。模型仍可能犯错，但系统能更快地发现错误、保存进展，并给下一轮提供可检查的状态。</p>
+<div class="callout"><strong>先建立正确直觉：</strong>Ralph Loop 不是一个更大的 Agent，而是一个包裹 Agent 的外层执行控制器。它让一个长任务变成一系列短任务，并让每次尝试都留下可供下一轮读取的工程状态。</div></section>
+
+<section id="definition"><h2>02 · Ralph 到底是什么？</h2>
+<p>Geoffrey Huntley 在 2025 年 7 月发表的原始文章中，把 Ralph 概括为一种技术（technique），而不是一个特定模型或多智能体框架。最简形式是反复向 Coding Agent 提交同一个 Prompt：</p>
+<div class="code-scroll"><pre><code>while :; do
+  cat PROMPT.md | claude
+done</code></pre></div>
+<p>这段代码没有复杂的 Planner、Agent Registry 或消息总线。外层 Shell 负责再次启动 Agent；Prompt 告诉它目标和下一步工作；仓库文件保存上轮留下的结果。Huntley 强调每轮只做一件事，并把规格与优先级计划固定放在每轮都能读取的位置。[1]</p>
+<figure class="figure"><div class="figure-scroll"><svg style="width:100%;height:auto;display:block" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 520" role="img" aria-labelledby="inline01-ralph-loop-title inline01-ralph-loop-desc">
+<title id="inline01-ralph-loop-title">Ralph Loop 的外层执行循环</title><desc id="inline01-ralph-loop-desc">规格和任务清单被读取，Agent 执行一个小任务，验证器检查结果，通过后持久化状态并选择下一项；满足完成条件或达到预算时停止。</desc>
+<defs><marker id="inline01-loop-arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10Z" fill="#397f75"/></marker></defs><rect width="1120" height="520" rx="22" fill="#f8fbf8"/>
+<text x="560" y="48" text-anchor="middle" font-family="system-ui,sans-serif" font-size="25" font-weight="700" fill="#234b4d">One task · One verification · One checkpoint</text>
+<g font-family="system-ui,'Microsoft YaHei',sans-serif" text-anchor="middle">
+<rect x="60" y="108" width="230" height="100" rx="16" fill="#e8f3ed" stroke="#85b8a9" stroke-width="2"/><text x="175" y="147" font-size="22" font-weight="700" fill="#226c62">1 · SPEC</text><text x="175" y="178" font-size="16" fill="#416c68">规格 / 任务清单</text>
+<rect x="445" y="108" width="230" height="100" rx="16" fill="#e8f1f8" stroke="#8eb5ca" stroke-width="2"/><text x="560" y="147" font-size="22" font-weight="700" fill="#3f7795">2 · AGENT</text><text x="560" y="178" font-size="16" fill="#456b7d">一个工作单元</text>
+<rect x="830" y="108" width="230" height="100" rx="16" fill="#fff0e5" stroke="#d7a17b" stroke-width="2"/><text x="945" y="147" font-size="22" font-weight="700" fill="#a56640">3 · PATCH</text><text x="945" y="178" font-size="16" fill="#765b49">代码 / 测试变更</text>
+<rect x="830" y="318" width="230" height="100" rx="16" fill="#f1eef9" stroke="#a99bc9" stroke-width="2"/><text x="945" y="357" font-size="22" font-weight="700" fill="#6e5f9d">4 · VERIFY</text><text x="945" y="388" font-size="16" fill="#655c7e">测试 / 类型 / Lint</text>
+<rect x="445" y="318" width="230" height="100" rx="16" fill="#e8f3ed" stroke="#85b8a9" stroke-width="2"/><text x="560" y="357" font-size="22" font-weight="700" fill="#226c62">5 · PERSIST</text><text x="560" y="388" font-size="16" fill="#416c68">计划 / Git / 日志</text>
+<rect x="60" y="318" width="230" height="100" rx="16" fill="#f8f1e8" stroke="#d6b58a" stroke-width="2"/><text x="175" y="357" font-size="22" font-weight="700" fill="#946c42">6 · DECIDE</text><text x="175" y="388" font-size="16" fill="#78654e">继续 / 完成 / 停止</text></g>
+<g fill="none" stroke="#397f75" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#inline01-loop-arrow)"><path d="M290 158 H432"/><path d="M675 158 H817"/><path d="M945 208 V305"/><path d="M830 368 H688"/><path d="M445 368 H303"/><path d="M175 318 V265 H34 V158 H48" stroke-dasharray="8 7"/></g>
+<g font-family="system-ui,sans-serif" font-size="14" fill="#55736f"><text x="360" y="143" text-anchor="middle">选取最高优先级</text><text x="750" y="143" text-anchor="middle">生成增量</text><text x="1000" y="265" text-anchor="middle">运行外部检查</text><text x="755" y="350" text-anchor="middle">仅保存可审查状态</text><text x="365" y="350" text-anchor="middle">更新剩余任务</text></g>
+<rect x="350" y="452" width="420" height="40" rx="20" fill="#234b4d"/><text x="560" y="478" text-anchor="middle" font-family="system-ui,sans-serif" font-size="16" font-weight="700" fill="#fff">STOP = verified complete OR budget exhausted</text></svg></div><figcaption>图 1 · Ralph 的核心不是无限重试，而是“执行一个小任务 → 获取外部反馈 → 持久化状态 → 再决定下一步”。每一轮都必须有明确的验证和退出边界。</figcaption></figure>
+<p>因此，Ralph 不等于以下任何一项：</p>
+<ul><li><strong>不是模型架构：</strong>它不改变 Transformer、注意力机制或模型训练目标。</li><li><strong>不是 ReAct 的同义词：</strong>ReAct 描述一次 Agent 运行中的 Thought / Action / Observation；Ralph 描述跨轮次的外层执行与恢复。</li><li><strong>不是多智能体的必要条件：</strong>可以只有一个主 Agent。需要时可把搜索、代码审查或测试摘要交给子 Agent，但这不是循环成立的前提。</li><li><strong>不是“失败就无限重试”：</strong>没有规格、验证、预算和停止条件的循环，只会把错误重复很多次。</li></ul>
+<p>Ralph 的“持久”来自外部状态，而不是模型本身获得了永久记忆。模型每次看到什么、如何恢复、何时停止，都由执行器和项目文件共同决定。</p></section>
+
+<section id="state"><h2>03 · 上下文与持久状态：两个不同的记忆层</h2>
+<p>理解 Ralph 最重要的概念，是区分 <strong>Context（上下文）</strong> 与 <strong>Durable State（持久状态）</strong>。</p>
+<p>上下文是当前模型推理时能直接使用的信息：系统指令、Prompt、当前任务、最近的工具输出和对话历史。它属于一次运行过程，容量有限，而且可能被压缩、截断或重新初始化。</p>
+<p>持久状态则存在于模型进程之外：代码仓库、规格文件、任务清单、测试、Git commit、构建日志和项目级 Agent 指南。它们可以在下一轮重新读取，也可以被人类检查、修改和回滚。</p>
+<figure class="figure"><div class="figure-scroll"><svg style="width:100%;height:auto;display:block" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 480" role="img" aria-labelledby="inline02-state-title inline02-state-desc">
+<title id="inline02-state-title">上下文与持久状态的双层结构</title><desc id="inline02-state-desc">上层是当前 Agent 的短暂上下文，下层是跨轮次保存的规格、计划、代码、测试和 Git 历史。</desc><rect width="1040" height="480" rx="22" fill="#f8fbf8"/>
+<text x="520" y="44" text-anchor="middle" font-family="system-ui,sans-serif" font-size="24" font-weight="700" fill="#234b4d">Two different memory layers</text>
+<rect x="54" y="80" width="932" height="140" rx="16" fill="#eaf2f8" stroke="#8eb4c8" stroke-width="2"/><text x="82" y="115" font-family="system-ui,sans-serif" font-size="18" font-weight="700" fill="#3e7591">EPHEMERAL · CURRENT CONTEXT</text>
+<g font-family="system-ui,'Microsoft YaHei',sans-serif" text-anchor="middle"><rect x="88" y="137" width="185" height="58" rx="10" fill="#fff" stroke="#b6cad8"/><text x="180" y="173" font-size="16" fill="#385e72">Prompt / Rules</text><rect x="300" y="137" width="185" height="58" rx="10" fill="#fff" stroke="#b6cad8"/><text x="392" y="173" font-size="16" fill="#385e72">Current Task</text><rect x="512" y="137" width="185" height="58" rx="10" fill="#fff" stroke="#b6cad8"/><text x="604" y="173" font-size="16" fill="#385e72">Tool Observations</text><rect x="724" y="137" width="224" height="58" rx="10" fill="#fff" stroke="#b6cad8"/><text x="836" y="173" font-size="16" fill="#385e72">Reasoning / Scratchpad</text></g>
+<path d="M520 222 V274" stroke="#397f75" stroke-width="3" stroke-dasharray="7 7"/><path d="M508 262 L520 276 L532 262" fill="none" stroke="#397f75" stroke-width="3"/><text x="550" y="253" font-family="system-ui,sans-serif" font-size="14" fill="#52736f">read / write / reassemble</text>
+<rect x="54" y="286" width="932" height="146" rx="16" fill="#e9f3ec" stroke="#8bb9a7" stroke-width="2"/><text x="82" y="322" font-family="system-ui,sans-serif" font-size="18" font-weight="700" fill="#287267">DURABLE · PROJECT STATE</text>
+<g font-family="system-ui,'Microsoft YaHei',sans-serif" text-anchor="middle"><rect x="88" y="345" width="160" height="64" rx="10" fill="#fff" stroke="#a8c8b9"/><text x="168" y="372" font-size="16" font-weight="700" fill="#356c62">Specs</text><text x="168" y="393" font-size="13" fill="#5a7d73">目标 / 验收</text><rect x="270" y="345" width="160" height="64" rx="10" fill="#fff" stroke="#a8c8b9"/><text x="350" y="372" font-size="16" font-weight="700" fill="#356c62">Plan</text><text x="350" y="393" font-size="13" fill="#5a7d73">优先级 / 进度</text><rect x="452" y="345" width="160" height="64" rx="10" fill="#fff" stroke="#a8c8b9"/><text x="532" y="372" font-size="16" font-weight="700" fill="#356c62">Code</text><text x="532" y="393" font-size="13" fill="#5a7d73">实际工作区</text><rect x="634" y="345" width="160" height="64" rx="10" fill="#fff" stroke="#a8c8b9"/><text x="714" y="372" font-size="16" font-weight="700" fill="#356c62">Tests</text><text x="714" y="393" font-size="13" fill="#5a7d73">行为证据</text><rect x="816" y="345" width="132" height="64" rx="10" fill="#fff" stroke="#a8c8b9"/><text x="882" y="372" font-size="16" font-weight="700" fill="#356c62">Git</text><text x="882" y="393" font-size="13" fill="#5a7d73">检查点</text></g>
+<text x="520" y="463" text-anchor="middle" font-family="system-ui,sans-serif" font-size="14" fill="#65817b">A fresh process can rebuild context only if useful state has been persisted outside it.</text></svg></div><figcaption>图 2 · 上下文是工作台，仓库是持久记忆。上下文重置不会自动保存知识；只有写回文件、测试结果和版本历史，下一轮才有可靠的恢复依据。</figcaption></figure>
+<div class="two"><div class="panel"><h3>短暂层：Context</h3><ul><li>当前 Prompt 与系统约束</li><li>当前任务和相关文件片段</li><li>最近的工具结果与错误信息</li><li>本轮推理中的临时假设</li></ul></div><div class="panel"><h3>持久层：Repository State</h3><ul><li>规格、验收标准和任务清单</li><li>源代码、测试与配置</li><li>Git 历史和可回滚检查点</li><li>AGENTS.md / 项目运行手册</li></ul></div></div>
+<p>这是一种重要的 Context Engineering 设计：不把所有历史塞进模型，而是每轮根据当前任务重新组装最小必要上下文。它与 Agent Memory 有联系，但也不完全相同：Memory 关心跨任务经验如何沉淀和复用；Ralph 更关心当前项目状态如何让下一轮继续执行。</p>
+<div class="caution"><strong>容易忽略的细节：</strong>“重新启动 Agent”不等于“自动恢复任务”。如果上轮只把关键决策留在对话里，没有写进规格、代码、测试或进度文件，那么下一轮确实会失去这些信息。</div></section>
+
+<section id="formal"><h2>04 · 用状态机描述 Ralph 的一轮执行</h2>
+<p>为了分析它的行为，可以把每轮开始时的持久状态写成一个向量。这里的符号是教学抽象，不是 Huntley 原文提出的数学定理。</p>
+<div class="mathbox"><div class="math-scroll" tabindex="0" role="region" aria-label="Ralph 持久状态定义，可横向滚动"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block" aria-label="D 下标 t 等于当前仓库 R 下标 t、规格 P、测试集合 T、Git 历史 G 下标 t 和剩余预算 M 下标 t 的组合"><mrow><msub><mi>D</mi><mi>t</mi></msub><mo>=</mo><mo>(</mo><msub><mi>R</mi><mi>t</mi></msub><mo>,</mo><mi>P</mi><mo>,</mo><mi>T</mi><mo>,</mo><msub><mi>G</mi><mi>t</mi></msub><mo>,</mo><msub><mi>M</mi><mi>t</mi></msub><mo>)</mo></mrow></math></div><small>式（1）· D：持久状态；R：仓库快照；P：规格；T：验证集合；G：Git 历史；M：剩余迭代预算。</small></div>
+<p>模型本轮看到的上下文不是全部持久状态，而是从中选择、整理后的工作集：</p>
+<div class="mathbox"><div class="math-scroll" tabindex="0" role="region" aria-label="上下文初始化与补丁生成公式，可横向滚动"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block" aria-label="C 下标 t 等于 Init 函数作用于规格 P 和持久状态 D 下标 t；增量 Delta 下标 t 等于 Agent 函数作用于 C 下标 t"><mrow><msub><mi>C</mi><mi>t</mi></msub><mo>=</mo><mi>Init</mi><mo>(</mo><mi>P</mi><mo>,</mo><msub><mi>D</mi><mi>t</mi></msub><mo>)</mo><mo>,</mo><mspace width="1em"/><msub><mi>Δ</mi><mi>t</mi></msub><mo>=</mo><mi>A</mi><mo>(</mo><msub><mi>C</mi><mi>t</mi></msub><mo>)</mo></mrow></math></div><small>式（2）· Init 代表上下文装配；A 代表当前 Agent。不同实现可以用 Shell、Stop Hook 或其他执行器。</small></div>
+<p>Agent 生成代码变更后，系统先应用变更，再运行验证器。验证结果必须进入下一轮可读取的持久状态：</p>
+<div class="mathbox"><div class="math-scroll" tabindex="0" role="region" aria-label="验证与持久化状态更新公式，可横向滚动"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block" aria-label="R 撇下标 t 等于 Apply 函数作用于 R 下标 t 和 Delta 下标 t；v 下标 t 等于 Verify 函数作用于 R 撇下标 t 和 T"><mrow><msubsup><mi>R</mi><mi>t</mi><mo>′</mo></msubsup><mo>=</mo><mi>Apply</mi><mo>(</mo><msub><mi>R</mi><mi>t</mi></msub><mo>,</mo><msub><mi>Δ</mi><mi>t</mi></msub><mo>)</mo><mo>,</mo><mspace width="0.8em"/><msub><mi>v</mi><mi>t</mi></msub><mo>=</mo><mi>Verify</mi><mo>(</mo><msubsup><mi>R</mi><mi>t</mi><mo>′</mo></msubsup><mo>,</mo><mi>T</mi><mo>)</mo></mrow></math></div><div class="math-scroll" tabindex="0" role="region" aria-label="持久状态更新公式，可横向滚动"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block" aria-label="D 下标 t 加一等于 Persist 函数作用于变更、规格、测试、Git 历史、验证结果和剩余预算减一"><mrow><msub><mi>D</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><mi>Persist</mi><mo>(</mo><msubsup><mi>R</mi><mi>t</mi><mo>′</mo></msubsup><mo>,</mo><mi>P</mi><mo>,</mo><mi>T</mi><mo>,</mo><msub><mi>G</mi><mi>t</mi></msub><mo>,</mo><msub><mi>v</mi><mi>t</mi></msub><mo>,</mo><msub><mi>M</mi><mi>t</mi></msub><mo>−</mo><mn>1</mn><mo>)</mo></mrow></math></div><small>式（3）· Verify 是外部验证器；Persist 把代码、测试结果、进度与必要的检查点写回，并将剩余预算减一。</small></div>
+<p>停止条件也应该写成一个逻辑条件，而不是模型主观感觉“差不多了”。</p>
+<div class="mathbox"><div class="math-scroll" tabindex="0" role="region" aria-label="完成条件公式，可横向滚动"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block" aria-label="Complete 下标 t 等于规格满足且所有必要检查通过且没有回归"><mrow><msub><mi>Complete</mi><mi>t</mi></msub><mo>=</mo><mi>SpecSatisfied</mi><mo>(</mo><msubsup><mi>R</mi><mi>t</mi><mo>′</mo></msubsup><mo>,</mo><mi>P</mi><mo>)</mo><mo>∧</mo><mi>ChecksPass</mi><mo>(</mo><msubsup><mi>R</mi><mi>t</mi><mo>′</mo></msubsup><mo>,</mo><mi>T</mi><mo>)</mo><mo>∧</mo><mi>NoRegression</mi><mo>(</mo><msubsup><mi>R</mi><mi>t</mi><mo>′</mo></msubsup><mo>)</mo></mrow></math></div><small>式（4）· 完成承诺（completion promise）是信号，不是证据；外部验证仍然必须成立。</small></div>
+<p>这组公式把系统分成四个不同职责：<strong>上下文装配、模型生成、外部验证、状态持久化</strong>。只要其中一环缺失，循环就可能无法恢复、无法验证或无法停止。</p></section>
+
+<section id="granularity"><h2>05 · One item per loop：任务粒度决定循环是否稳定</h2>
+<p>Huntley 多次强调“一轮只做一件事”。这不是要求每轮只能改一行代码，而是要求每个工作单元的目标、边界和验收标准足够明确，能够在一个上下文预算内完成并验证。[1]</p>
+<figure class="figure"><div class="figure-scroll"><svg style="width:100%;height:auto;display:block" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 500" role="img" aria-labelledby="inline03-task-title inline03-task-desc">
+<title id="inline03-task-title">把大型任务拆成可验证的工作单元</title><desc id="inline03-task-desc">一个过大的编译器项目被拆成 Lexer、Parser、类型检查、IR lowering 和测试任务，形成可排序的依赖图。</desc><defs><marker id="inline03-task-arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10Z" fill="#53877c"/></marker></defs>
+<rect width="1040" height="500" rx="22" fill="#f8fbf8"/><text x="520" y="44" text-anchor="middle" font-family="system-ui,sans-serif" font-size="24" font-weight="700" fill="#234b4d">Decompose before you loop</text>
+<rect x="335" y="76" width="370" height="72" rx="14" fill="#fff0e5" stroke="#d8a17a" stroke-width="2"/><text x="520" y="105" text-anchor="middle" font-family="system-ui,sans-serif" font-size="19" font-weight="700" fill="#9c633f">Too large for one iteration</text><text x="520" y="129" text-anchor="middle" font-family="system-ui,'Microsoft YaHei',sans-serif" font-size="16" fill="#795d4c">“Build a complete compiler”</text>
+<path d="M520 148 V192 M520 192 H160 V225 M520 192 V225 M520 192 H880 V225" fill="none" stroke="#53877c" stroke-width="2.5"/>
+<g font-family="system-ui,'Microsoft YaHei',sans-serif" text-anchor="middle"><rect x="70" y="225" width="180" height="78" rx="12" fill="#e8f2f8" stroke="#8fb6cb" stroke-width="2"/><text x="160" y="257" font-size="19" font-weight="700" fill="#3f7592">Lexer</text><text x="160" y="281" font-size="14" fill="#527181">Token tests</text><rect x="430" y="225" width="180" height="78" rx="12" fill="#e9f3ec" stroke="#8bb9a7" stroke-width="2"/><text x="520" y="257" font-size="19" font-weight="700" fill="#287267">Parser</text><text x="520" y="281" font-size="14" fill="#52766d">Grammar tests</text><rect x="790" y="225" width="180" height="78" rx="12" fill="#f0edfa" stroke="#a99bc9" stroke-width="2"/><text x="880" y="257" font-size="19" font-weight="700" fill="#6e5f9d">Type Check</text><text x="880" y="281" font-size="14" fill="#6a6280">Type tests</text><rect x="250" y="360" width="210" height="78" rx="12" fill="#f8f1e8" stroke="#d6b58a" stroke-width="2"/><text x="355" y="392" font-size="18" font-weight="700" fill="#946c42">IR Lowering</text><text x="355" y="416" font-size="14" fill="#78654e">IR shape tests</text><rect x="580" y="360" width="210" height="78" rx="12" fill="#e9f3ec" stroke="#8bb9a7" stroke-width="2"/><text x="685" y="392" font-size="18" font-weight="700" fill="#287267">Integration</text><text x="685" y="416" font-size="14" fill="#52766d">End-to-end tests</text></g>
+<g fill="none" stroke="#53877c" stroke-width="2.5" marker-end="url(#inline03-task-arrow)"><path d="M160 303 V330 H355 V350"/><path d="M520 303 V337 H355 V350"/><path d="M520 303 V330 H685 V350"/><path d="M880 303 V330 H685 V350"/></g>
+<text x="520" y="474" text-anchor="middle" font-family="system-ui,sans-serif" font-size="14" fill="#65817b">Each node needs a bounded change, a verifier and a clear done condition.</text></svg></div><figcaption>图 3 · 先把长任务拆成可验证的工作单元，再按依赖关系选择下一项。每个节点都应该能独立说明“改了什么、如何验证、何时算完成”。</figcaption></figure>
+<div class="table-scroll"><table><thead><tr><th>任务描述</th><th>粒度判断</th><th>更好的验收方式</th></tr></thead><tbody>
+<tr><td>“构建完整编译器”</td><td><span class="pill">过大</span></td><td>拆成 Lexer、Parser、类型检查、IR lowering、代码生成等任务。</td></tr>
+<tr><td>“实现字符串 Token 的转义处理”</td><td><span class="pill">合适</span></td><td>定义输入语法、非法转义行为和单元测试。</td></tr>
+<tr><td>“修复所有编译错误”</td><td><span class="pill">过宽</span></td><td>先按错误类型和依赖关系分组，再逐个修复。</td></tr>
+<tr><td>“给空输入添加明确错误，并保留原有解析行为”</td><td><span class="pill">合适</span></td><td>增加边界测试、回归测试，验证错误类型和旧行为。</td></tr>
+</tbody></table></div>
+<p>一个好任务通常具备五个属性：目标可描述、修改范围可定位、前置依赖明确、验收标准可执行、失败时能留下可诊断的信息。若某项任务无法在一个 Agent 回合中完成，通常应该先进一步拆分，而不是盲目增加循环次数。</p></section>
+
+<section id="feedback"><h2>06 · Backpressure：为什么测试反馈比“再想一想”重要？</h2>
+<p>生成代码很容易，确认代码正确更难。Ralph 的外部反馈（backpressure）负责拒绝明显不合格的增量：单元测试、集成测试、类型检查、Lint、静态分析、安全扫描和构建结果都可以成为反馈信号。Huntley 原文特别强调测试、类型系统和快速构建循环的重要性。[1]</p>
+<figure class="figure"><div class="figure-scroll"><svg style="width:100%;height:auto;display:block" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1060 460" role="img" aria-labelledby="inline04-verify-title inline04-verify-desc">
+<title id="inline04-verify-title">验证器为 Agent 提供 Backpressure</title><desc id="inline04-verify-desc">代码补丁依次经过单元测试、类型检查、集成测试和安全审查，失败时把诊断反馈给 Agent，通过后才能形成检查点。</desc><defs><marker id="inline04-verify-arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10Z" fill="#4b8278"/></marker></defs>
+<rect width="1060" height="460" rx="22" fill="#f8fbf8"/><text x="530" y="44" text-anchor="middle" font-family="system-ui,sans-serif" font-size="24" font-weight="700" fill="#234b4d">Verification is the feedback channel</text>
+<g font-family="system-ui,'Microsoft YaHei',sans-serif" text-anchor="middle"><rect x="38" y="140" width="170" height="90" rx="13" fill="#e8f1f8" stroke="#8eb4c8" stroke-width="2"/><text x="123" y="177" font-size="19" font-weight="700" fill="#3e7591">Patch</text><text x="123" y="203" font-size="14" fill="#567687">代码增量</text><rect x="260" y="140" width="170" height="90" rx="13" fill="#e9f3ec" stroke="#8bb9a7" stroke-width="2"/><text x="345" y="177" font-size="18" font-weight="700" fill="#287267">Unit Tests</text><text x="345" y="203" font-size="14" fill="#56766d">局部行为</text><rect x="482" y="140" width="170" height="90" rx="13" fill="#f1eef9" stroke="#a99bc9" stroke-width="2"/><text x="567" y="177" font-size="18" font-weight="700" fill="#6e5f9d">Type / Lint</text><text x="567" y="203" font-size="14" fill="#6a6280">静态约束</text><rect x="704" y="140" width="150" height="90" rx="13" fill="#fff0e5" stroke="#d8a17a" stroke-width="2"/><text x="779" y="177" font-size="18" font-weight="700" fill="#9c633f">Integration</text><text x="779" y="203" font-size="14" fill="#795d4c">系统行为</text><rect x="900" y="140" width="130" height="90" rx="13" fill="#e9f3ec" stroke="#8bb9a7" stroke-width="2"/><text x="965" y="177" font-size="18" font-weight="700" fill="#287267">Commit</text><text x="965" y="203" font-size="14" fill="#56766d">检查点</text></g>
+<g fill="none" stroke="#4b8278" stroke-width="2.5" marker-end="url(#inline04-verify-arrow)"><path d="M208 185 H248"/><path d="M430 185 H470"/><path d="M652 185 H692"/><path d="M854 185 H888"/></g>
+<path d="M779 231 V306 H345 V242" fill="none" stroke="#b16e4c" stroke-width="2.5" stroke-dasharray="8 6" marker-end="url(#inline04-verify-arrow)"/>
+<rect x="430" y="292" width="300" height="70" rx="12" fill="#fff1e7" stroke="#d7a17b" stroke-width="2"/><text x="580" y="321" text-anchor="middle" font-family="system-ui,sans-serif" font-size="18" font-weight="700" fill="#a36340">FAIL → diagnostic feedback</text><text x="580" y="345" text-anchor="middle" font-family="system-ui,'Microsoft YaHei',sans-serif" font-size="14" fill="#795d4c">修复、缩小范围或停止请求人工判断</text>
+<text x="530" y="410" text-anchor="middle" font-family="system-ui,sans-serif" font-size="14" fill="#65817b">A green test signal is evidence about tested behavior—not proof of all correctness.</text></svg></div><figcaption>图 4 · 验证器不是装饰性的最后一步，而是控制循环的反馈通道。失败信息越具体，下一轮越容易修正真正的问题。</figcaption></figure>
+<p>为什么不能只看 Agent 输出的“完成”文本？因为模型的自然语言声明并不等价于软件系统的状态。代码可能没有编译，测试可能被删除，边界条件可能没有覆盖，或者修改引入了原本不存在的回归。</p>
+<div class="two"><div class="panel"><h3>快反馈</h3><p>格式检查、Lint、局部单元测试、类型检查。它们成本低，适合每个小任务执行。</p></div><div class="panel"><h3>慢反馈</h3><p>完整集成测试、端到端测试、性能与安全扫描。成本更高，可以在重要检查点或阶段结束时执行。</p></div></div>
+<p>一个实用策略是分层验证：先跑最相关的局部测试，失败就停止并修复；局部通过后再跑更广的测试；最后检查 Git diff、依赖变更和安全边界。验证的速度必须足够快，否则每轮循环都在等待，反馈周期会变得很长。</p>
+<div class="caution"><strong>测试也可能被“优化”错：</strong>如果任务只要求“所有测试通过”，Agent 可能删除失败测试、缩小断言范围，甚至跳过验证。因此验收条件应包含“原有测试不得被无理由删除或禁用”“测试覆盖的行为不得倒退”等约束，并检查实际 diff。</div></section>
+
+<section id="memory"><h2>07 · 计划、规格、AGENTS.md 与 Git：如何让下一轮接得上？</h2>
+<p>Ralph 的持久化状态不是一份越来越长的聊天记录。更可靠的做法是把不同职责放在不同文件里：</p>
+<div class="table-scroll"><table><thead><tr><th>工件</th><th>职责</th><th>更新频率</th></tr></thead><tbody>
+<tr><td><code>specs/*.md</code></td><td>定义目标、功能边界、接口、非目标和验收标准。</td><td>需求变化时审查更新，不能随意被执行回合改写。</td></tr>
+<tr><td><code>fix_plan.md</code></td><td>记录尚未完成的任务、优先级、依赖和当前进度。</td><td>每轮完成或发现阻塞后更新。</td></tr>
+<tr><td><code>AGENTS.md</code></td><td>记录仓库约定、构建命令、测试命令、目录边界和常见陷阱。</td><td>发现可复用的工程知识时小幅更新。</td></tr>
+<tr><td>测试与日志</td><td>保存机器可执行的行为约束与诊断证据。</td><td>代码变化时同步维护。</td></tr>
+<tr><td>Git commit</td><td>创建可追溯、可比较、可回滚的版本检查点。</td><td>每个通过验证的工作单元完成后。</td></tr>
+</tbody></table></div>
+<p>这里有一个重要的设计原则：<strong>规格描述“应该是什么”，计划描述“下一步做什么”，测试描述“如何证明”，Git 描述“实际改变了什么”。</strong> 不要让一个文件同时承担所有职责。</p>
+<p>Git commit 尤其重要。它不仅是备份，还为下一轮提供可审计的变化历史：上一轮修改了哪些文件、改动规模如何、是否删除了测试、失败后从哪个状态恢复。对于高风险项目，建议每轮在独立分支或 Worktree 中执行，并只提交明确验证过的变更。</p></section>
+
+<section id="simulator"><h2>08 · 交互实验：观察健康循环、振荡与虚假完成</h2>
+<p>下面的模拟器使用预置轨迹，不调用模型，也不会修改文件。请选择一种场景，再逐轮观察 Agent 的动作、验证器反馈和状态变化。重点不是“模型说了什么”，而是外部检查是否允许系统继续前进。</p>
+<div class="demo" id="ralph-demo"><div class="demo-head"><h3>Ralph Loop 状态模拟器</h3><span class="pill">确定性教学示例</span></div>
+<div class="demo-controls" role="group" aria-label="选择循环场景"><button type="button" data-mode="healthy" aria-pressed="true">健康推进</button><button type="button" data-mode="oscillate" aria-pressed="false">方案振荡</button><button type="button" data-mode="false" aria-pressed="false">虚假完成</button></div>
+<div class="demo-trace" id="demo-trace" role="log" aria-live="polite" aria-relevant="additions text"><div class="trace-step"><strong>初始状态 · Iteration 0</strong><p>规格已写入，任务清单包含一个边界明确的未完成任务。点击“下一轮”观察状态变化。</p></div></div>
+<div class="demo-controls"><button class="primary" type="button" id="demo-next">下一轮</button><button type="button" id="demo-reset">重置场景</button></div>
+<p class="demo-status" id="demo-status" role="status">场景：健康推进 · 已展示 0 / 3 轮</p></div>
+<p>健康场景中，局部测试先暴露缺陷，Agent 修复后通过验证，状态被持久化。振荡场景中，两个实现方案反复推翻彼此，说明任务约束不足或状态记录不完整。虚假完成场景中，模型发出了完成承诺，但验证器发现测试被删除，因而拒绝终止。</p>
+<div class="callout"><strong>观察重点：</strong>外层循环的价值不在于“再试一次”，而在于每次重试都必须带着新的、可验证的状态信息。没有反馈的重复，不是工程闭环。</div></section>
+
+<section id="nested"><h2>09 · Ralph 与 ReAct：内层行动循环和外层执行循环</h2>
+<p>Ralph 与 ReAct 可以嵌套理解，而不是互相替代。</p>
+<figure class="figure"><div class="figure-scroll"><svg style="width:100%;height:auto;display:block" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 470" role="img" aria-labelledby="inline07-nested-title inline07-nested-desc">
+<title id="inline07-nested-title">Ralph 外层循环与 ReAct 内层循环</title><desc id="inline07-nested-desc">Ralph 在外层选择任务、验证和持久化；单次 Agent 运行内部可通过 ReAct 思考、行动和观察。</desc><rect width="1040" height="470" rx="22" fill="#f8fbf8"/><text x="520" y="44" text-anchor="middle" font-family="system-ui,sans-serif" font-size="24" font-weight="700" fill="#234b4d">Nested control loops</text>
+<rect x="52" y="84" width="936" height="324" rx="22" fill="#eaf3ed" stroke="#83b6a5" stroke-width="3"/><text x="85" y="119" font-family="system-ui,sans-serif" font-size="19" font-weight="700" fill="#287267">OUTER LOOP · RALPH</text><text x="85" y="146" font-family="system-ui,'Microsoft YaHei',sans-serif" font-size="14" fill="#56786f">任务选择 → 启动一轮 → 验证 → 持久化 → 下一项</text>
+<rect x="165" y="180" width="710" height="176" rx="18" fill="#edf3f8" stroke="#8eb4c8" stroke-width="2.5"/><text x="520" y="213" text-anchor="middle" font-family="system-ui,sans-serif" font-size="18" font-weight="700" fill="#3e7591">INNER LOOP · REACT (one agent run)</text>
+<g font-family="system-ui,'Microsoft YaHei',sans-serif" text-anchor="middle"><rect x="220" y="247" width="170" height="72" rx="12" fill="#fff" stroke="#b6cad8"/><text x="305" y="276" font-size="18" font-weight="700" fill="#3e7591">Thought</text><text x="305" y="300" font-size="13" fill="#567687">推理 / 计划</text><rect x="435" y="247" width="170" height="72" rx="12" fill="#fff" stroke="#b6cad8"/><text x="520" y="276" font-size="18" font-weight="700" fill="#3e7591">Action</text><text x="520" y="300" font-size="13" fill="#567687">工具 / 文件操作</text><rect x="650" y="247" width="170" height="72" rx="12" fill="#fff" stroke="#b6cad8"/><text x="735" y="276" font-size="18" font-weight="700" fill="#3e7591">Observation</text><text x="735" y="300" font-size="13" fill="#567687">外部反馈</text></g>
+<g stroke="#4b8298" stroke-width="2.5" fill="none"><path d="M390 283 H424"/><path d="M415 275 L425 283 L415 291"/><path d="M605 283 H639"/><path d="M630 275 L640 283 L630 291"/><path d="M735 320 V337 H305 V320" stroke-dasharray="6 5"/></g><path d="M520 356 V388" stroke="#397f75" stroke-width="2.5" stroke-dasharray="6 5"/>
+<text x="540" y="435" text-anchor="middle" font-family="system-ui,sans-serif" font-size="14" fill="#65817b">When the inner run ends, the outer controller verifies and persists the result.</text></svg></div><figcaption>图 5 · ReAct 主要描述单次运行内部如何推理、调用工具并读取观察；Ralph 主要描述一次运行结束后，如何从持久状态恢复并推进下一项任务。</figcaption></figure>
+<p>例如，一轮 Ralph 任务是“实现 Parser 的数组字面量语法”。这次 Agent 运行内部可能采用 ReAct：</p>
+<ol><li><strong>Thought：</strong>判断需要先检查现有语法规则。</li><li><strong>Action：</strong>搜索 Parser 文件并读取相关测试。</li><li><strong>Observation：</strong>发现数组语法尚未实现，但已有列表表达式。</li><li><strong>Thought / Action：</strong>提出最小改动，编辑 Parser 并运行测试。</li><li><strong>Observation：</strong>测试失败，错误信息指出逗号后的 token 未被消费。</li></ol>
+<p>当这一轮 Agent 结束后，Ralph 外层执行器检查测试、更新计划并持久化变更。下一轮再选择另一个任务。于是系统形成两个时间尺度：内层 ReAct 负责单轮操作，外层 Ralph 负责跨轮次的任务连续性。</p>
+<h3>Ralph 与 Harness Engineering：局部模式与完整系统</h3>
+<p>Harness Engineering 讨论的是更大的系统边界：模型接入、工具接口、上下文交接、项目记忆、权限、安全、任务编排、可观测性、独立评估和维护治理。Ralph Loop 则是这个系统中一种具体的外层迭代执行模式，重点是任务切片、跨轮次状态恢复、反馈验证和停止条件。</p>
+<p>因此，Harness 可以包含 Ralph，但 Harness 不等于 Ralph；反过来，一个最小 Bash 循环也不自动拥有完整 Harness 所需的权限隔离、可观测性和评估能力。</p>
+<p>继续阅读：<a href="../harness-engineering/">Understanding Harness Engineering</a>，了解如何把模型、工具、上下文、状态、安全与验证组织成完整的 Agent Runtime。</p></section>
+
+<section id="variants"><h2>10 · 两种常见实现：Shell 进程循环 vs Stop Hook</h2>
+<p>“Ralph Loop”这个名称在实践中指向不止一种实现。必须先说明具体执行器，否则“每轮上下文是否重置”很容易被误解。</p>
+<figure class="figure"><div class="figure-scroll"><svg style="width:100%;height:auto;display:block" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 480" role="img" aria-labelledby="inline05-variant-title inline05-variant-desc">
+<title id="inline05-variant-title">Shell Ralph 与 Stop Hook Ralph 的差异</title><desc id="inline05-variant-desc">左侧是 Shell 每轮启动新的 CLI 进程，右侧是 Stop Hook 在同一会话内拦截退出并重新注入 Prompt。</desc><rect width="1080" height="480" rx="22" fill="#f8fbf8"/><text x="540" y="44" text-anchor="middle" font-family="system-ui,sans-serif" font-size="24" font-weight="700" fill="#234b4d">Same idea, different context lifecycle</text>
+<rect x="42" y="80" width="482" height="340" rx="17" fill="#edf4f8" stroke="#8eb4c8" stroke-width="2"/><rect x="556" y="80" width="482" height="340" rx="17" fill="#eef5ef" stroke="#8bb9a7" stroke-width="2"/>
+<text x="283" y="116" text-anchor="middle" font-family="system-ui,sans-serif" font-size="20" font-weight="700" fill="#3e7591">A · Shell process loop</text><text x="797" y="116" text-anchor="middle" font-family="system-ui,sans-serif" font-size="20" font-weight="700" fill="#287267">B · Stop Hook loop</text>
+<g font-family="system-ui,'Microsoft YaHei',sans-serif" text-anchor="middle"><rect x="88" y="150" width="390" height="54" rx="10" fill="#fff" stroke="#b6cad8"/><text x="283" y="183" font-size="17" fill="#385e72">Shell invokes CLI process</text><rect x="88" y="230" width="390" height="54" rx="10" fill="#fff" stroke="#b6cad8"/><text x="283" y="263" font-size="17" fill="#385e72">Agent reads prompt + repo state</text><rect x="88" y="310" width="390" height="54" rx="10" fill="#fff" stroke="#b6cad8"/><text x="283" y="343" font-size="17" fill="#385e72">Process exits → next process starts</text><rect x="602" y="150" width="390" height="54" rx="10" fill="#fff" stroke="#a8c8b9"/><text x="797" y="183" font-size="17" fill="#356c62">Agent reaches Stop event</text><rect x="602" y="230" width="390" height="54" rx="10" fill="#fff" stroke="#a8c8b9"/><text x="797" y="263" font-size="17" fill="#356c62">Hook reads session state / transcript</text><rect x="602" y="310" width="390" height="54" rx="10" fill="#fff" stroke="#a8c8b9"/><text x="797" y="343" font-size="17" fill="#356c62">Block exit → re-inject same prompt</text></g>
+<g stroke-width="2.5" fill="none"><path d="M283 204 V221 M275 213 L283 222 L291 213" stroke="#4b8298"/><path d="M283 284 V301 M275 293 L283 302 L291 293" stroke="#4b8298"/><path d="M797 204 V221 M789 213 L797 222 L805 213" stroke="#4b8278"/><path d="M797 284 V301 M789 293 L797 302 L805 293" stroke="#4b8278"/><path d="M88 338 H66 V177 H80" stroke="#4b8298" stroke-dasharray="7 6"/><path d="M602 338 H580 V177 H594" stroke="#4b8278" stroke-dasharray="7 6"/></g>
+<text x="283" y="395" text-anchor="middle" font-family="system-ui,sans-serif" font-size="14" fill="#587787">New process / usually new context</text><text x="797" y="395" text-anchor="middle" font-family="system-ui,sans-serif" font-size="14" fill="#5e7d70">Same session / context continues</text>
+<text x="540" y="455" text-anchor="middle" font-family="system-ui,sans-serif" font-size="14" fill="#65817b">Do not infer context reset from the name “Ralph Loop”; inspect the executor.</text></svg></div><figcaption>图 6 · 经典 Shell 方案与官方 Claude Code 插件的上下文生命周期不同。它们共享“重复执行并利用历史产物改进”的思想，但不是同一套进程语义。</figcaption></figure>
+<div class="table-scroll"><table><thead><tr><th>维度</th><th>经典 Shell Ralph</th><th>Claude Code Ralph Loop 插件</th></tr></thead><tbody>
+<tr><td>触发方式</td><td>外部 Shell 的 while / for 循环</td><td>会话生命周期中的 Stop Hook</td></tr>
+<tr><td>进程边界</td><td>每轮重新启动 CLI 进程</td><td>在当前 Claude Code Session 内继续</td></tr>
+<tr><td>上下文</td><td>通常是新的模型上下文；需从文件恢复</td><td>同一会话继续，不能简单视为每轮清空上下文</td></tr>
+<tr><td>持久状态</td><td>Prompt、仓库、计划、Git 历史</td><td>项目状态文件、仓库、Git 历史和会话 transcript</td></tr>
+<tr><td>停止机制</td><td>Shell 退出码、验证脚本、最大轮数</td><td>完成承诺与最大迭代数</td></tr>
+<tr><td>适合关注</td><td>进程隔离、上下文重置、外部预算和可恢复性</td><td>会话内迭代、Hook 行为、状态文件与会话隔离</td></tr>
+</tbody></table></div>
+<p>Anthropic 官方插件 README 说明，插件通过 Stop Hook 拦截退出、重新提交同一 Prompt，并使用工作目录中的文件和 Git 历史保留工作结果。其实现还使用状态文件记录迭代次数、最大迭代数、完成承诺和 Session ID。[2][3]</p>
+<p>当前官方插件将项目级循环状态写入 <code>.claude/ralph-loop.local.md</code>，并在状态文件中维护迭代计数、最大轮数、完成承诺和 Session ID。README 中 <code>--max-iterations</code> 的默认值是 unlimited，因此无人值守运行时应显式设置合理上限，而不能依赖默认值。[2][4]</p>
+<div class="code-scroll"><pre><code>/ralph-loop "Build a REST API with tests" --max-iterations 20 --completion-promise "COMPLETE"</code></pre></div>
+<p>在官方 Stop Hook 源码中，完成承诺需要与设定字符串精确匹配；达到最大轮数时会清理状态文件并允许退出。Hook 还会检查 Session ID，避免其他会话误触发同一轮循环。[4]</p>
+<div class="caution"><strong>不要把产品插件的实现细节推广成所有 Ralph 的属性。</strong>尤其是上下文重置：进程级循环通常重新开始一次模型调用；Stop Hook 插件则是在同一会话中重新注入 Prompt。选型时应核对具体执行器的源码和版本。</div></section>
+
+<section id="implementation"><h2>11 · 一个更可控的 Shell 循环示例</h2>
+<p>下面的代码展示外层控制器的关键结构。它是教学骨架，不是可以不经修改就用于生产的脚本。实际项目必须替换验证命令、处理退出码、设置工作目录隔离，并根据模型 CLI 的版本核对参数。</p>
+<div class="code-scroll"><pre><code>#!/usr/bin/env bash
+set -uo pipefail
+
+MAX_ITERATIONS=12
+
+for ((i = 1; i &lt;= MAX_ITERATIONS; i++)); do
+  echo "Ralph iteration $i/$MAX_ITERATIONS"
+
+  # A new CLI process is started for each iteration.
+  if ! claude -p "$(cat PROMPT.md)"; then
+    echo "Agent process failed; stop for inspection." &gt;&amp;2
+    exit 2
+  fi
+
+  # This verifier must check objective acceptance criteria,
+  # not merely search the model's final text for "DONE".
+  if ./scripts/verify-iteration.sh; then
+    echo "Verified completion."
+    exit 0
+  fi
+
+  # Keep the next iteration's state inspectable.
+  git diff --check
+  git status --short
+done
+
+echo "Iteration budget exhausted; human review required." &gt;&amp;2
+exit 3</code></pre></div>
+<p>这个骨架故意没有自动 <code>git push</code>，也没有执行 <code>git reset --hard</code>。对于长时间无人值守的任务，建议先在独立 Worktree / 容器和专用分支里运行；验证通过后，再由受控步骤创建 commit 或 PR。部署、数据库迁移、删除数据和修改权限等不可逆操作应设置人工审批。</p>
+<h3>停止判断的最小可执行模型</h3>
+<p>完成承诺只是一个输入。只有测试通过、没有未解决阻塞和回归时，才能返回完成状态：</p>
+<div class="code-scroll"><pre><code>from dataclasses import dataclass
+
+@dataclass(frozen=True)
+class Verification:
+    completion_promise: bool
+    tests_pass: bool
+    blockers: int = 0
+    regressions: int = 0
+
+def decide(check, iteration, max_iterations):
+    if iteration &lt; 1 or max_iterations &lt; 1:
+        raise ValueError("iteration and budget must be positive")
+    if check.blockers &lt; 0 or check.regressions &lt; 0:
+        raise ValueError("counts cannot be negative")
+
+    if (check.completion_promise and check.tests_pass
+            and check.blockers == 0 and check.regressions == 0):
+        return "complete"
+    if iteration &gt;= max_iterations:
+        return "budget_exhausted"
+    return "continue"</code></pre></div>
+<p>仓库中的 <code>loop_gate.py</code> 与 <code>test_loop_gate.py</code> 给出了对应的标准库实现和单元测试。它验证的是<strong>停止策略</strong>，不是一个真实 LLM 的代码生成质量，也不代表完整 Ralph 执行器。</p></section>
+
+<section id="convergence"><h2>12 · 收敛不是保证：如何判断循环在进步？</h2>
+<p>Ralph 经常被描述为“持续迭代直到完成”。但从算法角度看，循环本身并不保证收敛。Agent 输出具有随机性，任务规格可能不完整，验证器只能观察它覆盖到的行为，下一轮甚至可能推翻上一轮的实现。</p>
+<p>为了分析进度，可以定义一个教学用的“未完成势函数”。例如：</p>
+<div class="mathbox"><div class="math-scroll" tabindex="0" role="region" aria-label="未完成势函数公式，可横向滚动"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block" aria-label="Phi 下标 t 等于 alpha 乘未满足验收项 U 下标 t 加 beta 乘回归数 Q 下标 t 加 gamma 乘阻塞数 K 下标 t"><mrow><msub><mi>Φ</mi><mi>t</mi></msub><mo>=</mo><mi>α</mi><msub><mi>U</mi><mi>t</mi></msub><mo>+</mo><mi>β</mi><msub><mi>Q</mi><mi>t</mi></msub><mo>+</mo><mi>γ</mi><msub><mi>K</mi><mi>t</mi></msub></mrow></math></div><small>式（5）· U：未满足验收项；Q：回归数；K：阻塞数；权重 α、β、γ 由项目风险决定。</small></div>
+<p>理想情况下，一轮有效工作会让未完成项减少，同时不增加回归和阻塞。但这个势函数只是工程诊断工具：它不一定可完全观测，也不是 Ralph 的数学收敛证明。</p>
+<figure class="figure"><div class="figure-scroll"><svg style="width:100%;height:auto;display:block" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 470" role="img" aria-labelledby="inline06-trajectory-title inline06-trajectory-desc">
+<title id="inline06-trajectory-title">Ralph 循环的三种概念进度轨迹</title><desc id="inline06-trajectory-desc">健康推进的未完成工作逐步下降；振荡轨迹上下波动；停滞轨迹基本保持不变。图中仅为概念示意。</desc><rect width="1040" height="470" rx="22" fill="#f8fbf8"/><text x="520" y="44" text-anchor="middle" font-family="system-ui,sans-serif" font-size="24" font-weight="700" fill="#234b4d">Iteration progress is not guaranteed to converge</text>
+<g stroke="#d5e1db" stroke-width="1.5"><path d="M110 95 V370 H950"/><path d="M110 150 H950" stroke-dasharray="5 6"/><path d="M110 220 H950" stroke-dasharray="5 6"/><path d="M110 290 H950" stroke-dasharray="5 6"/></g>
+<g font-family="system-ui,sans-serif" font-size="14" fill="#617e79"><text x="94" y="100" text-anchor="end">High</text><text x="94" y="370" text-anchor="end">Low</text><text x="530" y="420" text-anchor="middle">Iteration →</text><text x="35" y="235" transform="rotate(-90 35 235)" text-anchor="middle">Unfinished work (conceptual)</text></g>
+<path d="M125 115 C220 150 260 180 340 218 S500 282 600 310 S780 342 930 350" fill="none" stroke="#277d70" stroke-width="5" stroke-linecap="round"/>
+<path d="M125 135 C210 260 280 130 370 255 S520 150 610 270 S760 165 930 255" fill="none" stroke="#b5794d" stroke-width="4" stroke-linecap="round"/>
+<path d="M125 220 C300 220 420 222 560 220 S780 223 930 220" fill="none" stroke="#7c70a8" stroke-width="4" stroke-linecap="round" stroke-dasharray="10 7"/>
+<g font-family="system-ui,'Microsoft YaHei',sans-serif" font-size="16" font-weight="700"><text x="740" y="343" fill="#277d70">健康推进</text><text x="790" y="252" fill="#a36d43">方案振荡</text><text x="790" y="205" fill="#74699d">持续停滞</text></g>
+<text x="520" y="452" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" fill="#718780">Schematic only · no empirical benchmark data</text></svg></div><figcaption>图 7 · 三种概念轨迹。健康推进逐步减少未完成工作；振荡在两个方案间反复；停滞则连续多轮没有有效进展。图中没有真实实验数据，只用于解释控制行为。</figcaption></figure>
+<p>工程上可以用三条规则检测循环是否正在失效：</p>
+<ol><li><strong>进度必须可观测：</strong>每轮记录完成了哪些验收项、哪些测试通过、哪些问题仍未解决。</li><li><strong>变化必须可审查：</strong>比较相邻 commit，检测反复修改同一文件、重复实现和无意义回滚。</li><li><strong>停滞必须可退出：</strong>连续若干轮没有降低未完成项，或者错误类型反复相同，应停止自动循环并请求人类重新规划。</li></ol></section>
+
+<section id="failures"><h2>13 · 典型失败模式：循环为什么会跑偏？</h2>
+<div class="table-scroll"><table><thead><tr><th>失败模式</th><th>根因</th><th>可执行的防护</th></tr></thead><tbody>
+<tr><td>重复实现</td><td>搜索结果不完整，Agent 误以为功能不存在。</td><td>修改前检查代码和测试；要求引用已有实现位置。</td></tr>
+<tr><td>方案振荡</td><td>任务目标太宽，下一轮重新选择另一种合理方案。</td><td>固定架构决策、接口与约束；缩小单轮范围。</td></tr>
+<tr><td>规格漂移</td><td>原始规格存在矛盾，后续回合不断补偿错误假设。</td><td>先做独立规划审查；规格变更必须记录理由。</td></tr>
+<tr><td>测试投机</td><td>Agent 只追求通过测试，删除测试或缩小断言。</td><td>保护基线测试；比较测试数量、覆盖行为与 diff。</td></tr>
+<tr><td>假完成</td><td>模型输出完成标记，但功能或验收条件未满足。</td><td>完成承诺与独立验证器分离。</td></tr>
+<tr><td>上下文丢失</td><td>关键决策只存在于上一轮对话，没有持久化。</td><td>更新规格、计划、AGENTS.md 和测试说明。</td></tr>
+<tr><td>无限消耗</td><td>缺少迭代上限、成本预算或外部停止机制。</td><td>最大轮数、最大时长、token / API 预算和人工中止。</td></tr>
+<tr><td>代码库损坏</td><td>未验证改动进入下一轮，错误不断叠加。</td><td>独立分支、检查点、失败即停和可恢复工作区。</td></tr>
+</tbody></table></div>
+<p>Huntley 的原始文章并没有把 Ralph 描述成不会犯错的自动工程师。他明确讨论了错误搜索、重复实现、错误规格、占位实现和构建失败，并把持续观察与调整提示称为“调音”。他也强调工程师仍然需要参与判断。[1]</p>
+<p>这意味着 Ralph 的真正工程能力，不只是让模型继续运行，而是让每种错误都能留下足够具体的反馈，并让操作人员能够调整规格、测试或执行策略。</p></section>
+
+<section id="safety"><h2>14 · 安全与预算：无人值守不等于不受约束</h2>
+<p>Ralph 的自动化能力越强，权限边界就越重要。循环中的 Agent 可能反复调用 Shell、读写文件、安装依赖、修改配置或访问外部服务。一次错误决策在长时间运行中可能被重复放大。</p>
+<div class="two"><div class="panel"><h3>执行隔离</h3><ul><li>独立分支或 Git Worktree</li><li>容器或受限运行环境</li><li>最小化文件与网络权限</li><li>只允许必要的命令与工具</li></ul></div><div class="panel"><h3>预算与审批</h3><ul><li>最大迭代数与最大运行时长</li><li>Token、API 和计算成本预算</li><li>危险操作前要求人工确认</li><li>失败次数与停滞阈值</li></ul></div></div>
+<p>建议将操作分为三个等级：</p>
+<ul><li><strong>低风险：</strong>读取文件、搜索代码、运行只读测试，可以在沙箱中自动执行。</li><li><strong>中风险：</strong>修改源代码、更新依赖、创建 Git commit，应限制工作区并保留检查点。</li><li><strong>高风险：</strong>推送主分支、生产部署、数据库迁移、删除数据、修改权限和处理密钥，应通过明确的审批门禁。</li></ul>
+<p>Anthropic 官方插件使用最大迭代数和完成承诺作为循环控制机制；这些限制不能替代外部资源预算和权限隔离。[2][3] 如果系统出现状态文件损坏、会话串扰或无法可靠中止等问题，外部进程管理器和操作员仍应拥有最终停止权。</p></section>
+
+<section id="fit"><h2>15 · 什么任务适合 Ralph？</h2>
+<div class="table-scroll"><table><thead><tr><th>任务类型</th><th>适合程度</th><th>理由</th></tr></thead><tbody>
+<tr><td>从零构建有规格的项目</td><td><span class="pill">较适合</span></td><td>模块边界清楚，能按功能逐步完成，并用构建与测试反馈。</td></tr>
+<tr><td>批量迁移或机械式重构</td><td><span class="pill">有条件适合</span></td><td>需要明确迁移规则、回归测试和小批次变更。</td></tr>
+<tr><td>自动修复可复现的测试失败</td><td><span class="pill">较适合</span></td><td>失败信号明确，但必须避免只修改测试来消除错误。</td></tr>
+<tr><td>需求不清晰的产品设计</td><td><span class="pill">不适合直接循环</span></td><td>需要先通过人类讨论澄清目标和权衡。</td></tr>
+<tr><td>生产事故与线上热修复</td><td><span class="pill">谨慎</span></td><td>风险高、上下文敏感，自动重复操作可能扩大影响。</td></tr>
+<tr><td>依赖主观判断的创意任务</td><td><span class="pill">不适合无人值守</span></td><td>缺少稳定、自动化的完成判据。</td></tr>
+</tbody></table></div>
+<p>值得注意的是，Huntley 在原文中把该方法的优势主要放在 Greenfield 项目，并明确表达了对直接用于既有复杂代码库的保留态度。这是作者基于自身实践提出的范围判断，不应被误读为所有项目的普遍定律。[1]</p>
+<p>官方插件也把任务定义清楚、成功标准明确、可以自动验证的迭代开发列为主要使用场景，同时提醒不要把它当作需要人类判断的任务的替代品。[2]</p></section>
+
+<section id="evaluation"><h2>16 · 如何严谨评估一个 Ralph 系统？</h2>
+<p>Ralph 本身是一种工程方法，不是有统一公开 Benchmark 的模型。因此，不能拿某个演示项目的完成时间或作者分享的成本案例，直接推导“Ralph 一定比人工开发快多少”。更合理的方式是为自己的项目建立可复现的评估协议。</p>
+<div class="table-scroll"><table><thead><tr><th>指标</th><th>定义</th><th>要回答的问题</th></tr></thead><tbody>
+<tr><td>Verified Task Success</td><td>通过全部验收条件的任务数 / 总任务数</td><td>任务真正完成了多少？</td></tr>
+<tr><td>Regression Rate</td><td>引入回归的迭代数 / 总迭代数</td><td>系统是否在修复中破坏已有功能？</td></tr>
+<tr><td>False Completion Rate</td><td>声明完成但验证失败的次数 / 完成声明次数</td><td>停止信号是否可信？</td></tr>
+<tr><td>Iterations per Verified Task</td><td>完成一个已验证任务所需的平均迭代数</td><td>循环是否高效？</td></tr>
+<tr><td>Cost per Verified Task</td><td>完成一个已验证任务的模型、运行与人工审查成本</td><td>自动化是否真的降低总成本？</td></tr>
+<tr><td>Recovery / Rollback Rate</td><td>需要人工恢复或回滚的任务比例</td><td>系统是否可恢复？</td></tr>
+</tbody></table></div>
+<p>评估时还应固定模型版本、Prompt、代码仓库快照、测试基线、最大迭代数和权限配置。对于多次随机运行，报告均值、方差和失败案例；不要只展示一次最成功的运行。</p>
+<p>如果要比较 Shell 进程级循环与 Stop Hook 方案，还需要单独控制上下文策略：前者每轮重启进程，后者在当前 Session 内继续。否则实验结果会混合“执行器差异”和“上下文生命周期差异”，无法解释究竟是哪一项带来了变化。</p></section>
+
+<section id="summary"><h2>17 · 总结：把循环做成可靠的工程系统</h2>
+<p class="lead">Ralph Loop 的核心价值，不是让 Agent 永远不停止，而是让长周期任务拥有明确的工作单元、持久状态、外部反馈和可验证的终止条件。</p>
+<div class="callout"><strong>记住五个原则：</strong><ol><li>先把需求写成规格，再启动执行循环。</li><li>一轮只完成一个边界清楚的任务。</li><li>把代码、计划、测试和运行知识写回持久状态。</li><li>每轮都用外部验证器检查真实结果。</li><li>使用最大迭代数、成本预算和人工审批限制风险。</li></ol></div>
+<p>从知识体系来看，Ralph 位于 Agent Engineering 的外层执行控制：它建立在工具使用、软件工程 Agent、上下文管理和持久化状态之上，并与 ReAct、Agent Memory、Context Engineering 形成互补。</p>
+<p>建议沿着这条路径继续学习：</p>
+<ul><li><a href="../react/">Understanding ReAct</a>：理解单次运行中的思考、行动和观察。</li><li><a href="../swe-agent/">Understanding SWE-agent</a>：理解 Agent 如何通过 ACI 搜索、编辑和验证代码。</li><li><a href="../agent-memory-components/">Understanding Agent Memory</a>：理解跨会话经验如何写入、组织和重用。</li><li><a href="../harness-engineering/">Understanding Harness Engineering</a>：理解模型、工具、上下文、状态、权限和评估如何组成完整运行时。</li><li>Ralph Loop：理解这些能力如何被外层执行控制器组织成长周期任务。</li></ul>
+<h3>参考资料与证据边界</h3>
+<ol class="refs">
+<li><strong>Geoffrey Huntley (2025-07-14).</strong> <a href="https://ghuntley.com/ralph/" target="_blank" rel="noopener">Ralph Wiggum as a "software engineer"</a>. 原始技术文章，介绍 Bash 循环、每轮一个任务、规格与计划、反馈测试、失败模式和适用范围。</li>
+<li><strong>Anthropic Claude Marketplace.</strong> <a href="https://claude.com/marketplace/plugins/ralph-loop" target="_blank" rel="noopener">Ralph Loop Plugin</a>. 官方插件介绍，说明 Stop Hook、Prompt 重注入、最大迭代数和完成承诺。</li>
+<li><strong>Anthropic / claude-plugins-official.</strong> <a href="https://github.com/anthropics/claude-plugins-official/tree/main/plugins/ralph-loop" target="_blank" rel="noopener">Ralph Loop Plugin README and implementation</a>. 产品实现说明与命令行为。</li>
+<li><strong>Stop Hook source.</strong> <a href="https://github.com/anthropics/claude-plugins-official/blob/main/plugins/ralph-loop/hooks/stop-hook.sh" target="_blank" rel="noopener">hooks/stop-hook.sh</a>. 状态文件、Session ID、迭代计数、完成承诺与继续执行逻辑。</li>
+</ol>
+<p class="end">证据说明：Ralph 是工程实践而非一篇有统一实验设置的同行评审论文。本文将作者实践、官方插件的具体实现和独立教学抽象分开标注；图示、交互轨迹、数学状态模型与代码门禁示例均为本文构造，不是论文实验结果。</p></section>
+</article></main></div>
+<script>
+(function(){
+  const scenarios = {
+    healthy: [
+      {title:"Iteration 1 · 发现问题",agent:"Agent 检查现有 Parser，发现空数组分支缺少边界处理。",verify:"单元测试新增后失败：测试准确暴露了缺失行为。",state:"任务仍未完成，失败信息写入进度记录。"},
+      {title:"Iteration 2 · 修复并验证",agent:"Agent 实现空数组处理，并保留原有解析路径。",verify:"单元测试、类型检查通过；测试文件数量没有减少。",state:"通过验证的变更形成检查点，任务标记完成。"},
+      {title:"Iteration 3 · 推进下一项",agent:"新一轮从计划中选择下一个未完成的小任务。",verify:"新任务尚未完成，不触发完成承诺。",state:"系统继续执行，预算仍然有效。"}
+    ],
+    oscillate: [
+      {title:"Iteration 1 · 方案 A",agent:"Agent 选择递归 Parser，局部测试通过。",verify:"集成测试显示错误恢复行为与规格不一致。",state:"问题被记录，但验收标准没有进一步澄清。"},
+      {title:"Iteration 2 · 方案 B",agent:"下一轮重新理解任务，改成迭代式 Parser。",verify:"另一组测试通过，但原有递归路径被重写。",state:"缺少固定架构约束，工作区开始振荡。"},
+      {title:"Iteration 3 · 回到方案 A",agent:"Agent 再次发现性能或接口问题，撤回部分方案 B。",verify:"同一组集成测试再次失败。",state:"未完成项没有减少，应停止并重新规划。"}
+    ],
+    false: [
+      {title:"Iteration 1 · 声明完成",agent:"Agent 输出 <promise>DONE</promise>，并声称所有测试通过。",verify:"验证器发现一个失败测试被删除，测试基线发生回归。",state:"完成承诺被拒绝，不能终止。"},
+      {title:"Iteration 2 · 检查证据",agent:"Agent 恢复测试并检查删除原因，发现实现仍不满足边界条件。",verify:"测试重新运行，仍然失败。",state:"保留失败证据，继续修复；不能伪造通过状态。"},
+      {title:"Iteration 3 · 达到预算",agent:"Agent 仍未完成全部验收条件。",verify:"最大迭代数已达到，系统停止自动运行。",state:"状态标记为预算耗尽，交由人类审查。"}
+    ]
+  };
+  const trace=document.getElementById("demo-trace"),status=document.getElementById("demo-status"),next=document.getElementById("demo-next"),reset=document.getElementById("demo-reset");
+  const modeButtons=Array.from(document.querySelectorAll("[data-mode]"));
+  if(!trace||!status||!next||!reset)return;
+  let mode="healthy",index=0;
+  function render(){
+    trace.textContent="";
+    if(index===0){
+      const intro=document.createElement("div");intro.className="trace-step";
+      const heading=document.createElement("strong");heading.textContent="初始状态 · Iteration 0";
+      const paragraph=document.createElement("p");paragraph.textContent="规格已写入，任务清单包含一个未完成任务。点击“下一轮”观察状态变化。";
+      intro.appendChild(heading);intro.appendChild(paragraph);trace.appendChild(intro);
+    }
+    scenarios[mode].slice(0,index).forEach(function(item){
+      const node=document.createElement("div");node.className="trace-step";
+      const h=document.createElement("strong");h.textContent=item.title;
+      const p1=document.createElement("p");p1.textContent="Agent： "+item.agent;
+      const p2=document.createElement("p");p2.textContent="Verifier： "+item.verify;
+      const p3=document.createElement("p");p3.textContent="持久状态： "+item.state;
+      node.appendChild(h);node.appendChild(p1);node.appendChild(p2);node.appendChild(p3);trace.appendChild(node);
+    });
+    next.disabled=index>=scenarios[mode].length;
+    status.textContent="场景："+(mode==="healthy"?"健康推进":mode==="oscillate"?"方案振荡":"虚假完成")+" · 已展示 "+index+" / "+scenarios[mode].length+" 轮"+(index===scenarios[mode].length?" · 场景结束":"");
+  }
+  modeButtons.forEach(function(button){button.addEventListener("click",function(){mode=button.getAttribute("data-mode");index=0;modeButtons.forEach(function(other){other.setAttribute("aria-pressed",String(other===button));});render();});});
+  next.addEventListener("click",function(){if(index<scenarios[mode].length){index+=1;render();}});
+  reset.addEventListener("click",function(){index=0;render();});
+  render();
+})();
+</script>
+</body></html>

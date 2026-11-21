@@ -1,0 +1,660 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light">
+<meta name="description" content="从混合精度 Adam 的显存账本出发，逐步理解 DeepSpeed ZeRO-1/2/3、参数聚合、梯度分片、CPU/NVMe Offload、3D 并行和 ZeRO++ 通信优化。">
+<title>Understanding DeepSpeed — ZeRO 与大模型分布式训练</title>
+<style>
+:root{color-scheme:light;--bg:#f7f8f4;--paper:#fff;--ink:#20383b;--muted:#627875;--line:#dce6df;--teal:#177d73;--teal-soft:#e5f3ee;--amber:#c77d47;--amber-soft:#fff0e3;--violet:#766bb0;--shadow:0 14px 38px rgba(28,65,57,.055)}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.9 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;-webkit-font-smoothing:antialiased}
+a{color:#16766f;text-underline-offset:4px}a:hover{color:#a76136}
+:focus-visible{outline:3px solid #d38a53;outline-offset:3px}
+.skip{position:absolute;left:16px;top:-80px;background:#174a47;color:white;padding:9px 14px;z-index:20}.skip:focus{top:12px}
+.topbar{background:#183d3d;color:#eff7f1}.topbar-inner{max-width:1260px;margin:auto;padding:13px 30px;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.brand{color:white;text-decoration:none;font-weight:850;font-size:19px;letter-spacing:-.05em}.brand span{color:#e6a16c}
+.topbar nav{display:flex;gap:20px;flex-wrap:wrap}.topbar nav a{font-size:13px;color:#d5e8df;text-decoration:none}
+.layout{max-width:1280px;margin:auto;padding:52px 34px 110px;display:grid;grid-template-columns:218px minmax(0,1fr);gap:64px}
+.toc{position:sticky;top:22px;align-self:start;max-height:calc(100vh - 40px);overflow:auto;padding-right:10px}
+.toc strong{display:block;color:#a66f49;font-size:11px;letter-spacing:.16em;margin-bottom:12px}
+.toc a{display:block;padding:7px 9px;border-left:2px solid transparent;text-decoration:none;color:#6b807b;font-size:12px;line-height:1.55}
+.toc a:hover,.toc a:focus{border-color:var(--teal);background:var(--teal-soft);color:#176d65}
+.toc p{border-top:1px solid var(--line);padding-top:13px;margin-top:14px;font-size:11px;line-height:1.7;color:#80918a}
+main{min-width:0;max-width:900px}
+.kicker{font-size:12px;letter-spacing:.17em;font-weight:800;color:#ad754b}
+h1{font-size:clamp(40px,5.3vw,70px);line-height:1.08;letter-spacing:-.06em;margin:17px 0 18px;font-weight:850;overflow-wrap:anywhere}
+h1 em{font-style:normal;color:var(--teal)}
+.deck{font-size:22px;line-height:1.65;color:#58736f;max-width:820px;margin:0 0 21px}
+.meta{display:flex;flex-wrap:wrap;gap:9px 20px;color:#7a8b85;font-size:12px}
+.meta span+span:before{content:"·";margin-right:17px}
+section{margin-top:72px;scroll-margin-top:25px}
+h2{font-size:29px;line-height:1.42;letter-spacing:-.025em;margin:0 0 23px}
+h2 .n{font-size:14px;letter-spacing:0;color:var(--amber);margin-right:10px;vertical-align:middle}
+h3{font-size:21px;line-height:1.45;margin:31px 0 12px}
+p{margin:15px 0}strong{font-weight:780}
+.lead{font-size:20px;line-height:1.82;color:#285f59;font-weight:650}
+.figure{margin:29px 0 32px;padding:15px;background:#fff;border:1px solid var(--line);border-radius:15px;box-shadow:var(--shadow);overflow:hidden}
+.figure img{display:block;width:100%;height:auto;margin:auto}
+.figure svg{display:block;width:100%;height:auto}.responsive-diagram{position:relative;width:100%}.responsive-diagram .diagram-mobile{position:absolute;inset:0;visibility:hidden}
+.figure figcaption{border-top:1px solid #edf1ed;padding:11px 3px 0;margin-top:11px;color:#71827c;font-size:13px;line-height:1.75}
+.fig-no{display:inline-block;color:#ad754b;font-size:11px;font-weight:850;letter-spacing:.1em;margin-right:10px}
+.callout{background:#e9f4ee;border-left:4px solid var(--teal);padding:17px 20px;margin:23px 0;border-radius:0 10px 10px 0;color:#315d57}
+.callout.warn{background:#fff2e6;border-color:#cf8953;color:#77563d}
+.callout p:first-child{margin-top:0}.callout p:last-child{margin-bottom:0}
+.eq-scroll{max-width:100%;overflow-x:auto;overflow-y:hidden;padding:15px 8px 17px;margin:22px 0;background:#edf6f1;border-radius:11px;scrollbar-width:thin}
+.eq-scroll:focus-visible{outline:3px solid #c77d47;outline-offset:2px}
+.eq-scroll math[display="block"]{display:block;width:max-content;min-width:100%;text-align:center;font:normal 22px/1.6 "Cambria Math","STIX Two Math","DejaVu Serif",serif;color:#176e67}
+.math-inline{font-family:"Cambria Math","STIX Two Math","DejaVu Serif",serif;vertical-align:-.08em}
+.eq-note{font-size:12px;color:#73847d;margin:8px 4px 0}
+.table-scroll{overflow-x:auto;margin:20px 0}
+table{width:100%;min-width:650px;border-collapse:collapse;font-size:14px;line-height:1.7}
+th,td{padding:10px 12px;border:1px solid #dce6df;text-align:left;vertical-align:top}
+th{background:#e6f2ed;color:#245d56}
+tr:nth-child(even){background:#fff}
+pre{background:#203d3e;color:#e8f4ed;padding:20px;border-radius:12px;overflow:auto;tab-size:4;font:13px/1.75 ui-monospace,SFMono-Regular,Consolas,monospace;margin:22px 0}
+code{font: .92em ui-monospace,SFMono-Regular,Consolas,monospace}
+p code,li code{background:#e7eee8;color:#426b64;border-radius:4px;padding:2px 5px;overflow-wrap:anywhere}
+ul,ol{padding-left:24px}li{margin:8px 0}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:20px 0}
+.tile{background:#fff;border:1px solid var(--line);border-radius:12px;padding:17px}
+.tile b{display:block;color:#226f67}.tile p{font-size:14px;color:#657a74;margin:6px 0 0;line-height:1.75}
+.widget{background:#fff;border:1px solid var(--line);border-radius:15px;padding:22px;margin:27px 0;box-shadow:var(--shadow)}
+.widget h3{margin:0 0 7px}.widget-intro{font-size:14px;color:#71817a;margin:0}
+.controls{display:flex;gap:12px;flex-wrap:wrap;margin:18px 0}
+.control{display:flex;flex-direction:column;gap:6px;font-size:12px;color:#607770;font-weight:700}
+select{min-width:145px;border:1px solid #c9d9d0;border-radius:8px;background:white;color:#294d49;padding:10px 12px;font:14px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.stage-buttons{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0}
+.stage-buttons button{border:1px solid #bdd6cd;background:white;color:#246b63;border-radius:8px;padding:10px 13px;font:700 13px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;cursor:pointer}
+.stage-buttons button[aria-pressed="true"]{background:#1b766d;color:white;border-color:#1b766d}
+.readout{background:#edf6f1;padding:15px 17px;border-radius:10px;color:#2d625b;min-height:92px;font-size:14px}
+.readout strong{font-size:24px;color:#176f67}
+.bar{height:12px;border-radius:8px;background:#e1e9e3;overflow:hidden;margin:12px 0 7px}
+.bar span{display:block;height:100%;width:1%;background:#c77d47;border-radius:8px;transition:width .2s ease}
+.small{font-size:13px;color:#72847d}
+.ref-list{font-size:14px;color:#5f7770}.ref-list li{margin:11px 0}
+.footer{border-top:1px solid var(--line);padding-top:25px;margin-top:75px;color:#72857d;font-size:13px}
+@media(max-width:1020px){.layout{display:block;padding:35px 25px 85px}.toc{position:static;max-height:none;display:flex;gap:5px;flex-wrap:wrap;border-bottom:1px solid var(--line);padding:0 0 18px;margin-bottom:34px}.toc strong{width:100%;margin-bottom:2px}.toc a{border:1px solid #d8e5dd;border-radius:6px;padding:4px 8px;font-size:11px;background:#f0f6f1}.toc p{display:none}main{max-width:900px;margin:auto}}
+@media(max-width:580px){.responsive-diagram .diagram-desktop{position:absolute;inset:0;visibility:hidden}.responsive-diagram .diagram-mobile{position:relative;visibility:visible}body{font-size:15px;line-height:1.88}.topbar-inner{padding:10px 15px}.topbar nav{gap:12px}.topbar nav a{font-size:12px}.layout{padding:26px 15px 70px}h1{font-size:41px}.deck{font-size:18px}h2{font-size:25px}.lead{font-size:17px}section{margin-top:57px}.figure{padding:7px}.figure figcaption{padding:9px 3px 0}.grid2{grid-template-columns:1fr}.widget{padding:14px}.eq-scroll{padding:11px 4px}.eq-scroll math[display="block"]{font-size:18px}pre{font-size:12px;padding:15px}.controls{gap:9px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation:none!important;transition:none!important}}
+@media print{body{background:#fff;color:#111}.topbar,.toc,.skip,.stage-buttons,.controls{display:none!important}.layout{display:block;padding:0;max-width:none}.figure,.widget,.tile{box-shadow:none;break-inside:avoid}section{margin-top:35px}h2{break-after:avoid}a{color:#174d49}.eq-scroll{overflow:visible}.eq-scroll math[display="block"]{font-size:15px}}
+</style>
+</head>
+<body>
+<a class="skip" href="#article-content">跳转至正文</a>
+<header class="topbar"><div class="topbar-inner">
+<a class="brand" href="../../../">xm<span>.</span>posts</a>
+<nav aria-label="站点导航"><a href="../../../categories/training/">训练与对齐</a><a href="../../../topics/">知识地图</a><a href="../../../archive/">全部文章</a><a href="https://github.com/1998x-stack/xm-posts">GitHub</a></nav>
+</div></header>
+<div class="layout">
+<nav class="toc" aria-label="本文目录">
+<strong>THE SYSTEM ANATOMY OF DEEPSPEED</strong>
+<a href="#question">01 · 显存墙</a><a href="#dp">02 · 普通数据并行</a><a href="#memory">03 · 16 bytes 账本</a><a href="#stages">04 · ZeRO 三阶段</a><a href="#lifecycle">05 · Stage 3 生命周期</a><a href="#communication">06 · 通信代价</a><a href="#residual">07 · 激活与碎片</a><a href="#offload">08 · CPU / NVMe Offload</a><a href="#parallel">09 · 3D 并行</a><a href="#zeropp">10 · ZeRO++</a><a href="#ecosystem">11 · DeepSpeed 生态</a><a href="#inference">12 · 训练与推理边界</a><a href="#practice">13 · 配置与选型</a><a href="#evidence">14 · 论文证据</a><a href="#limits">15 · 局限与总结</a><a href="#references">16 · 参考文献</a>
+<p>主线：显存账本 → 状态分片 → 动态通信 → 异构内存 → 多维并行。</p>
+</nav>
+<main id="article-content">
+<article>
+<header>
+<div class="kicker">DISTRIBUTED TRAINING · LARGE MODEL SYSTEMS</div>
+<h1>Understanding <em>DeepSpeed</em></h1>
+<p class="deck">为什么一张 GPU 装得下模型权重，却装不下训练过程？从 ZeRO 的状态切分出发，理解大模型训练如何把显存、通信、CPU 内存与多 GPU 并行组织成一个系统。</p>
+<div class="meta"><span>核心论文 · ZeRO, SC20 2020</span><span>扩展 · Offload / Infinity / ZeRO++</span><span>阅读约 35 分钟</span></div>
+</header>
+
+<section id="question" aria-labelledby="question-heading">
+<h2 id="question-heading"><span class="n">01 ·</span>一个反直觉的问题：模型只有 15 GB，为什么训练需要 120 GB？</h2>
+<p class="lead">假设一个模型有 7.5 billion（75 亿）个参数。若每个参数用 FP16 存储，权重只占约 15 GB。但使用混合精度 Adam 训练时，仅仅与参数直接相关的状态就可能需要约 120 GB——还没有算激活、临时缓冲和显存碎片。</p>
+<p>这是理解 DeepSpeed 的起点。推理时，我们通常先想到「把权重放进显存」；训练时，GPU 还必须保存反向传播所需的梯度、优化器状态，以及某些实现中的 FP32 主权重。模型的参数规模并不等于训练时的显存规模。</p>
+<figure class="figure">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 300" role="img" aria-labelledby="ds-intro-title ds-intro-desc">
+<title id="ds-intro-title">权重存储与训练状态显存的数量差异</title>
+<desc id="ds-intro-desc">同一个 7.5B 参数模型，FP16 权重约 15GB，而混合精度 Adam 的参数、梯度和优化器状态合计约 120GB，尚未计入激活和缓冲。</desc>
+<rect width="360" height="300" rx="16" fill="#f6f9f5"/>
+<g font-family="system-ui,-apple-system,'PingFang SC','Microsoft YaHei',sans-serif">
+<text x="20" y="35" font-size="18" font-weight="750" fill="#203d3d">7.5B 参数模型</text>
+<text x="20" y="72" font-size="15" fill="#617a73">FP16 权重</text>
+<rect x="20" y="84" width="88" height="25" rx="5" fill="#3b9c8c"/>
+<text x="119" y="103" font-size="16" font-weight="750" fill="#1d7168">15 GB</text>
+<text x="20" y="148" font-size="15" fill="#617a73">混合精度 Adam 状态</text>
+<rect x="20" y="160" width="320" height="32" rx="6" fill="#e5eae4"/>
+<rect x="20" y="160" width="320" height="32" rx="6" fill="#c77d47"/>
+<text x="31" y="182" font-size="16" font-weight="750" fill="#fff">120 GB</text>
+<text x="20" y="224" font-size="13" fill="#6d8178">2 + 2 + 4 + 4 + 4 = 16 bytes / param</text>
+<text x="20" y="253" font-size="12" fill="#a16e46">未包含激活、临时 buffer 与碎片</text>
+<text x="20" y="278" font-size="11" fill="#83928b">条形宽度仅作数量级对比</text>
+</g></svg>
+<figcaption><span class="fig-no">FIG 01</span><strong>参数量不等于训练显存。</strong>7.5B × 2 bytes = 15 GB；7.5B × 16 bytes = 120 GB。这里采用十进制 GB 与论文中的混合精度 Adam 估算。</figcaption>
+</figure>
+<p>DeepSpeed 是一个面向 PyTorch 的深度学习优化库，核心目标不是提出一种新的 Transformer，而是让训练系统更有效地使用计算、内存、通信和 I/O。它最有代表性的技术是 <strong>ZeRO（Zero Redundancy Optimizer）</strong>：把原本在多个数据并行进程中重复保存的模型状态切分开，按需重建。</p>
+<div class="callout"><strong>先建立正确的问题：</strong>DeepSpeed 不是「把模型压缩成更小的网络」。ZeRO 主要改变的是训练状态在不同设备上的存放方式和通信时序，而不是改变模型函数本身。</div>
+</section>
+
+<section id="dp" aria-labelledby="dp-heading">
+<h2 id="dp-heading"><span class="n">02 ·</span>先看基线：普通数据并行为什么会浪费显存？</h2>
+<p>数据并行（Data Parallelism, DP）的想法很直接：把一个 batch 切成几份，每张 GPU 拿到不同样本，但每张 GPU 都保存一份完整模型副本。每个 rank 独立执行前向与反向传播，再通过梯度同步让所有副本更新到一致的参数。</p>
+<ol>
+<li><strong>复制模型：</strong>GPU 0、GPU 1、GPU 2、GPU 3 都有相同的参数、梯度和优化器状态。</li>
+<li><strong>切分数据：</strong>每张 GPU 处理不同 mini-batch，增加并行计算吞吐。</li>
+<li><strong>同步梯度：</strong>通过 All-Reduce 聚合各 rank 的梯度，使每个副本获得一致的更新方向。</li>
+<li><strong>重复更新：</strong>各 rank 使用相同优化器状态更新完整模型副本。</li>
+</ol>
+<p>DP 的计算利用率和编程便利性都很好，但它有一个显存问题：如果有 64 张 GPU，每张 GPU 仍然保存完整的参数、梯度和 Adam 状态。增加 GPU 可以增加算力，却不会自动把每张 GPU 上的模型状态缩小。</p>
+<div class="grid2">
+<div class="tile"><b>DP 擅长什么？</b><p>把样本分给不同设备，保持每张卡执行相同模型图，通常容易集成，计算粒度也较大。</p></div>
+<div class="tile"><b>DP 浪费什么？</b><p>每个 rank 保存相同的参数、梯度和优化器状态。状态副本越多，冗余越明显。</p></div>
+</div>
+<p>因此 DeepSpeed 的关键切入点不是「把 batch 再切小」，而是问：这些状态真的需要在每张 GPU 上都完整保存吗？</p>
+</section>
+
+<section id="memory" aria-labelledby="memory-heading">
+<h2 id="memory-heading"><span class="n">03 ·</span>把显存拆成账本：16 bytes / parameter 从哪里来？</h2>
+<p>以论文分析的混合精度 Adam 为例。前向和反向计算可以使用 FP16 权重与激活；为了稳定地更新参数，优化器还保留 FP32 主权重，以及 Adam 的一阶、二阶动量。</p>
+<figure class="figure"><div class="responsive-diagram"><svg class="diagram-desktop" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 380" role="img" aria-labelledby="memory-title memory-desc">
+<title id="memory-title">混合精度 Adam 训练的每参数 16 字节模型状态</title>
+<desc id="memory-desc">每个参数需要 2 字节 FP16 权重、2 字节 FP16 梯度、4 字节 FP32 主权重、4 字节 Adam 一阶矩和 4 字节 Adam 二阶矩，总计 16 字节。激活和临时缓冲不包含在内。</desc>
+<rect width="900" height="380" rx="22" fill="#f5f8f4"/>
+<g font-family="system-ui,-apple-system,'PingFang SC','Microsoft YaHei',sans-serif">
+<text x="42" y="48" font-size="23" font-weight="750" fill="#203c3e">先看清：训练时保存的不只有模型权重</text>
+<text x="42" y="82" font-size="17" fill="#55716e">混合精度 + Adam 的经典估算：每个参数约 16 bytes</text>
+<text x="42" y="132" font-size="16" font-weight="700" fill="#4b6260">一个参数对应的模型状态（按字节数比例绘制）</text>
+<rect x="42" y="154" width="102" height="82" rx="8" fill="#3b9c8c"/>
+<rect x="144" y="154" width="102" height="82" rx="8" fill="#d18a55"/>
+<rect x="246" y="154" width="204" height="82" rx="8" fill="#6d78b9"/>
+<rect x="450" y="154" width="204" height="82" rx="8" fill="#8b6cb0"/>
+<rect x="654" y="154" width="204" height="82" rx="8" fill="#b46c85"/>
+<g font-size="16" font-weight="750" text-anchor="middle" fill="#fff">
+<text x="93" y="187">权重</text><text x="93" y="211">2 B</text>
+<text x="195" y="187">梯度</text><text x="195" y="211">2 B</text>
+<text x="348" y="187">FP32 主权重</text><text x="348" y="211">4 B</text>
+<text x="552" y="187">Adam 一阶矩 m</text><text x="552" y="211">4 B</text>
+<text x="756" y="187">Adam 二阶矩 v</text><text x="756" y="211">4 B</text>
+</g>
+<text x="42" y="276" font-size="18" font-weight="800" fill="#1d6662">2 + 2 + 4 + 4 + 4 = 16 bytes / parameter</text>
+<path d="M42 296 H858" stroke="#cbd9d2" stroke-width="2"/>
+<text x="42" y="329" font-size="15" fill="#627a75">这只是参数相关状态；激活、通信 bucket、临时 workspace 与显存碎片还会继续占用 GPU。</text>
+<text x="42" y="354" font-size="13" fill="#7b8d86">来源：Rajbhandari et al., ZeRO, §3.1；不同精度与优化器配置会改变字节数。</text>
+</g>
+</svg><svg class="diagram-mobile" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 650" role="img" aria-labelledby="mm-title mm-desc">
+<title id="mm-title">混合精度 Adam 的 16 字节模型状态账本</title><desc id="mm-desc">五段纵向堆叠，分别是 FP16 权重 2 字节、FP16 梯度 2 字节、FP32 主权重 4 字节、Adam 一阶矩 4 字节和二阶矩 4 字节。</desc>
+<rect width="560" height="650" rx="20" fill="#f5f8f4"/><g font-family="system-ui,-apple-system,'PingFang SC','Microsoft YaHei',sans-serif">
+<text x="28" y="48" font-size="25" font-weight="750" fill="#203c3e">每个参数背后的 16 bytes</text><text x="28" y="82" font-size="17" fill="#5c746e">混合精度训练 + Adam（按字节数分配高度）</text>
+<rect x="35" y="112" width="490" height="76" rx="9" fill="#3b9c8c"/><rect x="35" y="190" width="490" height="76" rx="9" fill="#d18a55"/><rect x="35" y="268" width="490" height="118" rx="9" fill="#6d78b9"/><rect x="35" y="388" width="490" height="118" rx="9" fill="#8b6cb0"/><rect x="35" y="508" width="490" height="118" rx="9" fill="#b46c85"/>
+<g font-size="20" font-weight="750" fill="#fff"><text x="58" y="145">FP16 参数权重</text><text x="58" y="173">2 bytes</text><text x="58" y="223">FP16 梯度</text><text x="58" y="251">2 bytes</text><text x="58" y="311">FP32 主权重</text><text x="58" y="343">4 bytes</text><text x="58" y="431">Adam 一阶矩 m</text><text x="58" y="463">4 bytes</text><text x="58" y="551">Adam 二阶矩 v</text><text x="58" y="583">4 bytes</text></g>
+</g></svg></div><figcaption><span class="fig-no">FIG 02</span><strong>16 bytes 的组成。</strong>参数、梯度各 2 bytes；FP32 主权重、一阶矩和二阶矩各 4 bytes。实际配置若使用 BF16、不同优化器或不同状态布局，字节数会变化。</figcaption></figure>
+<p>令 <code>Ψ</code> 表示参数总数。按每个参数的字节数相加：</p>
+<div class="eq-scroll" role="region" aria-label="混合精度 Adam 模型状态显存公式" tabindex="0">
+<math xmlns="http://www.w3.org/1998/Math/MathML" display="block" aria-label="M model state equals 2 Psi plus 2 Psi plus 4 Psi plus 4 Psi plus 4 Psi equals 16 Psi bytes">
+<mrow><msub><mi>M</mi><mtext>state</mtext></msub><mo>=</mo><mn>2</mn><mi>Ψ</mi><mo>+</mo><mn>2</mn><mi>Ψ</mi><mo>+</mo><mn>4</mn><mi>Ψ</mi><mo>+</mo><mn>4</mn><mi>Ψ</mi><mo>+</mo><mn>4</mn><mi>Ψ</mi><mo>=</mo><mn>16</mn><mi>Ψ</mi><mtext> bytes</mtext></mrow>
+</math>
+</div>
+<p>对 7.5B 参数，模型状态估算为 <code>7.5 × 10⁹ × 16 = 120 × 10⁹ bytes</code>，即 120 GB（十进制）。注意，这不是训练峰值显存的完整公式。激活取决于 batch size、序列长度、层数和隐藏维度；临时通信缓冲区、内存碎片和 CUDA workspace 也会继续占用显存。</p>
+<p>ZeRO 的第一层目标是消除<strong>模型状态的跨 rank 冗余</strong>。它并不承诺把训练显存中的每一项都除以 GPU 数量。</p>
+</section>
+
+<section id="stages" aria-labelledby="stages-heading">
+<h2 id="stages-heading"><span class="n">04 ·</span>ZeRO 的核心：从 Stage 1 到 Stage 3，逐步切分三类状态</h2>
+<p>ZeRO 的名字来自 Zero Redundancy Optimizer。这里的「Zero」不是显存归零，而是逐步消除数据并行中重复保存的状态。设数据并行组大小为 <code>N</code>，并先忽略激活与临时缓冲。</p>
+<figure class="figure"><div class="responsive-diagram"><svg class="diagram-desktop" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 520" role="img" aria-labelledby="stages-title stages-desc">
+<title id="stages-title">ZeRO 从 Stage 0 到 Stage 3 的状态切分</title>
+<desc id="stages-desc">四行依次展示普通数据并行、ZeRO Stage 1、Stage 2 和 Stage 3。参数、梯度、优化器状态在各 GPU 上从完整复制逐步变成四分之一分片。</desc>
+<rect width="960" height="520" rx="22" fill="#f5f8f4"/>
+<g font-family="system-ui,-apple-system,'PingFang SC','Microsoft YaHei',sans-serif">
+<text x="34" y="43" font-size="22" font-weight="750" fill="#203c3e">ZeRO 的三步切分：消除跨 GPU 的状态冗余</text>
+<g font-size="13" fill="#506a67"><text x="245" y="83">GPU 0</text><text x="420" y="83">GPU 1</text><text x="595" y="83">GPU 2</text><text x="770" y="83">GPU 3</text></g>
+<g stroke="#d8e2dc" fill="#fff">
+<rect x="220" y="94" width="158" height="83" rx="9"/><rect x="395" y="94" width="158" height="83" rx="9"/><rect x="570" y="94" width="158" height="83" rx="9"/><rect x="745" y="94" width="158" height="83" rx="9"/>
+<rect x="220" y="195" width="158" height="83" rx="9"/><rect x="395" y="195" width="158" height="83" rx="9"/><rect x="570" y="195" width="158" height="83" rx="9"/><rect x="745" y="195" width="158" height="83" rx="9"/>
+<rect x="220" y="296" width="158" height="83" rx="9"/><rect x="395" y="296" width="158" height="83" rx="9"/><rect x="570" y="296" width="158" height="83" rx="9"/><rect x="745" y="296" width="158" height="83" rx="9"/>
+<rect x="220" y="397" width="158" height="83" rx="9"/><rect x="395" y="397" width="158" height="83" rx="9"/><rect x="570" y="397" width="158" height="83" rx="9"/><rect x="745" y="397" width="158" height="83" rx="9"/>
+</g>
+<g font-size="15" font-weight="750" fill="#2b4948"><text x="34" y="125">Stage 0</text><text x="34" y="146" font-size="12" font-weight="500" fill="#71827c">普通 DP</text><text x="34" y="226">Stage 1</text><text x="34" y="247" font-size="12" font-weight="500" fill="#71827c">切分优化器</text><text x="34" y="327">Stage 2</text><text x="34" y="348" font-size="12" font-weight="500" fill="#71827c">再切分梯度</text><text x="34" y="428">Stage 3</text><text x="34" y="449" font-size="12" font-weight="500" fill="#71827c">再切分参数</text></g>
+<g>
+<g fill="#3b9c8c"><rect x="231" y="108" width="136" height="15" rx="4"/><rect x="406" y="108" width="136" height="15" rx="4"/><rect x="581" y="108" width="136" height="15" rx="4"/><rect x="756" y="108" width="136" height="15" rx="4"/></g>
+<g fill="#d18a55"><rect x="231" y="130" width="136" height="15" rx="4"/><rect x="406" y="130" width="136" height="15" rx="4"/><rect x="581" y="130" width="136" height="15" rx="4"/><rect x="756" y="130" width="136" height="15" rx="4"/></g>
+<g fill="#8870b5"><rect x="231" y="152" width="136" height="15" rx="4"/><rect x="406" y="152" width="136" height="15" rx="4"/><rect x="581" y="152" width="136" height="15" rx="4"/><rect x="756" y="152" width="136" height="15" rx="4"/></g>
+<g fill="#3b9c8c"><rect x="231" y="209" width="136" height="15" rx="4"/><rect x="406" y="209" width="136" height="15" rx="4"/><rect x="581" y="209" width="136" height="15" rx="4"/><rect x="756" y="209" width="136" height="15" rx="4"/></g>
+<g fill="#d18a55"><rect x="231" y="231" width="136" height="15" rx="4"/><rect x="406" y="231" width="136" height="15" rx="4"/><rect x="581" y="231" width="136" height="15" rx="4"/><rect x="756" y="231" width="136" height="15" rx="4"/></g>
+<g fill="#8870b5"><rect x="231" y="253" width="34" height="15" rx="4"/><rect x="406" y="253" width="34" height="15" rx="4"/><rect x="581" y="253" width="34" height="15" rx="4"/><rect x="756" y="253" width="34" height="15" rx="4"/></g>
+<g fill="#3b9c8c"><rect x="231" y="310" width="136" height="15" rx="4"/><rect x="406" y="310" width="136" height="15" rx="4"/><rect x="581" y="310" width="136" height="15" rx="4"/><rect x="756" y="310" width="136" height="15" rx="4"/></g>
+<g fill="#d18a55"><rect x="231" y="332" width="34" height="15" rx="4"/><rect x="406" y="332" width="34" height="15" rx="4"/><rect x="581" y="332" width="34" height="15" rx="4"/><rect x="756" y="332" width="34" height="15" rx="4"/></g>
+<g fill="#8870b5"><rect x="231" y="354" width="34" height="15" rx="4"/><rect x="406" y="354" width="34" height="15" rx="4"/><rect x="581" y="354" width="34" height="15" rx="4"/><rect x="756" y="354" width="34" height="15" rx="4"/></g>
+<g fill="#3b9c8c"><rect x="231" y="411" width="34" height="15" rx="4"/><rect x="406" y="411" width="34" height="15" rx="4"/><rect x="581" y="411" width="34" height="15" rx="4"/><rect x="756" y="411" width="34" height="15" rx="4"/></g>
+<g fill="#d18a55"><rect x="231" y="433" width="34" height="15" rx="4"/><rect x="406" y="433" width="34" height="15" rx="4"/><rect x="581" y="433" width="34" height="15" rx="4"/><rect x="756" y="433" width="34" height="15" rx="4"/></g>
+<g fill="#8870b5"><rect x="231" y="455" width="34" height="15" rx="4"/><rect x="406" y="455" width="34" height="15" rx="4"/><rect x="581" y="455" width="34" height="15" rx="4"/><rect x="756" y="455" width="34" height="15" rx="4"/></g>
+</g>
+<g font-size="11" fill="#526b67"><text x="233" y="187">P / G / O：完整副本</text><text x="408" y="187">P / G / O：完整副本</text><text x="583" y="187">P / G / O：完整副本</text><text x="758" y="187">P / G / O：完整副本</text><text x="233" y="288">P、G 完整；O 为 1/4</text><text x="408" y="288">P、G 完整；O 为 1/4</text><text x="583" y="288">P、G 完整；O 为 1/4</text><text x="758" y="288">P、G 完整；O 为 1/4</text><text x="233" y="389">P 完整；G、O 为 1/4</text><text x="408" y="389">P 完整；G、O 为 1/4</text><text x="583" y="389">P 完整；G、O 为 1/4</text><text x="758" y="389">P 完整；G、O 为 1/4</text></g>
+<g font-size="11" fill="#526b67"><text x="233" y="499">P/G/O 均为 1/4 分片</text><text x="408" y="499">P/G/O 均为 1/4 分片</text><text x="583" y="499">P/G/O 均为 1/4 分片</text><text x="758" y="499">P/G/O 均为 1/4 分片</text></g>
+<g font-size="12" font-weight="700"><rect x="42" y="475" width="12" height="12" rx="2" fill="#3b9c8c"/><text x="60" y="486" fill="#49635f">参数 P</text><rect x="112" y="475" width="12" height="12" rx="2" fill="#d18a55"/><text x="130" y="486" fill="#49635f">梯度 G</text><rect x="182" y="475" width="12" height="12" rx="2" fill="#8870b5"/><text x="200" y="486" fill="#49635f">优化器 O</text></g>
+<text x="34" y="510" font-size="10" fill="#82918b">分片宽度为示意，非按真实字节比例绘制；Stage 3 在计算前按需 all-gather 参数。</text>
+</g>
+</svg><svg class="diagram-mobile" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 770" role="img" aria-labelledby="sm-title sm-desc">
+<title id="sm-title">ZeRO 四个阶段的单 GPU 状态分片示意</title><desc id="sm-desc">依次显示普通数据并行、ZeRO Stage 1、Stage 2 和 Stage 3 中一个 rank 持有的参数、梯度与优化器状态份额。</desc>
+<rect width="560" height="770" rx="20" fill="#f5f8f4"/><g font-family="system-ui,-apple-system,'PingFang SC','Microsoft YaHei',sans-serif">
+<text x="26" y="43" font-size="25" font-weight="750" fill="#203c3e">一个 rank 本地保留多少状态？</text><text x="26" y="75" font-size="16" fill="#627a73">满条 = 完整副本；短条 = 1/4 分片（四卡示意）</text>
+<g fill="#fff" stroke="#d7e2db"><rect x="24" y="96" width="512" height="145" rx="12"/><rect x="24" y="258" width="512" height="145" rx="12"/><rect x="24" y="420" width="512" height="145" rx="12"/><rect x="24" y="582" width="512" height="145" rx="12"/></g>
+<g font-size="20" font-weight="800" fill="#294a47"><text x="42" y="126">Stage 0 · 普通 DP</text><text x="42" y="288">Stage 1 · 切优化器状态</text><text x="42" y="450">Stage 2 · 再切梯度</text><text x="42" y="612">Stage 3 · 再切参数</text></g>
+<g font-size="15" font-weight="700" fill="#536d67"><text x="42" y="158">P 参数</text><text x="42" y="194">G 梯度</text><text x="42" y="230">O 优化器</text><text x="42" y="320">P 参数</text><text x="42" y="356">G 梯度</text><text x="42" y="392">O 优化器</text><text x="42" y="482">P 参数</text><text x="42" y="518">G 梯度</text><text x="42" y="554">O 优化器</text><text x="42" y="644">P 参数</text><text x="42" y="680">G 梯度</text><text x="42" y="716">O 优化器</text></g>
+<g fill="#3b9c8c"><rect x="158" y="143" width="350" height="19" rx="5"/><rect x="158" y="305" width="350" height="19" rx="5"/><rect x="158" y="467" width="350" height="19" rx="5"/><rect x="158" y="629" width="88" height="19" rx="5"/></g>
+<g fill="#d18a55"><rect x="158" y="179" width="350" height="19" rx="5"/><rect x="158" y="341" width="350" height="19" rx="5"/><rect x="158" y="503" width="88" height="19" rx="5"/><rect x="158" y="665" width="88" height="19" rx="5"/></g>
+<g fill="#8870b5"><rect x="158" y="215" width="350" height="19" rx="5"/><rect x="158" y="377" width="88" height="19" rx="5"/><rect x="158" y="539" width="88" height="19" rx="5"/><rect x="158" y="701" width="88" height="19" rx="5"/></g>
+</g></svg></div><figcaption><span class="fig-no">FIG 03</span><strong>每个 Stage 新增一种状态分片。</strong>Stage 1 切优化器状态；Stage 2 再切梯度；Stage 3 再切参数。图中用四个 rank 说明切分逻辑，分片长度仅为示意。</figcaption></figure>
+<div class="table-scroll"><table>
+<thead><tr><th>方案</th><th>每个 rank 保留什么</th><th>模型状态显存 / rank</th><th>直觉</th></tr></thead>
+<tbody>
+<tr><td>Stage 0 · 普通 DP</td><td>完整参数、梯度、优化器状态</td><td><code>16Ψ</code></td><td>每张卡都复制所有状态</td></tr>
+<tr><td>Stage 1</td><td>完整参数、完整梯度；优化器状态分片</td><td><code>4Ψ + 12Ψ/N</code></td><td>先切最占空间的 Adam 状态</td></tr>
+<tr><td>Stage 2</td><td>完整参数；梯度与优化器状态分片</td><td><code>2Ψ + 14Ψ/N</code></td><td>梯度也只留自己负责的部分</td></tr>
+<tr><td>Stage 3</td><td>参数、梯度、优化器状态全部分片</td><td><code>16Ψ/N</code></td><td>完整参数只在计算时按需重建</td></tr>
+</tbody></table></div>
+<h3>Stage 1：先切优化器状态（Optimizer State Partitioning）</h3>
+<p>Adam 的 FP32 主权重与一阶、二阶矩合计占 <code>12Ψ</code> bytes。Stage 1 把这些状态切成 N 份，每个 rank 只负责更新自己的那一份。参数和梯度仍然在每张卡上完整保存，因此每卡模型状态显存为：</p>
+<div class="eq-scroll" role="region" aria-label="ZeRO Stage 1 内存公式" tabindex="0"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block" aria-label="M1 equals 4 Psi plus 12 Psi over N"><mrow><msub><mi>M</mi><mn>1</mn></msub><mo>=</mo><mn>4</mn><mi>Ψ</mi><mo>+</mo><mfrac><mrow><mn>12</mn><mi>Ψ</mi></mrow><mi>N</mi></mfrac></mrow></math></div>
+<p>为什么前面仍有 <code>4Ψ</code>？因为每个 rank 仍保存 2Ψ 的 FP16 参数和 2Ψ 的 FP16 梯度。被切分的只是剩余 12Ψ 优化器状态。N 足够大时，<code>12Ψ/N</code> 变小，内存趋近 <code>4Ψ</code>，相对 16Ψ 的基线约减少到四分之一。</p>
+<h3>Stage 2：再切梯度（Gradient Partitioning）</h3>
+<p>每个 rank 只更新自己负责的参数分片，所以它不需要长期保留所有参数的完整梯度。反向传播时，梯度通过 Reduce-Scatter 聚合并分发到对应 owner；某个分片完成归约后，其他 rank 不再保留这部分完整梯度。</p>
+<div class="eq-scroll" role="region" aria-label="ZeRO Stage 2 内存公式" tabindex="0"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block" aria-label="M2 equals 2 Psi plus 14 Psi over N"><mrow><msub><mi>M</mi><mn>2</mn></msub><mo>=</mo><mn>2</mn><mi>Ψ</mi><mo>+</mo><mfrac><mrow><mn>14</mn><mi>Ψ</mi></mrow><mi>N</mi></mfrac></mrow></math></div>
+<p>这时完整参数仍在每张卡上，因此固定部分只剩 <code>2Ψ</code>。当 N 增大时，模型状态显存趋近基线的八分之一。公式对应 <a href="https://arxiv.org/abs/1910.02054">ZeRO 原论文 §5.2</a>。</p>
+<h3>Stage 3：参数也切分（Parameter Partitioning）</h3>
+<p>Stage 3 将参数本身也分片，每张 GPU 只保存自己负责的参数片段。可是在前向和反向计算某一层时，该层通常需要完整权重。因此 DeepSpeed 会在计算前通过 All-Gather 临时收集所需参数，在不再需要时释放或重新分片。</p>
+<div class="eq-scroll" role="region" aria-label="ZeRO Stage 3 内存公式" tabindex="0"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block" aria-label="M3 equals 16 Psi over N"><mrow><msub><mi>M</mi><mn>3</mn></msub><mo>=</mo><mfrac><mrow><mn>16</mn><mi>Ψ</mi></mrow><mi>N</mi></mfrac></mrow></math></div>
+<p>这就是 ZeRO 最重要的思想：<strong>参数在存储时是分片的，在计算时按需聚合。</strong>它用动态通信调度换取更低的常驻显存。对应原论文 <a href="https://arxiv.org/abs/1910.02054">§5.3 参数分片</a>。</p>
+<div class="callout"><strong>不要误读 Stage 3 公式：</strong><code>16Ψ/N</code> 是模型状态的理想化分摊，不是任意时刻 GPU 峰值显存的保证。前向时临时聚合的参数、激活、通信 bucket、预取缓冲等都会让实际峰值高于该值。</div>
+</section>
+
+<section id="lifecycle" aria-labelledby="lifecycle-heading">
+<h2 id="lifecycle-heading"><span class="n">05 ·</span>Stage 3 的动态生命周期：参数什么时候被拼回来？</h2>
+<p>可以把 ZeRO-3 想成「分布式保存、局部使用、用完释放」。假设当前层的权重被切成四片，分别由四个 rank 保存。执行当前层前，所有 rank 通过 All-Gather 收集这四片，得到该层完整参数；计算完成后，不必让完整参数永久驻留在每张 GPU。</p>
+<figure class="figure"><div class="responsive-diagram"><svg class="diagram-desktop" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 340" role="img" aria-labelledby="lifecycle-title lifecycle-desc">
+<title id="lifecycle-title">ZeRO-3 一次训练迭代中的参数聚合与梯度分片</title>
+<desc id="lifecycle-desc">参数分片在需要计算某层前通过 all-gather 临时重建；前向和反向计算后释放不再需要的完整参数；梯度通过 reduce-scatter 分配到负责该分片的 rank，局部优化器更新后再按需聚合。</desc>
+<rect width="960" height="340" rx="22" fill="#f5f8f4"/>
+<g font-family="system-ui,-apple-system,'PingFang SC','Microsoft YaHei',sans-serif">
+<text x="34" y="44" font-size="22" font-weight="750" fill="#203c3e">ZeRO-3：状态被切分，但计算仍需要完整的当前层</text>
+<g stroke="#b7c9c0" stroke-width="3" fill="none" stroke-linecap="round"><path d="M192 168 H220"/><path d="M402 168 H430"/><path d="M612 168 H640"/><path d="M822 168 H850"/></g>
+<g fill="#fff" stroke="#d3e0d8" stroke-width="1.5">
+<rect x="34" y="103" width="158" height="130" rx="12"/><rect x="220" y="103" width="182" height="130" rx="12"/><rect x="430" y="103" width="182" height="130" rx="12"/><rect x="640" y="103" width="182" height="130" rx="12"/><rect x="850" y="103" width="82" height="130" rx="12"/>
+</g>
+<g font-size="16" font-weight="750" text-anchor="middle" fill="#28514e"><text x="113" y="132">① 参数分片</text><text x="311" y="132">② All-Gather</text><text x="521" y="132">③ 前向 / 反向</text><text x="731" y="132">④ Reduce-Scatter</text><text x="891" y="132">⑤ 更新</text></g>
+<g font-size="13" text-anchor="middle" fill="#617a74"><text x="113" y="161">每个 rank 只持有</text><text x="113" y="182">自己负责的 shard</text><text x="311" y="161">临时拼出当前层</text><text x="311" y="182">所需完整参数</text><text x="521" y="161">用完整参数执行</text><text x="521" y="182">局部计算</text><text x="731" y="161">梯度归约并分发</text><text x="731" y="182">到各自 owner</text><text x="891" y="161">更新</text><text x="891" y="182">本地 shard</text></g>
+<g font-size="12" fill="#197a70" font-weight="700"><text x="34" y="265">存储：</text><text x="34" y="286" fill="#617a74" font-weight="500">参数 / 梯度 / 优化器状态按 rank 分片</text><text x="350" y="265">通信：</text><text x="350" y="286" fill="#617a74" font-weight="500">按需 all-gather 参数；reduce-scatter 梯度</text><text x="690" y="265">调度：</text><text x="690" y="286" fill="#617a74" font-weight="500">prefetch + overlap 减少等待</text></g>
+<text x="34" y="320" font-size="13" fill="#7c8d85">这是按层理解的简化流程；实际执行还包含 bucket、参数生命周期、持久化阈值与通信组管理。</text>
+</g>
+</svg><svg class="diagram-mobile" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 760" role="img" aria-labelledby="lm-title lm-desc">
+<title id="lm-title">ZeRO-3 按需聚合与梯度分片的五步生命周期</title><desc id="lm-desc">参数分片、All-Gather、前向反向计算、Reduce-Scatter、本地优化器更新依次组成训练步骤。</desc>
+<rect width="560" height="760" rx="20" fill="#f5f8f4"/><g font-family="system-ui,-apple-system,'PingFang SC','Microsoft YaHei',sans-serif">
+<text x="28" y="48" font-size="25" font-weight="750" fill="#203c3e">ZeRO-3：参数按需重建</text>
+<g fill="#fff" stroke="#d3e0d8"><rect x="35" y="83" width="490" height="94" rx="12"/><rect x="35" y="215" width="490" height="94" rx="12"/><rect x="35" y="347" width="490" height="94" rx="12"/><rect x="35" y="479" width="490" height="94" rx="12"/><rect x="35" y="611" width="490" height="94" rx="12"/></g>
+<g font-size="21" font-weight="800" fill="#28665e"><text x="58" y="119">① 参数分片</text><text x="58" y="251">② All-Gather</text><text x="58" y="383">③ 前向 / 反向计算</text><text x="58" y="515">④ Reduce-Scatter</text><text x="58" y="647">⑤ 本地优化器更新</text></g>
+<g font-size="16" fill="#5e7770"><text x="58" y="151">每个 rank 只持有自己负责的 shard</text><text x="58" y="283">临时收集当前层所需的完整参数</text><text x="58" y="415">用完整参数执行当前层的计算</text><text x="58" y="547">归约梯度，并分配给对应 owner</text><text x="58" y="679">只更新本地参数与优化器状态分片</text></g>
+<g stroke="#8ba89b" stroke-width="3" fill="none"><path d="M280 177 V215 M272 207 L280 215 L288 207"/><path d="M280 309 V347 M272 339 L280 347 L288 339"/><path d="M280 441 V479 M272 471 L280 479 L288 471"/><path d="M280 573 V611 M272 605 L280 611 L288 605"/></g>
+<text x="28" y="738" font-size="14" fill="#73857d">预取、bucket 和 overlap 用于尽量隐藏数据传输等待。</text>
+</g></svg></div><figcaption><span class="fig-no">FIG 04</span><strong>按需重建，而不是永久复制。</strong>All-Gather 让当前计算拿到完整参数；Reduce-Scatter 让梯度回到负责更新的 rank。</figcaption></figure>
+<p>更具体地看，一层 Transformer 的计算大致经历：</p>
+<ol>
+<li><strong>参数预取（prefetch）：</strong>在当前层真正执行前，提前把需要的参数片段传输到本地，尽量隐藏通信等待。</li>
+<li><strong>参数聚合（all-gather）：</strong>把不同 rank 保存的 shard 合并为当前层可用的完整权重。</li>
+<li><strong>前向 / 反向：</strong>执行矩阵乘法、Attention、MLP 等算子，产生该层梯度。</li>
+<li><strong>梯度分发（reduce-scatter）：</strong>先归约不同数据分片的梯度，再把归约结果分发给负责对应参数的 rank。</li>
+<li><strong>本地优化器更新：</strong>每个 rank 只更新自己持有的参数与优化器状态 shard。</li>
+</ol>
+<p>真实运行时还有 bucket 大小、参数持久化阈值、最大 live parameters、prefetch bucket 和通信重叠等调度参数。bucket 太小，通信调用次数增加；bucket 太大，临时缓冲占用可能上升。预取太激进，也可能让尚未使用的参数提前占据显存。</p>
+</section>
+
+<section id="communication" aria-labelledby="communication-heading">
+<h2 id="communication-heading"><span class="n">06 ·</span>显存省下来了，通信会不会反而拖慢训练？</h2>
+<p>这是 ZeRO 设计中必须回答的问题。分片并不是免费的：参数与梯度在不同 GPU 之间移动，需要集合通信（collective communication）。但不同 Stage 的通信代价并不相同。</p>
+<div class="table-scroll"><table>
+<thead><tr><th>策略</th><th>关键通信</th><th>原论文的通信分析</th><th>主要代价</th></tr></thead>
+<tbody>
+<tr><td>普通 DP</td><td>梯度 All-Reduce</td><td>基线</td><td>梯度同步；每卡保存完整状态</td></tr>
+<tr><td>ZeRO Stage 1</td><td>优化器状态分片后同步更新参数</td><td>与 DP 接近相同的通信量</td><td>状态分片管理与更新后参数同步</td></tr>
+<tr><td>ZeRO Stage 2</td><td>梯度 Reduce-Scatter</td><td>与 DP 接近相同的通信量</td><td>梯度归约并按分片归属分发</td></tr>
+<tr><td>ZeRO Stage 3</td><td>参数 All-Gather + 梯度 Reduce-Scatter</td><td><a href="https://arxiv.org/abs/1910.02054">原论文 §5.3 / §7</a>分析约为 DP 基线通信量的 1.5×</td><td>前向 / 反向按需聚合参数</td></tr>
+</tbody></table></div>
+<p>这里的 1.5× 是 ZeRO 原论文在其通信模型下给出的分析结果，不应当视为所有模型、网络拓扑、bucket 设置和 DeepSpeed 版本的固定倍率。跨节点网络带宽、每 GPU batch size、参数复用距离以及通信与计算是否能重叠，都会改变实际表现。</p>
+<h3>为什么 overlap communication 很重要？</h3>
+<p>假设一层计算需要 10 ms，通信需要 4 ms。如果二者严格串行，总耗时近似 14 ms；如果调度得当，通信中的一部分可以与计算并行，耗时更接近 10 ms，而不是简单相加。</p>
+<div class="eq-scroll" role="region" aria-label="通信与计算重叠的简化时间模型" tabindex="0"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block" aria-label="T serial approximately equals T compute plus T communication; T overlap approximately equals maximum of T compute and T communication plus unhidden time"><mrow><msub><mi>T</mi><mtext>serial</mtext></msub><mo>≈</mo><msub><mi>T</mi><mtext>compute</mtext></msub><mo>+</mo><msub><mi>T</mi><mtext>comm</mtext></msub><mo>,</mo><mspace width="1em"/><msub><mi>T</mi><mtext>overlap</mtext></msub><mo>≈</mo><mi>max</mi><mo>(</mo><msub><mi>T</mi><mtext>compute</mtext></msub><mo>,</mo><msub><mi>T</mi><mtext>comm</mtext></msub><mo>)</mo><mo>+</mo><msub><mi>T</mi><mtext>unhidden</mtext></msub></mrow></math></div>
+<p class="small">这是帮助理解调度收益的简化模型，不是某个 DeepSpeed 版本的性能预测公式。真实耗时还受到同步点、通信拥塞、算子效率和负载不均影响。</p>
+<p>所以，评估 ZeRO 不能只问「显存降了几倍」，还要测每步训练时间、GPU 利用率、网络利用率、通信等待比例，以及模型质量是否保持一致。</p>
+</section>
+
+<section id="residual" aria-labelledby="residual-heading">
+<h2 id="residual-heading"><span class="n">07 ·</span>ZeRO 没有消灭所有显存：激活、临时缓冲和碎片</h2>
+<p>原始 ZeRO 论文把显存问题分成两大类：<strong>模型状态（model states）</strong>和<strong>剩余状态（residual states）</strong>。前者是参数、梯度、优化器状态；后者包括激活、临时缓冲和内存碎片。</p>
+<div class="grid2">
+<div class="tile"><b>Activation Memory</b><p>前向传播产生、反向传播还要使用的中间张量。它会随 batch、sequence length、hidden size 和层数增长。</p></div>
+<div class="tile"><b>Temporary Buffers</b><p>梯度归约、All-Gather、融合算子和通信 bucket 所需的临时工作区。</p></div>
+<div class="tile"><b>Memory Fragmentation</b><p>空闲显存总量足够，但没有足够大的连续块，导致分配失败或 allocator 开销变高。</p></div>
+<div class="tile"><b>Checkpointing</b><p>只保存部分激活，反向时重新计算未保存部分，用额外计算换更低的激活常驻显存。</p></div>
+</div>
+<p><a href="https://arxiv.org/abs/1910.02054">ZeRO 论文 §6</a>中的 ZeRO-R 进一步讨论激活检查点分片、固定大小缓冲区和显存碎片管理。它与 ZeRO-DP 的参数状态分片互补：如果瓶颈来自长序列激活，仅仅把 Adam 状态切成 N 份，并不能自动解决问题。</p>
+<div class="callout warn"><strong>常见误区：</strong>「启用 ZeRO-3 后显存应该只有原来的 1/N」。这只在模型状态这一部分的理想估算下成立。若激活占主导、序列长度很长，或临时 buffer 很大，峰值显存仍可能 OOM。</div>
+<p>实践中要先通过 profiler 判断显存究竟花在哪里：参数状态占主导时优先考虑 ZeRO；激活占主导时要同时考虑 gradient checkpointing、micro-batch、序列并行、FlashAttention 或更合适的 attention kernel。</p>
+</section>
+
+<section id="offload" aria-labelledby="offload-heading">
+<h2 id="offload-heading"><span class="n">08 ·</span>GPU 仍然装不下？ZeRO-Offload 与 ZeRO-Infinity 把内存层级扩展到 CPU / NVMe</h2>
+<p>GPU HBM 很快，但容量有限；CPU DRAM 容量通常更大；NVMe SSD 的容量更大，却有更高延迟和更低的访问带宽。DeepSpeed 的异构内存路线，是把不同状态放到合适的层级，并通过分块传输、预取和重叠执行，尽量不让 GPU 长时间等待数据。</p>
+<figure class="figure"><div class="responsive-diagram"><svg class="diagram-desktop" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 390" role="img" aria-labelledby="offload-title offload-desc">
+<title id="offload-title">ZeRO-Offload 与 ZeRO-Infinity 的异构内存层次</title>
+<desc id="offload-desc">GPU HBM 容量较小但访问快，CPU DRAM 容量较大，NVMe 容量更大但延迟和带宽更受限。ZeRO-Offload 把优化器状态和更新计算迁移到 CPU；ZeRO-Infinity 在 ZeRO-3 基础上还可把参数、梯度和优化器状态分层卸载到 CPU 与 NVMe，并通过预取和计算通信重叠减少等待。</desc>
+<rect width="960" height="390" rx="22" fill="#f5f8f4"/>
+<g font-family="system-ui,-apple-system,'PingFang SC','Microsoft YaHei',sans-serif">
+<text x="34" y="45" font-size="22" font-weight="750" fill="#203c3e">显存不够时：把状态放到不同层级，而不是假装搬运没有成本</text>
+<rect x="40" y="87" width="250" height="150" rx="14" fill="#e1f2ed" stroke="#83bcb0" stroke-width="1.5"/>
+<rect x="355" y="87" width="250" height="150" rx="14" fill="#e9eafa" stroke="#a6abd5" stroke-width="1.5"/>
+<rect x="670" y="87" width="250" height="150" rx="14" fill="#fbefe3" stroke="#d9b08a" stroke-width="1.5"/>
+<g font-size="20" font-weight="800" text-anchor="middle"><text x="165" y="122" fill="#1c746c">GPU · HBM</text><text x="480" y="122" fill="#5f65a4">CPU · DRAM</text><text x="795" y="122" fill="#a86f3e">NVMe SSD</text></g>
+<g font-size="14" text-anchor="middle" fill="#526b67"><text x="165" y="155">小容量 / 高带宽</text><text x="165" y="180">执行前向、反向与算子</text><text x="480" y="155">更大容量 / 较低带宽</text><text x="480" y="180">优化器更新、缓存与卸载</text><text x="795" y="155">大容量 / 更高访问代价</text><text x="795" y="180">承载更大规模的冷状态</text></g>
+<g fill="none" stroke="#728e87" stroke-width="3" stroke-linecap="round"><path d="M290 162 H355"/><path d="M605 162 H670"/><path d="M355 192 H290"/><path d="M670 192 H605"/></g>
+<g fill="#728e87"><path d="M347 155 L355 162 L347 169 Z"/><path d="M298 185 L290 192 L298 199 Z"/><path d="M662 155 L670 162 L662 169 Z"/><path d="M613 185 L605 192 L613 199 Z"/></g>
+<rect x="40" y="265" width="880" height="83" rx="12" fill="#fff" stroke="#d8e3dc"/>
+<g font-size="14" fill="#355b57"><text x="60" y="294" font-weight="800">ZeRO-Offload</text><text x="60" y="320">常见路径：ZeRO-2 + optimizer state / optimizer step 放到 CPU</text><text x="495" y="294" font-weight="800">ZeRO-Infinity</text><text x="495" y="320">ZeRO-3 + CPU/NVMe 分层卸载 + 动态预取 + 通信/计算重叠</text></g>
+<text x="40" y="374" font-size="12" fill="#7a8c85">关键瓶颈从“容量够不够”转向 PCIe、CPU 内存带宽、NVMe I/O、预取粒度与重叠效率。</text>
+</g>
+</svg><svg class="diagram-mobile" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 760" role="img" aria-labelledby="om-title om-desc">
+<title id="om-title">GPU、CPU、NVMe 三层异构内存与 offload 路径</title><desc id="om-desc">GPU HBM 最快但容量较小，CPU DRAM 容量更大，NVMe 容量最大但访问成本最高。ZeRO-Offload 常把优化器状态和更新放到 CPU；ZeRO-Infinity 进一步支持 CPU 和 NVMe 分层卸载。</desc>
+<rect width="560" height="760" rx="20" fill="#f5f8f4"/><g font-family="system-ui,-apple-system,'PingFang SC','Microsoft YaHei',sans-serif">
+<text x="28" y="48" font-size="25" font-weight="750" fill="#203c3e">异构内存：容量与带宽的权衡</text>
+<g stroke-width="1.5"><rect x="35" y="87" width="490" height="142" rx="13" fill="#e1f2ed" stroke="#83bcb0"/><rect x="35" y="276" width="490" height="142" rx="13" fill="#e9eafa" stroke="#a6abd5"/><rect x="35" y="465" width="490" height="142" rx="13" fill="#fbefe3" stroke="#d9b08a"/></g>
+<g font-size="23" font-weight="800" text-anchor="middle"><text x="280" y="127" fill="#1c746c">GPU · HBM</text><text x="280" y="316" fill="#5f65a4">CPU · DRAM</text><text x="280" y="505" fill="#a86f3e">NVMe SSD</text></g>
+<g font-size="17" text-anchor="middle" fill="#526b67"><text x="280" y="163">较小容量 · 高带宽 · 执行计算</text><text x="280" y="193">参数、激活与工作区</text><text x="280" y="352">更大容量 · 较低带宽</text><text x="280" y="382">优化器更新、缓存与卸载状态</text><text x="280" y="541">大容量 · 更高延迟 / I/O 代价</text><text x="280" y="571">承载更大规模的冷状态</text></g>
+<g stroke="#718e86" stroke-width="3" fill="none"><path d="M280 229 V276 M272 268 L280 276 L288 268"/><path d="M280 418 V465 M272 457 L280 465 L288 457"/></g>
+<rect x="35" y="636" width="490" height="92" rx="12" fill="#fff" stroke="#d7e2db"/>
+<text x="55" y="670" font-size="18" font-weight="800" fill="#1b756c">Offload 的关键</text><text x="55" y="700" font-size="15" fill="#5e7770">预取 + 分块 + 通信 / 计算重叠；否则搬运会变成新瓶颈。</text>
+</g></svg></div><figcaption><span class="fig-no">FIG 05</span><strong>内存层级越往外，容量越大，但搬运成本越高。</strong>Offload 能突破 GPU 容量限制，但不能把 PCIe、CPU 内存带宽和 SSD I/O 当成无限资源。</figcaption></figure>
+<h3>ZeRO-Offload：把优化器工作迁移到 CPU</h3>
+<p><a href="https://arxiv.org/abs/2101.06840">ZeRO-Offload 原论文</a>的典型设计是在 ZeRO Stage 1/2 的基础上，将优化器状态与优化器更新计算放到 CPU 内存 / CPU 侧执行，GPU 主要负责模型计算。它的目标是减少 GPU 上的优化器状态与更新工作，同时尽量减少 GPU–CPU 之间的数据移动。论文提出 DeepSpeedCPUAdam 等 CPU 优化器实现来降低 CPU 更新的开销。</p>
+<p>这并不是「把所有模型数据都搬到 CPU」。数据移动本身很昂贵，若每一步都在 GPU 与 CPU 之间搬运大量张量，PCIe 就可能成为新的瓶颈。</p>
+<h3>ZeRO-Infinity：在 ZeRO-3 上管理更大的异构状态池</h3>
+<p><a href="https://arxiv.org/abs/2104.07857">ZeRO-Infinity 原论文</a>将参数、梯度和优化器状态的卸载扩展到 CPU 与 NVMe，并使用更细致的带宽中心分区、动态预取和重叠调度。其关键不只是「把东西放到 SSD」，而是把数据传输分成 NVMe→CPU、CPU→GPU、GPU 间聚合等路径，并尽量让这些传输与计算并行。</p>
+<p>如果传输只能串行发生，增加一层 NVMe 反而会叠加等待时间。要让 offload 有效，系统必须同时考虑 PCIe 通道、NUMA、CPU 内存带宽、NVMe 读写吞吐、分块粒度、预取距离和激活存储。</p>
+<div class="callout"><strong>工程判断：</strong>Offload 是用更慢但更大的内存层级换容量，不是免费扩容。GPU 内存不足且 CPU / NVMe 资源充足时它可能有价值；如果训练本身已受 PCIe 或 CPU 带宽限制，offload 可能降低吞吐。</div>
+</section>
+
+<section id="parallel" aria-labelledby="parallel-heading">
+<h2 id="parallel-heading"><span class="n">09 ·</span>ZeRO 与 3D Parallelism：它们不是二选一的同义词</h2>
+<p>当模型继续变大，单纯的数据并行状态切分未必够用。训练系统还可以沿三个不同维度拆分工作：数据并行、张量并行、流水线并行。DeepSpeed 的大模型训练路线通常将 ZeRO 与这些并行方式组合，而不是把它们混为一谈。</p>
+<figure class="figure"><div class="responsive-diagram"><svg class="diagram-desktop" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 410" role="img" aria-labelledby="parallel-title parallel-desc">
+<title id="parallel-title">数据并行、张量并行与流水线并行的职责差异</title>
+<desc id="parallel-desc">数据并行把样本分给多个模型副本；张量并行把一个层的矩阵计算切到多个 GPU；流水线并行把不同层分配给不同设备并用 micro-batch 填充流水线。大模型训练可以组合三者，并在数据并行维度使用 ZeRO。</desc>
+<rect width="960" height="410" rx="22" fill="#f5f8f4"/>
+<g font-family="system-ui,-apple-system,'PingFang SC','Microsoft YaHei',sans-serif">
+<text x="34" y="45" font-size="22" font-weight="750" fill="#203c3e">并行不是同一种切法：切数据、切层内矩阵、切层</text>
+<g fill="#fff" stroke="#d6e1da">
+<rect x="34" y="82" width="282" height="248" rx="13"/><rect x="339" y="82" width="282" height="248" rx="13"/><rect x="644" y="82" width="282" height="248" rx="13"/>
+</g>
+<g font-size="18" font-weight="800" text-anchor="middle"><text x="175" y="116" fill="#1d796f">Data Parallel · DP</text><text x="480" y="116" fill="#6d66a9">Tensor Parallel · TP</text><text x="785" y="116" fill="#b16f42">Pipeline Parallel · PP</text></g>
+<g fill="#e7f3ef" stroke="#8ebeb0"><rect x="60" y="142" width="94" height="62" rx="7"/><rect x="195" y="142" width="94" height="62" rx="7"/></g>
+<g fill="#fff" stroke="#8ebeb0"><rect x="69" y="153" width="76" height="38" rx="4"/><rect x="204" y="153" width="76" height="38" rx="4"/></g>
+<g font-size="12" text-anchor="middle" fill="#3e6e66"><text x="107" y="176">模型副本 A</text><text x="242" y="176">模型副本 B</text><text x="107" y="226">Batch A</text><text x="242" y="226">Batch B</text></g>
+<path d="M154 173 H195" stroke="#1d796f" stroke-width="2.5"/><path d="M187 167 L195 173 L187 179" fill="none" stroke="#1d796f" stroke-width="2.5"/>
+<g fill="#eeeefa" stroke="#aaa7d0"><rect x="366" y="142" width="78" height="76" rx="7"/><rect x="450" y="142" width="78" height="76" rx="7"/><rect x="534" y="142" width="62" height="76" rx="7"/></g>
+<g font-size="12" text-anchor="middle" fill="#5c5892"><text x="405" y="173">W₁</text><text x="489" y="173">W₂</text><text x="565" y="173">W₃</text><text x="405" y="198">切片</text><text x="489" y="198">切片</text><text x="565" y="198">切片</text></g>
+<g fill="#fbefe5" stroke="#d8ae88"><rect x="670" y="142" width="70" height="76" rx="7"/><rect x="750" y="142" width="70" height="76" rx="7"/><rect x="830" y="142" width="70" height="76" rx="7"/></g>
+<g font-size="12" text-anchor="middle" fill="#9b663f"><text x="705" y="170">Stage 1</text><text x="785" y="170">Stage 2</text><text x="865" y="170">Stage 3</text><text x="705" y="195">Layers</text><text x="785" y="195">Layers</text><text x="865" y="195">Layers</text></g>
+<g font-size="13" fill="#526c66"><text x="60" y="270">每个 rank 处理不同样本</text><text x="60" y="293">梯度同步 / ZeRO 切分状态</text><text x="365" y="270">同一层的矩阵分片</text><text x="365" y="293">局部乘法 + 集合通信</text><text x="670" y="270">不同层驻留不同设备</text><text x="670" y="293">micro-batch 流过阶段</text></g>
+<rect x="34" y="350" width="892" height="38" rx="8" fill="#e4f1eb"/>
+<text x="480" y="375" font-size="15" text-anchor="middle" font-weight="750" fill="#276d64">3D Parallelism = DP × TP × PP；ZeRO 通常作用于 DP 维度的模型状态分片</text>
+</g>
+</svg><svg class="diagram-mobile" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 790" role="img" aria-labelledby="pm-title pm-desc">
+<title id="pm-title">DP、TP、PP 三种模型并行方式</title><desc id="pm-desc">DP 切分样本，TP 切分同一层的矩阵，PP 将不同层放在不同设备阶段；三者可组合为 3D parallelism。</desc>
+<rect width="560" height="790" rx="20" fill="#f5f8f4"/><g font-family="system-ui,-apple-system,'PingFang SC','Microsoft YaHei',sans-serif">
+<text x="28" y="48" font-size="25" font-weight="750" fill="#203c3e">三种并行：切分的对象不同</text>
+<g fill="#fff" stroke="#d6e1da"><rect x="30" y="83" width="500" height="170" rx="13"/><rect x="30" y="276" width="500" height="170" rx="13"/><rect x="30" y="469" width="500" height="170" rx="13"/></g>
+<text x="55" y="121" font-size="23" font-weight="800" fill="#1d796f">Data Parallel · DP</text><text x="55" y="160" font-size="17" fill="#526c66">每张卡运行完整模型副本</text><text x="55" y="190" font-size="17" fill="#526c66">不同 rank 处理不同样本</text><text x="55" y="220" font-size="17" fill="#526c66">ZeRO 在 DP 组内切分模型状态</text>
+<text x="55" y="314" font-size="23" font-weight="800" fill="#6d66a9">Tensor Parallel · TP</text><text x="55" y="353" font-size="17" fill="#526c66">同一层的权重矩阵被切成多个 shard</text><text x="55" y="383" font-size="17" fill="#526c66">各 GPU 计算部分结果，再做集合通信</text><text x="55" y="413" font-size="17" fill="#526c66">适合单层矩阵本身过大的情况</text>
+<text x="55" y="507" font-size="23" font-weight="800" fill="#b16f42">Pipeline Parallel · PP</text><text x="55" y="546" font-size="17" fill="#526c66">不同 Transformer 层分配到不同阶段</text><text x="55" y="576" font-size="17" fill="#526c66">micro-batch 依次通过各个阶段</text><text x="55" y="606" font-size="17" fill="#526c66">需要管理 pipeline bubble 与负载平衡</text>
+<rect x="30" y="671" width="500" height="75" rx="12" fill="#e4f1eb"/><text x="280" y="704" font-size="20" text-anchor="middle" font-weight="800" fill="#276d64">3D Parallelism = DP × TP × PP</text><text x="280" y="729" font-size="14" text-anchor="middle" fill="#54766d">ZeRO 通常作用于 DP 维度的模型状态分片</text>
+</g></svg></div><figcaption><span class="fig-no">FIG 06</span><strong>三个维度切分的是不同对象。</strong>DP 切数据，TP 切层内矩阵，PP 切模型层；组合后可在不同设备组之间分配模型、数据和计算。</figcaption></figure>
+<ul>
+<li><strong>Data Parallelism（DP）：</strong>每个副本处理不同数据。ZeRO 在这一维度上切分参数、梯度和优化器状态，减少 DP rank 之间的状态冗余。</li>
+<li><strong>Tensor Parallelism（TP）：</strong>把单个大矩阵乘法或 Transformer 层内部的张量切片到多张 GPU 上，每张卡只计算部分结果，再通过集合通信合并。</li>
+<li><strong>Pipeline Parallelism（PP）：</strong>把不同层放到不同设备阶段，通过 micro-batch 让多个阶段尽量同时工作；需要处理 pipeline bubble 和阶段负载不均。</li>
+</ul>
+<p>如果 DP、TP、PP 组大小分别是 <code>D</code>、<code>T</code>、<code>P</code>，那么总设备数可近似看作 <code>D × T × P</code>（还可能包含 sequence parallel 等其他维度）。特别注意：ZeRO 公式中的 <code>N</code> 是对应的数据并行分片组大小，不应在混合并行时直接拿全局 GPU 总数代替。</p>
+<p><a href="https://www.deepspeed.ai/tutorials/large-models-w-deepspeed/">DeepSpeed 官方大模型训练指南</a>把 ZeRO 路线和 3D Parallelism 路线作为两种主要组织方式，并指出选择取决于模型结构、每 GPU batch、互联带宽等因素。ZeRO 对既有 DP 代码通常更容易接入；TP / PP 则可能要求模型模块或执行流程适配。</p>
+</section>
+
+<section id="zeropp" aria-labelledby="zeropp-heading">
+<h2 id="zeropp-heading"><span class="n">10 ·</span>ZeRO++：当网络成为瓶颈，进一步压缩通信字节数</h2>
+<p>ZeRO-3 通过参数 All-Gather 换取较低的常驻显存，但大规模训练时，参数与梯度通信可能变成主要瓶颈。尤其当跨节点网络带宽有限，或每张 GPU 的 batch 很小时，通信开销难以被计算完全覆盖。</p>
+<figure class="figure"><div class="responsive-diagram"><svg class="diagram-desktop" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 370" role="img" aria-labelledby="zeropp-title zeropp-desc">
+<title id="zeropp-title">ZeRO++ 的三类通信优化</title>
+<desc id="zeropp-desc">qwZ 对参数 all-gather 使用分块量化，hpZ 通过层级分区与数据重映射减少跨节点反向参数聚合，qgZ 使用量化梯度 all-to-all 替代传统 reduce-scatter 路径。论文报告组合后通信量可降至 ZeRO 基线的四分之一。</desc>
+<rect width="960" height="370" rx="22" fill="#f5f8f4"/>
+<g font-family="system-ui,-apple-system,'PingFang SC','Microsoft YaHei',sans-serif">
+<text x="34" y="45" font-size="22" font-weight="750" fill="#203c3e">ZeRO++：当瓶颈从显存转向网络通信</text>
+<g fill="#fff" stroke="#d7e2dc"><rect x="34" y="83" width="278" height="205" rx="13"/><rect x="341" y="83" width="278" height="205" rx="13"/><rect x="648" y="83" width="278" height="205" rx="13"/></g>
+<g font-size="18" font-weight="800" text-anchor="middle"><text x="173" y="119" fill="#1b786f">qwZ · 量化权重</text><text x="480" y="119" fill="#6b64a8">hpZ · 分层分区</text><text x="787" y="119" fill="#b36f45">qgZ · 量化梯度</text></g>
+<g fill="#e4f2ed"><rect x="58" y="143" width="230" height="34" rx="6"/><rect x="58" y="188" width="115" height="34" rx="6"/></g>
+<g font-size="13" text-anchor="middle" fill="#376b64"><text x="173" y="165">FP16 All-Gather</text><text x="115" y="210">INT8</text><text x="210" y="210">约 1/2 通信量</text></g>
+<g fill="#eeeefa"><rect x="365" y="143" width="230" height="34" rx="6"/><rect x="365" y="188" width="112" height="34" rx="6"/></g>
+<g font-size="13" text-anchor="middle" fill="#5e5b8e"><text x="480" y="165">跨节点反向参数聚合</text><text x="421" y="210">本地层级</text><text x="530" y="210">重映射 / 重算</text></g>
+<g fill="#fbefe5"><rect x="672" y="143" width="230" height="34" rx="6"/><rect x="672" y="188" width="115" height="34" rx="6"/></g>
+<g font-size="13" text-anchor="middle" fill="#93623e"><text x="787" y="165">FP16 梯度归约</text><text x="729" y="210">量化 All-to-All</text><text x="844" y="210">降低网络字节</text></g>
+<g font-size="13" fill="#526d67"><text x="58" y="254">块量化：降低权重传输字节数</text><text x="365" y="254">以额外内存 / 重计算换跨节点通信</text><text x="672" y="254">低精度通信 + 层级化梯度归约</text></g>
+<rect x="34" y="310" width="892" height="40" rx="9" fill="#e5f2ed"/>
+<text x="480" y="336" font-size="16" text-anchor="middle" font-weight="800" fill="#216f67">论文报告：组合优化使通信量相对 ZeRO 基线降低约 4×（具体收益依集群与配置而变）</text>
+</g>
+</svg><svg class="diagram-mobile" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 790" role="img" aria-labelledby="zm-title zm-desc">
+<title id="zm-title">ZeRO++ 的三种通信优化</title><desc id="zm-desc">qwZ 使用量化权重减少参数 All-Gather 通信；hpZ 使用层级分区和重映射减少跨节点反向参数通信；qgZ 使用量化梯度 All-to-All 减少梯度通信。</desc>
+<rect width="560" height="790" rx="20" fill="#f5f8f4"/><g font-family="system-ui,-apple-system,'PingFang SC','Microsoft YaHei',sans-serif">
+<text x="28" y="48" font-size="25" font-weight="750" fill="#203c3e">ZeRO++：优化通信字节</text>
+<g fill="#fff" stroke="#d7e2dc"><rect x="30" y="83" width="500" height="165" rx="13"/><rect x="30" y="270" width="500" height="165" rx="13"/><rect x="30" y="457" width="500" height="165" rx="13"/></g>
+<text x="55" y="122" font-size="23" font-weight="800" fill="#1b786f">qwZ · Quantized Weights</text><text x="55" y="163" font-size="17" fill="#526b67">FP16 权重 All-Gather → 分块 INT8</text><text x="55" y="196" font-size="17" fill="#526b67">降低参数聚合的传输字节数</text><text x="55" y="226" font-size="15" fill="#71847b">论文设计：权重 All-Gather 通信量约减半</text>
+<text x="55" y="309" font-size="23" font-weight="800" fill="#6b64a8">hpZ · Hierarchical Partitioning</text><text x="55" y="350" font-size="17" fill="#526b67">利用节点内 / 节点间带宽差异</text><text x="55" y="383" font-size="17" fill="#526b67">数据重映射与重计算减少跨节点通信</text><text x="55" y="413" font-size="15" fill="#71847b">以额外内存或计算换取网络流量下降</text>
+<text x="55" y="496" font-size="23" font-weight="800" fill="#b36f45">qgZ · Quantized Gradients</text><text x="55" y="537" font-size="17" fill="#526b67">量化梯度 + All-to-All 归约</text><text x="55" y="570" font-size="17" fill="#526b67">先利用节点内带宽，再跨节点交换</text><text x="55" y="600" font-size="15" fill="#71847b">减少梯度同步通信字节数</text>
+<rect x="30" y="654" width="500" height="92" rx="12" fill="#e5f2ed"/><text x="280" y="693" font-size="23" text-anchor="middle" font-weight="850" fill="#216f67">约 4× 通信量降低</text><text x="280" y="720" font-size="15" text-anchor="middle" fill="#54766d">论文摘要中的组合优化结果，依配置而变</text>
+</g></svg></div><figcaption><span class="fig-no">FIG 07</span><strong>ZeRO++ 不只是再切一遍显存。</strong>它分别优化参数聚合、跨节点参数通信和梯度归约，目标是减少网络传输字节数。</figcaption></figure>
+<div class="grid2">
+<div class="tile"><b>qwZ · Quantized Weights</b><p>对权重 All-Gather 使用分块量化，把 FP16 通信压到 INT8，降低参数聚合通信量。</p></div>
+<div class="tile"><b>hpZ · Hierarchical Partitioning</b><p>利用节点内 / 节点间带宽层次，通过数据重映射与重计算减少跨节点反向参数 All-Gather。</p></div>
+<div class="tile"><b>qgZ · Quantized Gradients</b><p>以量化梯度与 All-to-All 归约策略降低梯度通信量，并利用节点内先归约的层次结构。</p></div>
+<div class="tile"><b>System Integration</b><p>量化、反量化、通信与计算重叠，以及融合 kernel 必须共同工作，理论字节减少才可能转化成端到端吞吐提升。</p></div>
+</div>
+<p><a href="https://arxiv.org/abs/2306.10209">ZeRO++ 论文摘要</a>报告，组合优化相对 ZeRO 基线可减少约 4× 通信量，并在 384 GPU 规模的实验中实现最高约 2.16× 吞吐提升。这里的「最高」依赖论文中的模型、batch 和集群配置，不能直接当作任意训练任务的加速承诺。</p>
+</section>
+
+<section id="ecosystem" aria-labelledby="ecosystem-heading">
+<h2 id="ecosystem-heading"><span class="n">11 ·</span>DeepSpeed 不只有 ZeRO：训练系统工具箱正在扩展</h2>
+<p>把 DeepSpeed 等同于 ZeRO 会漏掉它的系统定位。官方文档还覆盖自动张量并行、长序列训练、MoE、数据效率、profiling、通信日志、checkpointing 和 kernel 优化等能力。</p>
+<div class="grid2">
+<div class="tile"><b>Automatic Tensor Parallelism</b><p>通过配置把支持的层切分到多个 GPU，训练时可与 ZeRO 组合，减少手工编写张量切片代码的负担。</p></div>
+<div class="tile"><b><a href="https://www.deepspeed.ai/tutorials/ds-sequence/">DeepSpeed-Ulysses / Sequence Parallelism</a></b><p>沿 sequence 维切分输入，再通过 All-to-All 在 attention head 维交换 Q/K/V，使不同 rank 计算不同 attention heads，服务长上下文训练。</p></div>
+<div class="tile"><b>MoE / Expert Parallelism</b><p>把不同专家分配到不同设备，配合 token routing 与通信组织稀疏专家计算。</p></div>
+<div class="tile"><b>Profiler / Checkpointing / Data Efficiency</b><p>帮助定位算力、通信与数据瓶颈，并管理训练状态保存、恢复和数据利用效率。</p></div>
+</div>
+<p>截至本文检索时，DeepSpeed 官方 <a href="https://github.com/deepspeedai/DeepSpeed/releases">Releases 页面</a>将 <strong>v0.20.0</strong> 标为 Latest；稳定文档也列出 <a href="https://deepspeed.readthedocs.io/en/stable/training.html">Automatic Sequence Parallel Training（AutoSP）</a>等较新的接口。具体 API、兼容矩阵和配置字段会随版本变化，工程项目应锁定 DeepSpeed、PyTorch、CUDA、NCCL 与模型代码的版本组合。</p>
+<p>这些能力的核心不是「越多并行维度越好」，而是根据瓶颈选择拆分方向：参数状态放不下，先看 ZeRO；单层矩阵本身太大，考虑 TP；模型层数和执行流水适合分段，考虑 PP；序列长度导致 attention 激活和通信压力，考虑 sequence parallel。</p>
+</section>
+
+<section id="inference" aria-labelledby="inference-heading">
+<h2 id="inference-heading"><span class="n">12 ·</span>训练与推理要分开：ZeRO 的显存账本不是 KV Cache</h2>
+<p>训练和推理都需要 GPU，但它们的内存瓶颈并不相同。训练要保存梯度与优化器状态；自回归推理通常不需要这些状态，却会为历史 token 的 Key / Value 保存 KV Cache，并受到 batch、上下文长度和请求调度影响。</p>
+<div class="table-scroll"><table>
+<thead><tr><th>维度</th><th>训练（Training）</th><th>推理 / Serving（Inference）</th></tr></thead>
+<tbody>
+<tr><td>核心状态</td><td>权重、梯度、优化器状态、激活</td><td>权重、KV Cache、临时激活 / 工作区</td></tr>
+<tr><td>常见瓶颈</td><td>模型状态显存、激活、梯度同步、跨节点通信</td><td>KV Cache、prefill/decode、batch 调度、内存带宽</td></tr>
+<tr><td>典型技术</td><td>ZeRO、TP、PP、sequence parallel、checkpointing</td><td>KV Cache 管理、连续批处理、kernel fusion、量化与 serving scheduler</td></tr>
+<tr><td>评估指标</td><td>step time、tokens/s、MFU、收敛与训练成本</td><td>TTFT、TPOT、吞吐、尾延迟、并发容量</td></tr>
+</tbody></table></div>
+<p>DeepSpeed 也有推理相关技术，但官方<a href="https://www.deepspeed.ai/inference/">旧版 DeepSpeed-Inference 文档</a>已明确提示：其 v2 演进为 <strong>DeepSpeed-FastGen</strong>，需要关注 FastGen 的最新模型支持和 serving 特性。ZeRO-3 可以帮助分片加载大模型，但 Stage 2 的梯度分片本身没有推理用途；更不能把 ZeRO 的参数状态公式当作 KV Cache 显存公式。</p>
+<div class="callout"><strong>记忆边界：</strong>训练显存优化解决「更新模型时，状态放在哪里」；推理显存优化解决「生成 token 时，权重与历史上下文如何驻留和调度」。两者会共享 GPU 内存管理思想，但不是同一个问题。</div>
+</section>
+
+<section id="practice" aria-labelledby="practice-heading">
+<h2 id="practice-heading"><span class="n">13 ·</span>动手估算：换模型规模、GPU 数量与 ZeRO Stage</h2>
+<p>下面的计算器使用原始 ZeRO 论文的混合精度 Adam 模型状态假设，帮助你理解 Stage 和 DP degree 对<strong>每个 rank 的模型状态显存</strong>有什么影响。默认选用 7.5B 参数、64 路 DP、Stage 3。</p>
+<div class="widget" aria-labelledby="calculator-title">
+<h3 id="calculator-title">ZeRO 模型状态显存估算器</h3>
+<p class="widget-intro">单位采用十进制 GB。结果不含激活、通信 bucket、临时 workspace、碎片与参数临时聚合峰值。</p>
+<div class="controls">
+<label class="control">模型参数量
+<select id="ds-model"><option value="1.5">1.5B</option><option value="7.5" selected>7.5B</option><option value="13">13B</option><option value="70">70B</option><option value="175">175B</option></select>
+</label>
+<label class="control">数据并行组大小 N
+<select id="ds-degree"><option value="1">1 GPU</option><option value="8">8 GPUs</option><option value="16">16 GPUs</option><option value="64" selected>64 GPUs</option><option value="128">128 GPUs</option></select>
+</label>
+</div>
+<div class="stage-buttons" role="group" aria-label="选择 ZeRO Stage">
+<button type="button" data-stage="0" aria-pressed="false">Stage 0 · DP</button>
+<button type="button" data-stage="1" aria-pressed="false">Stage 1</button>
+<button type="button" data-stage="2" aria-pressed="false">Stage 2</button>
+<button type="button" data-stage="3" aria-pressed="true">Stage 3</button>
+</div>
+<div class="readout" id="ds-readout" aria-live="polite">
+<div id="ds-formula">Stage 3：M = 16Ψ / N</div>
+<strong id="ds-memory">1.88 GB / GPU</strong>
+<div class="bar" role="img" aria-label="估算显存相对于 128 GB 标尺的比例"><span id="ds-bar"></span></div>
+<div id="ds-detail">7.5B 参数 · 64 路 DP · 模型状态理想分摊</div>
+</div>
+</div>
+<h3>一个最小可运行的数学模型</h3>
+<p>仓库中附带了 <code>zero_memory.py</code>。它用标准库实现模型状态估算，并用 Python 列表模拟 Reduce-Scatter 与 All-Gather 的数据含义。它不是 DeepSpeed 的分布式运行时，也没有调用 NCCL 或启动 GPU。</p>
+<pre><code>from posts.training.deepspeed.zero_memory import (
+    model_state_gb, reduce_scatter_sum, all_gather
+)
+
+# 7.5B parameters, 64-way data parallel group
+for stage in range(4):
+    print(stage, model_state_gb(7_500_000_000, 64, stage))
+
+# Each rank contributes a gradient vector.
+grads = [
+    [1.0, 2.0, 3.0, 4.0],
+    [10.0, 20.0, 30.0, 40.0],
+    [100.0, 200.0, 300.0, 400.0],
+    [1000.0, 2000.0, 3000.0, 4000.0],
+]
+shards = reduce_scatter_sum(grads)
+assert shards == [[1111.0], [2222.0], [3333.0], [4444.0]]
+assert all_gather(shards) == [1111.0, 2222.0, 3333.0, 4444.0]</code></pre>
+<p>执行方式：<code>python posts/training/deepspeed/zero_memory.py</code>；测试方式：<code>python -m pytest -q tests/test_deepspeed_memory.py</code>。数值测试检查了 7.5B / 64 GPU 的论文算例、Stage 递进、DP degree 变化，以及 toy collective 的求和与重建。</p>
+<h3>DeepSpeed 配置从哪里开始？</h3>
+<p>一个典型的训练配置会把 ZeRO stage 写在 JSON 中，再由 <code>deepspeed.initialize</code> 初始化 Engine。下面只展示配置形状；实际 bucket 大小、offload、混合精度和 batch 参数应根据模型与硬件调优。</p>
+<pre><code>{
+  "train_micro_batch_size_per_gpu": 1,
+  "gradient_accumulation_steps": 8,
+  "bf16": {
+    "enabled": true
+  },
+  "zero_optimization": {
+    "stage": 2,
+    "contiguous_gradients": true,
+    "overlap_comm": true,
+    "reduce_scatter": true,
+    "reduce_bucket_size": 500000000,
+    "allgather_bucket_size": 500000000
+  }
+}</code></pre>
+<p>这里的 Stage 2 适合说明「参数完整保留、梯度与优化器状态切分」的路径。若参数本身已无法在单卡驻留，可进一步评估 Stage 3；若显存压力主要来自 Adam 状态，也可以先测 Stage 1 / 2，避免一开始就承担 Stage 3 的参数聚合通信。</p>
+<p>注意：上面的配置是教学起点，不是对所有 DeepSpeed 版本都保证可直接运行的完整训练脚本。真正启动训练前，还需要模型、数据集、优化器、launcher、分布式环境、CUDA/NCCL 兼容性和 checkpoint 方案。</p>
+</section>
+
+<section id="evidence" aria-labelledby="evidence-heading">
+<h2 id="evidence-heading"><span class="n">14 ·</span>论文证据：哪些数字来自原论文，哪些只是估算？</h2>
+<p>DeepSpeed 是持续演进的软件系统，不能把不同论文、不同 GPU、不同模型和不同集群的最佳结果拼成一个统一的性能承诺。下面只保留能够明确定位到论文摘要或章节的结果。</p>
+<div class="table-scroll"><table>
+<thead><tr><th>工作</th><th>论文报告</th><th>正确的解读方式</th></tr></thead>
+<tbody>
+<tr><td>ZeRO（SC20）</td><td>在 400 张 NVIDIA V100 上训练 100B 级模型，报告总吞吐 15 PFLOPs；论文还展示 64 路 DP 下 7.5B 模型的状态显存估算。</td><td>历史论文硬件与实验配置，不是当前 GPU 的 benchmark。</td></tr>
+<tr><td>ZeRO-Offload（ATC 2021）</td><td>论文报告单张 V100 上训练 10B 模型约 40 TFLOPs/GPU，并比较了 PyTorch 基线。</td><td>特定模型、硬件、batch 和实现条件下的系统实验。</td></tr>
+<tr><td>ZeRO-Infinity（SC21）</td><td>论文报告在 512 张 V100 上超过 25 PFLOPs，并报告约 40% 峰值利用率。</td><td>说明异构内存与带宽聚合设计的可行性，不代表 NVMe offload 对任何任务都更快。</td></tr>
+<tr><td>ZeRO++（2023）</td><td>摘要报告通信量降低约 4×，并在 384 GPU 规模实验中实现最高约 2.16× 吞吐提升。</td><td>针对通信瓶颈的实验结果；收益依赖网络带宽、模型和 batch。</td></tr>
+</tbody></table></div>
+<p>可以从这些工作看到系统演进的逻辑：ZeRO 先减少状态冗余；Offload / Infinity 扩展可用内存层级；ZeRO++ 进一步优化通信字节；后续 TP、sequence parallel 与自动并行则面向不同的计算和序列长度瓶颈。</p>
+<p>本文中的 7.5B / 64 GPU 数值是根据论文的 <code>16Ψ</code> 模型状态公式计算并与论文 Table 1 对照；计算器和 Python 测试只验证该模型，不构成一次真实的 DeepSpeed 训练 benchmark。</p>
+</section>
+
+<section id="limits" aria-labelledby="limits-heading">
+<h2 id="limits-heading"><span class="n">15 ·</span>什么时候该用 DeepSpeed？以及它解决不了什么？</h2>
+<h3>按瓶颈选技术，而不是按 Stage 数字选技术</h3>
+<ul>
+<li><strong>模型能放下，Adam 状态占主导：</strong>从 Stage 1 或 Stage 2 开始测量，比较显存节省与额外同步成本。</li>
+<li><strong>每卡连完整参数都放不下：</strong>评估 Stage 3；若单层张量本身太大，再考虑 TP 或其他模型并行。</li>
+<li><strong>GPU 显存不足，但 CPU 内存充足：</strong>评估 ZeRO-Offload，并测量 PCIe、CPU 内存带宽和 CPU optimizer 的吞吐。</li>
+<li><strong>模型极大，CPU / NVMe 资源与 I/O 足够：</strong>评估 ZeRO-Infinity；必须测试预取、分块和通信重叠是否真正隐藏了数据搬运。</li>
+<li><strong>跨节点网络成为瓶颈：</strong>检查拓扑、通信日志和 batch；再评估 ZeRO++、分层通信或调整并行组。</li>
+<li><strong>长序列激活成为瓶颈：</strong>优先测 activation checkpointing、FlashAttention、sequence parallel 与 micro-batch，而不是期待 ZeRO-3 独自解决。</li>
+</ul>
+<h3>几个不能忽略的边界</h3>
+<ul>
+<li><strong>通信不是免费的：</strong>Stage 3 用参数 All-Gather 换取常驻显存下降，网络慢时可能受通信限制。</li>
+<li><strong>激活仍然存在：</strong>参数分片不会自动消除前向保存的激活张量。</li>
+<li><strong>Offload 有带宽上限：</strong>CPU / NVMe 容量更大，但数据搬运可能成为训练关键路径。</li>
+<li><strong>并行组大小不是总 GPU 数：</strong>混合 DP / TP / PP / SP 时，必须区分每个维度的 process group。</li>
+<li><strong>配置和版本会变化：</strong>bucket、prefetch、offload、optimizer 与自动并行的可用性需要对照锁定版本的官方文档。</li>
+<li><strong>系统优化不替代实验协议：</strong>训练质量、batch、学习率、数据顺序、随机种子和 checkpoint 恢复都需要正确验证。</li>
+</ul>
+<div class="callout"><strong>最后的心智模型：</strong>DeepSpeed 的价值不是单一的「显存压缩」。它把模型状态切分、参数按需聚合、梯度归约、异构内存搬运、并行维度和通信调度组合成一套训练系统。要判断某项优化是否有效，最终仍要回到端到端 step time、显存峰值、吞吐、收敛和复现结果。</div>
+</section>
+
+<section id="references" aria-labelledby="references-heading">
+<h2 id="references-heading"><span class="n">16 ·</span>参考论文与官方资料</h2>
+<ol class="ref-list">
+<li>Rajbhandari et al., <a href="https://arxiv.org/abs/1910.02054">ZeRO: Memory Optimizations Toward Training Trillion Parameter Models</a>, SC20. 重点：§3 模型状态账本、§5 ZeRO-DP、Table 1、§7 通信分析。</li>
+<li>Ren et al., <a href="https://arxiv.org/abs/2101.06840">ZeRO-Offload: Democratizing Billion-Scale Model Training</a>, USENIX ATC 2021. 重点：CPU offload、CPU optimizer 与数据移动设计。</li>
+<li>Rajbhandari et al., <a href="https://arxiv.org/abs/2104.07857">ZeRO-Infinity: Breaking the GPU Memory Wall for Extreme Scale Deep Learning</a>, SC21. 重点：异构内存、bandwidth-centric partitioning、overlap-centric design。</li>
+<li>Wang et al., <a href="https://arxiv.org/abs/2306.10209">ZeRO++: Extremely Efficient Collective Communication for Giant Model Training</a>, 2023. 重点：qwZ、hpZ、qgZ 与通信实验。</li>
+<li><a href="https://www.deepspeed.ai/tutorials/large-models-w-deepspeed/">DeepSpeed · Training your large model with DeepSpeed</a>：ZeRO 与 3D Parallelism 的选型与系统说明。</li>
+<li><a href="https://www.deepspeed.ai/tutorials/zero/">DeepSpeed · Zero Redundancy Optimizer</a>、<a href="https://www.deepspeed.ai/tutorials/zero-offload/">ZeRO-Offload</a>、<a href="https://www.deepspeed.ai/tutorials/zeropp/">ZeRO++</a>：配置字段与官方使用说明。</li>
+<li><a href="https://www.deepspeed.ai/tutorials/ds-sequence/">DeepSpeed-Ulysses</a>、<a href="https://deepspeed.readthedocs.io/en/stable/training.html">DeepSpeed 0.20.0 Training API</a>：sequence parallel 与较新训练接口。</li>
+<li><a href="https://github.com/deepspeedai/DeepSpeed">deepspeedai/DeepSpeed</a> · <a href="https://github.com/deepspeedai/DeepSpeed/releases">Releases</a>：源码、版本和发布记录。</li>
+</ol>
+<p class="footer">读完这篇文章后，可以继续沿着「Transformer → Chinchilla → DeepSpeed → FlashAttention」学习：模型如何增长、训练计算如何分配、分布式系统如何承载，以及 GPU kernel 如何减少数据搬运。</p>
+</section>
+</article>
+</main>
+</div>
+<script>
+(function(){
+  "use strict";
+  var model = document.getElementById("ds-model");
+  var degree = document.getElementById("ds-degree");
+  var buttons = Array.prototype.slice.call(document.querySelectorAll("[data-stage]"));
+  var formula = document.getElementById("ds-formula");
+  var memory = document.getElementById("ds-memory");
+  var detail = document.getElementById("ds-detail");
+  var bar = document.getElementById("ds-bar");
+  var stage = 3;
+  var formulas = [
+    "Stage 0：M = 16Ψ",
+    "Stage 1：M = 4Ψ + 12Ψ / N",
+    "Stage 2：M = 2Ψ + 14Ψ / N",
+    "Stage 3：M = 16Ψ / N"
+  ];
+  function render(){
+    var p = Number(model.value) * 1000000000;
+    var n = Number(degree.value);
+    var bytes = 0;
+    if(stage === 0){bytes = 16 * p;}
+    if(stage === 1){bytes = 4 * p + 12 * p / n;}
+    if(stage === 2){bytes = 2 * p + 14 * p / n;}
+    if(stage === 3){bytes = 16 * p / n;}
+    var gb = bytes / 1000000000;
+    formula.textContent = formulas[stage];
+    memory.textContent = gb.toFixed(2) + " GB / GPU";
+    detail.textContent = Number(model.value).toString() + "B 参数 · " + n + " 路 DP · 模型状态估算，不含激活与临时缓冲";
+    bar.style.width = Math.max(0, Math.min(100, gb / 128 * 100)).toFixed(2) + "%";
+    buttons.forEach(function(button){
+      button.setAttribute("aria-pressed", String(Number(button.getAttribute("data-stage")) === stage));
+    });
+  }
+  buttons.forEach(function(button){
+    button.addEventListener("click", function(){
+      stage = Number(button.getAttribute("data-stage"));
+      render();
+    });
+  });
+  model.addEventListener("change", render);
+  degree.addEventListener("change", render);
+  render();
+})();
+</script>
+</body>
+</html>

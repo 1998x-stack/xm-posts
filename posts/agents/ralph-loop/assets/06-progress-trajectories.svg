@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 470" role="img" aria-labelledby="trajectory-title trajectory-desc">
+<title id="trajectory-title">Ralph 循环的三种概念进度轨迹</title><desc id="trajectory-desc">健康推进的未完成工作逐步下降；振荡轨迹上下波动；停滞轨迹基本保持不变。图中仅为概念示意。</desc><rect width="1040" height="470" rx="22" fill="#f8fbf8"/><text x="520" y="44" text-anchor="middle" font-family="system-ui,sans-serif" font-size="24" font-weight="700" fill="#234b4d">Iteration progress is not guaranteed to converge</text>
+<g stroke="#d5e1db" stroke-width="1.5"><path d="M110 95 V370 H950"/><path d="M110 150 H950" stroke-dasharray="5 6"/><path d="M110 220 H950" stroke-dasharray="5 6"/><path d="M110 290 H950" stroke-dasharray="5 6"/></g>
+<g font-family="system-ui,sans-serif" font-size="14" fill="#617e79"><text x="94" y="100" text-anchor="end">High</text><text x="94" y="370" text-anchor="end">Low</text><text x="530" y="420" text-anchor="middle">Iteration →</text><text x="35" y="235" transform="rotate(-90 35 235)" text-anchor="middle">Unfinished work (conceptual)</text></g>
+<path d="M125 115 C220 150 260 180 340 218 S500 282 600 310 S780 342 930 350" fill="none" stroke="#277d70" stroke-width="5" stroke-linecap="round"/>
+<path d="M125 135 C210 260 280 130 370 255 S520 150 610 270 S760 165 930 255" fill="none" stroke="#b5794d" stroke-width="4" stroke-linecap="round"/>
+<path d="M125 220 C300 220 420 222 560 220 S780 223 930 220" fill="none" stroke="#7c70a8" stroke-width="4" stroke-linecap="round" stroke-dasharray="10 7"/>
+<g font-family="system-ui,'Microsoft YaHei',sans-serif" font-size="16" font-weight="700"><text x="740" y="343" fill="#277d70">健康推进</text><text x="790" y="252" fill="#a36d43">方案振荡</text><text x="790" y="205" fill="#74699d">持续停滞</text></g>
+<text x="520" y="452" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" fill="#718780">Schematic only · no empirical benchmark data</text></svg>

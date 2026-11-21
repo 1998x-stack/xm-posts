@@ -12,3 +12,6 @@
 - **Imbalanced Classification & PR Analysis**：Precision-Recall、Average Precision、基率、固定误报预算与类别不平衡评测。
 
 `_topics/` 为二级分类占位，不是正式文章；文章通过 `content/posts.json` 发布。
+## 2026-11-21 新增专题
+- [LLM-as-a-Judge & Judge Reliability](./_topics/llm-as-a-judge/README.md)
+- 关联文章：LLM-as-a-Judge、Agent Evaluation。

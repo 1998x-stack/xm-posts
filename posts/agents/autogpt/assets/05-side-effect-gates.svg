@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 470" role="img" aria-labelledby="autogpt-safety-title autogpt-safety-desc">
+<title id="autogpt-safety-title">Agent 工具副作用等级与执行门禁</title>
+<desc id="autogpt-safety-desc">工具操作按副作用分为纯计算、读取、工作区写入、平台对象修改、外部低风险变更和外部高风险变更；风险越高越需要审批、审计和回滚策略。</desc>
+<rect width="1000" height="470" rx="22" fill="#f6f8f5"/>
+<text x="45" y="48" font-size="23" font-weight="700" fill="#2b4b48">权限不应只回答“能不能调用”，还要回答“调用会改变什么”</text>
+<g font-size="16" font-weight="700" text-anchor="middle">
+<rect x="45" y="95" width="138" height="100" rx="12" fill="#e7f2ec" stroke="#8ebaa7" stroke-width="2"/><text x="114" y="132" fill="#2e6254">NONE</text><text x="114" y="160" font-size="14" font-weight="500" fill="#5c7b70">纯计算</text>
+<rect x="197" y="95" width="138" height="100" rx="12" fill="#e9f1f6" stroke="#94b4c7" stroke-width="2"/><text x="266" y="132" fill="#315c72">READ</text><text x="266" y="160" font-size="14" font-weight="500" fill="#648092">读取数据</text>
+<rect x="349" y="95" width="138" height="100" rx="12" fill="#edf2e2" stroke="#aab98b" stroke-width="2"/><text x="418" y="132" fill="#53663a">WORKSPACE</text><text x="418" y="160" font-size="14" font-weight="500" fill="#71815d">工作区写入</text>
+<rect x="501" y="95" width="138" height="100" rx="12" fill="#f7f0df" stroke="#d1b77a" stroke-width="2"/><text x="570" y="132" fill="#7b612b">PLATFORM</text><text x="570" y="160" font-size="14" font-weight="500" fill="#99804e">平台对象修改</text>
+<rect x="653" y="95" width="138" height="100" rx="12" fill="#f9eadf" stroke="#d6a47c" stroke-width="2"/><text x="722" y="132" font-size="12" fill="#8a5835">EXTERNAL_JUDGED</text><text x="722" y="160" font-size="14" font-weight="500" fill="#a17654">外部低风险变更*</text>
+<rect x="805" y="95" width="150" height="100" rx="12" fill="#f5e5e4" stroke="#d09b96" stroke-width="2"/><text x="880" y="132" fill="#844844">EXTERNAL</text><text x="880" y="160" font-size="14" font-weight="500" fill="#a06f6a">高风险外部副作用</text>
+</g>
+<path d="M114 215 H880" stroke="#c17d55" stroke-width="4" stroke-linecap="round"/>
+<path d="M880 215 L866 207 M880 215 L866 223" stroke="#c17d55" stroke-width="3" fill="none"/>
+<text x="500" y="246" text-anchor="middle" font-size="15" fill="#986c50">副作用与不可逆风险逐步增加</text>
+<rect x="95" y="292" width="230" height="95" rx="13" fill="#fff" stroke="#d5e1db" stroke-width="2"/>
+<text x="210" y="327" text-anchor="middle" font-size="19" font-weight="700" fill="#315d54">策略检查</text><text x="210" y="355" text-anchor="middle" font-size="14" fill="#71827c">身份 / 范围 / 参数 / 预算</text>
+<rect x="385" y="292" width="230" height="95" rx="13" fill="#fff" stroke="#d5e1db" stroke-width="2"/>
+<text x="500" y="327" text-anchor="middle" font-size="19" font-weight="700" fill="#315d54">人工批准</text><text x="500" y="355" text-anchor="middle" font-size="14" fill="#71827c">发送 / 删除 / 支付 / 发布</text>
+<rect x="675" y="292" width="230" height="95" rx="13" fill="#fff" stroke="#d5e1db" stroke-width="2"/>
+<text x="790" y="327" text-anchor="middle" font-size="19" font-weight="700" fill="#315d54">审计与回滚</text><text x="790" y="355" text-anchor="middle" font-size="14" fill="#71827c">记录输入、结果、操作者</text>
+<path d="M325 340 H385 M615 340 H675" stroke="#57877d" stroke-width="3"/>
+<text x="500" y="432" text-anchor="middle" font-size="13" fill="#778780">* 当前 Platform 源码还区分 EXTERNAL_JUDGED；此图为教学简化，不替代具体权限策略。</text>
+</svg>

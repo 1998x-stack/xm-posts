@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 790" role="img" aria-labelledby="zm-title zm-desc">
+<title id="zm-title">ZeRO++ 的三种通信优化</title><desc id="zm-desc">qwZ 使用量化权重减少参数 All-Gather 通信；hpZ 使用层级分区和重映射减少跨节点反向参数通信；qgZ 使用量化梯度 All-to-All 减少梯度通信。</desc>
+<rect width="560" height="790" rx="20" fill="#f5f8f4"/><g font-family="system-ui,-apple-system,'PingFang SC','Microsoft YaHei',sans-serif">
+<text x="28" y="48" font-size="25" font-weight="750" fill="#203c3e">ZeRO++：优化通信字节</text>
+<g fill="#fff" stroke="#d7e2dc"><rect x="30" y="83" width="500" height="165" rx="13"/><rect x="30" y="270" width="500" height="165" rx="13"/><rect x="30" y="457" width="500" height="165" rx="13"/></g>
+<text x="55" y="122" font-size="23" font-weight="800" fill="#1b786f">qwZ · Quantized Weights</text><text x="55" y="163" font-size="17" fill="#526b67">FP16 权重 All-Gather → 分块 INT8</text><text x="55" y="196" font-size="17" fill="#526b67">降低参数聚合的传输字节数</text><text x="55" y="226" font-size="15" fill="#71847b">论文设计：权重 All-Gather 通信量约减半</text>
+<text x="55" y="309" font-size="23" font-weight="800" fill="#6b64a8">hpZ · Hierarchical Partitioning</text><text x="55" y="350" font-size="17" fill="#526b67">利用节点内 / 节点间带宽差异</text><text x="55" y="383" font-size="17" fill="#526b67">数据重映射与重计算减少跨节点通信</text><text x="55" y="413" font-size="15" fill="#71847b">以额外内存或计算换取网络流量下降</text>
+<text x="55" y="496" font-size="23" font-weight="800" fill="#b36f45">qgZ · Quantized Gradients</text><text x="55" y="537" font-size="17" fill="#526b67">量化梯度 + All-to-All 归约</text><text x="55" y="570" font-size="17" fill="#526b67">先利用节点内带宽，再跨节点交换</text><text x="55" y="600" font-size="15" fill="#71847b">减少梯度同步通信字节数</text>
+<rect x="30" y="654" width="500" height="92" rx="12" fill="#e5f2ed"/><text x="280" y="693" font-size="23" text-anchor="middle" font-weight="850" fill="#216f67">约 4× 通信量降低</text><text x="280" y="720" font-size="15" text-anchor="middle" fill="#54766d">论文摘要中的组合优化结果，依配置而变</text>
+</g></svg>

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 760" role="img" aria-labelledby="om-title om-desc">
+<title id="om-title">GPU、CPU、NVMe 三层异构内存与 offload 路径</title><desc id="om-desc">GPU HBM 最快但容量较小，CPU DRAM 容量更大，NVMe 容量最大但访问成本最高。ZeRO-Offload 常把优化器状态和更新放到 CPU；ZeRO-Infinity 进一步支持 CPU 和 NVMe 分层卸载。</desc>
+<rect width="560" height="760" rx="20" fill="#f5f8f4"/><g font-family="system-ui,-apple-system,'PingFang SC','Microsoft YaHei',sans-serif">
+<text x="28" y="48" font-size="25" font-weight="750" fill="#203c3e">异构内存：容量与带宽的权衡</text>
+<g stroke-width="1.5"><rect x="35" y="87" width="490" height="142" rx="13" fill="#e1f2ed" stroke="#83bcb0"/><rect x="35" y="276" width="490" height="142" rx="13" fill="#e9eafa" stroke="#a6abd5"/><rect x="35" y="465" width="490" height="142" rx="13" fill="#fbefe3" stroke="#d9b08a"/></g>
+<g font-size="23" font-weight="800" text-anchor="middle"><text x="280" y="127" fill="#1c746c">GPU · HBM</text><text x="280" y="316" fill="#5f65a4">CPU · DRAM</text><text x="280" y="505" fill="#a86f3e">NVMe SSD</text></g>
+<g font-size="17" text-anchor="middle" fill="#526b67"><text x="280" y="163">较小容量 · 高带宽 · 执行计算</text><text x="280" y="193">参数、激活与工作区</text><text x="280" y="352">更大容量 · 较低带宽</text><text x="280" y="382">优化器更新、缓存与卸载状态</text><text x="280" y="541">大容量 · 更高延迟 / I/O 代价</text><text x="280" y="571">承载更大规模的冷状态</text></g>
+<g stroke="#718e86" stroke-width="3" fill="none"><path d="M280 229 V276 M272 268 L280 276 L288 268"/><path d="M280 418 V465 M272 457 L280 465 L288 457"/></g>
+<rect x="35" y="636" width="490" height="92" rx="12" fill="#fff" stroke="#d7e2db"/>
+<text x="55" y="670" font-size="18" font-weight="800" fill="#1b756c">Offload 的关键</text><text x="55" y="700" font-size="15" fill="#5e7770">预取 + 分块 + 通信 / 计算重叠；否则搬运会变成新瓶颈。</text>
+</g></svg>

@@ -24,3 +24,9 @@
 - `retrieval-rag` 研究检索质量和依据溯源；当检索被 Agent 作为工具使用时可做跨分类链接。
 - 正式文章放在 `posts/agents/<slug>/index.html`，提供独立 SVG、证据账本及真实 QA，并在 `content/posts.json` 注册。
 - `_topics/` 中的 README 仅作规划，占位不创建文章记录，也不会部署为文章。
+## 2026-11-21 新增专题
+- [Reflection, Self-Critique & Verbal Feedback](./_topics/reflection/README.md)
+- [Autonomous Agent Systems & Frameworks](./_topics/autonomous-agents/README.md)
+- [Autonomous Execution & Iterative Control](./_topics/autonomous-execution/README.md)
+- [Tool Integration & Interoperability Protocols](./_topics/tool-integration-protocols/README.md)
+- 关联文章：Agent Evaluation、AutoGPT、Ralph Loop、Function Calling、Model Context Protocol。

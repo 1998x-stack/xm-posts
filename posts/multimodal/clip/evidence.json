@@ -1,0 +1,110 @@
+[
+  {
+    "id": "CLIP-01",
+    "claim": "CLIP is trained on approximately 400 million image-text pairs collected from publicly available internet sources as the WebImageText (WIT) dataset.",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/abs/2103.00020",
+    "locator": "§2.2, Creating a Sufficiently Large Dataset",
+    "status": "verified",
+    "notes": "The paper describes 400 million image-text pairs; these are naturally noisy web pairs, not uniformly curated human labels."
+  },
+  {
+    "id": "CLIP-02",
+    "claim": "For a batch of N paired images and texts, CLIP compares all N×N possible pairings and maximizes the cosine similarity of the N true pairs while minimizing the N²−N mismatched pairings.",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/abs/2103.00020",
+    "locator": "§2.3, Selecting an Efficient Pre-Training Method",
+    "status": "verified",
+    "notes": "The objective uses a symmetric cross-entropy over image-to-text and text-to-image similarity scores."
+  },
+  {
+    "id": "CLIP-03",
+    "claim": "The CLIP text encoder is a 12-layer, 512-wide Transformer with 8 attention heads and a 49,152-token BPE vocabulary; the maximum sequence length is 76 and the final EOS representation is projected.",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/abs/2103.00020",
+    "locator": "§2.4, Choosing and Scaling a Model",
+    "status": "verified",
+    "notes": "These are the paper's base text encoder details; do not assume every later CLIP-derived model keeps them."
+  },
+  {
+    "id": "CLIP-04",
+    "claim": "The paper trains five ResNet and three Vision Transformer variants for 32 epochs using Adam with decoupled weight decay and cosine learning-rate decay; the batch size is 32,768.",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/abs/2103.00020",
+    "locator": "§2.5, Training",
+    "status": "verified",
+    "notes": "The paper also describes mixed precision and memory-saving techniques. The largest ViT model uses 256 V100 GPUs for 12 days."
+  },
+  {
+    "id": "CLIP-05",
+    "claim": "The learnable temperature parameter is initialized to an equivalent of 0.07 and logit scaling is clipped to no more than 100 to avoid training instability.",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/abs/2103.00020",
+    "locator": "§2.5, Training",
+    "status": "verified",
+    "notes": "The implementation stores a log-parameterized multiplicative scalar; tau is not simply a permanently fixed hyperparameter."
+  },
+  {
+    "id": "CLIP-06",
+    "claim": "For zero-shot transfer, class names or descriptions are encoded by the text encoder, compared with image embeddings by cosine similarity, scaled by temperature, and normalized with softmax.",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/abs/2103.00020",
+    "locator": "§3.1.2, Using CLIP for Zero-Shot Transfer",
+    "status": "verified",
+    "notes": "The paper interprets the text encoder as generating weights for a linear classifier over image features."
+  },
+  {
+    "id": "CLIP-07",
+    "claim": "The paper reports 76.2% ImageNet accuracy and 95% top-5 accuracy for its best CLIP model in the zero-shot comparison.",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/abs/2103.00020",
+    "locator": "Table 1 and §3.1.3, Initial Comparison to Visual N-Grams",
+    "status": "verified",
+    "notes": "The paper cautions that Visual N-Grams and CLIP differ in dataset scale, architecture, and compute; this is not a controlled comparison isolating the objective."
+  },
+  {
+    "id": "CLIP-08",
+    "claim": "Using the prompt template 'A photo of a {label}.' improves ImageNet accuracy by 1.3 percentage points over using only the label name; an 80-prompt ensemble improves the single-default-prompt result by a further 3.5 points on ImageNet.",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/abs/2103.00020",
+    "locator": "§3.1.4, Prompt Engineering and Ensembling",
+    "status": "verified",
+    "notes": "These are results under the paper's ImageNet evaluation setup, not a universal gain for every dataset."
+  },
+  {
+    "id": "CLIP-09",
+    "claim": "Zero-shot CLIP outperforms a supervised logistic-regression classifier trained on ResNet-50 features on 16 of the 27 datasets in the paper's Figure 5 comparison.",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/abs/2103.00020",
+    "locator": "Figure 5 and §3.1.5, Analysis of Zero-Shot CLIP Performance",
+    "status": "verified",
+    "notes": "The paper also reports substantial variation by task; performance is not uniformly strong."
+  },
+  {
+    "id": "CLIP-10",
+    "claim": "CLIP has limitations on counting, distance estimation, fine-grained recognition, prompt sensitivity, out-of-distribution inputs, and social bias.",
+    "kind": "paper-claim",
+    "source_url": "https://openai.com/index/clip/",
+    "locator": "Limitations and Broader impacts sections; cross-checked with the official model card",
+    "status": "verified",
+    "notes": "The article does not present CLIP as a universal vision understanding system or a high-stakes classifier."
+  },
+  {
+    "id": "CLIP-11",
+    "claim": "The toy matrix values, temperature slider similarities, and pure-Python examples in this article are pedagogical constructions, not reported model outputs or a reproduction of the original training run.",
+    "kind": "illustrative",
+    "source_url": "https://arxiv.org/abs/2103.00020",
+    "locator": "Independent teaching example based on §2.3 and §3.1.2",
+    "status": "illustrative",
+    "notes": "The accompanying tests validate mathematical invariants only; they do not benchmark a trained CLIP model."
+  },
+  {
+    "id": "CLIP-12",
+    "claim": "The official CLIP model card positions the model as a research output, notes that it was not purposefully trained or evaluated for languages other than English, and flags unconstrained deployment, surveillance, and facial recognition as out of scope.",
+    "kind": "model-card-claim",
+    "source_url": "https://github.com/openai/CLIP/blob/main/model-card.md",
+    "locator": "Model Card: Model Use, Intended Use, Out-of-Scope Use Cases, Limitations",
+    "status": "verified",
+    "notes": "The article presents these as the model card's stated scope and cautions, not as a new benchmark result."
+  }
+]

@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 380" role="img" aria-labelledby="memory-title memory-desc">
+<title id="memory-title">混合精度 Adam 训练的每参数 16 字节模型状态</title>
+<desc id="memory-desc">每个参数需要 2 字节 FP16 权重、2 字节 FP16 梯度、4 字节 FP32 主权重、4 字节 Adam 一阶矩和 4 字节 Adam 二阶矩，总计 16 字节。激活和临时缓冲不包含在内。</desc>
+<rect width="900" height="380" rx="22" fill="#f5f8f4"/>
+<g font-family="system-ui,-apple-system,'PingFang SC','Microsoft YaHei',sans-serif">
+<text x="42" y="48" font-size="23" font-weight="750" fill="#203c3e">先看清：训练时保存的不只有模型权重</text>
+<text x="42" y="82" font-size="17" fill="#55716e">混合精度 + Adam 的经典估算：每个参数约 16 bytes</text>
+<text x="42" y="132" font-size="16" font-weight="700" fill="#4b6260">一个参数对应的模型状态（按字节数比例绘制）</text>
+<rect x="42" y="154" width="102" height="82" rx="8" fill="#3b9c8c"/>
+<rect x="144" y="154" width="102" height="82" rx="8" fill="#d18a55"/>
+<rect x="246" y="154" width="204" height="82" rx="8" fill="#6d78b9"/>
+<rect x="450" y="154" width="204" height="82" rx="8" fill="#8b6cb0"/>
+<rect x="654" y="154" width="204" height="82" rx="8" fill="#b46c85"/>
+<g font-size="16" font-weight="750" text-anchor="middle" fill="#fff">
+<text x="93" y="187">权重</text><text x="93" y="211">2 B</text>
+<text x="195" y="187">梯度</text><text x="195" y="211">2 B</text>
+<text x="348" y="187">FP32 主权重</text><text x="348" y="211">4 B</text>
+<text x="552" y="187">Adam 一阶矩 m</text><text x="552" y="211">4 B</text>
+<text x="756" y="187">Adam 二阶矩 v</text><text x="756" y="211">4 B</text>
+</g>
+<text x="42" y="276" font-size="18" font-weight="800" fill="#1d6662">2 + 2 + 4 + 4 + 4 = 16 bytes / parameter</text>
+<path d="M42 296 H858" stroke="#cbd9d2" stroke-width="2"/>
+<text x="42" y="329" font-size="15" fill="#627a75">这只是参数相关状态；激活、通信 bucket、临时 workspace 与显存碎片还会继续占用 GPU。</text>
+<text x="42" y="354" font-size="13" fill="#7b8d86">来源：Rajbhandari et al., ZeRO, §3.1；不同精度与优化器配置会改变字节数。</text>
+</g>
+</svg>

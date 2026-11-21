@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 770" role="img" aria-labelledby="sm-title sm-desc">
+<title id="sm-title">ZeRO 四个阶段的单 GPU 状态分片示意</title><desc id="sm-desc">依次显示普通数据并行、ZeRO Stage 1、Stage 2 和 Stage 3 中一个 rank 持有的参数、梯度与优化器状态份额。</desc>
+<rect width="560" height="770" rx="20" fill="#f5f8f4"/><g font-family="system-ui,-apple-system,'PingFang SC','Microsoft YaHei',sans-serif">
+<text x="26" y="43" font-size="25" font-weight="750" fill="#203c3e">一个 rank 本地保留多少状态？</text><text x="26" y="75" font-size="16" fill="#627a73">满条 = 完整副本；短条 = 1/4 分片（四卡示意）</text>
+<g fill="#fff" stroke="#d7e2db"><rect x="24" y="96" width="512" height="145" rx="12"/><rect x="24" y="258" width="512" height="145" rx="12"/><rect x="24" y="420" width="512" height="145" rx="12"/><rect x="24" y="582" width="512" height="145" rx="12"/></g>
+<g font-size="20" font-weight="800" fill="#294a47"><text x="42" y="126">Stage 0 · 普通 DP</text><text x="42" y="288">Stage 1 · 切优化器状态</text><text x="42" y="450">Stage 2 · 再切梯度</text><text x="42" y="612">Stage 3 · 再切参数</text></g>
+<g font-size="15" font-weight="700" fill="#536d67"><text x="42" y="158">P 参数</text><text x="42" y="194">G 梯度</text><text x="42" y="230">O 优化器</text><text x="42" y="320">P 参数</text><text x="42" y="356">G 梯度</text><text x="42" y="392">O 优化器</text><text x="42" y="482">P 参数</text><text x="42" y="518">G 梯度</text><text x="42" y="554">O 优化器</text><text x="42" y="644">P 参数</text><text x="42" y="680">G 梯度</text><text x="42" y="716">O 优化器</text></g>
+<g fill="#3b9c8c"><rect x="158" y="143" width="350" height="19" rx="5"/><rect x="158" y="305" width="350" height="19" rx="5"/><rect x="158" y="467" width="350" height="19" rx="5"/><rect x="158" y="629" width="88" height="19" rx="5"/></g>
+<g fill="#d18a55"><rect x="158" y="179" width="350" height="19" rx="5"/><rect x="158" y="341" width="350" height="19" rx="5"/><rect x="158" y="503" width="88" height="19" rx="5"/><rect x="158" y="665" width="88" height="19" rx="5"/></g>
+<g fill="#8870b5"><rect x="158" y="215" width="350" height="19" rx="5"/><rect x="158" y="377" width="88" height="19" rx="5"/><rect x="158" y="539" width="88" height="19" rx="5"/><rect x="158" y="701" width="88" height="19" rx="5"/></g>
+</g></svg>

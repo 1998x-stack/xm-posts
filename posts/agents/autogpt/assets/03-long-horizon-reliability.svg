@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 500" role="img" aria-labelledby="autogpt-reliability-title autogpt-reliability-desc">
+<title id="autogpt-reliability-title">长程任务中的逐步成功率累积</title>
+<desc id="autogpt-reliability-desc">在每一步独立且成功概率固定的简化假设下，20 步全部成功的概率为 0.95 的 20 次方约 0.358，或 0.98 的 20 次方约 0.668。</desc>
+<rect width="1000" height="500" rx="22" fill="#f6f8f5"/>
+<text x="54" y="48" font-size="23" font-weight="700" fill="#2b4b48">没有恢复机制时，局部错误会在长链路中累积</text>
+<g stroke="#dce5e0" stroke-width="1"><path d="M100 95 H920 M100 175 H920 M100 255 H920 M100 335 H920 M100 415 H920"/></g>
+<g fill="#6b817b" font-size="14"><text x="70" y="100" text-anchor="end">1.0</text><text x="70" y="180" text-anchor="end">0.8</text><text x="70" y="260" text-anchor="end">0.6</text><text x="70" y="340" text-anchor="end">0.4</text><text x="70" y="420" text-anchor="end">0.2</text><text x="100" y="448" text-anchor="middle">0</text><text x="237" y="448" text-anchor="middle">5</text><text x="373" y="448" text-anchor="middle">10</text><text x="510" y="448" text-anchor="middle">15</text><text x="647" y="448" text-anchor="middle">20</text><text x="783" y="448" text-anchor="middle">25</text><text x="920" y="448" text-anchor="middle">30</text></g>
+<path d="M100 95 L237 185.4 L373 255.4 L510 309.8 L647 352.6 L783 385.4 L920 410.9" fill="none" stroke="#bf754d" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M100 95 L237 133.4 L373 168.2 L510 199.4 L647 228 L783 253.8 L920 277" fill="none" stroke="#2f8c80" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+<g fill="#bf754d"><circle cx="647" cy="352.6" r="6"/></g><g fill="#2f8c80"><circle cx="647" cy="228" r="6"/></g>
+<path d="M647 352.6 L710 352.6" stroke="#bf754d" stroke-width="2" stroke-dasharray="5 5"/><path d="M647 228 L710 228" stroke="#2f8c80" stroke-width="2" stroke-dasharray="5 5"/>
+<rect x="710" y="199" width="205" height="63" rx="10" fill="#e5f2ed" stroke="#9bc5b7"/><text x="725" y="224" font-size="16" font-weight="700" fill="#28695e">p = 0.98</text><text x="725" y="247" font-size="14" fill="#527e74">20 步 ≈ 0.668</text>
+<rect x="710" y="322" width="205" height="63" rx="10" fill="#fbede5" stroke="#d9b19a"/><text x="725" y="347" font-size="16" font-weight="700" fill="#965d3d">p = 0.95</text><text x="725" y="370" font-size="14" fill="#a2745c">20 步 ≈ 0.358</text>
+<text x="510" y="482" text-anchor="middle" font-size="13" fill="#778781">横轴：任务步骤数 n · 纵轴：所有步骤一次成功的概率 pⁿ</text>
+</svg>

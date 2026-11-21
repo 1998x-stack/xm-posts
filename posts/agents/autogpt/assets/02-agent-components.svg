@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 540" role="img" aria-labelledby="autogpt-components-title autogpt-components-desc">
+<title id="autogpt-components-title">自主 Agent 的组件分层</title>
+<desc id="autogpt-components-desc">目标与角色进入 LLM 决策核心，周围由规划、动作历史、上下文记忆、工具注册、权限管理和执行环境提供支持；组件通过明确接口交换状态。</desc>
+<defs><marker id="autogpt-comp-arrow" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6" fill="none" stroke="#57877d" stroke-width="1.5"/></marker></defs>
+<rect width="1000" height="540" rx="22" fill="#f6f8f5"/>
+<rect x="360" y="28" width="280" height="72" rx="15" fill="#e6eef8" stroke="#8ea9ce" stroke-width="2"/>
+<text x="500" y="58" text-anchor="middle" font-size="21" font-weight="700" fill="#314d70">Profile / Directives</text><text x="500" y="82" text-anchor="middle" font-size="14" fill="#617b9b">角色、目标、约束与成功标准</text>
+<rect x="350" y="180" width="300" height="110" rx="18" fill="#e4f2ec" stroke="#7cb39f" stroke-width="2.5"/>
+<text x="500" y="222" text-anchor="middle" font-size="26" font-weight="700" fill="#24594d">LLM 决策核心</text><text x="500" y="250" text-anchor="middle" font-size="15" fill="#557b70">提出下一步 Action Proposal</text><text x="500" y="272" text-anchor="middle" font-size="13" fill="#6c8980">不是执行环境本身</text>
+<path d="M500 100 V180" stroke="#57877d" stroke-width="3" fill="none" marker-end="url(#autogpt-comp-arrow)"/>
+<rect x="35" y="165" width="235" height="92" rx="14" fill="#fff0df" stroke="#d6a36d" stroke-width="2"/>
+<text x="152" y="198" text-anchor="middle" font-size="20" font-weight="700" fill="#79512f">Planning / Todo</text><text x="152" y="225" text-anchor="middle" font-size="14" fill="#916d4b">分解、排序、更新子任务</text>
+<path d="M270 210 H350" stroke="#57877d" stroke-width="3" fill="none" marker-end="url(#autogpt-comp-arrow)"/>
+<rect x="730" y="165" width="235" height="92" rx="14" fill="#f0eafb" stroke="#aaa0d0" stroke-width="2"/>
+<text x="847" y="198" text-anchor="middle" font-size="20" font-weight="700" fill="#51477c">Tools / Commands</text><text x="847" y="225" text-anchor="middle" font-size="14" fill="#71699a">搜索、浏览器、代码、文件</text>
+<path d="M650 210 H730" stroke="#57877d" stroke-width="3" fill="none" marker-end="url(#autogpt-comp-arrow)"/>
+<rect x="35" y="360" width="235" height="100" rx="14" fill="#e8f2f6" stroke="#94b5c8" stroke-width="2"/>
+<text x="152" y="393" text-anchor="middle" font-size="20" font-weight="700" fill="#355d70">Action History</text><text x="152" y="420" text-anchor="middle" font-size="14" fill="#607e90">动作、结果、错误与时间序列</text><text x="152" y="442" text-anchor="middle" font-size="13" fill="#708c9c">Episodic trace</text>
+<path d="M270 405 H350 V290" stroke="#57877d" stroke-width="2.5" fill="none" marker-end="url(#autogpt-comp-arrow)"/>
+<rect x="365" y="360" width="270" height="100" rx="14" fill="#eaf2e4" stroke="#a4b98b" stroke-width="2"/>
+<text x="500" y="393" text-anchor="middle" font-size="20" font-weight="700" fill="#4d6338">Context / Memory</text><text x="500" y="420" text-anchor="middle" font-size="14" fill="#6c8158">摘要、检索、工作区状态</text><text x="500" y="442" text-anchor="middle" font-size="13" fill="#81916e">控制上下文长度与信息保留</text>
+<path d="M500 290 V360" stroke="#57877d" stroke-width="2.5" fill="none" marker-end="url(#autogpt-comp-arrow)"/>
+<rect x="730" y="360" width="235" height="100" rx="14" fill="#f8e9e6" stroke="#d4a096" stroke-width="2"/>
+<text x="847" y="393" text-anchor="middle" font-size="20" font-weight="700" fill="#7c4b43">Permission Gate</text><text x="847" y="420" text-anchor="middle" font-size="14" fill="#966c63">允许、拒绝、请求人工批准</text><text x="847" y="442" text-anchor="middle" font-size="13" fill="#a07e75">副作用必须显式控制</text>
+<path d="M847 257 V360" stroke="#57877d" stroke-width="2.5" fill="none" marker-end="url(#autogpt-comp-arrow)"/>
+<text x="500" y="505" text-anchor="middle" font-size="14" fill="#71837d">组件是系统工程边界：LLM 负责提出决策，运行时负责校验、执行、记录和停止。</text>
+</svg>

@@ -1,0 +1,762 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<meta name="description" content="从 Jev 的 Choice、Score、Noul 类型化接口出发，理解概率校准、贝叶斯风险、拒绝决策与 Agent 工作流。">
+<title>Understanding Jev：类型化概率决策模型</title>
+<style>
+:root{color-scheme:light;--paper:#fffdf9;--ink:#203035;--muted:#586c70;--accent:#147f80;--accent2:#6656a6;--warm:#c36a45;--line:#dce7e2;--surface:#f1f7f4;--surface2:#f4f1fb;--warning:#fff4e8;--max:850px}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font:17px/1.86 system-ui,-apple-system,"PingFang SC","Microsoft YaHei",sans-serif}
+a{color:#126e72;text-underline-offset:.18em}a:hover{color:#a64f31}
+a:focus-visible,button:focus-visible,input:focus-visible,.math-scroll:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+.skip-link{position:absolute;left:1rem;top:-5rem;z-index:20;background:var(--ink);color:white;padding:.5rem 1rem;border-radius:.4rem}.skip-link:focus{top:1rem}
+.layout{width:100%;max-width:1320px;min-width:0;margin:0 auto;display:grid;grid-template-columns:220px minmax(0,1fr);gap:clamp(2rem,5vw,5rem);padding:3.7rem 2rem 8rem}.layout>*{min-width:0;max-width:100%}
+.toc{width:100%;max-width:100%;min-width:0;position:sticky;top:1.5rem;align-self:start;max-height:calc(100vh - 3rem);overflow:auto;font-size:.82rem;line-height:1.55}
+.toc strong{display:block;margin:0 0 .9rem;font-size:.9rem;letter-spacing:.03em}
+.toc a{display:block;text-decoration:none;color:var(--muted);padding:.38rem .7rem;border-left:2px solid var(--line)}
+.toc a:hover,.toc a[aria-current=location]{color:var(--accent);border-color:var(--accent);background:var(--surface)}
+main{width:100%;max-width:100%;min-width:0}article{width:100%;max-width:var(--max);margin:0 auto;min-width:0}
+.article-header{padding:.2rem 0 1.2rem;border-bottom:1px solid var(--line)}
+.eyebrow{margin:0 0 .7rem;color:var(--accent);font-size:.76rem;font-weight:750;letter-spacing:.13em;text-transform:uppercase}
+h1{font-size:clamp(2.5rem,5.5vw,4.3rem);line-height:1.14;letter-spacing:-.045em;margin:.2rem 0 1rem}
+.dek{font-size:clamp(1.1rem,2.1vw,1.34rem);line-height:1.7;color:var(--muted);margin:.8rem 0 1.2rem}
+.meta{display:flex;flex-wrap:wrap;gap:.5rem 1.1rem;color:var(--muted);font-size:.82rem}
+.meta span{display:inline-flex;align-items:center;gap:.35rem}
+section{scroll-margin-top:1.5rem;margin-top:4.2rem}
+h2{font-size:clamp(1.55rem,3vw,2.05rem);line-height:1.42;margin:0 0 1.25rem;letter-spacing:-.02em}
+h3{font-size:1.2rem;line-height:1.5;margin:2rem 0 .7rem}
+p{margin:1rem 0}
+.lead{font-size:1.1rem;color:#34494d}
+strong{font-weight:750}
+code,pre{font-family:ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",monospace}
+code{font-size:.88em;background:#edf3f0;padding:.12em .32em;border-radius:.25rem}
+pre{max-width:100%;margin:1.2rem 0;padding:1.1rem 1.2rem;background:#1d3037;color:#e7f3ef;border-radius:.8rem;overflow:auto;line-height:1.62;font-size:.82rem;tab-size:2}
+pre code{background:none;padding:0;color:inherit;font-size:inherit}
+figure{min-width:0;max-width:100%;margin:1.9rem 0;padding:1rem;border:1px solid var(--line);border-radius:1rem;background:#fff}
+figure img{display:block;width:100%;max-width:100%;height:auto}figure svg{display:block;width:100%;max-width:100%;height:auto}
+figcaption{margin-top:.8rem;padding-top:.7rem;border-top:1px solid var(--line);font-size:.82rem;line-height:1.7;color:var(--muted)}
+.note,.warning,.takeaway{margin:1.4rem 0;padding:1rem 1.15rem;border-radius:.65rem}
+.note{background:var(--surface);border-left:4px solid var(--accent)}
+.warning{background:var(--warning);border-left:4px solid var(--warm)}
+.takeaway{background:var(--surface2);border-left:4px solid var(--accent2)}
+.note p:first-child,.warning p:first-child,.takeaway p:first-child{margin-top:0}
+.note p:last-child,.warning p:last-child,.takeaway p:last-child{margin-bottom:0}
+.table-scroll{display:block;width:100%;max-width:100%;min-width:0;overflow-x:auto;border:1px solid var(--line);border-radius:.7rem;margin:1.2rem 0}
+table{width:100%;border-collapse:collapse;font-size:.88rem;min-width:580px}
+th,td{padding:.72rem .8rem;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{background:var(--surface);font-weight:700}
+tr:last-child td{border-bottom:0}
+.math-equation{max-width:100%;min-width:0;margin:1.4rem 0;padding:.65rem 0;border-block:1px solid var(--line)}
+.math-scroll{display:block;width:100%;max-width:100%;min-width:0;overflow-x:auto;overflow-y:hidden;scrollbar-width:thin}
+.math-scroll math[display=block]{width:max-content;min-width:100%;font-size:clamp(1.02rem,2vw,1.25rem)}
+.math-inline{font-family:"Cambria Math","STIX Two Math","Latin Modern Math",serif;vertical-align:-.06em}
+.figure-grid{display:grid;width:100%;max-width:100%;min-width:0;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem}
+.figure-grid figure{min-width:0;max-width:100%;margin:.5rem 0}
+.lab{margin:1.7rem 0;padding:1.1rem;border:1px solid var(--line);border-radius:1rem;background:#fff}
+.lab h3{margin:.2rem 0 .6rem}
+.lab-intro{font-size:.9rem;color:var(--muted)}
+.lab-controls{display:grid;min-width:0;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem}
+.lab-actions{display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;margin-top:1rem}
+.lab-actions button{font:inherit;font-size:.88rem;font-weight:700;cursor:pointer;padding:.55rem .85rem;border:1px solid #a9cec0;border-radius:.55rem;background:#e9f4f0;color:#24545a}
+.lab-actions button:hover{background:#dceee6}
+.control{padding:.8rem;border:1px solid var(--line);border-radius:.7rem;background:var(--surface)}
+.control label{display:flex;justify-content:space-between;gap:.5rem;font-weight:650;font-size:.88rem}
+.control input{width:100%;accent-color:var(--accent);margin:.7rem 0 .2rem}
+.control output{font-variant-numeric:tabular-nums;color:var(--accent);font-weight:750}
+.lab-result{margin-top:1rem;padding:1rem;border-radius:.7rem;background:#edf5f1}
+.risk-row{display:grid;grid-template-columns:9.5rem minmax(0,1fr) 4rem;gap:.6rem;align-items:center;margin:.65rem 0;font-size:.85rem}
+.risk-track{height:12px;background:#e4ebe7;border-radius:99px;overflow:hidden}
+.risk-fill{height:100%;width:0;background:var(--accent);border-radius:99px;transition:width .18s ease}
+.risk-fill.review{background:var(--warm)}
+.decision-output{font-size:1.1rem;font-weight:800;margin:.8rem 0 .2rem}
+.status{min-height:1.4em;color:var(--accent);font-size:.85rem}
+.checklist{padding-left:1.25rem}
+.checklist li{margin:.5rem 0}
+.ref-list{padding-left:1.3rem}
+.ref-list li{margin:.65rem 0;font-size:.9rem}
+.small{font-size:.82rem;color:var(--muted)}
+.pill{display:inline-block;border:1px solid var(--line);border-radius:99px;padding:.12rem .55rem;font-size:.75rem;color:var(--muted);margin-right:.25rem}
+footer{margin-top:4rem;padding-top:1.2rem;border-top:1px solid var(--line);font-size:.82rem;color:var(--muted)}
+@media(max-width:920px){.layout{display:block;width:100%;max-width:100%;min-width:0;padding:2rem 1.2rem 5rem}.toc{position:static;max-height:none;margin-bottom:2rem;padding-bottom:1rem;border-bottom:1px solid var(--line)}.toc a{display:inline-block;border-left:0;border-bottom:2px solid transparent;margin-right:.2rem;padding:.35rem .45rem}}
+@media(max-width:560px){body{font-size:16px;overflow-x:clip}.layout{padding:1.2rem .95rem 4rem}.figure-grid,.lab-controls{grid-template-columns:1fr}figure{padding:.65rem}section{margin-top:3.2rem}.risk-row{grid-template-columns:6.5rem minmax(0,1fr) 3.5rem;gap:.35rem;font-size:.78rem}h2{margin-bottom:1rem}}
+h1,h2,h3,p,li,td,th,code{overflow-wrap:anywhere}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation:none!important;transition:none!important}}
+@media print{body{background:#fff;color:#111;font-size:10.5pt}.layout{display:block;padding:0}.toc,.skip-link,.lab-controls{display:none!important}article{max-width:none}.article-header{padding-top:0}section{margin-top:1.6rem;break-inside:auto}figure,.note,.warning,.takeaway,.lab{break-inside:avoid;box-shadow:none}pre{white-space:pre-wrap;overflow:visible;color:#111;background:#f1f1f1}a{color:#164e54}.math-scroll{overflow:visible}.math-scroll math[display=block]{font-size:1rem}.risk-fill{print-color-adjust:exact}}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#content">跳转至正文</a>
+<div class="layout">
+<nav class="toc" aria-label="文章目录">
+<strong>Understanding Jev</strong>
+<a href="#problem">01 · 为什么需要决策模型</a>
+<a href="#model">02 · Jev 的接口与边界</a>
+<a href="#primitives">03 · 三种核心原语</a>
+<a href="#parallel">04 · 并行问题的含义</a>
+<a href="#probability">05 · 概率与校准</a>
+<a href="#decision">06 · 贝叶斯风险</a>
+<a href="#lab">07 · 交互式决策实验</a>
+<a href="#abstention">08 · 拒绝与人工复核</a>
+<a href="#agent">09 · Agent 系统集成</a>
+<a href="#evidence">10 · 独立研究证据</a>
+<a href="#limits">11 · 适用边界与风险</a>
+<a href="#practice">12 · 工程实践清单</a>
+<a href="#references">13 · 参考资料</a>
+</nav>
+<main id="content">
+<article>
+<header class="article-header">
+<p class="eyebrow">Probabilistic Decisions · Calibration · Agent Systems</p>
+<h1>Understanding Jev：类型化概率决策模型</h1>
+<p class="dek">从 Choice、Score、Noul 到贝叶斯风险与 Agent 工作流：理解模型怎样给出一个可执行的判断，以及为什么最终的行动规则必须由软件负责。</p>
+<div class="meta">
+<span>研究对象：TypeSafe AI Jev</span>
+<span>模型文档版本：1.14.0</span>
+<span>阅读时间：约 28 分钟</span>
+<span>资料核对：2026-11-21</span>
+</div>
+</header>
+
+<section id="problem">
+<h2>01 · 为什么软件需要一种“只做判断”的模型？</h2>
+<p class="lead">很多自动化任务并不需要模型写一段话。它只需要回答一个边界清楚的问题：这张工单交给哪个团队？这次操作是否危险？这段回答是否有证据支持？</p>
+<p>设想一个客服系统收到下面的消息：</p>
+<div class="note"><strong>用户消息（教学案例）</strong><p>“我的账户今天被扣了两次钱。我已经提交过一次退款申请，但还没有收到处理结果。请问现在应该找谁？”</p></div>
+<p>系统接下来要做的不是写一篇客服回复，而是完成几个软件决策：</p>
+<ul>
+<li>工单应该进入 Billing、Support，还是 Delivery？</li>
+<li>用户是否明确提出退款？</li>
+<li>这条工单是否应该立即升级给人工？</li>
+<li>如果模型对归属团队不确定，能否先进入人工分流队列？</li>
+</ul>
+<p>传统 LLM 可以被要求输出 JSON，但实际系统仍要面对“生成文本 → 解析 → 校验 → 处理异常 → 执行策略”的链条。严格 JSON Schema 可以减少格式错误，却不能自动解决概率是否可信、何时应该拒绝，以及错误动作会造成多大损失的问题。</p>
+<figure>
+<svg aria-label="生成式 LLM 的文本解析链路与 Jev 类型化概率决策链路对比" focusable="false" xmlns="http://www.w3.org/2000/svg" width="1080" height="470" viewBox="0 0 1080 470" role="img" aria-labelledby="jev-pipeline-title jev-pipeline-desc">
+<title id="jev-pipeline-title">从生成文本到类型化概率决策</title>
+<desc id="jev-pipeline-desc">上方展示生成式语言模型需要生成文本、解析和校验后再执行；下方展示 Jev 接收状态与类型化问题，输出概率分布，再由策略代码决定动作。</desc>
+<defs><marker id="jev-pipeline-arrow-a" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0 0 L9 3 L0 6 Z" fill="#8b9b9a"/></marker><marker id="jev-pipeline-arrow-b" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0 0 L9 3 L0 6 Z" fill="#147f80"/></marker></defs>
+<rect width="1080" height="470" rx="22" fill="#fbfdfb"/>
+<text x="44" y="52" font-size="22" font-weight="700" fill="#53676d">A · 生成式 LLM + JSON 约束</text>
+<g font-family="system-ui,'PingFang SC','Microsoft YaHei',sans-serif">
+<rect x="42" y="83" width="190" height="106" rx="14" fill="#eef2f1" stroke="#cbd8d4" stroke-width="2"/>
+<text x="137" y="122" text-anchor="middle" font-size="20" font-weight="700" fill="#203035">State + Prompt</text><text x="137" y="153" text-anchor="middle" font-size="15" fill="#53676d">自然语言上下文</text>
+<path d="M232 136 H276" stroke="#8b9b9a" stroke-width="3" marker-end="url(#jev-pipeline-arrow-a)"/>
+<rect x="282" y="83" width="190" height="106" rx="14" fill="#f4f1fb" stroke="#d6cfee" stroke-width="2"/>
+<text x="377" y="122" text-anchor="middle" font-size="20" font-weight="700" fill="#453b75">Token Generation</text><text x="377" y="153" text-anchor="middle" font-size="15" fill="#625b7d">逐 token 生成文本</text>
+<path d="M472 136 H516" stroke="#8b9b9a" stroke-width="3" marker-end="url(#jev-pipeline-arrow-a)"/>
+<rect x="522" y="83" width="190" height="106" rx="14" fill="#fff3e9" stroke="#ebc7ae" stroke-width="2"/>
+<text x="617" y="122" text-anchor="middle" font-size="20" font-weight="700" fill="#85472e">Parse + Validate</text><text x="617" y="153" text-anchor="middle" font-size="15" fill="#8a624e">解析、校验、兜底</text>
+<path d="M712 136 H756" stroke="#8b9b9a" stroke-width="3" marker-end="url(#jev-pipeline-arrow-a)"/>
+<rect x="762" y="83" width="276" height="106" rx="14" fill="#eef2f1" stroke="#cbd8d4" stroke-width="2"/>
+<text x="900" y="122" text-anchor="middle" font-size="20" font-weight="700" fill="#203035">Application Policy</text><text x="900" y="153" text-anchor="middle" font-size="15" fill="#53676d">决定执行或报错</text>
+<rect x="42" y="214" width="996" height="38" rx="9" fill="#fff4e8"/>
+<text x="540" y="239" text-anchor="middle" font-size="16" font-weight="650" fill="#99522f">JSON Schema 约束结构，不会自动校准语义判断，也不会定义错误成本</text>
+<text x="44" y="302" font-size="22" font-weight="700" fill="#147f80">B · Jev / Typed Decision Model</text>
+<rect x="42" y="330" width="190" height="100" rx="14" fill="#e9f4f0" stroke="#a9cec0" stroke-width="2"/>
+<text x="137" y="368" text-anchor="middle" font-size="20" font-weight="700" fill="#24545a">State + Questions</text><text x="137" y="397" text-anchor="middle" font-size="15" fill="#426c69">状态 + 答案契约</text>
+<path d="M232 380 H276" stroke="#147f80" stroke-width="3" marker-end="url(#jev-pipeline-arrow-b)"/>
+<rect x="282" y="330" width="190" height="100" rx="14" fill="#e9f4f0" stroke="#a9cec0" stroke-width="2"/>
+<text x="377" y="368" text-anchor="middle" font-size="20" font-weight="700" fill="#24545a">Jev · fθ</text><text x="377" y="397" text-anchor="middle" font-size="15" fill="#426c69">窄范围判断</text>
+<path d="M472 380 H516" stroke="#147f80" stroke-width="3" marker-end="url(#jev-pipeline-arrow-b)"/>
+<rect x="522" y="330" width="230" height="100" rx="14" fill="#f4f1fb" stroke="#d6cfee" stroke-width="2"/>
+<text x="637" y="366" text-anchor="middle" font-size="18" font-weight="700" fill="#453b75">Typed Probabilities</text><text x="637" y="396" text-anchor="middle" font-size="15" fill="#625b7d">Choice · Score · Noul</text>
+<path d="M752 380 H796" stroke="#147f80" stroke-width="3" marker-end="url(#jev-pipeline-arrow-b)"/>
+<rect x="802" y="330" width="236" height="100" rx="14" fill="#e9f4f0" stroke="#a9cec0" stroke-width="2"/>
+<text x="920" y="366" text-anchor="middle" font-size="18" font-weight="700" fill="#24545a">Policy in Code</text><text x="920" y="396" text-anchor="middle" font-size="15" fill="#426c69">Act · Review · Reject</text>
+</g>
+</svg>
+<figcaption>图 1 · 两种系统接口的区别。Jev 将可选答案空间提前写入请求，输出结构化判断；应用代码仍然负责阈值、风险和最终动作。图中流程是概念对比，不是某个产品的内部实现图。</figcaption>
+</figure>
+<p>因此，真正值得研究的问题不是“Jev 能不能替代 LLM”，而是：<strong>当软件只需要一个有限集合中的判断时，是否应该把判断接口从文本生成中分离出来？</strong></p>
+</section>
+
+<section id="model">
+<h2>02 · Jev 是什么？它不是什么？</h2>
+<p>TypeSafe AI 将 Jev 定位为首个 <em>System One Model</em>。它接收一份待判断的状态（<code>state</code>）和调用方定义的问题（<code>questions</code>），返回类型受约束的答案及概率信息，而不是自然语言段落。官方文档把它描述为一种供软件直接消费的结构化决策模型。[1][2]</p>
+<div class="math-equation" role="group" aria-label="Jev 的抽象输入输出接口">
+<div class="math-scroll" tabindex="0" role="region" aria-label="Jev 输入输出公式，可以横向滚动">
+<math display="block" aria-label="模型 f theta 接收状态 s 和问题集合 q，输出类型化答案集合 a 以及概率信息 p">
+<mrow><msub><mi>f</mi><mi>θ</mi></msub><mo>:</mo><mo>(</mo><mi>s</mi><mo>,</mo><mi>Q</mi><mo>)</mo><mo>→</mo><mo>(</mo><mi>A</mi><mo>,</mo><mi>P</mi><mo>)</mo></mrow>
+</math>
+</div>
+</div>
+<p>这里的 <code>fθ</code> 是教学用的抽象记号：<code>s</code> 是输入状态，<code>Q</code> 是问题与候选答案的定义，<code>A</code> 是类型化答案，<code>P</code> 是与答案相关的概率信息。它不是 TypeSafe 已公开的神经网络结构公式。</p>
+<h3>“System One”应该怎样理解？</h3>
+<p>名称借用了 Daniel Kahneman 对快速、直觉式 System 1 与较慢、审慎式 System 2 的区分。这里强调的是任务形态：快速、范围受限、适合由代码消费的判断。它不意味着模型拥有与人类大脑相同的认知机制，也不代表它能可靠处理多步数学推理。</p>
+<div class="warning"><strong>必须划清的边界：</strong>Jev 的类型安全保证输出落在预先声明的结构和答案空间中；它不保证答案符合事实。一个格式完全合法的错误选择，仍然可能触发错误的退款、封禁或工具调用。</div>
+<h3>截至 2026-11-21 的公开版本</h3>
+<p>TypeSafe 当前模型文档列出的最新稳定版本是 <code>jev-1.14.0</code>，<code>jev-latest</code> 指向该版本。1.14 增加了 Box 问题类型；Choice、Score、Noul 仍是本文讨论的核心决策原语。[3]</p>
+<p>TypeSafe 公开了 API、问题类型和训练目标说明，但这些信息不足以重建其完整模型架构、参数规模或训练数据。RLCD（Reinforcement Learning for Calibrated Decisions）是厂商对训练方法的命名；不能仅凭名称推断其具体损失函数、采样算法或内部网络结构。[1][4] 发布文章还使用了“cannot hallucinate”的营销表述，但同一文章明确说明其零类型错误图并非经验测量，而是由 schema matching 的结构保证得出。因此，合理的工程解释是“输出类型和结构受约束”，而不是“模型永远不会做出事实错误的判断”。</p>
+</section>
+
+<section id="primitives">
+<h2>03 · 三种核心概率原语：Choice、Score、Noul</h2>
+<p>三种原语的区别不是表面上的字段命名，而是它们对应不同的数学对象。先问清楚答案空间是什么，再选择问题类型。</p>
+<figure>
+<svg aria-label="Choice 的类别概率、Score 的有序等级分布和 Noul 的是非概率" focusable="false" xmlns="http://www.w3.org/2000/svg" width="1080" height="500" viewBox="0 0 1080 500" role="img" aria-labelledby="jev-primitives-title jev-primitives-desc">
+<title id="jev-primitives-title">Choice、Score 与 Noul 三种决策原语</title>
+<desc id="jev-primitives-desc">Choice 在无序类别间分配概率，Score 在有序等级间分配概率并计算期望位置，Noul 返回一个命题为真的概率。</desc>
+<rect width="1080" height="500" rx="22" fill="#fbfdfb"/>
+<g font-family="system-ui,'PingFang SC','Microsoft YaHei',sans-serif">
+<rect x="30" y="34" width="326" height="390" rx="18" fill="#f0f7f4" stroke="#cbded5" stroke-width="2"/>
+<text x="58" y="78" font-size="26" font-weight="750" fill="#147f80">CHOICE</text><text x="58" y="111" font-size="16" fill="#53676d">无序类别 · 选择一个选项</text>
+<text x="58" y="162" font-size="18" font-weight="650" fill="#203035">P(team | state)</text>
+<text x="58" y="210" font-size="16" fill="#53676d">Billing</text><rect x="145" y="190" width="160" height="26" rx="7" fill="#e0e9e5"/><rect x="145" y="190" width="112" height="26" rx="7" fill="#147f80"/><text x="315" y="210" font-size="16" fill="#203035">0.70</text>
+<text x="58" y="258" font-size="16" fill="#53676d">Support</text><rect x="145" y="238" width="160" height="26" rx="7" fill="#e0e9e5"/><rect x="145" y="238" width="32" height="26" rx="7" fill="#6656a6"/><text x="315" y="258" font-size="16" fill="#203035">0.20</text>
+<text x="58" y="306" font-size="16" fill="#53676d">Delivery</text><rect x="145" y="286" width="160" height="26" rx="7" fill="#e0e9e5"/><rect x="145" y="286" width="16" height="26" rx="7" fill="#c36a45"/><text x="315" y="306" font-size="16" fill="#203035">0.10</text>
+<text x="58" y="370" font-size="15" fill="#426c69">输出：choice + 全部分布</text>
+<rect x="377" y="34" width="326" height="390" rx="18" fill="#f5f2fb" stroke="#d9d1ef" stroke-width="2"/>
+<text x="405" y="78" font-size="26" font-weight="750" fill="#6656a6">SCORE</text><text x="405" y="111" font-size="16" fill="#625b7d">有序等级 · 估计标尺位置</text>
+<text x="405" y="162" font-size="18" font-weight="650" fill="#203035">P(severity level)</text>
+<text x="405" y="210" font-size="16" fill="#53676d">0 · Low</text><rect x="505" y="190" width="145" height="26" rx="7" fill="#e5e0f1"/><rect x="505" y="190" width="14.5" height="26" rx="7" fill="#6656a6"/><text x="660" y="210" font-size="16" fill="#203035">0.10</text>
+<text x="405" y="258" font-size="16" fill="#53676d">1 · Mid</text><rect x="505" y="238" width="145" height="26" rx="7" fill="#e5e0f1"/><rect x="505" y="238" width="87" height="26" rx="7" fill="#6656a6"/><text x="660" y="258" font-size="16" fill="#203035">0.60</text>
+<text x="405" y="306" font-size="16" fill="#53676d">2 · High</text><rect x="505" y="286" width="145" height="26" rx="7" fill="#e5e0f1"/><rect x="505" y="286" width="43.5" height="26" rx="7" fill="#6656a6"/><text x="660" y="306" font-size="16" fill="#203035">0.30</text>
+<text x="405" y="370" font-size="15" fill="#625b7d">score = 0×.1 + 1×.6 + 2×.3 = 1.2</text>
+<rect x="724" y="34" width="326" height="390" rx="18" fill="#fff5ec" stroke="#efd4c1" stroke-width="2"/>
+<text x="752" y="78" font-size="26" font-weight="750" fill="#b35e3d">NOUL</text><text x="752" y="111" font-size="16" fill="#8a624e">二元事件 · 返回 P(Yes)</text>
+<text x="752" y="162" font-size="18" font-weight="650" fill="#203035">P(refund requested)</text>
+<rect x="752" y="206" width="270" height="34" rx="10" fill="#f0e8e2"/>
+<rect x="752" y="206" width="245.7" height="34" rx="10" fill="#c36a45"/>
+<text x="752" y="281" font-size="17" fill="#53676d">Yes probability</text><text x="1022" y="281" text-anchor="end" font-size="22" font-weight="750" fill="#8a472e">0.91</text>
+<text x="752" y="370" font-size="15" fill="#8a624e">输出：noul（0 到 1）</text>
+<rect x="30" y="444" width="1020" height="34" rx="9" fill="#eef2f1"/>
+<text x="540" y="467" text-anchor="middle" font-size="15" fill="#53676d">教学示例：Choice 最多 255 个选项；Score 通常 2–10 个有序等级；Box 是 1.14 的图像定位预览扩展。</text>
+</g>
+</svg>
+<figcaption>图 2 · 三种问题类型分别处理无序类别、有序等级和二元真假判断。图中的概率值是教学示例，不是 Jev 的实测输出。</figcaption>
+</figure>
+<div class="table-scroll" role="region" tabindex="0" aria-label="三种决策原语比较表，可横向滚动">
+<table>
+<thead><tr><th>类型</th><th>答案空间</th><th>主要输出</th><th>典型问题</th></tr></thead>
+<tbody>
+<tr><td><strong>Choice</strong></td><td>有限、无序的选项集合</td><td><code>choice</code>、每个选项的 <code>probabilities</code>、<code>confidence</code></td><td>工单属于哪个团队？</td></tr>
+<tr><td><strong>Score</strong></td><td>有序的等级标尺，通常 2–10 个等级</td><td><code>score</code>、每个等级的概率、<code>confidence</code></td><td>故障严重程度属于哪个等级？</td></tr>
+<tr><td><strong>Noul</strong></td><td>是 / 否</td><td><code>noul</code>，即回答为 Yes 的概率</td><td>消息是否明确要求退款？</td></tr>
+</tbody>
+</table>
+</div>
+<h3>3.1 Choice：在离散选项中选择</h3>
+<p>如果候选答案之间没有自然顺序，就使用 Choice。假设选项集合为：</p>
+<pre><code>Y = {billing, support, delivery}</code></pre>
+<p>模型返回一个被选中的类别，以及对所有候选项的概率分布。下面的向量是一个方便讲解的教学算例：</p>
+<pre><code>P(Y | x) = {
+  billing:  0.70,
+  support:  0.20,
+  delivery: 0.10
+}
+selected choice = billing</code></pre>
+<p>三个概率相加为 1。<code>choice</code> 是最大概率对应的选项；完整概率向量则保留了次优候选的信息。Choice 最多可声明 255 个选项；如果真实数据可能不属于任何已知选项，应显式考虑 <code>other</code>、<code>none_of_the_above</code> 或配套的 Noul 判断，而不是强迫模型在错误集合中二选一。[5]</p>
+<h3>3.2 Score：在有序等级上估计位置</h3>
+<p>如果答案存在顺序，例如故障严重程度，可以定义等级：</p>
+<ul><li>0：轻微，不影响主要功能；</li><li>1：中等，存在可用的替代方案；</li><li>2：严重，关键功能不可用且没有替代方案。</li></ul>
+<p>Score 返回各等级的概率，并计算概率加权的位置：</p>
+<div class="math-equation" role="group" aria-label="Score 的概率加权期望">
+<div class="math-scroll" tabindex="0" role="region" aria-label="Score 期望公式，可横向滚动">
+<math display="block" aria-label="s 等于从零到 n 减一的等级值 l i 乘以概率 p i 的总和">
+<mrow><mi>s</mi><mo>=</mo><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>0</mn></mrow><mrow><mi>n</mi><mo>−</mo><mn>1</mn></mrow></munderover><msub><mi>p</mi><mi>i</mi></msub><msub><mi>ℓ</mi><mi>i</mi></msub></mrow>
+</math>
+</div>
+</div>
+<p>例如，三个等级的概率是 (0.10, 0.60, 0.30)，等级值为 (0, 1, 2)，则得分为 <code>0×0.10 + 1×0.60 + 2×0.30 = 1.20</code>。这个 1.20 是等级轴上的期望位置，不是“故障真实严重程度精确等于 1.20”。等级间距是否具有等距意义，取决于你设计的 rubric；若 0→1 与 1→2 并非等价变化，直接对等级编号取期望就需要格外谨慎。[6]</p>
+<h3>3.3 Noul：判断一个命题是否成立</h3>
+<p>Noul 对应二元事件，输出一个 0 到 1 的数值，表示模型认为命题为真的概率。比如 <code>noul = 0.91</code> 表示模型对“这条消息提出了退款请求”给出 0.91 的概率估计。Noul 本身没有单独的 <code>confidence</code> 字段；概率值已经表达了 Yes / No 两种结果的倾向。[7][8]</p>
+<h3>3.4 Box：1.14 的视觉扩展</h3>
+<p>Jev 1.14 还提供 Box：在图片中定位目标，输出归一化的上、下、左、右边界。它是空间定位结果，不是 Choice 那样的类别概率分布。官方把图片与 Box 能力标记为 preview / dreamer-ready，并明确提醒尚未达到生产可靠性标准；本文不把它当作成熟的通用检测器。[3][9]</p>
+</section>
+
+<section id="parallel">
+<h2>04 · 多个问题并行返回，不等于一个联合概率模型</h2>
+<p>Jev 可以在一次请求里同时接收多个问题。它们共享同一份状态，并行计算；官方文档明确说明，每个问题独立地针对同一状态进行评估。[2][3]</p>
+<p>例如，针对一张客服工单，可以同时提出：</p>
+<ul>
+<li>Q₁：应该交给哪个团队？</li>
+<li>Q₂：用户是否明确要求退款？</li>
+<li>Q₃：消息是否包含重复扣款的证据？</li>
+</ul>
+<p>这能降低多次往返请求的开销，也能让代码提前拿到多个维度的判断。但这里有一个经常被忽略的统计边界：</p>
+<div class="warning"><strong>三个边际分布，不自动组成一个联合分布。</strong>分别得到 P(团队 | 状态)、P(退款请求 | 状态) 和 P(重复扣款 | 状态)，并不意味着你已经得到了这三个事件的联合概率。不能未经验证就把它们相乘，声称得到 P(A ∩ B ∩ C | 状态)。</div>
+<p>“问题独立评估”描述的是模型接口的执行方式，不代表现实世界中的变量彼此独立。真实的工单团队、退款意图和重复扣款事实可能高度相关。若业务规则需要联合概率，应该用明确的联合模型、额外数据或可验证的条件结构来估计；否则，让代码把独立判断组合成明确的业务策略，并把组合规则当作工程假设来测试。</p>
+</section>
+
+<section id="probability">
+<h2>05 · 概率、confidence 与 calibration：三个不能混淆的概念</h2>
+<h3>5.1 概率分布回答“模型把质量放在哪里”</h3>
+<p>Choice 的概率向量描述模型在候选类别之间如何分配概率质量。对刚才的三分类算例：</p>
+<pre><code>p = (0.70, 0.20, 0.10)
+p_max = 0.70</code></pre>
+<p>这里 <code>p_max = 0.70</code> 是最可能选项的概率。它并不自动意味着“这次选择有 70% 的真实正确率”；那需要通过同一任务分布上的真实标签验证。</p>
+<h3>5.2 Jev 的 confidence 是分布集中度摘要</h3>
+<p>对含有 n 个选项的 Choice，TypeSafe 文档定义的 confidence 是：</p>
+<div class="math-equation" role="group" aria-label="Choice confidence 的归一化集中度公式">
+<div class="math-scroll" tabindex="0" role="region" aria-label="Choice confidence 公式，可横向滚动">
+<math display="block" aria-label="confidence 等于 p 最大值减去一除以 n，再除以一减去一除以 n">
+<mrow><mi>confidence</mi><mo>=</mo><mfrac><mrow><msub><mi>p</mi><mi>max</mi></msub><mo>−</mo><mfrac><mn>1</mn><mi>n</mi></mfrac></mrow><mrow><mn>1</mn><mo>−</mo><mfrac><mn>1</mn><mi>n</mi></mfrac></mrow></mfrac></mrow>
+</math>
+</div>
+</div>
+<p>当概率均匀分布时，confidence 为 0；当概率全部集中在一个选项时，confidence 为 1。对于三个选项、最大概率 0.70 的例子：</p>
+<pre><code>confidence = (0.70 - 1/3) / (1 - 1/3)
+           = 0.55</code></pre>
+<p>因此，<strong>0.70 是 top-option probability，0.55 是分布集中度 confidence</strong>。两者不是同一个统计量。官方文档特别提醒：confidence 并不等于“所选答案正确的概率”。对固定选项数的 Choice，confidence 只是 top probability 的单调变换，并没有创造一份独立的新证据。若需要判断第一名是否只比第二名略高，应继续检查完整概率向量，尤其是 top-to-second ratio（p<sub>max</sub> / p<sub>second</sub>）；它回答的是“第一名领先第二名多少”，而 confidence 回答的是“概率质量集中到什么程度”。对 Noul，直接使用 P(Yes) 更清楚；官方给出的 0.7 / 0.3 可作为起始阈值，中间区间应有独立的复核结果，而不是强行四舍五入。[8]</p>
+<h3>5.3 Calibration 是群体层面的概率可靠性</h3>
+<p>概率校准问的是：在大量预测中，所有被模型赋予 0.8 置信概率的预测，是否大约有 80% 最终正确？用 top-label 校准表达为：</p>
+<div class="math-equation" role="group" aria-label="概率校准定义">
+<div class="math-scroll" tabindex="0" role="region" aria-label="概率校准条件，可横向滚动">
+<math display="block" aria-label="在模型最大预测概率为 p 的样本集合中，预测正确的比例应当等于 p">
+<mrow><mi>P</mi><mo>(</mo><mover><mi>Y</mi><mo>^</mo></mover><mo>=</mo><mi>Y</mi><mo>∣</mo><msub><mi>p</mi><mi>max</mi></msub><mo>=</mo><mi>p</mi><mo>)</mo><mo>=</mo><mi>p</mi></mrow>
+</math>
+</div>
+</div>
+<p>这是一个关于预测集合的统计性质，不是单个样本的保证。一个预测的概率为 0.95，并不意味着我们可以证明这一次判断有 95% 的客观正确性；只有在足够大的、与部署分布匹配的验证样本上，才能检查模型是否满足相应的校准关系。[10]</p>
+<figure>
+<svg aria-label="理想概率校准线与过度自信示例，以及概率分布集中度和正确率的区别" focusable="false" xmlns="http://www.w3.org/2000/svg" width="1080" height="500" viewBox="0 0 1080 500" role="img" aria-labelledby="jev-calibration-title jev-calibration-desc">
+<title id="jev-calibration-title">概率校准与 confidence 的区别</title>
+<desc id="jev-calibration-desc">左侧可靠性图对比理想校准线与过度自信曲线。右侧展示三分类 top probability 为 0.70 时，Jev 归一化 confidence 为 0.55 的教学例子。</desc>
+<rect width="1080" height="500" rx="22" fill="#fbfdfb"/>
+<g font-family="system-ui,'PingFang SC','Microsoft YaHei',sans-serif">
+<text x="46" y="48" font-size="23" font-weight="750" fill="#203035">A · Reliability diagram（示意）</text>
+<rect x="64" y="76" width="470" height="330" rx="12" fill="#fff" stroke="#dce7e2"/>
+<path d="M112 356 V112 M112 356 H495" stroke="#53676d" stroke-width="2"/>
+<path d="M112 356 L470 112" stroke="#147f80" stroke-width="4" stroke-dasharray="9 7"/>
+<path d="M112 356 C190 280 258 224 320 192 S420 140 470 126" stroke="#c36a45" stroke-width="5" fill="none"/>
+<g fill="#53676d" font-size="14"><text x="110" y="384">0</text><text x="288" y="384">0.5</text><text x="465" y="384">1.0</text><text x="75" y="356">0</text><text x="75" y="238">0.5</text><text x="75" y="119">1.0</text><text x="300" y="430" text-anchor="middle">平均预测概率</text><text x="35" y="240" transform="rotate(-90 35 240)" text-anchor="middle">实际正确率</text></g>
+<line x1="120" y1="96" x2="153" y2="96" stroke="#147f80" stroke-width="4" stroke-dasharray="8 6"/><text x="163" y="102" font-size="14" fill="#426c69">理想校准</text>
+<line x1="276" y1="96" x2="309" y2="96" stroke="#c36a45" stroke-width="4"/><text x="319" y="102" font-size="14" fill="#8a624e">过度自信示意</text>
+<text x="64" y="463" font-size="14" fill="#53676d">若预测 0.8 的样本中只有约 0.6 正确，模型在该区间过度自信。</text>
+<text x="588" y="48" font-size="23" font-weight="750" fill="#203035">B · top probability ≠ confidence</text>
+<rect x="588" y="76" width="446" height="330" rx="12" fill="#fff" stroke="#dce7e2"/>
+<text x="620" y="126" font-size="18" font-weight="700" fill="#203035">三分类概率向量</text>
+<g font-size="16" fill="#53676d"><text x="620" y="180">Billing</text><text x="620" y="232">Support</text><text x="620" y="284">Delivery</text></g>
+<rect x="715" y="159" width="245" height="27" rx="7" fill="#e5ece8"/><rect x="715" y="159" width="171.5" height="27" rx="7" fill="#147f80"/><text x="977" y="180" font-size="16" font-weight="700" fill="#203035">0.70</text>
+<rect x="715" y="211" width="245" height="27" rx="7" fill="#e5ece8"/><rect x="715" y="211" width="49" height="27" rx="7" fill="#6656a6"/><text x="977" y="232" font-size="16" font-weight="700" fill="#203035">0.20</text>
+<rect x="715" y="263" width="245" height="27" rx="7" fill="#e5ece8"/><rect x="715" y="263" width="24.5" height="27" rx="7" fill="#c36a45"/><text x="977" y="284" font-size="16" font-weight="700" fill="#203035">0.10</text>
+<rect x="620" y="318" width="178" height="58" rx="10" fill="#e9f4f0"/><text x="709" y="343" text-anchor="middle" font-size="14" fill="#426c69">Top probability</text><text x="709" y="367" text-anchor="middle" font-size="24" font-weight="800" fill="#147f80">0.70</text>
+<rect x="816" y="318" width="188" height="58" rx="10" fill="#f4f1fb"/><text x="910" y="343" text-anchor="middle" font-size="14" fill="#625b7d">Choice confidence</text><text x="910" y="367" text-anchor="middle" font-size="24" font-weight="800" fill="#6656a6">0.55</text>
+<text x="588" y="463" font-size="14" fill="#53676d">confidence 是分布集中度的变换，不是“本次答案正确概率”。</text>
+</g>
+</svg>
+<figcaption>图 3 · 校准曲线比较预测概率与实际正确率；下方则区分 Choice 的 top probability 与 confidence。曲线中的点为教学示意，不能解读为 Jev 的实测曲线。</figcaption>
+</figure>
+<h3>5.4 ECE 与 Brier Score</h3>
+<p>Expected Calibration Error（ECE）通常把预测按置信度分箱，比较每个箱中的平均置信度和实际准确率：</p>
+<div class="math-equation" role="group" aria-label="Expected Calibration Error 定义">
+<div class="math-scroll" tabindex="0" role="region" aria-label="ECE 公式，可横向滚动">
+<math display="block" aria-label="ECE 等于各置信度分箱样本比例乘以箱内准确率与平均置信度差的绝对值之和">
+<mrow><mi>ECE</mi><mo>=</mo><munderover><mo>∑</mo><mrow><mi>b</mi><mo>=</mo><mn>1</mn></mrow><mi>B</mi></munderover><mfrac><mrow><mo>|</mo><msub><mi>S</mi><mi>b</mi></msub><mo>|</mo></mrow><mi>N</mi></mfrac><mo>·</mo><mo>|</mo><mi>acc</mi><mo>(</mo><msub><mi>S</mi><mi>b</mi></msub><mo>)</mo><mo>−</mo><mi>conf</mi><mo>(</mo><msub><mi>S</mi><mi>b</mi></msub><mo>)</mo><mo>|</mo></mrow>
+</math>
+</div>
+</div>
+<p>ECE 越低通常意味着分箱层面的概率与准确率更接近。但 ECE 依赖分箱数、分箱策略和样本量；单独报告一个 ECE 数字会掩盖局部过度自信或子群体失准。建议同时报告 reliability diagram、Brier Score / NLL、分组校准和置信区间。Guo 等人的经典研究也表明，现代神经网络的置信度可能失准，温度缩放是常见的后处理方法之一。[10]</p>
+<p><p>Score 的 confidence 还会考虑等级之间的距离：相邻等级之间的概率分散，与两端等级之间的概率分散，可能得到不同的 confidence。其官方定义为：</p>
+<div class="math-equation" role="group" aria-label="Score confidence 的等级距离公式">
+<div class="math-scroll" tabindex="0" role="region" aria-label="Score confidence 公式，可横向滚动">
+<math display="block" aria-label="confidence 等于最大值零与一减去概率加权等级距离除以均匀分布平均距离中的较大者">
+<mrow><mi>confidence</mi><mo>=</mo><mi>max</mi><mo>(</mo><mn>0</mn><mo>,</mo><mn>1</mn><mo>−</mo><mfrac><mrow><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>0</mn></mrow><mrow><mi>n</mi><mo>−</mo><mn>1</mn></mrow></munderover><msub><mi>p</mi><mi>i</mi></msub><mo>|</mo><mi>i</mi><mo>−</mo><mi>m</mi><mo>|</mo></mrow><msub><mi>MAD</mi><mi>unif</mi></msub></mfrac><mo>)</mo></mrow>
+</math>
+</div>
+<div class="math-scroll" tabindex="0" role="region" aria-label="均匀分布的平均等级距离公式，可横向滚动">
+<math display="block" aria-label="MAD uniform 等于一除以 n 乘以从零到 n 减一的等级 i 与中点 n 减一除以二之间绝对距离之和">
+<mrow><msub><mi>MAD</mi><mi>unif</mi></msub><mo>=</mo><mfrac><mn>1</mn><mi>n</mi></mfrac><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>0</mn></mrow><mrow><mi>n</mi><mo>−</mo><mn>1</mn></mrow></munderover><mo>|</mo><mi>i</mi><mo>−</mo><mfrac><mrow><mi>n</mi><mo>−</mo><mn>1</mn></mrow><mn>2</mn></mfrac><mo>|</mo></mrow>
+</math>
+</div>
+</div>
+<p>其中 m 是概率最大的等级编号。这个定义让“概率分布在相邻等级之间摇摆”和“概率分布在两个极端等级之间摇摆”得到不同的 confidence。它仍然是对概率分布形状的摘要，不应直接解释为该分数有多大概率正确。[8]</p></p>
+</section>
+
+<section id="decision">
+<h2>06 · 从概率到动作：贝叶斯风险，而不是盲目取最大值</h2>
+<p>概率本身不是业务决策。业务真正关心的是：选错某个动作会付出多少代价？例如，把重复扣款工单误路由给 Delivery，和把普通咨询误路由给 Billing，成本可能不同。</p>
+<p>令真实类别为 y，系统动作是 a，损失函数为 L(a,y)。给定当前状态 x，动作 a 的条件期望风险为：</p>
+<div class="math-equation" role="group" aria-label="贝叶斯条件风险公式">
+<div class="math-scroll" tabindex="0" role="region" aria-label="贝叶斯风险公式，可横向滚动">
+<math display="block" aria-label="R a 给定 x 等于对所有真实类别 y 求和，损失 L a y 乘以概率 P y 给定 x">
+<mrow><mi>R</mi><mo>(</mo><mi>a</mi><mo>∣</mo><mi>x</mi><mo>)</mo><mo>=</mo><munder><mo>∑</mo><mrow><mi>y</mi><mo>∈</mo><mi>Y</mi></mrow></munder><mi>L</mi><mo>(</mo><mi>a</mi><mo>,</mo><mi>y</mi><mo>)</mo><mi>P</mi><mo>(</mo><mi>y</mi><mo>∣</mo><mi>x</mi><mo>)</mo></mrow>
+</math>
+</div>
+</div>
+<p>最优动作是让条件期望损失最小的动作：</p>
+<div class="math-equation" role="group" aria-label="最小贝叶斯风险决策规则">
+<div class="math-scroll" tabindex="0" role="region" aria-label="最小风险动作公式，可横向滚动">
+<math display="block" aria-label="最优动作 a 星等于使条件风险最小的动作">
+<mrow><msup><mi>a</mi><mo>*</mo></msup><mo>=</mo><munder><mi>arg min</mi><mi>a</mi></munder><mi>R</mi><mo>(</mo><mi>a</mi><mo>∣</mo><mi>x</mi><mo>)</mo></mrow>
+</math>
+</div>
+</div>
+<p>注意这里的决策对象是 <strong>动作</strong>，不是模型的 top label。一个概率最高的类别，未必对应最低的期望损失。</p>
+<h3>6.1 二分类阈值为什么不总是 0.5？</h3>
+<p>假设有一个二元判断：是否拦截一笔疑似欺诈交易。令 p=P(欺诈 | x)。误报（把正常交易拦截）成本为 C<sub>FP</sub>，漏报（放过欺诈）成本为 C<sub>FN</sub>，正确决策损失为 0。</p>
+<p>拦截的期望损失是 C<sub>FP</sub>(1−p)，放行的期望损失是 C<sub>FN</sub>p。令两者相等，可以得到阈值：</p>
+<div class="math-equation" role="group" aria-label="非对称错误成本下的贝叶斯阈值">
+<div class="math-scroll" tabindex="0" role="region" aria-label="二分类成本阈值公式，可横向滚动">
+<math display="block" aria-label="当欺诈概率大于误报成本除以误报成本与漏报成本之和时拦截">
+<mrow><mi>p</mi><mo>&gt;</mo><mfrac><msub><mi>C</mi><mi>FP</mi></msub><mrow><msub><mi>C</mi><mi>FP</mi></msub><mo>+</mo><msub><mi>C</mi><mi>FN</mi></msub></mrow></mfrac></mrow>
+</math>
+</div>
+</div>
+<p>如果误报成本是 20、漏报成本是 180，阈值就是 0.10，而不是 0.50。漏报越昂贵，系统越应该倾向于拦截。这个阈值来自决策成本，而不是模型“更有信心了”。[11]</p>
+<figure>
+<svg aria-label="从概率分布与成本矩阵计算每个动作的期望风险，并比较自动执行和人工复核" focusable="false" xmlns="http://www.w3.org/2000/svg" width="1080" height="470" viewBox="0 0 1080 470" role="img" aria-labelledby="jev-risk-title jev-risk-desc">
+<title id="jev-risk-title">概率分布通过损失函数变成决策</title>
+<desc id="jev-risk-desc">流程图展示模型概率、成本矩阵、各动作的期望风险和人工复核选项，说明最大概率不一定是最低风险动作。</desc>
+<defs><marker id="jev-risk-arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0 0 L9 3 L0 6 Z" fill="#147f80"/></marker></defs>
+<rect width="1080" height="470" rx="22" fill="#fbfdfb"/>
+<g font-family="system-ui,'PingFang SC','Microsoft YaHei',sans-serif">
+<rect x="38" y="48" width="215" height="112" rx="15" fill="#e9f4f0" stroke="#a9cec0" stroke-width="2"/>
+<text x="145" y="91" text-anchor="middle" font-size="21" font-weight="750" fill="#24545a">Probability</text><text x="145" y="122" text-anchor="middle" font-size="16" fill="#426c69">P(y | x)</text>
+<path d="M253 104 H300" stroke="#147f80" stroke-width="3" marker-end="url(#jev-risk-arrow)"/>
+<rect x="306" y="48" width="215" height="112" rx="15" fill="#f4f1fb" stroke="#d6cfee" stroke-width="2"/>
+<text x="413" y="91" text-anchor="middle" font-size="21" font-weight="750" fill="#453b75">Cost Matrix</text><text x="413" y="122" text-anchor="middle" font-size="16" fill="#625b7d">L(action, truth)</text>
+<path d="M521 104 H568" stroke="#147f80" stroke-width="3" marker-end="url(#jev-risk-arrow)"/>
+<rect x="574" y="48" width="215" height="112" rx="15" fill="#fff3e9" stroke="#ebc7ae" stroke-width="2"/>
+<text x="681" y="91" text-anchor="middle" font-size="21" font-weight="750" fill="#85472e">Expected Risk</text><text x="681" y="122" text-anchor="middle" font-size="16" fill="#8a624e">Σ L(a,y) P(y|x)</text>
+<path d="M789 104 H836" stroke="#147f80" stroke-width="3" marker-end="url(#jev-risk-arrow)"/>
+<rect x="842" y="48" width="200" height="112" rx="15" fill="#e9f4f0" stroke="#a9cec0" stroke-width="2"/>
+<text x="942" y="91" text-anchor="middle" font-size="21" font-weight="750" fill="#24545a">Policy</text><text x="942" y="122" text-anchor="middle" font-size="16" fill="#426c69">arg min action</text>
+<text x="42" y="220" font-size="21" font-weight="750" fill="#203035">教学算例：P = (0.70, 0.20, 0.10)</text>
+<text x="42" y="251" font-size="15" fill="#53676d">下方数值为每种动作的期望损失；成本单位是假设值。</text>
+<g font-size="17" fill="#203035">
+<text x="42" y="305">自动路由 Billing</text><rect x="245" y="282" width="520" height="29" rx="8" fill="#e4ebe7"/><rect x="245" y="282" width="135" height="29" rx="8" fill="#147f80"/><text x="790" y="304" font-weight="750">1.30</text>
+<text x="42" y="351">自动路由 Support</text><rect x="245" y="328" width="520" height="29" rx="8" fill="#e4ebe7"/><rect x="245" y="328" width="260" height="29" rx="8" fill="#6656a6"/><text x="790" y="350" font-weight="750">2.50</text>
+<text x="42" y="397">自动路由 Delivery</text><rect x="245" y="374" width="520" height="29" rx="8" fill="#e4ebe7"/><rect x="245" y="374" width="447" height="29" rx="8" fill="#c36a45"/><text x="790" y="396" font-weight="750">4.30</text>
+</g>
+<rect x="858" y="270" width="184" height="133" rx="13" fill="#fff4e8" stroke="#ebc7ae" stroke-width="2"/>
+<text x="950" y="307" text-anchor="middle" font-size="17" font-weight="750" fill="#85472e">人工复核</text><text x="950" y="346" text-anchor="middle" font-size="28" font-weight="800" fill="#85472e">1.00</text><text x="950" y="376" text-anchor="middle" font-size="14" fill="#8a624e">最低风险动作</text>
+</g>
+</svg>
+<figcaption>图 4 · 概率提供对状态的估计，成本矩阵将估计映射为风险，策略代码再选择执行、拒绝或复核。所有成本均由应用定义。</figcaption>
+</figure>
+<figure>
+<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="190" viewBox="0 0 900 190" role="img" aria-labelledby="inline-bayes-title inline-bayes-desc">
+<title id="inline-bayes-title">贝叶斯决策的三个计算步骤</title>
+<desc id="inline-bayes-desc">先读取各真实类别的概率，再将每种动作与真实结果的损失相乘求和，最后选择期望风险最低的动作。</desc>
+<rect width="900" height="190" rx="16" fill="#f1f7f4"/>
+<g font-family="system-ui,'PingFang SC','Microsoft YaHei',sans-serif" text-anchor="middle">
+<rect x="28" y="42" width="220" height="105" rx="13" fill="#fff" stroke="#a9cec0" stroke-width="2"/><text x="138" y="83" font-size="20" font-weight="700" fill="#24545a">概率向量</text><text x="138" y="116" font-size="17" fill="#426c69">P(y | x)</text>
+<path d="M248 95 H326" stroke="#147f80" stroke-width="3"/><path d="M313 86 L326 95 L313 104" fill="none" stroke="#147f80" stroke-width="3"/>
+<rect x="333" y="42" width="234" height="105" rx="13" fill="#fff" stroke="#d6cfee" stroke-width="2"/><text x="450" y="83" font-size="20" font-weight="700" fill="#453b75">损失矩阵</text><text x="450" y="116" font-size="17" fill="#625b7d">L(a, y) × P(y | x)</text>
+<path d="M567 95 H645" stroke="#147f80" stroke-width="3"/><path d="M632 86 L645 95 L632 104" fill="none" stroke="#147f80" stroke-width="3"/>
+<rect x="652" y="42" width="220" height="105" rx="13" fill="#fff" stroke="#ebc7ae" stroke-width="2"/><text x="762" y="83" font-size="20" font-weight="700" fill="#85472e">最小风险动作</text><text x="762" y="116" font-size="17" fill="#8a624e">arg minₐ R(a | x)</text>
+</g></svg>
+<figcaption>图 4b · 先估计状态，再计算动作损失，最后由策略选择动作。该小图是对贝叶斯风险公式的独立教学示意。</figcaption>
+</figure>
+</section>
+
+<section id="lab">
+<h2>07 · 交互实验：最高概率的选项，是否一定应该自动执行？</h2>
+<p>我们用一个完全虚构的三分类客服分流案例，观察概率和动作成本如何共同决定结果。假设错误路由的损失分别为：</p>
+<ul>
+<li>Billing 路由错给 Support：4；错给 Delivery：5。</li>
+<li>Support 路由错给 Billing：3；错给 Delivery：4。</li>
+<li>Delivery 路由错给 Billing：5；错给 Support：4。</li>
+<li>人工复核成本：由滑块控制，且假设对三种真实类别相同。</li>
+</ul>
+<div class="lab" id="decision-lab">
+<h3>调整模型概率与人工复核成本</h3>
+<p class="lab-intro">改变 Billing 概率、剩余概率在 Support / Delivery 之间的分配，以及人工复核成本。所有数字都是教学用损失单位，不是实际货币，也不是 Jev 的评测结果。</p>
+<div class="lab-controls">
+<div class="control">
+<label for="p-billing"><span>P(Billing)</span><output id="p-billing-out">70%</output></label>
+<input id="p-billing" type="range" min="40" max="95" step="1" value="70">
+</div>
+<div class="control">
+<label for="support-share"><span>剩余概率分给 Support</span><output id="support-share-out">67%</output></label>
+<input id="support-share" type="range" min="0" max="100" step="1" value="67">
+</div>
+<div class="control">
+<label for="review-cost"><span>人工复核成本</span><output id="review-cost-out">1.00</output></label>
+<input id="review-cost" type="range" min="0.2" max="2" step="0.05" value="1">
+</div>
+</div>
+<div class="lab-actions"><button type="button" id="boost-billing">把 Billing 概率提高到 90%</button><span class="small">观察概率变化后，最低风险动作是否改变。</span></div>
+<div class="lab-result" aria-live="polite">
+<strong>当前概率分布</strong>
+<p id="probability-output">Billing 0.70 · Support 0.20 · Delivery 0.10</p>
+<strong>各动作的期望风险（越低越好）</strong>
+<div class="risk-row"><span>路由至 Billing</span><div class="risk-track"><div class="risk-fill" id="risk-billing" style="width:26%"></div></div><output id="risk-billing-out">1.30</output></div>
+<div class="risk-row"><span>路由至 Support</span><div class="risk-track"><div class="risk-fill" id="risk-support" style="width:50%"></div></div><output id="risk-support-out">2.50</output></div>
+<div class="risk-row"><span>路由至 Delivery</span><div class="risk-track"><div class="risk-fill" id="risk-delivery" style="width:86%"></div></div><output id="risk-delivery-out">4.30</output></div>
+<div class="risk-row"><span>人工复核</span><div class="risk-track"><div class="risk-fill review" id="risk-review" style="width:20%"></div></div><output id="risk-review-out">1.00</output></div>
+<p class="decision-output" id="decision-output">策略动作：人工复核</p>
+<p class="status" id="decision-reason">Billing 虽然是最高概率类别，但其自动路由风险高于人工复核成本。</p>
+</div>
+</div>
+<p>实验里，模型对 Billing 的概率是 0.70，但这并不强制系统执行 Billing 路由。如果错分的代价高，而人工复核的代价相对低，最低风险动作就可能是复核。</p>
+<p>这也解释了为什么“设置一个全局 confidence 阈值”通常过于粗糙：不同动作的误判成本不同，同一模型在只读操作、可撤销操作和不可逆操作上，应该采用不同的风险预算。</p>
+</section>
+
+<section id="abstention">
+<h2>08 · 拒绝决策：Abstention 与 Selective Prediction</h2>
+<p>一个可靠的决策系统不应该被迫对每个输入都给出自动动作。它至少需要三种结果：</p>
+<ul>
+<li><strong>Accept / Act：</strong>概率与预期风险满足自动执行条件。</li>
+<li><strong>Review / Defer：</strong>证据不足或风险较高，交给人工或更强的推理模型。</li>
+<li><strong>Reject / Block：</strong>策略明确禁止该动作，或者模型判断不适用。</li>
+</ul>
+<p>如果系统通过阈值 τ 决定是否回答，那么可以定义覆盖率（coverage）与选择性风险（selective risk）：</p>
+<div class="math-equation" role="group" aria-label="选择性预测的覆盖率和选择性风险">
+<div class="math-scroll" tabindex="0" role="region" aria-label="风险覆盖率公式，可横向滚动">
+<math display="block" aria-label="覆盖率等于被接受样本的概率；选择性风险等于接受样本上的条件期望损失">
+<mrow><mi>Coverage</mi><mo>(</mo><mi>τ</mi><mo>)</mo><mo>=</mo><mi>P</mi><mo>(</mo><mi>accept</mi><mo>)</mo></mrow>
+</math>
+</div>
+<div class="math-scroll" tabindex="0" role="region" aria-label="选择性风险公式，可横向滚动">
+<math display="block" aria-label="R selective 等于在接受条件下预测损失的期望">
+<mrow><msub><mi>R</mi><mi>sel</mi></msub><mo>(</mo><mi>τ</mi><mo>)</mo><mo>=</mo><mi>E</mi><mo>[</mo><mi>ℓ</mi><mo>(</mo><mover><mi>y</mi><mo>^</mo></mover><mo>,</mo><mi>y</mi><mo>)</mo><mo>∣</mo><mi>accept</mi><mo>]</mo></mrow>
+</math>
+</div>
+</div>
+<p>提高阈值通常会降低覆盖率、减少自动回答数量；如果模型的不确定性信号有效，留下来的样本应当具有更低的错误风险。部署时要报告风险—覆盖率曲线，而不只是一个“准确率”。[12]</p>
+<figure>
+<svg aria-label="阈值提高时覆盖率下降，选择性风险在理想不确定性排序下下降的示意曲线" focusable="false" xmlns="http://www.w3.org/2000/svg" width="1080" height="470" viewBox="0 0 1080 470" role="img" aria-labelledby="jev-rc-title jev-rc-desc">
+<title id="jev-rc-title">选择性预测的风险与覆盖率权衡</title>
+<desc id="jev-rc-desc">随着接受阈值提高，模型自动处理的样本比例下降；在不确定性排序有效时，被接受样本上的风险也会下降。</desc>
+<rect width="1080" height="470" rx="22" fill="#fbfdfb"/>
+<g font-family="system-ui,'PingFang SC','Microsoft YaHei',sans-serif">
+<text x="52" y="54" font-size="23" font-weight="750" fill="#203035">Risk–Coverage trade-off</text>
+<rect x="58" y="78" width="964" height="330" rx="14" fill="#fff" stroke="#dce7e2"/>
+<path d="M145 352 V126 M145 352 H934" stroke="#53676d" stroke-width="2"/>
+<g fill="#53676d" font-size="15"><text x="135" y="379">0</text><text x="520" y="379">0.5</text><text x="920" y="379">1.0</text><text x="540" y="424" text-anchor="middle">Coverage · 自动处理的样本比例</text><text x="93" y="354">0</text><text x="93" y="242">0.5</text><text x="93" y="132">1.0</text><text x="48" y="242" transform="rotate(-90 48 242)" text-anchor="middle">Selective Risk</text></g>
+<path d="M145 352 L934 126" stroke="#aebbb7" stroke-width="3" stroke-dasharray="9 8" fill="none"/>
+<path d="M145 352 C260 302 365 252 480 220 S740 164 934 145" stroke="#147f80" stroke-width="5" fill="none"/>
+<path d="M145 352 C265 318 390 270 515 236 S760 188 934 165" stroke="#6656a6" stroke-width="3" stroke-dasharray="8 7" fill="none"/>
+<g font-size="15"><line x1="660" y1="111" x2="700" y2="111" stroke="#147f80" stroke-width="5"/><text x="710" y="117" fill="#426c69">有效不确定性排序</text><line x1="660" y1="142" x2="700" y2="142" stroke="#6656a6" stroke-width="3" stroke-dasharray="8 7"/><text x="710" y="148" fill="#625b7d">较弱的排序能力</text></g>
+<rect x="177" y="163" width="245" height="62" rx="10" fill="#e9f4f0"/><text x="299" y="188" text-anchor="middle" font-size="15" font-weight="700" fill="#24545a">提高阈值</text><text x="299" y="211" text-anchor="middle" font-size="14" fill="#426c69">更多样本被转交复核</text>
+<rect x="603" y="280" width="310" height="62" rx="10" fill="#f4f1fb"/><text x="758" y="305" text-anchor="middle" font-size="15" font-weight="700" fill="#453b75">覆盖率下降</text><text x="758" y="328" text-anchor="middle" font-size="14" fill="#625b7d">留下的样本应当更容易</text>
+<text x="58" y="456" font-size="14" fill="#53676d">概念示意曲线：不是任何模型或 Jev 的测量结果。实际曲线必须在目标验证集上计算。</text>
+</g>
+</svg>
+<figcaption>图 5 · 风险—覆盖率关系的概念示意。曲线仅表达选择性预测的权衡，不是 Jev 或任何特定模型的实测数据。</figcaption>
+</figure>
+<p>实际的拒绝策略不应只看 <code>confidence</code>。对 Choice，可以评估目标动作的 top probability、第二名差距、错误成本和校准情况；对 Noul，直接针对 P(Yes) 设置双阈值，中间区域交给复核；对 Score，还需要检查等级分布是否呈现多峰或跨级分裂。</p>
+</section>
+
+<section id="agent">
+<h2>09 · Jev 如何嵌入 Agent：把判断、策略与执行分开</h2>
+<p>Agent 不只是一个模型。它通常包含状态收集、规划、工具调用、执行反馈和终止判断。Jev 可以承担其中某些窄范围判断，但不应接管整个行动闭环。</p>
+<figure>
+<svg aria-label="Agent 中由状态构建、Jev 判断、策略代码、工具执行和人工审核组成的混合架构" focusable="false" xmlns="http://www.w3.org/2000/svg" width="1080" height="510" viewBox="0 0 1080 510" role="img" aria-labelledby="jev-agent-title jev-agent-desc">
+<title id="jev-agent-title">Agent 中的混合决策架构</title>
+<desc id="jev-agent-desc">代码构建和过滤状态，生成式模型负责需要语言表达的任务，Jev 负责窄范围类型化判断，策略代码计算风险并选择工具执行、人工审核或拒绝。</desc>
+<defs><marker id="jev-agent-arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0 0 L9 3 L0 6 Z" fill="#147f80"/></marker></defs>
+<rect width="1080" height="510" rx="22" fill="#fbfdfb"/>
+<g font-family="system-ui,'PingFang SC','Microsoft YaHei',sans-serif">
+<rect x="36" y="48" width="190" height="96" rx="14" fill="#eef2f1" stroke="#cbd8d4" stroke-width="2"/><text x="131" y="88" text-anchor="middle" font-size="20" font-weight="750" fill="#203035">State Builder</text><text x="131" y="117" text-anchor="middle" font-size="15" fill="#53676d">检索 · 过滤 · 归一化</text>
+<path d="M226 96 H278" stroke="#147f80" stroke-width="3" marker-end="url(#jev-agent-arrow)"/>
+<rect x="284" y="48" width="225" height="96" rx="14" fill="#f4f1fb" stroke="#d6cfee" stroke-width="2"/><text x="396" y="88" text-anchor="middle" font-size="20" font-weight="750" fill="#453b75">Generative LLM</text><text x="396" y="117" text-anchor="middle" font-size="15" fill="#625b7d">规划 · 解释 · 自然语言</text>
+<path d="M509 96 H561" stroke="#147f80" stroke-width="3" marker-end="url(#jev-agent-arrow)"/>
+<rect x="567" y="48" width="190" height="96" rx="14" fill="#e9f4f0" stroke="#a9cec0" stroke-width="2"/><text x="662" y="88" text-anchor="middle" font-size="20" font-weight="750" fill="#24545a">Jev</text><text x="662" y="117" text-anchor="middle" font-size="15" fill="#426c69">Choice · Score · Noul</text>
+<path d="M757 96 H809" stroke="#147f80" stroke-width="3" marker-end="url(#jev-agent-arrow)"/>
+<rect x="815" y="48" width="228" height="96" rx="14" fill="#fff3e9" stroke="#ebc7ae" stroke-width="2"/><text x="929" y="88" text-anchor="middle" font-size="20" font-weight="750" fill="#85472e">Policy Engine</text><text x="929" y="117" text-anchor="middle" font-size="15" fill="#8a624e">成本 · 权限 · 阈值</text>
+<path d="M929 144 V205 M929 205 H205 V263" stroke="#147f80" stroke-width="3" fill="none" marker-end="url(#jev-agent-arrow)"/>
+<path d="M929 205 H540 V263" stroke="#147f80" stroke-width="3" fill="none" marker-end="url(#jev-agent-arrow)"/>
+<path d="M929 205 H870 V263" stroke="#147f80" stroke-width="3" fill="none" marker-end="url(#jev-agent-arrow)"/>
+<rect x="55" y="270" width="300" height="108" rx="14" fill="#e9f4f0" stroke="#a9cec0" stroke-width="2"/><text x="205" y="312" text-anchor="middle" font-size="21" font-weight="750" fill="#24545a">Execute Tool</text><text x="205" y="343" text-anchor="middle" font-size="15" fill="#426c69">只执行权限允许的动作</text>
+<rect x="390" y="270" width="300" height="108" rx="14" fill="#fff4e8" stroke="#ebc7ae" stroke-width="2"/><text x="540" y="312" text-anchor="middle" font-size="21" font-weight="750" fill="#85472e">Human Review</text><text x="540" y="343" text-anchor="middle" font-size="15" fill="#8a624e">不确定 · 高损失 · 例外</text>
+<rect x="725" y="270" width="300" height="108" rx="14" fill="#f4f1fb" stroke="#d6cfee" stroke-width="2"/><text x="875" y="312" text-anchor="middle" font-size="21" font-weight="750" fill="#453b75">Reject / Block</text><text x="875" y="343" text-anchor="middle" font-size="15" fill="#625b7d">策略禁止或证据不足</text>
+<path d="M205 378 V430 H540 V458" stroke="#9aaba6" stroke-width="2" stroke-dasharray="7 6" fill="none"/><path d="M540 378 V458" stroke="#9aaba6" stroke-width="2" stroke-dasharray="7 6" fill="none"/><path d="M875 378 V430 H540" stroke="#9aaba6" stroke-width="2" stroke-dasharray="7 6" fill="none"/>
+<rect x="352" y="458" width="376" height="36" rx="9" fill="#eef2f1"/><text x="540" y="482" text-anchor="middle" font-size="15" font-weight="650" fill="#53676d">Audit Log · Outcome · Human Feedback · Recalibration</text>
+</g>
+</svg>
+<figcaption>图 6 · 一个建议的混合架构：生成式模型负责需要表达与规划的任务，Jev 负责边界清楚的判断，确定性代码负责权限、成本和最终动作。</figcaption>
+</figure>
+<h3>一个更稳健的工作流</h3>
+<ol>
+<li><strong>构建状态：</strong>代码先从数据库、检索结果和当前会话中提取与问题有关的字段，避免把大量无关上下文交给模型。</li>
+<li><strong>定义问题契约：</strong>为每个判断写清楚问题、候选项、边界条件，以及“其他 / 不确定”路径。</li>
+<li><strong>并行调用：</strong>把需要的 Choice、Score、Noul 问题放进一次请求，但把它们当作分别评估的维度。</li>
+<li><strong>计算风险：</strong>代码读取概率，结合业务成本矩阵、权限和阈值，决定执行、复核或拒绝。</li>
+<li><strong>受控执行：</strong>只有通过权限检查的动作才能调用工具；转账、删除、对外发送等高风险副作用应有额外审批。</li>
+<li><strong>记录与评估：</strong>保存模型版本、问题定义、候选项顺序、概率、最终动作、人工修正和真实结果，用于持续校准。</li>
+</ol>
+<p>一个典型的组合是：LLM 负责理解用户意图并生成解释；Jev 负责对有限选项进行快速判断；业务代码负责规则和动作；人工负责高风险或低证据场景。它们不是互相取代，而是把任务放到最适合的组件中。</p>
+</section>
+
+<section id="evidence">
+<h2>10 · 独立研究证据：表现、校准与偏差都要看</h2>
+<p>Jev 是一个很新的商业模型。评价它时必须区分厂商文档、厂商自报结果和独立研究；不同版本、任务、语言、标签定义和问题措辞，都会影响结论。</p>
+<h3>10.1 37 个数据集上的公开基准</h3>
+<p>Deußer 等人的独立基准研究评估了 Jev 1.13.0：覆盖 37 个数据集、多个任务家族，共 346,009 次请求，并与两个开放权重模型在相同请求上比较。作者报告 Jev 在部分分类、路由和理解任务上表现较强，但也观察到低资源语言、细粒度或噪声标签、rubric 评分等场景的性能下降。[13]</p>
+<p>该研究的价值在于提供了冻结模板、完整请求与响应以及可复核的评测代码。它并不意味着 Jev 1.14.0 在所有任务上都具有相同表现，也不能把一个 benchmark 的概率校准直接迁移到你的线上业务。</p>
+<h3>10.2 独立校准审计：任务与措辞会改变概率可靠性</h3>
+<p>Meng 对 Jev 1.13.0 做了一项校准审计，包含 3,244 次评估、2,372 条不同文本，涉及两个公开分类任务。该预印本报告：校准误差会随着任务和问题表述变化；同一任务的两种问法之间，校准误差差异达到 0.071；一个四分类中间概率区间中，模型给出的 0.750 对应的实际正确率约为 0.612。[14]</p>
+<p>这些结果不是对 Jev 全部能力的最终判决：研究范围是特定版本、两个任务和特定评测协议，作者也明确提醒这是探索性分析。但它足以支持一个工程结论：<strong>不要把“厂商称其为 calibrated”理解成“任何业务分布都已经校准”。</strong></p>
+<h3>10.3 偏差研究：选项顺序与问题变体会影响判断</h3>
+<p>另一项对 Jev 1.13.0 的研究分析了 41,500 次回答，覆盖认知反思、锚定、合取、框架、沉没成本、零风险和定价偏差等任务。研究发现，部分无关数值和选项顺序会影响判断；在特定改写后的合取任务中，模型违反概率合取规则的比例达到 54%。[15]</p>
+<p>这里需要特别注意：这是预印本中的特定任务结果，不是一个可泛化的“Jev 偏差率”。它提示我们不能只检查最终选项是否变化，还要检查概率向量、confidence 和最终动作是否对无关的格式变化敏感。</p>
+<h3>10.4 风险预算：校准概率不等于受控错误率</h3>
+<p>Messoudi 与 Mansar 的研究把问题推进了一步：如果系统没有人工复核通道，每个输入都必须被分配一个动作，怎样保证“被允许通过的那一组样本”中的漏放风险不超过预算？他们在六个 moderation、safety 与 reranking 数据集上比较普通阈值、经验阈值和 Learn Then Test（LTT）。[16]</p>
+<p>在有定义的测试风险设置中，朴素阈值策略有 42.0%（105 / 250）超过预设风险预算，经验阈值为 51.7%（108 / 209），LTT 为 7.8%（12 / 153）。这些比例的分母只包含测试风险可定义的设置；LTT 也会在无法获得证书时拒绝部署该阈值，并采用保守 fallback。它不是一个“永不出错”的保证。</p>
+<div class="note"><strong>校准、Bayes Risk 与 LTT 解决的是不同问题：</strong><ul><li>Calibration：概率数值是否与长期观测频率相符？</li><li>Bayes Risk：给定概率与损失矩阵，哪个动作的期望损失最低？</li><li>Risk Control：在明确抽样假设和风险预算下，能否用独立校准样本为某个策略阈值提供有限样本保证？</li></ul></div>
+<p>LTT 不会自动让模型概率更校准。它把评分器和候选阈值固定后，使用独立校准样本检验候选策略；其保证依赖校准样本与部署总体的抽样假设。它展示了概率接口之后仍然需要一层统计决策治理。</p>
+<h3>10.5 选择性推理：决策模型也可以按需“慢下来”</h3>
+<p>Zheng 与 Chen 研究了如何在类型化答案接口中加入按需推理：先快速读取候选答案分布，只有在预期收益足够时才启动推理；过程中读取中间答案，并在不确定性足够低时提前停止。其 768 道 ProofWriter、LogiQA 2.0 与 ARC-Challenge 问题实验中，准确率从直接读取的 70.96% 提升到 84.38%；相较 1,024-token 终止读取，管线时间降低 46.30%，准确率差异为 −1.17 个百分点。[17]</p>
+<p>这不是 Jev 1.14 的内置功能，而是一个研究方向：System One 的快速判断可以与受控的 System Two 推理预算组合，而不是只能在“完全不推理”和“每次都长推理”之间二选一。</p>
+<h3>10.6 表格数据：内容不变，组织方式仍可能改变答案</h3>
+<p>关于 Tabular Data 的研究比较了四种类型化决策模型和三个 LLM，覆盖行分类、事实验证与异常检测，并对同一内容构造 21 种格式或措辞改写。研究报告：部分决策模型对问题措辞变化相对稳健，但没有被测试的模型能够对表格组织方式保持完全稳健；在某些改写下，至少三分之一的行级决策会发生变化。[18]</p>
+<p>这提醒工程师：将表格转成 JSON、调整列顺序、重命名字段、改变候选项描述，都属于输入契约的一部分。数据语义相同，不意味着模型的输出分布必然相同。</p>
+<h3>10.7 研究版图已经超出单一产品</h3>
+<p>Chen 等人的综述把 Typed Decision Models 放在 LLM 路由、零样本分类、Safety Guard、标签概率读取和部署适配成本的交汇处。作者版本标注已被 ACM SIGKDD Explorations 接收；作者同时披露参与 AnyJev 相关研发，因此这篇综述适合作为研究地图，不应单独作为中立的性能证据。[19]</p>
+<div class="takeaway"><strong>证据综合：</strong>类型化输出能减少解析和结构错误；概率接口让风险控制与拒绝策略更容易实现；但准确率、校准、鲁棒性和公平性仍然必须在目标任务、目标版本与目标人群上独立验证。</div>
+</section>
+
+<section id="limits">
+<h2>11 · 适用边界：什么时候应该使用，什么时候不应该？</h2>
+<div class="table-scroll" role="region" tabindex="0" aria-label="不同决策技术的适用边界，可横向滚动">
+<table>
+<thead><tr><th>方案</th><th>擅长</th><th>主要代价 / 风险</th><th>更适合</th></tr></thead>
+<tbody>
+<tr><td>传统分类器</td><td>固定标签、稳定任务、低延迟</td><td>新任务或新标签可能需要训练 / 调整输出头</td><td>高频、长期稳定的分类</td></tr>
+<tr><td>LLM + JSON Schema</td><td>复杂语义、开放式解释、灵活任务</td><td>仍需处理生成、成本、延迟和语义验证</td><td>需要推理与自然语言表达的工作</td></tr>
+<tr><td>Jev / 类型化决策模型</td><td>有限选项、窄问题、概率输出、并行判断</td><td>任务校准、选项设计、问题措辞和版本变化</td><td>路由、审核、评分、边界清楚的判断</td></tr>
+<tr><td>确定性代码</td><td>算术、日期比较、权限、硬约束</td><td>不能独立理解开放语义</td><td>必须精确、可审计的规则</td></tr>
+</tbody>
+</table>
+</div>
+<h3>官方已公开的失败模式</h3>
+<p>TypeSafe 的 Model Jaggedness 文档列出多类已知弱点：字面理解、数学与计数、日期比较、多层间接推理、无关上下文过多、对抗性内容、指令与 criteria 冲突，以及 Choice 选项顺序影响。[16]</p>
+<ul>
+<li><strong>不要把计算交给模型：</strong>金额、时间差、阈值比较、计数等由代码执行。</li>
+<li><strong>不要把多个判断塞进一个问题：</strong>拆成原子问题，再由程序组合。</li>
+<li><strong>不要无限扩大 State：</strong>先检索、过滤和归一化，只提供问题所需的字段。</li>
+<li><strong>不要忽略选项顺序：</strong>在测试集上轮换选项顺序，检查答案和概率是否稳定。</li>
+<li><strong>不要让 State 中的文本变成指令：</strong>外部内容可能包含提示注入或误导信息；它是数据，不是权限来源。</li>
+<li><strong>不要让模型直接批准高风险动作：</strong>将授权、金额上限、审批与审计放在确定性控制层。</li>
+</ul>
+<h3>数据治理同样重要</h3>
+<p>Jev 是托管式 API，调用方需要把状态发送给服务提供方。官方说明客户请求和响应不用于模型训练，并在法律 / 企业文档中单独说明数据保留选项；但“不用于训练”不等于“数据没有离开你的基础设施”。在传递个人信息、财务记录或机密内容前，应先核对适用的数据处理协议、保留策略、区域和组织权限。[3]</p>
+</section>
+
+<section id="practice">
+<h2>12 · 工程实践清单：把概率决策做成可审计的软件</h2>
+<p>下面的纯 Python 示例把三个容易混在一起的步骤拆开：验证概率分布、计算期望风险、比较自动动作与人工复核。它是教学用策略代码，不是 Jev SDK，也不复现 Jev 模型。</p>
+<pre><code>from jev_decision_policy import choose_with_review
+
+probabilities = {
+    "billing": 0.70,
+    "support": 0.20,
+    "delivery": 0.10,
+}
+
+costs = {
+    "route_billing": {"billing": 0, "support": 4, "delivery": 5},
+    "route_support": {"billing": 3, "support": 0, "delivery": 4},
+    "route_delivery": {"billing": 5, "support": 4, "delivery": 0},
+}
+
+decision = choose_with_review(
+    probabilities,
+    costs,
+    review_cost=1.0,
+)
+
+assert decision.action == "review"
+assert abs(decision.risks["route_billing"] - 1.30) &lt; 1e-9</code></pre>
+<p>完整的可运行实现和测试位于仓库源码：<a href="https://github.com/1998x-stack/xm-posts/blob/main/posts/decision-models/typed-decision-models/jev_decision_policy.py">jev_decision_policy.py</a> 与 <a href="https://github.com/1998x-stack/xm-posts/blob/main/posts/decision-models/typed-decision-models/test_jev_decision_policy.py">test_jev_decision_policy.py</a>。它们只使用 Python 标准库；GitHub Pages 只发布文章和静态资源，不会把 Python 源码作为可执行页面部署。</p>
+<h3>上线前至少验证这些不变量</h3>
+<ol class="checklist">
+<li>概率必须是有限数值、非负，且总和在容差范围内接近 1。</li>
+<li>输出标签必须与调用方声明的答案集合完全一致；未知标签不能悄悄映射到默认动作。</li>
+<li>所有候选动作必须有完整的成本矩阵；缺失的成本不能被默认为 0。</li>
+<li>拒绝 / 人工复核必须是明确的动作，并且有自己的成本、时限与负责人。</li>
+<li>校准集与线上分布要尽量一致；任务、语言、标签、问题措辞或模型版本变化后重新评估。</li>
+<li>保存模型版本、State 摘要、问题定义、选项顺序、概率、策略版本、最终动作和人工修正。</li>
+<li>高风险副作用必须经过独立权限和审批检查，不能只依赖模型概率。</li>
+</ol>
+<div class="note"><strong>版本治理：</strong>如果你针对 <code>jev-1.14.0</code> 调好了阈值，就应固定该模型版本并记录策略版本。官方文档提醒，<code>jev-latest</code> 是会移动的别名；升级模型后要重新跑目标任务评测，而不是假设旧阈值仍然有效。[3]</div>
+</section>
+
+<section id="references">
+<h2>13 · 参考资料与延伸阅读</h2>
+<ol class="ref-list">
+<li>TypeSafe AI. <a href="https://typesafe.ai/blog/introducing-system-one-models-and-jev">Introducing System One Models &amp; Jev</a>, 2026-09-15. 厂商发布说明；性能和训练描述应标记为厂商口径。</li>
+<li>TypeSafe AI. <a href="https://docs.typesafe.ai/introduction">Introduction</a>；<a href="https://docs.typesafe.ai/concepts/system-one">System One</a>. 官方接口与设计定位。</li>
+<li>TypeSafe AI. <a href="https://docs.typesafe.ai/models">Models</a>；<a href="https://typesafe.ai/blog/jev-1-14">Jev 1.14 release notes</a>. 版本、别名、输入和 Box 能力。</li>
+<li>TypeSafe AI. <a href="https://docs.typesafe.ai/introduction/machine-learning-primer">AI Primer</a>. RLCD 的官方介绍；不是完整公开的模型技术报告。</li>
+<li>TypeSafe AI. <a href="https://docs.typesafe.ai/primitives/choice">Choice</a>. 候选项与完整概率输出。</li>
+<li>TypeSafe AI. <a href="https://docs.typesafe.ai/primitives/score">Score</a>. 有序等级与概率加权分数。</li>
+<li>TypeSafe AI. <a href="https://docs.typesafe.ai/primitives/noul">Noul</a>. 二元问题与 P(Yes)。</li>
+<li>TypeSafe AI. <a href="https://docs.typesafe.ai/confidence">Confidence</a>. confidence 的定义、公式及阈值使用建议。</li>
+<li>TypeSafe AI. <a href="https://docs.typesafe.ai/primitives/box">Box</a>. Jev 1.14 的图像定位预览能力。</li>
+<li>Guo, C., Pleiss, G., Sun, Y. &amp; Weinberger, K. Q. <a href="https://proceedings.mlr.press/v70/guo17a.html">On Calibration of Modern Neural Networks</a>. ICML / PMLR, 2017.</li>
+<li><a href="https://statproofbook.github.io/P/bc-thr">Decision threshold for Bayes classification under asymmetric error costs</a>. The Book of Statistical Proofs, 2026.</li>
+<li>Geifman, Y. &amp; El-Yaniv, R. <a href="https://arxiv.org/abs/1705.08500">Selective Classification for Deep Neural Networks</a>, 2017.</li>
+<li>Deußer, T. et al. <a href="https://arxiv.org/abs/2609.37647">Evaluating and Benchmarking the System One Model Jev</a>, 2026. 37 数据集、346,009 次请求的独立基准预印本。</li>
+<li>Meng, L. <a href="https://escholarship.org/uc/item/4t4449jv">How far can a commercial decision model's probabilities be trusted?</a>, 2026. Jev 1.13.0 校准审计预印本。</li>
+<li>Imperatrice, I. et al. <a href="https://arxiv.org/abs/2610.19619">Are AI Decision Models Biased? A Case Study of Jev</a>, 2026. Jev 1.13.0 的认知偏差与选项顺序研究预印本。</li>
+<li>Messoudi, S. &amp; Mansar, Y. <a href="https://arxiv.org/abs/2610.19811">Calibration and Risk-Budgeted Decisions with System One Models</a>, 2026.</li>
+<li>Zheng, B. &amp; Chen, Z. <a href="https://arxiv.org/abs/2610.19644">Selective Reasoning for Typed Decision Models: When to Start, Read, and Stop</a>, 2026.</li>
+<li>Zhang, B., Ye, H. &amp; Zha, H. <a href="https://arxiv.org/abs/2610.19536">Typed Decision Models on Tabular Data</a>, 2026.</li>
+<li>Chen, E. et al. <a href="https://evan-py-chen.github.io/jev-survey/jev-survey.pdf">A Survey on Jev: Prior Research, Adaptation Costs, and Evidence of System One Models</a>, 2026. 作者版本标注已被 ACM SIGKDD Explorations 接收；作者披露参与 AnyJev 相关研发。</li>
+<li>TypeSafe AI. <a href="https://docs.typesafe.ai/model-jaggedness">Model jaggedness</a>. 官方已知失败模式与规避建议。</li>
+</ol>
+<p>站内延伸：<a href="../../classical-ml/logistic-regression/">Logistic Regression</a>（概率分类基础）、<a href="../../evaluation/roc-auc/">ROC-AUC</a>（分类评估）与 <a href="../../agents/react/">ReAct</a>（Agent 行动闭环）。</p>
+</section>
+
+<footer>
+<p>文章中的概率、成本矩阵和交互实验均为教学示例。厂商文档、独立基准、探索性审计和预印本结论分别标注；不应将特定版本的测量结果外推为所有 Jev 版本或所有业务场景的保证。</p>
+</footer>
+</article>
+</main>
+</div>
+<script>
+(function(){
+"use strict";
+var billing=document.getElementById("p-billing");
+var supportShare=document.getElementById("support-share");
+var review=document.getElementById("review-cost");
+var boost=document.getElementById("boost-billing");
+if(!billing||!supportShare||!review){return;}
+var fmt=function(x){return x.toFixed(2);};
+var setText=function(id,value){var el=document.getElementById(id);if(el){el.textContent=value;}};
+var setRisk=function(id,value,maxValue){
+ var el=document.getElementById(id);
+ if(el){el.style.width=Math.max(0,Math.min(100,value/maxValue*100))+"%";}
+};
+function update(){
+ var pB=Number(billing.value)/100;
+ var rest=1-pB;
+ var pS=rest*Number(supportShare.value)/100;
+ var pD=rest-pS;
+ var reviewCost=Number(review.value);
+ var risks={
+  billing:4*pS+5*pD,
+  support:3*pB+4*pD,
+  delivery:5*pB+4*pS
+ };
+ var best="billing";
+ if(risks.support<risks[best]){best="support";}
+ if(risks.delivery<risks[best]){best="delivery";}
+ var autoRisk=risks[best];
+ var action=reviewCost<autoRisk?"review":best;
+ var maxRisk=Math.max(risks.billing,risks.support,risks.delivery,reviewCost,0.01);
+ setText("p-billing-out",Math.round(pB*100)+"%");
+ setText("support-share-out",supportShare.value+"%");
+ setText("review-cost-out",fmt(reviewCost));
+ setText("probability-output","Billing "+fmt(pB)+" · Support "+fmt(pS)+" · Delivery "+fmt(pD));
+ setText("risk-billing-out",fmt(risks.billing));
+ setText("risk-support-out",fmt(risks.support));
+ setText("risk-delivery-out",fmt(risks.delivery));
+ setText("risk-review-out",fmt(reviewCost));
+ setRisk("risk-billing",risks.billing,maxRisk);
+ setRisk("risk-support",risks.support,maxRisk);
+ setRisk("risk-delivery",risks.delivery,maxRisk);
+ setRisk("risk-review",reviewCost,maxRisk);
+ var names={billing:"路由至 Billing",support:"路由至 Support",delivery:"路由至 Delivery",review:"人工复核"};
+ setText("decision-output","策略动作："+names[action]);
+ if(action==="review"){
+  setText("decision-reason","最低自动路由风险为 "+fmt(autoRisk)+"，高于人工复核成本 "+fmt(reviewCost)+"。");
+ }else{
+  setText("decision-reason",names[best]+" 的期望风险为 "+fmt(autoRisk)+"，不高于人工复核成本 "+fmt(reviewCost)+"。");
+ }
+}
+[billing,supportShare,review].forEach(function(el){el.addEventListener("input",update);});
+if(boost){boost.addEventListener("click",function(){billing.value="90";supportShare.value="67";update();});}
+update();
+})();
+</script>
+</body>
+</html>

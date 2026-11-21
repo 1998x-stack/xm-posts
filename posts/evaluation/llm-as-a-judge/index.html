@@ -1,0 +1,445 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light">
+<meta name="description" content="从评价标准、Pointwise/Pairwise/Rank 评审、G-Eval 与 MT-Bench，到位置偏差、人工一致性、校准和 Meta-evaluation，系统理解 LLM-as-a-Judge。">
+<link rel="canonical" href="https://1998x-stack.github.io/xm-posts/posts/evaluation/llm-as-a-judge/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Understanding LLM-as-a-Judge">
+<meta property="og:description" content="评审器不是真理：理解 LLM 评测机制、偏差和可靠性验证。">
+<meta property="og:url" content="https://1998x-stack.github.io/xm-posts/posts/evaluation/llm-as-a-judge/">
+<meta name="twitter:card" content="summary">
+<title>Understanding LLM-as-a-Judge · xm-posts</title>
+<style>
+:root{color-scheme:light;--paper:#f7f8f4;--white:#fffefa;--ink:#253d43;--muted:#60777a;--accent:#167d76;--line:#dce7e1;--blue:#dcecf2;--orange:#f5e8d8;--purple:#eae7f6;--green:#e4f1e7;--red:#f7e6e1}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font:17px/1.88 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}
+a{color:var(--accent);text-underline-offset:4px;overflow-wrap:anywhere}
+a:focus-visible,button:focus-visible,[tabindex]:focus-visible{outline:3px solid #bd7953;outline-offset:3px}
+.skip{position:absolute;left:14px;top:-90px;background:#183e43;color:#fff;padding:10px;z-index:10}
+.skip:focus{top:8px}
+.sitebar{background:var(--white);border-bottom:1px solid var(--line)}
+.sitewrap{max-width:1240px;margin:auto;padding:12px 22px;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
+.brand{font-weight:850;text-decoration:none;font-size:19px;color:var(--ink)}
+.brand b{color:var(--accent)}
+.sitebar nav{display:flex;gap:16px;flex-wrap:wrap;font-size:13px}
+.layout{max-width:1220px;margin:auto;padding:48px 24px 100px;display:grid;grid-template-columns:220px minmax(0,850px);gap:58px}
+.toc{align-self:start;position:sticky;top:20px;max-height:calc(100vh - 40px);overflow:auto}
+.toc strong{display:block;color:var(--accent);font-size:11px;letter-spacing:.13em;margin:0 0 9px}
+.toc a{display:block;padding:7px 10px;border-left:2px solid #d6e5df;text-decoration:none;color:#587174;font-size:12px;line-height:1.65}
+.toc a:hover{border-color:var(--accent);background:#eaf2ec}
+main{min-width:0}
+.kicker{font-size:11px;letter-spacing:.16em;font-weight:800;color:var(--accent)}
+h1{font-size:clamp(39px,5.2vw,65px);line-height:1.13;letter-spacing:-.055em;margin:16px 0 20px}
+h1 em{font-style:normal;color:var(--accent)}
+.dek{font-size:21px;line-height:1.7;color:#506b70;margin:0}
+.meta{display:flex;gap:16px;flex-wrap:wrap;margin:25px 0 34px;padding-top:14px;border-top:1px solid var(--line);font-size:12px;color:#718784}
+section{margin-top:68px;scroll-margin-top:24px}
+h2{font-size:clamp(25px,3vw,34px);line-height:1.38;letter-spacing:-.03em;margin:0 0 21px}
+h3{font-size:20px;line-height:1.45;margin:27px 0 12px}
+p{margin:0 0 18px}
+.lead{font-size:20px;color:#315e5d}
+strong{color:#23645f}
+.small{font-size:14px;color:var(--muted)}
+.aside{background:#eaf4ef;border-left:4px solid #70b29f;border-radius:6px;padding:16px 19px;color:#496c67;margin:22px 0;font-size:15px}
+.warning{background:#fff1e5;border-left-color:#d69b5d;color:#76583c}
+figure{background:var(--white);border:1px solid var(--line);border-radius:13px;padding:13px;margin:26px 0;min-width:0}
+figure img,figure svg{display:block;width:100%;height:auto;max-width:100%}
+figcaption{font-size:13px;line-height:1.72;color:#637d7a;border-top:1px solid #e8efea;padding:11px 5px 2px}
+.tablewrap{max-width:100%;overflow-x:auto;margin:20px 0}
+table{border-collapse:collapse;width:100%;min-width:560px;font-size:14px;line-height:1.7}
+caption{text-align:left;color:var(--muted);padding:7px 0}
+th,td{border:1px solid var(--line);padding:11px 12px;text-align:left;vertical-align:top}
+th{background:#eaf2ec;color:#355a57}
+.math-equation{display:flex;align-items:center;gap:9px;max-width:100%;min-width:0;margin:24px 0;padding:12px;border:1px solid #d3e7dc;border-radius:9px;background:#edf5ef}
+.eqno{font-size:12px;color:#68827b;flex:none}
+.math-scroll{flex:1;min-width:0;max-width:100%;overflow-x:auto;overflow-y:hidden}
+.math-scroll math[display=block]{width:max-content;min-width:100%;font-family:"Cambria Math","STIX Two Math","Latin Modern Math",serif;font-size:1.13rem;color:#285b60}
+.math-scroll:focus-visible{outline-offset:2px}
+.widget{background:var(--white);border:1px solid #b8d5c8;border-radius:13px;padding:18px 20px;margin:27px 0}
+.widget h3{margin:0 0 8px}
+.controls{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0}
+.controls button{border:1px solid #a9cbbf;background:#fff;color:#286d65;border-radius:8px;padding:9px 13px;font:650 14px system-ui,sans-serif;cursor:pointer}
+.controls button[aria-pressed=true]{background:#177d76;color:#fff;border-color:#177d76}
+.output{display:block;background:#edf5ef;border-radius:8px;padding:14px 15px;color:#365f58;font-size:14px;line-height:1.75;min-height:74px}
+.demo-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:14px 0}
+.demo-panel{border:1px solid var(--line);border-radius:9px;padding:12px;background:#fbfcfa;min-width:0}
+.demo-panel strong{display:block;font-size:12px;color:#597578}
+.demo-panel b{font-size:22px;display:block;color:#294f54}
+.tag{display:inline-block;border:1px solid #d7e4de;border-radius:99px;padding:3px 9px;margin:3px 4px 3px 0;font-size:12px;color:#55736e;background:#fff}
+pre{white-space:pre;overflow:auto;background:#203b40;color:#e6f0eb;padding:18px;border-radius:10px;font-size:13px;line-height:1.65}
+code{font:.9em ui-monospace,SFMono-Regular,Consolas,monospace;color:#805c45}
+pre code{color:inherit}
+li{margin:9px 0}
+.checklist li{padding-left:3px}
+.refs{font-size:14px}
+.refs li{margin:12px 0}
+.refs a{font-weight:650}
+.endline{background:#edf5ef;border-radius:10px;padding:20px;font-size:18px;margin-top:25px}
+.footer-note{font-size:13px;color:#708582;border-top:1px solid var(--line);padding-top:18px;margin-top:48px}
+@media(max-width:980px){.layout{display:block;max-width:900px;padding-top:34px}.toc{position:static;max-height:none;display:flex;flex-wrap:wrap;gap:5px;margin-bottom:30px}.toc strong{width:100%}.toc a{border:1px solid var(--line);border-radius:6px;padding:5px 8px}}
+@media(max-width:520px){body{font-size:16px}.layout{padding:26px 16px 70px}.sitewrap{padding:10px 16px}h1{font-size:clamp(37px,10.5vw,45px)}.dek{font-size:18px}section{margin-top:52px}figure{padding:7px}.widget{padding:14px 12px}.demo-grid{grid-template-columns:1fr}.math-equation{padding:9px 7px;gap:5px}.math-scroll math[display=block]{font-size:1rem}pre{font-size:12px;padding:14px}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+@media print{body{background:white;font-size:11pt}.sitebar,.toc,.skip,.controls{display:none!important}.layout{display:block;padding:0;max-width:none}section{break-inside:auto;margin-top:26px}figure,.aside,.widget{break-inside:avoid}figure img{max-width:100%}.math-scroll{overflow:visible}.math-scroll math[display=block]{font-size:10pt}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#f1f4f1;color:#203b40}}
+</style>
+</head>
+<body>
+<a class="skip" href="#content">跳转至正文</a>
+<header class="sitebar"><div class="sitewrap"><a class="brand" href="../../../">xm<b>·</b>posts</a><nav aria-label="站点导航"><a href="../../../">首页</a><a href="../../../topics/">知识地图</a><a href="../../../archive/">文章归档</a><a href="../../../categories/evaluation/">评测与复现</a></nav></div></header>
+<div class="layout">
+<nav class="toc" aria-label="文章目录">
+<strong>CONTENTS / 文章目录</strong>
+<a href="#problem">01 为什么需要 Judge</a>
+<a href="#definition">02 它究竟在判断什么</a>
+<a href="#pipeline">03 完整评审流水线</a>
+<a href="#formats">04 四种评审范式</a>
+<a href="#math">05 数学模型与聚合</a>
+<a href="#history">06 G-Eval、MT-Bench 与 JudgeBench</a>
+<a href="#bias">07 偏差与交互实验</a>
+<a href="#meta">08 如何评价评审器</a>
+<a href="#practice">09 工程落地与质量门禁</a>
+<a href="#limits">10 适用边界</a>
+<a href="#references">参考资料</a>
+</nav>
+<main id="content">
+<article>
+<header>
+<div class="kicker">EVALUATION SYSTEMS · JUDGE RELIABILITY</div>
+<h1>Understanding<br><em>LLM-as-a-Judge</em></h1>
+<p class="dek">让模型评价模型：从一条评分 Prompt，到一套有标准、有证据、能校准、可审计的自动评测系统。</p>
+<div class="meta"><span>评测与复现 / LLM-as-a-Judge</span><span>研究生进阶</span><span>约 42 分钟</span><span>核心问题：如何评价评审器本身？</span></div>
+</header>
+
+<section id="problem">
+<h2>01 · 为什么我们需要一个“模型评审器”？</h2>
+<p class="lead">当模型已经能写文章、生成代码、解释数学证明时，最难的部分往往不再是“生成一个答案”，而是判断这个答案到底好不好。</p>
+<p>先想一个具体任务：同一个问题交给两个语言模型。模型 A 给出一段 80 字的回答，模型 B 给出一段 300 字的回答。哪一个更好？如果问题要求准确、简洁地解释一个数学概念，B 的篇幅更长不代表它更正确；如果问题要求给出边界条件，A 的简短也不代表它更清晰。</p>
+<p>传统自动指标可以解决一部分问题。例如 BLEU、ROUGE 通过与参考答案比较 n-gram 重合度，适合某些有参考文本的任务；单元测试可以判断代码是否通过指定用例；Exact Match 可以判断答案字符串是否完全一致。但开放式生成通常存在多种合理表达，参考答案可能不完整，风格、事实、推理和指令遵循也不是一个数字能够同时概括的。</p>
+<p>LLM-as-a-Judge 的核心思路是：把一个能力较强的语言模型作为评价器，向它提供任务、候选答案和明确的评价标准，让它输出分数、偏好、排序或可核验的批评意见。它把自然语言理解能力转化为一种可扩展的评价接口。</p>
+<figure><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 430" role="img" aria-labelledby="title-01 desc-01">
+<title id="title-01">LLM-as-a-Judge evaluation pipeline</title><desc id="desc-01">A task and candidate answers are converted into a rubric, evaluated by a judge model, checked against human anchors and bias audits, then aggregated into a report.</desc>
+<defs><marker id="arrow-01" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0 0 L9 3 L0 6 Z" fill="#557b78"/></marker></defs>
+<rect width="1000" height="430" rx="24" fill="#f7faf7"/>
+<text x="42" y="52" font-size="23" font-weight="700" fill="#25464b">从“给分”到“可审计的测量系统”</text>
+<g font-family="Arial, sans-serif" text-anchor="middle">
+<rect x="38" y="112" width="160" height="112" rx="16" fill="#e7f0f4" stroke="#8daeba" stroke-width="2"/><text x="118" y="151" font-size="19" font-weight="700" fill="#315a66">任务与样本</text><text x="118" y="180" font-size="14" fill="#45666e">Question · Context</text><text x="118" y="201" font-size="14" fill="#45666e">Candidate outputs</text>
+<rect x="242" y="112" width="160" height="112" rx="16" fill="#fff0df" stroke="#d9a56d" stroke-width="2"/><text x="322" y="151" font-size="19" font-weight="700" fill="#80552d">评价 Rubric</text><text x="322" y="180" font-size="14" fill="#795f47">Dimensions · Weights</text><text x="322" y="201" font-size="14" fill="#795f47">Anchors · Evidence</text>
+<rect x="446" y="112" width="160" height="112" rx="16" fill="#e9e7f7" stroke="#a49acb" stroke-width="2"/><text x="526" y="151" font-size="19" font-weight="700" fill="#51447d">Judge LLM</text><text x="526" y="180" font-size="14" fill="#5e5780">Score / Compare</text><text x="526" y="201" font-size="14" fill="#5e5780">Critique / Verify</text>
+<rect x="650" y="112" width="160" height="112" rx="16" fill="#e4f3e9" stroke="#8ab99a" stroke-width="2"/><text x="730" y="151" font-size="19" font-weight="700" fill="#32694a">偏差审计</text><text x="730" y="180" font-size="14" fill="#4b745b">Swap · Repeat</text><text x="730" y="201" font-size="14" fill="#4b745b">Human anchor</text>
+<rect x="854" y="112" width="108" height="112" rx="16" fill="#f3e8ee" stroke="#c99aaf" stroke-width="2"/><text x="908" y="151" font-size="18" font-weight="700" fill="#78465b">报告</text><text x="908" y="180" font-size="13" fill="#82586a">Score</text><text x="908" y="200" font-size="13" fill="#82586a">CI · Caveat</text>
+<path d="M198 168 H236 M402 168 H440 M606 168 H644 M810 168 H848" fill="none" stroke="#557b78" stroke-width="3" marker-end="url(#arrow-01)"/>
+<rect x="270" y="294" width="460" height="82" rx="15" fill="#fff" stroke="#7ea99e" stroke-width="2"/><text x="500" y="327" font-size="18" font-weight="700" fill="#2f6660">人工校准集 + 领域验证器</text><text x="500" y="353" font-size="14" fill="#52716c">专家标注 · 单元测试 · 检索证据 · 安全审查</text>
+<path d="M730 224 V264 H730 V286 M500 286 V264 H526 V230" fill="none" stroke="#8b8066" stroke-width="2.5" stroke-dasharray="7 6" marker-end="url(#arrow-01)"/>
+<text x="500" y="405" font-size="13" fill="#647b78">闭环：发现偏差 → 修订 Rubric / Judge → 在独立样本上重新验证</text>
+</g></svg><figcaption>图 1：可靠的 LLM Judge 不应只是一个评分 API，而应是包含标准定义、结构化判断、独立校验和人工校准的完整测量流水线。</figcaption></figure>
+<div class="aside"><strong>最重要的区分：</strong>生成模型回答“我能生成什么”，评审模型回答“按照给定标准，哪个输出更符合要求”。评审器不是天然的真理来源；它本身也是一个需要被验证、监控和校准的模型。</div>
+</section>
+
+<section id="definition">
+<h2>02 · LLM-as-a-Judge 究竟在判断什么？</h2>
+<p>先把问题形式化。设输入任务为 q，必要上下文为 c，候选输出为 y。评价标准（rubric）记为 r，它规定评价维度、每个维度的含义、分值锚点、证据要求和权重。评审模型记为 J<sub>θ</sub>，其中 θ 表示模型参数及其版本。</p>
+<p>评审器接收 (q, c, y, r)，输出结构化结果 z。一个实用的结果至少应包含：各维度分数、支持判断的证据、最终判断、置信度或不确定性标记，以及是否需要人工复核。</p>
+<div class="tablewrap"><table><caption>表 1：评价目标不同，Judge 的任务定义也不同</caption><thead><tr><th>评价维度</th><th>要回答的问题</th><th>更合适的证据</th><th>不能混淆的概念</th></tr></thead><tbody>
+<tr><td>Instruction following</td><td>是否完成用户要求？</td><td>逐项对照指令和约束</td><td>遵循指令不等于事实正确</td></tr>
+<tr><td>Factuality</td><td>关键事实是否正确？</td><td>权威来源、检索证据、数据库</td><td>表达流畅不等于事实成立</td></tr>
+<tr><td>Reasoning correctness</td><td>推理链是否有效？</td><td>可验证步骤、计算器、单元测试</td><td>解释得像真的不等于推导正确</td></tr>
+<tr><td>Completeness</td><td>重要条件是否遗漏？</td><td>需求清单、rubric、覆盖矩阵</td><td>回答很长不等于覆盖充分</td></tr>
+<tr><td>Style / helpfulness</td><td>是否清晰、简洁、有帮助？</td><td>明确的受众与风格标准</td><td>主观偏好不能伪装成客观真值</td></tr>
+<tr><td>Safety</td><td>是否产生不可接受的风险？</td><td>政策规则、风险分类、专家复核</td><td>单个 Judge 的拒绝判断不等于安全证明</td></tr>
+</tbody></table></div>
+<p>这张表揭示一个关键原则：<strong>先定义被测量的构念（construct），再设计评分方式。</strong>如果“有帮助”没有被拆成可观察的行为，模型就可能用“语言优美”“篇幅很长”之类容易识别的表面信号替代真正目标。</p>
+</section>
+
+<section id="pipeline">
+<h2>03 · 一次可靠的评审，应该经过哪些步骤？</h2>
+<h3>Step 1：固定任务与评价单位</h3>
+<p>不要只给 Judge 一句“请评价回答质量”。应当明确任务是什么、输入包含什么、候选答案是否匿名、评估对象是单轮回答还是多轮对话、哪些信息可被引用、哪些内容属于不可信输入。任务边界决定了后续指标是否有意义。</p>
+<h3>Step 2：写出可以执行的 Rubric</h3>
+<p>Rubric 不是一句形容词，而是一份评价协议。每个维度需要定义：评价对象、分数范围、正反例、边界条件和证据要求。比如“事实正确性 1–5 分”仍然太宽泛；更好的定义是：5 分表示所有关键可核验事实均有证据支持，4 分表示存在非关键遗漏但无实质错误，1 分表示核心结论错误或捏造证据。</p>
+<h3>Step 3：调用 Judge 并约束输出结构</h3>
+<p>要求模型输出固定 JSON Schema，而不是一段难以解析的自由文本。结构化字段可以让系统检测缺失维度、非法分数、引用缺失、平局和人工升级条件。格式校验只能证明输出可解析，不能证明判断本身正确。</p>
+<h3>Step 4：执行独立校验与偏差审计</h3>
+<p>对代码使用测试，对数学使用符号或数值验证，对事实问题使用来源核查；对 pairwise 结果交换候选顺序，对相同样本重复运行，并抽取一部分样本由人类专家标注。不同类型的检查针对不同失效模式，不应让一个 Judge 自己证明自己。</p>
+<h3>Step 5：聚合、校准并报告不确定性</h3>
+<p>聚合之前先保留单次判断、提示词版本、Judge 模型版本、采样参数和证据。汇总结果要报告样本量、置信区间、人工一致性和已知偏差，而不是只展示一个漂亮的平均分。</p>
+</section>
+
+<section id="formats">
+<h2>04 · 四种常见评审范式</h2>
+<figure><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 460" role="img" aria-labelledby="title-02 desc-02">
+<title id="title-02">Four LLM judge task formats</title><desc id="desc-02">Pointwise scoring evaluates one answer, pairwise comparison chooses between two, listwise ranking compares several, and critique or verification checks evidence and correctness.</desc>
+<rect width="1000" height="460" rx="22" fill="#f8faf8"/><text x="38" y="52" font-size="23" font-weight="700" fill="#25464b">四种常见的评审任务：输入形式决定输出与风险</text>
+<g font-family="Arial, sans-serif">
+<g transform="translate(35 90)"><rect width="445" height="150" rx="15" fill="#eaf2f5" stroke="#9dbcc8" stroke-width="2"/><text x="22" y="34" font-size="19" font-weight="700" fill="#315a66">01 · Pointwise / 单点评分</text><rect x="22" y="54" width="180" height="54" rx="8" fill="#fff" stroke="#a5bdc5"/><text x="112" y="76" font-size="14" text-anchor="middle" fill="#45666e">Answer A</text><text x="112" y="95" font-size="12" text-anchor="middle" fill="#6c858b">单个候选</text><path d="M208 81 H257" stroke="#557b78" stroke-width="2.5"/><path d="M251 75 L260 81 L251 87" fill="none" stroke="#557b78" stroke-width="2.5"/><rect x="267" y="54" width="150" height="54" rx="8" fill="#dff0e5" stroke="#8ab99a"/><text x="342" y="77" font-size="14" text-anchor="middle" fill="#32694a">4.2 / 5</text><text x="342" y="96" font-size="12" text-anchor="middle" fill="#4b745b">维度分数</text><text x="22" y="132" font-size="13" fill="#58727a">适合：质量画像、rubric 诊断；风险：分数尺度漂移</text></g>
+<g transform="translate(520 90)"><rect width="445" height="150" rx="15" fill="#fff1e2" stroke="#d9b17d" stroke-width="2"/><text x="22" y="34" font-size="19" font-weight="700" fill="#80552d">02 · Pairwise / 成对比较</text><rect x="22" y="54" width="112" height="54" rx="8" fill="#fff" stroke="#d5b58d"/><text x="78" y="86" font-size="15" text-anchor="middle" fill="#795f47">A</text><text x="153" y="86" font-size="16" text-anchor="middle" fill="#8c765e">vs</text><rect x="172" y="54" width="112" height="54" rx="8" fill="#fff" stroke="#d5b58d"/><text x="228" y="86" font-size="15" text-anchor="middle" fill="#795f47">B</text><path d="M293 81 H328" stroke="#8b765e" stroke-width="2.5"/><path d="M322 75 L331 81 L322 87" fill="none" stroke="#8b765e" stroke-width="2.5"/><rect x="338" y="54" width="86" height="54" rx="8" fill="#f4dfc8" stroke="#d4a76e"/><text x="381" y="86" font-size="15" font-weight="700" text-anchor="middle" fill="#80552d">A 胜</text><text x="22" y="132" font-size="13" fill="#806d58">适合：偏好排序；风险：位置偏差、平局与循环偏好</text></g>
+<g transform="translate(35 270)"><rect width="445" height="150" rx="15" fill="#eeeafa" stroke="#aaa0d0" stroke-width="2"/><text x="22" y="34" font-size="19" font-weight="700" fill="#51447d">03 · Listwise / 列表排序</text><g transform="translate(24 57)"><rect width="62" height="45" rx="7" fill="#fff" stroke="#b6acd6"/><rect x="72" width="62" height="45" rx="7" fill="#fff" stroke="#b6acd6"/><rect x="144" width="62" height="45" rx="7" fill="#fff" stroke="#b6acd6"/><text x="31" y="28" font-size="15" text-anchor="middle" fill="#51447d">A</text><text x="103" y="28" font-size="15" text-anchor="middle" fill="#51447d">B</text><text x="175" y="28" font-size="15" text-anchor="middle" fill="#51447d">C</text></g><path d="M250 80 H286" stroke="#70659a" stroke-width="2.5"/><path d="M280 74 L289 80 L280 86" fill="none" stroke="#70659a" stroke-width="2.5"/><rect x="298" y="57" width="120" height="45" rx="7" fill="#e0daf4" stroke="#aaa0d0"/><text x="358" y="85" font-size="14" text-anchor="middle" fill="#51447d">B ≻ A ≻ C</text><text x="22" y="132" font-size="13" fill="#665d87">适合：多模型排行榜；风险：排列空间与候选数影响</text></g>
+<g transform="translate(520 270)"><rect width="445" height="150" rx="15" fill="#e7f3ec" stroke="#8ab99a" stroke-width="2"/><text x="22" y="34" font-size="19" font-weight="700" fill="#32694a">04 · Critique / Verifier</text><rect x="22" y="56" width="155" height="48" rx="8" fill="#fff" stroke="#9fc4a9"/><text x="99" y="85" font-size="14" text-anchor="middle" fill="#4b745b">答案 + 证据</text><path d="M184 80 H232" stroke="#628b70" stroke-width="2.5"/><path d="M226 74 L235 80 L226 86" fill="none" stroke="#628b70" stroke-width="2.5"/><rect x="242" y="56" width="178" height="48" rx="8" fill="#d7ebdc" stroke="#8ab99a"/><text x="331" y="85" font-size="14" text-anchor="middle" fill="#32694a">缺陷 / 证据 / 结论</text><text x="22" y="132" font-size="13" fill="#557b62">适合：事实、代码与推理核验；风险：评审器也会幻觉</text></g>
+</g></svg><figcaption>图 2：Pointwise 关注一个候选的绝对评分；Pairwise 关注两个候选的相对偏好；Listwise 扩展到多个候选；Critique / Verifier 重点输出问题、证据和核验结果。</figcaption></figure>
+<h3>4.1 Pointwise：给一个回答打分</h3>
+<p>输入一个候选答案，按 rubric 对每个维度评分。例如，事实正确性 4/5、指令遵循 5/5、表达清晰度 3/5。它适合构建质量画像和发现具体缺陷。但不同 Judge 对“4 分”的内部尺度可能不同，因此跨模型、跨任务比较原始分数时必须谨慎。</p>
+<h3>4.2 Pairwise：比较 A 和 B 哪个更好</h3>
+<p>Pairwise 让模型在同一个问题下比较两个答案，输出 A 胜、B 胜或平局。它通常比直接问“这个回答值几分”更容易形成相对判断，也适合 A/B 模型对比和偏好数据收集。风险在于候选顺序、答案长度、模型身份和比较提示词都会影响选择。</p>
+<h3>4.3 Listwise：一次比较多个候选</h3>
+<p>Listwise 把多个候选放在一起排序，能节省部分调用成本，但候选数增加后，注意力分配、比较复杂度和位置排列空间都会变大。若模型只选“最好的一个”，并不意味着它已经可靠地给出了完整排序；需要明确未选候选之间是否真的可比较。</p>
+<h3>4.4 Critique / Verifier：解释哪里有问题</h3>
+<p>Critique 输出优点、缺陷、遗漏和修订建议；Verifier 对一个可验证命题或推理步骤进行核验。对于代码、数学和事实任务，最好把语言模型的批评与独立工具结合：Judge 负责定位可能的问题，测试或外部证据负责确认问题是否真实存在。</p>
+</section>
+
+<section id="math">
+<h2>05 · 数学模型：评分、偏好和评审质量</h2>
+<h3>5.1 Rubric 加权评分</h3>
+<p>设一个回答有 K 个评价维度，第 k 个维度的分数为 s<sub>k</sub>，权重为 w<sub>k</sub>。一个简单的总分是归一化加权和：</p>
+<div class="math-equation"><span class="eqno">(1)</span><div class="math-scroll" role="region" tabindex="0" aria-label="Rubric weighted score equation"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block" aria-label="S of y equals sum of w k times s k of y divided by sum of w k"><mrow><mi>S</mi><mo>(</mo><mi>y</mi><mo>)</mo><mo>=</mo><mfrac><mrow><munderover><mo>∑</mo><mrow><mi>k</mi><mo>=</mo><mn>1</mn></mrow><mi>K</mi></munderover><msub><mi>w</mi><mi>k</mi></msub><msub><mi>s</mi><mi>k</mi></msub><mo>(</mo><mi>y</mi><mo>)</mo></mrow><mrow><munderover><mo>∑</mo><mrow><mi>k</mi><mo>=</mo><mn>1</mn></mrow><mi>K</mi></munderover><msub><mi>w</mi><mi>k</mi></msub></mrow></mfrac></mrow></math></div></div>
+<p>例如，事实正确性权重 0.5、指令遵循权重 0.3、表达清晰度权重 0.2。某回答分别得到 4、5、3 分，那么总分是 0.5×4 + 0.3×5 + 0.2×3 = 4.1。</p>
+<p>注意：这个 4.1 是在给定 rubric 和权重下的聚合结果，不是客观世界中的“真实质量”。如果 rubric 漏掉了关键安全约束，精确计算只会更精确地汇总一个不完整目标。权重也应在评测前确定，不能看到结果后为了偏好某个模型而随意调整。</p>
+<h3>5.2 Pairwise 与 Bradley–Terry 偏好模型</h3>
+<p>若每个候选 i 有一个潜在质量参数 θ<sub>i</sub>，Bradley–Terry 模型将 i 胜过 j 的概率写成：</p>
+<div class="math-equation"><span class="eqno">(2)</span><div class="math-scroll" role="region" tabindex="0" aria-label="Bradley Terry pairwise preference equation"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block" aria-label="Probability i preferred to j equals exponential theta i divided by sum of exponentials theta i and theta j"><mrow><mi>P</mi><mo>(</mo><mi>i</mi><mo>≻</mo><mi>j</mi><mo>)</mo><mo>=</mo><mfrac><mrow><mi>exp</mi><mo>(</mo><msub><mi>θ</mi><mi>i</mi></msub><mo>)</mo></mrow><mrow><mi>exp</mi><mo>(</mo><msub><mi>θ</mi><mi>i</mi></msub><mo>)</mo><mo>+</mo><mi>exp</mi><mo>(</mo><msub><mi>θ</mi><mi>j</mi></msub><mo>)</mo></mrow></mfrac></mrow></math></div></div>
+<p>这类模型可以从成对比较中估计相对强弱，也能用于构建排行榜。它依赖一个重要假设：候选偏好可以由相对分数解释。真实评测中，偏好可能随任务、评价维度和上下文变化；模型 A 在代码任务上更强，不代表它在事实问答或写作任务上也更强。</p>
+<h3>5.3 与人工判断的一致性</h3>
+<p>如果把人工标签记为 h<sub>i</sub>，Judge 标签记为 j<sub>i</sub>，最直观的精确一致率是：</p>
+<div class="math-equation"><span class="eqno">(3)</span><div class="math-scroll" role="region" tabindex="0" aria-label="Exact agreement rate equation"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block" aria-label="Agreement equals one over N times sum of indicator that judge label equals human label"><mrow><mi>A</mi><mo>=</mo><mfrac><mn>1</mn><mi>N</mi></mfrac><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>N</mi></munderover><mi mathvariant="double-struck">1</mi><mo>[</mo><msub><mi>j</mi><mi>i</mi></msub><mo>=</mo><msub><mi>h</mi><mi>i</mi></msub><mo>]</mo></mrow></math></div></div>
+<p>但精确一致率没有扣除“仅仅因为标签分布”而产生的偶然一致。Cohen's kappa 用观察一致率 p<sub>o</sub> 与边际分布推算的偶然一致率 p<sub>e</sub> 做校正：</p>
+<div class="math-equation"><span class="eqno">(4)</span><div class="math-scroll" role="region" tabindex="0" aria-label="Cohen kappa equation"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block" aria-label="Kappa equals p o minus p e divided by one minus p e"><mrow><mi>κ</mi><mo>=</mo><mfrac><mrow><msub><mi>p</mi><mi>o</mi></msub><mo>−</mo><msub><mi>p</mi><mi>e</mi></msub></mrow><mrow><mn>1</mn><mo>−</mo><msub><mi>p</mi><mi>e</mi></msub></mrow></mfrac></mrow></math></div></div>
+<p>对于连续分数，可以报告 Pearson 相关或 Spearman 秩相关；对于有序等级，可以考虑加权 kappa；对于多位标注者，可以考虑 Krippendorff's alpha。指标选择要匹配数据类型与标注协议。</p>
+<div class="aside warning"><strong>相关不等于一致。</strong> 如果 Judge 总是比人工多打 1 分，两者的 Pearson 相关可能很高，但它们并不一致。若目标是让 Judge 复现人工分数，应同时看绝对误差、偏差和一致性，而不是只报相关系数。</div>
+</section>
+
+<section id="history">
+<h2>06 · 代表性研究：从 G-Eval 到 JudgeBench</h2>
+<h3>6.1 MT-Bench 与 Chatbot Arena：把偏好评价规模化</h3>
+<p>Zheng 等人在 NeurIPS 2023 的研究 <a href="https://arxiv.org/abs/2306.05685" target="_blank" rel="noopener">Judging LLM-as-a-Judge with MT-Bench and Chatbot Arena</a> 探索用强 LLM 评价开放式对话模型。MT-Bench 提供多轮问题集，Chatbot Arena 收集真实用户的成对偏好。论文报告 GPT-4 Judge 在其研究设置中与人工偏好的总体一致率超过 80%，达到与人类之间一致率相近的水平。</p>
+<p>这个结果说明强模型可以成为规模化评价的有用近似，但不能把“超过 80%”理解为任何任务、任何 Judge、任何 rubric 都有 80% 准确率。论文同时讨论了位置偏差、冗长偏差、自我增强偏差和有限的推理能力。评价任务、样本构成和人类标注协议都会改变这个数字。</p>
+<h3>6.2 G-Eval：把评价步骤和输出格式显式化</h3>
+<p><a href="https://aclanthology.org/2023.emnlp-main.153/" target="_blank" rel="noopener">G-Eval（EMNLP 2023）</a>使用 LLM 先根据任务说明和评价标准生成更细的 Evaluation Steps，再以表单式结构对候选文本评分。它将“请打分”拆成更清楚的评价步骤和字段，并研究输出评分 token 的概率信息。</p>
+<p>论文报告，在其摘要评价实验中，GPT-4 作为评审器与人工评分的 Spearman 相关达到 0.514。这个数值是特定数据集与任务设置下的实验结果，不应被挪用为所有 LLM-as-a-Judge 系统的通用表现。作者还指出评审器可能偏好由 LLM 生成的文本，这提示我们必须审计评审器自身的偏好。</p>
+<p>G-Eval 还利用评分 token 的概率信息进行加权。假设评分范围是 1 到 R，模型对每个评分 token 的输出概率为 p<sub>r</sub>，则可以计算概率加权分数：</p>
+<div class="math-equation"><span class="eqno">(5)</span><div class="math-scroll" role="region" tabindex="0" aria-label="G-Eval probability weighted rating equation"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block" aria-label="Expected rating equals sum r times p r divided by sum p r"><mrow><mover><mi>s</mi><mo>^</mo></mover><mo>=</mo><mfrac><mrow><munderover><mo>∑</mo><mrow><mi>r</mi><mo>=</mo><mn>1</mn></mrow><mi>R</mi></munderover><mi>r</mi><mo>·</mo><msub><mi>p</mi><mi>r</mi></msub></mrow><mrow><munderover><mo>∑</mo><mrow><mi>r</mi><mo>=</mo><mn>1</mn></mrow><mi>R</mi></munderover><msub><mi>p</mi><mi>r</mi></msub></mrow></mfrac></mrow></math></div></div>
+<p>直觉上，如果模型在 3 分和 4 分之间犹豫，概率加权可以保留这部分不确定性，而不是只读取最终选中的一个整数。这里的 p<sub>r</sub> 是评分 token 的条件概率，不等于经过校准的“答案正确概率”；它受 tokenizer、提示词、输出格式和候选 token 集合影响，不能直接跨任务比较。</p>
+<h3>6.3 JudgeBench：评审器也需要考试</h3>
+<p><a href="https://arxiv.org/abs/2410.12784" target="_blank" rel="noopener">JudgeBench（ICLR 2025）</a>提出一个更严格的问题：如果两个答案中一个存在细微但关键的事实或逻辑错误，Judge 能否识别？它构建 350 组成对答案，覆盖常识、推理、数学和代码，并强调指令遵循、事实/逻辑正确性、风格偏好之间的层级关系。</p>
+<p>这个层级很重要。先判断答案是否响应了问题，再检查事实与逻辑是否正确，最后才考虑风格是否符合偏好。一个答案即使表达流畅、结构完整，如果核心结论错了，也不应靠“写得好看”获得更高分。JudgeBench 的困难样本表明，一些能力很强的模型在细微正确性比较上也可能只略高于随机猜测。</p>
+<h3>6.4 2025–2026：从单一分数走向可靠性协议</h3>
+<p>2025 年的 <a href="https://aclanthology.org/2025.ijcnlp-long.18/" target="_blank" rel="noopener">Judging the Judges</a> 系统研究了评审器的位置偏差，在 15 个 Judge、MT-Bench 与 DevBench 上分析超过 150,000 次评价，并提出 Repetition Stability、Position Consistency 和 Preference Fairness 等指标。研究强调：偏差不仅与 Judge 有关，也会随候选答案质量差距和任务类型变化。</p>
+<p>2026 年的综述 <a href="https://doi.org/10.1007/s10462-026-11652-0" target="_blank" rel="noopener">Large language models as judges: recent advances...</a> 将文本与代码评审、Rubric prompting、成对比较、多 Judge 集成、工具增强验证、校准、公平性和对抗鲁棒性纳入统一视角。另一篇 2026 年预印本 <a href="https://arxiv.org/abs/2606.19544" target="_blank" rel="noopener">Reliability without Validity</a> 报告，在其大规模实验中，精确一致率与 Cohen's kappa 的差距可达 33–41 个百分点；Judge 排名会随 Benchmark 改变，而很高的重复稳定性也可能与明显的位置偏差并存。该工作目前应按预印本看待，数值不能脱离其数据集和协议直接泛化。</p>
+</section>
+
+<section id="bias">
+<h2>07 · 最容易被忽略的问题：Judge Bias</h2>
+<p>评审器并不是一个中性的函数。即使评价标准写得很详细，模型仍可能受到输入顺序、篇幅、措辞风格、模型身份和上下文提示的影响。偏差的危险在于：它会让评价系统稳定地偏向某一类输出，而不是随机地产生噪声。</p>
+<h3>7.1 Position Bias：先出现的答案更容易获胜</h3>
+<p>在 Pairwise 评审中，设候选 A 和 B 的内容完全不变。第一次提示词按 A、B 的顺序输入；第二次只交换顺序，按 B、A 输入。如果 Judge 两次都选“第一个”，它实际偏好的可能是位置，而不是候选内容。</p>
+<figure><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 940 285" role="img" aria-labelledby="inline-swap-title inline-swap-desc">
+<title id="inline-swap-title">Pairwise order swap comparison</title><desc id="inline-swap-desc">The candidate order changes from A then B to B then A. A content-based judge follows candidate A, while a primacy-biased judge follows the first slot.</desc>
+<rect width="940" height="285" rx="16" fill="#f8faf8"/>
+<g font-family="Arial,sans-serif" text-anchor="middle">
+<text x="230" y="38" font-size="17" font-weight="700" fill="#315a66">Prompt 1 · A 在前</text>
+<rect x="75" y="58" width="145" height="60" rx="10" fill="#dcecf2" stroke="#8daeba" stroke-width="2"/><text x="147" y="84" font-size="16" fill="#315a66">第一位</text><text x="147" y="105" font-size="14" fill="#45666e">候选 A</text>
+<rect x="240" y="58" width="145" height="60" rx="10" fill="#f5e8d8" stroke="#d9a56d" stroke-width="2"/><text x="312" y="84" font-size="16" fill="#80552d">第二位</text><text x="312" y="105" font-size="14" fill="#795f47">候选 B</text>
+<text x="705" y="38" font-size="17" font-weight="700" fill="#315a66">Prompt 2 · B 在前</text>
+<rect x="550" y="58" width="145" height="60" rx="10" fill="#f5e8d8" stroke="#d9a56d" stroke-width="2"/><text x="622" y="84" font-size="16" fill="#80552d">第一位</text><text x="622" y="105" font-size="14" fill="#795f47">候选 B</text>
+<rect x="715" y="58" width="145" height="60" rx="10" fill="#dcecf2" stroke="#8daeba" stroke-width="2"/><text x="787" y="84" font-size="16" fill="#315a66">第二位</text><text x="787" y="105" font-size="14" fill="#45666e">候选 A</text>
+<path d="M405 88 H530" stroke="#557b78" stroke-width="3" stroke-dasharray="7 6"/><path d="M520 79 L533 88 L520 97" fill="none" stroke="#557b78" stroke-width="3"/>
+<rect x="55" y="160" width="395" height="84" rx="12" fill="#e4f1e7" stroke="#8ab99a"/><text x="252" y="190" font-size="17" font-weight="700" fill="#32694a">内容偏好：A → A</text><text x="252" y="218" font-size="14" fill="#4b745b">第二次选择第二位，仍是同一个候选 A</text>
+<rect x="490" y="160" width="395" height="84" rx="12" fill="#fff0e4" stroke="#d9a56d"/><text x="687" y="190" font-size="17" font-weight="700" fill="#80552d">首位偏好：第一位 → 第一位</text><text x="687" y="218" font-size="14" fill="#795f47">第二次改选候选 B，选择跟随位置变化</text>
+</g></svg><figcaption>图 3：只交换顺序，就能把“偏好某个候选”与“偏好某个位置”区分开来。该实验应在多个问题和多次运行中重复，而不是只看单个样本。</figcaption></figure>
+<div class="widget" id="swap-demo">
+<h3>交互实验：改变 Judge 的选择策略</h3>
+<p class="small">选择一种评审行为，观察原始顺序与交换顺序下，Judge 到底跟随候选内容，还是跟随位置。</p>
+<div class="controls" role="group" aria-label="选择评审行为">
+<button type="button" data-demo-choice="candidate" aria-pressed="true">跟随候选 A</button>
+<button type="button" data-demo-choice="first" aria-pressed="false">总选第一位</button>
+<button type="button" data-demo-choice="second" aria-pressed="false">总选第二位</button>
+<button type="button" data-demo-choice="unstable" aria-pressed="false">结果不稳定</button>
+</div>
+<div class="demo-grid">
+<div class="demo-panel"><strong>原始顺序（A 在第 1 位）</strong><b id="original-choice">选择 A</b><span class="small">候选顺序：A → B</span></div>
+<div class="demo-panel"><strong>交换顺序（B 在第 1 位）</strong><b id="swapped-choice">选择 B</b><span class="small">候选顺序：B → A</span></div>
+</div>
+<output class="output" id="swap-result" aria-live="polite">审计结论：两次都选择同一个候选 A。候选身份保持一致，Position Consistency = 1。</output>
+<p class="small">注意：这里展示的是教学用的确定性样例，不是对真实模型的测量。真实审计需要多个任务、重复运行和不同 Judge 版本。</p>
+</div>
+<h3>7.2 其他常见偏差</h3>
+<div class="tablewrap"><table><caption>表 2：偏差类型、可观察信号与控制方法</caption><thead><tr><th>偏差</th><th>可能表现</th><th>控制实验</th></tr></thead><tbody>
+<tr><td>Verbosity / Length Bias</td><td>信息相同但更长的答案得分更高</td><td>构造内容等价的长短版本，比较评分差</td></tr>
+<tr><td>Self-preference</td><td>Judge 更偏好自己或同系列模型的表达</td><td>匿名模型身份，跨模型族交叉评审</td></tr>
+<tr><td>Style / Concreteness Bias</td><td>术语多、结构漂亮、语气自信的答案被高估</td><td>控制事实内容，仅改变表达风格</td></tr>
+<tr><td>Anchoring</td><td>先看到的参考答案或初始分数影响后续判断</td><td>随机化展示顺序，分离参考信息与候选信息</td></tr>
+<tr><td>Prompt Injection</td><td>候选答案中的指令试图操纵评审器</td><td>把候选视为不可信数据，测试恶意提示样本</td></tr>
+<tr><td>Data Contamination</td><td>Judge 可能记住公开基准答案或偏好</td><td>使用隐藏测试集、时间切分和新颖样本</td></tr>
+</tbody></table></div>
+<p>提示词里写一句“不要受长度影响”并不能证明长度偏差已经消失。更可靠的方式是构造受控对照：保持语义内容不变，只改变篇幅、顺序、格式或措辞，然后测量输出差异。提示词可以作为缓解手段，但实验才是验证手段。</p>
+</section>
+
+<section id="meta">
+<h2>08 · Meta-evaluation：如何评价评审器本身？</h2>
+<p class="lead">这是整个体系的核心：我们不能只问“Judge 给出的分数是多少”，还必须问“这个分数是否有效、是否稳定、是否公平”。</p>
+<figure><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 430" role="img" aria-labelledby="title-04 desc-04">
+<title id="title-04">Three dimensions of judge meta-evaluation</title><desc id="desc-04">A judge should be evaluated on agreement with human reference labels, consistency under repeated runs, and fairness or robustness under controlled perturbations.</desc>
+<rect width="1000" height="430" rx="22" fill="#f8faf8"/><text x="38" y="52" font-size="23" font-weight="700" fill="#25464b">评审器的三维体检：有效性、稳定性、公平性</text>
+<g font-family="Arial, sans-serif">
+<g transform="translate(42 105)"><rect width="285" height="240" rx="18" fill="#e7f0f4" stroke="#8daeba" stroke-width="2"/><circle cx="142" cy="70" r="34" fill="#d0e4ec" stroke="#6d9aaa" stroke-width="2"/><path d="M126 70 L138 82 L160 55" fill="none" stroke="#356b7a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><text x="142" y="132" text-anchor="middle" font-size="20" font-weight="700" fill="#315a66">Agreement</text><text x="142" y="161" text-anchor="middle" font-size="15" fill="#45666e">与人工参考是否一致？</text><text x="142" y="192" text-anchor="middle" font-size="13" fill="#45666e">Spearman · κ · Alpha</text><text x="142" y="217" text-anchor="middle" font-size="13" fill="#45666e">Human–human baseline</text></g>
+<g transform="translate(357 105)"><rect width="285" height="240" rx="18" fill="#eeeafa" stroke="#aaa0d0" stroke-width="2"/><circle cx="142" cy="70" r="34" fill="#e0daf4" stroke="#8e82bc" stroke-width="2"/><path d="M122 68 C122 47 155 44 161 64 C166 83 145 92 132 80 M132 80 L131 68 M132 80 L145 81" fill="none" stroke="#51447d" stroke-width="4" stroke-linecap="round"/><text x="142" y="132" text-anchor="middle" font-size="20" font-weight="700" fill="#51447d">Consistency</text><text x="142" y="161" text-anchor="middle" font-size="15" fill="#665d87">相同输入是否稳定？</text><text x="142" y="192" text-anchor="middle" font-size="13" fill="#665d87">Repeat · Seed · Prompt</text><text x="142" y="217" text-anchor="middle" font-size="13" fill="#665d87">Test–retest reliability</text></g>
+<g transform="translate(672 105)"><rect width="285" height="240" rx="18" fill="#e7f3ec" stroke="#8ab99a" stroke-width="2"/><circle cx="142" cy="70" r="34" fill="#d7ebdc" stroke="#78a98a" stroke-width="2"/><path d="M142 45 L165 86 H119 Z" fill="none" stroke="#32694a" stroke-width="4" stroke-linejoin="round"/><path d="M142 59 V72 M142 79 V81" stroke="#32694a" stroke-width="4" stroke-linecap="round"/><text x="142" y="132" text-anchor="middle" font-size="20" font-weight="700" fill="#32694a">Fairness &amp; Robustness</text><text x="142" y="161" text-anchor="middle" font-size="15" fill="#557b62">无关变化会改变结论吗？</text><text x="142" y="192" text-anchor="middle" font-size="13" fill="#557b62">Swap · Length · Style · Attack</text><text x="142" y="217" text-anchor="middle" font-size="13" fill="#557b62">Calibration · Stress test</text></g>
+<text x="500" y="391" text-anchor="middle" font-size="15" font-weight="700" fill="#4d6968">三者不可互相替代：高一致性 ≠ 高有效性；高相关性 ≠ 无偏差</text>
+</g></svg><figcaption>图 4：评审器至少要接受三个维度的检验。任何一个维度表现好，都不能替代另外两个维度。</figcaption></figure>
+<h3>8.1 Agreement：是否与人类参考判断一致？</h3>
+<p>准备一个由人工标注的校准集。每条样本至少由多位标注者独立判断，保留原始标签和分歧，而不只保留多数票。再让 Judge 对同一批样本评分或比较，计算精确一致率、Cohen's kappa、Spearman 相关或适合当前数据类型的指标。</p>
+<p>更重要的是，必须测量 Human–Human Agreement。假设三位专家之间的一致率本身只有 72%，那么 Judge 与某一位专家的 72% 一致，不能直接被称为“错误 28%”；它可能接近单个人类标注者的可达到水平。反过来，如果 Judge 与人工多数票高度一致，但人工标注本身存在系统偏差，也不能把多数票当作绝对真值。</p>
+<h3>8.2 Consistency：相同输入是否稳定？</h3>
+<p>在相同提示词、相同模型版本和相同采样设置下重复运行，观察评分方差、选择分布和判断翻转率。然后再对提示词做轻微但语义等价的改写，测试结果是否发生不合理变化。必须记录 temperature、seed（若可用）、模型快照、系统提示词和工具版本。</p>
+<p>稳定性回答的是“重复测量是否相似”，并不回答“测量是否正确”。一个总选第一位的 Judge 可能每次都选择第一位，重复稳定性非常高，但它仍然不是一个公平的比较器。</p>
+<h3>8.3 Fairness & Robustness：无关变化是否改变结论？</h3>
+<p>设计一组反事实对照：交换 A/B 顺序、改变答案长短、匿名化模型身份、改变格式、改写非关键措辞、加入恶意指令，观察评分变化。对客观任务，还要使用外部验证器检查结论，例如数学答案的精确计算、代码的测试结果、事实陈述的来源支持。</p>
+<h3>8.4 Calibration：分数应该对应什么含义？</h3>
+<p>校准关心的是：当 Judge 给出某个分数或置信区间时，这个数值在经验上意味着什么。一个 4/5 分不自动等于“80% 正确概率”；它首先只是 rubric 上的有序等级。若希望把分数解释为概率，需要在独立的人类标注集上学习映射，并在留出数据上检查可靠性曲线、Brier Score 或 Expected Calibration Error（ECE）。对于有序评分，还应保留等级间距并考虑 ordinal calibration，而不是未经验证就把 1–5 分线性映射为 0–100%。</p>
+<p>校准集应覆盖不同任务难度、不同分数区间和边界案例。若模型升级、rubric 改版或数据分布变化，原来的映射可能失效，需要重新评估。不要用训练校准映射的同一批样本报告最终校准成绩。</p>
+<h3>8.5 一个可执行的最小评测协议</h3>
+<ol>
+<li><strong>建立分层样本：</strong>按任务类型、难度、答案质量差距、语言和长度分层抽样，避免只测简单题。</li>
+<li><strong>收集人工标签：</strong>至少记录多位标注者的独立判断、分歧率和裁决规则。</li>
+<li><strong>固定评审协议：</strong>公开模型版本、系统提示词、rubric、温度、采样策略和输出 Schema。</li>
+<li><strong>测量三类指标：</strong>人工一致性、重复稳定性、偏差与鲁棒性；必要时增加校准误差和成本。</li>
+<li><strong>独立验证：</strong>在未用于提示词调参的留出集上复测，并报告置信区间。</li>
+<li><strong>设置人工升级条件：</strong>边界样本、低置信度、评审器分歧、异常分布和高风险决策进入人工复核。</li>
+</ol>
+<div class="aside"><strong>研究结论的正确读法：</strong>2025 年位置偏差研究和 2026 年的可靠性研究共同提醒我们，评审器的稳定性、偏差和人类一致性是不同的统计维度。不能用单一准确率或多 Judge 共识代替完整的 Meta-evaluation。</div>
+</section>
+
+<section id="practice">
+<h2>09 · 工程落地：把 Judge 做成可审计组件</h2>
+<h3>9.1 建议的结构化输出协议</h3>
+<p>一个可供系统消费的 Judge 结果可以采用如下结构。分数范围、维度枚举和证据字段应由 Schema 校验；若证据缺失，不能仅凭自然语言解释自动补成“已验证”。</p>
+<pre><code>{
+  "task_id": "sample-001",
+  "judge_model": "provider/model-version",
+  "rubric_version": "rubric-v3",
+  "scores": {
+    "instruction_following": 5,
+    "factuality": 4,
+    "reasoning": 3,
+    "clarity": 4
+  },
+  "evidence": [
+    {
+      "criterion": "factuality",
+      "claim": "回答中的关键事实",
+      "source_or_span": "可定位的引用或答案片段",
+      "status": "supported"
+    }
+  ],
+  "decision": "needs_review",
+  "uncertainty": "medium",
+  "reason_codes": ["missing_edge_case"]
+}</code></pre>
+<h3>9.2 可复现的指标代码</h3>
+<p>下面的纯 Python 示例不调用任何模型 API，只计算评审器的两个外部属性：人工标签一致性与成对顺序交换稳定性。它刻意把“候选一致”与“位置偏好”区分开。</p>
+<pre><code>from judge_metrics import (
+    agreement_rate,
+    cohens_kappa,
+    position_swap_audit,
+    position_consistency_rate,
+)
+
+human = ["yes", "yes", "no", "no"]
+judge = ["yes", "no", "no", "no"]
+
+print(agreement_rate(human, judge))  # 0.75
+print(round(cohens_kappa(human, judge), 3))  # 0.5
+
+# 原始顺序选择 A，交换后选择 B：仍然是候选 A 获胜
+print(position_swap_audit("A", "B"))  # candidate_a
+
+# 两次都选择第一个位置：候选改变，暴露首位偏好
+print(position_swap_audit("A", "A"))  # first_position</code></pre>
+<p>这段代码是指标计算的最小参考实现，不是一个完整的 Judge 服务。真实系统还需要数据采样、模型调用、超时重试、版本记录、隐私保护、权限控制、结果存储和监控。</p>
+<h3>9.3 上线前检查清单</h3>
+<ul class="checklist">
+<li>评价目标与 rubric 在运行前已固定，并保留版本号。</li>
+<li>人工校准集与最终测试集分离，避免在同一数据上反复调提示词后报告成绩。</li>
+<li>模型、Prompt、采样参数、候选顺序和工具版本可追溯。</li>
+<li>对 Pairwise 任务进行 A/B 顺序交换，对 Pointwise 任务进行长短和格式对照。</li>
+<li>对事实、数学和代码任务使用检索、计算或测试等外部证据。</li>
+<li>报告人工一致性基线、Judge–Human Agreement、稳定性和偏差。</li>
+<li>对低置信度、分歧和高风险样本保留人工复核路径。</li>
+<li>持续监控模型升级、Rubric 修改和数据分布变化带来的性能漂移。</li>
+</ul>
+</section>
+
+<section id="limits">
+<h2>10 · 什么时候应该使用，什么时候不应该使用？</h2>
+<div class="tablewrap"><table><caption>表 3：选择评价方式时的工程判断</caption><thead><tr><th>场景</th><th>建议方式</th><th>原因</th></tr></thead><tbody>
+<tr><td>开放式回答质量、写作风格、帮助性</td><td>Rubric + LLM Judge + 人工校准</td><td>评价标准复杂，参考答案不唯一</td></tr>
+<tr><td>代码功能正确性</td><td>单元测试 / 集成测试为主，Judge 辅助解释</td><td>可执行测试比语言模型猜测更直接</td></tr>
+<tr><td>数学推导与数值结果</td><td>符号/数值验证 + 专家审查 + Judge 辅助</td><td>流畅解释不能替代证明与计算</td></tr>
+<tr><td>事实密集型问答</td><td>检索证据 + 引用核验 + Judge</td><td>需要可追溯来源，而非仅靠模型记忆</td></tr>
+<tr><td>安全、医疗、法律等高风险决策</td><td>规则系统 + 专家人工审核；Judge 只做辅助</td><td>错误成本高，不能把模型评分当作最终裁决</td></tr>
+<tr><td>大规模候选模型排行榜</td><td>盲测 Pairwise + 多任务 + 人工抽检</td><td>必须审计位置、任务构成和排序不确定性</td></tr>
+</tbody></table></div>
+<p>最稳妥的架构不是“用 LLM 替代所有评测工具”，而是让不同工具承担自己擅长的部分：确定性程序验证确定性事实，检索系统提供外部证据，LLM 处理复杂语义判断，人类专家负责高风险裁决和评价标准治理。</p>
+<div class="endline"><strong>记住这条原则：</strong>LLM-as-a-Judge 的价值不是让模型成为新的裁判权威，而是把原本昂贵、模糊、难以规模化的评价过程，变成可以被定义、测量、审计和持续改进的工程系统。</div>
+</section>
+
+<section id="references">
+<h2>参考论文与延伸阅读</h2>
+<ol class="refs">
+<li><a href="https://arxiv.org/abs/2306.05685" target="_blank" rel="noopener">Judging LLM-as-a-Judge with MT-Bench and Chatbot Arena</a> — Zheng et al., NeurIPS 2023. 评审器范式、MT-Bench、Chatbot Arena 与偏差讨论。</li>
+<li><a href="https://aclanthology.org/2023.emnlp-main.153/" target="_blank" rel="noopener">G-Eval: NLG Evaluation using GPT-4 with Better Human Alignment</a> — Liu et al., EMNLP 2023. Rubric、CoT 和表单式评价。</li>
+<li><a href="https://arxiv.org/abs/2410.12784" target="_blank" rel="noopener">JudgeBench: A Benchmark for Evaluating LLM-based Judges</a> — Tan et al., ICLR 2025. 困难事实与逻辑判断。</li>
+<li><a href="https://aclanthology.org/2025.ijcnlp-long.18/" target="_blank" rel="noopener">Judging the Judges: A Systematic Study of Position Bias in LLM-as-a-Judge</a> — Shi et al., IJCNLP-AACL 2025. 位置交换、重复稳定性和偏好公平性。</li>
+<li><a href="https://doi.org/10.1007/s10462-026-11652-0" target="_blank" rel="noopener">Large language models as judges: recent advances in LLM-based evaluation, critique, preference modeling, and feedback for text and code</a> — Nadăş, Artificial Intelligence Review, 2026.</li>
+<li><a href="https://arxiv.org/abs/2606.19544" target="_blank" rel="noopener">Reliability without Validity: A Systematic, Large-Scale Evaluation of LLM-as-a-Judge Models Across Agreement, Consistency, and Bias</a> — Norman et al., 2026 preprint.</li>
+<li><a href="https://www.microsoft.com/en-us/research/publication/the-geometry-of-llm-as-judge-why-inter-llm-consensus-is-not-human-alignment/" target="_blank" rel="noopener">The Geometry of LLM-as-Judge: Why Inter-LLM Consensus Is Not Human Alignment</a> — Mukherjee et al., June 2026 preprint.</li>
+<li><a href="https://doi.org/10.1177/001316446002000104" target="_blank" rel="noopener">A coefficient of agreement for nominal scales</a> — Cohen, 1960. Cohen's kappa 的经典定义。</li>
+</ol>
+<p class="footer-note">阅读时请区分论文原始实验、后续综述、预印本结果和本文的教学推导。不同研究使用的任务、样本、人工标注协议和 Judge 版本并不相同，不能把一个基准上的指标直接当作通用能力分数。</p>
+</section>
+</article>
+</main>
+</div>
+<script>
+(function(){
+  var buttons = Array.prototype.slice.call(document.querySelectorAll('[data-demo-choice]'));
+  var original = document.getElementById('original-choice');
+  var swapped = document.getElementById('swapped-choice');
+  var result = document.getElementById('swap-result');
+  var patterns = {
+    candidate: {
+      a: 'A', b: 'B',
+      text: '审计结论：两次都选择同一个候选 A。候选身份保持一致，Position Consistency = 1。'
+    },
+    first: {
+      a: 'A', b: 'A',
+      text: '审计结论：两次都选择第一位。交换后获胜候选从 A 变成 B，出现 Primacy / 首位偏好。'
+    },
+    second: {
+      a: 'B', b: 'B',
+      text: '审计结论：两次都选择第二位。交换后获胜候选从 B 变成 A，出现 Recency / 末位偏好。'
+    },
+    unstable: {
+      a: 'A', b: '平局',
+      text: '审计结论：两次判断不一致，既不能确认候选偏好，也不能归因于稳定的位置偏好；需要更多重复试验。'
+    }
+  };
+  function activate(key){
+    var p = patterns[key];
+    if(!p) return;
+    original.textContent = '选择 ' + p.a;
+    swapped.textContent = '选择 ' + p.b;
+    result.textContent = p.text;
+    buttons.forEach(function(button){
+      button.setAttribute('aria-pressed', String(button.getAttribute('data-demo-choice') === key));
+    });
+  }
+  buttons.forEach(function(button){
+    button.addEventListener('click', function(){
+      activate(button.getAttribute('data-demo-choice'));
+    });
+  });
+})();
+</script>
+</body>
+</html>

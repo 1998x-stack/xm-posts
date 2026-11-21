@@ -1,0 +1,465 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light">
+<meta name="description" content="从 AutoGPT Classic 的目标驱动循环，到当前 AutoGPT Platform 的图工作流，深入理解 LLM 自主智能体的规划、记忆、工具执行、权限控制、失败模式与评测。">
+
+<title>Understanding AutoGPT · xm-posts</title>
+<style>
+:root{--bg:#f5f8f5;--paper:#fffefb;--ink:#203f46;--muted:#5c7475;--teal:#187e75;--orange:#b46744;--rule:#d8e3de;--soft:#eaf4ef}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.86 system-ui,-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}
+a{color:#146f75;text-underline-offset:4px}a:hover{color:#a05d3d}
+a:focus-visible,button:focus-visible,[tabindex]:focus-visible{outline:3px solid #c9824b;outline-offset:3px}
+.skip{position:absolute;left:12px;top:-100px;padding:8px 12px;background:#153f45;color:#fff;z-index:9}.skip:focus{top:10px}
+.bar{background:var(--paper);border-bottom:1px solid var(--rule)}
+.barin{max-width:1210px;margin:auto;min-height:62px;padding:11px 20px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.brand{font-size:22px;font-weight:850;letter-spacing:-.05em;text-decoration:none;color:var(--ink)}.brand b{color:var(--orange)}
+.links{display:flex;gap:17px;flex-wrap:wrap;font-size:13px}
+.page{max-width:1210px;margin:auto;padding:56px 22px 95px;display:grid;grid-template-columns:230px minmax(0,820px);gap:52px}
+.toc{align-self:start;position:sticky;top:20px;max-height:92vh;overflow-y:auto;font-size:12px}
+.toc strong{display:block;font-size:11px;letter-spacing:.15em;color:#758d87;margin-bottom:8px}
+.toc a{display:block;color:#587477;text-decoration:none;padding:6px 9px;border-left:2px solid var(--rule);line-height:1.55}.toc a:hover{border-color:var(--teal);color:var(--teal)}
+main,article{min-width:0}
+.eyebrow{font:750 12px system-ui;letter-spacing:.15em;color:var(--teal)}
+h1{font-size:clamp(40px,5.8vw,68px);line-height:1.08;letter-spacing:-.06em;margin:15px 0 20px}
+h2{font-size:clamp(25px,3vw,34px);line-height:1.34;letter-spacing:-.035em;margin:0 0 20px}
+h3{font-size:20px;line-height:1.45;margin:20px 0 10px}
+.dek{font-size:21px;line-height:1.7;color:#49686b}
+.meta{display:flex;gap:14px;flex-wrap:wrap;border-top:1px solid var(--rule);font-size:12px;color:#728784;padding-top:17px;margin:25px 0 62px}
+section{margin:0 0 72px;scroll-margin-top:24px}
+p{margin:0 0 19px;color:#435f65}.lead{font-size:19px;color:#2c5156}
+strong{color:#24484c}p code,li code{background:#e9f2ed;color:#21645c;border-radius:4px;padding:1px 5px}code{font-size:.9em}
+.figure{margin:27px 0 30px;padding:12px;border:1px solid var(--rule);border-radius:14px;background:#fff;box-shadow:0 12px 36px #204d4109}
+.figure-scroll{max-width:100%;overflow-x:auto;overflow-y:hidden}
+.figure svg{display:block;width:100%;height:auto;min-width:0}
+.figure figcaption{font-size:13px;line-height:1.7;color:#657d7b;padding:10px 4px 0}
+.panel{border:1px solid var(--rule);border-radius:12px;background:#fff;padding:17px 20px;margin:18px 0}
+.panel h3{margin-top:0}.panel p:last-child{margin-bottom:0}
+.twocol{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:22px 0}
+.note{border-left:4px solid var(--teal);background:#eaf4ef;padding:15px 18px;border-radius:0 8px 8px 0;margin:22px 0;color:#345d59}
+.warning{border-left-color:var(--orange);background:#fff1e8;color:#79513f}
+.table-scroll{width:100%;max-width:100%;overflow-x:auto;border:1px solid var(--rule);border-radius:10px;margin:22px 0}
+table{border-collapse:collapse;width:100%;min-width:650px;font-size:14px;background:white}
+th,td{padding:11px 13px;text-align:left;vertical-align:top;border-bottom:1px solid var(--rule)}
+th{background:#edf4f0;color:#315a55}tr:last-child td{border-bottom:0}
+.math-wrap{max-width:100%;min-width:0;border:1px solid var(--rule);background:#edf5f0;border-radius:10px;padding:13px 15px;margin:20px 0}
+.math-scroll{max-width:100%;min-width:0;overflow-x:auto;overflow-y:hidden}
+.math-scroll:focus-visible{outline:3px solid var(--teal);outline-offset:2px}
+.math-scroll math[display=block]{display:block;width:max-content;min-width:100%;font-size:1.2rem;font-family:"Cambria Math","STIX Two Math",serif}
+.math-caption{font-size:12px;color:#637d79;margin-top:7px}
+pre{padding:18px 20px;background:#203c43;color:#e6f2ed;border-radius:10px;overflow-x:auto;white-space:pre;font:13px/1.75 ui-monospace,SFMono-Regular,Consolas,monospace}
+.demo{border:1px solid #b7d6ca;border-radius:14px;padding:19px;background:white;margin:25px 0}
+.controls{display:flex;gap:9px;flex-wrap:wrap;margin:12px 0}
+.controls button{font:650 14px system-ui;padding:9px 13px;min-height:42px;border-radius:8px;cursor:pointer;border:1px solid #278b7e;background:#fff;color:#1d6d64}
+.controls button[aria-pressed=true],.controls button.primary{background:#187e75;color:#fff}
+.controls button:disabled{opacity:.45;cursor:not-allowed}
+.status{min-height:1.6em;color:#187e75;font-size:14px;font-weight:700}
+.trace{margin-top:12px;border:1px solid var(--rule);background:#f4f8f5;border-radius:9px;padding:11px 15px;min-height:135px;max-height:330px;overflow-y:auto}
+.trace p{padding:8px 0;border-bottom:1px solid #dce8e1;font-size:14px;line-height:1.6;margin:0}
+.trace p:last-child{border:0}.trace b{color:#275d55}
+.foot{display:flex;gap:12px;flex-wrap:wrap;border-top:1px solid var(--rule);padding-top:16px;font-size:13px}
+.small{font-size:13px;color:#6a8380}
+@media(max-width:930px){.page{display:block;max-width:850px;padding:34px 20px 70px}.toc{position:static;max-height:none;margin-bottom:34px;padding:12px;background:white;border:1px solid var(--rule);border-radius:10px}.toc a{display:inline-block;border:none;padding:7px}}
+@media(max-width:480px){body{font-size:16px}.barin{padding:12px 15px}.links{gap:10px}.page{padding:25px 15px 55px}.dek{font-size:18px}.twocol{grid-template-columns:1fr}.figure{padding:8px}.figure svg{min-width:720px;max-width:none}.panel{padding:15px}section{margin-bottom:58px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+@media print{body{background:white;color:#111}.bar,.toc,.skip,.controls{display:none!important}.page{display:block;max-width:none;padding:0}.figure{break-inside:avoid;box-shadow:none}.figure-scroll,.table-scroll,.math-scroll{overflow:visible}.figure svg{width:100%;min-width:0;max-width:100%}section{margin-bottom:28px}.trace{max-height:none;overflow:visible}}
+</style>
+</head>
+<body>
+<a class="skip" href="#content">跳至正文</a>
+<header class="bar"><div class="barin"><a class="brand" href="../../../">xm<b>.</b>posts</a><nav class="links" aria-label="站点导航"><a href="../../../">首页</a><a href="../../../categories/agents/">智能体专题</a><a href="../../../topics/">知识地图</a><a href="../../../archive/">归档</a></nav></div></header>
+<div class="page">
+<nav class="toc" aria-label="文章目录"><strong>AGENT SYSTEMS · READING MAP</strong>
+<a href="#problem">01 · 为什么需要自主 Agent？</a><a href="#definition">02 · Agent 不等于 LLM</a><a href="#loop">03 · Classic 的执行闭环</a><a href="#components">04 · 系统由哪些模块构成？</a><a href="#planning">05 · 规划、任务队列与重规划</a><a href="#memory">06 · 记忆：上下文不等于长期记忆</a><a href="#formal">07 · 数学形式化与成本</a><a href="#interactive">08 · 交互：一步步执行任务</a><a href="#reliability">09 · 长程可靠性为什么困难？</a><a href="#failures">10 · 典型失败模式</a><a href="#platform">11 · 从 Classic 到 Platform</a><a href="#safety">12 · 权限、安全与副作用</a><a href="#evaluation">13 · 如何评测 Agent？</a><a href="#engineering">14 · 工程设计原则</a><a href="#summary">15 · 关键结论与阅读路线</a><a href="#references">16 · 参考资料</a>
+</nav>
+<main id="content"><article>
+<header><span class="eyebrow">AUTONOMOUS AGENTS · SYSTEMS ARCHITECTURE · 2026 REVIEW</span>
+<h1>Understanding AutoGPT</h1>
+<p class="dek">为什么给大模型一个目标和工具还不够？从 AutoGPT Classic 的自主执行循环，到当前 Platform 的可编排工作流，拆解规划、记忆、行动、权限与长程可靠性。</p>
+<div class="meta"><span>AutoGPT Project · 2023 → 2026</span><span>建议阅读 32 分钟</span><span>适合本科高年级 / 研究生 / Agent 工程实践者</span></div>
+</header>
+
+<section id="problem">
+<h2>01 · 为什么需要自主 Agent？</h2>
+<p class="lead">想象你交给模型一个任务：“研究近两年 LLM Agent 的规划方法，整理可信来源，比较方法差异，写成一份带引用的报告，并保存到项目目录。” 这不是一道问答题，而是一项包含多个依赖步骤的工作。</p>
+<p>普通聊天模型可以一次性生成一段看起来完整的文字，但它不一定真的检索了论文，不一定验证了来源，也不一定把文件写入磁盘。<strong>语言上说“我已经完成”与环境中确实发生了动作，是两件不同的事。</strong></p>
+<div class="twocol"><div class="panel"><h3>单轮问答</h3><p>输入 → 一次生成 → 输出。模型主要依赖当前上下文与训练时获得的知识；它不天然拥有可验证的外部动作。</p></div><div class="panel"><h3>自主 Agent</h3><p>目标 → 计划 → 工具动作 → 环境观察 → 状态更新 → 再决策。完成标准由外部状态和验证器共同约束。</p></div></div>
+<p>AutoGPT 在 2023 年受到关注，正是因为它把“给目标、持续让模型决定下一步、调用工具、观察结果”的方式做成了一个可运行的开源系统。它展示了一个重要的系统转变：模型不再只是回答器，而成为一个被运行时包围的决策模块。</p>
+<div class="note"><strong>先澄清证据类型：</strong>AutoGPT 是持续演进的开源工程项目，不应被误写成一篇拥有单一方法、固定实验表格的学术论文。本文以官方代码与文档作为项目事实来源，以 Agent 综述作为学术框架；教学模拟和工程建议会单独标明。</div>
+</section>
+
+<section id="definition">
+<h2>02 · Agent 不等于 LLM：真正的对象是一个系统</h2>
+<p>把一个 LLM 包装成 Agent，至少需要补上四种能力：<strong>目标与角色</strong>、<strong>状态与记忆</strong>、<strong>规划与决策</strong>、<strong>工具与环境动作</strong>。此外还需要运行时控制器、权限、预算和停止条件。</p>
+<p>Wang 等人在 2024 年的自主 Agent 综述中，将 LLM Agent 的架构归纳为 Profile、Memory、Planning、Action 等模块：Profile 规定角色，Memory 保存和检索经历，Planning 选择后续行动，Action 把决策转化为可执行输出。这个视角有助于把 AutoGPT 放进更一般的研究体系，而不是把它当作一个神奇 Prompt。</p>
+<figure class="figure"><div class="figure-scroll"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 540" role="img" aria-labelledby="autogpt-components-title autogpt-components-desc">
+<title id="autogpt-components-title">自主 Agent 的组件分层</title>
+<desc id="autogpt-components-desc">目标与角色进入 LLM 决策核心，周围由规划、动作历史、上下文记忆、工具注册、权限管理和执行环境提供支持；组件通过明确接口交换状态。</desc>
+<defs><marker id="autogpt-comp-arrow" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6" fill="none" stroke="#57877d" stroke-width="1.5"/></marker></defs>
+<rect width="1000" height="540" rx="22" fill="#f6f8f5"/>
+<rect x="360" y="28" width="280" height="72" rx="15" fill="#e6eef8" stroke="#8ea9ce" stroke-width="2"/>
+<text x="500" y="58" text-anchor="middle" font-size="21" font-weight="700" fill="#314d70">Profile / Directives</text><text x="500" y="82" text-anchor="middle" font-size="14" fill="#617b9b">角色、目标、约束与成功标准</text>
+<rect x="350" y="180" width="300" height="110" rx="18" fill="#e4f2ec" stroke="#7cb39f" stroke-width="2.5"/>
+<text x="500" y="222" text-anchor="middle" font-size="26" font-weight="700" fill="#24594d">LLM 决策核心</text><text x="500" y="250" text-anchor="middle" font-size="15" fill="#557b70">提出下一步 Action Proposal</text><text x="500" y="272" text-anchor="middle" font-size="13" fill="#6c8980">不是执行环境本身</text>
+<path d="M500 100 V180" stroke="#57877d" stroke-width="3" fill="none" marker-end="url(#autogpt-comp-arrow)"/>
+<rect x="35" y="165" width="235" height="92" rx="14" fill="#fff0df" stroke="#d6a36d" stroke-width="2"/>
+<text x="152" y="198" text-anchor="middle" font-size="20" font-weight="700" fill="#79512f">Planning / Todo</text><text x="152" y="225" text-anchor="middle" font-size="14" fill="#916d4b">分解、排序、更新子任务</text>
+<path d="M270 210 H350" stroke="#57877d" stroke-width="3" fill="none" marker-end="url(#autogpt-comp-arrow)"/>
+<rect x="730" y="165" width="235" height="92" rx="14" fill="#f0eafb" stroke="#aaa0d0" stroke-width="2"/>
+<text x="847" y="198" text-anchor="middle" font-size="20" font-weight="700" fill="#51477c">Tools / Commands</text><text x="847" y="225" text-anchor="middle" font-size="14" fill="#71699a">搜索、浏览器、代码、文件</text>
+<path d="M650 210 H730" stroke="#57877d" stroke-width="3" fill="none" marker-end="url(#autogpt-comp-arrow)"/>
+<rect x="35" y="360" width="235" height="100" rx="14" fill="#e8f2f6" stroke="#94b5c8" stroke-width="2"/>
+<text x="152" y="393" text-anchor="middle" font-size="20" font-weight="700" fill="#355d70">Action History</text><text x="152" y="420" text-anchor="middle" font-size="14" fill="#607e90">动作、结果、错误与时间序列</text><text x="152" y="442" text-anchor="middle" font-size="13" fill="#708c9c">Episodic trace</text>
+<path d="M270 405 H350 V290" stroke="#57877d" stroke-width="2.5" fill="none" marker-end="url(#autogpt-comp-arrow)"/>
+<rect x="365" y="360" width="270" height="100" rx="14" fill="#eaf2e4" stroke="#a4b98b" stroke-width="2"/>
+<text x="500" y="393" text-anchor="middle" font-size="20" font-weight="700" fill="#4d6338">Context / Memory</text><text x="500" y="420" text-anchor="middle" font-size="14" fill="#6c8158">摘要、检索、工作区状态</text><text x="500" y="442" text-anchor="middle" font-size="13" fill="#81916e">控制上下文长度与信息保留</text>
+<path d="M500 290 V360" stroke="#57877d" stroke-width="2.5" fill="none" marker-end="url(#autogpt-comp-arrow)"/>
+<rect x="730" y="360" width="235" height="100" rx="14" fill="#f8e9e6" stroke="#d4a096" stroke-width="2"/>
+<text x="847" y="393" text-anchor="middle" font-size="20" font-weight="700" fill="#7c4b43">Permission Gate</text><text x="847" y="420" text-anchor="middle" font-size="14" fill="#966c63">允许、拒绝、请求人工批准</text><text x="847" y="442" text-anchor="middle" font-size="13" fill="#a07e75">副作用必须显式控制</text>
+<path d="M847 257 V360" stroke="#57877d" stroke-width="2.5" fill="none" marker-end="url(#autogpt-comp-arrow)"/>
+<text x="500" y="505" text-anchor="middle" font-size="14" fill="#71837d">组件是系统工程边界：LLM 负责提出决策，运行时负责校验、执行、记录和停止。</text>
+</svg></div><figcaption>图 1 · Agent 是一个围绕 LLM 组织起来的控制系统。LLM 负责提出决策，运行时组件负责提供状态、执行工具、处理权限并记录结果。</figcaption></figure>
+<h3>四个经常混淆的概念</h3>
+<div class="table-scroll"><table><thead><tr><th>概念</th><th>负责什么</th><th>不代表什么</th></tr></thead><tbody>
+<tr><td>LLM</td><td>理解上下文、生成计划或动作提议</td><td>不等于工具执行环境</td></tr>
+<tr><td>Agent Controller</td><td>组织循环、状态转移、重试与终止</td><td>不等于模型参数本身</td></tr>
+<tr><td>Tool</td><td>执行搜索、读写文件、调用 API、运行代码</td><td>不保证结果正确或安全</td></tr>
+<tr><td>Memory / State</td><td>保留目标、历史、观察和持久化信息</td><td>不等于模型已经学会并更新权重</td></tr>
+</tbody></table></div>
+<p>特别注意：Agent 在一次任务中“从反馈中调整行为”，通常是更新上下文、任务列表或外部状态；这不意味着模型通过梯度下降更新了参数。把运行时适应误称为训练，是一个常见概念错误。</p>
+</section>
+
+<section id="loop">
+<h2>03 · AutoGPT Classic 的执行闭环：从目标到下一步动作</h2>
+<p>把 AutoGPT Classic 抽象成一个控制循环，可以得到五个阶段：</p>
+<ol><li><strong>接收目标：</strong>明确要完成什么、有哪些约束、哪些动作不允许。</li><li><strong>构造决策上下文：</strong>把角色指令、当前任务、历史记录和可用命令交给 LLM。</li><li><strong>提出动作：</strong>模型返回结构化动作提议，而不只是自然语言承诺。</li><li><strong>执行并观察：</strong>运行时检查权限，调用工具，再把结果或错误反馈给模型。</li><li><strong>更新状态与停止判断：</strong>写入动作历史、更新待办和上下文，判断继续、请求人工介入或终止。</li></ol>
+<figure class="figure"><div class="figure-scroll"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 500" role="img" aria-labelledby="autogpt-loop-title autogpt-loop-desc">
+<title id="autogpt-loop-title">AutoGPT Classic 的目标驱动执行闭环</title>
+<desc id="autogpt-loop-desc">用户目标进入 LLM 控制器，控制器提出结构化动作；权限门禁批准后调用工具，环境返回观察结果，历史与上下文更新后进入下一轮，直到终止条件触发。</desc>
+<defs><marker id="autogpt-loop-arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0 0 L8 3 L0 6" fill="none" stroke="#397c78" stroke-width="1.6"/></marker></defs>
+<rect width="1000" height="500" rx="22" fill="#f5f8f5"/>
+<rect x="34" y="45" width="172" height="82" rx="14" fill="#e8edf8" stroke="#98a9d2" stroke-width="2"/>
+<text x="120" y="78" text-anchor="middle" font-size="21" font-weight="700" fill="#2b3d5c">用户目标 g</text><text x="120" y="105" text-anchor="middle" font-size="14" fill="#5d6f91">目标 / 约束 / 完成条件</text>
+<rect x="275" y="45" width="210" height="82" rx="14" fill="#e4f2ed" stroke="#80b7a6" stroke-width="2"/>
+<text x="380" y="78" text-anchor="middle" font-size="21" font-weight="700" fill="#20574e">LLM 控制器</text><text x="380" y="105" text-anchor="middle" font-size="14" fill="#527a72">读取上下文并提出动作</text>
+<rect x="560" y="45" width="180" height="82" rx="14" fill="#fff0df" stroke="#d9a36d" stroke-width="2"/>
+<text x="650" y="78" text-anchor="middle" font-size="21" font-weight="700" fill="#79502d">权限门禁</text><text x="650" y="105" text-anchor="middle" font-size="14" fill="#936b49">校验工具与副作用</text>
+<rect x="795" y="45" width="170" height="82" rx="14" fill="#f4e9e7" stroke="#cf9a90" stroke-width="2"/>
+<text x="880" y="78" text-anchor="middle" font-size="21" font-weight="700" fill="#79483f">工具执行</text><text x="880" y="105" text-anchor="middle" font-size="14" fill="#986b62">Search / Browser / Code</text>
+<path d="M206 86 H275 M485 86 H560 M740 86 H795" stroke="#397c78" stroke-width="3" fill="none" marker-end="url(#autogpt-loop-arrow)"/>
+<rect x="795" y="222" width="170" height="78" rx="14" fill="#e8f0f8" stroke="#93afc8" stroke-width="2"/>
+<text x="880" y="254" text-anchor="middle" font-size="21" font-weight="700" fill="#31516b">环境结果</text><text x="880" y="279" text-anchor="middle" font-size="14" fill="#607d96">Observation / Error</text>
+<path d="M880 127 V222" stroke="#397c78" stroke-width="3" fill="none" marker-end="url(#autogpt-loop-arrow)"/>
+<rect x="520" y="222" width="220" height="78" rx="14" fill="#eeeafa" stroke="#aaa0d2" stroke-width="2"/>
+<text x="630" y="254" text-anchor="middle" font-size="21" font-weight="700" fill="#4e447d">历史与上下文</text><text x="630" y="279" text-anchor="middle" font-size="14" fill="#71699a">动作记录 / 摘要 / 记忆</text>
+<path d="M795 261 H740" stroke="#397c78" stroke-width="3" fill="none" marker-end="url(#autogpt-loop-arrow)"/>
+<path d="M520 261 C455 261 420 210 420 127" stroke="#397c78" stroke-width="3" fill="none" marker-end="url(#autogpt-loop-arrow)"/>
+<rect x="275" y="222" width="210" height="78" rx="14" fill="#edf3e5" stroke="#a5b88c" stroke-width="2"/>
+<text x="380" y="254" text-anchor="middle" font-size="21" font-weight="700" fill="#4c6337">终止判定</text><text x="380" y="279" text-anchor="middle" font-size="14" fill="#71845d">完成 / 预算 / 人工中止</text>
+<path d="M520 261 H485" stroke="#397c78" stroke-width="3" fill="none" marker-end="url(#autogpt-loop-arrow)"/>
+<path d="M380 300 V365 H650 V300" stroke="#397c78" stroke-width="2.5" stroke-dasharray="7 6" fill="none" marker-end="url(#autogpt-loop-arrow)"/>
+<rect x="270" y="365" width="430" height="72" rx="13" fill="#fff" stroke="#d7e1dc" stroke-width="1.5"/>
+<text x="485" y="394" text-anchor="middle" font-size="18" font-weight="700" fill="#365b57">下一轮：基于新 Observation 重新决策</text>
+<text x="485" y="418" text-anchor="middle" font-size="14" fill="#6c807a">不是一次生成完整答案，而是反复读取状态、选择动作、观察结果</text>
+<text x="42" y="475" font-size="13" fill="#74847f">教学抽象：突出控制流；不同 AutoGPT 版本的组件与策略并不完全相同。</text>
+</svg></div><figcaption>图 2 · AutoGPT Classic 的核心思想是“目标驱动的反馈闭环”。权限检查与终止条件是运行时的一部分；它们不能被一句“模型会自己负责”替代。</figcaption></figure>
+<p>从仓库代码看，当前 Classic 分支中的 <code>Agent.propose_action()</code> 会收集 directives、commands 和 messages，再调用 prompt strategy 构造请求并解析动作提议；<code>Agent.execute()</code> 则重新取得可用命令，先执行权限检查，再调用工具，并把执行结果通过组件管线写回历史。这个实现细节说明：<strong>“模型建议动作”与“系统真正执行动作”是两个独立阶段。</strong></p>
+<p>该实现还允许一次提议包含多个工具，并发执行工具调用；但并发只是一种执行优化，不代表这些动作在语义上天然独立。若两个工具会修改同一文件或同一外部对象，仍然需要考虑竞态、幂等性和顺序约束。</p>
+<div class="note"><strong>版本边界：</strong>这里描述的是仓库当前保留的 Classic 代码结构，不应将它逐行等同于 AutoGPT 在 2023 年最早发布时的实现。Classic 的官方 README 现在明确标注为停止维护、仅供教育参考。</div>
+</section>
+
+<section id="components">
+<h2>04 · 系统由哪些模块构成？</h2>
+<p>看代码时不要只盯着“LLM 生成了什么”。一个可运行 Agent 还需要管理指令、历史、上下文、工具、文件、错误和用户交互。AutoGPT Classic 的 Agent 实现中可以看到这些组件的组合：</p>
+<div class="table-scroll"><table><thead><tr><th>组件 / 机制</th><th>系统职责</th><th>为什么重要</th></tr></thead><tbody>
+<tr><td>Profile / Directives</td><td>定义 Agent 名称、角色、目标和约束</td><td>把开放式任务收敛到一个工作范围</td></tr>
+<tr><td>Action History</td><td>保存动作提议、工具结果和反馈</td><td>避免每一轮都像第一次运行</td></tr>
+<tr><td>Context</td><td>维护工作区与可用上下文</td><td>让模型看到当前任务所需的信息</td></tr>
+<tr><td>Todo / Planning</td><td>拆分和维护子任务</td><td>将长期目标转成可跟踪的进度</td></tr>
+<tr><td>Tools / Commands</td><td>搜索、浏览器、文件、代码、API 等</td><td>让模型能够改变或观察外部环境</td></tr>
+<tr><td>Watchdog / Budget</td><td>监控循环、资源和停止条件</td><td>防止无上限执行与成本失控</td></tr>
+<tr><td>Permission Manager</td><td>检查动作是否被允许</td><td>把“模型想做”与“系统允许做”分离</td></tr>
+</tbody></table></div>
+<p>当前 Classic 源码还把不同 Prompt Strategy 分开组织，例如 One-shot、Plan-and-Execute、Reflexion、ReWOO、Tree of Thoughts、LATS 和多 Agent Debate。这说明即使在同一个 Agent 框架内，决策策略也可以替换；“AutoGPT”并不是唯一一种固定规划算法。</p>
+<p>从架构上看，可以把 Agent 的责任边界理解为：LLM 产生候选动作，控制器校验动作结构与执行预算，工具层完成副作用，观察结果再进入下一轮。这个边界也方便单独测试每个模块。</p>
+</section>
+
+<section id="planning">
+<h2>05 · 规划、任务队列与重规划：为什么不能只生成一份 TODO？</h2>
+<p>长期任务的难点不只是“把任务拆小”，还包括：子任务之间有依赖关系；执行中会发现新信息；某一步失败后原计划可能已经不成立；任务优先级也可能随着观察结果改变。</p>
+<p>一个最简单的任务队列可以表示为：</p>
+<div class="math-wrap"><div class="math-scroll" tabindex="0" role="region" aria-label="任务队列公式，可横向滚动"><math aria-label="当前任务队列由多个待处理子任务组成" xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>Q</mi><mi>t</mi></msub><mo>=</mo><mo>[</mo><msub><mi>q</mi><mn>1</mn></msub><mo>,</mo><msub><mi>q</mi><mn>2</mn></msub><mo>,</mo><mo>…</mo><mo>,</mo><msub><mi>q</mi><mi>m</mi></msub><mo>]</mo></mrow></math></div><div class="math-caption">Qₜ 是当前待处理任务集合；每次执行后都可能新增、删除、重排或标记任务完成。</div></div>
+<p>但队列不是完整计划。更重要的是观察后的更新：</p>
+<div class="math-wrap"><div class="math-scroll" tabindex="0" role="region" aria-label="任务状态更新公式，可横向滚动"><math aria-label="下一轮任务队列由当前队列、动作和新观察共同更新" xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>Q</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><mi>Update</mi><mo>(</mo><msub><mi>Q</mi><mi>t</mi></msub><mo>,</mo><msub><mi>a</mi><mi>t</mi></msub><mo>,</mo><msub><mi>o</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>)</mo></mrow></math></div><div class="math-caption">教学形式化：用动作 aₜ 与新观察 oₜ₊₁ 更新待办 Q。它不是 AutoGPT 官方论文中的原始公式。</div></div>
+<p>AutoGPT 与 BabyAGI 在早期生态讨论中经常被并列，但二者不应混为一谈。LangChain 在 2023 年的技术分析中指出，AutoGPT 更偏向开放式、长期目标，并为中间 Agent–Tool 步骤引入检索式记忆；BabyAGI 则更明确地把“先规划一组任务、执行第一项、再根据结果更新任务列表”作为其设计重点。两者都在处理长程任务，但计划生成与更新方式不同。</p>
+<p>Huang 等人 2024 年的规划综述将 LLM Agent 规划研究归纳为 Task Decomposition、Plan Selection、External Module、Reflection、Memory 等方向。这也说明“规划”不是一个单独 Prompt，而是一个可以拆成多个研究问题的领域。</p>
+<div class="note"><strong>理解重点：</strong>计划是当前对未来的假设，不是不可更改的合同。可靠 Agent 应当在观察与计划冲突时更新计划，而不是为了“执行完 TODO”继续做无意义动作。</div>
+</section>
+
+<section id="memory">
+<h2>06 · 记忆：上下文不等于长期记忆</h2>
+<p>Agent 需要记住过去，但 Transformer 的上下文窗口有限。若每一轮都把完整历史塞回模型，输入 token 会随任务长度持续增长；若只保留最终答案，又会丢失重要的工具轨迹和中间证据。</p>
+<p>至少要区分三层：</p>
+<div class="twocol"><div class="panel"><h3>工作记忆 / Working Context</h3><p>当前目标、最近观察、下一步计划。通常直接进入 prompt，读取速度快，但受上下文长度约束。</p></div><div class="panel"><h3>情节记忆 / Episodic History</h3><p>记录某一步做了什么、工具返回了什么、是否失败。它是可审计的事件轨迹，不等于摘要。</p></div><div class="panel"><h3>长期记忆 / Retrieval Memory</h3><p>把较早经历整理为可检索信息，按相关性找回。它减少上下文负担，但检索会漏召回或召回过时内容。</p></div><div class="panel"><h3>持久化工作区</h3><p>文件、任务状态、配置和中间产物。它不必全部进入 prompt，但要有明确读写权限与生命周期。</p></div></div>
+<p>LangChain 2023 年的 AutoGPT 技术分析明确讨论了这一点：长程 Agent 不适合每次把所有中间步骤都原样塞入模型，因此 AutoGPT 引入了对 Agent–Tool 中间步骤的检索式记忆。这里的检索式记忆通常依赖 embedding 与向量存储；但检索命中并不意味着内容一定正确，也不意味着系统已经“学会”某个事实。</p>
+<p>在当前 Classic 代码中，Agent Settings 也包含 EpisodicActionHistory 与 AgentContext；这与“只有一个向量数据库”的简化说法不同。实际系统往往同时需要最近轨迹、上下文管理、外部文件和可检索记忆。</p>
+</section>
+
+<section id="formal">
+<h2>07 · 数学形式化：把 Agent 看成部分可观测的决策系统</h2>
+<p>为避免把“思考”当作魔法，我们可以用一个简化的状态模型描述 Agent。设：</p>
+<ul><li><code>g</code>：用户目标与约束；</li><li><code>sₜ</code>：环境在时刻 t 的真实状态，Agent 通常无法完整看到；</li><li><code>hₜ</code>：Agent 当前可见的历史与上下文；</li><li><code>Aₜ</code>：此刻允许调用的动作 / 工具集合；</li><li><code>aₜ</code>：模型提出并通过权限检查的动作；</li><li><code>oₜ₊₁</code>：工具执行后返回的新观察。</li></ul>
+<div class="math-wrap"><div class="math-scroll" tabindex="0" role="region" aria-label="Agent 决策策略公式，可横向滚动"><math aria-label="Agent 策略根据目标、历史上下文和允许动作集合提出下一步动作" xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>a</mi><mi>t</mi></msub><mo>∼</mo><msub><mi>π</mi><mi>θ</mi></msub><mo>(</mo><mi>·</mi><mo>|</mo><mi>g</mi><mo>,</mo><msub><mi>h</mi><mi>t</mi></msub><mo>,</mo><msub><mi>A</mi><mi>t</mi></msub><mo>)</mo></mrow></math></div><div class="math-caption">πθ 是由 LLM 与 Prompt / 策略共同实现的动作提议分布；可用工具集合 Aₜ 约束动作空间。</div></div>
+<div class="math-wrap"><div class="math-scroll" tabindex="0" role="region" aria-label="环境观察和历史更新公式，可横向滚动"><math aria-label="环境转移产生新观察，上下文更新函数整合动作与观察" xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>o</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><mi>T</mi><mo>(</mo><msub><mi>s</mi><mi>t</mi></msub><mo>,</mo><msub><mi>a</mi><mi>t</mi></msub><mo>)</mo><mo>,</mo><mspace width="1em"/><msub><mi>h</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><mi>U</mi><mo>(</mo><msub><mi>h</mi><mi>t</mi></msub><mo>,</mo><msub><mi>a</mi><mi>t</mi></msub><mo>,</mo><msub><mi>o</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>)</mo></mrow></math></div><div class="math-caption">T 表示环境转移；U 表示把动作和新观察写回上下文 / 记忆。两者是教学抽象，不是 AutoGPT 的特定实现接口。</div></div>
+<p>这个模型揭示了关键边界：LLM 只根据当前可见的 hₜ 和允许动作 Aₜ 提出 aₜ；真实世界的变化由工具与环境完成。若工具返回错误、权限拒绝或外部状态已变化，下一轮的决策依据就应该随之改变。</p>
+<h3>预算也是状态的一部分</h3>
+<p>长程任务的成本至少包括模型调用、工具调用和失败恢复：</p>
+<div class="math-wrap"><div class="math-scroll" tabindex="0" role="region" aria-label="Agent 执行成本公式，可横向滚动"><math aria-label="Agent 总成本由模型调用、工具执行和失败恢复成本组成" xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>C</mi><mi>total</mi></msub><mo>=</mo><munderover><mo>∑</mo><mrow><mi>t</mi><mo>=</mo><mn>1</mn></mrow><mi>T</mi></munderover><mo>(</mo><msub><mi>C</mi><mrow><mi>LLM</mi><mo>,</mo><mi>t</mi></mrow></msub><mo>+</mo><msub><mi>C</mi><mrow><mi>tool</mi><mo>,</mo><mi>t</mi></mrow></msub><mo>+</mo><msub><mi>C</mi><mrow><mi>recovery</mi><mo>,</mo><mi>t</mi></mrow></msub><mo>)</mo></mrow></math></div><div class="math-caption">成本分解是工程分析模型；实际成本还可能包含延迟、存储、人工审核和外部 API 费用。</div></div>
+<p>当前 Classic 的 BaseAgent 配置中有 <code>cycle_budget</code>：例如 <code>None</code> 表示不设上限的连续执行，<code>1</code> 表示每一步需要用户批准，<code>0</code> 表示停止。这个设置说明预算与人工监督不是 UI 装饰，而是执行语义的一部分。</p>
+</section>
+
+<section id="interactive">
+<h2>08 · 交互：一步步执行一个真实工作流</h2>
+<p>假设任务是：“检索三篇资料，写出研究摘要，保存草稿，最后发布到外部网站。” 这里有四种动作：检索（READ）、总结（NONE / AI 计算）、保存草稿（WORKSPACE）、发布（EXTERNAL）。前面三种动作与最后一种动作的风险完全不同。</p>
+<div class="demo" id="agent-demo">
+<p><strong>选择执行路径：</strong>默认只读研究；也可以加入一个需要人工批准的外部发布动作。</p>
+<div class="controls">
+<button type="button" data-scenario="read" aria-pressed="true">只读研究 + 保存草稿</button>
+<button type="button" data-scenario="publish" aria-pressed="false">加入外部发布</button>
+<button type="button" id="demo-next" class="primary">执行下一步</button>
+<button type="button" id="demo-approve" disabled>批准发布</button>
+<button type="button" id="demo-reset">重置</button>
+</div>
+<p class="status" id="demo-status" role="status" aria-live="polite">已准备：读取目标与工具权限。</p>
+<div class="trace" id="demo-trace" aria-live="polite">
+<p><b>任务</b>：研究 AutoGPT，保存一份带来源的摘要。</p>
+<p><b>初始状态</b>：只读检索和工作区写入已允许；外部发布默认需要批准。</p>
+</div>
+<p class="small">这是一个确定性的教学轨迹，不会连接真实网站、调用真实 API 或执行任何外部副作用。</p>
+</div>
+<h3>最小 Python 控制器</h3>
+<p>下面的实现只模拟运行时边界：动作有副作用等级，外部动作需要明确批准，失败与预算耗尽会留下停止原因。它不是 AutoGPT 原始源码，也不调用 LLM；目的是把权限与终止条件变成可测试的不变量。</p>
+<pre><code>from autogpt_loop import PlannedAction, run_plan
+
+plan = [
+    PlannedAction("search_sources", "read", "找到三篇候选资料"),
+    PlannedAction("write_draft", "workspace", "草稿已写入工作区"),
+    PlannedAction("publish", "external", "页面已发布", goal_complete=True),
+]
+
+# 没有人工批准：执行到发布门禁时停止，不产生外部副作用
+result = run_plan("整理并发布研究摘要", plan, max_steps=5)
+assert result.stop_reason == "approval_required"
+assert result.trace[-1].status == "blocked"
+
+# 只有明确批准后，外部动作才会被执行
+approved = run_plan(
+    "整理并发布研究摘要", plan, max_steps=5,
+    approved_external={"publish"},
+)
+assert approved.completed</code></pre>
+</section>
+
+<section id="reliability">
+<h2>09 · 长程可靠性为什么困难？</h2>
+<p>假设一个任务需要连续完成 n 个步骤，每一步独立成功的概率都是 p，而且没有重试与恢复机制，那么所有步骤一次成功的概率为：</p>
+<div class="math-wrap"><div class="math-scroll" tabindex="0" role="region" aria-label="多步骤成功概率公式，可横向滚动"><math aria-label="每一步独立成功概率为 p 时，n 步全部一次成功的概率为 p 的 n 次方" xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>P</mi><mo>(</mo><mtext>all steps succeed</mtext><mo>)</mo><mo>=</mo><msup><mi>p</mi><mi>n</mi></msup></mrow></math></div><div class="math-caption">这是独立同分布的教学假设，不是对真实 AutoGPT 任务成功率的实测估计。</div></div>
+<figure class="figure"><div class="figure-scroll"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 500" role="img" aria-labelledby="autogpt-reliability-title autogpt-reliability-desc">
+<title id="autogpt-reliability-title">长程任务中的逐步成功率累积</title>
+<desc id="autogpt-reliability-desc">在每一步独立且成功概率固定的简化假设下，20 步全部成功的概率为 0.95 的 20 次方约 0.358，或 0.98 的 20 次方约 0.668。</desc>
+<rect width="1000" height="500" rx="22" fill="#f6f8f5"/>
+<text x="54" y="48" font-size="23" font-weight="700" fill="#2b4b48">没有恢复机制时，局部错误会在长链路中累积</text>
+<g stroke="#dce5e0" stroke-width="1"><path d="M100 95 H920 M100 175 H920 M100 255 H920 M100 335 H920 M100 415 H920"/></g>
+<g fill="#6b817b" font-size="14"><text x="70" y="100" text-anchor="end">1.0</text><text x="70" y="180" text-anchor="end">0.8</text><text x="70" y="260" text-anchor="end">0.6</text><text x="70" y="340" text-anchor="end">0.4</text><text x="70" y="420" text-anchor="end">0.2</text><text x="100" y="448" text-anchor="middle">0</text><text x="237" y="448" text-anchor="middle">5</text><text x="373" y="448" text-anchor="middle">10</text><text x="510" y="448" text-anchor="middle">15</text><text x="647" y="448" text-anchor="middle">20</text><text x="783" y="448" text-anchor="middle">25</text><text x="920" y="448" text-anchor="middle">30</text></g>
+<path d="M100 95 L237 185.4 L373 255.4 L510 309.8 L647 352.6 L783 385.4 L920 410.9" fill="none" stroke="#bf754d" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M100 95 L237 133.4 L373 168.2 L510 199.4 L647 228 L783 253.8 L920 277" fill="none" stroke="#2f8c80" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+<g fill="#bf754d"><circle cx="647" cy="352.6" r="6"/></g><g fill="#2f8c80"><circle cx="647" cy="228" r="6"/></g>
+<path d="M647 352.6 L710 352.6" stroke="#bf754d" stroke-width="2" stroke-dasharray="5 5"/><path d="M647 228 L710 228" stroke="#2f8c80" stroke-width="2" stroke-dasharray="5 5"/>
+<rect x="710" y="199" width="205" height="63" rx="10" fill="#e5f2ed" stroke="#9bc5b7"/><text x="725" y="224" font-size="16" font-weight="700" fill="#28695e">p = 0.98</text><text x="725" y="247" font-size="14" fill="#527e74">20 步 ≈ 0.668</text>
+<rect x="710" y="322" width="205" height="63" rx="10" fill="#fbede5" stroke="#d9b19a"/><text x="725" y="347" font-size="16" font-weight="700" fill="#965d3d">p = 0.95</text><text x="725" y="370" font-size="14" fill="#a2745c">20 步 ≈ 0.358</text>
+<text x="510" y="482" text-anchor="middle" font-size="13" fill="#778781">横轴：任务步骤数 n · 纵轴：所有步骤一次成功的概率 pⁿ</text>
+</svg></div><figcaption>图 3 · 即使单步成功率达到 98%，在 20 步都必须一次成功的简化模型中，整体概率也只有约 66.8%。真实任务的错误并不独立，但这张图解释了为什么长程系统必须具备检测、恢复和停止能力。</figcaption></figure>
+<p>这也解释了为什么“让模型多跑几轮”并不等于“让任务更可靠”。如果没有进度检查、错误分类、重试上限、回滚和人工审批，更多步骤可能只是增加成本与副作用暴露面。</p>
+</section>
+
+<section id="failures">
+<h2>10 · 典型失败模式：Agent 为什么会失控？</h2>
+<div class="table-scroll"><table><thead><tr><th>失败类型</th><th>表现</th><th>需要的控制机制</th></tr></thead><tbody>
+<tr><td>目标漂移</td><td>子任务越来越偏离最初目标</td><td>保存目标不变量，周期性检查产物是否仍支持目标</td></tr>
+<tr><td>循环 / 无进展</td><td>重复搜索、重复写入、反复尝试相同命令</td><td>检测重复动作、设置 no-progress 阈值与最大循环数</td></tr>
+<tr><td>工具错误</td><td>API 限流、参数错误、空结果、超时</td><td>结构化错误、有限重试、退避与替代路径</td></tr>
+<tr><td>观察误读</td><td>模型把错误信息当成成功结果</td><td>工具返回结构化状态，关键结果使用独立验证器</td></tr>
+<tr><td>记忆污染</td><td>过时摘要或错误事实被后续步骤重复引用</td><td>来源、时间戳、置信度、冲突检查与可追溯记录</td></tr>
+<tr><td>上下文膨胀</td><td>历史占满 token，关键目标被截断</td><td>近期轨迹 + 检索记忆 + 任务摘要分层管理</td></tr>
+<tr><td>副作用失控</td><td>未经确认发送邮件、删除文件或发布内容</td><td>最小权限、人工审批、幂等键、审计与回滚</td></tr>
+<tr><td>Prompt Injection</td><td>网页或文档中的恶意指令诱导 Agent 改变目标</td><td>把工具内容视为不可信数据，隔离指令与观察</td></tr>
+</tbody></table></div>
+<p>其中最危险的不是模型回答得不够漂亮，而是它把不可靠的推断转化为真实的外部操作。工具返回的网页文本、邮件内容或代码仓库文件，可能包含恶意指令；它们应当被视为数据，而不是有权覆盖系统约束的命令。</p>
+</section>
+
+<section id="platform">
+<h2>11 · 从 Classic 到 Platform：自主循环与显式工作流</h2>
+<p>截至本文检查的官方仓库版本，AutoGPT Classic 已被标注为停止维护，官方建议使用 AutoGPT Platform。两者在教学上应该分开讲：Classic 的重点是开放式目标与动态动作循环；Platform 则把许多任务组织为显式的 Agent Graph / Workflow。</p>
+<figure class="figure"><div class="figure-scroll"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 500" role="img" aria-labelledby="autogpt-evolution-title autogpt-evolution-desc">
+<title id="autogpt-evolution-title">AutoGPT Classic 与 AutoGPT Platform 的控制方式比较</title>
+<desc id="autogpt-evolution-desc">Classic 以 LLM 逐轮决定下一步行动，形成开放式反馈循环；Platform 以显式的图工作流连接类型化 Blocks，并通过输出端、错误端和触发器管理流程。</desc>
+<rect width="1000" height="500" rx="22" fill="#f6f8f5"/>
+<rect x="35" y="35" width="440" height="430" rx="18" fill="#fff" stroke="#d6e2dc" stroke-width="2"/>
+<rect x="525" y="35" width="440" height="430" rx="18" fill="#fff" stroke="#d6e2dc" stroke-width="2"/>
+<text x="255" y="76" text-anchor="middle" font-size="23" font-weight="700" fill="#315c55">Classic：动态决策循环</text>
+<text x="745" y="76" text-anchor="middle" font-size="23" font-weight="700" fill="#315c55">Platform：显式工作流图</text>
+<rect x="145" y="112" width="220" height="65" rx="12" fill="#e6f1ed" stroke="#8eb9a8" stroke-width="2"/><text x="255" y="151" text-anchor="middle" font-size="19" font-weight="700" fill="#2b6258">LLM 选择下一动作</text>
+<rect x="145" y="235" width="220" height="65" rx="12" fill="#fff0df" stroke="#d9a674" stroke-width="2"/><text x="255" y="274" text-anchor="middle" font-size="19" font-weight="700" fill="#80542f">工具 / 环境执行</text>
+<rect x="145" y="358" width="220" height="65" rx="12" fill="#e9eef8" stroke="#9aaed0" stroke-width="2"/><text x="255" y="397" text-anchor="middle" font-size="19" font-weight="700" fill="#3a5074">Observation / 历史</text>
+<path d="M255 177 V235 M255 300 V358 M145 390 H80 V145 H145" fill="none" stroke="#3c8477" stroke-width="3" stroke-linecap="round"/>
+<path d="M255 177 V235 M255 300 V358" stroke="#3c8477" stroke-width="3"/>
+<text x="70" y="275" transform="rotate(-90 70 275)" text-anchor="middle" font-size="13" fill="#6e8179">根据新结果再次规划</text>
+<rect x="565" y="112" width="130" height="70" rx="11" fill="#e8edf8" stroke="#9aadd0" stroke-width="2"/><text x="630" y="143" text-anchor="middle" font-size="17" font-weight="700" fill="#3a5074">Input</text><text x="630" y="164" text-anchor="middle" font-size="13" fill="#63799a">任务参数</text>
+<rect x="735" y="112" width="170" height="70" rx="11" fill="#e6f1ed" stroke="#8eb9a8" stroke-width="2"/><text x="820" y="143" text-anchor="middle" font-size="17" font-weight="700" fill="#2b6258">AI / Search</text><text x="820" y="164" text-anchor="middle" font-size="13" fill="#63837a">Action Block</text>
+<rect x="735" y="252" width="170" height="70" rx="11" fill="#fff0df" stroke="#d9a674" stroke-width="2"/><text x="820" y="283" text-anchor="middle" font-size="17" font-weight="700" fill="#80542f">Human Review</text><text x="820" y="304" text-anchor="middle" font-size="13" fill="#9a754f">人工审核</text>
+<rect x="565" y="382" width="130" height="55" rx="11" fill="#e9eef8" stroke="#9aadd0" stroke-width="2"/><text x="630" y="416" text-anchor="middle" font-size="17" font-weight="700" fill="#3a5074">Output</text>
+<path d="M695 147 H735 M820 182 V252 M735 287 H695 V409 H695" fill="none" stroke="#3c8477" stroke-width="3" stroke-linecap="round"/>
+<path d="M820 322 V352 H630 V382" fill="none" stroke="#bd7950" stroke-width="2.5" stroke-dasharray="6 5"/>
+<text x="865" y="365" font-size="12" fill="#9a6748">error / fallback</text>
+<text x="255" y="450" text-anchor="middle" font-size="13" fill="#74857e">开放式任务适应性强，但必须限制循环与副作用</text>
+<text x="745" y="450" text-anchor="middle" font-size="13" fill="#74857e">流程更可审查，但动态规划能力取决于图中设计</text>
+</svg></div><figcaption>图 4 · Classic 更强调模型在循环中动态选择下一步；Platform 的 Builder 则通过 Input、Action、Output Blocks 和连接线定义可重复的执行流程。两者不是同一实现换了 UI。</figcaption></figure>
+<p>官方 Agent Builder 文档将 Blocks 分为 Input、Action、Output，并说明输入输出 pin 是有类型的；连接线把一个 Block 的输出传给下一个 Block。触发器可以通过 webhook 启动工作流，错误 pin 可以连接到错误处理或回退路径。</p>
+<p>当前 Platform 源码还将 Block 的副作用分成 <code>NONE</code>、<code>READ</code>、<code>WORKSPACE</code>、<code>PLATFORM</code>、<code>EXTERNAL_JUDGED</code> 和 <code>EXTERNAL</code>。这比简单的“工具列表”更接近生产系统：系统需要知道一个动作究竟只是计算、读取数据，还是会以用户身份改变外部世界。</p>
+<div class="note"><strong>架构权衡：</strong>开放式循环更灵活，但计划和动作更难预测；显式工作流更容易审查、复现与调试，但动态适应能力取决于图中是否设计了分支、循环、错误处理和 Agent 决策节点。不要把“显式”误解成“自动正确”。</div>
+<p>当前仓库 README 还把 AutoGPT 描述为 AI Experts 团队与工作流平台。研究历史时要保留 Classic 的技术意义，评估当前产品时则必须阅读最新 Platform 文档，不能用旧教程推断现有产品能力。</p>
+</section>
+
+<section id="safety">
+<h2>12 · 权限、安全与副作用：从“工具能调用”走向“动作可治理”</h2>
+<p>工具调用可以按副作用等级治理。低风险读取与高风险外部写入不应共用同一套批准策略。下面的图根据当前 Platform 源码的 BlockEffect 分类做了教学归并；特别注意，源码还单独包含 <code>EXTERNAL_JUDGED</code>，不能把图中简化标签当作完整枚举。</p>
+<figure class="figure"><div class="figure-scroll"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 470" role="img" aria-labelledby="autogpt-safety-title autogpt-safety-desc">
+<title id="autogpt-safety-title">Agent 工具副作用等级与执行门禁</title>
+<desc id="autogpt-safety-desc">工具操作按副作用分为纯计算、读取、工作区写入、平台对象修改、外部低风险变更和外部高风险变更；风险越高越需要审批、审计和回滚策略。</desc>
+<rect width="1000" height="470" rx="22" fill="#f6f8f5"/>
+<text x="45" y="48" font-size="23" font-weight="700" fill="#2b4b48">权限不应只回答“能不能调用”，还要回答“调用会改变什么”</text>
+<g font-size="16" font-weight="700" text-anchor="middle">
+<rect x="45" y="95" width="138" height="100" rx="12" fill="#e7f2ec" stroke="#8ebaa7" stroke-width="2"/><text x="114" y="132" fill="#2e6254">NONE</text><text x="114" y="160" font-size="14" font-weight="500" fill="#5c7b70">纯计算</text>
+<rect x="197" y="95" width="138" height="100" rx="12" fill="#e9f1f6" stroke="#94b4c7" stroke-width="2"/><text x="266" y="132" fill="#315c72">READ</text><text x="266" y="160" font-size="14" font-weight="500" fill="#648092">读取数据</text>
+<rect x="349" y="95" width="138" height="100" rx="12" fill="#edf2e2" stroke="#aab98b" stroke-width="2"/><text x="418" y="132" fill="#53663a">WORKSPACE</text><text x="418" y="160" font-size="14" font-weight="500" fill="#71815d">工作区写入</text>
+<rect x="501" y="95" width="138" height="100" rx="12" fill="#f7f0df" stroke="#d1b77a" stroke-width="2"/><text x="570" y="132" fill="#7b612b">PLATFORM</text><text x="570" y="160" font-size="14" font-weight="500" fill="#99804e">平台对象修改</text>
+<rect x="653" y="95" width="138" height="100" rx="12" fill="#f9eadf" stroke="#d6a47c" stroke-width="2"/><text x="722" y="132" font-size="12" fill="#8a5835">EXTERNAL_JUDGED</text><text x="722" y="160" font-size="14" font-weight="500" fill="#a17654">外部低风险变更*</text>
+<rect x="805" y="95" width="150" height="100" rx="12" fill="#f5e5e4" stroke="#d09b96" stroke-width="2"/><text x="880" y="132" fill="#844844">EXTERNAL</text><text x="880" y="160" font-size="14" font-weight="500" fill="#a06f6a">高风险外部副作用</text>
+</g>
+<path d="M114 215 H880" stroke="#c17d55" stroke-width="4" stroke-linecap="round"/>
+<path d="M880 215 L866 207 M880 215 L866 223" stroke="#c17d55" stroke-width="3" fill="none"/>
+<text x="500" y="246" text-anchor="middle" font-size="15" fill="#986c50">副作用与不可逆风险逐步增加</text>
+<rect x="95" y="292" width="230" height="95" rx="13" fill="#fff" stroke="#d5e1db" stroke-width="2"/>
+<text x="210" y="327" text-anchor="middle" font-size="19" font-weight="700" fill="#315d54">策略检查</text><text x="210" y="355" text-anchor="middle" font-size="14" fill="#71827c">身份 / 范围 / 参数 / 预算</text>
+<rect x="385" y="292" width="230" height="95" rx="13" fill="#fff" stroke="#d5e1db" stroke-width="2"/>
+<text x="500" y="327" text-anchor="middle" font-size="19" font-weight="700" fill="#315d54">人工批准</text><text x="500" y="355" text-anchor="middle" font-size="14" fill="#71827c">发送 / 删除 / 支付 / 发布</text>
+<rect x="675" y="292" width="230" height="95" rx="13" fill="#fff" stroke="#d5e1db" stroke-width="2"/>
+<text x="790" y="327" text-anchor="middle" font-size="19" font-weight="700" fill="#315d54">审计与回滚</text><text x="790" y="355" text-anchor="middle" font-size="14" fill="#71827c">记录输入、结果、操作者</text>
+<path d="M325 340 H385 M615 340 H675" stroke="#57877d" stroke-width="3"/>
+<text x="500" y="432" text-anchor="middle" font-size="13" fill="#778780">* 当前 Platform 源码还区分 EXTERNAL_JUDGED；此图为教学简化，不替代具体权限策略。</text>
+</svg></div><figcaption>图 5 · 副作用越大，越需要身份校验、范围限制、人工审批和可追溯审计。外部操作是否需要审批，应由系统策略决定，而不是由模型自己宣布“安全”。</figcaption></figure>
+<p>一个稳健的 Agent 运行时至少应实现：</p>
+<ol><li><strong>最小权限：</strong>工具只获得完成任务所需的最小资源范围。</li><li><strong>动作分类：</strong>读取、工作区写入、平台内变更、外部变更分别处理。</li><li><strong>参数校验：</strong>工具 schema、路径、文件类型和目标对象都要验证。</li><li><strong>人工批准：</strong>发送、支付、删除、公开发布等高风险动作应设置审批边界。</li><li><strong>幂等与恢复：</strong>重试前确认动作是否已成功，避免重复扣款或重复发布。</li><li><strong>审计记录：</strong>保存谁发起、模型提出了什么、系统批准了什么、工具实际返回了什么。</li></ol>
+<p class="warning note"><strong>重要的版本警告：</strong>AutoGPT Classic 官方 README 明确提示其代码已停止维护，并指出存在已知漏洞和依赖问题。不要把 Classic 代码直接部署到生产环境；本文章的代码演示也不会连接真实工具或开放系统权限。</p>
+</section>
+
+<section id="evaluation">
+<h2>13 · 如何评测 Agent？不能只看最后一段文字</h2>
+<p>Agent 的评价对象是一个任务执行过程，而不只是最终回答。Yehudai 等人在 2025 年的 Agent Evaluation 综述中，强调评测需要覆盖基础能力、应用场景、通用 Agent 基准和评测框架，并特别指出成本效率、安全性、鲁棒性和细粒度评价仍是关键挑战。</p>
+<div class="table-scroll"><table><thead><tr><th>评测维度</th><th>建议记录的指标</th><th>需要回答的问题</th></tr></thead><tbody>
+<tr><td>任务完成</td><td>成功率、部分完成率、目标约束满足率</td><td>是否真的完成了用户要求？</td></tr>
+<tr><td>执行效率</td><td>工具调用次数、LLM 调用次数、token、墙钟时间、费用</td><td>完成任务花了多少资源？</td></tr>
+<tr><td>可靠性</td><td>循环率、错误恢复率、重试次数、终止正确率</td><td>失败时能否恢复或安全停止？</td></tr>
+<tr><td>证据质量</td><td>引用准确率、来源覆盖率、事实一致性</td><td>最终产物是否有可验证依据？</td></tr>
+<tr><td>安全性</td><td>越权动作率、误操作率、审批绕过率</td><td>是否避免了不允许的副作用？</td></tr>
+<tr><td>泛化能力</td><td>新任务、新工具、新环境下的表现</td><td>是否只记住了固定任务轨迹？</td></tr>
+</tbody></table></div>
+<p>Benchmark 也要按任务类型选择：网页交互、软件工程、通用任务和工具调用并不是同一能力。<a href="https://arxiv.org/abs/2308.03688">AgentBench</a> 覆盖多种交互环境，<a href="https://arxiv.org/abs/2311.12983">GAIA</a> 聚焦需要工具与多步推理的通用助理任务，<a href="https://arxiv.org/abs/2307.13854">WebArena</a> 在可控网站环境中检验任务状态，<a href="https://arxiv.org/abs/2310.06770">SWE-bench</a> 则以真实代码仓库 Issue 和测试验证软件修复。它们测量的是不同能力，不能把一个基准上的分数当作“Agent 总体智能”的度量。对 AutoGPT 这种长程系统，必须同时报告成功率、成本、失败轨迹和安全行为。</p>
+<p>2026 年的一篇部署评测综述进一步指出，标准化任务完成分数与真实部署可行性之间存在落差：成本效率、安全合规、可维护性和工作流集成也必须纳入评价。换言之，Agent benchmark 不应只问“做没做对”，还要问“用了多少资源、是否越权、能否复现、出了错能否恢复”。</p>
+<p>更重要的是，报告实验时要固定模型版本、工具权限、环境状态、提示模板、最大步数、预算和重试策略。否则比较到的可能不是 Agent 算法，而是不同运行时配置。</p>
+</section>
+
+<section id="engineering">
+<h2>14 · 工程设计原则：把自主性限制在可验证的边界内</h2>
+<ol><li><strong>目标必须可检验：</strong>把“写一份好报告”转成来源数量、引用格式、文件路径和验收条件。</li><li><strong>动作必须结构化：</strong>动作名、参数、预期结果、风险等级都应该有 schema。</li><li><strong>状态必须持久化：</strong>任务队列、工具结果、检查点和错误原因应能恢复。</li><li><strong>每一步都要问是否有进展：</strong>如果观察没有减少不确定性，就不要无限重试同一动作。</li><li><strong>预算与停止条件先于自主性：</strong>最大步数、token、费用、时间和外部动作权限都应明确配置。</li><li><strong>成功必须外部验证：</strong>文件存在、测试通过、页面可访问，比模型说“已完成”更可信。</li><li><strong>先构建可观察性，再扩大权限：</strong>保存轨迹、工具输入输出和人工审批记录，之后再逐步开放动作范围。</li></ol>
+<p>一个实用的设计目标不是让 Agent 尽可能自主，而是在给定预算与风险约束下，让它尽可能稳定地完成可验证目标。自主性应当是一个可配置的系统属性，而不是越高越好的单调指标。</p>
+</section>
+
+<section id="summary">
+<h2>15 · 关键结论与下一步阅读路线</h2>
+<div class="panel"><h3>把 AutoGPT 记成三个层次</h3><ol><li><strong>认知层：</strong>LLM 根据目标、上下文和工具集合提出下一步动作。</li><li><strong>控制层：</strong>运行时管理循环、记忆、预算、权限、错误和终止。</li><li><strong>环境层：</strong>工具真正读取或改变外部世界，并返回可观察结果。</li></ol></div>
+<p>AutoGPT 的重要性不在于证明“LLM 已经能完全自主工作”，而在于把一个系统问题暴露出来：<strong>如何把不确定的语言模型决策，包装成可执行、可观察、可恢复、可治理的任务系统？</strong></p>
+<p>后续学习建议按机制顺序推进：</p>
+<ul><li><a href="../react/">ReAct</a>：理解 Thought / Action / Observation 的基本交互循环。</li><li><a href="../autogpt/">AutoGPT</a>：理解长程目标、工具、记忆与运行时控制的集成。</li><li><a href="../agent-memory-components/">Agent Memory</a>：深入研究跨步骤、跨会话的记忆与上下文管理。</li><li><a href="../swe-agent/">SWE-agent</a>：观察 Agent 如何通过专门的工具接口完成软件工程任务。</li></ul>
+</section>
+
+<section id="references">
+<h2>16 · 参考资料与证据边界</h2>
+<p><strong>AutoGPT 项目与实现：</strong></p>
+<ul>
+<li><a href="https://github.com/Significant-Gravitas/AutoGPT">AutoGPT 官方仓库与当前 README</a>：当前 Platform 产品与工作流入口。</li>
+<li><a href="https://github.com/Significant-Gravitas/AutoGPT/tree/master/classic">AutoGPT Classic README</a>：历史项目状态、配置、工作区和权限说明。</li>
+<li><a href="https://github.com/Significant-Gravitas/AutoGPT/blob/master/classic/original_autogpt/autogpt/agents/agent.py">Classic Agent 实现</a>：动作提议、工具执行、权限检查和组件组合。</li>
+<li><a href="https://github.com/Significant-Gravitas/AutoGPT/blob/master/classic/forge/forge/agent/base.py">BaseAgent 实现</a>：cycle_budget、状态与组件管线。</li>
+<li><a href="https://github.com/Significant-Gravitas/AutoGPT/blob/master/docs/platform/agent-builder-guide.md">Platform Agent Builder Guide</a>：类型化 Blocks、连接、触发器与错误处理。</li>
+<li><a href="https://github.com/Significant-Gravitas/AutoGPT/blob/master/autogpt_platform/backend/backend/blocks/_base.py">Platform Block 基类</a>：BlockEffect 与副作用分类。</li>
+</ul>
+<p><strong>研究综述与技术分析：</strong></p>
+<ul>
+<li>LangChain Team, <a href="https://www.langchain.com/blog/agents-round">Autonomous Agents &amp; Agent Simulations</a>, 2023-04-18：早期 AutoGPT、BabyAGI 的长期目标、规划与记忆差异。</li>
+<li>Huang et al., <a href="https://arxiv.org/abs/2402.02716">Understanding the Planning of LLM Agents: A Survey</a>, 2024：任务分解、计划选择、外部模块、反思和记忆。</li>
+<li>Wang et al., <a href="https://doi.org/10.1007/s11704-024-40231-1">A Survey on Large Language Model Based Autonomous Agents</a>, Frontiers of Computer Science, 2024：Profile、Memory、Planning、Action 的统一视角。</li>
+<li>Yehudai et al., <a href="https://arxiv.org/abs/2503.16416">Survey on Evaluation of LLM-based Agents</a>, 2025：能力、应用基准、评测框架与成本、安全、鲁棒性挑战。</li>
+<li>Liu et al., <a href="https://arxiv.org/abs/2308.03688">AgentBench</a>, 2023；Mialon et al., <a href="https://arxiv.org/abs/2311.12983">GAIA</a>, 2023；Zhou et al., <a href="https://arxiv.org/abs/2307.13854">WebArena</a>, 2023；Jimenez et al., <a href="https://arxiv.org/abs/2310.06770">SWE-bench</a>, 2023：不同任务族的原始评测基准。</li>
+<li><a href="https://doi.org/10.1007/s10462-026-11571-0">From benchmarks to deployment: a comprehensive review of agentic AI evaluation</a>, 2026：讨论任务完成指标与部署可行性之间的差距。</li>
+</ul>
+<p class="small">证据边界：AutoGPT 没有在本文中被伪装成某一篇原始学术论文。官方仓库和源码用于说明项目行为；综述用于组织研究脉络；可靠性曲线、状态方程与交互示例属于明确标注的教学抽象，并非官方实验结果。</p>
+<div class="foot"><a href="../../../categories/agents/">智能体专题</a><a href="../../../topics/">知识地图</a><a href="../react/">ReAct</a><a href="../agent-memory-components/">Agent Memory</a><a href="../swe-agent/">SWE-agent</a><a href="https://github.com/Significant-Gravitas/AutoGPT">AutoGPT 官方仓库</a></div>
+</section>
+</article></main></div>
+<script>
+(()=>{"use strict";
+const scenarios={
+read:[
+["目标","研究 AutoGPT，整理可信资料，并保存草稿。"],
+["Plan","拆成检索、证据整理、摘要撰写和工作区保存。"],
+["Action · READ","调用搜索工具查找官方仓库与学术综述。"],
+["Observation","返回来源链接、标题和可核验段落。"],
+["Action · NONE","比较来源并生成结构化摘要。"],
+["Observation","摘要包含方法、局限和引用清单。"],
+["Action · WORKSPACE","把草稿写入受限工作区。"],
+["Finish","工作区文件存在，任务达到本次验收条件。"]
+],
+publish:[
+["目标","研究 AutoGPT，整理摘要，保存草稿，并发布到外部网站。"],
+["Plan","检索 → 摘要 → 保存草稿 → 外部发布。"],
+["Action · READ","读取官方资料与学术综述。"],
+["Observation","证据已收集，草稿内容可供审核。"],
+["Action · WORKSPACE","草稿保存到工作区。"],
+["Observation","文件已保存；发布属于外部副作用。"],
+["Permission Gate","外部发布需要人工批准；系统拒绝自动执行。"],
+["Action · EXTERNAL","人工批准后，才允许调用发布工具。"],
+["Finish","发布结果需要由外部页面状态再次验证。"]
+]
+};
+let mode="read",step=0,approved=false;
+const trace=document.getElementById("demo-trace");
+const status=document.getElementById("demo-status");
+const next=document.getElementById("demo-next");
+const approve=document.getElementById("demo-approve");
+function add(label,content){const p=document.createElement("p");const b=document.createElement("b");b.textContent=label;p.append(b,document.createTextNode("："+content));trace.append(p);trace.scrollTop=trace.scrollHeight;}
+function reset(){step=0;approved=false;trace.replaceChildren();add("任务",mode==="read"?"研究 AutoGPT，整理可信资料，并保存草稿。":"研究 AutoGPT，整理摘要，保存草稿，并发布到外部网站。");add("初始权限","READ 与 WORKSPACE 已允许；EXTERNAL 默认等待人工批准。");next.disabled=false;next.textContent="执行下一步";approve.disabled=true;status.textContent="已准备：读取目标与工具权限。";}
+function advance(){const list=scenarios[mode];if(step>=list.length)return;const item=list[step];if(item[0]==="Action · EXTERNAL"&&!approved){add("Permission Gate","拒绝自动执行：尚未获得人工批准。未调用外部工具。");approve.disabled=false;status.textContent="已安全停止：等待人工批准。";next.disabled=true;return;}add(item[0],item[1]);step++;if(step>=list.length){next.disabled=true;approve.disabled=true;status.textContent="演示结束：检查外部结果仍然是独立步骤。";}else{status.textContent="已执行 "+step+" / "+list.length+" 个步骤。";}}
+next.addEventListener("click",advance);
+approve.addEventListener("click",()=>{approved=true;approve.disabled=true;next.disabled=false;status.textContent="已记录人工批准；点击“执行下一步”才会模拟发布。";});
+document.getElementById("demo-reset").addEventListener("click",reset);
+document.querySelectorAll("[data-scenario]").forEach(button=>button.addEventListener("click",()=>{mode=button.dataset.scenario;document.querySelectorAll("[data-scenario]").forEach(b=>b.setAttribute("aria-pressed",String(b===button)));reset();}));
+reset();
+})();
+</script>
+</body>
+</html>

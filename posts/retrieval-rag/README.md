@@ -17,3 +17,6 @@
 - `agents` 负责工具使用、规划与行动闭环；这里只研究检索与证据支撑的生成。
 - 正式文章创建于 `posts/retrieval-rag/<slug>/index.html`，与独立 `assets/*.svg`、`evidence.json` 同目录，随后在 `content/posts.json` 登记。
 - `_topics/` 内仅有 README 占位，不注册假文章、不提交空 HTML；`draft` 不进入首页、分类列表、RSS 或 Sitemap。
+## 2026-11-21 新增专题
+- Query Understanding：从意图识别、语义解析、重写与澄清，到检索和 RAG 路由。
+- 关联文章：[Query Understanding](./query-understanding/index.html)。

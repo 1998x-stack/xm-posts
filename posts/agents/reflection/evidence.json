@@ -1,0 +1,119 @@
+[
+  {
+    "id": "E01",
+    "kind": "method",
+    "claim": "Reflexion 将 Actor、Evaluator、Self-Reflection 与 Memory 组合为语言反馈优化闭环；轨迹与评价结果被转为自然语言经验并用于后续尝试。",
+    "source_url": "https://arxiv.org/abs/2303.11366",
+    "locator": "§3, Algorithm 1, Figure 2",
+    "status": "verified",
+    "notes": "按 arXiv v4 版本描述；文中的符号与公式采用独立教学抽象。"
+  },
+  {
+    "id": "E02",
+    "kind": "experiment",
+    "claim": "在 ALFWorld 的 134 个环境任务中，ReAct + Reflexion 在启发式自评价设置下完成 130 个任务。",
+    "source_url": "https://arxiv.org/abs/2303.11366",
+    "locator": "§4.1 Results, Figure 3",
+    "status": "verified",
+    "notes": "保留任务数和具体实验设置；不外推为所有 Agent 环境的成功率。"
+  },
+  {
+    "id": "E03",
+    "kind": "experiment",
+    "claim": "Reflexion 在 HumanEval Python 的论文表格中报告 pass@1 为 91.0，GPT-4 对照列为 80.1；MBPP Python 上 Reflexion 为 77.1，GPT-4 对照列为 80.1。",
+    "source_url": "https://arxiv.org/abs/2303.11366",
+    "locator": "§4.3, Table 1",
+    "status": "verified",
+    "notes": "这些结果涉及不同生成策略与测试生成设置，不能简单视为同一模型的纯粹 Reflection 消融；同时保留 MBPP 上未提升的结果。"
+  },
+  {
+    "id": "E04",
+    "kind": "ablation",
+    "claim": "HumanEval Rust 50 道最难题的消融中，基础模型 0.60、去掉测试生成 0.52、去掉自我反思 0.60、完整 Reflexion 0.68。",
+    "source_url": "https://arxiv.org/abs/2303.11366",
+    "locator": "§4.3 Ablation study, Table 3",
+    "status": "verified",
+    "notes": "只代表论文给出的 GPT-4 / Rust 子集实验，不是普遍提升率。"
+  },
+  {
+    "id": "E05",
+    "kind": "limitation",
+    "claim": "Reflexion 代码任务依赖测试质量；测试误报和漏报会分别造成错误通过或对正确实现产生误导性失败信号。",
+    "source_url": "https://arxiv.org/abs/2303.11366",
+    "locator": "§4.3 Analysis, false positives / false negatives",
+    "status": "verified",
+    "notes": "这是原论文明确讨论的限制。"
+  },
+  {
+    "id": "E06",
+    "kind": "method",
+    "claim": "Self-Refine 使用 Feedback → Refine 循环，由同一个 LLM 兼任生成、反馈和修订角色，不需要额外监督训练数据、额外训练或强化学习。",
+    "source_url": "https://arxiv.org/abs/2303.17651",
+    "locator": "Abstract and method overview",
+    "status": "verified",
+    "notes": "任务相关的反馈和停止函数需要设计；内部反馈并不天然独立。"
+  },
+  {
+    "id": "E07",
+    "kind": "experiment",
+    "claim": "Self-Refine 在七类不同生成任务上评估，论文摘要报告相较于一次性生成平均约 20 个百分点的绝对任务表现提升。",
+    "source_url": "https://papers.nips.cc/paper/2023/hash/91edff07232fb1b55a505a9e9f6c0ff3-Abstract-Conference.html",
+    "locator": "NeurIPS 2023 abstract",
+    "status": "verified",
+    "notes": "保留为论文摘要层面的总体描述；具体任务的指标与人评协议并不相同。"
+  },
+  {
+    "id": "E08",
+    "kind": "method",
+    "claim": "CRITIC 从初始输出出发，与外部工具交互以验证特定维度，再基于工具反馈逐步修订答案。",
+    "source_url": "https://proceedings.iclr.cc/paper_files/paper/2024/hash/fef126561bbf9d4467dbb8d27334b8fe-Abstract-Conference.html",
+    "locator": "ICLR 2024 abstract",
+    "status": "verified",
+    "notes": "工具交互覆盖开放式问答、数学程序合成和毒性降低等任务。"
+  },
+  {
+    "id": "E09",
+    "kind": "limitation",
+    "claim": "仅依赖模型内部能力进行 intrinsic self-correction 时，模型在推理任务中难以可靠修正初始回答，部分设置下修正后表现会下降。",
+    "source_url": "https://proceedings.iclr.cc/paper_files/paper/2024/hash/8b4add8b0aa8749d80a34ca5d941c355-Abstract-Conference.html",
+    "locator": "ICLR 2024 abstract",
+    "status": "verified",
+    "notes": "结论针对论文研究的 intrinsic self-correction 设置，不应扩大为所有外部反馈反思方法均无效。"
+  },
+  {
+    "id": "E10",
+    "kind": "survey",
+    "claim": "TACL 2024 批判性综述指出，通用任务中仅使用 prompted LLM 自身反馈的可靠成功证据不足；可靠外部反馈和大规模微调能支持更多自我纠错情形。",
+    "source_url": "https://aclanthology.org/2024.tacl-1.78/",
+    "locator": "Abstract and §§4–8",
+    "status": "verified",
+    "notes": "需区分研究问题、强基线、外部信息与任务是否适合自我纠错。"
+  },
+  {
+    "id": "E11",
+    "kind": "survey",
+    "claim": "2026 年 Verbal Reinforcement Learning 预印本按语言反馈进入 Agent 生命周期的时点区分 Grounding Signal、Deliberative Feedback 和 Learning Signal。",
+    "source_url": "https://arxiv.org/abs/2609.01597",
+    "locator": "§2 Taxonomy, Table 1; §4 Deliberative Feedback",
+    "status": "verified",
+    "notes": "这是 2026 年 arXiv 预印本提出的综合分类，非最终统一标准。"
+  },
+  {
+    "id": "E12",
+    "kind": "derived",
+    "claim": "继续反思的边际净收益可用成功概率提升乘以任务价值，再减模型、工具、延迟和回归成本来进行工程化分析。",
+    "source_url": "https://arxiv.org/abs/2303.11366",
+    "locator": "Independent teaching derivation informed by Reflexion's iterative process and limitations",
+    "status": "derived",
+    "notes": "式 5 是本文独立提出的工程启发式，不是原论文目标函数。"
+  },
+  {
+    "id": "E13",
+    "kind": "illustrative",
+    "claim": "数组平均值示例、三种反馈模式的交互演示和 Python 固定策略实现均为独立教学构造。",
+    "source_url": "https://arxiv.org/abs/2303.17651",
+    "locator": "Article §§1,9,13",
+    "status": "illustrative",
+    "notes": "不调用 LLM、不复现论文 benchmark，也不将教学算例当作实验结果。"
+  }
+]
