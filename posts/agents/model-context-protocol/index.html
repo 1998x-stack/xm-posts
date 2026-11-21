@@ -25,7 +25,7 @@ pre{overflow-x:auto;white-space:pre;font:13px/1.75 ui-monospace,SFMono-Regular,C
 <p class="lead">假设你已经有一个能理解自然语言、会调用函数的模型。现在希望它读取 GitHub Issue、查询数据库、访问本地文件、搜索公司知识库，还要在日历里创建会议。模型的推理能力并没有直接解决这些连接问题。</p>
 <p>在没有共同协议时，每一个 AI 应用都可能需要为每一个外部服务单独编写适配器：认证怎么做、工具列表怎么描述、参数怎么传、结果怎么返回、错误如何表达。应用越多、服务越多，重复集成就越难维护。</p>
 <p>可以用一个理想化的适配器计数模型解释这个直觉：假设有 <strong>H</strong> 个应用宿主、<strong>S</strong> 个外部服务，且每个宿主都要连接每项服务。点对点实现最多需要 H×S 组专用连接；在所有参与方都实现同一个兼容协议的前提下，接口实现的数量可简化为 H+S：</p>
-<p class="formula" aria-label="理想化集成数量比较"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>N</mi><mtext>point-to-point</mtext></msub><mo>=</mo><mi>H</mi><mo>×</mo><mi>S</mi><mo>,</mo><mspace width="1em"/><msub><mi>N</mi><mtext>protocol</mtext></msub><mo>=</mo><mi>H</mi><mo>+</mo><mi>S</mi></mrow></math></p>
+<div class="formula math-scroll" role="region" tabindex="0" aria-label="理想化集成数量比较，公式可横向滚动"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block" aria-label="点对点集成数等于 H 乘 S；统一协议端点实现数等于 H 加 S"><mrow><msub><mi>N</mi><mtext>point-to-point</mtext></msub><mo>=</mo><mi>H</mi><mo>×</mo><mi>S</mi><mo>,</mo><mspace width="1em"/><msub><mi>N</mi><mtext>protocol</mtext></msub><mo>=</mo><mi>H</mi><mo>+</mo><mi>S</mi></mrow></math></div>
 <p>例如 H=3、S=4 时，分别为 12 组专用连接与 7 个协议端点实现。这是用于理解集成复杂度的<strong>教学模型</strong>，不是 MCP 规范承诺的性能指标；实际还存在认证、权限、服务差异和协议版本兼容等额外成本。</p>
 
 <figure class="figure"><svg xmlns="http://www.w3.org/2000/svg" width="1200" height="470" viewBox="0 0 1200 470" role="img" aria-labelledby="growth-title growth-desc">
