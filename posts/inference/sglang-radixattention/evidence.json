@@ -1,0 +1,101 @@
+[
+  {
+    "id": "S01",
+    "kind": "paper-claim",
+    "claim": "SGLang combines a frontend LM program language with an optimized runtime",
+    "source_url": "https://arxiv.org/html/2312.07104",
+    "locator": "§1–§2, Fig. 1",
+    "status": "verified",
+    "notes": "Original experimental results remain bound to original settings."
+  },
+  {
+    "id": "S02",
+    "kind": "paper-claim",
+    "claim": "The frontend supports gen, select, extend, fork and join primitives",
+    "source_url": "https://arxiv.org/html/2312.07104",
+    "locator": "§2 Language primitives",
+    "status": "verified",
+    "notes": "Original experimental results remain bound to original settings."
+  },
+  {
+    "id": "S03",
+    "kind": "paper-claim",
+    "claim": "RadixAttention uses a radix tree to organize KV prefix reuse across calls",
+    "source_url": "https://arxiv.org/html/2312.07104",
+    "locator": "§3 and Fig. 3",
+    "status": "verified",
+    "notes": "Original experimental results remain bound to original settings."
+  },
+  {
+    "id": "S04",
+    "kind": "paper-claim",
+    "claim": "Radix tree edges may contain multiple tokens and are split on common prefix boundaries",
+    "source_url": "https://arxiv.org/html/2312.07104",
+    "locator": "§3 RadixAttention",
+    "status": "verified",
+    "notes": "Original experimental results remain bound to original settings."
+  },
+  {
+    "id": "S05",
+    "kind": "paper-claim",
+    "claim": "The runtime protects in-use nodes through reference counters and uses leaf-first LRU eviction",
+    "source_url": "https://arxiv.org/html/2312.07104",
+    "locator": "§3 RadixAttention and Fig. 3",
+    "status": "verified",
+    "notes": "Original experimental results remain bound to original settings."
+  },
+  {
+    "id": "S06",
+    "kind": "paper-claim",
+    "claim": "Cache-aware scheduling prioritizes requests with longer matched prefixes but can risk starvation",
+    "source_url": "https://arxiv.org/html/2312.07104",
+    "locator": "§3 Cache-aware scheduling; Theorem 3.1",
+    "status": "verified",
+    "notes": "Original experimental results remain bound to original settings."
+  },
+  {
+    "id": "S07",
+    "kind": "paper-claim",
+    "claim": "Compressed FSM enables faster constrained decoding along single-transition paths",
+    "source_url": "https://arxiv.org/html/2312.07104",
+    "locator": "§4 and Appendix B",
+    "status": "verified",
+    "notes": "Original experimental results remain bound to original settings."
+  },
+  {
+    "id": "S08",
+    "kind": "paper-claim",
+    "claim": "The paper presents API speculative execution for API-only models",
+    "source_url": "https://arxiv.org/html/2312.07104",
+    "locator": "§5",
+    "status": "verified",
+    "notes": "Original experimental results remain bound to original settings."
+  },
+  {
+    "id": "S09",
+    "kind": "paper-claim",
+    "claim": "The study reports up to 6.4x throughput gains for its workload and baseline configurations",
+    "source_url": "https://proceedings.nips.cc/paper_files/paper/2024/hash/724be4472168f31ba1c9ac630f15dec8-Abstract-Conference.html",
+    "locator": "NeurIPS abstract; §6.1–§6.3",
+    "status": "verified",
+    "notes": "Original experimental results remain bound to original settings."
+  },
+  {
+    "id": "S10",
+    "kind": "toy-derivation",
+    "claim": "The shared-prefix formulas and radix tree simulator are educational models",
+    "source_url": "https://arxiv.org/html/2312.07104",
+    "locator": "Independent derivation; not paper benchmark or production cache",
+    "status": "illustrative",
+    "notes": "Independent, non-empirical teaching calculation."
+  },
+  {
+    "id": "S11",
+    "kind": "paper-claim",
+    "claim": "PagedAttention is distinct from radix prefix matching and sharing",
+    "source_url": "https://arxiv.org/abs/2309.06180",
+    "locator": "SOSP 2023 method",
+    "status": "verified",
+    "notes": "Original experimental results remain bound to original settings."
+  }
+]
