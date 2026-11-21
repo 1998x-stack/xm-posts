@@ -59,6 +59,8 @@
 
 `_topics/` 下的 README 是规划占位，不会作为正式文章发布。分类或文章 slug 一旦对外公开，原则上保持稳定。
 
+逐篇质量标准、科学证据核验、MathML/SVG、无障碍、全站发布和周期性清理流程统一见 [`docs/repository-cleanup.md`](docs/repository-cleanup.md)。
+
 ## RSS：订阅与更新语义
 
 **订阅地址：<https://1998x-stack.github.io/xm-posts/feed.xml>**
