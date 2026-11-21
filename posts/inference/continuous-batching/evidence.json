@@ -1,0 +1,83 @@
+[
+  {
+    "id": "C01",
+    "kind": "paper-claim",
+    "claim": "ORCA proposes iteration-level scheduling in contrast to request-level batches",
+    "source_url": "https://www.usenix.org/conference/osdi22/presentation/yu",
+    "locator": "Abstract and §3, S1: Iteration-level scheduling",
+    "status": "verified",
+    "notes": "Model/hardware claims scoped to original paper."
+  },
+  {
+    "id": "C02",
+    "kind": "paper-claim",
+    "claim": "ORCA proposes selective batching; narrow Attention computations run per request while non-Attention operations are batched",
+    "source_url": "https://www.usenix.org/conference/osdi22/presentation/yu",
+    "locator": "§3, S2; Figure 5",
+    "status": "verified",
+    "notes": "Model/hardware claims scoped to original paper."
+  },
+  {
+    "id": "C03",
+    "kind": "paper-claim",
+    "claim": "ORCA's scheduling algorithm considers iteration-level FCFS and memory constraints",
+    "source_url": "https://www.usenix.org/conference/osdi22/presentation/yu",
+    "locator": "§4.2 Scheduling Algorithm",
+    "status": "verified",
+    "notes": "Model/hardware claims scoped to original paper."
+  },
+  {
+    "id": "C04",
+    "kind": "paper-claim",
+    "claim": "ORCA reports up to 36.9x throughput improvement at equivalent latency in a GPT-3 175B comparison with FasterTransformer",
+    "source_url": "https://www.usenix.org/conference/osdi22/presentation/yu",
+    "locator": "Abstract and evaluation §6; exact experimental setting",
+    "status": "verified",
+    "notes": "Model/hardware claims scoped to original paper."
+  },
+  {
+    "id": "C05",
+    "kind": "paper-claim",
+    "claim": "Different request lengths cause request-level batch waiting and delayed admission",
+    "source_url": "https://www.usenix.org/conference/osdi22/presentation/yu",
+    "locator": "§3 C1, Figures 2–4",
+    "status": "verified",
+    "notes": "Model/hardware claims scoped to original paper."
+  },
+  {
+    "id": "C06",
+    "kind": "derived-math",
+    "claim": "Request set update B_(t+1)=(B_t\\F_t)∪A_t is an independent formalization",
+    "source_url": "https://www.usenix.org/conference/osdi22/presentation/yu",
+    "locator": "Derived pedagogical state abstraction, not a quoted equation",
+    "status": "derived",
+    "notes": "Independent explanation, not an ORCA empirical result."
+  },
+  {
+    "id": "C07",
+    "kind": "paper-claim",
+    "claim": "Flattened tensor [sum_i L_i,H] is used to batch non-attention operations",
+    "source_url": "https://www.usenix.org/conference/osdi22/presentation/yu",
+    "locator": "§3 S2, Figure 5",
+    "status": "verified",
+    "notes": "Model/hardware claims scoped to original paper."
+  },
+  {
+    "id": "C08",
+    "kind": "toy-model",
+    "claim": "The deterministic Python demonstration handles late arrival and request exit",
+    "source_url": "https://www.usenix.org/conference/osdi22/presentation/yu",
+    "locator": "Independent tutorial simulation; local tests only; no performance claim",
+    "status": "illustrative",
+    "notes": "Independent explanation, not an ORCA empirical result."
+  },
+  {
+    "id": "C09",
+    "kind": "paper-claim",
+    "claim": "PagedAttention memory management is a later distinct contribution",
+    "source_url": "https://arxiv.org/abs/2309.06180",
+    "locator": "Abstract and paper introduction",
+    "status": "verified",
+    "notes": "Model/hardware claims scoped to original paper."
+  }
+]
