@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import argparse
 from html.parser import HTMLParser
+from io import BytesIO
 import time
 from urllib.parse import urljoin
 from urllib.request import Request, urlopen
@@ -18,6 +19,7 @@ ARTICLES = (
     'posts/reinforcement-learning/mcts/',
 )
 CSS = 'assets/related-posts.css'
+C51 = 'posts/reinforcement-learning/c51/'
 
 
 class ReadingParser(HTMLParser):
@@ -72,7 +74,84 @@ def fetch(url: str) -> bytes:
         return result.read()
 
 
+
+class C51Parser(HTMLParser):
+    """Collect article navigation, formulas, SVG and downloadable PDF links."""
+    def __init__(self):
+        super().__init__()
+        self.links = []
+        self.images = []
+        self.math_count = 0
+        self.svg_count = 0
+        self.headings = 0
+
+    def handle_starttag(self, tag, attrs):
+        a = dict(attrs)
+        if tag == 'a':
+            self.links.append(a.get('href', ''))
+        elif tag == 'img':
+            self.images.append(a.get('src', ''))
+        elif tag == 'math':
+            self.math_count += 1
+        elif tag == 'svg':
+            self.svg_count += 1
+        elif tag == 'h1':
+            self.headings += 1
+
+
+def verify_c51(base: str):
+    """Verify the *deployed* C51 article, PDF, illustrations and site indexes.
+
+    PDF parsing here complements (not replaces) the PR's full PDF and
+    browser/visual checks; the deploy job installs pypdf for this step.
+    """
+    from pypdf import PdfReader
+
+    url = urljoin(base, C51)
+    parser = C51Parser()
+    html = fetch(url).decode('utf-8')
+    parser.feed(html)
+    assert parser.headings == 1, f'{url}: expected one h1'
+    assert parser.math_count >= 1, f'{url}: no MathML formulas'
+    assert parser.svg_count >= 1, f'{url}: no inline SVG'
+    assert 'C51' in html, f'{url}: wrong or stale article'
+
+    pdf_url = urljoin(url, 'article.pdf')
+    assert any(urljoin(url, href) == pdf_url for href in parser.links), (
+        f'{url}: missing live PDF download link'
+    )
+    pdf = fetch(pdf_url)
+    assert pdf.startswith(b'%PDF-') and len(pdf) > 10000, (
+        f'{pdf_url}: missing or truncated PDF'
+    )
+    reader = PdfReader(BytesIO(pdf), strict=False)
+    assert not reader.is_encrypted, f'{pdf_url}: encrypted PDF'
+    assert len(reader.pages) >= 2, f'{pdf_url}: suspicious page count'
+    extracted = ''.join(page.extract_text() or '' for page in reader.pages)
+    assert len(extracted.strip()) >= 500, f'{pdf_url}: no readable text'
+
+    for path in parser.images:
+        if not path or path.startswith('data:'):
+            continue
+        target = urljoin(url, path)
+        assert target.startswith(base), f'{url}: external illustration {path}'
+        assert fetch(target), f'{url}: empty illustration {target}'
+
+    for suffix in ('archive/', 'topics/', 'feed.xml', 'reinforcement-learning/'):
+        target = urljoin(base, suffix)
+        data = fetch(target)
+        assert data, f'{target}: empty index'
+
+    # The archive and RSS must include this article; the topic page
+    # may display only topic-level navigation.
+    for suffix in ('archive/', 'feed.xml'):
+        data = fetch(urljoin(base, suffix)).decode('utf-8')
+        assert 'c51' in data.lower(), f'{suffix}: C51 missing from public index'
+    print(f'PUBLIC C51 VERIFIED: HTML, MathML, SVG, PDF ({len(reader.pages)} pages), archive, topic and RSS')
+
+
 def verify(base: str):
+    verify_c51(base)
     stylesheet = fetch(urljoin(base, CSS))
     assert b'.xm-related-reading' in stylesheet, 'Missing related card stylesheet'
     for suffix in ARTICLES:
