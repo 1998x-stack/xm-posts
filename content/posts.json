@@ -787,7 +787,7 @@
     "subtitle": "从 Young–Daly、CheckFreq 到 PyTorch DCP：如何平衡训练开销、故障恢复与分布式一致性？",
     "category": "training",
     "topic": "checkpointing",
-    "status": "draft",
+    "status": "published",
     "published": "2026-11-21",
     "updated": "2026-11-21",
     "reading_minutes": 30,
