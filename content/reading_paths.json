@@ -190,6 +190,7 @@
     "posts": [
       "bellman-equations",
       "dqn",
+      "c51",
       "noisynet"
     ]
   },
