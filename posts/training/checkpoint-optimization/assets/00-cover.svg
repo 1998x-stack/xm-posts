@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 440" role="img" aria-labelledby="cover-title cover-desc">
+<title id="cover-title">Checkpoint interval optimization</title>
+<desc id="cover-desc">The optimal checkpoint interval balances frequent-save overhead against expected lost training work, minimizing total overhead.</desc>
+<rect x="1" y="1" width="798" height="438" rx="22" fill="#fbfdfb" stroke="#d9e6df" stroke-width="2"/>
+<g font-family="system-ui,'PingFang SC','Microsoft YaHei',sans-serif">
+<text x="38" y="58" fill="#29454a" font-size="34" font-weight="800">检查点间隔优化</text>
+<text x="40" y="91" fill="#60797c" font-size="21">平衡保存成本与故障回滚风险</text>
+<path d="M95 132V350H735" fill="none" stroke="#668187" stroke-width="3"/>
+<g stroke="#e4ece6" stroke-width="1.5"><path d="M95 190H735"/><path d="M95 245H735"/><path d="M95 300H735"/></g>
+<path d="M120 155 C195 220 275 285 395 310 C520 335 635 341 715 344" fill="none" stroke="#b86b49" stroke-width="6" stroke-linecap="round"/>
+<path d="M120 340 C260 337 365 315 470 270 C580 222 655 168 715 137" fill="none" stroke="#7165a7" stroke-width="6" stroke-linecap="round"/>
+<path d="M120 160 C230 245 325 284 430 274 C540 263 640 190 715 142" fill="none" stroke="#187c72" stroke-width="8" stroke-linecap="round"/>
+<path d="M430 132V350" stroke="#b86b49" stroke-width="2.5" stroke-dasharray="8 7"/>
+<circle cx="430" cy="274" r="10" fill="#b86b49" stroke="#fff" stroke-width="4"/>
+<g font-size="23" font-weight="750"><text x="145" y="205" fill="#a65f43">保存成本</text><text x="535" y="180" fill="#7165a7">故障重做</text><text x="565" y="305" fill="#187c72">总开销</text></g>
+<rect x="384" y="106" width="92" height="42" rx="10" fill="#f7e9df" stroke="#d9a98f"/>
+<text x="430" y="135" text-anchor="middle" fill="#9b5d43" font-size="25" font-weight="850">τ*</text>
+<g fill="#60797c" font-size="19"><text x="95" y="382">过于频繁</text><text x="735" y="382" text-anchor="end">过于稀疏</text><text x="415" y="419" text-anchor="middle" font-size="21">保存间隔 →</text></g>
+</g></svg>

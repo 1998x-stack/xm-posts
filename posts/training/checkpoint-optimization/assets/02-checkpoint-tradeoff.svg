@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 520" role="img" aria-labelledby="s2-title s2-desc">
+<title id="s2-title">检查点间隔的成本权衡</title><desc id="s2-desc">频繁保存导致检查点成本较高，稀疏保存导致故障重做成本较高，两者相加得到 U 形总开销，并在最优间隔附近达到最低。</desc>
+<rect x="1" y="1" width="998" height="518" rx="20" fill="#fbfdfb" stroke="#d9e6df"/>
+<g font-family="system-ui,'PingFang SC','Microsoft YaHei',sans-serif">
+<text x="42" y="52" fill="#29454a" font-size="26" font-weight="750">为什么最优间隔不是“越频繁越好”？</text>
+<path d="M115 95V410H915" fill="none" stroke="#678187" stroke-width="3"/>
+<g stroke="#e5ede7" stroke-width="1"><path d="M115 155H915"/><path d="M115 215H915"/><path d="M115 275H915"/><path d="M115 335H915"/></g>
+<path d="M145 120 C210 190 270 275 430 335 C540 370 700 386 890 395" fill="none" stroke="#b86b49" stroke-width="5" stroke-linecap="round"/>
+<path d="M145 395 C300 392 440 365 560 320 C690 270 800 180 890 115" fill="none" stroke="#7165a7" stroke-width="5" stroke-linecap="round"/>
+<path d="M145 95 C250 165 335 260 470 275 C620 290 760 220 890 130" fill="none" stroke="#187c72" stroke-width="6" stroke-linecap="round"/>
+<path d="M560 110V410" stroke="#b86b49" stroke-width="2.5" stroke-dasharray="8 7"/>
+<circle cx="560" cy="282" r="9" fill="#b86b49" stroke="#fff" stroke-width="3"/>
+<g fill="#29454a" font-size="17"><text x="480" y="455">保存间隔 τ</text><text x="36" y="92">开销</text><text x="130" y="445">短</text><text x="875" y="445">长</text></g>
+<g font-size="18" font-weight="700"><text x="175" y="185" fill="#a65f43">保存成本 C / τ</text><text x="680" y="175" fill="#7165a7">故障重做 τ / 2M</text><text x="670" y="320" fill="#187c72">总开销 H(τ)</text></g>
+<rect x="470" y="70" width="180" height="45" rx="10" fill="#f7e9df" stroke="#d9a98f"/>
+<text x="560" y="99" text-anchor="middle" font-size="17" fill="#9b5d43" font-weight="750">τ* = √(2CM)</text>
+<text x="115" y="490" font-size="15" fill="#60797c">示意曲线：帮助理解方向与权衡；具体形状取决于成本、故障率和模型假设。</text>
+</g></svg>

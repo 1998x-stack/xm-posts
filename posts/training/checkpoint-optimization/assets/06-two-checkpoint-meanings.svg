@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 440" role="img" aria-labelledby="s6-title s6-desc">
+<title id="s6-title">两种 checkpoint 的不同目标</title><desc id="s6-desc">Training checkpoint 把模型、优化器和数据状态持久化用于故障恢复；Activation checkpoint 丢弃中间激活并在 backward 时重计算以节省显存。</desc>
+<rect x="1" y="1" width="998" height="438" rx="20" fill="#fbfdfb" stroke="#d9e6df"/>
+<g font-family="system-ui,'PingFang SC','Microsoft YaHei',sans-serif">
+<text x="40" y="48" font-size="26" fill="#29454a" font-weight="750">同一个词，两个完全不同的优化目标</text>
+<rect x="45" y="90" width="430" height="290" rx="16" fill="#e0f0e9" stroke="#82b9a9" stroke-width="2"/>
+<text x="75" y="132" font-size="23" fill="#176f69" font-weight="850">Training Checkpoint</text>
+<text x="75" y="164" font-size="15" fill="#4d6d69">持久化状态 · 为故障恢复服务</text>
+<g fill="#fff" stroke="#9ccabc" stroke-width="1.5"><rect x="78" y="200" width="150" height="48" rx="8"/><rect x="280" y="200" width="150" height="48" rx="8"/><rect x="78" y="270" width="150" height="48" rx="8"/><rect x="280" y="270" width="150" height="48" rx="8"/></g>
+<g fill="#29454a" text-anchor="middle" font-size="16" font-weight="700"><text x="153" y="230">Model + Optimizer</text><text x="355" y="230">RNG + Data State</text><text x="153" y="300">Serialize / Shard</text><text x="355" y="300">Disk / Object Store</text></g>
+<path d="M228 224H280M153 248V270M355 248V270" stroke="#66858a" stroke-width="2.5"/>
+<rect x="525" y="90" width="430" height="290" rx="16" fill="#eeebf8" stroke="#aaa1d0" stroke-width="2"/>
+<text x="555" y="132" font-size="23" fill="#62568f" font-weight="850">Activation Checkpoint</text>
+<text x="555" y="164" font-size="15" fill="#6c658f">重计算激活 · 为显存优化服务</text>
+<g fill="#fff" stroke="#b8afd8" stroke-width="1.5"><rect x="565" y="200" width="105" height="48" rx="8"/><rect x="690" y="200" width="105" height="48" rx="8"/><rect x="815" y="200" width="105" height="48" rx="8"/></g>
+<g fill="#51487f" text-anchor="middle" font-size="15" font-weight="700"><text x="617" y="230">Forward</text><text x="742" y="230">Boundary</text><text x="867" y="230">Backward</text></g>
+<path d="M670 224H690M795 224H815" stroke="#7165a7" stroke-width="2.5"/>
+<path d="M742 250V278H867V250" fill="none" stroke="#7165a7" stroke-width="2.5" stroke-dasharray="6 4"/>
+<text x="805" y="303" text-anchor="middle" fill="#62568f" font-size="15">重跑部分 forward</text>
+<text x="742" y="346" text-anchor="middle" fill="#6c658f" font-size="14">计算换显存 · 不负责持久化续训</text>
+</g></svg>
