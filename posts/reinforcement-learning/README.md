@@ -14,3 +14,4 @@
 - [Understanding PPO](ppo/index.html)：为什么用 clipped surrogate、如何估计优势以及两种 KL 的区别。
 
 后续可拓展 Double DQN、Dueling DQN、DDPG、TD3、TRPO、RLHF 的具体算法。所有文章须具有 `index.html`、`assets/*.svg`、`evidence.json`，并在 `content/posts.json` 登记；草稿不会发布到 GitHub Pages。
+- [Understanding Imitation Learning](imitation-learning/index.html)：行为克隆、协变量偏移、DAgger、IRL、GAIL 和 Diffusion Policy；区分示范监督与奖励驱动学习。
