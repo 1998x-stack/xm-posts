@@ -81,8 +81,12 @@ def run(output:Path, site:Path):
                         category.select_option('')
                         search=page.locator('[data-search-input]')
                         search.fill('ResNet')
-                        shown=page.locator('[data-post-card]:visible').count()
-                        assert shown==1,f'expected 1 matching ResNet, got {shown}'
+                        shown=page.locator('[data-post-card]:visible')
+                        assert shown.count()>=1, 'ResNet search returned no results'
+                        assert all('resnet' in (shown.nth(i).get_attribute('data-search') or '')
+                                   for i in range(shown.count())), 'Search includes an unrelated article'
+                        resnet_card=shown.filter(has=page.locator('a[href$="/architectures/resnet/"]'))
+                        assert resnet_card.count()==1, 'Search must include exactly one ResNet article card'
                         search.fill('no-article-matches-this')
                         assert page.locator('[data-no-results]').is_visible()
                         search.fill('')
