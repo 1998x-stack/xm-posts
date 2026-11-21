@@ -1,0 +1,92 @@
+[
+  {
+    "id": "A01",
+    "kind": "paper-claim",
+    "claim": "Prefill is highly parallel whereas decode is sequential token-wise and relatively memory-oriented",
+    "source_url": "https://www.usenix.org/conference/osdi24/presentation/agrawal",
+    "locator": "Abstract and §2",
+    "status": "verified",
+    "notes": "Claims and results are scoped to source models, workload and metrics."
+  },
+  {
+    "id": "A02",
+    "kind": "paper-claim",
+    "claim": "Conventional request-level decode-prioritizing batching delays admission; eager prefill can stall ongoing decodes",
+    "source_url": "https://arxiv.t3mt.com/html/2403.02310v3",
+    "locator": "§2.5 and §3",
+    "status": "verified",
+    "notes": "Claims and results are scoped to source models, workload and metrics."
+  },
+  {
+    "id": "A03",
+    "kind": "paper-claim",
+    "claim": "Sarathi-Serve uses chunked-prefills and stall-free scheduling",
+    "source_url": "https://www.usenix.org/conference/osdi24/presentation/agrawal",
+    "locator": "Abstract and §4.1–§4.2",
+    "status": "verified",
+    "notes": "Claims and results are scoped to source models, workload and metrics."
+  },
+  {
+    "id": "A04",
+    "kind": "paper-claim",
+    "claim": "The algorithm reserves all ongoing decode tokens before filling prefill chunks from a per-iteration token budget",
+    "source_url": "https://arxiv.t3mt.com/html/2403.02310v3",
+    "locator": "Algorithm 3, §4.2",
+    "status": "verified",
+    "notes": "Claims and results are scoped to source models, workload and metrics."
+  },
+  {
+    "id": "A05",
+    "kind": "paper-claim",
+    "claim": "Token budget is selected by profiling latency and prefill overhead against TBT SLO",
+    "source_url": "https://arxiv.t3mt.com/html/2403.02310v3",
+    "locator": "§4.3 Determining Token Budget",
+    "status": "verified",
+    "notes": "Claims and results are scoped to source models, workload and metrics."
+  },
+  {
+    "id": "A06",
+    "kind": "paper-claim",
+    "claim": "Each new prefill chunk reads historical KV states of previous chunks, increasing accesses",
+    "source_url": "https://arxiv.t3mt.com/html/2403.02310v3",
+    "locator": "§4.3",
+    "status": "verified",
+    "notes": "Claims and results are scoped to source models, workload and metrics."
+  },
+  {
+    "id": "A07",
+    "kind": "paper-claim",
+    "claim": "Paper reports 2.6x/3.7x/5.6x serving capacity improvements in named hardware/model comparisons",
+    "source_url": "https://www.usenix.org/conference/osdi24/presentation/agrawal",
+    "locator": "Abstract, §5; Mistral-7B, Yi-34B, Falcon-180B",
+    "status": "verified",
+    "notes": "Claims and results are scoped to source models, workload and metrics."
+  },
+  {
+    "id": "A08",
+    "kind": "paper-claim",
+    "claim": "The Table 4 ablation isolates hybrid batching vs chunked prefill and their combination",
+    "source_url": "https://arxiv.t3mt.com/html/2403.02310v3",
+    "locator": "§5.4.2 Table 4",
+    "status": "verified",
+    "notes": "Claims and results are scoped to source models, workload and metrics."
+  },
+  {
+    "id": "A09",
+    "kind": "derived-math",
+    "claim": "Decode-first toy token budget equation is an independent teaching abstraction",
+    "source_url": "https://www.usenix.org/conference/osdi24/presentation/agrawal",
+    "locator": "Derived from Algorithm 3, not original closed-form guarantee",
+    "status": "derived",
+    "notes": "Illustrative; no empirical performance measured."
+  },
+  {
+    "id": "A10",
+    "kind": "toy-model",
+    "claim": "Python budget planner tests allocation invariants only, not GPU TBT",
+    "source_url": "https://www.usenix.org/conference/osdi24/presentation/agrawal",
+    "locator": "Independent deterministic teaching program",
+    "status": "illustrative",
+    "notes": "Illustrative; no empirical performance measured."
+  }
+]
