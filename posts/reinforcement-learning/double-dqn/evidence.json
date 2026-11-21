@@ -1,0 +1,38 @@
+[
+  {
+    "id": "D01",
+    "claim": "Deep Reinforcement Learning with Double Q-learning was published by Hado van Hasselt, Arthur Guez, and David Silver at AAAI 2016.",
+    "kind": "bibliography",
+    "source_url": "https://doi.org/10.1609/aaai.v30i1.10295",
+    "locator": "AAAI 2016 official proceedings",
+    "status": "verified",
+    "notes": "Conference publication and author names; arXiv first submitted in 2015."
+  },
+  {
+    "id": "D02",
+    "claim": "The paper extends Double Q-learning to DQN by selecting the maximizing action with online parameters and evaluating it with target parameters.",
+    "kind": "algorithm",
+    "source_url": "https://arxiv.org/abs/1509.06461",
+    "locator": "Double DQN algorithm, equation 4",
+    "status": "verified",
+    "notes": "Do not confuse Double DQN with the original tabular Double Q-learning, which maintains two estimators."
+  },
+  {
+    "id": "D03",
+    "claim": "The authors reported overestimation in some Atari games and improved results on several games with Double DQN.",
+    "kind": "experiment",
+    "source_url": "https://doi.org/10.1609/aaai.v30i1.10295",
+    "locator": "Abstract and Atari experiments",
+    "status": "verified",
+    "notes": "Limited to the paper's evaluated Atari games and baselines; no universal performance claim."
+  },
+  {
+    "id": "D04",
+    "claim": "For online estimates (6,4) and target estimates (4.5,5.5), DQN bootstrap value is 5.5 while Double DQN bootstrap value is 4.5.",
+    "kind": "toy-derivation",
+    "source_url": "https://arxiv.org/abs/1509.06461",
+    "locator": "Pedagogical calculation using equation 4",
+    "status": "derived",
+    "notes": "Independently constructed numerical example, not reported experiment; assumes two actions and no terminal transition."
+  }
+]
