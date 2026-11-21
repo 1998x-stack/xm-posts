@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 350" role="img" aria-labelledby="il-fig2-title il-fig2-desc">
+<title id="il-fig2-title">专家状态分布与学习者状态分布的偏移</title><desc id="il-fig2-desc">左图中专家轨迹稳定地沿目标路径前进；右图中学习者的一次偏差使后续状态逐渐偏离专家数据覆盖区域。</desc>
+<rect x="10" y="10" width="880" height="330" rx="18" fill="#f7faf8"/>
+<rect x="28" y="48" width="405" height="254" rx="14" fill="#edf6f1" stroke="#d2e5dc"/><rect x="467" y="48" width="405" height="254" rx="14" fill="#fbf1e9" stroke="#ead7c6"/>
+<text x="230" y="34" text-anchor="middle" font-size="20" font-weight="700" fill="#28584f">专家示范分布 dE</text><text x="670" y="34" text-anchor="middle" font-size="20" font-weight="700" fill="#84512e">学习者诱导分布 dπ</text>
+<g stroke="#b6c9c0" stroke-width="1.5"><path d="M75 260 H395 M75 260 V82"/><path d="M514 260 H834 M514 260 V82"/></g>
+<path d="M90 226 C160 208 220 188 285 160 S360 122 388 110" fill="none" stroke="#2c8a75" stroke-width="7" stroke-linecap="round"/>
+<g fill="#2c8a75"><circle cx="105" cy="222" r="7"/><circle cx="165" cy="204" r="7"/><circle cx="225" cy="183" r="7"/><circle cx="285" cy="160" r="7"/><circle cx="345" cy="132" r="7"/></g>
+<text x="230" y="285" text-anchor="middle" font-size="15" fill="#3d6d62">训练样本覆盖的状态</text>
+<path d="M530 226 C590 210 640 192 694 165 S772 116 820 82" fill="none" stroke="#c47b42" stroke-width="7" stroke-linecap="round" stroke-dasharray="10 8"/>
+<g fill="#c47b42"><circle cx="544" cy="222" r="7"/><circle cx="604" cy="206" r="7"/><circle cx="664" cy="180" r="7"/><circle cx="724" cy="150" r="7"/><circle cx="784" cy="112" r="7"/></g>
+<path d="M664 180 L694 165" stroke="#9e4e39" stroke-width="2.5"/><path d="M694 165 L704 179 L685 178 Z" fill="#9e4e39"/>
+<text x="704" y="222" font-size="14" fill="#8b5637">偏离后进入</text><text x="704" y="242" font-size="14" fill="#8b5637">未见状态</text>
+<text x="670" y="285" text-anchor="middle" font-size="15" fill="#8b5637">后续动作在新状态上继续执行</text>
+</svg>

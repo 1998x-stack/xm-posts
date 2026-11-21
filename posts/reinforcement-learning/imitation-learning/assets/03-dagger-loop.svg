@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 360" role="img" aria-labelledby="il-fig3-title il-fig3-desc">
+<title id="il-fig3-title">DAgger 数据集聚合闭环</title><desc id="il-fig3-desc">当前策略在环境中运行，收集学习者实际访问的状态，请专家为这些状态标注动作，把新样本加入数据集，再训练下一轮策略。</desc>
+<defs><marker id="il-fig3-arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#477b78"/></marker></defs>
+<rect x="10" y="10" width="880" height="340" rx="18" fill="#f7faf8"/>
+<g fill="none" stroke="#477b78" stroke-width="4" marker-end="url(#il-fig3-arrow)"><path d="M450 90 V122"/><path d="M560 172 H620"/><path d="M710 222 V260"/><path d="M620 302 H280"/><path d="M190 260 V222"/><path d="M280 172 H340"/></g>
+<rect x="340" y="30" width="220" height="60" rx="12" fill="#e9e4fb" stroke="#8a79c4" stroke-width="2"/><text x="450" y="67" text-anchor="middle" font-size="20" font-weight="700" fill="#4d417e">当前策略 πk</text>
+<rect x="340" y="122" width="220" height="60" rx="12" fill="#e6edf2" stroke="#8299aa" stroke-width="2"/><text x="450" y="159" text-anchor="middle" font-size="19" font-weight="700" fill="#344f61">学习者实际 rollout</text>
+<rect x="620" y="162" width="180" height="60" rx="12" fill="#fff0db" stroke="#d59b4e" stroke-width="2"/><text x="710" y="199" text-anchor="middle" font-size="18" font-weight="700" fill="#714d1c">专家标注 πE(s)</text>
+<rect x="620" y="260" width="180" height="60" rx="12" fill="#d8eee8" stroke="#6aa69a" stroke-width="2"/><text x="710" y="297" text-anchor="middle" font-size="18" font-weight="700" fill="#244e4b">聚合数据集 Dk+1</text>
+<rect x="100" y="260" width="180" height="60" rx="12" fill="#d8eee8" stroke="#6aa69a" stroke-width="2"/><text x="190" y="297" text-anchor="middle" font-size="18" font-weight="700" fill="#244e4b">重新训练 πk+1</text>
+<rect x="100" y="162" width="180" height="60" rx="12" fill="#f7e6e1" stroke="#c77d67" stroke-width="2"/><text x="190" y="199" text-anchor="middle" font-size="18" font-weight="700" fill="#824637">访问状态 sk</text>
+<text x="450" y="215" text-anchor="middle" font-size="14" fill="#536d69">收集的是学习者走到的状态</text><text x="450" y="343" text-anchor="middle" font-size="14" fill="#536d69">新数据补足分布缺口，再进入下一轮训练</text>
+</svg>

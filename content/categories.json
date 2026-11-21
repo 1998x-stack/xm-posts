@@ -228,6 +228,10 @@
       {
         "slug": "off-policy-evaluation",
         "title": "Off-policy Evaluation & Importance Sampling"
+      },
+      {
+        "slug": "imitation-learning",
+        "title": "Imitation Learning & Learning from Demonstrations"
       }
     ]
   },

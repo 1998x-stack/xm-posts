@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 380" role="img" aria-labelledby="il-fig6-title il-fig6-desc">
+<title id="il-fig6-title">模仿学习的双轴分类</title><desc id="il-fig6-desc">模仿学习需要同时区分监督信号与学习对象 / 模型形式。BC 学习直接策略，DAgger 负责学习者状态上的数据聚合，IRL 推断奖励，GAIL 匹配占用分布，Diffusion Policy 表达生成式动作分布。</desc>
+<rect x="10" y="10" width="880" height="360" rx="18" fill="#f7faf8"/>
+<text x="450" y="42" text-anchor="middle" font-size="21" font-weight="700" fill="#294d4b">不是一条算法排行榜，而是两个相互独立的设计维度</text>
+<text x="38" y="95" font-size="16" font-weight="700" fill="#536d69">学习信号</text>
+<g><rect x="160" y="68" width="205" height="52" rx="10" fill="#d8eee8"/><text x="262" y="101" text-anchor="middle" font-size="17" fill="#244e4b">专家动作示范</text><rect x="382" y="68" width="205" height="52" rx="10" fill="#fff0db"/><text x="484" y="101" text-anchor="middle" font-size="17" fill="#714d1c">在线纠错标注（DAgger）</text><rect x="604" y="68" width="250" height="52" rx="10" fill="#e9e4fb"/><text x="729" y="101" text-anchor="middle" font-size="17" fill="#4d417e">推断目标 / 分布匹配</text></g>
+<text x="38" y="165" font-size="16" font-weight="700" fill="#536d69">学习对象 / 模型形式</text>
+<g><rect x="160" y="142" width="694" height="55" rx="10" fill="#edf6f1" stroke="#c7dfd4"/><text x="180" y="176" font-size="16" font-weight="700" fill="#28584f">直接策略</text><text x="410" y="176" font-size="16" fill="#315f5a">BC</text></g>
+<g><rect x="160" y="210" width="694" height="55" rx="10" fill="#fff6e9" stroke="#ead9b8"/><text x="180" y="244" font-size="16" font-weight="700" fill="#805a24">奖励 / 占用度量</text><text x="410" y="244" font-size="16" fill="#805a24">IRL / MaxEnt IRL</text><text x="640" y="244" font-size="16" fill="#805a24">GAIL</text></g>
+<g><rect x="160" y="278" width="694" height="55" rx="10" fill="#eef1fa" stroke="#d3d8ee"/><text x="180" y="312" font-size="16" font-weight="700" fill="#4d4d83">生成式动作分布</text><text x="410" y="312" font-size="16" fill="#4d4d83">Diffusion Policy</text></g>
+<text x="450" y="355" text-anchor="middle" font-size="13" fill="#657b78">交叉关系可组合：例如扩散策略仍可使用专家示范进行行为克隆式训练</text>
+</svg>

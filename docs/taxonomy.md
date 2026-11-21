@@ -157,3 +157,8 @@
 - **Ontology → Knowledge Graph → Retrieval / RAG**：显式语义知识与统计检索互补，不互相替代。
 - **Probability Calibration → Cost-sensitive Decision → Selective Prediction → Agent Routing**：从可信概率到风险敏感的执行、复核或拒绝。
 
+### 模仿学习（Imitation Learning）
+
+- **主归属**：`reinforcement-learning / imitation-learning`（稳定二级 Topic，现有一级分类不变），以「从专家示范学习策略」为核心。
+- **教学范围**：Behavior Cloning、协变量偏移、DAgger、Inverse Reinforcement Learning、MaxEnt IRL、GAIL 与 Diffusion Policy。
+- **概念边界**：模仿学习并不要求显式环境奖励；置于强化学习导航区是为了连接策略学习和决策问题，而不是宣称模仿学习是奖励驱动 RL 的严格子集。数据聚合程序、逆奖励推断、占用测度匹配与生成式动作模型应区分学习信号和模型结构。
