@@ -190,8 +190,8 @@
     "posts": [
       "bellman-equations",
       "dqn",
-      "c51",
-      "noisynet"
+      "noisynet",
+      "c51"
     ]
   },
   {
@@ -303,6 +303,7 @@
       "transformer",
       "kv-cache",
       "pagedattention",
+      "continuous-batching",
       "speculative-decoding"
     ]
   },
@@ -593,6 +594,18 @@
       "ppo",
       "imitation-learning",
       "alphago"
+    ]
+  },
+  {
+    "id": "path-serving-scheduler-01",
+    "title": "从动态组批到缓存感知与分块调度",
+    "posts": [
+      "transformer",
+      "kv-cache",
+      "pagedattention",
+      "continuous-batching",
+      "sglang-radixattention",
+      "sarathi-serve"
     ]
   }
 ]

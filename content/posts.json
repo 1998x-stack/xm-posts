@@ -2864,6 +2864,81 @@
     }
   },
   {
+    "slug": "continuous-batching",
+    "title": "Understanding Continuous Batching and Orca",
+    "subtitle": "从请求级批处理到迭代级调度、Selective Batching 与 KV 生命周期",
+    "category": "inference",
+    "topic": "continuous-batching",
+    "status": "published",
+    "published": "2026-11-21",
+    "updated": "2026-11-21",
+    "reading_minutes": 23,
+    "tags": [
+      "Orca",
+      "Iteration-level Scheduling",
+      "Selective Batching",
+      "Inference Scheduling"
+    ],
+    "summary": "精读经典 Serving 系统论文，以原生 MathML、三幅原创机制 SVG、可操作调度实验和纯 Python 数值/状态不变量测试解释论文提出的核心方法及其工程边界。",
+    "paper": "https://www.usenix.org/conference/osdi22/presentation/yu",
+    "illustration": "continuous-batching",
+    "cover": {
+      "src": "assets/01-batch-timeline.svg",
+      "caption": "请求级批次必须等待整组结束，迭代级批次允许已完成请求退出与新请求加入"
+    }
+  },
+  {
+    "slug": "sglang-radixattention",
+    "title": "Understanding SGLang and RadixAttention",
+    "subtitle": "从压缩 Radix Tree、KV 前缀共享到结构化生成程序与缓存感知调度",
+    "category": "inference",
+    "topic": "prefix-caching",
+    "status": "published",
+    "published": "2026-11-21",
+    "updated": "2026-11-21",
+    "reading_minutes": 27,
+    "tags": [
+      "SGLang",
+      "RadixAttention",
+      "Radix Tree",
+      "Prefix Caching",
+      "Compressed FSM"
+    ],
+    "summary": "精读经典 Serving 系统论文，以原生 MathML、三幅原创机制 SVG、可操作调度实验和纯 Python 数值/状态不变量测试解释论文提出的核心方法及其工程边界。",
+    "paper": "https://proceedings.nips.cc/paper_files/paper/2024/hash/724be4472168f31ba1c9ac630f15dec8-Abstract-Conference.html",
+    "illustration": "sglang-radixattention",
+    "cover": {
+      "src": "assets/01-compressed-prefix-tree.svg",
+      "caption": "不同请求在压缩前缀树上共享模型已算过的 KV 前缀，分叉处才分别计算"
+    }
+  },
+  {
+    "slug": "sarathi-serve",
+    "title": "Understanding Sarathi-Serve: Chunked Prefill and Scheduling",
+    "subtitle": "用 token budget 与 Decode 优先混合批次降低 Prefill 对流式输出的干扰",
+    "category": "inference",
+    "topic": "request-scheduling",
+    "status": "published",
+    "published": "2026-11-21",
+    "updated": "2026-11-21",
+    "reading_minutes": 26,
+    "tags": [
+      "Sarathi-Serve",
+      "Chunked Prefill",
+      "Stall-free Batching",
+      "Tail Latency",
+      "TTFT",
+      "TBT"
+    ],
+    "summary": "精读经典 Serving 系统论文，以原生 MathML、三幅原创机制 SVG、可操作调度实验和纯 Python 数值/状态不变量测试解释论文提出的核心方法及其工程边界。",
+    "paper": "https://www.usenix.org/conference/osdi24/presentation/agrawal",
+    "illustration": "sarathi-serve",
+    "cover": {
+      "src": "assets/02-token-budget.svg",
+      "caption": "每轮先保留 Decode token 槽位，其余 token budget 才填入一个 Prefill 分块"
+    }
+  },
+  {
     "slug": "c51",
     "title": "Understanding C51: Distributional Reinforcement Learning",
     "subtitle": "从回报分布到 51 个固定原子：理解分布式 Bellman 更新与概率质量投影",
