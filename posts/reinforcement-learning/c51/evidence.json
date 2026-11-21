@@ -5,7 +5,8 @@
     "kind": "bibliography",
     "source_url": "https://proceedings.mlr.press/v70/bellemare17a.html",
     "locator": "PMLR official proceedings",
-    "status": "verified"
+    "status": "verified",
+    "notes": "Bibliographic metadata is checked against the official PMLR proceedings record; this establishes publication details, not algorithmic performance."
   },
   {
     "id": "C02",
@@ -13,7 +14,8 @@
     "kind": "algorithm",
     "source_url": "https://arxiv.org/abs/1707.06887",
     "locator": "Sections 3–4, categorical algorithm",
-    "status": "verified"
+    "status": "verified",
+    "notes": "The fixed 51-atom categorical support and projection steps describe the original C51 method; distinguish this from later distributional RL variants."
   },
   {
     "id": "C03",
@@ -21,7 +23,8 @@
     "kind": "theory",
     "source_url": "https://proceedings.mlr.press/v70/bellemare17a.html",
     "locator": "Theoretical analysis",
-    "status": "verified"
+    "status": "verified",
+    "notes": "The theoretical statement is scoped to the paper's distributional policy-evaluation and control results; do not generalize the contraction claim to all control settings."
   },
   {
     "id": "C04",
@@ -29,6 +32,7 @@
     "kind": "toy-derivation",
     "source_url": "https://arxiv.org/abs/1707.06887",
     "locator": "Independent pedagogical arithmetic based on linear projection, not experimental data",
-    "status": "derived"
+    "status": "derived",
+    "notes": "See the cited paper locator; distinguish this source claim from the article's independent teaching example."
   }
 ]

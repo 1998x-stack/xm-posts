@@ -3,18 +3,78 @@
 from __future__ import annotations
 import argparse, json, re, sys
 from pathlib import Path
+from urllib.parse import urlparse
 from bs4 import BeautifulSoup
 
 # Production-process labels are disallowed inside an article; they belong in project docs.
 BANNED = (
     '原创图解 · 单文件离线 HTML',
     '用直觉 → 图示 → 数学 → 工程实现，理解残差网络 · 参考 Colah 风格，非原文翻译',
+
 )
+
+ALLOWED_EVIDENCE_STATUS = {"verified", "derived", "illustrative", "unverified"}
+REQUIRED_EVIDENCE_FIELDS = ("id", "claim", "kind", "source_url", "locator", "status")
+
+
+def validate_evidence_ledger(path: Path) -> dict:
+    """Validate the traceability structure without pretending to verify claims."""
+    failures, warnings = [], []
+    if not path.is_file():
+        return {"pass": False, "claim_count": 0,
+                "failures": [f"Missing evidence ledger: {path}"], "warnings": []}
+    try:
+        entries = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, UnicodeError, json.JSONDecodeError) as exc:
+        return {"pass": False, "claim_count": 0,
+                "failures": [f"Invalid evidence JSON: {exc}"], "warnings": []}
+    if not isinstance(entries, list) or not entries:
+        return {"pass": False, "claim_count": 0,
+                "failures": ["Evidence ledger must be a non-empty JSON array"], "warnings": []}
+    seen_ids = set()
+    for index, entry in enumerate(entries, 1):
+        label = f"evidence entry {index}"
+        if not isinstance(entry, dict):
+            failures.append(f"{label}: expected an object")
+            continue
+        for field in REQUIRED_EVIDENCE_FIELDS:
+            value = entry.get(field)
+            if not isinstance(value, str) or not value.strip():
+                failures.append(f"{label}: missing or empty {field}")
+        identifier = entry.get("id")
+        if isinstance(identifier, str) and identifier.strip():
+            if identifier in seen_ids:
+                failures.append(f"{label}: duplicate id {identifier}")
+            seen_ids.add(identifier)
+        status = entry.get("status")
+        if status not in ALLOWED_EVIDENCE_STATUS:
+            failures.append(f"{label}: invalid status {status!r}")
+        source = entry.get("source_url")
+        if isinstance(source, str) and source.strip():
+            parsed = urlparse(source)
+            if parsed.scheme != "https" or not parsed.netloc:
+                failures.append(f"{label}: source_url must be an absolute HTTPS URL")
+        notes = entry.get("notes")
+        if not isinstance(notes, str) or not notes.strip():
+            warnings.append(f"{label}: notes should explain scope, caveat, or verification boundary")
+        if status == "unverified":
+            warnings.append(f"{label}: claim is explicitly marked unverified")
+    return {"pass": not failures, "claim_count": len(entries),
+            "failures": failures, "warnings": warnings}
+
 
 def validate(path: Path) -> dict:
     html = path.read_text(encoding='utf-8')
     soup = BeautifulSoup(html, 'html.parser')
     failures, warnings = [], []
+    evidence_path = path.parent / 'evidence.json'
+    if evidence_path.is_file():
+        evidence = validate_evidence_ledger(evidence_path)
+        failures.extend(evidence['failures'])
+        warnings.extend(evidence['warnings'])
+    else:
+        # Isolated validator fixtures may omit repository-level publication assets.
+        evidence = {'claim_count': 0, 'warnings': ['Evidence ledger absent from isolated validation fixture']}
     h1 = soup.find_all('h1')
     if len(h1) != 1: failures.append(f'Expected exactly one h1, found {len(h1)}')
     if not soup.find('main'): failures.append('Missing semantic main')
@@ -51,8 +111,9 @@ def validate(path: Path) -> dict:
         if script['src'].startswith('http'): warnings.append('External JS dependency: ' + script['src'])
     for link in soup.find_all('link', href=True):
         if link['href'].startswith('http'): warnings.append('External stylesheet dependency: ' + link['href'])
-    # MathML is optional for legacy articles; whenever present it must be well formed.
+    # Every published article carries at least one semantic MathML expression.
     maths = soup.find_all('math')
+    if not maths: failures.append('Missing native MathML; published articles require semantic math')
     for idx, math in enumerate(maths, 1):
         if math.find_parent('svg'):
             failures.append(f'MathML {idx} nested inside SVG (invalid namespace)')
@@ -78,7 +139,7 @@ def validate(path: Path) -> dict:
         warnings.append('No obvious primary-paper reference in article')
     return {
         'path': str(path), 'pass': not failures,
-        'counts': {'h2': len(soup.find_all('h2')), 'figures': len(figures), 'svg': len(svgs), 'buttons': len(soup.find_all('button')), 'mathml': len(maths)},
+        'counts': {'h2': len(soup.find_all('h2')), 'figures': len(figures), 'svg': len(svgs), 'buttons': len(soup.find_all('button')), 'mathml': len(maths), 'evidence_claims': evidence['claim_count']},
         'failures': failures, 'warnings': warnings,
     }
 

@@ -42,6 +42,8 @@ def source_articles(root=ROOT):
             assert bad not in article,f'Forbidden production text: {bad} in {f}'
         result=mod.validate(f)
         assert result['pass'],result
+        for warning in result.get('warnings', []):
+            print('ARTICLE WARN', p['slug'], warning)
         assert (f.parent/'evidence.json').exists()
         assert len(list((f.parent/'assets').glob('*.svg'))) >= 3,'Need multiple standalone SVGs'
         print('ARTICLE OK',p['slug'],result['counts'])
