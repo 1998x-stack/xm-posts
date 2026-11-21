@@ -3,7 +3,7 @@
 > 维护对象：`content/categories.json`（一级分类与稳定二级 topic slug）、`content/posts.json`（每篇文章的唯一主分类/主专题）。
 > `posts/<category>/_topics/<topic>/README.md` 是规划占位，不是文章，也不是发布目录；`posts/<category>/<slug>/index.html` 才是文章源文件。
 
-## 14 个一级分类及领域边界
+## 一级分类及领域边界
 
 | 分类 slug | 收录范围 | 与邻近类别的边界 |
 | --- | --- | --- |
