@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 360" role="img" aria-labelledby="m1t m1d"><title id="m1t">选择性记忆：按内容保存关键 token</title><desc id="m1d">上方固定写入轨迹持续受干扰，下方选择性轨迹仅对关键 token 明显更新状态，噪声时保留旧状态。</desc>
+<rect width="980" height="360" rx="22" fill="#f4f9f6"/>
+<text x="42" y="46" font-size="23" font-family="system-ui" fill="#204a48" font-weight="700">同一段输入，为什么需要选择性记忆？</text>
+<g font-family="system-ui" font-size="20" text-anchor="middle">
+<rect x="48" y="88" width="115" height="64" rx="12" fill="#d3ebe0"/><text x="105" y="129" fill="#125a4e">A · 关键</text>
+<rect x="211" y="88" width="115" height="64" rx="12" fill="#e7eaf0"/><text x="268" y="129" fill="#65717c">噪声</text>
+<rect x="374" y="88" width="115" height="64" rx="12" fill="#e7eaf0"/><text x="431" y="129" fill="#65717c">噪声</text>
+<rect x="537" y="88" width="115" height="64" rx="12" fill="#d3ebe0"/><text x="594" y="129" fill="#125a4e">B · 关键</text>
+<rect x="700" y="88" width="115" height="64" rx="12" fill="#e7eaf0"/><text x="758" y="129" fill="#65717c">噪声</text>
+</g>
+<g stroke="#9db8b1" stroke-width="3"><path d="M163 121 H211 M326 121 H374 M489 121 H537 M652 121 H700" /></g>
+<text x="44" y="205" font-size="18" fill="#9b6041" font-family="system-ui" font-weight="600">固定混合：每步类似地扰动记忆</text><path d="M50 235 L195 224 L340 263 L485 213 L630 265 L775 239 L905 284" stroke="#b66c45" stroke-width="5" stroke-linecap="round" fill="none"/><circle cx="905" cy="284" r="8" fill="#b66c45"/>
+<text x="44" y="303" font-size="18" fill="#126a61" font-family="system-ui" font-weight="600">选择性更新：跳过噪声，保留有效信息</text><path d="M360 296 L485 296 L630 254 L775 254 L905 254" stroke="#15887c" stroke-width="5" fill="none" stroke-linecap="round"/><circle cx="905" cy="254" r="8" fill="#15887c"/>
+<text x="885" y="338" font-size="13" text-anchor="end" fill="#57746e" font-family="system-ui">示意图：线条不代表真实模型权重</text></svg>
