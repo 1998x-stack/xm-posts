@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light"><meta name="description" content="从选择性复制与状态空间方程出发，精读 Gu 和 Dao 2023 年的 Mamba：输入依赖参数、离散化、门控、Selective Scan、GPU 内存层次与实验边界。">
+<link rel="canonical" href="https://1998x-stack.github.io/xm-posts/posts/architectures/mamba/">
+<title>Understanding Mamba · Selective State Spaces · xm-posts</title>
+<style>
+:root{--ink:#1f3f47;--muted:#59747a;--accent:#15786c;--line:#dae6e2;--paper:#ffffff;--bg:#f6faf8;--warm:#ad673d}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.86 system-ui,-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}
+a{color:var(--accent);text-underline-offset:4px}a:hover{color:var(--warm)}a:focus-visible,button:focus-visible,[tabindex]:focus-visible{outline:3px solid #dd995f;outline-offset:3px}
+.skip{position:absolute;top:-100px;left:12px;padding:8px 15px;background:#173c41;color:#fff;z-index:10}.skip:focus{top:12px}
+.sitebar{border-bottom:1px solid var(--line);background:#fff}.siteinner{max-width:1230px;margin:auto;padding:13px 23px;display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap}.brand{font-size:21px;font-weight:850;color:var(--ink);text-decoration:none}.brand span{color:var(--warm)}.siteinner nav{display:flex;gap:16px;flex-wrap:wrap;font-size:13px}
+.layout{max-width:1225px;margin:auto;padding:65px 22px 100px;display:grid;grid-template-columns:204px minmax(0,860px);gap:56px}.toc{position:sticky;top:20px;align-self:start;max-height:calc(100vh - 40px);overflow:auto}.toc strong{display:block;color:var(--accent);font-size:12px;letter-spacing:.1em;margin-bottom:12px}.toc a{display:block;text-decoration:none;color:#597579;border-left:2px solid var(--line);font-size:12px;line-height:1.5;padding:7px 10px}.toc a:hover{background:#e9f3f0;border-color:var(--accent)}
+main,article{min-width:0}.eyebrow{font-size:12px;letter-spacing:.14em;color:var(--accent);font-weight:800}h1{font-size:clamp(42px,5.6vw,73px);line-height:1.07;letter-spacing:-.05em;margin:17px 0 22px}h1 em{font-style:normal;color:var(--accent)}
+.dek{font-size:21px;color:#4c6b6e;line-height:1.68}.meta{display:flex;flex-wrap:wrap;gap:10px 18px;border-top:1px solid var(--line);padding-top:18px;margin-top:26px;color:#648184;font-size:13px}
+.insight{border:1px solid #b9dcd0;background:#eaf7f0;border-radius:13px;padding:20px;margin-top:30px;font-size:18px}
+section{margin-top:67px;scroll-margin-top:23px}h2{font-size:clamp(25px,3.3vw,33px);line-height:1.32;letter-spacing:-.025em;margin:0 0 22px}h3{font-size:21px;line-height:1.4;margin:30px 0 11px}p{margin:0 0 18px;color:#37585d}strong{color:#285b53}.lead{font-size:19px;color:#2b6560}
+figure{margin:29px 0 32px;border:1px solid var(--line);border-radius:14px;background:#fff;padding:14px;min-width:0}.fig{color:var(--accent);font-size:11px;font-weight:800;letter-spacing:.1em;margin-bottom:9px}.figureview{overflow-x:auto;max-width:100%}.figureview img{width:100%;height:auto;display:block;min-width:560px}figcaption{font-size:13px;line-height:1.8;color:#667f83;margin-top:12px;padding-top:11px;border-top:1px solid #eaf0ed}
+.equation{display:flex;gap:7px;align-items:center;min-width:0;margin:22px 0;border-radius:11px;background:#e8f3ee;padding:13px 10px}.mathscroll{flex:1;min-width:0;max-width:100%;overflow-x:auto;overflow-y:hidden}.mathscroll math{display:block;width:max-content;min-width:100%;font:1.17rem "Cambria Math","STIX Two Math",serif;color:#1d625a}.eqnum{flex:none;font:12px ui-monospace,monospace;color:#65847b}
+.note{background:#fff4e8;border-left:4px solid #d8a06d;padding:15px 17px;margin:23px 0;color:#6d533d}.tablewrap{overflow-x:auto}table{border-collapse:collapse;min-width:600px;font-size:14px;width:100%}th,td{border:1px solid var(--line);padding:10px;vertical-align:top;text-align:left}th{background:#e7f4ee}
+code,pre{font-family:ui-monospace,Consolas,monospace}code{font-size:.87em;color:#22545a}pre{padding:19px;overflow-x:auto;border-radius:12px;background:#203e44;color:#f2f8f5;font-size:13px;line-height:1.75}
+.demo{border:1px solid #b6dacf;background:#fff;border-radius:14px;padding:22px;margin:25px 0}.controls{display:flex;gap:9px;flex-wrap:wrap;margin:17px 0}.controls button{background:#fff;border:1px solid #7ab6a6;color:#226459;border-radius:8px;padding:9px 15px;font:600 14px system-ui;cursor:pointer}.controls button[aria-pressed="true"]{background:#1c796d;color:#fff}
+.readout{padding:15px;border-radius:10px;background:#eaf5ef;font-variant-numeric:tabular-nums;color:#215f56}.sources li{margin:10px 0}.foot{margin-top:78px;border-top:1px solid var(--line);padding-top:18px;font-size:13px;color:#658184}
+@media(max-width:950px){.layout{display:block;max-width:870px;padding-top:32px}.toc{position:static;max-height:none;display:flex;flex-wrap:wrap;gap:5px;margin-bottom:30px}.toc strong{width:100%}.toc a{border:1px solid var(--line);padding:6px 9px;border-radius:6px}}
+@media(max-width:600px){body{font-size:16px}.layout{padding:27px 13px 65px}.siteinner{padding:10px 14px}.siteinner nav{gap:10px}.dek{font-size:18px}section{margin-top:50px}figure{padding:8px}.demo{padding:14px}.mathscroll math{font-size:1rem}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto!important}}
+@media print{body{background:#fff;font-size:11pt}.sitebar,.toc,.skip,.controls{display:none}.layout{display:block;padding:0}section{margin-top:27px}figure{break-inside:avoid}.mathscroll{overflow:visible}pre{background:#eee;color:#213c44}}
+</style></head>
+<body><a class="skip" href="#content">跳至正文</a>
+<header class="sitebar"><div class="siteinner"><a class="brand" href="../../../">xm<span>.</span>posts</a><nav aria-label="站点导航"><a href="../../../categories/architectures/">模型架构</a><a href="../../../topics/">知识地图</a><a href="../../../archive/">文章归档</a><a href="https://github.com/1998x-stack/xm-posts">GitHub</a></nav></div></header>
+<div class="layout"><nav class="toc" aria-label="本文目录"><strong>MAMBA · SELECTIVE SSM · 2023</strong>
+<a href="#problem">01 · 为什么长序列难</a><a href="#ssm">02 · 从动力系统到递推</a><a href="#selection">03 · 选择性如何产生</a><a href="#gating">04 · 门控的数学直觉</a><a href="#scan">05 · GPU Selective Scan</a><a href="#block">06 · 完整 Mamba Block</a><a href="#example">07 · 数字算例与交互</a><a href="#code">08 · 最小可验证代码</a><a href="#evidence">09 · 实验与边界</a><a href="#relationship">10 · 与注意力和后续工作</a><a href="#references">11 · 原始资料</a></nav>
+<main id="content"><article><header><div class="eyebrow">RESEARCH EXPLAINER / ARCHITECTURES / STATE SPACE MODELS</div><h1>Understanding <em>Mamba</em></h1>
+<p class="dek">Transformer 会回看历史 token；普通状态空间模型把历史压缩成小状态。Mamba 的突破不是“多记一点”，而是让状态决定 <strong>哪些信息值得写入、哪些应该保留</strong>，并设计 GPU 友好的并行扫描。</p>
+<div class="meta"><span>Albert Gu · Tri Dao</span><span>arXiv:2312.00752 · 2023</span><span>选择性状态空间模型（S6）</span><span>约 27 分钟</span></div>
+<div class="insight"><strong>先记住一句话：</strong>让 Δ、B、C 随输入 token 改变，使递推成为内容敏感的记忆压缩；再使用并行 scan、算子融合与重计算，避免“灵活但无法高效训练”的两难。<a href="https://arxiv.org/html/2312.00752">[原论文 §3]</a></div></header>
+
+<section id="problem"><h2>01 · 一段长文本，哪些内容必须记住？</h2><p class="lead">想象读到“密码为 A”，中间穿插一千个无关词，最后问“密码是什么”。模型不能只因为输入变长，就让噪声冲掉关键记忆。</p>
+<p>自注意力允许当前位置用 Query 与先前 Key 逐一比较；这种按内容检索的能力很强，但全序列密集注意力的计算与存储随长度增长。经典线性时不变状态空间模型（LTI SSM）把历史放进固定维度的隐藏状态，递推和卷积两种算法可互换，速度具有吸引力。问题是<strong>同一套固定动态参数对所有时刻相同</strong>，难以依据 token 的内容决定写入或忽略。</p>
+<p>Gu 与 Dao 设计的 Selective Copying 任务让有用 token 的间隔随机变化；它专门阻止模型只靠固定位置间隔完成复制。无关 token 与目标 token 应得到不同的记忆更新，而不只是不同的输出权重。<a href="https://arxiv.org/html/2312.00752">[论文 §3.1、Figure 2]</a></p>
+<figure><div class="fig">FIGURE 01 / 内容选择与记忆稳定性</div><div class="figureview"><img src="assets/01-selective-memory.svg" width="980" height="360" loading="lazy" alt="关键 token A、B 与噪声交替出现；选择性记忆尽量保留有用状态"></div><figcaption>图示比较固定混合和选择性更新的直觉。折线不是实际 Mamba 参数、性能曲线或训练权重；模型的选择参数由输入经过投影学习而来。</figcaption></figure>
+<div class="note"><strong>避免误解：</strong>“常数状态大小”不等于“永不丢信息”。有限维状态会压缩历史；选择性机制改善压缩策略，并不保证任意精确检索。</div></section>
+
+<section id="ssm"><h2>02 · SSM：连续时间系统怎样变成逐 token 运算？</h2>
+<p>先只考虑一个通道。连续输入为标量 <code>x(t)</code>；隐藏状态 <code>h(t)</code> 为 <code>N</code> 维向量；矩阵 <code>A∈R^{N×N}</code> 描述状态自身的演化，<code>B∈R^{N×1}</code> 把输入写入状态，<code>C∈R^{1×N}</code> 把状态读成输出。</p>
+<div class="equation" role="group" aria-label="连续时间状态演化"><div class="mathscroll" tabindex="0" role="region" aria-label="连续时间状态演化，可横向滚动"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block" aria-label="连续时间状态演化"><mrow><msup><mi>h</mi><mo>′</mo></msup><mo>(</mo><mi>t</mi><mo>)</mo><mo>=</mo><mi>A</mi><mi>h</mi><mo>(</mo><mi>t</mi><mo>)</mo><mo>+</mo><mi>B</mi><mi>x</mi><mo>(</mo><mi>t</mi><mo>)</mo></mrow></math></div><span class="eqnum">(1)</span></div>
+<div class="equation" role="group" aria-label="连续时间输出映射"><div class="mathscroll" tabindex="0" role="region" aria-label="连续时间输出映射，可横向滚动"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block" aria-label="连续时间输出映射"><mrow><mi>y</mi><mo>(</mo><mi>t</mi><mo>)</mo><mo>=</mo><mi>C</mi><mi>h</mi><mo>(</mo><mi>t</mi><mo>)</mo></mrow></math></div><span class="eqnum">(2)</span></div>
+<p>语言模型接收离散 token。采样间隔为 <code>Δ</code> 时，零阶保持（ZOH）把连续矩阵映射为离散矩阵。其状态转移为矩阵指数；写入项也取决于这一时间步的积分：</p>
+<div class="equation" role="group" aria-label="零阶保持离散化"><div class="mathscroll" tabindex="0" role="region" aria-label="零阶保持离散化，可横向滚动"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block" aria-label="零阶保持离散化"><mrow><mover><mi>A</mi><mo>¯</mo></mover><mo>=</mo><mi>exp</mi><mo>(</mo><mi>Δ</mi><mi>A</mi><mo>)</mo><mo>,</mo><mspace width="1em"/><mover><mi>B</mi><mo>¯</mo></mover><mo>=</mo><msubsup><mo>∫</mo><mn>0</mn><mi>Δ</mi></msubsup><mi>exp</mi><mo>(</mo><mi>s</mi><mi>A</mi><mo>)</mo><mi>B</mi><mi>d</mi><mi>s</mi></mrow></math></div><span class="eqnum">(3)</span></div>
+<div class="equation" role="group" aria-label="离散状态递推"><div class="mathscroll" tabindex="0" role="region" aria-label="离散状态递推，可横向滚动"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block" aria-label="离散状态递推"><mrow><msub><mi>h</mi><mi>t</mi></msub><mo>=</mo><mover><mi>A</mi><mo>¯</mo></mover><msub><mi>h</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>+</mo><mover><mi>B</mi><mo>¯</mo></mover><msub><mi>x</mi><mi>t</mi></msub><mo>,</mo><mspace width="1em"/><msub><mi>y</mi><mi>t</mi></msub><mo>=</mo><mi>C</mi><msub><mi>h</mi><mi>t</mi></msub></mrow></math></div><span class="eqnum">(4)</span></div>
+<p>论文的常见 ZOH 写法用 <code>(ΔA)⁻¹(exp(ΔA)−I)ΔB</code> 表示第二项；上面的积分式不要求显式对可能不可逆的矩阵求逆。若 <code>A、B、C、Δ</code> 与时间无关，展开递推会得到固定卷积核 <code>C B̄、C Ā B̄、C Ā² B̄…</code>，训练时就可以用卷积模式并行。<a href="https://arxiv.org/html/2312.00752">[论文 §2，式 (1)–(4)]</a></p></section>
+
+<section id="selection"><h2>03 · Mamba 如何从固定动态变成内容选择？</h2>
+<p>Mamba 的关键是把 SSM 中的 <code>B、C、Δ</code> 变为输入 <code>xₜ</code> 的函数。每个 token 经过线性投影产生读写方向和离散化步长；与保持为模型参数的 <code>A</code> 结合后，得到随时间变化的离散系数。时间变化意味着不再存在一条适用于全部输入的固定卷积核。</p>
+<div class="tablewrap"><table><thead><tr><th>量</th><th>原论文 Algorithm 2 的形状</th><th>机制</th></tr></thead><tbody><tr><td>输入 x</td><td>(B, L, D)</td><td>批次、长度、通道</td></tr><tr><td>A</td><td>(D, N)</td><td>每个通道的结构化状态动态，学习参数</td></tr><tr><td>B(x), C(x)</td><td>(B, L, N)</td><td>每个位置按内容选择写入与读出方向，广播到各通道</td></tr><tr><td>Δ(x)</td><td>(B, L, D)</td><td>每位置每通道的正步长</td></tr><tr><td>隐状态</td><td>(B, D, N)</td><td>自回归单步所需状态；训练时有中间状态但采用融合与重计算</td></tr></tbody></table></div>
+<figure><div class="fig">FIGURE 02 / 隐状态与输入依赖参数</div><div class="figureview"><img src="assets/02-state-equations.svg" width="980" height="380" loading="lazy" alt="输入 x_t 分别生成 B_t、Δ_t、C_t；状态更新得到 h_t，再经 C_t 读出"></div><figcaption>选择性 SSM 核心链路。为聚焦状态方程，省略外层 Mamba Block 的 Conv1D、逐点非线性、门控支路与残差。符号形状以原论文 Algorithm 2 为准。</figcaption></figure>
+<p>作者采用 <code>Bₜ=Linear_N(xₜ)</code>、<code>Cₜ=Linear_N(xₜ)</code>、<code>Δₜ=softplus(参数偏置 + Broadcast_D(Linear_1(xₜ)))</code> 这样的参数化。它既是内容选择，也是动态调节记忆随时间流动的速率。<a href="https://arxiv.org/html/2312.00752">[论文 §3.2]</a></p></section>
+
+<section id="gating"><h2>04 · 为什么 Δ 可以理解成门控？</h2>
+<p>设 <code>N=1，A=−1，B=1</code>。这是一个非常容易分析的泄漏积分器。其连续形式为 <code>h′=−h+x</code>。对输入在一个时间步内保持不变进行 ZOH 离散化：</p>
+<div class="equation" role="group" aria-label="可解释的标量门控递推"><div class="mathscroll" tabindex="0" role="region" aria-label="可解释的标量门控递推，可横向滚动"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block" aria-label="可解释的标量门控递推"><mrow><msub><mi>h</mi><mi>t</mi></msub><mo>=</mo><msup><mi>e</mi><mrow><mo>−</mo><msub><mi>Δ</mi><mi>t</mi></msub></mrow></msup><msub><mi>h</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>+</mo><mo>(</mo><mn>1</mn><mo>−</mo><msup><mi>e</mi><mrow><mo>−</mo><msub><mi>Δ</mi><mi>t</mi></msub></mrow></msup><mo>)</mo><msub><mi>x</mi><mi>t</mi></msub></mrow></math></div><span class="eqnum">(5)</span></div>
+<p>令 <code>gₜ=1−e^(−Δₜ)</code>，则 <code>hₜ=(1−gₜ)hₜ₋₁+gₜxₜ</code>：当 <code>gₜ</code> 很小，状态近似保持；当它很大，状态更倾向新输入。论文 Theorem 1 证明，在所述 <code>softplus</code> 参数化下它可化为 Sigmoid 型门控。此推导说明了选择性的数学来源，但<strong>不要把整个 Mamba 简化为一个标量 GRU</strong>：真实模型具有多通道、多维状态、输入投影和非线性模块。<a href="https://arxiv.org/html/2312.00752">[论文 §3.5.1、Appendix C]</a></p>
+<div class="note"><strong>直觉与定理的边界：</strong>标量等式是论文特殊条件下的精确结果；多维 Mamba 的行为不能通过这个单门公式完整推断。</div></section>
+
+<section id="scan"><h2>05 · 输入依赖破坏卷积，为什么还能快？</h2>
+<p>对固定 SSM，序列计算可转为卷积；对选择性 SSM，每个位置的系数都变，无法事先生成同一卷积核。然而「不能用固定卷积」并不等于「GPU 只能串行等待」。关键是仿射变换的结合律。</p>
+<p>把一步递推写成 <code>fₜ(h)=aₜh+bₜ</code>，用数对 <code>(aₜ,bₜ)</code> 表示。连续两步组合：</p>
+<div class="equation" role="group" aria-label="仿射状态更新的结合性组合"><div class="mathscroll" tabindex="0" role="region" aria-label="仿射状态更新的结合性组合，可横向滚动"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block" aria-label="仿射状态更新的结合性组合"><mrow><mo>(</mo><msub><mi>a</mi><mn>2</mn></msub><mo>,</mo><msub><mi>b</mi><mn>2</mn></msub><mo>)</mo><mo>∘</mo><mo>(</mo><msub><mi>a</mi><mn>1</mn></msub><mo>,</mo><msub><mi>b</mi><mn>1</mn></msub><mo>)</mo><mo>=</mo><mo>(</mo><msub><mi>a</mi><mn>2</mn></msub><msub><mi>a</mi><mn>1</mn></msub><mo>,</mo><msub><mi>a</mi><mn>2</mn></msub><msub><mi>b</mi><mn>1</mn></msub><mo>+</mo><msub><mi>b</mi><mn>2</mn></msub><mo>)</mo></mrow></math></div><span class="eqnum">(6)</span></div>
+<p>这个组合满足结合律（但通常不满足交换律），因此可以用并行前缀扫描求各位置的状态。真实模型的 <code>a</code> 可以是对角结构矩阵/逐元素系数，而不只是图中的标量。<strong>Parallel Scan 提升序列方向的并行度；它没有取消所有依赖，也不意味着零成本。</strong></p>
+<figure><div class="fig">FIGURE 03 / Associative Scan</div><div class="figureview"><img src="assets/03-selective-scan.svg" width="980" height="334" loading="lazy" alt="四步仿射递推可以两两组合后再次组合，利用结合律进行前缀扫描"></div><figcaption>以标量仿射映射说明关联组合的代数基础；真实 GPU 算法还涉及并行工作划分、硬件内存布局和反向传播。</figcaption></figure>
+<h3>GPU 内存层次才是另一半答案</h3><p>朴素实现可能把完整形状为 <code>(B,L,D,N)</code> 的中间状态写入 HBM（较慢的显存）。论文采用 <strong>kernel fusion + SRAM 中计算 + backward recomputation</strong>：把离散化、扫描和读出尽量融合；只向 HBM 写最终的 <code>(B,L,D)</code> 输出；反向传播需要的中间状态重算而非全量保存。论文还分析了 <code>O(BLDN)</code> 量级的运算与 IO 差异；实际速度取决于 GPU、序列长度、实现和对照模型。<a href="https://arxiv.org/html/2312.00752">[论文 §3.3、Appendix D]</a></p></section>
+
+<section id="block"><h2>06 · Selective SSM 只是 Mamba Block 的中间核心</h2>
+<p>把 S6 理解了，还不能说看懂了 Mamba。原始 2023 Block 的典型信息路径是：输入投影扩张维度，在主支路使用 <strong>短卷积（causal Conv1D）→ 非线性 → Selective SSM</strong>，另一支路产生逐元素门控，再做输出投影；网络中反复堆叠这样的 Block，并结合归一化与残差。它不使用标准 Transformer 自注意力或单独 MLP Block；这并不是说“没有任何线性投影”。</p>
+<p>论文在比较参数量的实验设置中常取扩张因子 <code>E=2</code>；该配置和具体实现超参数不是对所有模型的普遍要求。官方实现的 <code>mamba_ssm/modules/mamba_simple.py</code> 是定位代码路径的起点，而不是把后续 Mamba-2 代码冒充原版。<a href="https://arxiv.org/html/2312.00752">[论文 §3.4]</a> <a href="https://github.com/state-spaces/mamba">[官方代码]</a></p></section>
+
+<section id="example"><h2>07 · 用四个数字看到“忽略噪声”的意义</h2>
+<p>下面故意使用简化的 <code>hₜ=(1−gₜ)hₜ₋₁+gₜxₜ</code>，初始 <code>h₀=0</code>。四个输入依次为 <code>[1,0,0,0.5]</code>：第一个和第四个代表要保存的内容，中间两个为无关噪声。</p>
+<div class="tablewrap"><table><thead><tr><th>位置</th><th>输入 xₜ</th><th>人为选择 gₜ</th><th>计算结果 hₜ</th></tr></thead><tbody><tr><td>1 · 关键 A</td><td>1</td><td>0.80</td><td>0.80000</td></tr><tr><td>2 · 噪声</td><td>0</td><td>0.02</td><td>0.78400</td></tr><tr><td>3 · 噪声</td><td>0</td><td>0.02</td><td>0.76832</td></tr><tr><td>4 · 关键 B</td><td>0.5</td><td>0.70</td><td>0.580496</td></tr></tbody></table></div>
+<p>第二、三步使用小门值时，旧状态每次只轻微衰减；第四步明确改写。这说明为何内容依赖门可以处理随机间隔。它不是论文公开的学习参数或准确率。</p>
+<div class="demo"><h3>交互实验：切换固定门与选择性门</h3><p>点击按钮比较同一序列两种门控。默认显示选择性门；所有数值均由上面的教学公式确定，和训练过的 Mamba 权重无关。</p>
+<div class="controls" role="group" aria-label="门控选择"><button id="selective" type="button" aria-pressed="true">选择性门</button><button id="fixed" type="button" aria-pressed="false">固定门 g = 0.5</button></div>
+<div class="readout" id="steps" role="status" aria-live="polite">选择性门：0.80000 → 0.78400 → 0.76832 → 0.58050。噪声对旧记忆的影响相对较小。</div></div></section>
+
+<section id="code"><h2>08 · 用可执行的最小 Python 验证组合律</h2>
+<p>下面两段只实现<strong>可验证的标量教学算例</strong>，不包含训练、参数投影、CUDA kernel 或完整 Mamba Block。完整源文件与测试位于同目录的 <a href="selective_ssm_demo.py">selective_ssm_demo.py</a> 和 <a href="test_selective_ssm_demo.py">test_selective_ssm_demo.py</a>。</p>
+<pre><code>def gated_step(h, x, g):
+    if not 0.0 &lt;= g &lt;= 1.0:
+        raise ValueError("gate out of range")
+    return (1 - g) * h + g * x
+
+def compose(left, right):
+    a1, b1 = left
+    a2, b2 = right
+    return (a2 * a1, a2 * b1 + b2)
+
+# 在实数误差容许范围内检查结合律：
+# compose(compose(p, q), r) ≈ compose(p, compose(q, r))</code></pre>
+<p>两个实现的测试分别覆盖门值边界、非法门值、组合律与前缀扫描对逐步递推的等价性。它们仅证明教学递推一致；若要复现论文的训练质量或 GPU 吞吐，需要官方代码、数据、设备条件及独立实验。</p></section>
+
+<section id="evidence"><h2>09 · 论文实验到底支持哪些结论？</h2>
+<p>论文在 Selective Copying、语言建模、DNA 和音频等任务上报告结果。Selective Copying 的重点是间隔随机变化时是否还能选择信息；§4.2 的语言实验比较预训练困惑度和零样本评测；§4.5 的速度实验在特定硬件、batch 和实现下比较吞吐。原摘要报告相对所比较 Transformer 配置的约 <strong>5 倍生成吞吐</strong>，这不是所有场景都可复现的硬性保证。<a href="https://arxiv.org/html/2312.00752">[原论文 §4]</a></p>
+<div class="tablewrap"><table><thead><tr><th>证据</th><th>可以说</th><th>不可以外推为</th></tr></thead><tbody>
+<tr><td>Selective Copying / §4.1</td><td>输入依赖的选择机制对随机间隔复制更有利</td><td>任意长依赖都能无损存储</td></tr>
+<tr><td>Language Modeling / §4.2</td><td>在论文报告的训练协议下 Mamba 与强基线竞争</td><td>所有数据集和模型规模都领先 Transformer</td></tr>
+<tr><td>DNA / §4.3</td><td>论文长序列基因组实验报告可扩展性趋势</td><td>任何一百万长度任务都无成本</td></tr>
+<tr><td>GPU Benchmarks / §4.5</td><td>特定实现与硬件的速度、IO 收益</td><td>普遍 5 倍提速、没有额外训练开销</td></tr>
+</tbody></table></div>
+<p>项目中的 <a href="evidence.json">evidence.json</a> 将主要主张分别绑定到论文小节、公式、算法和官方代码。教学图示和数字算例与真实实验结果分开记录。</p></section>
+
+<section id="relationship"><h2>10 · 与 Transformer、线性注意力、Mamba-2 的关系</h2>
+<p><strong>Transformer：</strong>使用显式 token-to-token 注意力交互；Mamba-2023 在序列维度采用压缩状态与选择性递推。前者便于依据位置内容做动态检索，后者避免解码时为每个历史 token 保留标准注意力 KV Cache，但会受有限状态容量影响。</p>
+<p><strong>线性注意力 / DeltaNet：</strong>也强调有限大小记忆与递推计算，但具体状态、写入/纠错规则不一样。可结合 <a href="../deltanet/">Understanding DeltaNet</a> 理解“状态更新的记忆干扰”，结合 <a href="../../inference/kv-cache/">Understanding KV Cache</a> 理解标准 Transformer 的推理缓存。</p>
+<p><strong>Mamba-2：</strong>Dao 与 Gu 在 ICML 2024 的 <em>Transformers are SSMs</em> 中引入 Structured State Space Duality，提出新算法和 Mamba-2。它是后续架构，不应回填为 2023 原始 Mamba 的机制。<a href="https://proceedings.mlr.press/v235/dao24a.html">[ICML 2024]</a></p>
+<div class="note"><strong>研究与工程边界：</strong>真实部署需要权衡序列长度、状态规模、GPU kernel、数值精度和推理批处理。固定状态并不自动意味更低端到端延迟；跨论文速度比应对齐实验协议后讨论。</div></section>
+
+<section id="references"><h2>11 · 原始论文、代码与进一步学习</h2>
+<ol class="sources"><li>Albert Gu, Tri Dao. <a href="https://arxiv.org/abs/2312.00752">Mamba: Linear-Time Sequence Modeling with Selective State Spaces</a>. arXiv:2312.00752, 2023. 研究动机、Algorithm 2、Selective Scan 和实验。</li>
+<li><a href="https://arxiv.org/html/2312.00752">arXiv HTML 正文</a>，用于逐式核对与查阅 Appendix C、D。</li>
+<li><a href="https://github.com/state-spaces/mamba">state-spaces/mamba</a>，官方实现与使用说明。</li>
+<li>Tri Dao, Albert Gu. <a href="https://proceedings.mlr.press/v235/dao24a.html">Transformers are SSMs: Generalized Models and Efficient Algorithms Through Structured State Space Duality</a>. ICML 2024。后续 Mamba-2 / SSD。</li></ol>
+</section>
+<footer class="foot"><p>研究导读 · xm-posts。引用中的实验属于各自论文，交互中的标量递推为独立教学推导。</p><p><a href="../../../topics/">返回知识地图</a> · <a href="../../../archive/">继续阅读文章归档</a></p></footer>
+</article></main></div>
+<script>
+(function(){
+"use strict";
+var sel=document.getElementById("selective"),fix=document.getElementById("fixed"),out=document.getElementById("steps");
+var xs=[1,0,0,0.5];
+function render(mode){var gs=mode==="selective"?[0.8,0.02,0.02,0.7]:[0.5,0.5,0.5,0.5],h=0,values=[];
+for(var i=0;i<xs.length;i++){h=(1-gs[i])*h+gs[i]*xs[i];values.push(h.toFixed(5));}
+sel.setAttribute("aria-pressed",String(mode==="selective"));fix.setAttribute("aria-pressed",String(mode==="fixed"));
+out.textContent=(mode==="selective"?"选择性门":"固定门")+"："+values.join(" → ")+"。"+
+(mode==="selective"?"噪声对旧记忆的影响相对较小。":"固定门在噪声输入时同样快速改变记忆。");
+}
+sel.addEventListener("click",function(){render("selective");});
+fix.addEventListener("click",function(){render("fixed");});
+})();
+</script></body></html>
