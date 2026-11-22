@@ -21,7 +21,7 @@ def page_url(path: str) -> str:
 def test_archive_follows_rel_next_until_c51_is_found():
     pages = {
         page_url("archive/"): b'<nav><a rel="next" href="page/2/">Next</a></nav>',
-        page_url("archive/page/2/"): b'<nav><a rel="next" href="../3/">Next</a></nav>',
+        page_url("archive/page/2/"): b'<nav><a rel="next" href="../../../archive/page/3/">Next</a></nav>',
         page_url("archive/page/3/"): b'<a href="../../../posts/reinforcement-learning/c51/">C51</a>',
     }
 
