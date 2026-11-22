@@ -89,7 +89,10 @@ def published_site(out:Path,base:str=DEFAULT_URL,require_pdfs:bool=False):
             if not dest.is_relative_to(out.resolve()):
                 bad.append(f'out-of-root link: {path.relative_to(out)} -> {href}')
                 continue
-            if not dest.is_file():
+            # PDF files are generated after the initial HTML build. In pre-PDF
+            # validation, defer only explicitly marked article PDF downloads;
+            # --require-pdfs must still check their existence and integrity.
+            if not dest.is_file() and not (not require_pdfs and link.name == 'a' and link.has_attr('data-pdf-download') and parsed.path == 'article.pdf'):
                 bad.append(f'broken link: {path.relative_to(out)} -> {href}')
                 continue
             if link.name=='a' and parsed.fragment:
