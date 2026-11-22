@@ -607,5 +607,16 @@
       "sglang-radixattention",
       "sarathi-serve"
     ]
+  },
+  {
+    "id": "path-selective-state-models",
+    "title": "从循环门控到选择性状态空间模型",
+    "posts": [
+      "rnn",
+      "lstm",
+      "neural-gating",
+      "mamba",
+      "deltanet"
+    ]
   }
 ]

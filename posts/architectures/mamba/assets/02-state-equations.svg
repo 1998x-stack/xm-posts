@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 380" role="img" aria-labelledby="m2t m2d"><title id="m2t">状态空间层的数据流和张量维度</title><desc id="m2d">输入 x_t 同时进入 B C Delta 投影，离散化 A B 后更新状态 h_t，C 对新状态读出 y_t。</desc>
+<rect width="980" height="380" rx="22" fill="#f5f8fc"/><text x="40" y="47" font-size="23" fill="#203f5a" font-family="system-ui" font-weight="700">选择性 SSM：参数随 token 改变</text>
+<g font-family="system-ui" font-size="19" text-anchor="middle">
+<rect x="42" y="154" width="130" height="77" rx="12" fill="#dae7f6" stroke="#8cb2da"/><text x="107" y="186" fill="#2b597d" font-weight="700">xₜ</text><text x="107" y="210" fill="#476b81" font-size="14">输入通道</text>
+<rect x="249" y="78" width="162" height="64" rx="12" fill="#e6f0fa" stroke="#9db8d2"/><text x="330" y="109" fill="#2b597d">Bₜ = fB(xₜ)</text>
+<rect x="249" y="172" width="162" height="64" rx="12" fill="#e6f0fa" stroke="#9db8d2"/><text x="330" y="203" fill="#2b597d">Δₜ = fΔ(xₜ)</text>
+<rect x="249" y="267" width="162" height="64" rx="12" fill="#e6f0fa" stroke="#9db8d2"/><text x="330" y="300" fill="#2b597d">Cₜ = fC(xₜ)</text>
+<rect x="506" y="131" width="181" height="127" rx="14" fill="#d6eee4" stroke="#6dad9a"/><text x="596" y="163" fill="#135b50" font-weight="700">状态更新</text><text x="596" y="193" fill="#135b50" font-size="17">hₜ = Āₜhₜ₋₁</text><text x="596" y="217" fill="#135b50" font-size="17">+ B̄ₜxₜ</text><text x="596" y="241" fill="#52786e" font-size="14">每个通道 N 维状态</text>
+<rect x="781" y="164" width="153" height="67" rx="12" fill="#f9e9d8" stroke="#d8b38b"/><text x="857" y="193" fill="#946038" font-weight="700">yₜ = Cₜhₜ</text><text x="857" y="213" fill="#946038" font-size="13">输出</text>
+</g>
+<g fill="none" stroke="#7299a7" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M172 183 L224 183 L224 110 L249 110"/><path d="M172 193 H249"/><path d="M172 205 L224 205 L224 299 H249"/><path d="M411 110 H468 V163 H506"/><path d="M411 204 H506"/><path d="M411 299 H718 V231 H781"/><path d="M687 192 H781"/></g>
+<text x="496" y="93" font-size="15" fill="#406879" font-family="system-ui">A 为学习参数，Δ 决定离散化步长</text><text x="40" y="351" font-size="15" fill="#5c7787" font-family="system-ui">注意：此图隐藏了完整 Mamba Block 中的 Conv1D、门控和残差路径</text></svg>
