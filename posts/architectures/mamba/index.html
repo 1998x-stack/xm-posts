@@ -82,7 +82,7 @@ code,pre{font-family:ui-monospace,Consolas,monospace}code{font-size:.87em;color:
 <div class="readout" id="steps" role="status" aria-live="polite">选择性门：0.80000 → 0.78400 → 0.76832 → 0.58050。噪声对旧记忆的影响相对较小。</div></div></section>
 
 <section id="code"><h2>08 · 用可执行的最小 Python 验证组合律</h2>
-<p>下面两段只实现<strong>可验证的标量教学算例</strong>，不包含训练、参数投影、CUDA kernel 或完整 Mamba Block。完整源文件与测试位于同目录的 <a href="selective_ssm_demo.py">selective_ssm_demo.py</a> 和 <a href="test_selective_ssm_demo.py">test_selective_ssm_demo.py</a>。</p>
+<p>下面两段只实现<strong>可验证的标量教学算例</strong>，不包含训练、参数投影、CUDA kernel 或完整 Mamba Block。完整源文件与测试位于同目录的 <a href="https://github.com/1998x-stack/xm-posts/blob/main/posts/architectures/mamba/selective_ssm_demo.py">selective_ssm_demo.py</a> 和 <a href="https://github.com/1998x-stack/xm-posts/blob/main/posts/architectures/mamba/test_selective_ssm_demo.py">test_selective_ssm_demo.py</a>。</p>
 <pre><code>def gated_step(h, x, g):
     if not 0.0 &lt;= g &lt;= 1.0:
         raise ValueError("gate out of range")
