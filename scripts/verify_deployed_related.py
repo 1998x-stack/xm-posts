@@ -147,7 +147,7 @@ def verify_c51(base: str):
     # is a complete index. RSS is not paginated.
     import re
     archive = fetch(urljoin(base, 'archive/')).decode('utf-8')
-    page_numbers = [int(n) for n in re.findall(r'archive/page/(\\d+)/', archive)]
+    page_numbers = [int(n) for n in re.findall(r'archive/page/(\d+)/', archive)]
     last_page = max([1, *page_numbers])
     assert last_page <= 100, f'Unexpected archive page count: {last_page}'
     found = 'posts/reinforcement-learning/c51/' in archive.lower()
