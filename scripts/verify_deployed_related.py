@@ -142,11 +142,23 @@ def verify_c51(base: str):
         data = fetch(target)
         assert data, f'{target}: empty index'
 
-    # The archive and RSS must include this article; the topic page
-    # may display only topic-level navigation.
-    for suffix in ('archive/', 'feed.xml'):
-        data = fetch(urljoin(base, suffix)).decode('utf-8')
-        assert 'c51' in data.lower(), f'{suffix}: C51 missing from public index'
+    # The archive is paginated (16 posts per page); C51 need not be on page 1.
+    # Read the published archive pagination instead of assuming the first page
+    # is a complete index. RSS is not paginated.
+    import re
+    archive = fetch(urljoin(base, 'archive/')).decode('utf-8')
+    page_numbers = [int(n) for n in re.findall(r'archive/page/(\d+)/', archive)]
+    last_page = max([1, *page_numbers])
+    assert last_page <= 100, f'Unexpected archive page count: {last_page}'
+    found = 'posts/reinforcement-learning/c51/' in archive.lower()
+    for page in range(2, last_page + 1):
+        if found:
+            break
+        content = fetch(urljoin(base, f'archive/page/{page}/')).decode('utf-8')
+        found = 'posts/reinforcement-learning/c51/' in content.lower()
+    assert found, f'C51 missing from all {last_page} public archive pages'
+    rss = fetch(urljoin(base, 'feed.xml')).decode('utf-8')
+    assert 'posts/reinforcement-learning/c51/' in rss.lower(), 'C51 missing from RSS'
     print(f'PUBLIC C51 VERIFIED: HTML, MathML, SVG, PDF ({len(reader.pages)} pages), archive, topic and RSS')
 
 
