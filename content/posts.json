@@ -2964,5 +2964,31 @@
       "src": "assets/return-distributions.svg",
       "caption": "同一期望回报可以对应不同分布，C51 学习固定原子上的概率质量"
     }
+  },
+  {
+    "slug": "double-dqn",
+    "title": "Understanding Double DQN",
+    "subtitle": "为什么拆开动作选择与评价，能减轻 DQN 的最大化过估计？",
+    "category": "reinforcement-learning",
+    "topic": "value-learning",
+    "status": "published",
+    "published": "2026-11-21",
+    "updated": "2026-11-21",
+    "reading_minutes": 18,
+    "tags": [
+      "Double DQN",
+      "Double Q-learning",
+      "DQN",
+      "Overestimation Bias",
+      "Bellman Target",
+      "Reinforcement Learning"
+    ],
+    "summary": "精读 van Hasselt 等人的 AAAI 2016 Double DQN：从带噪声最大化的乐观偏差出发，推导在线网络选动作、目标网络评动作的 Bellman 目标，给出逐步数值算例、原生 MathML、两幅原创 SVG、训练伪代码及实验适用边界。",
+    "paper": "https://doi.org/10.1609/aaai.v30i1.10295",
+    "illustration": "double-dqn",
+    "cover": {
+      "src": "assets/02-selection-evaluation.svg",
+      "caption": "在线网络选出动作 A，目标网络只评价 A，不再用同一估计器选与评"
+    }
   }
 ]
