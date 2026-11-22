@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 334" role="img" aria-labelledby="m3t m3d"><title id="m3t">从线性递推到可并行组合的仿射扫描</title><desc id="m3d">每个时刻用二元组表示仿射映射，利用结合律在多个层级合并前缀，使时间变参数的状态更新能够并行扫描。</desc>
+<rect width="980" height="334" rx="22" fill="#f8f9fc"/><text x="42" y="47" font-size="23" font-family="system-ui" fill="#243a56" font-weight="700">选择性扫描不是把时间变参数硬转成固定卷积</text>
+<g font-family="system-ui" text-anchor="middle" font-size="18">
+<text x="84" y="109" fill="#677389">顺序递推</text>
+<g fill="#e7edf7" stroke="#9cafc8" stroke-width="2"><rect x="170" y="81" width="122" height="56" rx="10"/><rect x="353" y="81" width="122" height="56" rx="10"/><rect x="536" y="81" width="122" height="56" rx="10"/><rect x="719" y="81" width="122" height="56" rx="10"/></g>
+<g fill="#355c83"><text x="231" y="116">(a₁, b₁)</text><text x="414" y="116">(a₂, b₂)</text><text x="597" y="116">(a₃, b₃)</text><text x="780" y="116">(a₄, b₄)</text></g>
+<text x="84" y="228" fill="#25776e">并行组合</text>
+<g fill="#d9efe8" stroke="#7fb9a9" stroke-width="2"><rect x="170" y="196" width="248" height="58" rx="11"/><rect x="534" y="196" width="248" height="58" rx="11"/><rect x="349" y="276" width="261" height="43" rx="11"/></g>
+<g fill="#176759"><text x="294" y="231">(a₂,b₂) ∘ (a₁,b₁)</text><text x="658" y="231">(a₄,b₄) ∘ (a₃,b₃)</text><text x="479" y="303" font-size="15">再组合，生成分组前缀</text></g></g>
+<g stroke="#9aabc5" fill="none" stroke-width="3" stroke-linecap="round"><path d="M292 109 H353 M475 109 H536 M658 109 H719 M294 254 V275 H349 M658 254 V275 H610"/><path d="M294 137 V196 M658 137 V196"/></g>
+<text x="42" y="164" font-size="16" font-family="system-ui" fill="#5d7186">组合律： (a₂,b₂) ∘ (a₁,b₁) = (a₂a₁, a₂b₁+b₂)</text></svg>
