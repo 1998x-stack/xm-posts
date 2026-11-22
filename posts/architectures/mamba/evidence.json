@@ -1,0 +1,100 @@
+[
+  {
+    "id": "M01",
+    "claim": "Mamba original paper and authors Albert Gu, Tri Dao, first submitted 2023-12-01",
+    "kind": "bibliography",
+    "source_url": "https://arxiv.org/abs/2312.00752",
+    "locator": "Title/Authors/Submission history",
+    "status": "verified"
+  },
+  {
+    "id": "M02",
+    "claim": "LTI SSM supports recurrence and convolution; time-invariant Abar/Bbar produce kernel Kbar",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/html/2312.00752",
+    "locator": "§2 Eqs. (2) and (3)",
+    "status": "verified"
+  },
+  {
+    "id": "M03",
+    "claim": "ZOH discretization uses Abar=exp(Delta A) and Bbar=(Delta A)^-1(exp(Delta A)-I) Delta B",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/html/2312.00752",
+    "locator": "§2 Eq. (4)",
+    "status": "verified",
+    "notes": "Inverse expression presumes invertibility; integral formulation is robust"
+  },
+  {
+    "id": "M04",
+    "claim": "Selective SSM (S6) makes Delta, B and C input-dependent, so no fixed convolution kernel",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/html/2312.00752",
+    "locator": "§3.2 Algorithm 2",
+    "status": "verified"
+  },
+  {
+    "id": "M05",
+    "claim": "Selective copying randomizes spacing and requires content-aware filtering",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/html/2312.00752",
+    "locator": "§3.1 Figure 2; §4.1.1",
+    "status": "verified"
+  },
+  {
+    "id": "M06",
+    "claim": "Selective scan uses kernel fusion, parallel scan and recomputation",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/html/2312.00752",
+    "locator": "§3.3.2 and Appendix D",
+    "status": "verified"
+  },
+  {
+    "id": "M07",
+    "claim": "Mamba architecture combines local convolution, selective SSM, gating and projections",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/html/2312.00752",
+    "locator": "§3.4 Figure 3",
+    "status": "verified"
+  },
+  {
+    "id": "M08",
+    "claim": "Theorem 1 special case yields gated recurrence h_t=(1-g_t)h_(t-1)+g_t x_t",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/html/2312.00752",
+    "locator": "§3.5.1 Theorem 1; Appendix C",
+    "status": "verified"
+  },
+  {
+    "id": "M09",
+    "claim": "Original paper reports higher inference throughput and comparisons under its experimental setup",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/abs/2312.00752",
+    "locator": "Abstract; §4.2 and §4.5",
+    "status": "verified",
+    "notes": "Benchmarks are paper-specific, not unconditional system-wide claims"
+  },
+  {
+    "id": "M10",
+    "claim": "Official code exposes selective scan and Mamba block and distinguishes Mamba-2",
+    "kind": "implementation",
+    "source_url": "https://github.com/state-spaces/mamba",
+    "locator": "README Usage and mamba_ssm/modules/mamba_simple.py",
+    "status": "verified"
+  },
+  {
+    "id": "M11",
+    "claim": "Mamba-2 is a 2024 follow-up, not the original Mamba 2023 architecture",
+    "kind": "bibliography",
+    "source_url": "https://proceedings.mlr.press/v235/dao24a.html",
+    "locator": "ICML 2024 publication",
+    "status": "verified"
+  },
+  {
+    "id": "M12",
+    "claim": "Toy scalar gated recurrence and scan associativity examples are pedagogical reductions, not full Mamba reproduction",
+    "kind": "teaching-derivation",
+    "source_url": "https://arxiv.org/html/2312.00752",
+    "locator": "§3.5.1 and §3.3.2",
+    "status": "verified"
+  }
+]
