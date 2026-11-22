@@ -2990,5 +2990,33 @@
       "src": "assets/02-selection-evaluation.svg",
       "caption": "在线网络选出动作 A，目标网络只评价 A，不再用同一估计器选与评"
     }
+  },
+  {
+    "slug": "mamba",
+    "title": "Understanding Mamba",
+    "subtitle": "选择性状态空间模型如何筛选记忆，并在 GPU 上高效训练？",
+    "category": "architectures",
+    "topic": "state-space-models",
+    "status": "published",
+    "published": "2026-11-22",
+    "updated": "2026-11-22",
+    "reading_minutes": 27,
+    "tags": [
+      "Mamba",
+      "Selective State Space Models",
+      "S6",
+      "SSM",
+      "Selective Scan",
+      "Linear-Time Sequence Modeling",
+      "Parallel Scan",
+      "State Space Models"
+    ],
+    "summary": "精读 Gu 与 Dao 2023 Mamba 原论文：从随机间隔选择性复制出发，解释连续/离散状态空间方程、输入依赖的 Δ/B/C、ZOH 门控推导、结合律扫描与 GPU 融合/重计算；包含三幅原创建模 SVG、六个原生 MathML 公式、交互数值算例、独立 Python 递推测试及逐条证据台账，并区分 Mamba-2 后续工作。",
+    "paper": "https://arxiv.org/abs/2312.00752",
+    "illustration": "mamba",
+    "cover": {
+      "src": "assets/01-selective-memory.svg",
+      "caption": "关键 token 改写记忆、无关 token 尽量保留旧状态：Mamba 的内容选择机制"
+    }
   }
 ]
