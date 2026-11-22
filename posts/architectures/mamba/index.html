@@ -38,7 +38,7 @@ code,pre{font-family:ui-monospace,Consolas,monospace}code{font-size:.87em;color:
 <section id="problem"><h2>01 · 一段长文本，哪些内容必须记住？</h2><p class="lead">想象读到“密码为 A”，中间穿插一千个无关词，最后问“密码是什么”。模型不能只因为输入变长，就让噪声冲掉关键记忆。</p>
 <p>自注意力允许当前位置用 Query 与先前 Key 逐一比较；这种按内容检索的能力很强，但全序列密集注意力的计算与存储随长度增长。经典线性时不变状态空间模型（LTI SSM）把历史放进固定维度的隐藏状态，递推和卷积两种算法可互换，速度具有吸引力。问题是<strong>同一套固定动态参数对所有时刻相同</strong>，难以依据 token 的内容决定写入或忽略。</p>
 <p>Gu 与 Dao 设计的 Selective Copying 任务让有用 token 的间隔随机变化；它专门阻止模型只靠固定位置间隔完成复制。无关 token 与目标 token 应得到不同的记忆更新，而不只是不同的输出权重。<a href="https://arxiv.org/html/2312.00752">[论文 §3.1、Figure 2]</a></p>
-<figure><div class="fig">FIGURE 01 / 内容选择与记忆稳定性</div><div class="figureview"><img src="assets/01-selective-memory.svg" width="980" height="360" loading="lazy" alt="关键 token A、B 与噪声交替出现；选择性记忆尽量保留有用状态"></div><figcaption>图示比较固定混合和选择性更新的直觉。折线不是实际 Mamba 参数、性能曲线或训练权重；模型的选择参数由输入经过投影学习而来。</figcaption></figure>
+<figure><div class="fig">FIGURE 01 / 内容选择与记忆稳定性</div><div class="figureview"><img src="assets/01-selective-memory.svg" width="980" height="360" loading="eager" alt="关键 token A、B 与噪声交替出现；选择性记忆尽量保留有用状态"></div><figcaption>图示比较固定混合和选择性更新的直觉。折线不是实际 Mamba 参数、性能曲线或训练权重；模型的选择参数由输入经过投影学习而来。</figcaption></figure>
 <div class="note"><strong>避免误解：</strong>“常数状态大小”不等于“永不丢信息”。有限维状态会压缩历史；选择性机制改善压缩策略，并不保证任意精确检索。</div></section>
 
 <section id="ssm"><h2>02 · SSM：连续时间系统怎样变成逐 token 运算？</h2>
@@ -53,7 +53,7 @@ code,pre{font-family:ui-monospace,Consolas,monospace}code{font-size:.87em;color:
 <section id="selection"><h2>03 · Mamba 如何从固定动态变成内容选择？</h2>
 <p>Mamba 的关键是把 SSM 中的 <code>B、C、Δ</code> 变为输入 <code>xₜ</code> 的函数。每个 token 经过线性投影产生读写方向和离散化步长；与保持为模型参数的 <code>A</code> 结合后，得到随时间变化的离散系数。时间变化意味着不再存在一条适用于全部输入的固定卷积核。</p>
 <div class="tablewrap"><table><thead><tr><th>量</th><th>原论文 Algorithm 2 的形状</th><th>机制</th></tr></thead><tbody><tr><td>输入 x</td><td>(B, L, D)</td><td>批次、长度、通道</td></tr><tr><td>A</td><td>(D, N)</td><td>每个通道的结构化状态动态，学习参数</td></tr><tr><td>B(x), C(x)</td><td>(B, L, N)</td><td>每个位置按内容选择写入与读出方向，广播到各通道</td></tr><tr><td>Δ(x)</td><td>(B, L, D)</td><td>每位置每通道的正步长</td></tr><tr><td>隐状态</td><td>(B, D, N)</td><td>自回归单步所需状态；训练时有中间状态但采用融合与重计算</td></tr></tbody></table></div>
-<figure><div class="fig">FIGURE 02 / 隐状态与输入依赖参数</div><div class="figureview"><img src="assets/02-state-equations.svg" width="980" height="380" loading="lazy" alt="输入 x_t 分别生成 B_t、Δ_t、C_t；状态更新得到 h_t，再经 C_t 读出"></div><figcaption>选择性 SSM 核心链路。为聚焦状态方程，省略外层 Mamba Block 的 Conv1D、逐点非线性、门控支路与残差。符号形状以原论文 Algorithm 2 为准。</figcaption></figure>
+<figure><div class="fig">FIGURE 02 / 隐状态与输入依赖参数</div><div class="figureview"><img src="assets/02-state-equations.svg" width="980" height="380" loading="eager" alt="输入 x_t 分别生成 B_t、Δ_t、C_t；状态更新得到 h_t，再经 C_t 读出"></div><figcaption>选择性 SSM 核心链路。为聚焦状态方程，省略外层 Mamba Block 的 Conv1D、逐点非线性、门控支路与残差。符号形状以原论文 Algorithm 2 为准。</figcaption></figure>
 <p>作者采用 <code>Bₜ=Linear_N(xₜ)</code>、<code>Cₜ=Linear_N(xₜ)</code>、<code>Δₜ=softplus(参数偏置 + Broadcast_D(Linear_1(xₜ)))</code> 这样的参数化。它既是内容选择，也是动态调节记忆随时间流动的速率。<a href="https://arxiv.org/html/2312.00752">[论文 §3.2]</a></p></section>
 
 <section id="gating"><h2>04 · 为什么 Δ 可以理解成门控？</h2>
@@ -67,7 +67,7 @@ code,pre{font-family:ui-monospace,Consolas,monospace}code{font-size:.87em;color:
 <p>把一步递推写成 <code>fₜ(h)=aₜh+bₜ</code>，用数对 <code>(aₜ,bₜ)</code> 表示。连续两步组合：</p>
 <div class="equation" role="group" aria-label="仿射状态更新的结合性组合"><div class="mathscroll math-scroll" tabindex="0" role="region" aria-label="仿射状态更新的结合性组合，可横向滚动"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block" aria-label="仿射状态更新的结合性组合"><mrow><mo>(</mo><msub><mi>a</mi><mn>2</mn></msub><mo>,</mo><msub><mi>b</mi><mn>2</mn></msub><mo>)</mo><mo>∘</mo><mo>(</mo><msub><mi>a</mi><mn>1</mn></msub><mo>,</mo><msub><mi>b</mi><mn>1</mn></msub><mo>)</mo><mo>=</mo><mo>(</mo><msub><mi>a</mi><mn>2</mn></msub><msub><mi>a</mi><mn>1</mn></msub><mo>,</mo><msub><mi>a</mi><mn>2</mn></msub><msub><mi>b</mi><mn>1</mn></msub><mo>+</mo><msub><mi>b</mi><mn>2</mn></msub><mo>)</mo></mrow></math></div><span class="eqnum">(6)</span></div>
 <p>这个组合满足结合律（但通常不满足交换律），因此可以用并行前缀扫描求各位置的状态。真实模型的 <code>a</code> 可以是对角结构矩阵/逐元素系数，而不只是图中的标量。<strong>Parallel Scan 提升序列方向的并行度；它没有取消所有依赖，也不意味着零成本。</strong></p>
-<figure><div class="fig">FIGURE 03 / Associative Scan</div><div class="figureview"><img src="assets/03-selective-scan.svg" width="980" height="334" loading="lazy" alt="四步仿射递推可以两两组合后再次组合，利用结合律进行前缀扫描"></div><figcaption>以标量仿射映射说明关联组合的代数基础；真实 GPU 算法还涉及并行工作划分、硬件内存布局和反向传播。</figcaption></figure>
+<figure><div class="fig">FIGURE 03 / Associative Scan</div><div class="figureview"><img src="assets/03-selective-scan.svg" width="980" height="334" loading="eager" alt="四步仿射递推可以两两组合后再次组合，利用结合律进行前缀扫描"></div><figcaption>以标量仿射映射说明关联组合的代数基础；真实 GPU 算法还涉及并行工作划分、硬件内存布局和反向传播。</figcaption></figure>
 <h3>GPU 内存层次才是另一半答案</h3><p>朴素实现可能把完整形状为 <code>(B,L,D,N)</code> 的中间状态写入 HBM（较慢的显存）。论文采用 <strong>kernel fusion + SRAM 中计算 + backward recomputation</strong>：把离散化、扫描和读出尽量融合；只向 HBM 写最终的 <code>(B,L,D)</code> 输出；反向传播需要的中间状态重算而非全量保存。论文还分析了 <code>O(BLDN)</code> 量级的运算与 IO 差异；实际速度取决于 GPU、序列长度、实现和对照模型。<a href="https://arxiv.org/html/2312.00752">[论文 §3.3、Appendix D]</a></p></section>
 
 <section id="block"><h2>06 · Selective SSM 只是 Mamba Block 的中间核心</h2>
