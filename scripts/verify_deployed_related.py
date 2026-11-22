@@ -10,7 +10,8 @@ import argparse
 from html.parser import HTMLParser
 from io import BytesIO
 import time
-from urllib.parse import urljoin
+from urllib.parse import urldefrag, urljoin
+from xml.etree import ElementTree as ET
 from urllib.request import Request, urlopen
 
 ARTICLES = (
@@ -99,6 +100,80 @@ class C51Parser(HTMLParser):
             self.headings += 1
 
 
+
+class ArchiveParser(HTMLParser):
+    """Read article links and the explicit next-page link from one archive page."""
+    def __init__(self):
+        super().__init__()
+        self.links: list[str] = []
+        self.next_href: str | None = None
+
+    def handle_starttag(self, tag, attrs):
+        if tag != 'a':
+            return
+        values = dict(attrs)
+        href = values.get('href', '')
+        if href:
+            self.links.append(href)
+        rel = set((values.get('rel') or '').lower().split())
+        if 'next' in rel:
+            self.next_href = href
+
+
+def archive_contains_c51(base: str, fetcher=None, max_pages: int = 100) -> int:
+    """Follow rel=next until C51 is found or the published archive ends.
+
+    Returns the number of pages visited. The traversal is deliberately based
+    on the site's navigational contract, not on a guessed last-page link.
+    """
+    if max_pages < 1:
+        raise ValueError('max_pages must be positive')
+    fetch_page = fetch if fetcher is None else fetcher
+    expected = urljoin(base, C51)
+    current = urljoin(base, 'archive/')
+    visited: set[str] = set()
+
+    for _ in range(max_pages):
+        if not current.startswith(base):
+            raise AssertionError(f'Archive pagination escaped the site: {current}')
+        if current in visited:
+            raise AssertionError(f'Archive pagination loop detected at {current}')
+        visited.add(current)
+
+        parser = ArchiveParser()
+        parser.feed(fetch_page(current).decode('utf-8'))
+        for href in parser.links:
+            candidate, _fragment = urldefrag(urljoin(current, href))
+            if candidate.rstrip('/') == expected.rstrip('/'):
+                return len(visited)
+
+        if not parser.next_href:
+            return 0
+        next_url, _fragment = urldefrag(urljoin(current, parser.next_href))
+        if not next_url.startswith(base):
+            raise AssertionError(f'Archive next-page link escaped the site: {next_url}')
+        if next_url in visited:
+            raise AssertionError(f'Archive pagination loop detected at {next_url}')
+        current = next_url
+
+    raise AssertionError(f'Archive pagination exceeded the {max_pages}-page safety limit')
+
+
+def feed_contains_c51(feed: bytes, base: str) -> bool:
+    """Check the exact canonical C51 GUID in the complete RSS 2.0 feed."""
+    root = ET.fromstring(feed)
+    if root.tag != 'rss':
+        raise AssertionError(f'Unexpected RSS root element: {root.tag}')
+    expected = urljoin(base, C51)
+    channel = root.find('channel')
+    if channel is None:
+        raise AssertionError('RSS feed is missing its channel')
+    return any(
+        (item.findtext('guid') or item.findtext('link')) == expected
+        for item in channel.findall('item')
+    )
+
+
 def verify_c51(base: str):
     """Verify the *deployed* C51 article, PDF, illustrations and site indexes.
 
@@ -142,24 +217,13 @@ def verify_c51(base: str):
         data = fetch(target)
         assert data, f'{target}: empty index'
 
-    # The archive is paginated (16 posts per page); C51 need not be on page 1.
-    # Read the published archive pagination instead of assuming the first page
-    # is a complete index. RSS is not paginated.
-    import re
-    archive = fetch(urljoin(base, 'archive/')).decode('utf-8')
-    page_numbers = [int(n) for n in re.findall(r'archive/page/(\d+)/', archive)]
-    last_page = max([1, *page_numbers])
-    assert last_page <= 100, f'Unexpected archive page count: {last_page}'
-    found = 'posts/reinforcement-learning/c51/' in archive.lower()
-    for page in range(2, last_page + 1):
-        if found:
-            break
-        content = fetch(urljoin(base, f'archive/page/{page}/')).decode('utf-8')
-        found = 'posts/reinforcement-learning/c51/' in content.lower()
-    assert found, f'C51 missing from all {last_page} public archive pages'
-    rss = fetch(urljoin(base, 'feed.xml')).decode('utf-8')
-    assert 'posts/reinforcement-learning/c51/' in rss.lower(), 'C51 missing from RSS'
-    print(f'PUBLIC C51 VERIFIED: HTML, MathML, SVG, PDF ({len(reader.pages)} pages), archive, topic and RSS')
+    # Follow the explicit rel=next chain instead of guessing the final
+    # page number from links that happen to be visible on page one.
+    archive_pages = archive_contains_c51(base)
+    assert archive_pages > 0, 'C51 missing from all linked public archive pages'
+    rss = fetch(urljoin(base, 'feed.xml'))
+    assert feed_contains_c51(rss, base), 'C51 missing from the complete public RSS feed'
+    print(f'PUBLIC C51 VERIFIED: HTML, MathML, SVG, PDF ({len(reader.pages)} pages), archive ({archive_pages} pages), topic and RSS')
 
 
 def verify(base: str):
