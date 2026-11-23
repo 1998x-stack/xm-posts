@@ -3086,7 +3086,7 @@
     "illustration": "score-centering",
     "cover": {
       "src": "assets/03-drift-signal-decomposition.svg",
-      "caption": "Off-policy policy gradient 分解为 sampler-induced drift 与 reward-score covariance signal"
+      "caption": "Drift 与 reward-score covariance 的梯度分解"
     }
   }
 ]
