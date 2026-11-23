@@ -79,7 +79,7 @@ pre{max-width:100%;overflow-x:auto;white-space:pre;background:#203b41;color:#e4f
 <p>例如输入串 <code>10110</code> 中有三个 1，因此路径最终落在 O，字符串被拒绝。DFA 的关键不是图形长什么样，而是对每一个状态和输入符号，转移结果都唯一。</p></section>
 
 <section id="families"><h2>03 · 状态机的几个重要家族</h2>
-<h3>DFA 与 NFA：转移结果是否唯一？</h3><p>DFA 对每个状态与输入符号给出唯一的下一状态。非确定性有限自动机（NFA）允许一个输入对应零个、一个或多个候选下一状态；接受语义是“至少存在一条路径到达接受状态”。在表达能力上，DFA 与 NFA 识别相同的正则语言；子集构造可以把 NFA 转换成 DFA，但最坏情况下状态数量可能显著增加。</p>
+<h3>DFA 与 NFA：转移结果是否唯一？</h3><p>DFA 对每个状态与输入符号给出唯一的下一状态。非确定性有限自动机（NFA）允许一个输入对应零个、一个或多个候选下一状态；接受语义是“至少存在一条路径到达接受状态”。在表达能力上，DFA 与 NFA 识别相同的正则语言；子集构造可以把 NFA 转换成 DFA，但 n 个 NFA 状态在最坏情况下可产生至多 2^n 个子集状态。</p>
 <div class="table-scroll" tabindex="0" role="region" aria-label="DFA 与 NFA 对比表，可横向滚动"><table><thead><tr><th>维度</th><th>DFA</th><th>NFA</th></tr></thead><tbody><tr><td>转移</td><td>状态 × 符号 → 单一状态</td><td>状态 × 符号 → 状态集合（可含 ε 转移）</td></tr><tr><td>接受</td><td>唯一运行路径最终进入接受态</td><td>存在一条运行路径最终进入接受态</td></tr><tr><td>适用直觉</td><td>执行路径明确、实现直接</td><td>描述模式更紧凑，便于表达“多种可能”</td></tr></tbody></table></div>
 <h3>Mealy 与 Moore：输出由什么决定？</h3><p>在顺序电路和输出自动机中，状态机不仅改变状态，还产生输出。Mealy 机的输出函数依赖当前状态与输入；Moore 机的输出函数只依赖当前状态。Mealy 的输出常标在转移边上，Moore 的输出常标在状态节点里。</p>
 <div class="math-box"><div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="Mealy 和 Moore 输出函数公式，可横向滚动"><math display="block" aria-label="Mealy 输出函数依赖状态和输入；Moore 输出函数只依赖状态"><mrow><msub><mi>λ</mi><mtext>Mealy</mtext></msub><mo>:</mo><mi>S</mi><mo>×</mo><mi>E</mi><mo>→</mo><mi>O</mi><mo>,</mo><mspace width="1em"/><msub><mi>λ</mi><mtext>Moore</mtext></msub><mo>:</mo><mi>S</mi><mo>→</mo><mi>O</mi></mrow></math></div></div>
