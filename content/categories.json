@@ -76,6 +76,18 @@
     ]
   },
   {
+    "slug": "recommender-systems",
+    "title": "推荐系统",
+    "english": "Recommender Systems",
+    "description": "研究如何从用户偏好、交互反馈与物品关系中估计个体兴趣，并将候选内容转化为个性化召回与排序；从协同过滤和邻域模型延伸到矩阵分解、隐式反馈、序列与图推荐及在线评估。",
+    "topics": [
+      {
+        "slug": "collaborative-filtering",
+        "title": "Collaborative Filtering & Neighborhood Models"
+      }
+    ]
+  },
+  {
     "slug": "decision-models",
     "title": "概率决策模型",
     "description": "研究如何把有限答案空间中的模型判断转化为可审计、可校准、可执行的概率决策，包括类型化决策模型、贝叶斯风险、概率校准、风险预算、选择性预测、模型路由与鲁棒性。",
