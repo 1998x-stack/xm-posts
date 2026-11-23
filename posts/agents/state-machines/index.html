@@ -237,7 +237,7 @@ def transition(state, event, context):
 <script>
 (() => {
  const labels={idle:"空闲（idle）",validating:"校验中（validating）",awaiting_approval:"等待审批（awaiting_approval）",running:"执行中（running）",retry_wait:"等待重试（retry_wait）",succeeded:"成功（succeeded）",failed:"失败（failed）",cancelled:"已取消（cancelled）"};
- const transitions={idle:["submit"],validating:["pass","invalid","cancel"],awaiting_approval:["approve","reject","cancel"],running:["success","fail","timeout","cancel"],retry_wait:["retry","cancel"],succeeded:["reset"],failed:["reset"],cancelled:["reset"]};
+ const transitions={idle:["submit"],validating:["pass","invalid"],awaiting_approval:["approve","reject","cancel"],running:["success","fail","timeout","cancel"],retry_wait:["retry","cancel"],succeeded:["reset"],failed:["reset"],cancelled:["reset"]};
  const eventLabels={submit:"提交任务",pass:"校验通过",invalid:"校验失败",approve:"人工批准",reject:"人工拒绝",success:"执行成功",fail:"执行失败",timeout:"执行超时",retry:"发起重试",cancel:"取消任务",reset:"重置终态"};
  let state="idle",attempts=0;const maxAttempts=2;
  const stateText=document.getElementById("sim-state"),status=document.getElementById("sim-status"),log=document.getElementById("sim-log"),attemptText=document.getElementById("sim-attempts"),approval=document.getElementById("requires-approval"),buttons=[...document.querySelectorAll("[data-event]")];
