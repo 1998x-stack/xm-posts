@@ -79,5 +79,50 @@
     "locator": "Independent explanatory adaptation",
     "status": "illustrative",
     "notes": "Author-created teaching abstraction; not a product implementation or measured result."
+  },
+  {
+    "id": "A10",
+    "kind": "result",
+    "claim": "Anthropic reports Gray Swan Agent Red Teaming attack success of roughly 0.1% on single attempts and 5–6% after 100 adaptive attempts for Claude Opus 4.7; Claude Code auto mode catches about 83% of overeager behaviors before execution.",
+    "source_url": "https://www.anthropic.com/research/how-we-contain-claude",
+    "locator": "Three types of risk, three components of defense → model layer",
+    "status": "verified",
+    "notes": "Company-reported, benchmark- and model-specific results; not a universal security guarantee."
+  },
+  {
+    "id": "A11",
+    "kind": "limitation",
+    "claim": "Anthropic's footnote reports auto mode blocks roughly 0.4% of benign commands while allowing about 17% of overeager actions through.",
+    "source_url": "https://www.anthropic.com/research/how-we-contain-claude",
+    "locator": "Footnote 01",
+    "status": "verified",
+    "notes": "Product-specific tradeoff; reinforces that model-based approvals are not a substitute for sandboxing."
+  },
+  {
+    "id": "A12",
+    "kind": "architecture",
+    "claim": "Cowork workspace mounts support read-only, read-write, and read-write-no-delete modes; symlink resolution must precede path validation.",
+    "source_url": "https://www.anthropic.com/research/how-we-contain-claude",
+    "locator": "Pattern 3: The local VM → Filesystem controls",
+    "status": "verified",
+    "notes": "Product architecture detail reported by Anthropic."
+  },
+  {
+    "id": "A13",
+    "kind": "architecture",
+    "claim": "Anthropic moved local MCP servers outside the Cowork VM and routes tool calls through proxies that enforce policy and can inspect returned content before it enters model context.",
+    "source_url": "https://www.anthropic.com/research/how-we-contain-claude",
+    "locator": "Pattern 3: The local VM; Trusting what the agent reads",
+    "status": "verified",
+    "notes": "Tool-output inspection is a defense-in-depth measure, not a perfect guarantee."
+  },
+  {
+    "id": "A14",
+    "kind": "identity",
+    "claim": "Cowork keeps credentials in the host keychain and provisions a per-session scoped-down token to the VM that can be revoked independently.",
+    "source_url": "https://www.anthropic.com/research/how-we-contain-claude",
+    "locator": "Looking ahead → Agent identity",
+    "status": "verified",
+    "notes": "Product-specific identity design described by Anthropic."
   }
 ]
