@@ -205,9 +205,10 @@ def score_centering_loss(
 <div class="table-scroll" tabindex="0" role="region" aria-label="框架实现边界对比表，可横向滚动"><table><thead><tr><th>实现 / 文档</th><th>关键约束</th><th>阅读时要注意</th></tr></thead><tbody>
 <tr><td><a href="https://github.com/martin-marek/score-centering" target="_blank" rel="noopener noreferrer">作者官方实现</a></td><td>Top-k sampler logprobs；JAX / PyTorch loss；可组合 TIS / MIS</td><td>参考实现用于复现实验，不等于通用生产 trainer</td></tr>
 <tr><td><a href="https://verl.readthedocs.io/en/latest/algo/rollout_corr.html" target="_blank" rel="noopener noreferrer">verl</a></td><td>当前文档要求 bypass mode、REINFORCE loss、token-level 或无 IS，并捕获 sampler top-k log-probs</td><td>此模式不支持 sequence-level IS；以具体版本文档为准</td></tr>
-<tr><td><a href="https://huggingface.co/docs/trl/main/en/paper_index" target="_blank" rel="noopener noreferrer">TRL</a></td><td>AsyncGRPOTrainer 文档将 score centering 作为默认目标的一部分</td><td>不能外推到所有 GRPOTrainer</td></tr>
-<tr><td><a href="https://docs.nvidia.com/nemo/rl/nightly/guides/score-centering.html" target="_blank" rel="noopener noreferrer">NeMo-RL</a></td><td>需要 token capture、vLLM top-logprobs 与特定控制器 / 训练布局</td><td>Nightly 文档标记 experimental，需按目标布局验证</td></tr>
+<tr><td><a href="https://huggingface.co/docs/trl/main/async_grpo_trainer" target="_blank" rel="noopener noreferrer">TRL AsyncGRPOTrainer</a></td><td>默认 score_centering=True；采集 sampler top-logprobs；默认与 Masked IS 的权重函数组合</td><td>num_sampler_logprobs 默认 8；关闭 score centering 才切回 clipped GRPO surrogate，不能外推到所有 GRPOTrainer</td></tr>
+<tr><td><a href="https://docs.nvidia.com/nemo/rl/nightly/guides/score-centering.html" target="_blank" rel="noopener noreferrer">NeMo-RL</a></td><td>默认关闭；SingleController + NeMo Gym + vLLM + token capture；采样过滤时需要 sampler replay</td><td>Nightly 标记 experimental；它是叠加在现有 clipped objective 上的 correction，不等于完全中心化任意 PPO loss</td></tr>
 </tbody></table></div>
+<p>框架支持并不意味着实现语义完全相同。TRL AsyncGRPOTrainer 的 score-centering 目标默认结合 Masked Importance Sampling：权重在配置区间内保留，区间外置零；其默认 sampler logprob 候选数为 8。NeMo-RL 则明确说明，它把中心化项加到既有 clipped objective 上，并不声称精确中心化任意 PPO clipped gradient；若使用 top-k / top-p sampling filters，还需要 sampler replay，让 trainer 与 sampler 在相同 support 上计算概率。</p>
 <p>真实训练中还要监控 sampler 与 trainer 的概率差异、Top-k tail mass、importance ratio 分布、有效样本量、entropy、gradient norm、policy KL 和 sampler refresh interval。尤其在异步长轨迹任务中，局部 token 修正不能替代 trajectory-level staleness 治理。</p>
 <div class="note cool"><strong>原论文的工程建议：</strong>当 trainer 在 sampler 同步之间可能移动较远时，优先评估 SC 与 TIS / MIS 的组合；在严重 staleness 实验中，组合方法优于单独 SC。对于数值量化 mismatch，单独 SC 在论文测试中也表现出较强稳定性。</div></section>
 
