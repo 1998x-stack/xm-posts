@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 390" role="img" aria-labelledby="gl06-title gl06-desc">
+<title id="gl06-title">Pearson 相关系数比较中心化评分</title>
+<desc id="gl06-desc">Pearson 相关系数先从两位用户的共同评分中减去各自均值，再比较偏差向量。相同方向表示正相关，相反方向表示负相关。</desc>
+<rect x="8" y="8" width="944" height="374" rx="22" fill="#f7faf7"/>
+<g font-family="Noto Sans CJK SC,system-ui,sans-serif">
+<text x="42" y="52" font-size="14" font-weight="800" letter-spacing="2" fill="#8a715b">CENTER, THEN COMPARE</text>
+<g>
+<rect x="42" y="82" width="260" height="238" rx="16" fill="#fff" stroke="#dce8e1"/>
+<text x="172" y="113" text-anchor="middle" font-size="17" font-weight="750" fill="#2d5358">原始评分</text>
+<path d="M86 266H260M110 286V142" stroke="#8ba6a0" stroke-width="1.5"/>
+<g fill="#27847c"><circle cx="128" cy="250" r="7"/><circle cx="157" cy="158" r="7"/><circle cx="190" cy="223" r="7"/><circle cx="226" cy="183" r="7"/></g>
+<g fill="#c47a55"><circle cx="128" cy="158" r="7"/><circle cx="157" cy="250" r="7"/><circle cx="190" cy="183" r="7"/><circle cx="226" cy="223" r="7"/></g>
+<text x="172" y="302" text-anchor="middle" font-size="12" fill="#728781">用户打分习惯可能不同</text>
+</g>
+<path d="M320 201H371" stroke="#4d7774" stroke-width="2.5"/>
+<path d="M359 193L371 201L359 209" stroke="#4d7774" stroke-width="2.5" fill="none"/>
+<rect x="385" y="82" width="240" height="238" rx="16" fill="#e5f3ed" stroke="#8ab8a7" stroke-width="2"/>
+<text x="505" y="113" text-anchor="middle" font-size="17" font-weight="750" fill="#236b65">减去各自均值</text>
+<text x="505" y="156" text-anchor="middle" font-size="14" fill="#527b72">Ken − K̄</text>
+<text x="505" y="184" text-anchor="middle" font-size="19" font-weight="750" fill="#24746d">[−2, +2, −1, +1]</text>
+<path d="M418 204H592" stroke="#a8cfc0" stroke-width="1.5"/>
+<text x="505" y="238" text-anchor="middle" font-size="14" fill="#527b72">Lee − L̄</text>
+<text x="505" y="266" text-anchor="middle" font-size="19" font-weight="750" fill="#a76142">[+1, −1, +2, −2]</text>
+<text x="505" y="298" text-anchor="middle" font-size="12" fill="#66887f">只保留共同评分项目</text>
+<path d="M643 201H692" stroke="#4d7774" stroke-width="2.5"/>
+<path d="M680 193L692 201L680 209" stroke="#4d7774" stroke-width="2.5" fill="none"/>
+<rect x="706" y="82" width="210" height="238" rx="16" fill="#fff0e5" stroke="#dba27b" stroke-width="2"/>
+<text x="811" y="113" text-anchor="middle" font-size="17" font-weight="750" fill="#8b5839">相关方向</text>
+<path d="M750 164L870 264" stroke="#c47a55" stroke-width="5" stroke-linecap="round"/>
+<path d="M750 264L870 164" stroke="#27847c" stroke-width="5" stroke-linecap="round"/>
+<text x="811" y="294" text-anchor="middle" font-size="13" font-weight="750" fill="#8b5839">Ken–Lee = −0.8</text>
+<text x="811" y="313" text-anchor="middle" font-size="11" fill="#98745f">相对变化相反</text>
+</g>
+</svg>
