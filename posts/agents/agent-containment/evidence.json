@@ -14,7 +14,8 @@
     "claim": "The article groups risks into user misuse, model misbehavior, and external attackers, and defenses into environment, model, and external content.",
     "source_url": "https://www.anthropic.com/research/how-we-contain-claude",
     "locator": "Three types of risk, three components of defense",
-    "status": "verified"
+    "status": "verified",
+    "notes": "Verified as a summary of the cited primary source; not independently reproduced."
   },
   {
     "id": "A03",
@@ -22,7 +23,8 @@
     "claim": "The article contrasts ephemeral gVisor containers, Claude Code OS sandbox plus human oversight, and Cowork local VM isolation.",
     "source_url": "https://www.anthropic.com/research/how-we-contain-claude",
     "locator": "Patterns for containing agents",
-    "status": "verified"
+    "status": "verified",
+    "notes": "Verified as a summary of the cited primary source; not independently reproduced."
   },
   {
     "id": "A04",
@@ -48,7 +50,8 @@
     "claim": "The article argues that a domain allowlist is a capability grant, and describes a proxy that validates a VM-provisioned session token and constrains requests.",
     "source_url": "https://www.anthropic.com/research/how-we-contain-claude",
     "locator": "Risk we missed: Exfiltration through an approved domain",
-    "status": "verified"
+    "status": "verified",
+    "notes": "Verified as a summary of the cited primary source; not independently reproduced."
   },
   {
     "id": "A07",
@@ -56,7 +59,8 @@
     "claim": "The article notes that VM isolation can reduce host EDR visibility and that OTLP pull-based exports are not equivalent to live monitoring.",
     "source_url": "https://www.anthropic.com/research/how-we-contain-claude",
     "locator": "Risk we missed: VM isolation kept the endpoint detection software out too",
-    "status": "verified"
+    "status": "verified",
+    "notes": "Verified as a summary of the cited primary source; not independently reproduced."
   },
   {
     "id": "A08",
@@ -64,7 +68,8 @@
     "claim": "The article separates traditional tool supply-chain auditing from prompt-injection risk in tool outputs and identifies persistent memory poisoning and multi-agent trust escalation as future concerns.",
     "source_url": "https://www.anthropic.com/research/how-we-contain-claude",
     "locator": "Trusting what the agent reads; Looking ahead",
-    "status": "verified"
+    "status": "verified",
+    "notes": "Verified as a summary of the cited primary source; not independently reproduced."
   },
   {
     "id": "A09",
@@ -72,6 +77,7 @@
     "claim": "The three-layer diagrams, interactive environment selector, and Python path policy are independent teaching abstractions, not a complete product configuration.",
     "source_url": "https://www.anthropic.com/research/how-we-contain-claude",
     "locator": "Independent explanatory adaptation",
-    "status": "illustrative"
+    "status": "illustrative",
+    "notes": "Author-created teaching abstraction; not a product implementation or measured result."
   }
 ]
