@@ -199,7 +199,7 @@ def transition(state, event, context):
 <div class="note"><strong>一个重要区别：</strong>状态机定义合法行为；持久化工作流引擎还要负责把状态、事件、计时器、重试、并发执行和外部副作用可靠地落地。两者有关联，但不是同一个东西。</div></section>
 
 <section id="protocol"><h2>09 · TCP：状态机不是抽象玩具</h2>
-<p>TCP 连接的生命周期就是一个经典的协议状态机。RFC 9293 §3.3.2 列出 LISTEN、SYN-SENT、SYN-RECEIVED、ESTABLISHED、FIN-WAIT-1、FIN-WAIT-2、CLOSE-WAIT、CLOSING、LAST-ACK、TIME-WAIT 和 CLOSED 等状态；转移由 OPEN、SEND、RECEIVE、CLOSE、ABORT、报文标志位与超时事件触发。</p>
+<p>TCP 连接的生命周期就是一个经典的协议状态机。RFC 9293 §3.3.2 列出 LISTEN、SYN-SENT、SYN-RECEIVED、ESTABLISHED、FIN-WAIT-1、FIN-WAIT-2、CLOSE-WAIT、CLOSING、LAST-ACK、TIME-WAIT 和 CLOSED 等状态；其中 CLOSED 是表示“没有 TCB、因此不存在连接”的虚拟状态。用户调用 OPEN、SEND、RECEIVE、CLOSE、ABORT、STATUS，接收带 SYN / ACK / RST / FIN 的报文，以及超时，都是规范讨论的事件来源；并非每个事件都会改变状态。</p>
 <p>注意 RFC 自己也提醒：状态图只是状态变化的摘要，不是完整协议规范。真实 TCP 行为还包含序列号校验、重传队列、报文处理顺序、错误响应和计时器细节。不能只照着图写一个简化版，就声称实现了 TCP。</p>
 <div class="note"><strong>工程启示：</strong>协议状态机让边界条件可见，但状态图必须与规范中的事件处理规则一起阅读。状态转移图是规格的一部分，不是规格的全部。</div>
 <p>来源：<a href="https://www.rfc-editor.org/rfc/rfc9293.html#section-3.3.2" target="_blank" rel="noopener noreferrer">RFC 9293 · State Machine Overview ↗</a>。</p></section>
