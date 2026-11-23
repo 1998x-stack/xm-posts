@@ -149,7 +149,7 @@ pre{max-width:100%;overflow-x:auto;white-space:pre;background:#203b41;color:#e4f
 </g></svg></div><figcaption>审批守卫决定高风险任务是否进入执行；低风险任务在校验通过后可以直达执行。</figcaption></figure>
 <div class="simulator" data-demo>
 <div class="sim-top"><div><h3>Agent Task Controller</h3><p class="hint">点击事件，观察合法转移和当前活动状态。</p></div><div class="current-state"><span class="dot" aria-hidden="true"></span><span>当前状态：</span><span id="sim-state" aria-live="polite">空闲（idle）</span></div></div>
-<label class="sim-options"><input id="requires-approval" type="checkbox" checked> 高风险任务：校验通过后需要人工审批</label>
+<label class="sim-options"><input id="requires-approval" type="checkbox" checked disabled> 高风险任务：校验通过后需要人工审批</label>
 <figure class="figure"><div class="figure-scroll" tabindex="0" role="region" aria-label="图示，可横向滚动"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 370" role="img" aria-labelledby="fsm06-title fsm06-desc">
 <title id="fsm06-title">Agent 任务执行状态机</title><desc id="fsm06-desc">任务从空闲进入校验，根据风险守卫进入人工审批或直接执行；执行后成功、失败重试或取消，重试次数达到上限后终止。</desc>
 <defs><marker id="fsm06-arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0 0 L9 3 L0 6" fill="none" stroke="#287d79" stroke-width="1.5"/></marker></defs><rect x="8" y="8" width="984" height="354" rx="18" fill="#f5f8f6"/>
@@ -175,8 +175,9 @@ pre{max-width:100%;overflow-x:auto;white-space:pre;background:#203b41;color:#e4f
 <path d="M760 135 C810 188 850 216 890 267" stroke="#b65d5d" stroke-width="2" fill="none" marker-end="url(#fsm06-arrow)"/><text x="858" y="210" text-anchor="middle" font-size="12" stroke="none">重试耗尽</text>
 <text x="500" y="348" text-anchor="middle" font-size="12" fill="#61777a" stroke="none">简化图省略持久化、并发控制与超时细节；重试必须受次数和幂等性约束</text>
 </g></svg></div><figcaption>橙色描边表示当前状态。简化模型把外部工具执行当作一个事件结果；真实系统还需要处理持久化、并发、幂等和超时。</figcaption></figure>
+<noscript><p class="note">交互模拟需要启用 JavaScript；上方状态图、转移规则与正文说明仍可独立阅读。</p></noscript>
 <div class="sim-controls" aria-label="状态机事件控制">
-<button type="button" data-event="submit">提交任务</button><button type="button" data-event="pass">校验通过</button><button type="button" data-event="invalid">校验失败</button><button type="button" data-event="approve">批准</button><button type="button" data-event="reject">拒绝</button><button type="button" data-event="success">执行成功</button><button type="button" data-event="fail">执行失败</button><button type="button" data-event="timeout">超时</button><button type="button" data-event="retry">重试</button><button type="button" data-event="cancel">取消</button><button type="button" data-event="reset">重置终态</button>
+<button type="button" data-event="submit" disabled>提交任务</button><button type="button" data-event="pass" disabled>校验通过</button><button type="button" data-event="invalid" disabled>校验失败</button><button type="button" data-event="approve" disabled>批准</button><button type="button" data-event="reject" disabled>拒绝</button><button type="button" data-event="success" disabled>执行成功</button><button type="button" data-event="fail" disabled>执行失败</button><button type="button" data-event="timeout" disabled>超时</button><button type="button" data-event="retry" disabled>重试</button><button type="button" data-event="cancel" disabled>取消</button><button type="button" data-event="reset" disabled>重置终态</button>
 </div>
 <p class="sim-status" id="sim-status" role="status" aria-live="polite">等待提交。当前状态不接受“批准”或“执行成功”等事件。</p>
 <div class="sim-log" aria-label="转移日志"><ol id="sim-log"><li>初始化：idle</li></ol></div>
