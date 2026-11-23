@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="920" height="370" viewBox="0 0 920 370" role="img" aria-labelledby="rpa-fig2-title rpa-fig2-desc">
+<title id="rpa-fig2-title">工作长尾与 RPA 候选区间</title><desc id="rpa-fig2-desc">高频重复任务更容易标准化，中段稳定的跨系统任务适合 RPA，低频复杂例外保留人工判断。</desc>
+<rect width="920" height="370" rx="22" fill="#f4f8f6"/><path d="M94 48V292H866" fill="none" stroke="#536d69" stroke-width="2.5"/>
+<path d="M94 72 C155 84 190 118 248 158 S365 220 438 246 S585 274 680 284 S795 289 850 290 L850 292 L94 292Z" fill="#d9eee8"/>
+<path d="M94 72 C155 84 190 118 248 158 S365 220 438 246 S585 274 680 284 S795 289 850 290" fill="none" stroke="#168777" stroke-width="5" stroke-linecap="round"/>
+<path d="M325 52V292M600 52V292" stroke="#d18a48" stroke-width="2.5" stroke-dasharray="7 7"/>
+<rect x="112" y="105" width="190" height="68" rx="12" fill="#dff2ed" stroke="#168777"/><text x="207" y="132" text-anchor="middle" font-size="18" font-weight="700" fill="#155e55">标准化流程</text><text x="207" y="154" text-anchor="middle" font-size="13" fill="#386d66">高频 · 规则明确</text>
+<rect x="360" y="170" width="208" height="68" rx="12" fill="#fff0df" stroke="#d18a48"/><text x="464" y="197" text-anchor="middle" font-size="18" font-weight="700" fill="#8d4c20">RPA 候选区</text><text x="464" y="219" text-anchor="middle" font-size="13" fill="#8d684b">重复 · 稳定 · 跨系统</text>
+<rect x="643" y="214" width="210" height="68" rx="12" fill="#ece9f8" stroke="#9a8bc8"/><text x="748" y="241" text-anchor="middle" font-size="18" font-weight="700" fill="#51457f">人类处理例外</text><text x="748" y="263" text-anchor="middle" font-size="13" fill="#665e8f">低频 · 歧义 · 高判断</text>
+<text x="36" y="64" font-size="13" fill="#536d69">高</text><text x="36" y="288" font-size="13" fill="#536d69">低</text><text x="24" y="184" transform="rotate(-90 24 184)" text-anchor="middle" font-size="15" fill="#536d69">案例出现频率</text>
+<text x="94" y="326" font-size="14" fill="#536d69">高频、同质</text><text x="480" y="326" text-anchor="middle" font-size="14" fill="#536d69">案例类型逐渐变得多样</text><text x="866" y="326" text-anchor="end" font-size="14" fill="#536d69">低频、长尾</text>
+<text x="460" y="355" text-anchor="middle" font-size="12" fill="#6d817c">概念示意图，不是实测分布，也不意味着所有组织都遵循固定的 80/20 比例</text></svg>
