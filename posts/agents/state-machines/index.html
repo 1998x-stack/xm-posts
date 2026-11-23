@@ -14,7 +14,7 @@ a{color:#147b78;text-underline-offset:3px}a:hover{color:var(--orange)}a:focus-vi
 main,article{min-width:0}.hero{padding:5px 0 0}.eyebrow{font-size:12px;font-weight:800;letter-spacing:.15em;color:var(--teal)}h1{font-size:clamp(41px,5.8vw,68px);line-height:1.08;letter-spacing:-.06em;margin:15px 0 20px}h2{font-size:clamp(26px,3vw,35px);line-height:1.3;letter-spacing:-.035em;margin:0 0 20px}h3{font-size:20px;line-height:1.4;margin:25px 0 10px}
 .dek{font-size:21px;line-height:1.68;color:#4e696d}.meta{display:flex;gap:14px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:17px;margin:27px 0 62px;color:#728787;font-size:12px}
 section{margin:0 0 74px;scroll-margin-top:22px}p{margin:0 0 19px;color:#405d62}.lead{font-size:19px;color:#2e5558}strong{color:#24484c}li{margin:7px 0;color:#405d62}
-.figure{margin:27px 0 30px;padding:13px;border:1px solid var(--line);border-radius:14px;background:#fff;box-shadow:0 12px 34px #1f4b3d0a}.figure svg{display:block;width:100%;height:auto}.figure figcaption{font-size:13px;color:var(--muted);line-height:1.7;padding:10px 5px 0;border-top:1px solid #edf1ed;margin-top:9px}
+.figure{margin:27px 0 30px;padding:13px;border:1px solid var(--line);border-radius:14px;background:#fff;box-shadow:0 12px 34px #1f4b3d0a}.figure svg{display:block;width:100%;height:auto}.figure-scroll{max-width:100%;overflow-x:auto;overflow-y:hidden}.figure-scroll:focus-visible{outline:3px solid var(--teal);outline-offset:2px}.figure figcaption{font-size:13px;color:var(--muted);line-height:1.7;padding:10px 5px 0;border-top:1px solid #edf1ed;margin-top:9px}
 .note{border-left:4px solid var(--teal);background:#eaf5f0;padding:15px 18px;margin:22px 0;border-radius:0 8px 8px 0}.warning{border-left-color:var(--orange);background:#fff3e9}.critical{border-left-color:var(--red);background:#fff0ef}
 .panel{border:1px solid var(--line);border-radius:12px;background:#fff;padding:18px 20px;margin:20px 0;min-width:0}.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}.panel h3{margin-top:0}.panel p:last-child{margin-bottom:0}
 .math-box{border:1px solid var(--line);background:#eef6f1;border-radius:10px;padding:14px 16px;margin:22px 0;min-width:0}.math-scroll{max-width:100%;min-width:0;overflow-x:auto;overflow-y:hidden}.math-scroll:focus-visible{outline:3px solid var(--teal);outline-offset:2px}.math-scroll math[display=block]{display:block;width:max-content;min-width:100%;font-size:1.2rem;font-family:"Cambria Math","STIX Two Math",serif}.math-inline{font-family:"Cambria Math","STIX Two Math",serif}
@@ -24,9 +24,9 @@ pre{max-width:100%;overflow-x:auto;white-space:pre;background:#203b41;color:#e4f
 .callout-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:20px 0}.callout{background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px}.callout strong{display:block;margin-bottom:5px}.callout p{font-size:14px;margin:0}
 .ref-list{padding-left:1.4em}.ref-list li{margin:13px 0}.ref-list a{overflow-wrap:anywhere}
 @media(max-width:930px){.layout{display:block;padding:30px 20px 70px}.toc{position:static;max-height:none;margin-bottom:28px;padding-bottom:12px;border-bottom:1px solid var(--line)}.toc a{display:inline-block;border-left:0;border-bottom:2px solid transparent;margin:0 7px 5px 0;padding:5px 2px}.toc a:hover{border-bottom-color:var(--teal)}}
-@media(max-width:620px){.barin{align-items:flex-start;flex-direction:column}.links{gap:10px}.layout{padding:22px 16px 55px}body{font-size:16px}.dek{font-size:18px}h1{font-size:clamp(38px,11vw,52px)}section{margin-bottom:56px}.figure{padding:8px}.grid2,.callout-row{grid-template-columns:1fr}.simulator{padding:14px}.sim-controls button{flex:1 1 42%}}
+@media(max-width:620px){.barin{align-items:flex-start;flex-direction:column}.links{gap:10px}.layout{padding:22px 16px 55px}body{font-size:16px}.dek{font-size:18px}h1{font-size:clamp(38px,11vw,52px)}section{margin-bottom:56px}.figure{padding:8px}.figure-scroll svg{min-width:960px}.grid2,.callout-row{grid-template-columns:1fr}.simulator{padding:14px}.sim-controls button{flex:1 1 42%}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation:none!important;transition:none!important}}
-@media print{body{background:#fff;color:#111;font-size:10.5pt}.bar,.toc,.skip,.sim-controls,.sim-options{display:none!important}.layout{display:block;padding:0}.figure,.panel,.simulator{box-shadow:none;break-inside:avoid}section{margin-bottom:1.3rem}.math-scroll{overflow:visible}.math-scroll math[display=block]{font-size:10pt}a{color:#164e54}.sim-log{max-height:none}}
+@media print{body{background:#fff;color:#111;font-size:10.5pt}.bar,.toc,.skip,.sim-controls,.sim-options{display:none!important}.layout{display:block;padding:0}.figure,.panel,.simulator{box-shadow:none;break-inside:avoid}.figure-scroll{overflow:visible}.figure-scroll svg{min-width:0}section{margin-bottom:1.3rem}.math-scroll{overflow:visible}.math-scroll math[display=block]{font-size:10pt}a{color:#164e54}.sim-log{max-height:none}}
 </style></head>
 <body>
 <a class="skip" href="#content">跳转至正文</a>
@@ -40,7 +40,7 @@ pre{max-width:100%;overflow-x:auto;white-space:pre;background:#203b41;color:#e4f
 <p class="lead">一个任务对象只有 <code>status = "running"</code>，并不意味着系统真的有一套可靠的状态模型。</p>
 <p>假设一个 Agent 正在执行工具调用：它可能先校验参数，再等待人工审批，然后执行工具，最后成功、失败、超时或取消。如果代码只是在不同函数里随意写入字符串，系统就可能出现“已取消的任务又被重试”“未审批的高风险操作进入执行”“成功任务被重复提交”等非法行为。</p>
 <p>状态机解决的不是“如何给对象加一个状态字段”，而是把系统允许发生的行为写成显式规则：<strong>当前处于什么状态、发生了什么事件、哪些条件必须成立、执行什么动作、转移到哪里。</strong></p>
-<figure class="figure"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 250" role="img" aria-labelledby="fsm01-title fsm01-desc">
+<figure class="figure"><div class="figure-scroll" tabindex="0" role="region" aria-label="图示，可横向滚动"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 250" role="img" aria-labelledby="fsm01-title fsm01-desc">
 <title id="fsm01-title">状态机的一次转移由五个部分组成</title><desc id="fsm01-desc">当前状态和输入事件进入转移规则，守卫判断是否允许，动作产生副作用，最后进入下一个状态。</desc>
 <defs><marker id="fsm01-arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0 0 L9 3 L0 6" fill="none" stroke="#287d79" stroke-width="1.5"/></marker></defs><rect x="8" y="8" width="884" height="234" rx="18" fill="#f5f8f6"/>
 <g font-family="system-ui,sans-serif" text-anchor="middle">
@@ -50,7 +50,7 @@ pre{max-width:100%;overflow-x:auto;white-space:pre;background:#203b41;color:#e4f
 <rect x="545" y="78" width="135" height="82" rx="13" fill="#fce7e0" stroke="#c87959" stroke-width="2"/><text x="612" y="111" font-size="18" font-weight="700" fill="#824b39">动作</text><text x="612" y="137" font-size="15" fill="#965d48">action</text>
 <rect x="715" y="78" width="150" height="82" rx="13" fill="#e9e4f8" stroke="#8878bb" stroke-width="2"/><text x="790" y="111" font-size="18" font-weight="700" fill="#514478">下一状态</text><text x="790" y="137" font-size="15" fill="#6d6095">sₜ₊₁</text>
 <g stroke="#287d79" stroke-width="3" fill="none" marker-end="url(#fsm01-arrow)"><path d="M180 119 H208"/><path d="M340 119 H368"/><path d="M510 119 H538"/><path d="M680 119 H708"/></g>
-<text x="450" y="204" font-size="15" fill="#526c6d">只有匹配且守卫成立的转移规则才可执行</text></g></svg><figcaption>一次转移必须同时解释来源状态、触发事件、守卫条件、动作和目标状态；没有匹配规则时，不应默默猜测下一步。</figcaption></figure>
+<text x="450" y="204" font-size="15" fill="#526c6d">只有匹配且守卫成立的转移规则才可执行</text></g></svg></div><figcaption>一次转移必须同时解释来源状态、触发事件、守卫条件、动作和目标状态；没有匹配规则时，不应默默猜测下一步。</figcaption></figure>
 <div class="grid2"><div class="panel"><h3>没有显式转移模型</h3><p>多个模块各自修改状态字符串；合法路径分散在 if/else、异常处理和定时任务中。局部看似合理，组合后却可能出现非法跳转。</p></div><div class="panel"><h3>有显式转移模型</h3><p>状态与事件组成可审查的转移表；非法事件可以拒绝，守卫可以被测试，完整路径可以被模拟或模型检查。</p></div></div>
 <div class="note"><strong>核心直觉：</strong>状态描述系统“现在处于什么行为阶段”；事件描述“什么事情发生了”；转移规则描述“在什么条件下，系统允许如何变化”。</div></section>
 
@@ -62,7 +62,7 @@ pre{max-width:100%;overflow-x:auto;white-space:pre;background:#203b41;color:#e4f
 <div class="math-box"><div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="DFA 五元组公式，可横向滚动"><math display="block" aria-label="DFA 等于状态集合、输入字母表、转移函数、初始状态和接受状态集合组成的五元组"><mrow><mi>A</mi><mo>=</mo><mo>(</mo><mi>Q</mi><mo>,</mo><mi>Σ</mi><mo>,</mo><mi>δ</mi><mo>,</mo><msub><mi>q</mi><mn>0</mn></msub><mo>,</mo><mi>F</mi><mo>)</mo></mrow></math></div></div>
 <ul><li><strong>Q</strong>：有限状态集合。</li><li><strong>Σ</strong>：输入符号表。</li><li><strong>δ</strong>：转移函数，DFA 中每个状态和输入符号恰好对应一个下一状态。</li><li><strong>q₀</strong>：初始状态。</li><li><strong>F</strong>：接受状态集合；输入串结束时落入 F，才接受该字符串。</li></ul>
 <p>这一定义与 Sipser《Introduction to the Theory of Computation》第一章的有限自动机定义一致。<a href="https://ac.informatik.uni-freiburg.de/teaching/ss_23/tcs_bridging/book/Introduction_to_the_theory_of_computation_by_Michael_Sipser.pdf" target="_blank" rel="noopener noreferrer">教材原文 PDF ↗</a>。Rabin 与 Scott 1959 年的论文系统研究了有限自动机及其判定问题：<a href="https://doi.org/10.1147/rd.32.0114" target="_blank" rel="noopener noreferrer">Finite Automata and Their Decision Problems ↗</a>。</p>
-<figure class="figure"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 300" role="img" aria-labelledby="fsm02-title fsm02-desc">
+<figure class="figure"><div class="figure-scroll" tabindex="0" role="region" aria-label="图示，可横向滚动"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 300" role="img" aria-labelledby="fsm02-title fsm02-desc">
 <title id="fsm02-title">二进制输入中 1 的个数为偶数的 DFA</title><desc id="fsm02-desc">偶数状态是初态和接受态；读入 0 留在原状态，读入 1 在偶数与奇数状态之间切换。</desc>
 <defs><marker id="fsm02-arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0 0 L9 3 L0 6" fill="none" stroke="#287d79" stroke-width="1.5"/></marker></defs><rect x="8" y="8" width="804" height="284" rx="18" fill="#f5f8f6"/>
 <g font-family="system-ui,sans-serif" fill="#29484c">
@@ -75,15 +75,15 @@ pre{max-width:100%;overflow-x:auto;white-space:pre;background:#203b41;color:#e4f
 <path d="M570 86 C535 18 685 18 650 86" stroke="#c18a3d" stroke-width="2.5" fill="none" marker-end="url(#fsm02-arrow)"/><text x="610" y="36" text-anchor="middle" font-size="17" font-weight="700">0</text>
 <path d="M384 144 H540" stroke="#287d79" stroke-width="3" fill="none" marker-end="url(#fsm02-arrow)"/><text x="462" y="128" text-anchor="middle" font-size="17" font-weight="700">1</text>
 <path d="M546 183 C500 258 430 258 384 183" stroke="#c18a3d" stroke-width="3" fill="none" marker-end="url(#fsm02-arrow)"/><text x="465" y="253" text-anchor="middle" font-size="17" font-weight="700">1</text>
-<text x="410" y="282" text-anchor="middle" font-size="13" fill="#61777a">输入串结束时落在 E，且仅当 1 的数量为偶数时接受</text></g></svg><figcaption>识别“1 的数量为偶数”的 DFA：读入 0 不改变奇偶性，读入 1 切换奇偶状态；输入结束时处于双圆圈 E 才接受。</figcaption></figure>
+<text x="410" y="282" text-anchor="middle" font-size="13" fill="#61777a">输入串结束时落在 E，且仅当 1 的数量为偶数时接受</text></g></svg></div><figcaption>识别“1 的数量为偶数”的 DFA：读入 0 不改变奇偶性，读入 1 切换奇偶状态；输入结束时处于双圆圈 E 才接受。</figcaption></figure>
 <p>例如输入串 <code>10110</code> 中有三个 1，因此路径最终落在 O，字符串被拒绝。DFA 的关键不是图形长什么样，而是对每一个状态和输入符号，转移结果都唯一。</p></section>
 
 <section id="families"><h2>03 · 状态机的几个重要家族</h2>
 <h3>DFA 与 NFA：转移结果是否唯一？</h3><p>DFA 对每个状态与输入符号给出唯一的下一状态。非确定性有限自动机（NFA）允许一个输入对应零个、一个或多个候选下一状态；接受语义是“至少存在一条路径到达接受状态”。在表达能力上，DFA 与 NFA 识别相同的正则语言；子集构造可以把 NFA 转换成 DFA，但最坏情况下状态数量可能显著增加。</p>
-<div class="table-scroll"><table><thead><tr><th>维度</th><th>DFA</th><th>NFA</th></tr></thead><tbody><tr><td>转移</td><td>状态 × 符号 → 单一状态</td><td>状态 × 符号 → 状态集合（可含 ε 转移）</td></tr><tr><td>接受</td><td>唯一运行路径最终进入接受态</td><td>存在一条运行路径最终进入接受态</td></tr><tr><td>适用直觉</td><td>执行路径明确、实现直接</td><td>描述模式更紧凑，便于表达“多种可能”</td></tr></tbody></table></div>
+<div class="table-scroll" tabindex="0" role="region" aria-label="DFA 与 NFA 对比表，可横向滚动"><table><thead><tr><th>维度</th><th>DFA</th><th>NFA</th></tr></thead><tbody><tr><td>转移</td><td>状态 × 符号 → 单一状态</td><td>状态 × 符号 → 状态集合（可含 ε 转移）</td></tr><tr><td>接受</td><td>唯一运行路径最终进入接受态</td><td>存在一条运行路径最终进入接受态</td></tr><tr><td>适用直觉</td><td>执行路径明确、实现直接</td><td>描述模式更紧凑，便于表达“多种可能”</td></tr></tbody></table></div>
 <h3>Mealy 与 Moore：输出由什么决定？</h3><p>在顺序电路和输出自动机中，状态机不仅改变状态，还产生输出。Mealy 机的输出函数依赖当前状态与输入；Moore 机的输出函数只依赖当前状态。Mealy 的输出常标在转移边上，Moore 的输出常标在状态节点里。</p>
 <div class="math-box"><div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="Mealy 和 Moore 输出函数公式，可横向滚动"><math display="block" aria-label="Mealy 输出函数依赖状态和输入；Moore 输出函数只依赖状态"><mrow><msub><mi>λ</mi><mtext>Mealy</mtext></msub><mo>:</mo><mi>S</mi><mo>×</mo><mi>E</mi><mo>→</mo><mi>O</mi><mo>,</mo><mspace width="1em"/><msub><mi>λ</mi><mtext>Moore</mtext></msub><mo>:</mo><mi>S</mi><mo>→</mo><mi>O</mi></mrow></math></div></div>
-<figure class="figure"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 330" role="img" aria-labelledby="fsm03-title fsm03-desc">
+<figure class="figure"><div class="figure-scroll" tabindex="0" role="region" aria-label="图示，可横向滚动"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 330" role="img" aria-labelledby="fsm03-title fsm03-desc">
 <title id="fsm03-title">Mealy 与 Moore 输出模型的差异</title><desc id="fsm03-desc">Mealy 机把输出标注在由输入触发的边上；Moore 机把输出绑定在状态节点上。</desc>
 <defs><marker id="fsm03-arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0 0 L9 3 L0 6" fill="none" stroke="#287d79" stroke-width="1.5"/></marker></defs><rect x="8" y="8" width="884" height="314" rx="18" fill="#f5f8f6"/>
 <g font-family="system-ui,sans-serif" fill="#29484c">
@@ -98,7 +98,7 @@ pre{max-width:100%;overflow-x:auto;white-space:pre;background:#203b41;color:#e4f
 <text x="630" y="169" text-anchor="middle" font-size="17" font-weight="700">锁定</text><text x="630" y="192" text-anchor="middle" font-size="12">输出=0</text>
 <text x="805" y="169" text-anchor="middle" font-size="17" font-weight="700">解锁</text><text x="805" y="192" text-anchor="middle" font-size="12">输出=1</text>
 <path d="M678 174 H757" stroke="#287d79" stroke-width="3" marker-end="url(#fsm03-arrow)"/><text x="717" y="145" text-anchor="middle" font-size="14">投币</text>
-<text x="450" y="315" text-anchor="middle" font-size="13" fill="#61777a">Mealy 输出依赖状态和输入；Moore 输出只依赖状态</text></g></svg><figcaption>Mealy 在输入触发的边上给出输出，Moore 把输出绑定在进入后的状态上。</figcaption></figure>
+<text x="450" y="315" text-anchor="middle" font-size="13" fill="#61777a">Mealy 输出依赖状态和输入；Moore 输出只依赖状态</text></g></svg></div><figcaption>Mealy 在输入触发的边上给出输出，Moore 把输出绑定在进入后的状态上。</figcaption></figure>
 <p>Mealy 的 1955 年论文讨论顺序电路的形式化综合方法；Moore 的 1956 年论文从有限自动机的外部实验角度研究状态可辨识性。<a href="https://doi.org/10.1002/j.1538-7305.1955.tb03788.x" target="_blank" rel="noopener noreferrer">Mealy (1955) ↗</a>、<a href="https://doi.org/10.1515/9781400882618-006" target="_blank" rel="noopener noreferrer">Moore (1956) ↗</a>。</p></section>
 
 <section id="transition"><h2>04 · 从一条边拆开：事件、守卫与动作</h2>
@@ -112,7 +112,7 @@ pre{max-width:100%;overflow-x:auto;white-space:pre;background:#203b41;color:#e4f
 <section id="statecharts"><h2>05 · 为什么复杂系统需要 Statecharts？</h2>
 <p>扁平 FSM 的一个问题是状态组合爆炸。假设任务生命周期有 5 个状态，审批有 3 个状态，预算监控有 2 个状态。若把所有维度硬编码成一个枚举，理论组合上界就是 5 × 3 × 2 = 30 个组合；但很多组合根本不合法，且共享行为会重复出现。</p>
 <p>Harel 在 1987 年提出 Statecharts，扩展传统状态图，引入<strong>层次（hierarchy）、并发（concurrency）和通信（communication）</strong>，使复杂离散事件系统可以模块化表达。原始论文：<a href="https://doi.org/10.1016/0167-6423(87)90035-9" target="_blank" rel="noopener noreferrer">Statecharts: A Visual Formalism for Complex Systems ↗</a>。</p>
-<figure class="figure"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 370" role="img" aria-labelledby="fsm04-title fsm04-desc">
+<figure class="figure"><div class="figure-scroll" tabindex="0" role="region" aria-label="图示，可横向滚动"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 370" role="img" aria-labelledby="fsm04-title fsm04-desc">
 <title id="fsm04-title">层次状态机把复杂行为拆成嵌套与正交区域</title><desc id="fsm04-desc">一个 AgentTask 复合状态包含准备和执行两个阶段；执行阶段中，任务执行与预算监控是同时激活的两个正交区域。</desc>
 <rect x="8" y="8" width="904" height="354" rx="18" fill="#f5f8f6"/>
 <g font-family="system-ui,sans-serif" fill="#29484c">
@@ -127,7 +127,7 @@ pre{max-width:100%;overflow-x:auto;white-space:pre;background:#203b41;color:#e4f
 <rect x="670" y="151" width="165" height="123" rx="10" fill="#fff0dc" stroke="#c18a3d" stroke-width="1.7"/><text x="752" y="175" text-anchor="middle" font-size="14" font-weight="700" fill="#916c35">正交区域 B · 预算</text>
 <rect x="688" y="194" width="130" height="54" rx="8" fill="#fff" stroke="#c18a3d"/><text x="753" y="226" text-anchor="middle" font-size="14">剩余预算监控</text>
 <path d="M290 200 H326 M320 194 L328 200 L320 206" fill="none" stroke="#287f77" stroke-width="2"/>
-<text x="460" y="322" text-anchor="middle" font-size="13" fill="#61777a">正交区域表示同时处于活动配置中，不等价于必须创建两个线程</text></g></svg><figcaption>复合状态把准备与执行分层；执行内部的任务区域与预算区域可以同时处于活动配置中。正交区域表达的是模型语义上的同时激活，不是“必须启动多个 OS 线程”。</figcaption></figure>
+<text x="460" y="322" text-anchor="middle" font-size="13" fill="#61777a">正交区域表示同时处于活动配置中，不等价于必须创建两个线程</text></g></svg></div><figcaption>复合状态把准备与执行分层；执行内部的任务区域与预算区域可以同时处于活动配置中。正交区域表达的是模型语义上的同时激活，不是“必须启动多个 OS 线程”。</figcaption></figure>
 <h3>层次、并发与历史状态</h3><ul><li><strong>层次状态：</strong>一个复合状态包含子状态；进入父状态时，还要按初始子状态规则进入具体活动状态。</li><li><strong>正交区域：</strong>多个区域同时处于活动状态，同一事件可能分别被各区域处理。它是状态配置语义，不自动等价于真实并行线程。</li><li><strong>历史状态：</strong>退出复合状态时记录上次活动的子状态，重新进入时可以恢复浅历史或深历史。</li><li><strong>进入 / 退出动作：</strong>状态激活或退出时执行相应动作；必须考虑动作顺序和失败语义。</li></ul>
 <p>W3C 的 SCXML 1.0 Recommendation 将这些语义落实为可执行的状态机表示：<a href="https://www.w3.org/TR/scxml/" target="_blank" rel="noopener noreferrer">W3C SCXML 规范 ↗</a>。例如 SCXML 的 <code>parallel</code> 状态会让其所有子区域同时激活，但事件处理顺序和冲突规则仍由解释算法定义。</p></section>
 
@@ -136,7 +136,7 @@ pre{max-width:100%;overflow-x:auto;white-space:pre;background:#203b41;color:#e4f
 <div class="simulator" data-demo>
 <div class="sim-top"><div><h3>Agent Task Controller</h3><p class="hint">点击事件，观察合法转移和当前活动状态。</p></div><div class="current-state"><span class="dot" aria-hidden="true"></span><span>当前状态：</span><span id="sim-state" aria-live="polite">空闲（idle）</span></div></div>
 <label class="sim-options"><input id="requires-approval" type="checkbox" checked> 高风险任务：校验通过后需要人工审批</label>
-<figure class="figure"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 370" role="img" aria-labelledby="fsm05-title fsm05-desc">
+<figure class="figure"><div class="figure-scroll" tabindex="0" role="region" aria-label="图示，可横向滚动"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 370" role="img" aria-labelledby="fsm05-title fsm05-desc">
 <title id="fsm05-title">Agent 任务执行状态机</title><desc id="fsm05-desc">任务从空闲进入校验，根据风险守卫进入人工审批或直接执行；执行后成功、失败重试或取消，重试次数达到上限后终止。</desc>
 <defs><marker id="fsm05-arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0 0 L9 3 L0 6" fill="none" stroke="#287d79" stroke-width="1.5"/></marker></defs><rect x="8" y="8" width="984" height="354" rx="18" fill="#f5f8f6"/>
 <g font-family="system-ui,sans-serif" fill="#29484c" stroke-linecap="round" stroke-linejoin="round">
@@ -160,7 +160,7 @@ pre{max-width:100%;overflow-x:auto;white-space:pre;background:#203b41;color:#e4f
 <path d="M731 135 V166 H398 V267" stroke="#c87959" stroke-width="2" fill="none" marker-end="url(#fsm05-arrow)"/><text x="790" y="183" text-anchor="middle" font-size="12" stroke="none">取消</text>
 <path d="M760 135 C810 188 850 216 890 267" stroke="#b65d5d" stroke-width="2" fill="none" marker-end="url(#fsm05-arrow)"/><text x="858" y="210" text-anchor="middle" font-size="12" stroke="none">重试耗尽</text>
 <text x="500" y="348" text-anchor="middle" font-size="12" fill="#61777a" stroke="none">简化图省略持久化、并发控制与超时细节；重试必须受次数和幂等性约束</text>
-</g></svg><figcaption>橙色描边表示当前状态。简化模型把外部工具执行当作一个事件结果；真实系统还需要处理持久化、并发、幂等和超时。</figcaption></figure>
+</g></svg></div><figcaption>橙色描边表示当前状态。简化模型把外部工具执行当作一个事件结果；真实系统还需要处理持久化、并发、幂等和超时。</figcaption></figure>
 <div class="sim-controls" aria-label="状态机事件控制">
 <button type="button" data-event="submit">提交任务</button><button type="button" data-event="pass">校验通过</button><button type="button" data-event="invalid">校验失败</button><button type="button" data-event="approve">批准</button><button type="button" data-event="reject">拒绝</button><button type="button" data-event="success">执行成功</button><button type="button" data-event="fail">执行失败</button><button type="button" data-event="timeout">超时</button><button type="button" data-event="retry">重试</button><button type="button" data-event="cancel">取消</button><button type="button" data-event="reset">重置终态</button>
 </div>
@@ -178,7 +178,7 @@ pre{max-width:100%;overflow-x:auto;white-space:pre;background:#203b41;color:#e4f
 
 <section id="engineering"><h2>08 · 工程实现：把转移表变成可测试代码</h2>
 <p>实现时，不要把状态机散落成几十个互相调用的回调。把状态、事件和上下文作为显式输入；转移函数只负责判断下一状态与上下文更新。完整代码与测试：<a href="https://github.com/1998x-stack/xm-posts/blob/main/examples/agent_state_machine.py" target="_blank" rel="noopener noreferrer">agent_state_machine.py ↗</a>。</p>
-<pre><code>from dataclasses import replace
+<pre tabindex="0" role="region" aria-label="Python 状态转移代码，可横向滚动"><code>from dataclasses import replace
 
 def transition(state, event, context):
     if state == IDLE and event == SUBMIT:
@@ -205,7 +205,7 @@ def transition(state, event, context):
 <p>来源：<a href="https://www.rfc-editor.org/rfc/rfc9293.html#section-3.3.2" target="_blank" rel="noopener noreferrer">RFC 9293 · State Machine Overview ↗</a>。</p></section>
 
 <section id="boundaries"><h2>10 · 不要把所有带有“State”的东西混为一谈</h2>
-<div class="table-scroll"><table><thead><tr><th>概念</th><th>状态是什么</th><th>转移 / 更新</th><th>主要问题</th></tr></thead><tbody>
+<div class="table-scroll" tabindex="0" role="region" aria-label="状态机与相关概念对比表，可横向滚动"><thead><tr><th>概念</th><th>状态是什么</th><th>转移 / 更新</th><th>主要问题</th></tr></thead><tbody>
 <tr><td><strong>有限状态机 FSM</strong></td><td>有限个离散符号状态</td><td>事件触发确定或非确定转移</td><td>哪些行为路径合法？</td></tr>
 <tr><td><strong>Statecharts / EFSM</strong></td><td>层次状态配置 + 数据变量</td><td>守卫、动作、并发区域、历史</td><td>复杂控制流如何模块化？</td></tr>
 <tr><td><strong>State Space Model</strong></td><td>通常是向量化的动态状态</td><td>状态方程随时间更新</td><td>如何压缩和传播历史信息？</td></tr>
