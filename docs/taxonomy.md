@@ -9,6 +9,7 @@
 | --- | --- | --- |
 | `foundations` | 线性代数、数值稳定、优化与正则化、表示与分词基础 | 具体的学习算法归 `classical-ml`；训练过程与分布式实现归 `training` |
 | `classical-ml` | 线性/概率模型、树与集成、核方法、聚类、降维等经典算法 | 深度网络信息路径归 `architectures` |
+| `recommender-systems` | 用户/物品交互建模、协同过滤、邻域预测、矩阵分解、推荐排序、序列与图推荐及推荐评估 | 通用近邻分类/回归归 `classical-ml`；通用向量召回与 RAG 归 `retrieval-rag`；用户偏好预测与排序归此类 |
 | `architectures` | CNN、RNN、Transformer、门控、MoE、状态空间、高效注意力，以及神经场/三维场景表示与新视角合成 | GPU 算子实现归 `systems`，线上请求管理归 `inference`；跨模态联合建模归 `multimodal` |
 | `reinforcement-learning` | MDP、Bellman、Policy Gradient、Actor–Critic、探索与搜索 | RLHF/GRPO 等模型后训练方案的训练目标与流程归 `training` |
 | `datasets` | 语料来源、清洗去重、混合、污染与数据治理 | 任务指标、Benchmark 设计与可重复性归 `evaluation` |
@@ -174,3 +175,13 @@
 - 与 `architectures/state-space-models` 的边界：有限状态机使用有限个离散控制状态；SSM 使用数值状态变量和状态方程传播历史信息。不要因共享术语 state 而混同。
 - 与 `reinforcement-learning` 的边界：MDP 增加动作、概率转移和奖励，用于策略决策；FSM 主要刻画控制行为的合法路径。二者可组合，但不等价。
 - Event Sourcing 是事件持久化与状态重建模式；Workflow Engine 是带持久化、计时器、重试和 Worker 调度的执行系统；它们可使用 FSM，但不属于同一抽象层。
+
+
+## Recommender Systems 专题边界
+
+- **主分类：** `recommender-systems`；当前注册二级专题：`collaborative-filtering`。
+- 收录从显式评分与隐式交互中学习个体偏好、用户/物品邻域、矩阵分解、推荐排序、序列/会话推荐、图推荐和推荐系统评估。
+- `classical-ml/nearest-neighbors` 研究一般样本空间中的近邻分类/回归；这里的邻域相似度用于用户或物品偏好预测，任务对象不同。
+- `retrieval-rag` 研究查询驱动的文档/证据召回与生成；推荐系统根据用户历史和候选物品估计个性化效用，两者可共享向量索引但目标函数与反馈闭环不同。
+- GroupLens 是早期基于用户相似性的协同过滤系统；不要把它写成现代矩阵分解、隐式反馈或深度排序模型。
+- 只在有对应文章与证据时注册新的二级 Topic，避免先堆叠空占位。
