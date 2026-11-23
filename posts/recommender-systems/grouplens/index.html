@@ -134,7 +134,7 @@ h1,h2,h3,figcaption{overflow-wrap:anywhere}
 <h1>Understanding <em>GroupLens</em></h1>
 <p class="dek">如果两个人过去喜欢相同的文章，我们能否借用其中一个人的评价，预测另一个人会不会喜欢一篇新文章？</p>
 <p class="byline">Paul Resnick · Neophytos Iacovou · Mitesh Suchak · Peter Bergstrom · John Riedl<br>CSCW 1994 · pp. 175–186 · DOI: <a href="https://doi.org/10.1145/192844.192905">10.1145/192844.192905</a></p>
-<figure class="hero-art"><img src="assets/01-information-overload.svg" alt="海量新闻经过内容线索与用户群体评价两条路径，最终变成个性化阅读顺序"></figure>
+
 <div class="paper-card">
 <p><strong>核心论文：</strong>Resnick et al., <em>GroupLens: An Open Architecture for Collaborative Filtering of Netnews</em> (1994).</p>
 <p><a href="https://pages.cpsc.ucalgary.ca/~saul/601.13/readings/p175-resnick.pdf">阅读论文全文 PDF</a> · <a href="https://doi.org/10.1145/192844.192905">ACM DOI 页面</a></p>
@@ -242,10 +242,10 @@ h1,h2,h3,figcaption{overflow-wrap:anywhere}
 <mrow>
 <mi>sim</mi><mo>(</mo><mi>u</mi><mo>,</mo><mi>v</mi><mo>)</mo><mo>=</mo>
 <mfrac>
-<mrow><munderover><mo>∑</mo><mrow><mi>i</mi><mo>∈</mo><msub><mi>I</mi><mrow><mi>u</mi><mi>v</mi></mrow></msub></mrow></munderover><mo>(</mo><msub><mi>r</mi><mrow><mi>u</mi><mi>i</mi></mrow></msub><mo>−</mo><msub><mover><mi>r</mi><mo>¯</mo></mover><mi>u</mi></msub><mo>)</mo><mo>(</mo><msub><mi>r</mi><mrow><mi>v</mi><mi>i</mi></mrow></msub><mo>−</mo><msub><mover><mi>r</mi><mo>¯</mo></mover><mi>v</mi></msub><mo>)</mo></mrow>
+<mrow><munder><mo>∑</mo><mrow><mi>i</mi><mo>∈</mo><msub><mi>I</mi><mrow><mi>u</mi><mi>v</mi></mrow></msub></mrow></munder><mo>(</mo><msub><mi>r</mi><mrow><mi>u</mi><mi>i</mi></mrow></msub><mo>−</mo><msub><mover><mi>r</mi><mo>¯</mo></mover><mi>u</mi></msub><mo>)</mo><mo>(</mo><msub><mi>r</mi><mrow><mi>v</mi><mi>i</mi></mrow></msub><mo>−</mo><msub><mover><mi>r</mi><mo>¯</mo></mover><mi>v</mi></msub><mo>)</mo></mrow>
 <mrow>
-<msqrt><munderover><mo>∑</mo><mrow><mi>i</mi><mo>∈</mo><msub><mi>I</mi><mrow><mi>u</mi><mi>v</mi></mrow></msub></mrow></munderover><msup><mrow><mo>(</mo><msub><mi>r</mi><mrow><mi>u</mi><mi>i</mi></mrow></msub><mo>−</mo><msub><mover><mi>r</mi><mo>¯</mo></mover><mi>u</mi></msub><mo>)</mo></mrow><mn>2</mn></msup></msqrt>
-<msqrt><munderover><mo>∑</mo><mrow><mi>i</mi><mo>∈</mo><msub><mi>I</mi><mrow><mi>u</mi><mi>v</mi></mrow></msub></mrow></munderover><msup><mrow><mo>(</mo><msub><mi>r</mi><mrow><mi>v</mi><mi>i</mi></mrow></msub><mo>−</mo><msub><mover><mi>r</mi><mo>¯</mo></mover><mi>v</mi></msub><mo>)</mo></mrow><mn>2</mn></msup></msqrt>
+<msqrt><munder><mo>∑</mo><mrow><mi>i</mi><mo>∈</mo><msub><mi>I</mi><mrow><mi>u</mi><mi>v</mi></mrow></msub></mrow></munder><msup><mrow><mo>(</mo><msub><mi>r</mi><mrow><mi>u</mi><mi>i</mi></mrow></msub><mo>−</mo><msub><mover><mi>r</mi><mo>¯</mo></mover><mi>u</mi></msub><mo>)</mo></mrow><mn>2</mn></msup></msqrt>
+<msqrt><munder><mo>∑</mo><mrow><mi>i</mi><mo>∈</mo><msub><mi>I</mi><mrow><mi>u</mi><mi>v</mi></mrow></msub></mrow></munder><msup><mrow><mo>(</mo><msub><mi>r</mi><mrow><mi>v</mi><mi>i</mi></mrow></msub><mo>−</mo><msub><mover><mi>r</mi><mo>¯</mo></mover><mi>v</mi></msub><mo>)</mo></mrow><mn>2</mn></msup></msqrt>
 </mrow>
 </mfrac>
 </mrow>
@@ -280,18 +280,18 @@ h1,h2,h3,figcaption{overflow-wrap:anywhere}
 <msub><mover><mi>r</mi><mo>^</mo></mover><mrow><mi>u</mi><mi>i</mi></mrow></msub><mo>=</mo>
 <msub><mover><mi>r</mi><mo>¯</mo></mover><mi>u</mi></msub><mo>+</mo>
 <mfrac>
-<mrow><munderover><mo>∑</mo><mrow><mi>v</mi><mo>∈</mo><msub><mi>U</mi><mi>i</mi></msub></mrow></munderover><mi>sim</mi><mo>(</mo><mi>u</mi><mo>,</mo><mi>v</mi><mo>)</mo><mo>(</mo><msub><mi>r</mi><mrow><mi>v</mi><mi>i</mi></mrow></msub><mo>−</mo><msub><mover><mi>r</mi><mo>¯</mo></mover><mi>v</mi></msub><mo>)</mo></mrow>
-<mrow><munderover><mo>∑</mo><mrow><mi>v</mi><mo>∈</mo><msub><mi>U</mi><mi>i</mi></msub></mrow></munderover><mo>|</mo><mi>sim</mi><mo>(</mo><mi>u</mi><mo>,</mo><mi>v</mi><mo>)</mo><mo>|</mo></mrow>
+<mrow><munder><mo>∑</mo><mrow><mi>v</mi><mo>∈</mo><msub><mi>U</mi><mi>i</mi></msub></mrow></munder><mi>sim</mi><mo>(</mo><mi>u</mi><mo>,</mo><mi>v</mi><mo>)</mo><mo>(</mo><msub><mi>r</mi><mrow><mi>v</mi><mi>i</mi></mrow></msub><mo>−</mo><msub><mover><mi>r</mi><mo>¯</mo></mover><mi>v</mi></msub><mo>)</mo></mrow>
+<mrow><munder><mo>∑</mo><mrow><mi>v</mi><mo>∈</mo><msub><mi>U</mi><mi>i</mi></msub></mrow></munder><mo>|</mo><mi>sim</mi><mo>(</mo><mi>u</mi><mo>,</mo><mi>v</mi><mo>)</mo><mo>|</mo></mrow>
 </mfrac>
 </mrow>
 </math>
 </div>
-<p class="math-note">U<sub>i</sub> 是已经评价目标文章 i 的邻居集合。预测基线均值使用目标用户的历史评分均值；邻居偏差使用邻居自身的历史均值。</p>
+<p class="math-note">U<sub>i</sub> 是已经评价目标文章 i 的邻居集合。预测基线均值使用目标用户的历史评分均值；邻居偏差使用邻居在目标文章之外的历史均值，避免把待预测项本身泄漏进基线。</p>
 </div>
 <p>可以把这个式子读成三步：</p>
 <ol class="step-list">
 <li><strong>建立个人基线：</strong>目标用户 u 的平均评分是预测起点。</li>
-<li><strong>计算邻居偏差：</strong>每个邻居 v 对文章 i 的评分，减去 v 自己的平均评分。</li>
+<li><strong>计算邻居偏差：</strong>每个邻居 v 对文章 i 的评分，减去 v 在文章 i 之外的历史平均评分。</li>
 <li><strong>按相关性加权：</strong>乘以 sim(u,v)，再除以相似度绝对值之和，控制整体尺度。</li>
 </ol>
 <p>分母使用相似度绝对值之和，而不是简单求和。这样负相关邻居仍然能参与预测，但不会因为正负权重相互抵消而造成不稳定的归一化分母。</p>
