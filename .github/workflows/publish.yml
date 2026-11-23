@@ -40,6 +40,14 @@ jobs:
         run: python scripts/ci_metrics.py run --name site-build -- python scripts/build_site.py
       - name: Validate generated site and original articles
         run: python scripts/ci_metrics.py run --name site-validation -- python scripts/validate_site.py
+      - name: Validate and browser-check Anthropic Engineering batch 01 drafts
+        run: |
+          python scripts/ci_metrics.py run --name anthropic-safety-static -- python skills/olah-style-paper-posts/scripts/validate.py posts/evaluation/anthropic-safety-evaluations/index.html
+          python scripts/ci_metrics.py run --name anthropic-source-control-static -- python skills/olah-style-paper-posts/scripts/validate.py posts/systems/agent-scale-source-control/index.html
+          python scripts/ci_metrics.py run --name anthropic-containment-static -- python skills/olah-style-paper-posts/scripts/validate.py posts/agents/agent-containment/index.html
+          python scripts/ci_metrics.py run --name browser-anthropic-safety -- python skills/olah-style-paper-posts/scripts/browser_check.py posts/evaluation/anthropic-safety-evaluations/index.html --output reports/anthropic-safety-evaluations
+          python scripts/ci_metrics.py run --name browser-anthropic-source-control -- python skills/olah-style-paper-posts/scripts/browser_check.py posts/systems/agent-scale-source-control/index.html --output reports/agent-scale-source-control
+          python scripts/ci_metrics.py run --name browser-anthropic-containment -- python skills/olah-style-paper-posts/scripts/browser_check.py posts/agents/agent-containment/index.html --output reports/agent-containment
       - name: Check interactive teaching batches in Chromium
         run: |
           python scripts/ci_metrics.py run --name browser-fifth -- python scripts/browser_check_fifth_batch.py --output reports/fifth-batch
