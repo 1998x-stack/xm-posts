@@ -3052,7 +3052,7 @@
     "illustration": "state-machines",
     "cover": {
       "src": "assets/05-agent-runtime.svg",
-      "caption": "事件与守卫控制 Agent 任务从审批、执行到终态的合法路径"
+      "caption": "审批守卫决定高风险任务是否进入执行"
     }
   }
 ]
