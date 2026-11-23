@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 390" role="img" aria-labelledby="gl02-title gl02-desc">
+<title id="gl02-title">共同评分建立用户邻域</title>
+<desc id="gl02-desc">四位用户对若干文章进行评分。共同评分的列向量可用于比较用户偏好，目标文章的缺失单元格由已评分邻居提供信息。</desc>
+<rect x="8" y="8" width="944" height="374" rx="22" fill="#f7faf7"/>
+<g font-family="Noto Sans CJK SC,system-ui,sans-serif">
+<text x="42" y="51" font-size="14" font-weight="800" letter-spacing="2" fill="#8a715b">SHARED EVIDENCE</text>
+<text x="84" y="96" font-size="16" font-weight="750" fill="#2d5358">Article</text>
+<g font-size="16" font-weight="750" text-anchor="middle" fill="#2d5358"><text x="275" y="96">Ken</text><text x="405" y="96">Lee</text><text x="535" y="96">Meg</text><text x="665" y="96">Nan</text></g>
+<g stroke="#dce8e1" stroke-width="1">
+<path d="M64 110H725M64 160H725M64 210H725M64 260H725M64 310H725"/>
+<path d="M185 110V310M340 110V310M470 110V310M600 110V310M730 110V310"/>
+</g>
+<g font-size="15" fill="#557477" text-anchor="middle"><text x="122" y="142">1</text><text x="122" y="192">2</text><text x="122" y="242">4</text><text x="122" y="292">5</text></g>
+<g font-size="18" font-weight="800" text-anchor="middle">
+<g fill="#246e69"><text x="275" y="142">1</text><text x="275" y="192">5</text><text x="275" y="242">2</text><text x="275" y="292">4</text></g>
+<g fill="#9a6548"><text x="405" y="142">4</text><text x="405" y="192">2</text><text x="405" y="242">5</text><text x="405" y="292">1</text></g>
+<g fill="#5f5a9c"><text x="535" y="142">2</text><text x="535" y="192">4</text><text x="535" y="242">—</text><text x="535" y="292">—</text></g>
+<g fill="#4d7774"><text x="665" y="142">2</text><text x="665" y="192">4</text><text x="665" y="242">5</text><text x="665" y="292">1</text></g>
+</g>
+<rect x="218" y="112" width="115" height="196" rx="10" fill="none" stroke="#27847c" stroke-width="2.5" stroke-dasharray="7 5"/>
+<rect x="348" y="112" width="115" height="196" rx="10" fill="none" stroke="#c17d52" stroke-width="2.5" stroke-dasharray="7 5"/>
+<path d="M275 315V342H405V315" fill="none" stroke="#4d7774" stroke-width="2"/>
+<text x="340" y="363" text-anchor="middle" font-size="12" fill="#6d8580">共同评分 → 相似性</text>
+<rect x="757" y="108" width="158" height="204" rx="14" fill="#fff0e5" stroke="#dca27b" stroke-width="2"/>
+<text x="836" y="139" text-anchor="middle" font-size="16" font-weight="750" fill="#8b5839">Article 6</text>
+<rect x="778" y="159" width="50" height="42" rx="8" fill="#fff" stroke="#d8b49b"/><text x="803" y="186" text-anchor="middle" font-size="18" font-weight="800" fill="#b26c48">?</text>
+<rect x="842" y="159" width="50" height="42" rx="8" fill="#f4e5da" stroke="#d8b49b"/><text x="867" y="186" text-anchor="middle" font-size="18" font-weight="800" fill="#8b5839">2</text>
+<text x="836" y="229" text-anchor="middle" font-size="12" fill="#9a745d">Ken 未评分</text>
+<text x="836" y="250" text-anchor="middle" font-size="12" fill="#9a745d">Lee / Meg 已评分</text>
+<path d="M665 312V332H756" fill="none" stroke="#7b74b5" stroke-width="2" stroke-dasharray="5 4"/>
+<text x="756" y="355" font-size="12" fill="#6f6a9c">只对目标文章已评分的邻居求和</text>
+</g>
+</svg>
