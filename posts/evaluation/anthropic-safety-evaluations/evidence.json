@@ -72,5 +72,63 @@
     "source_url": "https://www.anthropic.com/research/building-strong-safety-evaluations",
     "locator": "Independent explanatory adaptation",
     "status": "illustrative"
+  },
+  {
+    "id": "S10",
+    "kind": "method",
+    "claim": "Anthropic recommends involving both methods experts and domain experts from the start of safety evaluation design.",
+    "source_url": "https://www.anthropic.com/research/building-strong-safety-evaluations",
+    "locator": "Safety first → Build a team with the right skills",
+    "status": "verified"
+  },
+  {
+    "id": "S11",
+    "kind": "method",
+    "claim": "Scenario specifications include simulated-user goals, tactics, persona, situation, tone, and conversational style; important dimensions should be varied independently.",
+    "source_url": "https://www.anthropic.com/research/building-strong-safety-evaluations",
+    "locator": "Design → Design scenarios that model a range of conditions",
+    "status": "verified"
+  },
+  {
+    "id": "S12",
+    "kind": "method",
+    "claim": "The article recommends covering languages, modalities, product surfaces, tools, and deployment-specific harness configurations, while continuously updating scenarios from observed behavior.",
+    "source_url": "https://www.anthropic.com/research/building-strong-safety-evaluations",
+    "locator": "Design → Take real-world interaction patterns into account",
+    "status": "verified"
+  },
+  {
+    "id": "S13",
+    "kind": "method",
+    "claim": "Anthropic recommends blind human labels, comparing grader agreement to human-human agreement, and chance-corrected measures such as Cohen's kappa.",
+    "source_url": "https://www.anthropic.com/research/building-strong-safety-evaluations",
+    "locator": "Run → Carefully calibrate your grader; footnote 3",
+    "status": "verified"
+  },
+  {
+    "id": "S14",
+    "kind": "result",
+    "claim": "Anthropic reports confidence intervals for some multi-turn API safety evaluations exceeding ±10 percentage points and a 98% vs 94% comparison that was not statistically significant.",
+    "source_url": "https://www.anthropic.com/research/building-strong-safety-evaluations",
+    "locator": "Report → Report statistics fully",
+    "status": "verified",
+    "notes": "Specific reported romance-scam evaluation; not a general model ranking."
+  },
+  {
+    "id": "S15",
+    "kind": "result",
+    "claim": "Anthropic reports that API versus claude.ai configuration differences in one multi-turn safety evaluation reached up to 34 percentage points.",
+    "source_url": "https://www.anthropic.com/research/building-strong-safety-evaluations",
+    "locator": "Report → Document everything",
+    "status": "verified",
+    "notes": "Configuration-specific company report; not a universal effect size."
+  },
+  {
+    "id": "S16",
+    "kind": "method",
+    "claim": "The article recommends continuous evaluation during model development and responsible disclosure of severe deployed-system flaws.",
+    "source_url": "https://www.anthropic.com/research/building-strong-safety-evaluations",
+    "locator": "Report → Disclose flaws responsibly",
+    "status": "verified"
   }
 ]
