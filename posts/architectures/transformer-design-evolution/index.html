@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light">
+<meta name="description" content="从训练稳定性、位置表示、FFN、KV Cache 到 GPU IO，理解 Transformer 设计如何在规模化过程中演进。">
+<title>Transformer Design Evolution：从原始架构到现代 LLM</title>
+<style>
+:root{--paper:#fffdf9;--ink:#203035;--muted:#53676d;--line:#dce6e1;--teal:#147f80;--rust:#c86f4b;--gold:#b28b3d;--violet:#7664a8;--soft:#f1f7f4;--serif:Georgia,"Noto Serif SC","Songti SC",serif;--sans:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);color:var(--ink);font:17px/1.82 var(--sans)}a{color:#176f73;text-decoration-thickness:1px;text-underline-offset:3px}a:hover{color:#a65338}.skip{position:absolute;left:-9999px;top:8px;background:white;padding:10px;z-index:5}.skip:focus{left:8px}.topbar{border-bottom:1px solid var(--line);background:#fffdf9}.topbar-inner{max-width:1240px;margin:auto;padding:12px 24px;display:flex;justify-content:space-between;gap:18px;align-items:center}.brand{font-weight:800;letter-spacing:-.04em;text-decoration:none;color:var(--ink)}.brand span{color:var(--rust)}.topnav{display:flex;gap:20px;flex-wrap:wrap;font-size:14px}.topnav a{text-decoration:none}.layout{max-width:1240px;margin:0 auto;padding:36px 24px 100px;display:grid;grid-template-columns:220px minmax(0,780px);gap:64px;align-items:start}.toc{position:sticky;top:24px;max-height:calc(100vh - 48px);overflow:auto;padding:14px 0;font-size:13px;line-height:1.55}.toc strong{display:block;color:#64787a;letter-spacing:.1em;font-size:11px;margin-bottom:12px}.toc a{display:block;text-decoration:none;color:#52676a;padding:5px 8px;border-left:2px solid transparent}.toc a:hover{border-color:var(--teal);color:var(--ink)}main,article{min-width:0}.kicker{font-size:12px;letter-spacing:.13em;font-weight:750;color:var(--teal)}h1,h2,h3{line-height:1.25;letter-spacing:-.035em}h1{font:700 clamp(34px,5vw,54px)/1.16 var(--serif);margin:16px 0 20px}h1 em{font-style:normal;color:var(--teal)}h2{font:700 clamp(25px,3vw,34px)/1.3 var(--serif);margin:0 0 20px}h3{font-size:20px;margin:28px 0 10px}.dek{font-size:20px;line-height:1.7;color:#40585d;max-width:720px}.meta{display:flex;gap:10px 18px;flex-wrap:wrap;color:#6a7c7e;font-size:13px;border-bottom:1px solid var(--line);padding:16px 0 24px;margin-bottom:34px}.lead{font:22px/1.7 var(--serif);color:#344e53}.section{padding:30px 0 36px;border-bottom:1px solid var(--line)}p{margin:14px 0}strong{color:#233f43}.note,.caution,.takeaway{padding:16px 18px;margin:22px 0;border-left:3px solid var(--teal);background:var(--soft);border-radius:0 10px 10px 0}.caution{border-color:var(--rust);background:#fbf2ed}.takeaway{border-color:var(--gold);background:#faf6e9}.figure{margin:26px 0 30px;padding:14px;background:#fff;border:1px solid var(--line);border-radius:14px}.figure img{display:block;width:100%;height:auto}.figure figcaption{font-size:14px;color:#617477;padding:10px 5px 2px;line-height:1.6}.fig-label{font-size:11px;letter-spacing:.12em;color:#708587;font-weight:750;margin:0 5px 8px}.equation{margin:18px 0;padding:12px 14px;border:1px solid #e2e9e5;border-radius:10px;background:#fff;max-width:100%;min-width:0}.math-scroll{max-width:100%;min-width:0;overflow-x:auto;overflow-y:hidden;padding:8px 2px}.math-scroll:focus-visible{outline:3px solid #bf8047;outline-offset:2px}.math-scroll math[display=block]{display:block;width:max-content;min-width:100%;font:normal 21px/1.5 "Cambria Math","STIX Two Math","Latin Modern Math",serif;text-align:center}.math-inline{font-family:"Cambria Math","STIX Two Math",serif}.glossary{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:20px 0}.glossary div{border:1px solid var(--line);padding:12px 14px;border-radius:10px;background:#fff}.glossary b{display:block;color:var(--teal);font-size:14px}.glossary span{font-size:14px;color:var(--muted)}.table-wrap{overflow-x:auto;margin:20px 0}table{border-collapse:collapse;width:100%;min-width:580px;font-size:14px}th,td{text-align:left;padding:11px 12px;border-bottom:1px solid var(--line);vertical-align:top}th{background:#f2f7f4;color:#39575a}.tag{display:inline-block;border:1px solid var(--line);border-radius:99px;padding:2px 9px;margin:3px;font-size:12px;color:#52676a}.route{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:22px 0}.route a{display:block;border:1px solid var(--line);padding:14px;border-radius:12px;text-decoration:none;background:white}.route b{display:block;color:var(--ink);font-size:15px}.route small{display:block;color:var(--muted);line-height:1.5;margin-top:6px}.refs{font-size:14px;padding-left:22px}.refs li{margin:10px 0;overflow-wrap:anywhere}.footer-note{font-size:13px;color:#667b7c}.skip:focus,.topnav a:focus-visible,.toc a:focus-visible,a:focus-visible{outline:3px solid #bf8047;outline-offset:3px}
+@media(max-width:900px){.layout{grid-template-columns:minmax(0,1fr);gap:12px;padding-top:22px}.toc{position:static;max-height:none;display:flex;gap:4px;overflow-x:auto;white-space:nowrap;border-bottom:1px solid var(--line);padding:8px 0}.toc strong{display:none}.toc a{display:inline-block;border-left:0;border-bottom:2px solid transparent}.toc a:hover{border-bottom-color:var(--teal)}}
+@media(max-width:560px){body{font-size:16px}.topbar-inner{padding:10px 16px}.topnav{gap:10px;font-size:12px}.layout{padding:18px 16px 70px}.dek{font-size:18px}.lead{font-size:19px}.glossary{grid-template-columns:1fr}.route{grid-template-columns:1fr}.figure{padding:8px;margin-left:0;margin-right:0}.math-scroll math[display=block]{font-size:17px}.meta{gap:6px 12px}}
+@media print{body{background:#fff;font-size:11pt}.topbar,.toc,.skip{display:none!important}.layout{display:block;max-width:none;padding:0}.section{break-inside:auto}.figure,.note,.caution,.takeaway{break-inside:avoid}.math-scroll{overflow:visible}.math-scroll math[display=block]{font-size:12pt}.figure img{max-height:7in;object-fit:contain}a{color:inherit;text-decoration:none}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<a class="skip" href="#content">跳转至正文</a>
+<header class="topbar"><div class="topbar-inner"><a class="brand" href="../../../">xm<span>.</span>posts</a><nav class="topnav" aria-label="站点导航"><a href="../../../categories/architectures/">模型架构</a><a href="../transformer/">原始 Transformer</a><a href="../../../topics/">知识地图</a><a href="../../../archive/">文章归档</a></nav></div></header>
+<div class="layout">
+<nav class="toc" aria-label="文章目录"><strong>CONTENTS / 阅读路线</strong>
+<a href="#question">问题与边界</a><a href="#map">五条演进主线</a><a href="#norm">训练稳定性</a><a href="#position">位置表示</a><a href="#ffn">FFN 门控</a><a href="#kv">KV 与推理</a><a href="#io">Attention IO</a><a href="#synthesis">统一比较</a><a href="#reading">继续阅读</a><a href="#references">原始论文</a></nav>
+<main id="content"><article>
+<header>
+<div class="kicker">TRANSFORMER / DESIGN EVOLUTION</div>
+<h1>Transformer Design Evolution<br><em>从原始架构到现代 LLM</em></h1>
+<p class="dek">为什么一个成功的架构还会不断改变？沿着训练稳定性、位置表示、特征变换、推理内存与 GPU 数据搬运五条主线，追踪 Transformer 的设计如何在规模化过程中演进。</p>
+<div class="meta"><span>2026-11-23</span><span>约 24 分钟阅读</span><span>研究主线：Vaswani 2017 → 现代 LLM</span><span>理论 · 架构 · 系统</span></div>
+</header>
+
+<section class="section" id="question">
+<h2>01 · 一个成功的架构，为什么还需要被反复改造？</h2>
+<p class="lead">Transformer 的故事不是“原论文错了，后来的人修好了”。更准确地说：原始设计在当时的任务、模型规模和硬件条件下非常有效；当训练变深、上下文变长、生成变成在线服务，原先不突出的代价才成为新的主导瓶颈。</p>
+<p>2017 年的 <a href="https://arxiv.org/abs/1706.03762">Attention Is All You Need</a> 提出完全基于 Attention 的 Encoder–Decoder 序列转换架构。论文使用六层 Encoder 与 Decoder、Multi-Head Attention、位置编码、逐位置 FFN 和 Post-LN 残差子层。它的贡献不是发明了 Attention，而是证明了不依赖 RNN/CNN 的序列转换架构可以在机器翻译任务上取得强结果，并更容易并行训练。</p>
+<p>后来出现的改进，通常不是推翻整个 Transformer，而是针对一个具体约束改变某个组件。要避免把这些变化混成“新一代 Transformer”一个概念：有些改变训练动力学，有些改变表示方式，有些只改变 kernel 的执行路径。</p>
+<div class="note"><strong>读图方法：</strong>下面的五条主线分别回答五个不同的问题：梯度如何通过深层网络？位置信息如何进入注意力分数？FFN 如何调节特征？生成时如何存储历史 K/V？GPU 如何避免反复搬运中间矩阵？</div>
+<figure class="figure"><div class="fig-label">FIGURE 01 · FIVE BOTTLENECKS, FIVE DESIGN RESPONSES</div><img src="assets/evolution-map.svg" alt="Transformer 架构演进五条主线：训练稳定性、位置表示、FFN 门控、KV Cache、Attention IO"><figcaption>这不是一条单一的替代链。五条路线作用于不同层次，现代模型通常组合使用它们。</figcaption></figure>
+</section>
+
+<section class="section" id="map">
+<h2>02 · 先把“改进”分成五种不同问题</h2>
+<div class="glossary">
+<div><b>优化动力学</b><span>梯度尺度、初始化、残差流与学习率日程。</span></div>
+<div><b>表示机制</b><span>Token 内容与位置信息如何共同决定 Attention。</span></div>
+<div><b>计算单元</b><span>FFN 的非线性、门控与参数化方式。</span></div>
+<div><b>推理资源</b><span>KV Cache 的容量、带宽和并发请求成本。</span></div>
+<div><b>硬件数据流</b><span>矩阵分块、SRAM/HBM 访问与 kernel 融合。</span></div>
+<div><b>评价原则</b><span>模型质量、训练成本、吞吐、延迟和可扩展性不能混为一谈。</span></div>
+</div>
+<p>一个实用的判断方式是问：改动发生在模型的<strong>数学函数</strong>、训练时的<strong>参数更新过程</strong>，还是实现同一数学函数的<strong>执行算法</strong>？例如 FlashAttention 属于第三类：它计算精确 Attention，但通过 IO-aware tiling 改变执行方式；GQA 则改变了 K/V 投影结构，因而也改变了模型函数和缓存布局。</p>
+</section>
+
+<section class="section" id="norm">
+<h2>03 · 训练稳定性：Post-LN、Pre-LN 与 DeepNorm</h2>
+<p>原始 Transformer 对每个子层使用 Post-LN：</p>
+<div class="equation"><div class="math-scroll" tabindex="0" role="region" aria-label="Post-LN 公式，可横向滚动"><math display="block" aria-label="x 下一个等于 LayerNorm 作用于 x 加 F 作用于 x"><msub><mi>x</mi><mrow><mi>l</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><mi>LN</mi><mo>(</mo><msub><mi>x</mi><mi>l</mi></msub><mo>+</mo><msub><mi>F</mi><mi>l</mi></msub><mo>(</mo><msub><mi>x</mi><mi>l</mi></msub><mo>)</mo><mo>)</mo></math></div></div>
+<p>Pre-LN 将归一化移到变换分支内部：</p>
+<div class="equation"><div class="math-scroll" tabindex="0" role="region" aria-label="Pre-LN 公式，可横向滚动"><math display="block" aria-label="x 下一个等于 x 加 F 作用于 LayerNorm x"><msub><mi>x</mi><mrow><mi>l</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><msub><mi>x</mi><mi>l</mi></msub><mo>+</mo><msub><mi>F</mi><mi>l</mi></msub><mo>(</mo><mi>LN</mi><mo>(</mo><msub><mi>x</mi><mi>l</mi></msub><mo>)</mo><mo>)</mo></math></div></div>
+<figure class="figure"><div class="fig-label">FIGURE 02 · WHERE DOES THE IDENTITY PATH GO?</div><img src="assets/normalization-paths.svg" alt="Post-LN 与 Pre-LN 的残差和 LayerNorm 顺序对比"><figcaption>Post-LN 在残差相加后归一化；Pre-LN 只归一化变换分支输入，恒等残差路径不穿过该 LayerNorm。</figcaption></figure>
+<h3>从 Jacobian 看差异</h3>
+<p>令 (J_F) 表示子层变换的 Jacobian，(J_{LN}) 表示 LayerNorm 的 Jacobian。按链式法则：</p>
+<div class="equation"><div class="math-scroll" tabindex="0" role="region" aria-label="两个架构 Jacobian 公式"><math display="block" aria-label="Post-LN Jacobian 等于 J LayerNorm 乘以单位矩阵加 J F；Pre-LN Jacobian 等于单位矩阵加 J F 乘以 J LayerNorm"><mtable><mtr><mtd><mtext>Post-LN</mtext></mtd><mtd><mo>:</mo></mtd><mtd><msub><mi>J</mi><mi>LN</mi></msub><mo>(</mo><mi>I</mi><mo>+</mo><msub><mi>J</mi><mi>F</mi></msub><mo>)</mo></mtd></mtr><mtr><mtd><mtext>Pre-LN</mtext></mtd><mtd><mo>:</mo></mtd><mtd><mi>I</mi><mo>+</mo><msub><mi>J</mi><mi>F</mi></msub><msub><mi>J</mi><mi>LN</mi></msub></mtd></mtr></mtable></math></div></div>
+<p>因此 Pre-LN 的反向路径包含显式的恒等项 (I)，梯度可以沿残差流直接传播。Post-LN 则在残差加法之后仍经过归一化 Jacobian。注意，这并不意味着 Post-LN 在所有层、所有训练阶段必然梯度消失；关键是初始化附近参数梯度的尺度分布及其对学习率的敏感性。</p>
+<p>Xiong 等人使用 Mean Field Theory 分析初始化时的梯度行为。其结论是：在论文所采用的假设与简化模型下，Post-LN 靠近输出层的参数期望梯度较大，直接使用较大学习率可能导致不稳定；Pre-LN 的初始化梯度行为更温和，因此在他们的实验设置中可以去掉 warm-up 并取得可比结果。论文 Theorem 1 对比的最后 FFN 参数梯度量级分别为 (O(d\sqrt{\ln d})) 与 (O(d\sqrt{\ln d/L}))，其中 (d) 是隐藏维度，(L) 是层数。这是特定理论设置下的上界分析，不是任意训练配置下的普适精确梯度公式。</p>
+<div class="caution"><strong>不要过度简化：</strong>“Pre-LN 更稳定”不等于“Pre-LN 在所有深度和任务上更优”。Pre-LN 的残差状态尺度会随深度增长，且实际训练还受到初始化、优化器、数据、学习率和最终归一化位置影响。</div>
+<h3>为什么又出现 DeepNorm？</h3>
+<p>DeepNorm / DeepNet 不是简单回到原始 Post-LN，而是通过残差分支缩放与配套初始化控制模型更新，目标是在深层扩展时兼顾 Post-LN 的一些性能特性与稳定训练。论文报告了最高 1,000 层的实验，但这应被理解为该论文方法和实验配置下的结果，而不是所有模型都能直接套用的通用深度保证。</p>
+<p>RMSNorm 则解决另一类问题：它去掉 LayerNorm 的均值中心化，只保留基于均方根的缩放。它与 Pre-LN/Post-LN 是不同维度的选择，可以组合，而不是取代残差归一化顺序。</p>
+<p><a href="../pre-ln-vs-post-ln/">深入阅读：Pre-LN vs Post-LN</a> · <a href="https://arxiv.org/abs/2203.00555">DeepNet 原论文</a> · <a href="https://arxiv.org/abs/1910.07467">RMSNorm 原论文</a></p>
+</section>
+
+<section class="section" id="position">
+<h2>04 · 位置表示：从输入相加到相对位移进入注意力</h2>
+<p>原始 Transformer 没有循环或卷积结构，因此需要向模型注入序列顺序。Vaswani 等人将固定正弦位置编码加到 Token Embedding：</p>
+<div class="equation"><div class="math-scroll" tabindex="0" role="region" aria-label="位置编码公式"><math display="block" aria-label="偶数维度位置编码为正弦，奇数维度为余弦"><mtable><mtr><mtd><msub><mi>PE</mi><mrow><mi>pos</mi><mo>,</mo><mn>2i</mn></mrow></msub></mtd><mtd><mo>=</mo></mtd><mtd><mi>sin</mi><mo>(</mo><mi>pos</mi><mo>/</mo><msup><mn>10000</mn><mrow><mn>2i</mn><mo>/</mo><msub><mi>d</mi><mi>model</mi></msub></mrow></msup><mo>)</mo></mtd></mtr><mtr><mtd><msub><mi>PE</mi><mrow><mi>pos</mi><mo>,</mo><mn>2i</mn><mo>+</mo><mn>1</mn></mrow></msub></mtd><mtd><mo>=</mo></mtd><mtd><mi>cos</mi><mo>(</mo><mi>pos</mi><mo>/</mo><msup><mn>10000</mn><mrow><mn>2i</mn><mo>/</mo><msub><mi>d</mi><mi>model</mi></msub></mrow></msup><mo>)</mo></mtd></mtr></mtable></math></div></div>
+<p>不能把它说成“绝对位置编码完全没有相对位置信息”。正弦和余弦的三角恒等式允许线性关系编码位移；真正的差异在于，位置向量先与内容表示相加，再由投影后的 Q/K 学习利用这些线索。RoPE 则直接对 Query 和 Key 的二维通道对施加与位置相关的旋转，使点积显式依赖相对位移。</p>
+<figure class="figure"><div class="fig-label">FIGURE 03 · ABSOLUTE ROTATION, RELATIVE INNER PRODUCT</div><img src="assets/rope-relative.svg" alt="RoPE 将不同位置的 Query 和 Key 旋转后，内积只依赖两者相对位移"><figcaption>若 (R_m) 与 (R_n) 是位置 m、n 的旋转矩阵，则 ((R_mq)^T(R_nk)=q^TR_{n-m}k)。</figcaption></figure>
+<div class="equation"><div class="math-scroll" tabindex="0" role="region" aria-label="RoPE 相对位置性质公式"><math display="block" aria-label="旋转后的 Query 与 Key 内积等于 q 转置乘以相对位置旋转矩阵再乘 k"><msup><mrow><mo>(</mo><msub><mi>R</mi><mi>m</mi></msub><mi>q</mi><mo>)</mo></mrow><mi>T</mi></msup><mo>(</mo><msub><mi>R</mi><mi>n</mi></msub><mi>k</mi><mo>)</mo><mo>=</mo><msup><mi>q</mi><mi>T</mi></msup><msub><mi>R</mi><mrow><mi>n</mi><mo>−</mo><mi>m</mi></mrow></msub><mi>k</mi></math></div></div>
+<p>RoPE 同时编码绝对位置并在 Attention 内积中产生相对位置依赖。但它并不自动解决任意长度外推：频率设计、训练长度与测试长度差异、注意力分布变化仍然需要专门处理。位置插值、NTK-aware scaling 等属于后续长上下文适配策略，不能与 RoPE 原始定义混为一谈。</p>
+<p><a href="../rope/">深入阅读：Understanding RoPE</a> · <a href="https://arxiv.org/abs/2104.09864">RoFormer 原论文</a></p>
+</section>
+
+<section class="section" id="ffn">
+<h2>05 · FFN：从 ReLU 到门控特征变换</h2>
+<p>原始 Transformer 的 Position-wise FFN 对每个 Token 独立应用两层线性变换，中间使用 ReLU：</p>
+<div class="equation"><div class="math-scroll" tabindex="0" role="region" aria-label="原始 FFN 公式"><math display="block" aria-label="FFN x 等于 ReLU 作用于 xW1 加 b1，再乘 W2 加 b2"><mi>FFN</mi><mo>(</mo><mi>x</mi><mo>)</mo><mo>=</mo><mi>ReLU</mi><mo>(</mo><mi>x</mi><msub><mi>W</mi><mn>1</mn></msub><mo>+</mo><msub><mi>b</mi><mn>1</mn></msub><mo>)</mo><msub><mi>W</mi><mn>2</mn></msub><mo>+</mo><msub><mi>b</mi><mn>2</mn></msub></math></div></div>
+<p>ReLU 的负半轴导数为零，但把后续激活函数演进全部归结为 Dying ReLU 并不准确。GELU 提供平滑的非线性；GLU 家族则引入两个投影分支的逐元素乘法，让一条分支调制另一条分支的特征。Shazeer 对 Transformer FFN 中多种 GLU 变体做了实验，发现部分门控变体优于当时常用的 ReLU/GELU 配置。</p>
+<figure class="figure"><div class="fig-label">FIGURE 04 · A GATE MODULATES A FEATURE STREAM</div><img src="assets/gated-ffn.svg" alt="SwiGLU 的两个投影分支，其中 SiLU 门控分支与线性特征分支逐元素相乘"><figcaption>SwiGLU 的核心不是“把 ReLU 换成另一个标量函数”，而是两条投影路径经门控相乘，再投影回模型维度。</figcaption></figure>
+<div class="equation"><div class="math-scroll" tabindex="0" role="region" aria-label="SwiGLU 公式"><math display="block" aria-label="SwiGLU x 等于 SiLU 作用于 x W gate，逐元素乘以 x W value"><mi>SwiGLU</mi><mo>(</mo><mi>x</mi><mo>)</mo><mo>=</mo><mo>(</mo><mi>SiLU</mi><mo>(</mo><mi>x</mi><msub><mi>W</mi><mi>g</mi></msub><mo>)</mo><mo>)</mo><mo>⊙</mo><mo>(</mo><mi>x</mi><msub><mi>W</mi><mi>v</mi></msub><mo>)</mo></math></div></div>
+<p>实际 Transformer FFN 还会使用输出投影 (W_o)，并调整中间维度以控制参数量和计算量。比较激活函数时，必须同时报告模型宽度、参数预算、训练配方和数据设置；否则“更好”可能来自容量变化而不是激活函数本身。</p>
+<p><a href="../swiglu/">深入阅读：Understanding SwiGLU</a> · <a href="https://arxiv.org/abs/2002.05202">GLU Variants Improve Transformer</a></p>
+</section>
+
+<section class="section" id="kv">
+<h2>06 · Attention Head：从 MHA 到 MQA / GQA</h2>
+<p>在自回归解码中，历史 Token 的 Key 和 Value 通常被缓存，避免每生成一个新 Token 都重新计算全部历史表示。MHA 为每个 Query Head 配置独立的 K/V Head，因此缓存容量随 K/V Head 数量增长。</p>
+<figure class="figure"><div class="fig-label">FIGURE 05 · KV HEAD SHARING</div><img src="assets/kv-sharing.svg" alt="MHA 每个 Query Head 独立拥有 KV，MQA 共享一个 KV，GQA 以组共享 KV"><figcaption>GQA 在 MHA 与 MQA 之间折中：多个 Query Head 分组，共享各组的 Key/Value Head。</figcaption></figure>
+<p>若使用相同的层数、Batch、缓存长度和每头维度，KV Cache 元素数量可近似写成：</p>
+<div class="equation"><div class="math-scroll" tabindex="0" role="region" aria-label="KV Cache 元素数量公式"><math display="block" aria-label="KV Cache 元素数等于二乘层数乘批次乘序列长度乘 KV Head 数乘每头维度"><mi>N</mi><msub><mi>KV</mi><mi>elements</mi></msub><mo>=</mo><mn>2</mn><mi>L</mi><mi>B</mi><mi>T</mi><msub><mi>H</mi><mi>KV</mi></msub><msub><mi>d</mi><mi>h</mi></msub></math></div></div>
+<p>其中 2 表示 Key 与 Value；(L) 为层数，(B) 为批次，(T) 为缓存长度，(H_{KV}) 为 K/V Head 数，(d_h) 为每头维度。MHA 通常 (H_{KV}=H_Q)，MQA 为 1，GQA 则介于二者之间。这个表达式统计缓存元素，不包含量化、分页元数据、对齐与框架额外开销。</p>
+<p>Ainslie 等人的 GQA 工作提出从 MHA checkpoint 转换并 uptrain 到 MQA/GQA 的方法，论文报告约 5% 原始预训练计算量的 uptraining 配方，并在其评测中获得接近 MHA 的质量与接近 MQA 的推理速度。这个结论属于该论文的模型和实验配置，不应外推成所有架构的固定比例。</p>
+<p><a href="../gqa/">深入阅读：Understanding GQA</a> · <a href="../../inference/kv-cache/">关联专题：KV Cache</a> · <a href="https://aclanthology.org/2023.emnlp-main.298/">GQA 原论文</a></p>
+</section>
+
+<section class="section" id="io">
+<h2>07 · Attention Kernel：FlashAttention 优化的是 IO，而不是把精确 Attention 变成线性复杂度</h2>
+<p>标准 Scaled Dot-Product Attention 为：</p>
+<div class="equation"><div class="math-scroll" tabindex="0" role="region" aria-label="Scaled Dot Product Attention 公式"><math display="block" aria-label="Attention 等于 softmax 作用于 QK 转置除以根号 d k，再乘 V"><mi>Attention</mi><mo>(</mo><mi>Q</mi><mo>,</mo><mi>K</mi><mo>,</mo><mi>V</mi><mo>)</mo><mo>=</mo><mi>softmax</mi><mo>(</mo><mfrac><mrow><mi>Q</mi><msup><mi>K</mi><mi>T</mi></msup></mrow><msqrt><msub><mi>d</mi><mi>k</mi></msub></msqrt></mfrac><mo>)</mo><mi>V</mi></math></div></div>
+<p>长度为 (N) 的全注意力仍需要处理 (N\times N) 个 Query-Key 交互，因此精确全注意力的算术计算量对序列长度仍为二次量级。传统实现可能把完整分数矩阵和 Softmax 中间结果写入 HBM，造成大量显存读写。</p>
+<figure class="figure"><div class="fig-label">FIGURE 06 · TILE THE COMPUTATION, NOT THE MATHEMATICS</div><img src="assets/flashattention-io.svg" alt="传统 Attention 物化完整分数矩阵与 FlashAttention 分块计算并在线更新 Softmax 统计量的对比"><figcaption>FlashAttention 通过分块与在线 Softmax 降低 HBM 与片上 SRAM 之间的数据搬运；它保持精确 Attention 的数学结果，并未消除全注意力的二次算术复杂度。</figcaption></figure>
+<p>FlashAttention 的关键是 IO-aware tiling：把 Q、K、V 分块载入片上 SRAM，局部计算分数和加权值，并通过在线更新的最大值与归一化因子合并不同 Key 块的 Softmax 结果。这样避免将完整 (N\times N) 注意力矩阵物化到 HBM。</p>
+<div class="caution"><strong>必须分清两种复杂度：</strong>FlashAttention 降低的是内存 IO 与中间矩阵物化成本，不是把精确全注意力的 FLOPs 从 (O(N^2d)) 降为 (O(Nd))。稀疏注意力、线性注意力等方法则改变计算结构或近似方式，属于另一条路线。</div>
+<p><a href="../../systems/flashattention/">深入阅读：Understanding FlashAttention</a> · <a href="https://arxiv.org/abs/2205.14135">FlashAttention 原论文</a></p>
+</section>
+
+<section class="section" id="synthesis">
+<h2>08 · 把五条路线放在同一张决策表里</h2>
+<div class="table-wrap"><table>
+<thead><tr><th>设计变化</th><th>直接改变什么</th><th>主要收益</th><th>代价 / 边界</th></tr></thead>
+<tbody>
+<tr><td>Post-LN → Pre-LN</td><td>子层与归一化的顺序</td><td>更直接的残差梯度路径；初始化优化更温和</td><td>残差流尺度随深度增长；最终归一化与训练配方仍重要</td></tr>
+<tr><td>Pre-LN → DeepNorm</td><td>残差缩放与初始化</td><td>面向极深 Transformer 的稳定训练方案</td><td>依赖深度相关的系数与配套初始化</td></tr>
+<tr><td>绝对 PE → RoPE</td><td>位置进入 Q/K 的方式</td><td>注意力内积显式包含相对位移</td><td>长上下文外推仍需额外策略</td></tr>
+<tr><td>ReLU FFN → SwiGLU</td><td>前馈子层的门控参数化</td><td>输入依赖的特征调制</td><td>投影分支更多；比较需控制参数预算</td></tr>
+<tr><td>MHA → GQA</td><td>K/V Head 数量与共享关系</td><td>降低 KV Cache 容量与读取压力</td><td>共享程度是质量与速度之间的权衡</td></tr>
+<tr><td>标准 Attention → FlashAttention</td><td>GPU kernel 的分块与数据流</td><td>减少 HBM 访问和中间张量物化</td><td>全注意力算术复杂度仍是二次量级</td></tr>
+</tbody></table></div>
+<p>这些变化可以同时存在于一个模型中。例如一个现代 Decoder-only Transformer 可以使用 Pre-LN 风格的 RMSNorm、RoPE、SwiGLU、GQA，并由 FlashAttention 类 kernel 执行 Attention。它们分别作用于不同组件，不是相互排斥的“版本”。具体模型还会在 bias、QK normalization、残差缩放、局部/全局注意力、MoE 等方面作出额外选择。</p>
+<div class="takeaway"><strong>最重要的心智模型：</strong>架构演进通常是约束驱动的局部改造。先确定瓶颈发生在优化、表示、参数化、缓存还是硬件 IO，再选择对应改动；不要仅凭技术名称推断模型质量或速度。</div>
+</section>
+
+<section class="section" id="reading">
+<h2>09 · 按组件继续阅读</h2>
+<p>总览负责建立关系，下面的专题页负责展开推导、图解和实现细节。</p>
+<div class="route">
+<a href="../transformer/"><b>01 · 原始 Transformer</b><small>从 Encoder–Decoder、Q/K/V、Mask 和原始 Post-LN 建立基线。</small></a>
+<a href="../pre-ln-vs-post-ln/"><b>02 · Pre-LN vs Post-LN</b><small>追踪 LayerNorm Jacobian、梯度尺度与 Mean Field Theory。</small></a>
+<a href="../rope/"><b>03 · RoPE</b><small>理解二维旋转、频率维度与相对位置性质。</small></a>
+<a href="../swiglu/"><b>04 · SwiGLU</b><small>拆解 GLU 门控、投影矩阵和 FFN 维度。</small></a>
+<a href="../gqa/"><b>05 · GQA</b><small>比较 MHA/MQA/GQA 的 Head 分组与缓存成本。</small></a>
+<a href="../../systems/flashattention/"><b>06 · FlashAttention</b><small>理解 tiling、online softmax 与 GPU IO 复杂度。</small></a>
+<a href="../../inference/kv-cache/"><b>07 · KV Cache</b><small>从逐 Token 解码看缓存布局、显存占用和复用。</small></a>
+<a href="../moe/"><b>08 · MoE</b><small>继续研究 Dense FFN 如何演进为条件计算。</small></a>
+<a href="https://arxiv.org/abs/2203.00555"><b>补充 · DeepNet</b><small>残差缩放与极深 Transformer 的理论和实验。</small></a>
+</div>
+</section>
+
+<section class="section" id="references">
+<h2>10 · 原始论文与证据边界</h2>
+<ol class="refs">
+<li>Vaswani et al. (2017), <a href="https://arxiv.org/abs/1706.03762">Attention Is All You Need</a>. 原始 Encoder–Decoder Transformer、Post-LN、正弦位置编码、ReLU FFN 与 Scaled Dot-Product Attention。</li>
+<li>Xiong et al. (2020), <a href="https://proceedings.mlr.press/v119/xiong20b.html">On Layer Normalization in the Transformer Architecture</a>. Mean Field Theory 对 Post-LN/Pre-LN 初始化梯度行为的分析。</li>
+<li>Wang et al. (2022), <a href="https://arxiv.org/abs/2203.00555">DeepNet: Scaling Transformers to 1,000 Layers</a>. DeepNorm 残差缩放与初始化方案。</li>
+<li>Zhang &amp; Sennrich (2019), <a href="https://arxiv.org/abs/1910.07467">Root Mean Square Layer Normalization</a>. RMSNorm。</li>
+<li>Su et al. (2021), <a href="https://arxiv.org/abs/2104.09864">RoFormer: Enhanced Transformer with Rotary Position Embedding</a>. RoPE 的绝对旋转表示与相对位置依赖。</li>
+<li>Shazeer (2020), <a href="https://arxiv.org/abs/2002.05202">GLU Variants Improve Transformer</a>. GLU 家族在 Transformer FFN 中的比较。</li>
+<li>Ainslie et al. (2023), <a href="https://aclanthology.org/2023.emnlp-main.298/">GQA: Training Generalized Multi-Query Transformer Models from Multi-Head Checkpoints</a>. GQA 与 checkpoint uptraining。</li>
+<li>Dao et al. (2022), <a href="https://arxiv.org/abs/2205.14135">FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness</a>. 精确 Attention 的 IO-aware 分块算法。</li>
+</ol>
+<p class="footer-note">本文把原始论文设计、后续论文提出的机制与现代模型常见组合分开描述。论文结论只在各自实验设定内成立；图中示意不代表特定模型的完整配置。</p>
+</section>
+</article></main></div>
+</body></html>
