@@ -19,7 +19,7 @@
 <text x="253" y="348" text-anchor="middle" font-size="19" font-weight="850" fill="#b16a46">?</text>
 <text x="383" y="348" text-anchor="middle" font-size="17" font-weight="850" fill="#8b5839">2</text>
 <rect x="215" y="311" width="76" height="58" rx="10" fill="none" stroke="#c67a55" stroke-width="2.5"/>
-<path d="M760 150H908V340H760" fill="#fff" stroke="#dce8e1" stroke-width="1.5" rx="14"/>
+<rect x="760" y="150" width="148" height="190" rx="14" fill="#fff" stroke="#dce8e1" stroke-width="1.5"/>
 <text x="834" y="185" text-anchor="middle" font-size="16" font-weight="750" fill="#2d5358">缺失 ≠ 0</text>
 <text x="834" y="218" text-anchor="middle" font-size="13" fill="#64807b">未评分的单元格</text>
 <text x="834" y="240" text-anchor="middle" font-size="13" fill="#64807b">不是负反馈</text>
