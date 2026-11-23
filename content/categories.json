@@ -596,6 +596,10 @@
       {
         "slug": "tool-integration-protocols",
         "title": "Tool Integration & Interoperability Protocols"
+      },
+      {
+        "slug": "state-machines",
+        "title": "State Machines & Workflow Control"
       }
     ]
   },

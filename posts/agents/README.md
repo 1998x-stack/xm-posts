@@ -4,12 +4,16 @@
 
 ## 已发布专题
 
+- [State Machines & Workflow Control](state-machines/index.html) — 从 DFA / NFA、Mealy / Moore 与 Statecharts 出发，建立事件、守卫、动作、验证和 Agent Runtime 状态控制的完整模型。
+
 - [Agentic Reinforcement Learning](agentic-rl/index.html) — 从单轮 LLM-RL 到多轮环境交互，讲解 POMDP、轨迹回报、信用分配、长程课程与异步训练。
 - [Context Engineering](context-engineering/index.html) — 管理每轮推理所需的信息选择、检索、压缩、组装、记忆和上下文安全。
 - [Harness Engineering](harness-engineering/index.html) — Agent Runtime、上下文交接、工具、安全、独立评估与维护治理。
 - [Loop Engineering](loop-engineering/index.html) — 外层持续执行：触发、任务发现、独立验证、持久状态、预算与停止策略。
 
 ## 专题占位
+
+- [State Machines & Workflow Control](_topics/state-machines/README.md) — 显式状态转移、协议状态与可靠工作流控制。
 
 - [ReAct](react/) — 已有正式论文解读；[专题研究规划](_topics/react/README.md) 仍作为未发布的历史规划记录。
 - [Software Engineering Agents & ACI](swe-agent/) — SWE-agent：代码搜索、编辑、错误护栏、上下文管理与软件修复评测。

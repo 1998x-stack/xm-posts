@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 370" role="img" aria-labelledby="fsm05-title fsm05-desc">
+<title id="fsm05-title">Agent 任务执行状态机</title><desc id="fsm05-desc">任务从空闲进入校验，根据风险守卫进入人工审批或直接执行；执行后成功、失败重试或取消，重试次数达到上限后终止。</desc>
+<defs><marker id="fsm05-arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0 0 L9 3 L0 6" fill="none" stroke="#287d79" stroke-width="1.5"/></marker></defs><rect x="8" y="8" width="984" height="354" rx="18" fill="#f5f8f6"/>
+<g font-family="system-ui,sans-serif" fill="#29484c" stroke-linecap="round" stroke-linejoin="round">
+<path d="M68 117 H112" stroke="#287d79" stroke-width="2.5" marker-end="url(#fsm05-arrow)"/>
+<g class="state-node" data-state-node="idle"><rect x="115" y="83" width="112" height="68" rx="12" fill="#e7e9fb" stroke="#7774b9" stroke-width="2"/><text x="171" y="124" text-anchor="middle" font-size="16" font-weight="700" stroke="none">空闲</text></g>
+<path d="M227 117 H273" stroke="#287d79" stroke-width="2.5" marker-end="url(#fsm05-arrow)"/><text x="250" y="101" text-anchor="middle" font-size="12" stroke="none">提交</text>
+<g class="state-node" data-state-node="validating"><rect x="276" y="83" width="122" height="68" rx="12" fill="#fff0dc" stroke="#c18a3d" stroke-width="2"/><text x="337" y="124" text-anchor="middle" font-size="16" font-weight="700" stroke="none">校验</text></g>
+<path d="M398 100 H460" stroke="#287d79" stroke-width="2.5" marker-end="url(#fsm05-arrow)"/><text x="430" y="86" text-anchor="middle" font-size="12" stroke="none">高风险</text>
+<g class="state-node" data-state-node="awaiting_approval"><rect x="463" y="67" width="140" height="68" rx="12" fill="#fce7e0" stroke="#c87959" stroke-width="2"/><text x="533" y="108" text-anchor="middle" font-size="15" font-weight="700" stroke="none">等待审批</text></g>
+<path d="M603 101 H672" stroke="#287d79" stroke-width="2.5" marker-end="url(#fsm05-arrow)"/><text x="638" y="86" text-anchor="middle" font-size="12" stroke="none">批准</text>
+<g class="state-node" data-state-node="running"><rect x="675" y="67" width="112" height="68" rx="12" fill="#dcefeb" stroke="#287f77" stroke-width="2"/><text x="731" y="108" text-anchor="middle" font-size="16" font-weight="700" stroke="none">执行中</text></g>
+<path d="M787 100 H842" stroke="#287d79" stroke-width="2.5" marker-end="url(#fsm05-arrow)"/><text x="814" y="84" text-anchor="middle" font-size="12" stroke="none">成功</text>
+<g class="state-node" data-state-node="succeeded"><rect x="845" y="67" width="112" height="68" rx="12" fill="#e0f1e4" stroke="#43895c" stroke-width="2"/><text x="901" y="108" text-anchor="middle" font-size="16" font-weight="700" stroke="none">成功</text></g>
+<path d="M731 135 V202 H675" stroke="#c18a3d" stroke-width="2.5" fill="none" marker-end="url(#fsm05-arrow)"/><text x="712" y="177" text-anchor="middle" font-size="12" stroke="none">失败且可重试</text>
+<g class="state-node" data-state-node="retry_wait"><rect x="550" y="202" width="125" height="66" rx="12" fill="#fff0dc" stroke="#c18a3d" stroke-width="2"/><text x="612" y="242" text-anchor="middle" font-size="15" font-weight="700" stroke="none">等待重试</text></g>
+<path d="M550 235 H488 V166 H731 V139" stroke="#287d79" stroke-width="2" fill="none" marker-end="url(#fsm05-arrow)"/><text x="505" y="224" text-anchor="middle" font-size="12" stroke="none">重试</text>
+<path d="M337 151 V300 H844" stroke="#c87959" stroke-width="2" fill="none" marker-end="url(#fsm05-arrow)"/><text x="420" y="289" text-anchor="middle" font-size="12" stroke="none">校验失败</text>
+<g class="state-node" data-state-node="failed"><rect x="845" y="267" width="112" height="58" rx="12" fill="#f8e3e3" stroke="#b65d5d" stroke-width="2"/><text x="901" y="302" text-anchor="middle" font-size="15" font-weight="700" stroke="none">失败</text></g>
+<g class="state-node" data-state-node="cancelled"><rect x="276" y="267" width="122" height="58" rx="12" fill="#ece9ef" stroke="#8b8195" stroke-width="2"/><text x="337" y="302" text-anchor="middle" font-size="15" font-weight="700" stroke="none">已取消</text></g>
+<path d="M533 135 V180 H398 V267" stroke="#c87959" stroke-width="2" fill="none" marker-end="url(#fsm05-arrow)"/><text x="460" y="173" text-anchor="middle" font-size="12" stroke="none">拒绝</text>
+<path d="M731 135 V166 H398 V267" stroke="#c87959" stroke-width="2" fill="none" marker-end="url(#fsm05-arrow)"/><text x="790" y="183" text-anchor="middle" font-size="12" stroke="none">取消</text>
+<path d="M760 135 C810 188 850 216 890 267" stroke="#b65d5d" stroke-width="2" fill="none" marker-end="url(#fsm05-arrow)"/><text x="858" y="210" text-anchor="middle" font-size="12" stroke="none">重试耗尽</text>
+<text x="500" y="348" text-anchor="middle" font-size="12" fill="#61777a" stroke="none">简化图省略持久化、并发控制与超时细节；重试必须受次数和幂等性约束</text>
+</g></svg>

@@ -1,0 +1,83 @@
+[
+  {
+    "id": "dfa-formal-tuple",
+    "claim": "A DFA is represented by a finite state set, input alphabet, transition function, initial state, and accepting-state set.",
+    "kind": "definition",
+    "source_url": "https://ac.informatik.uni-freiburg.de/teaching/ss_23/tcs_bridging/book/Introduction_to_the_theory_of_computation_by_Michael_Sipser.pdf",
+    "locator": "Chapter 1, Section 1.1, Definition 1.5",
+    "status": "verified",
+    "notes": "Textbook definition; this is the automata-theory model, not every software workflow state machine."
+  },
+  {
+    "id": "rabin-scott-finite-automata",
+    "claim": "Rabin and Scott's 1959 paper studies finite automata as devices for classifying finite tapes and examines decision problems.",
+    "kind": "historical-paper-claim",
+    "source_url": "https://doi.org/10.1147/rd.32.0114",
+    "locator": "IBM Journal of Research and Development, 3(2), 114–125, abstract",
+    "status": "verified",
+    "notes": "Used as a foundational historical reference; no unsupported claim that this paper alone invented all DFA/NFA concepts is made."
+  },
+  {
+    "id": "mealy-output-function",
+    "claim": "The Mealy sequential-machine model associates output behavior with the current state and input.",
+    "kind": "historical-model-definition",
+    "source_url": "https://doi.org/10.1002/j.1538-7305.1955.tb03788.x",
+    "locator": "Section 2, model for sequential circuits",
+    "status": "verified",
+    "notes": "The article uses the standard Mealy output-function distinction and links the original 1955 paper."
+  },
+  {
+    "id": "moore-output-function",
+    "claim": "Moore's sequential machines define present output as a function of present state.",
+    "kind": "historical-model-definition",
+    "source_url": "https://doi.org/10.1515/9781400882618-006",
+    "locator": "Automata Studies (1956), pp. 129–154; introduction",
+    "status": "verified",
+    "notes": "Moore's original paper explicitly states that present output depends only on present state."
+  },
+  {
+    "id": "harel-statecharts",
+    "claim": "Harel's Statecharts extend conventional state machines with hierarchy, concurrency, and communication.",
+    "kind": "historical-paper-claim",
+    "source_url": "https://doi.org/10.1016/0167-6423(87)90035-9",
+    "locator": "Science of Computer Programming, 8(3), 231–274, abstract",
+    "status": "verified",
+    "notes": "The article's diagrams are independently authored teaching models, not reproductions of original paper figures."
+  },
+  {
+    "id": "w3c-scxml-parallel",
+    "claim": "SCXML parallel states activate all child regions and define how events are processed by those regions.",
+    "kind": "standard-semantics",
+    "source_url": "https://www.w3.org/TR/scxml/",
+    "locator": "W3C Recommendation 1 September 2015, Sections 3.4 and 3.11",
+    "status": "verified",
+    "notes": "The article distinguishes simultaneous active-state semantics from an assumption of multiple OS threads."
+  },
+  {
+    "id": "tcp-state-machine",
+    "claim": "RFC 9293 defines TCP connection states and the events and segments that drive state transitions.",
+    "kind": "protocol-standard",
+    "source_url": "https://www.rfc-editor.org/rfc/rfc9293.html",
+    "locator": "Section 3.3.2 and Figure 5",
+    "status": "verified",
+    "notes": "RFC 9293 warns that Figure 5 summarizes state changes and is not the complete protocol specification."
+  },
+  {
+    "id": "safety-liveness",
+    "claim": "Safety properties state that bad behavior never occurs, while liveness properties require that desirable progress eventually occurs.",
+    "kind": "formal-methods-definition",
+    "source_url": "https://lamport.azurewebsites.net/tla/tutorial/session9.html",
+    "locator": "TLA+ Tutorial, Session 9, Section 1",
+    "status": "verified",
+    "notes": "Liveness claims require explicit fairness and environment assumptions; the article states this qualification."
+  },
+  {
+    "id": "agent-runtime-toy-model",
+    "claim": "The interactive Agent Runtime controller is a finite teaching example with approval, bounded retries, cancellation, and terminal reset transitions.",
+    "kind": "illustrative",
+    "source_url": "https://github.com/1998x-stack/xm-posts/blob/main/examples/agent_state_machine.py",
+    "locator": "State, Event, Context, and transition() implementation",
+    "status": "illustrative",
+    "notes": "A deterministic toy controller for teaching; not a production workflow engine or an implementation of SCXML."
+  }
+]
