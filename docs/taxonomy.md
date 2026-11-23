@@ -18,7 +18,7 @@
 | `systems` | GPU 内存、算子、编译、通信、性能分析及底层优化 | 服务请求、token 调度、端到端 serving 归 `inference` |
 | `storage-indexing` | B+ Tree、LSM Tree、页与缓冲区管理、事务恢复、MVCC | 数据库磁盘/索引结构归此类；向量语义召回归 `retrieval-rag`，GPU 算子实现归 `systems` |
 | `retrieval-rag` | 向量/ANN、稀疏混合检索、重排序、RAG、证据落地 | Agent 任务计划与工具执行归 `agents`，embedding 基础表征归 `foundations` |
-| `agents` | ReAct、规划、工具调用、Agent Memory、Context Engineering、软件工程 Agent、Agent-Computer Interface、Harness Engineering、Agentic RL、Loop Engineering 与端到端评测 | 纯推理策略归 `reasoning`；检索算法归 `retrieval-rag`；跨会话知识管理归 `memory`；推理时上下文的选择、组装与生命周期归 `context-engineering`；PPO / GRPO 等优化算法仍按其训练方法归 `training` 或 `reinforcement-learning`；Loop 关注跨运行的触发、验证、持久化与终止 |
+| `agents` | ReAct、规划、工具调用、Agent Memory、Context Engineering、软件工程 Agent、显式状态机与事件驱动工作流、Agent-Computer Interface、Harness Engineering、Agentic RL、Loop Engineering 与端到端评测 | 纯推理策略归 `reasoning`；检索算法归 `retrieval-rag`；跨会话知识管理归 `memory`；推理时上下文的选择、组装与生命周期归 `context-engineering`；PPO / GRPO 等优化算法仍按其训练方法归 `training` 或 `reinforcement-learning`；Loop 关注跨运行的触发、验证、持久化与终止 |
 | `multimodal` | 视觉/语言/音频的跨模态建模与对齐 | 通用单模态 CNN 架构仍可归 `architectures` |
 | `evaluation` | 模型/任务 Benchmark、ROC/PR、消融与复现 | 训练数据质量、污染事实与许可证归 `datasets` |
 
@@ -162,3 +162,31 @@
 - **主归属**：`reinforcement-learning / imitation-learning`（稳定二级 Topic，现有一级分类不变），以「从专家示范学习策略」为核心。
 - **教学范围**：Behavior Cloning、协变量偏移、DAgger、Inverse Reinforcement Learning、MaxEnt IRL、GAIL 与 Diffusion Policy。
 - **概念边界**：模仿学习并不要求显式环境奖励；置于强化学习导航区是为了连接策略学习和决策问题，而不是宣称模仿学习是奖励驱动 RL 的严格子集。数据聚合程序、逆奖励推断、占用测度匹配与生成式动作模型应区分学习信号和模型结构。
+
+
+## State Machines & Workflow Control 专题边界
+
+- **主分类：** `agents`；**二级专题：** `state-machines`。不新增一级分类。
+- 研究离散状态、事件、转移、守卫、动作和终态约束，覆盖 DFA / NFA、Mealy / Moore、EFSM、层次状态机与 Statecharts。
+- 工程重点是协议、工具调用、Agent Runtime 与长任务工作流中的合法路径、非法事件、重试、超时、取消、持久化和并发控制。
+- 与 `loop-engineering` 的边界：State Machines 研究单个系统/任务实例的显式状态与合法转移；Loop Engineering 研究跨运行的触发、发现、隔离执行、验证、持久化与终止。
+- 与 `harness-engineering` 的边界：State Machines 提供行为控制模型；Harness Engineering 组织工具、权限、环境、可观测性和验证基础设施。
+- 与 `architectures/state-space-models` 的边界：有限状态机使用有限个离散控制状态；SSM 使用数值状态变量和状态方程传播历史信息。不要因共享术语 state 而混同。
+- 与 `reinforcement-learning` 的边界：MDP 增加动作、概率转移和奖励，用于策略决策；FSM 主要刻画控制行为的合法路径。二者可组合，但不等价。
+- Event Sourcing 是事件持久化与状态重建模式；Workflow Engine 是带持久化、计时器、重试和 Worker 调度的执行系统；它们可使用 FSM，但不属于同一抽象层。
+
+
+## Robotic Process Automation 专题边界（2026-11）
+
+- 主分类：agents；二级专题：robotic-process-automation。
+- 收录传统 RPA、软件机器人、UI 自动化、机器人编排、流程挖掘辅助候选发现、IPA 与 Agentic Process Automation 的交叉研究。
+- Traditional RPA 的核心是预定义规则、确定性步骤和受控的业务状态转换；它可以通过 UI 操作遗留应用，但不要求模型进行开放式规划。
+- BPM / Workflow 负责端到端流程设计、责任、事件和治理；RPA 通常执行其中的任务级动作。二者互补，不应把 RPA 描述为完整 BPM 的替代品。
+- API Automation 优先使用稳定接口和数据契约；只有接口不可用或改造成本不合理时，才将 UI RPA 作为兼容层。
+- IPA 在执行流程中加入 OCR、文档理解、ML 或 NLP；Agentic Process Automation 则在不确定环节加入 LLM Agent 的理解、规划与异常处理能力。
+- 与 ReAct 的边界：ReAct 研究 Thought–Action–Observation 的动态推理循环；RPA 研究如何把已明确的业务步骤转化为可重复、可审计的确定性执行。
+- 与 Tool Calling 的边界：Function Calling 定义模型如何调用结构化工具；RPA 定义工具/机器人如何跨应用完成具体业务操作。
+- 与 Harness Engineering 的边界：Harness 研究 Agent Runtime、权限、环境、状态和验证基础设施；RPA 是可被 Harness 编排的一类确定性执行器。
+- 与 Process Mining 的关系：Process Mining 从事件日志发现真实流程并检查偏差；Task Mining 更关注 UI 交互轨迹。两者可辅助候选发现，但不自动替代业务、风险与经济评估。
+- 评估必须区分 UI 动作成功、业务状态正确、端到端流程完成和组织层面的投资回报；不得把界面 Toast 或按钮点击当作持久化业务正确性的证据。
+- 新增 RPA 文章应将原始 RPA 研究、近年系统综述、Agentic Automation 论文和企业软件状态验证研究分层引用；预印本、概念模型和教学模拟器必须标明证据等级。

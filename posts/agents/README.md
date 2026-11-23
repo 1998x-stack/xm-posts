@@ -1,8 +1,10 @@
 # 智能体与工具使用 / Agents & Tool Use
 
-本分类专注模型与外界交互的行动闭环：ReAct、Planning、Tool Calling、Agent Memory、Context Engineering、Software Engineering Agents & ACI、Harness Engineering、Agentic RL、Agent Evaluation。
+本分类专注模型与外界交互的行动闭环：ReAct、Planning、Tool Calling、RPA 与 Agentic Process Automation、Agent Memory、Context Engineering、Software Engineering Agents & ACI、Harness Engineering、Agentic RL、Agent Evaluation。
 
 ## 已发布专题
+
+- [State Machines & Workflow Control](state-machines/index.html) — 从 DFA / NFA、Mealy / Moore 与 Statecharts 出发，建立事件、守卫、动作、验证和 Agent Runtime 状态控制的完整模型。
 
 - [Agentic Reinforcement Learning](agentic-rl/index.html) — 从单轮 LLM-RL 到多轮环境交互，讲解 POMDP、轨迹回报、信用分配、长程课程与异步训练。
 - [Context Engineering](context-engineering/index.html) — 管理每轮推理所需的信息选择、检索、压缩、组装、记忆和上下文安全。
@@ -10,6 +12,8 @@
 - [Loop Engineering](loop-engineering/index.html) — 外层持续执行：触发、任务发现、独立验证、持久状态、预算与停止策略。
 
 ## 专题占位
+
+- [State Machines & Workflow Control](_topics/state-machines/README.md) — 显式状态转移、协议状态与可靠工作流控制。
 
 - [ReAct](react/) — 已有正式论文解读；[专题研究规划](_topics/react/README.md) 仍作为未发布的历史规划记录。
 - [Software Engineering Agents & ACI](swe-agent/) — SWE-agent：代码搜索、编辑、错误护栏、上下文管理与软件修复评测。
@@ -30,3 +34,8 @@
 - [Autonomous Execution & Iterative Control](./_topics/autonomous-execution/README.md)
 - [Tool Integration & Interoperability Protocols](./_topics/tool-integration-protocols/README.md)
 - 关联文章：Agent Evaluation、AutoGPT、Ralph Loop、Function Calling、Model Context Protocol。
+
+
+## 规划中专题
+
+- [Robotic Process Automation & Agentic Process Automation](_topics/robotic-process-automation/README.md) — 研究传统规则驱动 RPA、Process Mining、IPA、Agentic Automation 与企业状态验证；正式文章通过专属 QA 后发布。
