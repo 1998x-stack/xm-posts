@@ -127,11 +127,38 @@
   },
   {
     "id": "GL15",
-    "claim": "Item-based collaborative filtering, matrix factorization, Bayesian Personalized Ranking and deep recommendation are later model families and should not be attributed to the 1994 GroupLens implementation.",
+    "claim": "Item-based collaborative filtering estimates item-item relationships and uses them to recommend items from a user's history.",
     "kind": "later-work",
     "source_url": "https://doi.org/10.1145/371920.372071",
-    "locator": "Sarwar et al. 2001; Koren et al. 2009; Rendle et al. 2009; Covington et al. 2016",
+    "locator": "Sarwar et al., WWW 2001, abstract and method",
     "status": "verified",
-    "notes": "The article treats these as a lineage of related later approaches, not as components of GroupLens."
+    "notes": "A later item-neighborhood family; not part of GroupLens 1994."
+  },
+  {
+    "id": "GL16",
+    "claim": "Matrix factorization models represent users and items with latent factors and became a prominent alternative to classic neighborhood methods.",
+    "kind": "later-work",
+    "source_url": "https://doi.org/10.1109/MC.2009.263",
+    "locator": "Koren, Bell & Volinsky, Computer 42(8), 2009",
+    "status": "verified",
+    "notes": "A later latent-factor family; do not attribute it to GroupLens."
+  },
+  {
+    "id": "GL17",
+    "claim": "Bayesian Personalized Ranking optimizes personalized ranking from implicit feedback rather than treating the task solely as explicit rating prediction.",
+    "kind": "later-work",
+    "source_url": "https://proceedings.mlr.press/r7/rendle09a.html",
+    "locator": "Rendle et al., UAI 2009, abstract and BPR-Opt",
+    "status": "verified",
+    "notes": "A later pairwise ranking objective; not part of the 1994 GroupLens predictor."
+  },
+  {
+    "id": "GL18",
+    "claim": "The YouTube recommendation paper describes a deep candidate-generation model and a separate deep ranking model.",
+    "kind": "later-work",
+    "source_url": "https://doi.org/10.1145/2959100.2959190",
+    "locator": "Covington, Adams & Sargin, RecSys 2016, abstract",
+    "status": "verified",
+    "notes": "A later industrial deep-recommendation architecture; used only as a broad extension pointer."
   }
 ]
