@@ -205,7 +205,7 @@ def transition(state, event, context):
 <p>来源：<a href="https://www.rfc-editor.org/rfc/rfc9293.html#section-3.3.2" target="_blank" rel="noopener noreferrer">RFC 9293 · State Machine Overview ↗</a>。</p></section>
 
 <section id="boundaries"><h2>10 · 不要把所有带有“State”的东西混为一谈</h2>
-<div class="table-scroll" tabindex="0" role="region" aria-label="状态机与相关概念对比表，可横向滚动"><thead><tr><th>概念</th><th>状态是什么</th><th>转移 / 更新</th><th>主要问题</th></tr></thead><tbody>
+<div class="table-scroll" tabindex="0" role="region" aria-label="状态机与相关概念对比表，可横向滚动"><table><thead><tr><th>概念</th><th>状态是什么</th><th>转移 / 更新</th><th>主要问题</th></tr></thead><tbody>
 <tr><td><strong>有限状态机 FSM</strong></td><td>有限个离散符号状态</td><td>事件触发确定或非确定转移</td><td>哪些行为路径合法？</td></tr>
 <tr><td><strong>Statecharts / EFSM</strong></td><td>层次状态配置 + 数据变量</td><td>守卫、动作、并发区域、历史</td><td>复杂控制流如何模块化？</td></tr>
 <tr><td><strong>State Space Model</strong></td><td>通常是向量化的动态状态</td><td>状态方程随时间更新</td><td>如何压缩和传播历史信息？</td></tr>
