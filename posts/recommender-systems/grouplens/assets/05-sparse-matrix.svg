@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 390" role="img" aria-labelledby="gl05-title gl05-desc">
+<title id="gl05-title">稀疏评分矩阵中的待预测单元格</title>
+<desc id="gl05-desc">文章作为行，用户作为列。许多单元格没有评分。Ken 对文章 6 的评分未知，Lee 和 Meg 已经评分，因此他们可以提供预测证据。</desc>
+<rect x="8" y="8" width="944" height="374" rx="22" fill="#f7faf7"/>
+<g font-family="Noto Sans CJK SC,system-ui,sans-serif">
+<text x="42" y="52" font-size="14" font-weight="800" letter-spacing="2" fill="#8a715b">MATRIX COMPLETION</text>
+<g font-size="15" font-weight="750" fill="#2d5358" text-anchor="middle"><text x="275" y="102">Ken</text><text x="405" y="102">Lee</text><text x="535" y="102">Meg</text><text x="665" y="102">Nan</text></g>
+<g font-size="14" fill="#557477" text-anchor="middle"><text x="120" y="147">1</text><text x="120" y="197">2</text><text x="120" y="247">3</text><text x="120" y="297">4</text><text x="120" y="347">6</text></g>
+<text x="120" y="76" text-anchor="middle" font-size="13" fill="#80918d">Article</text>
+<g stroke="#d9e6df" stroke-width="1">
+<path d="M185 116H730M185 166H730M185 216H730M185 266H730M185 316H730M185 366H730"/>
+<path d="M185 116V366M340 116V366M470 116V366M600 116V366M730 116V366"/>
+</g>
+<g fill="#e3f2ec" stroke="#b8d7c7">
+<rect x="203" y="124" width="100" height="34" rx="7"/><rect x="463" y="124" width="100" height="34" rx="7"/><rect x="333" y="174" width="100" height="34" rx="7"/><rect x="593" y="174" width="100" height="34" rx="7"/>
+</g>
+<g fill="#fff0e5" stroke="#e3b18f"><rect x="203" y="324" width="100" height="34" rx="7"/><rect x="333" y="324" width="100" height="34" rx="7"/></g>
+<g font-size="17" font-weight="800" text-anchor="middle" fill="#2c716b"><text x="253" y="148">1</text><text x="513" y="148">2</text><text x="383" y="198">2</text><text x="643" y="198">4</text></g>
+<text x="253" y="348" text-anchor="middle" font-size="19" font-weight="850" fill="#b16a46">?</text>
+<text x="383" y="348" text-anchor="middle" font-size="17" font-weight="850" fill="#8b5839">2</text>
+<rect x="215" y="311" width="76" height="58" rx="10" fill="none" stroke="#c67a55" stroke-width="2.5"/>
+<path d="M760 150H908V340H760" fill="#fff" stroke="#dce8e1" stroke-width="1.5" rx="14"/>
+<text x="834" y="185" text-anchor="middle" font-size="16" font-weight="750" fill="#2d5358">缺失 ≠ 0</text>
+<text x="834" y="218" text-anchor="middle" font-size="13" fill="#64807b">未评分的单元格</text>
+<text x="834" y="240" text-anchor="middle" font-size="13" fill="#64807b">不是负反馈</text>
+<text x="834" y="286" text-anchor="middle" font-size="13" fill="#9b6c4c">目标 ?</text>
+<text x="834" y="309" text-anchor="middle" font-size="13" fill="#9b6c4c">由邻居估计</text>
+</g>
+</svg>
