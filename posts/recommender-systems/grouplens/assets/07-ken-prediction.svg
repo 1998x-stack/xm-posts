@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 390" role="img" aria-labelledby="gl07-title gl07-desc">
+<title id="gl07-title">Ken 的评分预测贡献拆解</title>
+<desc id="gl07-desc">Ken 的平均分是 3。Lee 与 Ken 负相关为负 0.8，Lee 对文章 6 的低于均值评分产生正贡献 0.8；Meg 与 Ken 正相关为 1，Meg 的高于均值评分贡献 2。除以绝对相似度之和 1.8，得到 4.56。</desc>
+<rect x="8" y="8" width="944" height="374" rx="22" fill="#f7faf7"/>
+<g font-family="Noto Sans CJK SC,system-ui,sans-serif">
+<text x="42" y="52" font-size="14" font-weight="800" letter-spacing="2" fill="#8a715b">PREDICTION BY WEIGHTED DEVIATION</text>
+<rect x="42" y="92" width="160" height="210" rx="15" fill="#e9e7f7" stroke="#aaa3d2" stroke-width="2"/>
+<text x="122" y="132" text-anchor="middle" font-size="16" font-weight="750" fill="#514a86">Ken baseline</text>
+<text x="122" y="191" text-anchor="middle" font-size="40" font-weight="850" fill="#514a86">3.00</text>
+<text x="122" y="229" text-anchor="middle" font-size="13" fill="#6b659d">个人平均评分</text>
+<text x="122" y="268" text-anchor="middle" font-size="12" fill="#7c76a7">预测起点</text>
+<rect x="236" y="92" width="205" height="210" rx="15" fill="#fff0e5" stroke="#dba27b" stroke-width="2"/>
+<text x="338" y="132" text-anchor="middle" font-size="16" font-weight="750" fill="#8b5839">Lee · sim −0.8</text>
+<text x="338" y="181" text-anchor="middle" font-size="14" fill="#946c55">rating 2 − mean 3</text>
+<text x="338" y="225" text-anchor="middle" font-size="31" font-weight="850" fill="#b56843">+0.8</text>
+<text x="338" y="268" text-anchor="middle" font-size="12" fill="#9b7b65">负相关反转偏差</text>
+<rect x="475" y="92" width="205" height="210" rx="15" fill="#e5f3ed" stroke="#8ab8a7" stroke-width="2"/>
+<text x="577" y="132" text-anchor="middle" font-size="16" font-weight="750" fill="#236b65">Meg · sim +1.0</text>
+<text x="577" y="181" text-anchor="middle" font-size="14" fill="#527b72">rating 5 − mean 3</text>
+<text x="577" y="225" text-anchor="middle" font-size="31" font-weight="850" fill="#24746d">+2.0</text>
+<text x="577" y="268" text-anchor="middle" font-size="12" fill="#66887f">正相关保留偏差</text>
+<path d="M202 198H226M441 198H465M680 198H705" stroke="#4d7774" stroke-width="2.5" fill="none"/>
+<path d="M217 190L227 198L217 206M456 190L466 198L456 206M696 190L706 198L696 206" stroke="#4d7774" stroke-width="2.5" fill="none"/>
+<rect x="716" y="92" width="198" height="210" rx="15" fill="#fff5dc" stroke="#d5b66d" stroke-width="2"/>
+<text x="815" y="132" text-anchor="middle" font-size="16" font-weight="750" fill="#80612c">Prediction</text>
+<text x="815" y="191" text-anchor="middle" font-size="40" font-weight="850" fill="#8d6b2d">4.56</text>
+<text x="815" y="229" text-anchor="middle" font-size="13" fill="#927843">3 + (0.8 + 2.0) / 1.8</text>
+<text x="815" y="268" text-anchor="middle" font-size="12" fill="#927843">归一化加权偏差</text>
+<text x="480" y="345" text-anchor="middle" font-size="13" fill="#68817c">分母 = |−0.8| + |1.0| = 1.8；Nan 没有评价文章 6，因此不进入这次求和。</text>
+</g>
+</svg>
