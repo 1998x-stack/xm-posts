@@ -1,0 +1,76 @@
+[
+  {
+    "id": "S01",
+    "kind": "publication",
+    "claim": "Anthropic Engineering article published 2026-11-13; it distinguishes safety evaluations from capability evaluations.",
+    "source_url": "https://www.anthropic.com/research/building-strong-safety-evaluations",
+    "locator": "Opening section; Safety first",
+    "status": "verified",
+    "notes": "Official engineering guidance, not a peer-reviewed paper."
+  },
+  {
+    "id": "S02",
+    "kind": "method",
+    "claim": "Safety evaluations should measure whether a response makes harm more or less likely, and should define appropriate behavior for each risk area.",
+    "source_url": "https://www.anthropic.com/research/building-strong-safety-evaluations",
+    "locator": "Opening section; Measure what you mean to measure",
+    "status": "verified"
+  },
+  {
+    "id": "S03",
+    "kind": "method",
+    "claim": "Anthropic describes multi-turn simulations with a fixed initial user turn, model-generated subsequent user turns, a tested model, and a grader using a risk-specific rubric.",
+    "source_url": "https://www.anthropic.com/research/building-strong-safety-evaluations",
+    "locator": "Design → Make sure the results generalize → Capture nuance via multi-turn simulations",
+    "status": "verified"
+  },
+  {
+    "id": "S04",
+    "kind": "method",
+    "claim": "The article recommends atomic grader criteria, human validation, bias checks, explicit failure handling, and human review of uncertain samples.",
+    "source_url": "https://www.anthropic.com/research/building-strong-safety-evaluations",
+    "locator": "Run → Carefully calibrate your grader",
+    "status": "verified"
+  },
+  {
+    "id": "S05",
+    "kind": "recommendation",
+    "claim": "Anthropic gives practical sample-size floors of 100 for complex multi-turn evaluations and 1,000 for simpler single-turn evaluations.",
+    "source_url": "https://www.anthropic.com/research/building-strong-safety-evaluations",
+    "locator": "Run → Preregister",
+    "status": "verified",
+    "notes": "Company recommendation, not a universal statistical law."
+  },
+  {
+    "id": "S06",
+    "kind": "recommendation",
+    "claim": "The article recommends preregistration, repeated runs, paired comparisons, uncertainty intervals, and full configuration reporting.",
+    "source_url": "https://www.anthropic.com/research/building-strong-safety-evaluations",
+    "locator": "Preregister; Report statistics fully; Document everything",
+    "status": "verified"
+  },
+  {
+    "id": "S07",
+    "kind": "limitation",
+    "claim": "The article warns that single-turn tasks can saturate and that evaluation scores can be affected by contamination, reward hacking, grader bias, and deployment configuration.",
+    "source_url": "https://www.anthropic.com/research/building-strong-safety-evaluations",
+    "locator": "Make sure the results generalize; Keep measures internally valid; Document everything",
+    "status": "verified"
+  },
+  {
+    "id": "S08",
+    "kind": "safety",
+    "claim": "Anthropic recommends sandboxing and real-time monitoring for evaluations that may expose models to unsafe network or cyber actions.",
+    "source_url": "https://www.anthropic.com/research/building-strong-safety-evaluations",
+    "locator": "Safety first → Run evals safely",
+    "status": "verified"
+  },
+  {
+    "id": "S09",
+    "kind": "illustration",
+    "claim": "The article diagrams, scoring formula, interactive examples, and Python aggregation code in this explainer are independently authored teaching abstractions.",
+    "source_url": "https://www.anthropic.com/research/building-strong-safety-evaluations",
+    "locator": "Independent explanatory adaptation",
+    "status": "illustrative"
+  }
+]

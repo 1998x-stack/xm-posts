@@ -15,3 +15,6 @@
 ## 2026-11-21 新增专题
 - [LLM-as-a-Judge & Judge Reliability](./_topics/llm-as-a-judge/README.md)
 - 关联文章：LLM-as-a-Judge、Agent Evaluation。
+
+## 2026-11-23 新增研究方向
+- [Safety Evaluation & Risk Testing](_topics/safety-evaluations/README.md) — 构念效度、多轮风险模拟、评分器校准与统计报告；首篇 Anthropic 案例仍为 draft。

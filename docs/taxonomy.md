@@ -174,3 +174,12 @@
 - 与 `architectures/state-space-models` 的边界：有限状态机使用有限个离散控制状态；SSM 使用数值状态变量和状态方程传播历史信息。不要因共享术语 state 而混同。
 - 与 `reinforcement-learning` 的边界：MDP 增加动作、概率转移和奖励，用于策略决策；FSM 主要刻画控制行为的合法路径。二者可组合，但不等价。
 - Event Sourcing 是事件持久化与状态重建模式；Workflow Engine 是带持久化、计时器、重试和 Worker 调度的执行系统；它们可使用 FSM，但不属于同一抽象层。
+
+
+## Anthropic Engineering 专题扩展（2026-11）
+
+- `evaluation/safety-evaluations`：安全行为评测的构念效度、多轮模拟、grader 校准、统计不确定性与运行安全。它不同于通用 Agent task success benchmark，也不同于单独的 refusal-rate 指标。
+- `systems/developer-infrastructure`：Agent-scale 代码生产下的 source control、monorepo、changeset、对象存储、稀疏检出、缓存和 CI。它关注开发基础设施，不等同于 GPU kernel 或推理 serving。
+- `agents/agent-security`：Agent 的执行环境隔离、文件/网络边界、工具输出信任、prompt injection 与 blast-radius 控制。它关注运行时安全，不与 Function Calling / MCP 协议本身混为一谈。
+
+上述新文章目前均为 draft。发布前需要补充阅读路径，并完成浏览器 QA；draft 不得加入已发布 reading_paths。
