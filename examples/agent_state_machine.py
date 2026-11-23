@@ -1,4 +1,4 @@
-"""A small, deterministic Agent task state machine used by the article.
+"""A small, deterministic Agent task EFSM used by the article.
 
 This is a teaching model, not a durable workflow engine.
 """
