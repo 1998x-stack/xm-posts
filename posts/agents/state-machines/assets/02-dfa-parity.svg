@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 300" role="img" aria-labelledby="fsm02-title fsm02-desc">
+<title id="fsm02-title">二进制输入中 1 的个数为偶数的 DFA</title><desc id="fsm02-desc">偶数状态是初态和接受态；读入 0 留在原状态，读入 1 在偶数与奇数状态之间切换。</desc>
+<defs><marker id="fsm02-arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0 0 L9 3 L0 6" fill="none" stroke="#287d79" stroke-width="1.5"/></marker></defs><rect x="8" y="8" width="804" height="284" rx="18" fill="#f5f8f6"/>
+<g font-family="system-ui,sans-serif" fill="#29484c">
+<path d="M88 144 H245" stroke="#287d79" stroke-width="3" marker-end="url(#fsm02-arrow)"/><text x="102" y="126" font-size="14">开始</text>
+<circle cx="320" cy="144" r="64" fill="#dcefeb" stroke="#287f77" stroke-width="3"/><circle cx="320" cy="144" r="54" fill="none" stroke="#287f77" stroke-width="2"/>
+<circle cx="610" cy="144" r="64" fill="#fff0dc" stroke="#c18a3d" stroke-width="3"/>
+<text x="320" y="136" text-anchor="middle" font-size="21" font-weight="700">偶数 E</text><text x="320" y="164" text-anchor="middle" font-size="14">接受态</text>
+<text x="610" y="136" text-anchor="middle" font-size="21" font-weight="700">奇数 O</text><text x="610" y="164" text-anchor="middle" font-size="14">非接受态</text>
+<path d="M280 86 C245 18 395 18 360 86" stroke="#287d79" stroke-width="2.5" fill="none" marker-end="url(#fsm02-arrow)"/><text x="320" y="36" text-anchor="middle" font-size="17" font-weight="700">0</text>
+<path d="M570 86 C535 18 685 18 650 86" stroke="#c18a3d" stroke-width="2.5" fill="none" marker-end="url(#fsm02-arrow)"/><text x="610" y="36" text-anchor="middle" font-size="17" font-weight="700">0</text>
+<path d="M384 144 H540" stroke="#287d79" stroke-width="3" fill="none" marker-end="url(#fsm02-arrow)"/><text x="462" y="128" text-anchor="middle" font-size="17" font-weight="700">1</text>
+<path d="M546 183 C500 258 430 258 384 183" stroke="#c18a3d" stroke-width="3" fill="none" marker-end="url(#fsm02-arrow)"/><text x="465" y="253" text-anchor="middle" font-size="17" font-weight="700">1</text>
+<text x="410" y="282" text-anchor="middle" font-size="13" fill="#61777a">输入串结束时落在 E，且仅当 1 的数量为偶数时接受</text></g></svg>

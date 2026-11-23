@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 250" role="img" aria-labelledby="fsm01-title fsm01-desc">
+<title id="fsm01-title">状态机的一次转移由五个部分组成</title><desc id="fsm01-desc">当前状态和输入事件进入转移规则，守卫判断是否允许，动作产生副作用，最后进入下一个状态。</desc>
+<defs><marker id="fsm01-arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0 0 L9 3 L0 6" fill="none" stroke="#287d79" stroke-width="1.5"/></marker></defs><rect x="8" y="8" width="884" height="234" rx="18" fill="#f5f8f6"/>
+<g font-family="system-ui,sans-serif" text-anchor="middle">
+<rect x="35" y="78" width="145" height="82" rx="13" fill="#dcefeb" stroke="#398e83" stroke-width="2"/><text x="107" y="111" font-size="18" font-weight="700" fill="#234b4b">当前状态</text><text x="107" y="137" font-size="15" fill="#456568">sₜ</text>
+<rect x="215" y="78" width="125" height="82" rx="13" fill="#e7e9fb" stroke="#7774b9" stroke-width="2"/><text x="277" y="111" font-size="18" font-weight="700" fill="#3f426f">事件</text><text x="277" y="137" font-size="15" fill="#575b86">eₜ</text>
+<rect x="375" y="78" width="135" height="82" rx="13" fill="#fff0dc" stroke="#c18a3d" stroke-width="2"/><text x="442" y="111" font-size="18" font-weight="700" fill="#79521d">守卫</text><text x="442" y="137" font-size="15" fill="#916c35">guard(s,e,x)</text>
+<rect x="545" y="78" width="135" height="82" rx="13" fill="#fce7e0" stroke="#c87959" stroke-width="2"/><text x="612" y="111" font-size="18" font-weight="700" fill="#824b39">动作</text><text x="612" y="137" font-size="15" fill="#965d48">action</text>
+<rect x="715" y="78" width="150" height="82" rx="13" fill="#e9e4f8" stroke="#8878bb" stroke-width="2"/><text x="790" y="111" font-size="18" font-weight="700" fill="#514478">下一状态</text><text x="790" y="137" font-size="15" fill="#6d6095">sₜ₊₁</text>
+<g stroke="#287d79" stroke-width="3" fill="none" marker-end="url(#fsm01-arrow)"><path d="M180 119 H208"/><path d="M340 119 H368"/><path d="M510 119 H538"/><path d="M680 119 H708"/></g>
+<text x="450" y="204" font-size="15" fill="#526c6d">只有匹配且守卫成立的转移规则才可执行</text></g></svg>

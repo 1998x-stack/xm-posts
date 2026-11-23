@@ -3018,5 +3018,41 @@
       "src": "assets/01-selective-memory.svg",
       "caption": "关键 token 改写记忆、无关 token 尽量保留旧状态：Mamba 的内容选择机制"
     }
+  },
+  {
+    "slug": "state-machines",
+    "title": "Understanding State Machines",
+    "subtitle": "从有限自动机、Statecharts 到 Agent Runtime，理解状态、事件、守卫与可靠工作流控制。",
+    "category": "agents",
+    "topic": "state-machines",
+    "status": "published",
+    "published": "2026-11-23",
+    "updated": "2026-11-23",
+    "reading_minutes": 32,
+    "tags": [
+      "State Machine",
+      "Finite State Machine",
+      "FSM",
+      "DFA",
+      "NFA",
+      "Mealy Machine",
+      "Moore Machine",
+      "Statecharts",
+      "EFSM",
+      "SCXML",
+      "Protocol State",
+      "Agent Runtime",
+      "Workflow Control",
+      "Safety Properties",
+      "Liveness Properties",
+      "Transition System"
+    ],
+    "summary": "从 DFA / NFA 的形式化定义出发，比较 Mealy / Moore、EFSM 与 Harel Statecharts，推导事件、守卫、动作和合法转移；通过 Agent Runtime 交互模拟、TCP 状态机案例、Python 确定性实现与测试，连接安全性、活性、持久化、重试和并发控制，并明确区分 FSM、SSM、MDP、Event Sourcing 与 Workflow Engine。",
+    "paper": "https://doi.org/10.1016/0167-6423(87)90035-9",
+    "illustration": "state-machines",
+    "cover": {
+      "src": "assets/05-agent-runtime.svg",
+      "caption": "审批守卫决定高风险任务是否进入执行"
+    }
   }
 ]

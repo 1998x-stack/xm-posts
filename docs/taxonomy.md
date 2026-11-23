@@ -18,7 +18,7 @@
 | `systems` | GPU 内存、算子、编译、通信、性能分析及底层优化 | 服务请求、token 调度、端到端 serving 归 `inference` |
 | `storage-indexing` | B+ Tree、LSM Tree、页与缓冲区管理、事务恢复、MVCC | 数据库磁盘/索引结构归此类；向量语义召回归 `retrieval-rag`，GPU 算子实现归 `systems` |
 | `retrieval-rag` | 向量/ANN、稀疏混合检索、重排序、RAG、证据落地 | Agent 任务计划与工具执行归 `agents`，embedding 基础表征归 `foundations` |
-| `agents` | ReAct、规划、工具调用、Agent Memory、Context Engineering、软件工程 Agent、显式状态机与事件驱动工作流、Agent-Computer Interface、Harness Engineering、Agentic RL、Loop Engineering 与端到端评测 | 纯推理策略归 `reasoning`；检索算法归 `retrieval-rag`；跨会话知识管理归 `memory`；推理时上下文的选择、组装与生命周期归 `context-engineering`；PPO / GRPO 等优化算法仍按其训练方法归 `training` 或 `reinforcement-learning`；Loop 关注跨运行的触发、验证、持久化与终止 |
+| `agents` | ReAct、规划、工具调用、RPA 与 Agentic Process Automation、Agent Memory、Context Engineering、软件工程 Agent、显式状态机与事件驱动工作流、RPA 软件机器人、Agent-Computer Interface、Harness Engineering、Agentic RL、Loop Engineering 与端到端评测 | 纯推理策略归 `reasoning`；检索算法归 `retrieval-rag`；跨会话知识管理归 `memory`；推理时上下文的选择、组装与生命周期归 `context-engineering`；PPO / GRPO 等优化算法仍按其训练方法归 `training` 或 `reinforcement-learning`；Loop 关注跨运行的触发、验证、持久化与终止 |
 | `multimodal` | 视觉/语言/音频的跨模态建模与对齐 | 通用单模态 CNN 架构仍可归 `architectures` |
 | `evaluation` | 模型/任务 Benchmark、ROC/PR、消融与复现 | 训练数据质量、污染事实与许可证归 `datasets` |
 
