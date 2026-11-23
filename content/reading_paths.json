@@ -618,5 +618,16 @@
       "mamba",
       "deltanet"
     ]
+  },
+  {
+    "id": "path-state-machine-agent-runtime",
+    "title": "从显式状态机到可靠 Agent Runtime",
+    "posts": [
+      "state-machines",
+      "function-calling",
+      "harness-engineering",
+      "loop-engineering",
+      "agent-evaluation"
+    ]
   }
 ]
