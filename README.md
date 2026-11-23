@@ -47,6 +47,7 @@
 内容按 **一级领域 → 二级主题 → 文章** 组织。主要方向包括：
 
 - **Foundations / Classical ML**：数学、优化、表示学习、分词与经典机器学习。
+- **Recommender Systems**：协同过滤、邻域模型与个性化推荐；后续沿矩阵分解、排序、序列与图推荐扩展。
 - **Architectures**：CNN、RNN、Transformer、Attention、MoE、SSM，以及神经场与三维场景表示。
 - **Training / Reinforcement Learning**：预训练、知识蒸馏与教师—学生迁移、对齐、PEFT、价值与策略学习及搜索。
 - **Reasoning / Agents & Tool Use**：推理策略、工具调用、规划、Agent Memory、Context Engineering、Agentic RL、Harness Engineering 与可验证智能体工作流。
