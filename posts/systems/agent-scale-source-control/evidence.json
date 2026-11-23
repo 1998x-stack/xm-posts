@@ -32,7 +32,8 @@
     "claim": "Scion uses server-authoritative changesets, content-addressed blobs, derived data structures, sparse/virtualized checkouts, and tiered caches.",
     "source_url": "https://www.anthropic.com/research/redesigning-source-control",
     "locator": "Principles for agent-scale source control; How Scion works",
-    "status": "verified"
+    "status": "verified",
+    "notes": "Verified as a summary of the cited primary source; not independently reproduced."
   },
   {
     "id": "C05",
@@ -40,7 +41,8 @@
     "claim": "Changesets store changed paths relative to the first parent and blob references; blame, path history, and commit-graph data are derived separately.",
     "source_url": "https://www.anthropic.com/research/redesigning-source-control",
     "locator": "How Scion works → Data structures",
-    "status": "verified"
+    "status": "verified",
+    "notes": "Verified as a summary of the cited primary source; not independently reproduced."
   },
   {
     "id": "C06",
@@ -57,7 +59,8 @@
     "claim": "Anthropic says Scion is not a general-purpose Git replacement and is aimed at enormous monorepos with prolific online clients.",
     "source_url": "https://www.anthropic.com/research/redesigning-source-control",
     "locator": "Contributing to the wider ecosystem",
-    "status": "verified"
+    "status": "verified",
+    "notes": "Verified as a summary of the cited primary source; not independently reproduced."
   },
   {
     "id": "C08",
@@ -65,6 +68,7 @@
     "claim": "The normalized transfer slider and Python path-selection example are teaching abstractions, not Scion implementation or measured performance.",
     "source_url": "https://www.anthropic.com/research/redesigning-source-control",
     "locator": "Independent explanatory adaptation",
-    "status": "illustrative"
+    "status": "illustrative",
+    "notes": "Author-created teaching abstraction; not a product implementation or measured result."
   }
 ]
