@@ -78,7 +78,8 @@ def predict_rating(
         similarity = pearson_similarity(target_profile, profile)
         if similarity is None or abs(similarity) < 1e-12:
             continue
-        neighbor_mean = mean_rating(profile)
+        neighbor_history = {item: value for item, value in profile.items() if item != target_item}
+        neighbor_mean = mean_rating(neighbor_history)
         if neighbor_mean is None:
             continue
         numerator += similarity * (float(profile[target_item]) - neighbor_mean)
