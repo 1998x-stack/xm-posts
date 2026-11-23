@@ -2,6 +2,8 @@
 from pathlib import Path
 import sys
 
+import pytest
+
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "posts/recommender-systems/grouplens"))
 
@@ -59,6 +61,3 @@ def test_prediction_keeps_negative_similarity_instead_of_discarding_it():
 def test_empty_profile_has_no_baseline():
     assert mean_rating({}) is None
 
-
-# pytest is imported at the end to keep the implementation module dependency-free.
-import pytest  # noqa: E402
