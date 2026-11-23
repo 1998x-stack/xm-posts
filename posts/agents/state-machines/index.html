@@ -56,7 +56,7 @@ pre{max-width:100%;overflow-x:auto;white-space:pre;background:#203b41;color:#e4f
 
 <section id="formal"><h2>02 · 把状态机写成数学对象</h2>
 <p>先从最小的确定性状态转移系统开始。令 <em>S</em> 为状态集合，<em>E</em> 为事件集合，<em>s₀</em> 为初始状态。一个部分定义的转移函数可以写成：</p>
-<div class="math-box"><div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="状态转移函数公式，可横向滚动"><math display="block" aria-label="delta 从状态集合乘事件集合映射到状态集合，当前状态和事件决定下一状态"><mrow><mi>δ</mi><mo>:</mo><mi>S</mi><mo>×</mo><mi>E</mi><mo>⇀</mo><mi>S</mi><mo>,</mo><mspace width="1em"/><msub><mi>s</mi><mi>t+1</mi></msub><mo>=</mo><mi>δ</mi><mo>(</mo><msub><mi>s</mi><mi>t</mi></msub><mo>,</mo><msub><mi>e</mi><mi>t</mi></msub><mo>)</mo></mrow></math></div></div>
+<div class="math-box"><div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="状态转移函数公式，可横向滚动"><math display="block" aria-label="delta 从状态集合乘事件集合映射到状态集合，当前状态和事件决定下一状态"><mrow><mi>δ</mi><mo>:</mo><mi>S</mi><mo>×</mo><mi>E</mi><mo>⇀</mo><mi>S</mi><mo>,</mo><mspace width="1em"/><msub><mi>s</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><mi>δ</mi><mo>(</mo><msub><mi>s</mi><mi>t</mi></msub><mo>,</mo><msub><mi>e</mi><mi>t</mi></msub><mo>)</mo></mrow></math></div></div>
 <p>这里的 ⇀ 表示函数可以是部分定义的：某个状态下某个事件可能没有合法转移。工程实现通常应把这种情况明确表示为拒绝、忽略或错误，而不是偷偷落入默认分支。</p>
 <h3>有限自动机的五元组</h3><p>在形式语言理论中，确定性有限自动机（DFA）还要显式定义输入字母表和接受状态：</p>
 <div class="math-box"><div class="math-scroll" data-math-scroll tabindex="0" role="region" aria-label="DFA 五元组公式，可横向滚动"><math display="block" aria-label="DFA 等于状态集合、输入字母表、转移函数、初始状态和接受状态集合组成的五元组"><mrow><mi>A</mi><mo>=</mo><mo>(</mo><mi>Q</mi><mo>,</mo><mi>Σ</mi><mo>,</mo><mi>δ</mi><mo>,</mo><msub><mi>q</mi><mn>0</mn></msub><mo>,</mo><mi>F</mi><mo>)</mo></mrow></math></div></div>
