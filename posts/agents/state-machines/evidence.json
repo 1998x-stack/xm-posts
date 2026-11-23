@@ -79,5 +79,23 @@
     "locator": "State, Event, Context, and transition() implementation",
     "status": "illustrative",
     "notes": "A deterministic toy controller for teaching; not a production workflow engine or an implementation of SCXML."
+  },
+  {
+    "id": "nfa-dfa-equivalence",
+    "claim": "DFA and NFA recognize the same regular languages; the subset construction may produce up to 2^n subset states from an n-state NFA.",
+    "kind": "theorem-and-worst-case-bound",
+    "source_url": "https://ac.informatik.uni-freiburg.de/teaching/ss_23/tcs_bridging/book/Introduction_to_the_theory_of_computation_by_Michael_Sipser.pdf",
+    "locator": "Chapter 1, Section 1.2, Nondeterminism and the subset construction",
+    "status": "verified",
+    "notes": "The exponential bound is a worst-case upper bound on the determinized state set, not a claim that every NFA incurs this expansion."
+  },
+  {
+    "id": "ssm-vs-fsm-boundary",
+    "claim": "Selective State Space Models such as Mamba update numeric state variables through state-space recurrences rather than selecting among a finite set of symbolic control states.",
+    "kind": "model-boundary",
+    "source_url": "https://arxiv.org/abs/2312.00752",
+    "locator": "Mamba paper, Section 3, Selective State Space Models",
+    "status": "verified",
+    "notes": "Used only to anchor the distinction between numerical dynamical state and finite symbolic control state; the article does not claim that all state-space models share one implementation."
   }
 ]
