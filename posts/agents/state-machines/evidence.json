@@ -73,12 +73,12 @@
   },
   {
     "id": "agent-runtime-toy-model",
-    "claim": "The interactive Agent Runtime controller is a finite teaching example with approval, bounded retries, cancellation, and terminal reset transitions.",
+    "claim": "The interactive Agent Runtime controller is a deterministic teaching EFSM with finite control states, an approval guard, a bounded retry counter, cancellation, and terminal reset transitions.",
     "kind": "illustrative",
     "source_url": "https://github.com/1998x-stack/xm-posts/blob/main/examples/agent_state_machine.py",
     "locator": "State, Event, Context, and transition() implementation",
     "status": "illustrative",
-    "notes": "A deterministic toy controller for teaching; not a production workflow engine or an implementation of SCXML."
+    "notes": "The browser simulator fixes the retry budget at two; the Python example exposes a validated finite max_attempts parameter. This is a teaching EFSM, not a production workflow engine or an implementation of SCXML."
   },
   {
     "id": "nfa-dfa-equivalence",
