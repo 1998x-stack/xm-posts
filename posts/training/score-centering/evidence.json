@@ -196,5 +196,23 @@
     "locator": "§4; independent Bernoulli derivation",
     "status": "illustrative",
     "notes": "One-parameter toy model, not an LLM benchmark or paper reproduction."
+  },
+  {
+    "id": "SC23",
+    "claim": "TRL AsyncGRPOTrainer enables score centering by default and combines it with masked importance weights over a configured interval.",
+    "kind": "modern-implementation",
+    "source_url": "https://huggingface.co/docs/trl/main/async_grpo_trainer",
+    "locator": "Computing the loss; AsyncGRPOConfig",
+    "status": "verified",
+    "notes": "This integration is specific to AsyncGRPOTrainer; its default objective is not identical to every GRPOTrainer or pure unweighted SC."
+  },
+  {
+    "id": "SC24",
+    "claim": "NeMo-RL adds score-centering correction to its existing clipped objective and requires sampler replay for filtered sampling support.",
+    "kind": "modern-implementation",
+    "source_url": "https://docs.nvidia.com/nemo/rl/nightly/guides/score-centering.html",
+    "locator": "Objective; Configuration; Sampling filters",
+    "status": "verified",
+    "notes": "The nightly implementation explicitly says this does not exactly center an arbitrary PPO clipped gradient; feature remains experimental."
   }
 ]
