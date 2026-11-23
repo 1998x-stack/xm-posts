@@ -62,7 +62,7 @@
 <p>令 (J_F) 表示子层变换的 Jacobian，(J_{LN}) 表示 LayerNorm 的 Jacobian。按链式法则：</p>
 <div class="equation"><div class="math-scroll" tabindex="0" role="region" aria-label="两个架构 Jacobian 公式"><math display="block" aria-label="Post-LN Jacobian 等于 J LayerNorm 乘以单位矩阵加 J F；Pre-LN Jacobian 等于单位矩阵加 J F 乘以 J LayerNorm"><mtable><mtr><mtd><mtext>Post-LN</mtext></mtd><mtd><mo>:</mo></mtd><mtd><msub><mi>J</mi><mi>LN</mi></msub><mo>(</mo><mi>I</mi><mo>+</mo><msub><mi>J</mi><mi>F</mi></msub><mo>)</mo></mtd></mtr><mtr><mtd><mtext>Pre-LN</mtext></mtd><mtd><mo>:</mo></mtd><mtd><mi>I</mi><mo>+</mo><msub><mi>J</mi><mi>F</mi></msub><msub><mi>J</mi><mi>LN</mi></msub></mtd></mtr></mtable></math></div></div>
 <p>因此 Pre-LN 的反向路径包含显式的恒等项 (I)，梯度可以沿残差流直接传播。Post-LN 则在残差加法之后仍经过归一化 Jacobian。注意，这并不意味着 Post-LN 在所有层、所有训练阶段必然梯度消失；关键是初始化附近参数梯度的尺度分布及其对学习率的敏感性。</p>
-<p>Xiong 等人使用 Mean Field Theory 分析初始化时的梯度行为。其结论是：在论文所采用的假设与简化模型下，Post-LN 靠近输出层的参数期望梯度较大，直接使用较大学习率可能导致不稳定；Pre-LN 的初始化梯度行为更温和，因此在他们的实验设置中可以去掉 warm-up 并取得可比结果。论文 Theorem 1 对比的最后 FFN 参数梯度量级分别为 (O(d\sqrt{\ln d})) 与 (O(d\sqrt{\ln d/L}))，其中 (d) 是隐藏维度，(L) 是层数。这是特定理论设置下的上界分析，不是任意训练配置下的普适精确梯度公式。</p>
+<p>Xiong 等人使用 Mean Field Theory 分析初始化时的梯度行为。其结论是：在论文所采用的假设与简化模型下，Post-LN 靠近输出层的参数期望梯度较大，直接使用较大学习率可能导致不稳定；Pre-LN 的初始化梯度行为更温和，因此在他们的实验设置中可以去掉 warm-up 并取得可比结果。论文 Theorem 1 对比的最后 FFN 参数梯度量级分别为 (O(d\sqrt{\ln d})) 与 (O(d\sqrt{\ln d/L}))，其中 <code>d</code> 是隐藏维度，<code>L</code> 是层数。这是特定理论设置下的上界分析，不是任意训练配置下的普适精确梯度公式。</p>
 <div class="caution"><strong>不要过度简化：</strong>“Pre-LN 更稳定”不等于“Pre-LN 在所有深度和任务上更优”。Pre-LN 的残差状态尺度会随深度增长，且实际训练还受到初始化、优化器、数据、学习率和最终归一化位置影响。</div>
 <h3>为什么又出现 DeepNorm？</h3>
 <p>DeepNorm / DeepNet 不是简单回到原始 Post-LN，而是通过残差分支缩放与配套初始化控制模型更新，目标是在深层扩展时兼顾 Post-LN 的一些性能特性与稳定训练。论文报告了最高 1,000 层的实验，但这应被理解为该论文方法和实验配置下的结果，而不是所有模型都能直接套用的通用深度保证。</p>
@@ -107,7 +107,7 @@
 <h2>07 · Attention Kernel：FlashAttention 优化的是 IO，而不是把精确 Attention 变成线性复杂度</h2>
 <p>标准 Scaled Dot-Product Attention 为：</p>
 <div class="equation"><div class="math-scroll" tabindex="0" role="region" aria-label="Scaled Dot Product Attention 公式"><math display="block" aria-label="Attention 等于 softmax 作用于 QK 转置除以根号 d k，再乘 V"><mi>Attention</mi><mo>(</mo><mi>Q</mi><mo>,</mo><mi>K</mi><mo>,</mo><mi>V</mi><mo>)</mo><mo>=</mo><mi>softmax</mi><mo>(</mo><mfrac><mrow><mi>Q</mi><msup><mi>K</mi><mi>T</mi></msup></mrow><msqrt><msub><mi>d</mi><mi>k</mi></msub></msqrt></mfrac><mo>)</mo><mi>V</mi></math></div></div>
-<p>长度为 (N) 的全注意力仍需要处理 (N\times N) 个 Query-Key 交互，因此精确全注意力的算术计算量对序列长度仍为二次量级。传统实现可能把完整分数矩阵和 Softmax 中间结果写入 HBM，造成大量显存读写。</p>
+<p>长度为 <code>N</code> 的全注意力仍需要处理 (N\times N) 个 Query-Key 交互，因此精确全注意力的算术计算量对序列长度仍为二次量级，即随 <code>N²</code> 增长。传统实现可能把完整分数矩阵和 Softmax 中间结果写入 HBM，造成大量显存读写。</p>
 <figure class="figure"><div class="fig-label">FIGURE 06 · TILE THE COMPUTATION, NOT THE MATHEMATICS</div><img src="assets/flashattention-io.svg" alt="传统 Attention 物化完整分数矩阵与 FlashAttention 分块计算并在线更新 Softmax 统计量的对比"><figcaption>FlashAttention 通过分块与在线 Softmax 降低 HBM 与片上 SRAM 之间的数据搬运；它保持精确 Attention 的数学结果，并未消除全注意力的二次算术复杂度。</figcaption></figure>
 <p>FlashAttention 的关键是 IO-aware tiling：把 Q、K、V 分块载入片上 SRAM，局部计算分数和加权值，并通过在线更新的最大值与归一化因子合并不同 Key 块的 Softmax 结果。这样避免将完整 (N\times N) 注意力矩阵物化到 HBM。</p>
 <div class="caution"><strong>必须分清两种复杂度：</strong>FlashAttention 降低的是内存 IO 与中间矩阵物化成本，不是把精确全注意力的 FLOPs 从 (O(N^2d)) 降为 (O(Nd))。稀疏注意力、线性注意力等方法则改变计算结构或近似方式，属于另一条路线。</div>
