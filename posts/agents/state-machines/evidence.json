@@ -97,5 +97,14 @@
     "locator": "Mamba paper, Section 3, Selective State Space Models",
     "status": "verified",
     "notes": "Used only to anchor the distinction between numerical dynamical state and finite symbolic control state; the article does not claim that all state-space models share one implementation."
+  },
+  {
+    "id": "scxml-final-state-completion",
+    "claim": "In SCXML, entering a final child state of a compound state causes a done.state event for the parent compound state.",
+    "kind": "standard-semantics",
+    "source_url": "https://www.w3.org/TR/scxml/",
+    "locator": "W3C SCXML Recommendation, Section 3.7 <final>",
+    "status": "verified",
+    "notes": "This distinguishes SCXML compound-state completion from DFA language acceptance and from a business workflow's terminal status."
   }
 ]
