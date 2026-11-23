@@ -19,7 +19,7 @@ flowchart LR
 
 ## Reasoning and inference taxonomy
 
-`reasoning` covers answer-quality algorithms (CoT, Self-Consistency, test-time search/verification); `inference` covers serving infrastructure (KV Cache, batching, latency/throughput). `retrieval-rag` covers ANN, retrieval/reranking and RAG; `agents` covers Reasoning–Acting, planning, tool calling and memory. `systems` owns kernels, compilers and GPU communication; `training` owns distributed model training, mixed precision and checkpointing. Both share the manifest-driven publishing pipeline.
+`reasoning` covers answer-quality algorithms (CoT, Self-Consistency, test-time search/verification); `inference` covers serving infrastructure (KV Cache, batching, latency/throughput). `retrieval-rag` covers ANN, retrieval/reranking and RAG; `recommender-systems` covers user/item preference estimation, collaborative filtering and personalized ranking; `agents` covers Reasoning–Acting, planning, tool calling and memory. `systems` owns kernels, compilers and GPU communication; `training` owns distributed model training, mixed precision and checkpointing. Both share the manifest-driven publishing pipeline.
 
 ## Path layout and routing
 
