@@ -133,7 +133,7 @@ pre{max-width:100%;overflow-x:auto;white-space:pre;background:#203b41;color:#e4f
 <p>W3C 的 SCXML 1.0 Recommendation 将这些语义落实为可执行的状态机表示：<a href="https://www.w3.org/TR/scxml/" target="_blank" rel="noopener noreferrer">W3C SCXML 规范 ↗</a>。例如 SCXML 的 <code>parallel</code> 状态会让其所有子区域同时激活，但事件处理顺序和冲突规则仍由解释算法定义。</p></section>
 
 <section id="simulator"><h2>06 · 交互实验：一个 Agent Runtime 如何流转？</h2>
-<p>下面模拟一个受审批约束的工具任务。先提交任务，再校验；高风险任务必须审批后才能执行。执行失败时最多允许两次尝试，取消和终态重置也都有明确规则。</p>
+<p>下面模拟一个受审批约束的工具任务。先提交任务，再校验；高风险任务必须审批后才能执行。执行失败时最多允许两次尝试，取消和终态重置也都有明确规则。严格地说，这是一个带数据上下文的 EFSM：控制状态集合有限，attempts / max_attempts 作为受约束变量参与守卫；交互模拟固定 maxAttempts = 2，因此重试轨迹有界。</p>
 <figure class="figure"><div class="figure-scroll" tabindex="0" role="region" aria-label="Agent 任务审批守卫总览图，可横向滚动"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 240" class="cover-overview" role="img" aria-labelledby="fsm05cover-title fsm05cover-desc">
 <title id="fsm05cover-title">审批守卫控制 Agent 任务执行路径</title>
 <desc id="fsm05cover-desc">校验后，高风险任务先进入人工审批，低风险任务可以直接进入执行；批准后也会进入执行状态。</desc>
