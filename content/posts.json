@@ -3056,6 +3056,33 @@
     }
   },
   {
+    "slug": "dspark",
+    "title": "Understanding DSpark",
+    "subtitle": "半自回归草稿、置信度校准与硬件感知前缀调度",
+    "category": "inference",
+    "topic": "speculative-decoding",
+    "status": "draft",
+    "published": "2026-11-25",
+    "updated": "2026-11-25",
+    "reading_minutes": 30,
+    "tags": [
+      "Speculative Decoding",
+      "DSpark",
+      "DFlash",
+      "Markov Head",
+      "Confidence Calibration",
+      "Serving Performance",
+      "Request Scheduling"
+    ],
+    "summary": "从并行主干和低秩顺序头出发，推导前缀生存率、硬件感知调度、训练损失与无损性约束，分析原论文离线和在线实验。",
+    "paper": "https://arxiv.org/abs/2607.05147",
+    "illustration": "dspark",
+    "cover": {
+      "src": "assets/01-cycle.svg",
+      "caption": "并行草稿经顺序修正后仅将高收益前缀交给目标验证"
+    }
+  },
+  {
     "slug": "score-centering",
     "title": "Understanding Score Centering",
     "subtitle": "从 Training–Inference Mismatch 出发，推导 Off-policy Policy Gradient 中的 Drift / Signal 分解，以及一种不依赖概率比裁剪的加性修正。",
