@@ -1,0 +1,119 @@
+[
+  {
+    "id": "E01",
+    "kind": "bibliography",
+    "claim": "ICML 2026 publication",
+    "source_url": "https://proceedings.mlr.press/v306/chen26bv.html",
+    "locator": "Proceedings metadata",
+    "status": "verified",
+    "notes": "Scoped to cited source or explicitly marked teaching derivation; not a GPU reproduction."
+  },
+  {
+    "id": "E02",
+    "kind": "algorithm",
+    "claim": "Single forward block drafting conditioned on target features",
+    "source_url": "https://arxiv.org/html/2602.06036v1",
+    "locator": "§3.2, §4.1, Fig.2",
+    "status": "verified",
+    "notes": "Scoped to cited source or explicitly marked teaching derivation; not a GPU reproduction."
+  },
+  {
+    "id": "E03",
+    "kind": "architecture",
+    "claim": "Fused context injected into each draft layer K/V",
+    "source_url": "https://arxiv.org/html/2602.06036v1",
+    "locator": "§4.1",
+    "status": "verified",
+    "notes": "Scoped to cited source or explicitly marked teaching derivation; not a GPU reproduction."
+  },
+  {
+    "id": "E04",
+    "kind": "training",
+    "claim": "Random anchors, B−1 masks, no inter-block visibility",
+    "source_url": "https://arxiv.org/html/2602.06036v1",
+    "locator": "§4.2 Fig.4",
+    "status": "verified",
+    "notes": "Scoped to cited source or explicitly marked teaching derivation; not a GPU reproduction."
+  },
+  {
+    "id": "E05",
+    "kind": "training",
+    "claim": "Frozen embedding and LM head; exponential decay; 512 anchors and decay 7 for B16",
+    "source_url": "https://arxiv.org/html/2602.06036v1",
+    "locator": "§4.2 Eq.4, Appendix A.1",
+    "status": "verified",
+    "notes": "Scoped to cited source or explicitly marked teaching derivation; not a GPU reproduction."
+  },
+  {
+    "id": "E06",
+    "kind": "implementation",
+    "claim": "Greedy prefix acceptance, bonus and cache cropping",
+    "source_url": "https://github.com/z-lab/dflash/blob/main/dflash/model.py",
+    "locator": "dflash_generate, main (evolving implementation)",
+    "status": "verified",
+    "notes": "Scoped to cited source or explicitly marked teaching derivation; not a GPU reproduction."
+  },
+  {
+    "id": "E07",
+    "kind": "results",
+    "claim": "Qwen3-8B temperature 0 mean speedup 1.76/2.02/4.86× and tau 2.96/3.40/6.49",
+    "source_url": "https://arxiv.org/html/2602.06036v1",
+    "locator": "Table 1",
+    "status": "verified",
+    "notes": "Scoped to cited source or explicitly marked teaching derivation; not a GPU reproduction."
+  },
+  {
+    "id": "E08",
+    "kind": "results",
+    "claim": "SGLang Qwen3-8B Math500 concurrency 1: 230/1175; concurrency 32: 5694/16076 tok/s",
+    "source_url": "https://arxiv.org/html/2602.06036v1",
+    "locator": "Table 3",
+    "status": "verified",
+    "notes": "Scoped to cited source or explicitly marked teaching derivation; not a GPU reproduction."
+  },
+  {
+    "id": "E09",
+    "kind": "ablation",
+    "claim": "3/5/8 draft layers Math500 tau 5.64/5.99/6.33 and speedups 4.69/4.71/4.64",
+    "source_url": "https://arxiv.org/html/2602.06036v1",
+    "locator": "Table 5",
+    "status": "verified",
+    "notes": "Scoped to cited source or explicitly marked teaching derivation; not a GPU reproduction."
+  },
+  {
+    "id": "E10",
+    "kind": "ablation",
+    "claim": "Train B16 transfers to smaller block; adaptive scheduling future work",
+    "source_url": "https://arxiv.org/html/2602.06036v1",
+    "locator": "§5.4.4 Table 7",
+    "status": "verified",
+    "notes": "Scoped to cited source or explicitly marked teaching derivation; not a GPU reproduction."
+  },
+  {
+    "id": "E11",
+    "kind": "mathematics",
+    "claim": "Corrected sampling preserves marginal target distribution",
+    "source_url": "https://proceedings.mlr.press/v202/leviathan23a.html",
+    "locator": "Algorithm 1 and Appendix A",
+    "status": "derived",
+    "notes": "Scoped to cited source or explicitly marked teaching derivation; not a GPU reproduction."
+  },
+  {
+    "id": "E12",
+    "kind": "mathematics",
+    "claim": "Tail sum yields expected commit count",
+    "source_url": "https://arxiv.org/html/2602.06036v1",
+    "locator": "Teaching derivation from §3.1",
+    "status": "derived",
+    "notes": "Scoped to cited source or explicitly marked teaching derivation; not a GPU reproduction."
+  },
+  {
+    "id": "E13",
+    "kind": "pedagogy",
+    "claim": "Mask matrix, prefix example and toy latency parameters are not benchmarks",
+    "source_url": "https://arxiv.org/html/2602.06036v1",
+    "locator": "Teaching illustration of §3–4",
+    "status": "illustrative",
+    "notes": "Scoped to cited source or explicitly marked teaching derivation; not a GPU reproduction."
+  }
+]
