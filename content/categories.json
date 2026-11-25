@@ -539,7 +539,7 @@
     "slug": "agents",
     "title": "智能体与工具使用",
     "english": "Agents & Tool Use",
-    "description": "围绕模型与外部环境交互的闭环，研究 ReAct、Reflection、自主 Agent 系统与迭代执行、任务规划、Function Calling、MCP 等工具互操作协议、状态机、事件驱动工作流与记忆、软件工程智能体、Harness Engineering、Agentic RL 与端到端评测。",
+    "description": "围绕模型与外部环境交互的行动闭环，研究 ReAct、Planning、Tool Calling、RPA 与 Agentic Process Automation、Agent Memory、Context Engineering、软件工程智能体、Harness Engineering、Agentic RL 与端到端评测。",
     "topics": [
       {
         "slug": "react",
@@ -600,6 +600,10 @@
       {
         "slug": "state-machines",
         "title": "State Machines & Workflow Control"
+      },
+      {
+        "slug": "robotic-process-automation",
+        "title": "Robotic Process Automation & Agentic Process Automation"
       }
     ]
   },

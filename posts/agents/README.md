@@ -34,3 +34,8 @@
 - [Autonomous Execution & Iterative Control](./_topics/autonomous-execution/README.md)
 - [Tool Integration & Interoperability Protocols](./_topics/tool-integration-protocols/README.md)
 - 关联文章：Agent Evaluation、AutoGPT、Ralph Loop、Function Calling、Model Context Protocol。
+
+
+## 规划中专题
+
+- [Robotic Process Automation & Agentic Process Automation](_topics/robotic-process-automation/README.md) — 研究传统规则驱动 RPA、Process Mining、IPA、Agentic Automation 与企业状态验证；正式文章通过专属 QA 后发布。

@@ -54,6 +54,12 @@ jobs:
           python scripts/ci_metrics.py run --name browser-second -- python scripts/browser_check_second_batch.py --output reports/second-batch
       - name: Check checkpoint optimization article in Chromium
         run: python scripts/ci_metrics.py run --name browser-checkpoint-optimization -- python skills/olah-style-paper-posts/scripts/browser_check.py posts/training/checkpoint-optimization/index.html --output reports/checkpoint-optimization
+      - name: Validate RPA draft article source and evidence
+        run: python scripts/ci_metrics.py run --name rpa-source-validation -- python skills/olah-style-paper-posts/scripts/validate.py posts/agents/rpa/index.html
+      - name: Test deterministic RPA invoice simulator
+        run: python scripts/ci_metrics.py run --name rpa-demo-tests -- python -m pytest -q posts/agents/rpa/test_rpa_demo.py
+      - name: Check RPA interactive article in Chromium
+        run: python scripts/ci_metrics.py run --name browser-rpa -- python skills/olah-style-paper-posts/scripts/browser_check.py posts/agents/rpa/index.html --output reports/rpa
       - name: Check every published article with shared Chromium workers
         run: python scripts/ci_metrics.py run --name browser-all -- python scripts/browser_check_all.py --workers 2
       - name: Verify actual generated Pages site in Chromium

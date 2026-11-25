@@ -1,0 +1,146 @@
+[
+  {
+    "id": "rpa-definition",
+    "claim": "RPA tools operate on the user interface of other computer systems in a human-like, outside-in manner, while the underlying information system can remain unchanged.",
+    "kind": "primary-paper",
+    "source_url": "https://doi.org/10.1007/s12599-018-0542-4",
+    "locator": "van der Aalst et al. (2018), Section 1, pp. 269–270.",
+    "status": "verified"
+  },
+  {
+    "id": "work-long-tail",
+    "claim": "The 2018 RPA editorial positions RPA in the middle of the long tail of work, between frequent standardized cases and rare cases that remain human-handled.",
+    "kind": "primary-paper",
+    "source_url": "https://doi.org/10.1007/s12599-018-0542-4",
+    "locator": "van der Aalst et al. (2018), Section 2 and Figure 1, pp. 270–271.",
+    "status": "verified",
+    "notes": "The 80/20 language is a Pareto-style motivating illustration, not a universal business law."
+  },
+  {
+    "id": "process-mining-rpa",
+    "claim": "A 2023 systematic review selected 32 studies from 605 unique candidate records and found that RPA/process-mining work focuses heavily on UI event capture and preprocessing.",
+    "kind": "systematic-review",
+    "source_url": "https://doi.org/10.1016/j.datak.2023.102229",
+    "locator": "El-Gharib and Amyot (2023), abstract and systematic review findings.",
+    "status": "verified"
+  },
+  {
+    "id": "rpa-selection-criteria",
+    "claim": "A 2024 RPA selection framework identified 32 criteria; feasibility, process description, and input/output data were among the most-voted criteria, evaluated with 18 processes in six organizations.",
+    "kind": "empirical-study",
+    "source_url": "https://doi.org/10.1177/02683962231165066",
+    "locator": "Farinha et al. (2024), abstract and process-selection framework.",
+    "status": "verified"
+  },
+  {
+    "id": "rpa-bpm-review",
+    "claim": "A 2026 PRISMA-based review synthesizes 83 peer-reviewed journal articles from 2015–2025 into six dimensions and three conceptual pillars; the proposed framework is not empirically validated in that review.",
+    "kind": "systematic-review",
+    "source_url": "https://doi.org/10.3390/technologies14040225",
+    "locator": "Khantong and Sriboonlue (2026), Abstract, Sections 3–4 and Section 7.",
+    "status": "verified"
+  },
+  {
+    "id": "autorpa-pipeline",
+    "claim": "AutoRPA proposes a translator-builder pipeline that distills ReAct-style GUI interaction logic into reusable RPA functions and uses ReAct-based fallback for repair.",
+    "kind": "peer-reviewed-conference-paper",
+    "source_url": "https://proceedings.mlr.press/v306/chen26ar.html",
+    "locator": "Chen et al. (ICML 2026), abstract and method summary.",
+    "status": "verified",
+    "notes": "The paper reports an 82%–96% reduction in token usage on its evaluated similar tasks; this is not a claim of equivalent latency or business ROI improvement."
+  },
+  {
+    "id": "rpa-mapping-study",
+    "claim": "Wewerka and Reichert's systematic mapping study identified and analyzed 63 RPA publications and derived a framework for comparing RPA research.",
+    "kind": "systematic-mapping-study",
+    "source_url": "https://doi.org/10.1080/17517575.2021.1986862",
+    "locator": "Wewerka and Reichert (published online 15 November 2021; Enterprise Information Systems 17(2), 2023), abstract.",
+    "status": "verified"
+  },
+  {
+    "id": "textual-candidate-identification",
+    "claim": "A 2026 study expands the corpus to 183 process descriptions and 2,262 labeled activities; synthetic-to-human cross-dataset transfer drops Macro-F1 from 0.935 to 0.648 and automated-class F1 from 0.948 to 0.434.",
+    "kind": "empirical-study",
+    "source_url": "https://doi.org/10.1007/s10791-026-10820-8",
+    "locator": "Chen et al. (2026), abstract, Sections 2.2.2, 3.2.5 and 5.1; published 4 November 2026.",
+    "status": "verified"
+  },
+  {
+    "id": "bpmn-generation",
+    "claim": "The 2026 BPMNGen study evaluates semantic quality and comprehensibility of LLM-generated BPMN models and reports stronger results on simpler and moderately complex processes than on highly complex ones.",
+    "kind": "empirical-study",
+    "source_url": "https://doi.org/10.1007/s12599-025-00983-x",
+    "locator": "Hörner et al. (2026), abstract and Sections 1 and 7.",
+    "status": "verified"
+  },
+  {
+    "id": "erpbench-ground-truth",
+    "claim": "ERPBench evaluates screenshot-driven computer-use agents against persistent database ground truth and reports cases where saving a form did not imply correct stored values.",
+    "kind": "preprint",
+    "source_url": "https://arxiv.org/abs/2609.17885",
+    "locator": "Bhagtani et al. (2026), abstract, arXiv:2609.17885.",
+    "status": "verified",
+    "notes": "Preprint submitted for review to ICASSP 2027; not a settled industry benchmark standard."
+  },
+  {
+    "id": "osworld-computer-use",
+    "claim": "OSWorld contains 369 tasks across real desktop and web applications; its 2024 paper reports 12.24% best-agent task success compared with 72.36% for humans in the reported evaluation.",
+    "kind": "benchmark-paper",
+    "source_url": "https://arxiv.org/abs/2404.07972",
+    "locator": "Xie et al. (NeurIPS 2024), abstract and benchmark results.",
+    "status": "verified",
+    "notes": "These are the 2024 paper's baseline figures, not a 2026 state-of-the-art snapshot."
+  },
+  {
+    "id": "windowsworld-cross-app",
+    "claim": "WindowsWorld (Findings ACL 2026) contains 181 professional tasks across 17 desktop applications, 78% inherently multi-application, and reports under 21% success for leading GUI agents on multi-application tasks.",
+    "kind": "peer-reviewed-conference-paper",
+    "source_url": "https://aclanthology.org/2026.findings-acl.750/",
+    "locator": "Li et al. (Findings ACL 2026), abstract and benchmark description.",
+    "status": "verified"
+  },
+  {
+    "id": "osworld-2026-update",
+    "claim": "Stanford AI Index 2026 summarizes a 66.3% OSWorld accuracy result for Claude Opus 4.5, illustrating progress since the original 2024 paper baseline.",
+    "kind": "benchmark-summary",
+    "source_url": "https://hai.stanford.edu/assets/files/ai_index_report_2026_chapter_2_technical.pdf",
+    "locator": "Stanford AI Index Report 2026, Chapter 2, Section 2.6 AI Agents, Figure 2.6.2.",
+    "status": "verified",
+    "notes": "Do not compare this value as a clean time series with the original paper's 12.24%; benchmark conditions and model snapshots differ."
+  },
+  {
+    "id": "workflow-reliability-math",
+    "claim": "If step successes are independent, a sequential workflow's one-shot success probability is the product of its step success probabilities; 0.99^12 is approximately 0.886.",
+    "kind": "derived",
+    "source_url": "https://doi.org/10.1007/s12599-018-0542-4",
+    "locator": "Independent mathematical derivation in the article; no empirical benchmark claim.",
+    "status": "derived"
+  },
+  {
+    "id": "retry-probability-math",
+    "claim": "With independent transient failure probability q and r retries, the idealized probability of at least one successful attempt is 1-q^(r+1).",
+    "kind": "derived",
+    "source_url": "https://doi.org/10.1007/s12599-018-0542-4",
+    "locator": "Independent mathematical derivation in the article.",
+    "status": "derived",
+    "notes": "Assumes independent failures and no duplicate side effects."
+  },
+  {
+    "id": "break-even-cost-model",
+    "claim": "The article derives a simplified break-even case-volume formula from fixed build cost, maintenance cost, manual per-case cost, and automated per-case run cost.",
+    "kind": "derived",
+    "source_url": "https://doi.org/10.3390/technologies14040225",
+    "locator": "Independent cost-model derivation in the article, Section 12.",
+    "status": "derived",
+    "notes": "Teaching model omits licensing, risk, financing, change-management and error-compensation costs."
+  },
+  {
+    "id": "invoice-state-demo",
+    "claim": "The Python invoice workflow is a deterministic teaching simulator demonstrating state transitions, business-rule gates, idempotent writes and read-after-write verification.",
+    "kind": "illustrative",
+    "source_url": "https://doi.org/10.1007/s12599-018-0542-4",
+    "locator": "Article Section 13 and adjacent rpa_demo.py / test_rpa_demo.py.",
+    "status": "illustrative",
+    "notes": "FakeERP is not a browser driver or production ERP connector."
+  }
+]
