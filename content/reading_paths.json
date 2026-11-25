@@ -641,5 +641,19 @@
       "importance-sampling",
       "score-centering"
     ]
+  },
+  {
+    "id": "path-transformer-design-evolution",
+    "title": "从原始 Transformer 到现代架构设计",
+    "posts": [
+      "transformer",
+      "transformer-design-evolution",
+      "pre-ln-vs-post-ln",
+      "rope",
+      "swiglu",
+      "gqa",
+      "kv-cache",
+      "flashattention"
+    ]
   }
 ]

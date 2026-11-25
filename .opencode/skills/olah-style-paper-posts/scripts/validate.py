@@ -109,7 +109,7 @@ def validate(path: Path) -> dict:
             failures.append('Missing image: ' + src)
     for script in soup.find_all('script', src=True):
         if script['src'].startswith('http'): warnings.append('External JS dependency: ' + script['src'])
-    for link in soup.find_all('link', href=True):
+    for link in soup.find_all('link', href=True, rel='stylesheet'):
         if link['href'].startswith('http'): warnings.append('External stylesheet dependency: ' + link['href'])
     # Every published article carries at least one semantic MathML expression.
     maths = soup.find_all('math')

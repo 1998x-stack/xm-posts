@@ -3088,5 +3088,39 @@
       "src": "assets/03-drift-signal-decomposition.svg",
       "caption": "Drift 与 reward-score covariance 的梯度分解"
     }
+  },
+  {
+    "slug": "transformer-design-evolution",
+    "title": "Transformer Design Evolution",
+    "subtitle": "从原始架构到现代 LLM：五条设计演进主线",
+    "category": "architectures",
+    "status": "published",
+    "published": "2026-11-23",
+    "updated": "2026-11-23",
+    "reading_minutes": 24,
+    "tags": [
+      "Transformer",
+      "Architecture Evolution",
+      "Post-LN",
+      "Pre-LN",
+      "DeepNorm",
+      "RMSNorm",
+      "RoPE",
+      "SwiGLU",
+      "MHA",
+      "MQA",
+      "GQA",
+      "KV Cache",
+      "FlashAttention",
+      "GPU IO"
+    ],
+    "summary": "沿训练稳定性、位置表示、FFN 门控、KV Cache 与 GPU IO 五条主线，解释 Transformer 组件为何演进、改变了什么，以及每种改进的适用边界。",
+    "paper": "https://arxiv.org/abs/1706.03762",
+    "illustration": "transformer-design-evolution",
+    "topic": "transformers",
+    "cover": {
+      "src": "assets/evolution-map.svg",
+      "caption": "五条不同的技术路线分别优化 Transformer 的训练、表示、计算与推理成本"
+    }
   }
 ]

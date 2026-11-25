@@ -32,7 +32,7 @@
 | 学习方向 | 先读 | 接着读 |
 | --- | --- | --- |
 | 经典机器学习 | [Logistic Regression](posts/classical-ml/logistic-regression/index.html) | [K-Means](posts/classical-ml/k-means/index.html) · [SVM](posts/classical-ml/svm/index.html) |
-| 神经网络架构 | [ResNet](posts/architectures/resnet/index.html) | [Transformer](posts/architectures/transformer/index.html) · [Multi-Head Attention](posts/architectures/multi-head-attention/index.html) |
+| 神经网络架构 | [ResNet](posts/architectures/resnet/index.html) | [Transformer](posts/architectures/transformer/index.html) · [Transformer Design Evolution](posts/architectures/transformer-design-evolution/index.html) · [Multi-Head Attention](posts/architectures/multi-head-attention/index.html) |
 | 三维视觉与神经渲染 | [CNN](posts/architectures/cnn/index.html) · [ResNet](posts/architectures/resnet/index.html) | [NeRF](posts/architectures/nerf/index.html) |
 | 训练与优化 | [SGD](posts/foundations/sgd/index.html) | [AdamW](posts/foundations/adamw/index.html) · [LoRA](posts/training/lora/index.html) · [Knowledge Distillation](posts/training/knowledge-distillation/index.html) |
 | 强化学习 | [Bellman Equations](posts/reinforcement-learning/bellman-equations/index.html) | [MCTS](posts/reinforcement-learning/mcts/index.html) · [Imitation Learning](posts/reinforcement-learning/imitation-learning/index.html) |
