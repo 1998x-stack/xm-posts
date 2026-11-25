@@ -18,3 +18,6 @@
 - [Performance Modeling](_topics/performance-modeling/README.md)
 
 上述 `_topics/` 是研究路线占位目录，正式文章仍遵循 `posts/systems/<slug>/index.html`；只有 `content/posts.json` 中的 `published` 文章才会被发布。
+
+## 2026-11-23 新增研究方向
+- [Developer Infrastructure & Agent-scale Source Control](_topics/developer-infrastructure/README.md) — 面向 Agent 大规模代码工作负载的版本控制、检出、缓存与 CI 基础设施；Scion 案例仍为 draft。

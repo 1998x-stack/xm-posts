@@ -3056,6 +3056,87 @@
     }
   },
   {
+    "slug": "anthropic-safety-evaluations",
+    "title": "Building Strong Safety Evaluations",
+    "subtitle": "从拒答率到构念效度：如何设计可复现、多轮、统计可靠的 AI 安全评测？",
+    "category": "evaluation",
+    "topic": "safety-evaluations",
+    "status": "published",
+    "published": "2026-11-25",
+    "updated": "2026-11-25",
+    "reading_minutes": 26,
+    "tags": [
+      "Anthropic Engineering",
+      "Safety Evaluation",
+      "Construct Validity",
+      "Multi-turn Evaluation",
+      "LLM Grader",
+      "Preregistration"
+    ],
+    "summary": "解读 Anthropic 的安全评测方法：区分能力与安全、构念效度、良性/有害成对测试、多轮模拟用户、评分器校准、预注册、置信区间与评测环境隔离。",
+    "paper": "https://www.anthropic.com/research/building-strong-safety-evaluations",
+    "source_label": "官方工程文章",
+    "illustration": "anthropic-safety-evaluations",
+    "cover": {
+      "src": "assets/01-cover.svg",
+      "caption": "从风险问题、多轮场景到评分量表与可复现报告"
+    }
+  },
+  {
+    "slug": "agent-scale-source-control",
+    "title": "Understanding Agent-scale Source Control",
+    "subtitle": "从 Git 的完整副本到 Scion 的在线对象服务：Agent 如何改变超大仓库的版本控制？",
+    "category": "systems",
+    "topic": "developer-infrastructure",
+    "status": "published",
+    "published": "2026-11-25",
+    "updated": "2026-11-25",
+    "reading_minutes": 28,
+    "tags": [
+      "Anthropic Engineering",
+      "Scion",
+      "Source Control",
+      "Monorepo",
+      "Content-addressed Storage",
+      "Sparse Checkout"
+    ],
+    "summary": "拆解 Anthropic Scion 的 agent-scale source control：changeset、content-addressed blob、derived indexes、服务端 RPC、稀疏检出、分层缓存与公司自述性能结果，并明确其不适用于普通 Git 工作负载。",
+    "paper": "https://www.anthropic.com/research/redesigning-source-control",
+    "source_label": "官方工程文章",
+    "illustration": "agent-scale-source-control",
+    "cover": {
+      "src": "assets/01-cover.svg",
+      "caption": "从完整 Git clone 转向按需获取不可变对象"
+    }
+  },
+  {
+    "slug": "agent-containment",
+    "title": "Understanding Agent Containment",
+    "subtitle": "从 Prompt Guardrails 到 Sandbox、VM 与 Egress Control：如何限制自主 Agent 的 Blast Radius？",
+    "category": "agents",
+    "topic": "agent-security",
+    "status": "published",
+    "published": "2026-11-25",
+    "updated": "2026-11-25",
+    "reading_minutes": 27,
+    "tags": [
+      "Anthropic Engineering",
+      "Agent Security",
+      "Sandbox",
+      "Virtual Machine",
+      "Egress Control",
+      "Prompt Injection"
+    ],
+    "summary": "系统解析 Anthropic 的 Agent containment：三类风险、环境/模型/外部内容三层防御、临时容器、OS 沙箱、人类监督、本地 VM、出口能力控制和工具输出信任。",
+    "paper": "https://www.anthropic.com/research/how-we-contain-claude",
+    "source_label": "官方工程文章",
+    "illustration": "agent-containment",
+    "cover": {
+      "src": "assets/01-cover.svg",
+      "caption": "环境、模型与外部内容构成 Agent 的三道防御边界"
+    }
+  },
+  {
     "slug": "score-centering",
     "title": "Understanding Score Centering",
     "subtitle": "从 Training–Inference Mismatch 出发，推导 Off-policy Policy Gradient 中的 Drift / Signal 分解，以及一种不依赖概率比裁剪的加性修正。",

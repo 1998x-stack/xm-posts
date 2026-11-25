@@ -631,6 +631,25 @@
     ]
   },
   {
+    "id": "path-anthropic-safety-eval",
+    "title": "从 Agent 评估到安全评测",
+    "posts": [
+      "agent-evaluation",
+      "anthropic-safety-evaluations",
+      "agent-containment"
+    ]
+  },
+  {
+    "id": "path-agent-runtime-infra",
+    "title": "从软件工程智能体到运行环境与源码管理",
+    "posts": [
+      "swe-agent",
+      "harness-engineering",
+      "agent-scale-source-control",
+      "agent-containment"
+    ]
+  },
+  {
     "id": "path-score-centering-01",
     "title": "从 SFT 与 Policy Gradient 到 Off-policy RL 稳定性",
     "posts": [

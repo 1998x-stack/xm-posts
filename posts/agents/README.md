@@ -34,3 +34,6 @@
 - [Autonomous Execution & Iterative Control](./_topics/autonomous-execution/README.md)
 - [Tool Integration & Interoperability Protocols](./_topics/tool-integration-protocols/README.md)
 - 关联文章：Agent Evaluation、AutoGPT、Ralph Loop、Function Calling、Model Context Protocol。
+
+## 2026-11-23 新增研究方向
+- [Agent Security & Containment](_topics/agent-security/README.md) — 执行环境隔离、最小权限、网络出口、工具内容信任与 blast-radius 控制；Anthropic 案例仍为 draft。

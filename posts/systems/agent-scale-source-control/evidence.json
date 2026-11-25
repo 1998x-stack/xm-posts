@@ -1,0 +1,110 @@
+[
+  {
+    "id": "C01",
+    "kind": "publication",
+    "claim": "Anthropic published Redesigning source control at Anthropic on 2026-10-13 and updated it on 2026-10-15.",
+    "source_url": "https://www.anthropic.com/research/redesigning-source-control",
+    "locator": "Publication header and update note",
+    "status": "verified",
+    "notes": "Official company engineering case study, not a peer-reviewed paper."
+  },
+  {
+    "id": "C02",
+    "kind": "workload",
+    "claim": "Anthropic reports approximately 2,500 merged changes per day in May 2026 and more than 30,000 per day by September 2026.",
+    "source_url": "https://www.anthropic.com/research/redesigning-source-control",
+    "locator": "Growing our monorepo",
+    "status": "verified",
+    "notes": "Company-reported workload numbers."
+  },
+  {
+    "id": "C03",
+    "kind": "workload",
+    "claim": "Anthropic reports about 25 million code checkouts per day; naive full-repository fetching would exceed 600 PB/day.",
+    "source_url": "https://www.anthropic.com/research/redesigning-source-control",
+    "locator": "Growing our monorepo",
+    "status": "verified",
+    "notes": "The 600 PB/day figure is the article's estimate under naive fetching."
+  },
+  {
+    "id": "C04",
+    "kind": "architecture",
+    "claim": "Scion uses server-authoritative changesets, content-addressed blobs, derived data structures, sparse/virtualized checkouts, and tiered caches.",
+    "source_url": "https://www.anthropic.com/research/redesigning-source-control",
+    "locator": "Principles for agent-scale source control; How Scion works",
+    "status": "verified",
+    "notes": "Verified as a summary of the cited primary source; not independently reproduced."
+  },
+  {
+    "id": "C05",
+    "kind": "architecture",
+    "claim": "Changesets store changed paths relative to the first parent and blob references; blame, path history, and commit-graph data are derived separately.",
+    "source_url": "https://www.anthropic.com/research/redesigning-source-control",
+    "locator": "How Scion works → Data structures",
+    "status": "verified",
+    "notes": "Verified as a summary of the cited primary source; not independently reproduced."
+  },
+  {
+    "id": "C06",
+    "kind": "result",
+    "claim": "Anthropic reports cache hit rates above 99%, a 200x smaller CPU/memory footprint than its prior Git mirroring infrastructure, checkout speeds two orders of magnitude faster, and a 25% CI CPU capacity gain.",
+    "source_url": "https://www.anthropic.com/research/redesigning-source-control",
+    "locator": "How Scion works → Scaling Scion",
+    "status": "verified",
+    "notes": "Company-reported outcomes; not independently benchmarked in this article."
+  },
+  {
+    "id": "C07",
+    "kind": "limitation",
+    "claim": "Anthropic says Scion is not a general-purpose Git replacement and is aimed at enormous monorepos with prolific online clients.",
+    "source_url": "https://www.anthropic.com/research/redesigning-source-control",
+    "locator": "Contributing to the wider ecosystem",
+    "status": "verified",
+    "notes": "Verified as a summary of the cited primary source; not independently reproduced."
+  },
+  {
+    "id": "C08",
+    "kind": "illustration",
+    "claim": "The normalized transfer slider and Python path-selection example are teaching abstractions, not Scion implementation or measured performance.",
+    "source_url": "https://www.anthropic.com/research/redesigning-source-control",
+    "locator": "Independent explanatory adaptation",
+    "status": "illustrative",
+    "notes": "Author-created teaching abstraction; not a product implementation or measured result."
+  },
+  {
+    "id": "C09",
+    "kind": "result",
+    "claim": "Anthropic reports that an internal model rewrote its git-to-Scion ingestion pipeline with about 20x lower memory consumption and 4x faster execution.",
+    "source_url": "https://www.anthropic.com/research/redesigning-source-control",
+    "locator": "What we learned building Scion → ingestion pipeline example",
+    "status": "verified",
+    "notes": "Single internal pipeline example reported by Anthropic; not a general coding benchmark."
+  },
+  {
+    "id": "C10",
+    "kind": "architecture",
+    "claim": "Scion supports repository- and directory-level access control, while its review tooling can express semantic approval constraints such as distinguishing comment-only from sensitive logical changes.",
+    "source_url": "https://www.anthropic.com/research/redesigning-source-control",
+    "locator": "What we learned building Scion → monorepo security",
+    "status": "verified",
+    "notes": "Internal product capabilities described by Anthropic."
+  },
+  {
+    "id": "C11",
+    "kind": "architecture",
+    "claim": "Anthropic says global merge-queue locking did not scale to its agent workload, so it invested in post-merge and pre-deploy automated testing while accepting that concurrent changes may conflict.",
+    "source_url": "https://www.anthropic.com/research/redesigning-source-control",
+    "locator": "What we learned building Scion → operational excellence",
+    "status": "verified",
+    "notes": "Company-specific workflow decision; requires strong testing and recovery infrastructure."
+  },
+  {
+    "id": "C12",
+    "kind": "result",
+    "claim": "Anthropic reports a seven-person team built Scion, Antique, and related systems and completed the monorepo migration in five months while daily merges increased roughly tenfold.",
+    "source_url": "https://www.anthropic.com/research/redesigning-source-control",
+    "locator": "What we learned building Scion → rapid development with a small team",
+    "status": "verified",
+    "notes": "Company-reported project history; not a forecast for other teams."
+  }
+]

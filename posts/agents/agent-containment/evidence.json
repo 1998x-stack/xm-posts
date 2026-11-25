@@ -1,0 +1,128 @@
+[
+  {
+    "id": "A01",
+    "kind": "publication",
+    "claim": "Anthropic published How we contain Claude across products on 2026-05-25.",
+    "source_url": "https://www.anthropic.com/research/how-we-contain-claude",
+    "locator": "Publication header",
+    "status": "verified",
+    "notes": "Official product-security engineering retrospective."
+  },
+  {
+    "id": "A02",
+    "kind": "threat-model",
+    "claim": "The article groups risks into user misuse, model misbehavior, and external attackers, and defenses into environment, model, and external content.",
+    "source_url": "https://www.anthropic.com/research/how-we-contain-claude",
+    "locator": "Three types of risk, three components of defense",
+    "status": "verified",
+    "notes": "Verified as a summary of the cited primary source; not independently reproduced."
+  },
+  {
+    "id": "A03",
+    "kind": "architecture",
+    "claim": "The article contrasts ephemeral gVisor containers, Claude Code OS sandbox plus human oversight, and Cowork local VM isolation.",
+    "source_url": "https://www.anthropic.com/research/how-we-contain-claude",
+    "locator": "Patterns for containing agents",
+    "status": "verified",
+    "notes": "Verified as a summary of the cited primary source; not independently reproduced."
+  },
+  {
+    "id": "A04",
+    "kind": "result",
+    "claim": "Anthropic reports users approved roughly 93% of Claude Code permission prompts and that OS sandboxing reduced permission prompts by 84%.",
+    "source_url": "https://www.anthropic.com/research/how-we-contain-claude",
+    "locator": "Three types of risk; Pattern 2: The human-in-the-loop sandbox",
+    "status": "verified",
+    "notes": "Product telemetry and company-reported result."
+  },
+  {
+    "id": "A05",
+    "kind": "incident",
+    "claim": "The article describes pre-consent project configuration execution, user-mediated prompt injection, and egress through an allowlisted API domain.",
+    "source_url": "https://www.anthropic.com/research/how-we-contain-claude",
+    "locator": "Risk we missed sections under Claude Code and Claude Cowork",
+    "status": "verified",
+    "notes": "Details are summarized at a defensive level; exploit payloads are intentionally not reproduced."
+  },
+  {
+    "id": "A06",
+    "kind": "security",
+    "claim": "The article argues that a domain allowlist is a capability grant, and describes a proxy that validates a VM-provisioned session token and constrains requests.",
+    "source_url": "https://www.anthropic.com/research/how-we-contain-claude",
+    "locator": "Risk we missed: Exfiltration through an approved domain",
+    "status": "verified",
+    "notes": "Verified as a summary of the cited primary source; not independently reproduced."
+  },
+  {
+    "id": "A07",
+    "kind": "limitation",
+    "claim": "The article notes that VM isolation can reduce host EDR visibility and that OTLP pull-based exports are not equivalent to live monitoring.",
+    "source_url": "https://www.anthropic.com/research/how-we-contain-claude",
+    "locator": "Risk we missed: VM isolation kept the endpoint detection software out too",
+    "status": "verified",
+    "notes": "Verified as a summary of the cited primary source; not independently reproduced."
+  },
+  {
+    "id": "A08",
+    "kind": "security",
+    "claim": "The article separates traditional tool supply-chain auditing from prompt-injection risk in tool outputs and identifies persistent memory poisoning and multi-agent trust escalation as future concerns.",
+    "source_url": "https://www.anthropic.com/research/how-we-contain-claude",
+    "locator": "Trusting what the agent reads; Looking ahead",
+    "status": "verified",
+    "notes": "Verified as a summary of the cited primary source; not independently reproduced."
+  },
+  {
+    "id": "A09",
+    "kind": "illustration",
+    "claim": "The three-layer diagrams, interactive environment selector, and Python path policy are independent teaching abstractions, not a complete product configuration.",
+    "source_url": "https://www.anthropic.com/research/how-we-contain-claude",
+    "locator": "Independent explanatory adaptation",
+    "status": "illustrative",
+    "notes": "Author-created teaching abstraction; not a product implementation or measured result."
+  },
+  {
+    "id": "A10",
+    "kind": "result",
+    "claim": "Anthropic reports Gray Swan Agent Red Teaming attack success of roughly 0.1% on single attempts and 5–6% after 100 adaptive attempts for Claude Opus 4.7; Claude Code auto mode catches about 83% of overeager behaviors before execution.",
+    "source_url": "https://www.anthropic.com/research/how-we-contain-claude",
+    "locator": "Three types of risk, three components of defense → model layer",
+    "status": "verified",
+    "notes": "Company-reported, benchmark- and model-specific results; not a universal security guarantee."
+  },
+  {
+    "id": "A11",
+    "kind": "limitation",
+    "claim": "Anthropic's footnote reports auto mode blocks roughly 0.4% of benign commands while allowing about 17% of overeager actions through.",
+    "source_url": "https://www.anthropic.com/research/how-we-contain-claude",
+    "locator": "Footnote 01",
+    "status": "verified",
+    "notes": "Product-specific tradeoff; reinforces that model-based approvals are not a substitute for sandboxing."
+  },
+  {
+    "id": "A12",
+    "kind": "architecture",
+    "claim": "Cowork workspace mounts support read-only, read-write, and read-write-no-delete modes; symlink resolution must precede path validation.",
+    "source_url": "https://www.anthropic.com/research/how-we-contain-claude",
+    "locator": "Pattern 3: The local VM → Filesystem controls",
+    "status": "verified",
+    "notes": "Product architecture detail reported by Anthropic."
+  },
+  {
+    "id": "A13",
+    "kind": "architecture",
+    "claim": "Anthropic moved local MCP servers outside the Cowork VM and routes tool calls through proxies that enforce policy and can inspect returned content before it enters model context.",
+    "source_url": "https://www.anthropic.com/research/how-we-contain-claude",
+    "locator": "Pattern 3: The local VM; Trusting what the agent reads",
+    "status": "verified",
+    "notes": "Tool-output inspection is a defense-in-depth measure, not a perfect guarantee."
+  },
+  {
+    "id": "A14",
+    "kind": "identity",
+    "claim": "Cowork keeps credentials in the host keychain and provisions a per-session scoped-down token to the VM that can be revoked independently.",
+    "source_url": "https://www.anthropic.com/research/how-we-contain-claude",
+    "locator": "Looking ahead → Agent identity",
+    "status": "verified",
+    "notes": "Product-specific identity design described by Anthropic."
+  }
+]

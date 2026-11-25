@@ -128,11 +128,12 @@ def cover_art(p,rel,*,compact=False):
 def post_card(p,rel,ordinal=0,topic_title=None):
     path=rel+article_url(p)
     topic_link=(f'<a class="card-topic" href="{rel}categories/{H(p["category"])}/#topic-{H(p["topic"])}">{H(topic_title)}</a>' if topic_title else '')
+    source_label=H(p.get('source_label','原始论文'))
     return f'''<article class="post-card" data-post-card data-search="{H((p['title']+' '+p['summary']+' '+' '.join(p['tags'])+' '+p['category']+' '+p['topic']+' '+(topic_title or '')).lower(),quote=True)}" data-category="{H(p['category'])}">
 <a class="card-hit" href="{path}" aria-label="阅读 {H(p['title'],quote=True)}">{cover_art(p,rel)}</a>
 <div class="card-body"><div class="card-topline"><span>MODEL STUDY / {H(p['category']).upper()}</span><span>{H(p['published'])}</span></div>
 {topic_link}<h3><a href="{path}">{H(p['title'])}</a></h3><p class="card-subtitle">{H(p['subtitle'])}</p>
-<p class="card-summary">{H(p['summary'])}</p><div class="card-bottom"><span>{p['reading_minutes']} 分钟阅读</span><span class="card-actions"><a class="paper-source" href="{H(p.get('paper',''),quote=True)}" target="_blank" rel="noopener noreferrer" aria-label="原始论文：{H(p['title'],quote=True)}">原论文</a><a href="{path}" aria-label="阅读 {H(p['title'],quote=True)}">阅读全文 <span aria-hidden="true">↗</span></a></span></div></div></article>'''
+<p class="card-summary">{H(p['summary'])}</p><div class="card-bottom"><span>{p['reading_minutes']} 分钟阅读</span><span class="card-actions"><a class="paper-source" href="{H(p.get('paper',''),quote=True)}" target="_blank" rel="noopener noreferrer" aria-label="{source_label}：{H(p['title'],quote=True)}">{source_label}</a><a href="{path}" aria-label="阅读 {H(p['title'],quote=True)}">阅读全文 <span aria-hidden="true">↗</span></a></span></div></div></article>'''
 
 
 HOME_PAGE_SIZE = 8
@@ -251,12 +252,13 @@ def build_home(categories,posts,base):
         category=next(c['title'] for c in categories if c['slug']==p['category'])
         tokens=' '.join([p['title'],p['subtitle'],p['summary'],p['category'],category,topic,
                          p['topic'],*p['tags']]).lower()
+        source_label=H(p.get('source_label','原始论文'))
         search_cards.append(
             f'''<article class="index-card post-card" data-post-card data-category="{H(p['category'],quote=True)}" data-search="{H(tokens,quote=True)}">
             <span class="index-order">{i+1:02d}</span><a class="index-image-link" href="{article_url(p)}" aria-label="阅读 {H(p['title'],quote=True)}">{cover_art(p,'./',compact=True)}</a>
             <div class="index-main"><div class="index-kicker">{H(category)} <span>/</span> {H(topic)}</div>
                 <h3><a href="{article_url(p)}">{H(p['title'])}</a></h3><p>{H(p['subtitle'])}</p>
-                <div class="index-tags"><span>{p['reading_minutes']} 分钟</span><span>{H(p['published'])}</span><a class="paper-source" href="{H(p['paper'],quote=True)}" target="_blank" rel="noopener noreferrer" aria-label="原始论文：{H(p['title'],quote=True)}">原始论文 ↗</a></div>
+                <div class="index-tags"><span>{p['reading_minutes']} 分钟</span><span>{H(p['published'])}</span><a class="paper-source" href="{H(p['paper'],quote=True)}" target="_blank" rel="noopener noreferrer" aria-label="{source_label}：{H(p['title'],quote=True)}">{source_label} ↗</a></div>
             </div><a class="index-arrow" href="{article_url(p)}" aria-label="阅读 {H(p['title'],quote=True)}">↗</a>
             </article>'''
         )
