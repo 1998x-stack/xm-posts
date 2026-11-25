@@ -54,6 +54,10 @@ jobs:
           python scripts/ci_metrics.py run --name browser-second -- python scripts/browser_check_second_batch.py --output reports/second-batch
       - name: Check checkpoint optimization article in Chromium
         run: python scripts/ci_metrics.py run --name browser-checkpoint-optimization -- python skills/olah-style-paper-posts/scripts/browser_check.py posts/training/checkpoint-optimization/index.html --output reports/checkpoint-optimization
+      - name: Validate DFlash draft and run Chromium QA
+        run: |
+          python skills/olah-style-paper-posts/scripts/validate.py posts/inference/dflash/index.html
+          python skills/olah-style-paper-posts/scripts/browser_check.py posts/inference/dflash/index.html --output reports/dflash
       - name: Check every published article with shared Chromium workers
         run: python scripts/ci_metrics.py run --name browser-all -- python scripts/browser_check_all.py --workers 2
       - name: Verify actual generated Pages site in Chromium

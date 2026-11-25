@@ -3056,6 +3056,31 @@
     }
   },
   {
+    "slug": "dflash",
+    "title": "Understanding DFlash",
+    "subtitle": "单步块扩散、逐层 KV 注入与推测验证",
+    "category": "inference",
+    "topic": "speculative-decoding",
+    "status": "draft",
+    "reading_minutes": 22,
+    "tags": [
+      "DFlash",
+      "Speculative Decoding",
+      "Block Diffusion",
+      "KV Cache",
+      "LLM Serving"
+    ],
+    "summary": "解析并行草稿、目标隐藏特征注入、随机 anchor、前缀验证、接受长度与真实服务吞吐，附五幅独立 SVG、MathML 和确定性 Python 实验。",
+    "paper": "https://arxiv.org/abs/2602.06036",
+    "illustration": "dflash",
+    "cover": {
+      "src": "assets/01-parallel.svg",
+      "caption": "目标隐藏特征引导块扩散一次前向并行预测未来候选"
+    },
+    "published": "2026-11-25",
+    "updated": "2026-11-25"
+  },
+  {
     "slug": "score-centering",
     "title": "Understanding Score Centering",
     "subtitle": "从 Training–Inference Mismatch 出发，推导 Off-policy Policy Gradient 中的 Drift / Signal 分解，以及一种不依赖概率比裁剪的加性修正。",
