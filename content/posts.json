@@ -3056,6 +3056,37 @@
     }
   },
   {
+    "slug": "grouplens",
+    "title": "Understanding GroupLens",
+    "subtitle": "从 Usenet 信息过载到基于用户相似性的协同过滤：拆解 1994 年 GroupLens 的评分、邻域预测与开放式系统架构。",
+    "category": "recommender-systems",
+    "topic": "collaborative-filtering",
+    "status": "draft",
+    "published": "2026-11-24",
+    "updated": "2026-11-24",
+    "reading_minutes": 30,
+    "tags": [
+      "GroupLens",
+      "Collaborative Filtering",
+      "User-based Collaborative Filtering",
+      "UserCF",
+      "Pearson Correlation",
+      "Neighborhood Models",
+      "Rating Prediction",
+      "Usenet",
+      "Better Bit Bureau",
+      "Cold Start",
+      "Recommender Systems"
+    ],
+    "summary": "从 Usenet 的信息过载切入，逐步拆解 GroupLens 的 News Client / Better Bit Bureau / Usenet 评分传播架构；用 Figure 5 的 Ken–Lee–Meg–Nan 评分矩阵推导 Pearson 相似度与加权评分预测，提供可交互计算、纯 Python 复算和证据台账。特别区分 1994 年原论文的试验计划与 1997 年后续实地研究，并审计论文报告的 Nan=3.75 与按展示数据复算 3.875 的差异。",
+    "paper": "https://doi.org/10.1145/192844.192905",
+    "illustration": "grouplens",
+    "cover": {
+      "src": "assets/02-rating-matrix.svg",
+      "caption": "共同评分将用户连接起来，并为未知偏好提供预测依据"
+    }
+  },
+  {
     "slug": "score-centering",
     "title": "Understanding Score Centering",
     "subtitle": "从 Training–Inference Mismatch 出发，推导 Off-policy Policy Gradient 中的 Drift / Signal 分解，以及一种不依赖概率比裁剪的加性修正。",

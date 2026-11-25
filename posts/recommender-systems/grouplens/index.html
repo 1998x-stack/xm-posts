@@ -1,0 +1,733 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light">
+<meta name="description" content="精读 Resnick 等人 1994 年 GroupLens：从 Usenet 信息过载、Better Bit Bureau 开放架构，到 Pearson 用户相似度与加权评分预测。">
+<title>Understanding GroupLens · 从用户相似性到协同过滤</title>
+<style>
+:root{--paper:#fffefa;--bg:#f6f9f6;--ink:#213a40;--muted:#60767a;--line:#dce8e3;--teal:#187f7b;--teal-soft:#e3f3ed;--coral:#c97855;--coral-soft:#fff0e7;--violet:#766db5;--violet-soft:#efecfa;--gold:#b68b3f;--gold-soft:#fff5dc;--navy:#234b58}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.9 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;-webkit-font-smoothing:antialiased}
+a{color:#176f70;text-decoration-color:#a6c9bd;text-underline-offset:4px}
+a:hover{color:var(--coral)}
+:focus-visible{outline:3px solid #bf805e;outline-offset:3px}
+.skip{position:absolute;left:12px;top:-100px;z-index:20;background:var(--ink);color:white;padding:9px 14px;border-radius:7px}
+.skip:focus{top:12px}
+.top{background:#fffefa;border-bottom:1px solid var(--line)}
+.top-inner{max-width:1200px;margin:auto;padding:10px 24px;min-height:62px;display:flex;justify-content:space-between;align-items:center;gap:18px}
+.brand{font-size:20px;font-weight:850;letter-spacing:-.06em;color:var(--ink);text-decoration:none}
+.brand span{color:var(--coral)}
+.top nav{display:flex;gap:18px;flex-wrap:wrap;font-size:13px;font-weight:700}
+.layout{max-width:1220px;margin:auto;padding:58px 26px 110px;display:grid;grid-template-columns:220px minmax(0,850px);gap:58px}
+.toc{position:sticky;top:24px;align-self:start;max-height:calc(100vh - 48px);overflow:auto;font-size:12px;line-height:1.55}
+.toc strong{display:block;font-size:10px;letter-spacing:.15em;color:#81938f;margin-bottom:12px}
+.toc a{display:block;padding:7px 10px;border-left:2px solid #d8e5df;color:#5e7777;text-decoration:none}
+.toc a:hover{border-left-color:var(--teal);background:#edf6f1;color:var(--teal)}
+.toc .sub{padding-left:22px;font-size:11px}
+.article{min-width:0;max-width:850px}
+.meta{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#a76e4c;font-weight:850}
+.hero h1{font-size:clamp(42px,6vw,72px);line-height:1.1;letter-spacing:-.055em;margin:16px 0 16px;font-weight:850}
+.hero h1 em{font-style:normal;color:var(--teal)}
+.dek{font-size:22px;line-height:1.7;color:#506c6d;max-width:790px;margin:0 0 18px}
+.byline{font-size:13px;color:var(--muted)}
+.hero-art{margin:34px 0 0;background:linear-gradient(115deg,#e9f5ef,#fff6e9);border:1px solid #e2ebe4;border-radius:18px;padding:16px;overflow:hidden}
+.hero-art img{display:block;width:100%;height:auto}
+.paper-card{margin:22px 0 0;padding:16px 19px;border-left:4px solid var(--teal);background:#edf7f2;border-radius:0 11px 11px 0;font-size:14px;line-height:1.75}
+.paper-card p{margin:4px 0}
+section{scroll-margin-top:28px;margin-top:74px}
+h2{font-size:30px;line-height:1.4;letter-spacing:-.03em;margin:0 0 20px}
+h2 .n{font-size:14px;letter-spacing:0;color:var(--coral);margin-right:9px;vertical-align:middle}
+h3{font-size:21px;line-height:1.5;margin:31px 0 10px}
+p{margin:15px 0}
+strong{font-weight:760}
+.lead{font-size:20px;line-height:1.7;color:#276b69;font-weight:720;margin:22px 0}
+.callout{margin:25px 0;padding:15px 19px;border-left:4px solid var(--teal);border-radius:0 10px 10px 0;background:#edf7f2}
+.callout.warn{border-color:#d58b52;background:#fff6e9}
+.callout.violet{border-color:var(--violet);background:var(--violet-soft)}
+.callout p:first-child{margin-top:0}.callout p:last-child{margin-bottom:0}
+.figure{margin:27px 0 31px;padding:19px 18px 14px;border:1px solid var(--line);border-radius:16px;background:white;box-shadow:0 9px 28px rgba(25,62,57,.045);overflow-x:auto;scrollbar-width:thin}
+.figure svg{display:block;width:100%;min-width:660px;max-width:none;height:auto;margin:auto}
+.figure figcaption{border-top:1px solid #edf1ec;padding-top:11px;margin-top:12px;color:#647a7a;font-size:13px;line-height:1.75}
+.fig-kicker{font-size:10px;letter-spacing:.13em;font-weight:850;color:var(--teal);margin-bottom:8px}
+.table-scroll{overflow-x:auto;margin:22px 0;border:1px solid var(--line);border-radius:11px;background:white}
+table{border-collapse:collapse;width:100%;min-width:580px;font-size:14px;line-height:1.65}
+th{background:#e8f5ef;color:#226b68;font-weight:760}
+td,th{padding:11px 13px;text-align:left;border-bottom:1px solid #e5ece7}
+tbody tr:last-child td{border-bottom:0}
+tbody tr:nth-child(even){background:#fafcf9}
+td.num,th.num{text-align:center;font-variant-numeric:tabular-nums}
+td.missing{color:#b36d4b;font-weight:800;text-align:center}
+.math-box{margin:23px 0;padding:17px 19px;background:#edf7f3;border:1px solid #d9e9e1;border-radius:13px}
+.math-title{font-size:11px;color:#397d77;font-weight:850;letter-spacing:.08em;margin-bottom:9px}
+.math-scroll{overflow-x:auto;padding:7px 4px;text-align:center}
+math[display="block"]{font-size:1.18em;color:#194e52}
+math.math-inline{font-size:1.04em;color:#176f70}
+.math-note{font-size:13px;color:#607a78;margin:8px 0 0}
+.symbols{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:18px 0}
+.symbol{background:white;border:1px solid var(--line);border-radius:10px;padding:11px 13px;font-size:13px}
+.symbol b{display:block;color:#176f70;margin-bottom:3px}
+.pill{display:inline-block;border-radius:30px;padding:3px 9px;background:var(--teal-soft);color:#1a706d;font-size:11px;font-weight:800}
+.pill.coral{background:var(--coral-soft);color:#a75f3f}
+.pill.violet{background:var(--violet-soft);color:#6259a2}
+.controls{border:1px solid var(--line);background:white;border-radius:15px;padding:20px;margin:23px 0;box-shadow:0 7px 22px rgba(25,62,57,.04)}
+.controls h3{margin:0 0 7px;font-size:18px}
+.controls p.hint{font-size:13px;color:var(--muted);margin:0 0 16px}
+.field{display:grid;gap:7px;margin:14px 0}
+.field label{font-size:13px;font-weight:760;color:#385e60}
+select,input[type="range"]{width:100%}
+select{background:#fbfdfa;border:1px solid #cbdcd4;border-radius:8px;padding:10px 12px;color:var(--ink);font:inherit;font-size:14px}
+input[type="range"]{accent-color:var(--teal)}
+.readout{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:11px 13px;background:#edf7f3;border-radius:9px;margin-top:13px}
+.readout span{font-size:13px;color:#5b7574}
+.readout output{font-size:24px;font-weight:850;color:#176f70;font-variant-numeric:tabular-nums}
+.live{min-height:42px;color:#607779;font-size:13px;line-height:1.65;margin-top:9px}
+.range-row{display:grid;grid-template-columns:1fr 44px;align-items:center;gap:14px}
+.range-row output{font-weight:800;text-align:center;color:var(--coral);font-variant-numeric:tabular-nums}
+.step-list{counter-reset:steps;list-style:none;padding:0;margin:20px 0}
+.step-list li{counter-increment:steps;position:relative;padding:0 0 19px 45px}
+.step-list li:before{content:counter(steps);position:absolute;left:0;top:0;width:29px;height:29px;border-radius:50%;display:grid;place-items:center;background:#e3f2ec;color:#176f70;font-size:13px;font-weight:850}
+.grid-two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px;margin:20px 0}
+.tile{padding:15px;border:1px solid var(--line);border-radius:11px;background:white}
+.tile b{display:block;margin-bottom:5px;color:#246a68}
+.tile p{font-size:13px;color:#657a7b;line-height:1.7;margin:0}
+pre{background:#193b40;color:#e8f4ef;padding:18px 20px;border-radius:12px;overflow:auto;font:13px/1.7 ui-monospace,SFMono-Regular,Consolas,monospace}
+code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.91em;color:#a65e41}
+pre code{color:inherit;font-size:inherit}
+.refs{padding-left:22px;font-size:13px;line-height:1.75}
+.refs li{margin:12px 0}
+.footer{margin-top:65px;padding-top:22px;border-top:1px solid var(--line);font-size:13px;color:#6d8180}
+.footer a{color:#426f71}
+@media(max-width:900px){.layout{display:block;padding:28px 20px 80px}.toc{position:static;max-height:none;display:flex;flex-wrap:wrap;gap:5px 8px;margin-bottom:30px}.toc strong{width:100%;margin-bottom:3px}.toc a{border:1px solid #dce8e2;border-radius:20px;padding:5px 9px}.toc .sub{display:none}.article{margin:auto}.hero h1{font-size:clamp(40px,8vw,58px)}}
+@media(max-width:520px){.top-inner{padding:10px 16px}.top nav{gap:10px;font-size:12px}.layout{padding-left:16px;padding-right:16px}.dek{font-size:19px}.symbols,.grid-two{grid-template-columns:1fr}.figure{padding:14px 12px}.figure svg{min-width:660px}h2{font-size:26px}}
+@media print{body{background:white;font-size:11pt}.top,.toc,.controls{display:none}.layout{display:block;padding:0 8mm}.article{max-width:none}.hero h1{font-size:30pt}section{margin-top:28px}.figure{box-shadow:none;break-inside:avoid}.math-box,.callout{break-inside:avoid}a{color:#174f53;text-decoration:underline}}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto!important}*,*::before,*::after{transition:none!important;animation:none!important}}
+h1,h2,h3,figcaption{overflow-wrap:anywhere}
+</style>
+</head>
+<body>
+<a class="skip" href="#content">跳转至正文</a>
+<header class="top"><div class="top-inner"><a class="brand" href="../../../">xm<span>·</span>posts</a><nav aria-label="站点导航"><a href="../../../">首页</a><a href="../../../topics/">知识地图</a><a href="../../../archive/">文章归档</a><a href="../../../feed.xml">RSS</a></nav></div></header>
+<div class="layout">
+<nav class="toc" aria-label="文章目录">
+<strong>IN THIS CHAPTER</strong>
+<a href="#problem">01 · 信息过载</a>
+<a href="#idea">02 · 核心思想</a>
+<a href="#architecture">03 · 开放式架构</a>
+<a href="#ratings">04 · 评分如何流动</a>
+<a href="#matrix">05 · 用户—物品矩阵</a>
+<a href="#similarity">06 · Pearson 相似度</a>
+<a href="#prediction">07 · 加权评分预测</a>
+<a href="#worked">08 · Ken 的手算过程</a>
+<a href="#lab">09 · 交互实验</a>
+<a href="#limits">10 · 失效边界</a>
+<a href="#evidence">11 · 论文证据与实验</a>
+<a href="#legacy">12 · 从 GroupLens 到现代推荐</a>
+<a href="#references">参考文献</a>
+</nav>
+<main id="content" class="article">
+<article>
+<header class="hero">
+<div class="meta">RECOMMENDER SYSTEMS · COLLABORATIVE FILTERING · 1994</div>
+<h1>Understanding <em>GroupLens</em></h1>
+<p class="dek">如果两个人过去喜欢相同的文章，我们能否借用其中一个人的评价，预测另一个人会不会喜欢一篇新文章？</p>
+<p class="byline">Paul Resnick · Neophytos Iacovou · Mitesh Suchak · Peter Bergstrom · John Riedl<br>CSCW 1994 · pp. 175–186 · DOI: <a href="https://doi.org/10.1145/192844.192905">10.1145/192844.192905</a></p>
+
+<div class="paper-card">
+<p><strong>核心论文：</strong>Resnick et al., <em>GroupLens: An Open Architecture for Collaborative Filtering of Netnews</em> (1994).</p>
+<p><a href="https://pages.cpsc.ucalgary.ca/~saul/601.13/readings/p175-resnick.pdf">阅读论文全文 PDF</a> · <a href="https://doi.org/10.1145/192844.192905">ACM DOI 页面</a></p>
+</div>
+</header>
+
+<section id="problem">
+<h2><span class="n">01</span> 信息越来越多，为什么找到好内容仍然很难？</h2>
+<p>1994 年的 Usenet 是一个跨站点传播的公共新闻系统。用户把文章发布到 newsgroup，新闻服务器再把文章逐站传播。读者可以加入许多主题组，但每个组里仍然混杂着公告、问题、讨论、回复和质量参差不齐的内容。</p>
+<p>原论文描述的痛点不是“找不到关键词”，而是<strong>同一个主题下，不同读者真正想看的内容并不相同</strong>。一篇文章可能对系统管理员非常有用，对另一个读者却毫无价值。用户需要在大量文章中逐篇筛选，最终有人干脆放弃阅读。</p>
+<p>内容过滤可以依据主题、作者或词语做判断，但它难以直接理解文章的质量、语气、权威性和个人兴趣。人类读者却能对这些主观维度作出评价。</p>
+<div class="grid-two">
+<div class="tile"><b>Content-based filtering</b><p>文章写了什么？用词语、主题、作者或内容特征匹配用户画像。</p></div>
+<div class="tile"><b>Collaborative filtering</b><p>哪些人和我过去喜欢相似内容？利用他们对新内容的评价推断我的偏好。</p></div>
+</div>
+<figure class="figure" tabindex="0" role="region" aria-label="内容过滤与协同过滤的两条信息路径，可横向滚动">
+<div class="fig-kicker">FIGURE 01 · TWO SOURCES OF EVIDENCE</div>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 390" role="img" aria-labelledby="gl01-title gl01-desc">
+<title id="gl01-title">从信息过载到个性化过滤</title>
+<desc id="gl01-desc">大量 Usenet 文章分别进入内容过滤和协同过滤两条路径。内容过滤分析文章特征，协同过滤分析其他读者对文章的评分，最终形成面向个人的阅读列表。</desc>
+<defs>
+<marker id="gl01-arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0 0L9 3L0 6" fill="none" stroke="#4d7774" stroke-width="1.6"/></marker>
+</defs>
+<rect x="8" y="8" width="944" height="374" rx="22" fill="#f7faf7"/>
+<g font-family="Noto Sans CJK SC,system-ui,sans-serif">
+<text x="42" y="52" font-size="14" font-weight="800" letter-spacing="2" fill="#8a715b">THE PROBLEM</text>
+<rect x="42" y="84" width="178" height="214" rx="16" fill="#fff" stroke="#d6e5dc" stroke-width="2"/>
+<text x="131" y="117" text-anchor="middle" font-size="19" font-weight="750" fill="#244a50">Usenet</text>
+<text x="131" y="141" text-anchor="middle" font-size="13" fill="#67817e">大量新闻文章</text>
+<g fill="#e8f2ed" stroke="#a9c7ba">
+<rect x="65" y="162" width="130" height="24" rx="5"/><rect x="65" y="195" width="130" height="24" rx="5"/><rect x="65" y="228" width="130" height="24" rx="5"/><rect x="65" y="261" width="130" height="24" rx="5"/>
+</g>
+<g fill="#456b6b" font-size="12"><text x="78" y="179">Article A</text><text x="78" y="212">Article B</text><text x="78" y="245">Article C</text><text x="78" y="278">Article …</text></g>
+<path d="M220 190H273V132H313" fill="none" stroke="#4d7774" stroke-width="2.5" marker-end="url(#gl01-arrow)"/>
+<path d="M273 190V277H313" fill="none" stroke="#4d7774" stroke-width="2.5" marker-end="url(#gl01-arrow)"/>
+<rect x="318" y="82" width="252" height="102" rx="14" fill="#fff0e5" stroke="#dba27b" stroke-width="2"/>
+<text x="444" y="116" text-anchor="middle" font-size="18" font-weight="750" fill="#8b5839">Content-based</text>
+<text x="444" y="143" text-anchor="middle" font-size="14" fill="#8d6c59">关键词 · 主题 · 作者 · 文本</text>
+<text x="444" y="164" text-anchor="middle" font-size="12" fill="#9c7b66">文章自身提供证据</text>
+<rect x="318" y="226" width="252" height="102" rx="14" fill="#e5f3ed" stroke="#8ab8a7" stroke-width="2"/>
+<text x="444" y="260" text-anchor="middle" font-size="18" font-weight="750" fill="#236b65">Collaborative</text>
+<text x="444" y="287" text-anchor="middle" font-size="14" fill="#4d7971">相似读者 · 历史评分 · 偏好</text>
+<text x="444" y="308" text-anchor="middle" font-size="12" fill="#64877f">群体评价提供证据</text>
+<path d="M570 132H641V190H688" fill="none" stroke="#c17d52" stroke-width="2.5" marker-end="url(#gl01-arrow)"/>
+<path d="M570 277H641V218H688" fill="none" stroke="#27847c" stroke-width="2.5" marker-end="url(#gl01-arrow)"/>
+<rect x="695" y="132" width="218" height="142" rx="16" fill="#e9e7f7" stroke="#aaa3d2" stroke-width="2"/>
+<text x="804" y="169" text-anchor="middle" font-size="19" font-weight="750" fill="#4d4a83">My reading list</text>
+<text x="804" y="196" text-anchor="middle" font-size="14" fill="#68649a">个性化预测分数</text>
+<g fill="#fff" stroke="#d4d0eb"><rect x="730" y="213" width="148" height="13" rx="6"/><rect x="730" y="235" width="118" height="13" rx="6"/><rect x="730" y="257" width="82" height="7" rx="3"/></g>
+<text x="42" y="355" font-size="13" fill="#6c8580">同一篇文章，对不同读者可以有不同的预测分数。</text>
+</g>
+</svg>
+<figcaption>内容过滤读取文章自身的特征；协同过滤读取其他读者的主观评价。两者可以组合，但 GroupLens 的核心贡献是把跨用户评价变成个性化预测。</figcaption>
+</figure>
+<div class="callout"><strong>历史定位：</strong>GroupLens 不是最早出现的协同过滤想法。论文明确讨论了更早的 Tapestry 系统。它的重要贡献是将评分聚合、个性化预测与开放、分布式的 Netnews 架构结合起来。</div>
+</section>
+
+<section id="idea">
+<h2><span class="n">02</span> 一个简单的假设：过去意见一致，未来也可能一致</h2>
+<p>把问题缩小到两位读者。Ken 和 Lee 都给过去读过的文章打过分。如果 Ken 喜欢的文章 Lee 通常不喜欢，那么 Lee 对一篇新文章的高分，未必意味着 Ken 也会喜欢。相反，如果 Ken 和 Meg 的历史评分变化很一致，Meg 对新文章的评分就可能成为 Ken 的有用线索。</p>
+<p class="lead">GroupLens 的基本机制不是“把所有人的分数平均”，而是“先估计谁的判断值得参考，再按相关程度组合他们的评分”。</p>
+<figure class="figure" tabindex="0" role="region" aria-label="用户相似性到评分预测的概念图，可横向滚动">
+<div class="fig-kicker">FIGURE 02 · FROM AGREEMENT TO PREDICTION</div>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 390" role="img" aria-labelledby="gl02-title gl02-desc">
+<title id="gl02-title">共同评分建立用户邻域</title>
+<desc id="gl02-desc">四位用户对若干文章进行评分。共同评分的列向量可用于比较用户偏好，目标文章的缺失单元格由已评分邻居提供信息。</desc>
+<rect x="8" y="8" width="944" height="374" rx="22" fill="#f7faf7"/>
+<g font-family="Noto Sans CJK SC,system-ui,sans-serif">
+<text x="42" y="51" font-size="14" font-weight="800" letter-spacing="2" fill="#8a715b">SHARED EVIDENCE</text>
+<text x="84" y="96" font-size="16" font-weight="750" fill="#2d5358">Article</text>
+<g font-size="16" font-weight="750" text-anchor="middle" fill="#2d5358"><text x="275" y="96">Ken</text><text x="405" y="96">Lee</text><text x="535" y="96">Meg</text><text x="665" y="96">Nan</text></g>
+<g stroke="#dce8e1" stroke-width="1">
+<path d="M64 110H725M64 160H725M64 210H725M64 260H725M64 310H725"/>
+<path d="M185 110V310M340 110V310M470 110V310M600 110V310M730 110V310"/>
+</g>
+<g font-size="15" fill="#557477" text-anchor="middle"><text x="122" y="142">1</text><text x="122" y="192">2</text><text x="122" y="242">4</text><text x="122" y="292">5</text></g>
+<g font-size="18" font-weight="800" text-anchor="middle">
+<g fill="#246e69"><text x="275" y="142">1</text><text x="275" y="192">5</text><text x="275" y="242">2</text><text x="275" y="292">4</text></g>
+<g fill="#9a6548"><text x="405" y="142">4</text><text x="405" y="192">2</text><text x="405" y="242">5</text><text x="405" y="292">1</text></g>
+<g fill="#5f5a9c"><text x="535" y="142">2</text><text x="535" y="192">4</text><text x="535" y="242">—</text><text x="535" y="292">—</text></g>
+<g fill="#4d7774"><text x="665" y="142">2</text><text x="665" y="192">4</text><text x="665" y="242">5</text><text x="665" y="292">1</text></g>
+</g>
+<rect x="218" y="112" width="115" height="196" rx="10" fill="none" stroke="#27847c" stroke-width="2.5" stroke-dasharray="7 5"/>
+<rect x="348" y="112" width="115" height="196" rx="10" fill="none" stroke="#c17d52" stroke-width="2.5" stroke-dasharray="7 5"/>
+<path d="M275 315V342H405V315" fill="none" stroke="#4d7774" stroke-width="2"/>
+<text x="340" y="363" text-anchor="middle" font-size="12" fill="#6d8580">共同评分 → 相似性</text>
+<rect x="757" y="108" width="158" height="204" rx="14" fill="#fff0e5" stroke="#dca27b" stroke-width="2"/>
+<text x="836" y="139" text-anchor="middle" font-size="16" font-weight="750" fill="#8b5839">Article 6</text>
+<rect x="778" y="159" width="50" height="42" rx="8" fill="#fff" stroke="#d8b49b"/><text x="803" y="186" text-anchor="middle" font-size="18" font-weight="800" fill="#b26c48">?</text>
+<rect x="842" y="159" width="50" height="42" rx="8" fill="#f4e5da" stroke="#d8b49b"/><text x="867" y="186" text-anchor="middle" font-size="18" font-weight="800" fill="#8b5839">2</text>
+<text x="836" y="229" text-anchor="middle" font-size="12" fill="#9a745d">Ken 未评分</text>
+<text x="836" y="250" text-anchor="middle" font-size="12" fill="#9a745d">Lee / Meg 已评分</text>
+<path d="M665 312V332H756" fill="none" stroke="#7b74b5" stroke-width="2" stroke-dasharray="5 4"/>
+<text x="756" y="355" font-size="12" fill="#6f6a9c">只对目标文章已评分的邻居求和</text>
+</g>
+</svg>
+<figcaption>共同评分是比较两位用户的证据；只有对目标文章已经给出评分的邻居，才能参与这次预测。</figcaption>
+</figure>
+<p>这套方法依赖三个条件：有足够多的共同评分、用户偏好在一定时间和主题范围内相对稳定、目标文章至少已经被某些人评价过。后面的章节会逐个检查这些条件。</p>
+</section>
+
+<section id="architecture">
+<h2><span class="n">03</span> GroupLens 不只是一个公式，而是一套开放式系统</h2>
+<p>论文的标题强调 <em>Open Architecture</em>。GroupLens 将新闻阅读客户端与评分服务器分开：客户端负责收集用户评分、展示预测分数；服务器负责汇总评分、计算预测，并通过现有 Usenet 机制传播评分数据。</p>
+<figure class="figure" tabindex="0" role="region" aria-label="GroupLens 开放式分布架构图，可横向滚动">
+<div class="fig-kicker">FIGURE 03 · CLIENTS, NEWS SERVERS & BETTER BIT BUREAUS</div>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 470" role="img" aria-labelledby="gl03-title gl03-desc">
+<title id="gl03-title">GroupLens 的开放式分布架构</title>
+<desc id="gl03-desc">不同站点的新闻客户端连接本地新闻服务器并提交评分给 Better Bit Bureau。BBB 将评分打包成新闻文章，经由专用评分 newsgroup 在 Usenet 服务器间传播，再计算预测分数返回客户端。</desc>
+<defs>
+<marker id="gl03-teal" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0 0L9 3L0 6" fill="none" stroke="#25847b" stroke-width="1.6"/></marker>
+<marker id="gl03-coral" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0 0L9 3L0 6" fill="none" stroke="#c27a55" stroke-width="1.6"/></marker>
+</defs>
+<rect x="8" y="8" width="944" height="454" rx="22" fill="#f7faf7"/>
+<g font-family="Noto Sans CJK SC,system-ui,sans-serif">
+<text x="42" y="48" font-size="14" font-weight="800" letter-spacing="2" fill="#8a715b">OPEN, DISTRIBUTED ARCHITECTURE</text>
+<rect x="45" y="86" width="870" height="128" rx="16" fill="#edf3f1" stroke="#cbded5" stroke-width="1.5"/>
+<text x="72" y="115" font-size="15" font-weight="750" fill="#416a67">Usenet news server network</text>
+<g fill="#fff" stroke="#8db8a8" stroke-width="2">
+<rect x="93" y="139" width="130" height="48" rx="10"/><rect x="306" y="139" width="130" height="48" rx="10"/><rect x="519" y="139" width="130" height="48" rx="10"/><rect x="732" y="139" width="130" height="48" rx="10"/>
+</g>
+<g fill="#2f6561" font-size="14" font-weight="700" text-anchor="middle"><text x="158" y="169">News Server A</text><text x="371" y="169">News Server B</text><text x="584" y="169">News Server C</text><text x="797" y="169">News Server D</text></g>
+<g stroke="#4d7774" stroke-width="2.5" fill="none" marker-end="url(#gl03-teal)"><path d="M223 163H298"/><path d="M436 163H511"/><path d="M649 163H724"/></g>
+<rect x="78" y="281" width="230" height="108" rx="14" fill="#e5f3ed" stroke="#8ab8a7" stroke-width="2"/>
+<text x="193" y="312" text-anchor="middle" font-size="17" font-weight="750" fill="#236b65">News Clients</text>
+<text x="193" y="339" text-anchor="middle" font-size="13" fill="#507a72">read · rate · display score</text>
+<text x="193" y="365" text-anchor="middle" font-size="12" fill="#66887f">NewsWatcher / Gnus / NN</text>
+<rect x="367" y="281" width="230" height="108" rx="14" fill="#fff0e5" stroke="#dba27b" stroke-width="2"/>
+<text x="482" y="312" text-anchor="middle" font-size="17" font-weight="750" fill="#8b5839">Better Bit Bureau</text>
+<text x="482" y="339" text-anchor="middle" font-size="13" fill="#946c55">collect · correlate · predict</text>
+<text x="482" y="365" text-anchor="middle" font-size="12" fill="#9b7b65">rating server</text>
+<rect x="656" y="281" width="230" height="108" rx="14" fill="#eae8f7" stroke="#aaa3d2" stroke-width="2"/>
+<text x="771" y="312" text-anchor="middle" font-size="17" font-weight="750" fill="#514a86">Remote BBB</text>
+<text x="771" y="339" text-anchor="middle" font-size="13" fill="#6b659d">alternative implementation</text>
+<text x="771" y="365" text-anchor="middle" font-size="12" fill="#7c76a7">same open protocol</text>
+<g stroke="#25847b" stroke-width="2.5" fill="none" marker-end="url(#gl03-teal)">
+<path d="M193 281V228H482V273"/><path d="M482 281V224H158V214"/>
+</g>
+<g stroke="#c27a55" stroke-width="2.5" fill="none" marker-end="url(#gl03-coral)">
+<path d="M482 281V245H584V214"/><path d="M771 281V231H797V214"/>
+</g>
+<path d="M597 335H648" stroke="#756db1" stroke-width="2.5" stroke-dasharray="7 5" marker-end="url(#gl03-teal)"/>
+<path d="M367 375H316" stroke="#25847b" stroke-width="2.5" fill="none" marker-end="url(#gl03-teal)"/>
+<text x="341" y="405" text-anchor="middle" font-size="11" fill="#5c7c77">prediction response</text>
+<g font-size="12" fill="#5c7c77"><text x="245" y="238">predictions / ratings</text><text x="490" y="232">ratings article</text><text x="610" y="322">rating exchange</text></g>
+<rect x="47" y="414" width="868" height="30" rx="8" fill="#fff" stroke="#dce8e1"/>
+<text x="481" y="434" text-anchor="middle" font-size="13" fill="#547572">评分借用 Usenet 的传播网络；客户端不需要彼此直接连接，也不必接收全部原始评分。</text>
+</g>
+</svg>
+<figcaption>Better Bit Bureau（BBB）是评分服务器。它可以与客户端位于同一站点，也可以作为远程服务；评分数据借用 Usenet 的新闻传播网络，而不是要求所有客户端直接互联。</figcaption>
+</figure>
+<h3>三个组件，各自承担什么责任？</h3>
+<div class="grid-two">
+<div class="tile"><b>News Client</b><p>嵌入现有新闻阅读流程，让用户阅读后快速打分，并显示预测分数、排序或过滤结果。</p></div>
+<div class="tile"><b>Better Bit Bureau</b><p>接收和聚合评分，按用户历史行为估计相似度，再计算每位读者的个性化分数。</p></div>
+<div class="tile"><b>Usenet News Server</b><p>传播新闻文章，也传播专门承载评分记录的 ratings newsgroup。</p></div>
+<div class="tile"><b>Open Protocol</b><p>客户端和 BBB 可以由不同团队实现；只要遵守评分与通信格式，就能互操作。</p></div>
+</div>
+<p>原论文还强调五个设计目标：开放性、易用性、兼容性、可扩展性与隐私。它没有要求所有人使用同一个新闻阅读器，也没有把评分服务器绑定到单一厂商实现。</p>
+</section>
+
+<section id="ratings">
+<h2><span class="n">04</span> 一条评分是怎样从阅读行为变成共享数据的？</h2>
+<p>用户阅读文章后，可以给出 1 到 5 的数字评分：1 最低，5 最高。评分可以附带阅读时长（秒），并通过用户选择的 pseudonym（化名）关联同一个人的历史记录。化名让系统能识别“同一评分者”，同时不必把真实姓名直接暴露给其他参与者。</p>
+<figure class="figure" tabindex="0" role="region" aria-label="评分从客户端到评分服务器的传播过程，可横向滚动">
+<div class="fig-kicker">FIGURE 04 · RATING LIFECYCLE</div>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 360" role="img" aria-labelledby="gl04-title gl04-desc">
+<title id="gl04-title">评分数据的生命周期</title>
+<desc id="gl04-desc">用户阅读文章后在客户端给出一到五分的评分。BBB 按会话批量打包评分记录，发布到专用 Usenet newsgroup，其他 BBB 收到后更新矩阵并计算预测，最后把分数返回客户端。</desc>
+<defs><marker id="gl04-arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0 0L9 3L0 6" fill="none" stroke="#4d7774" stroke-width="1.5"/></marker></defs>
+<rect x="8" y="8" width="944" height="344" rx="22" fill="#f7faf7"/>
+<g font-family="Noto Sans CJK SC,system-ui,sans-serif" text-anchor="middle">
+<rect x="35" y="95" width="150" height="132" rx="14" fill="#e4f3ec" stroke="#8ab8a7" stroke-width="2"/>
+<text x="110" y="128" font-size="17" font-weight="750" fill="#236b65">Reader</text>
+<text x="110" y="157" font-size="13" fill="#527b72">read article</text>
+<g fill="#fff" stroke="#b6d6c7"><rect x="55" y="178" width="22" height="28" rx="5"/><rect x="81" y="178" width="22" height="28" rx="5"/><rect x="107" y="178" width="22" height="28" rx="5"/><rect x="133" y="178" width="22" height="28" rx="5"/></g>
+<text x="110" y="197" font-size="11" fill="#24756c">1–5</text>
+<rect x="230" y="95" width="150" height="132" rx="14" fill="#fff0e5" stroke="#dba27b" stroke-width="2"/>
+<text x="305" y="128" font-size="17" font-weight="750" fill="#8b5839">News Client</text>
+<text x="305" y="157" font-size="13" fill="#946c55">rating + pseudonym</text>
+<text x="305" y="184" font-size="12" fill="#946c55">optional read seconds</text>
+<rect x="425" y="95" width="150" height="132" rx="14" fill="#fff5dc" stroke="#d5b66d" stroke-width="2"/>
+<text x="500" y="128" font-size="17" font-weight="750" fill="#80612c">Batch</text>
+<text x="500" y="157" font-size="13" fill="#927843">session ratings</text>
+<text x="500" y="184" font-size="12" fill="#927843">one ratings article</text>
+<rect x="620" y="95" width="150" height="132" rx="14" fill="#e9e7f7" stroke="#aaa3d2" stroke-width="2"/>
+<text x="695" y="128" font-size="17" font-weight="750" fill="#514a86">Usenet</text>
+<text x="695" y="157" font-size="13" fill="#6b659d">ratings newsgroup</text>
+<text x="695" y="184" font-size="12" fill="#7c76a7">server propagation</text>
+<rect x="815" y="95" width="110" height="132" rx="14" fill="#e5f3ed" stroke="#8ab8a7" stroke-width="2"/>
+<text x="870" y="128" font-size="17" font-weight="750" fill="#236b65">BBB</text>
+<text x="870" y="157" font-size="13" fill="#527b72">update</text>
+<text x="870" y="184" font-size="12" fill="#527b72">predict</text>
+<g stroke="#4d7774" stroke-width="2.5" fill="none" marker-end="url(#gl04-arrow)"><path d="M185 161H222"/><path d="M380 161H417"/><path d="M575 161H612"/><path d="M770 161H807"/></g>
+<path d="M870 227V277H110V235" stroke="#25847b" stroke-width="2.5" fill="none" marker-end="url(#gl04-arrow)"/>
+<text x="490" y="305" font-size="14" fill="#3b7770">个性化预测分数返回客户端，供展示、排序或过滤</text>
+<text x="110" y="66" font-size="12" fill="#8a715b">01</text><text x="305" y="66" font-size="12" fill="#8a715b">02</text><text x="500" y="66" font-size="12" fill="#8a715b">03</text><text x="695" y="66" font-size="12" fill="#8a715b">04</text><text x="870" y="66" font-size="12" fill="#8a715b">05</text>
+</g>
+</svg>
+<figcaption>论文中的 BBB 按阅读会话批量发送评分：一条评分只占少量正文，但每篇 Usenet 文章都有头部开销，批量打包能减少传播负担。</figcaption>
+</figure>
+<ol class="step-list">
+<li><strong>Read & rate：</strong>新闻客户端展示 1–5 的评分入口；用户也可以用键盘快捷键输入评分。</li>
+<li><strong>Batch：</strong>BBB 将用户在一次阅读会话中产生的评分打包成一篇 ratings article。</li>
+<li><strong>Propagate：</strong>评分文章被发布到专门的 newsgroup，沿用 Usenet 原有的服务器间传播机制。</li>
+<li><strong>Aggregate & predict：</strong>BBB 汇总收到的评分，更新用户间关系，并为客户端请求的文章计算个性化分数。</li>
+<li><strong>Display：</strong>客户端可以只展示分数、按分数排序，或隐藏低于阈值的文章。</li>
+</ol>
+<div class="callout warn"><strong>不要误读阅读时长：</strong>1994 年论文说客户端会收集用户阅读文章的秒数，但当时 BBB 的评分预测并没有使用这个信号。收集字段不等于算法已经使用该字段。</div>
+</section>
+
+<section id="matrix">
+<h2><span class="n">05</span> 用户—物品矩阵：推荐就是补全未知偏好</h2>
+<p>当评分与预测处于同一个 1–5 数值尺度时，可以把任务看成矩阵补全。原论文 Figure 5 的行是文章、列是用户；现代推荐系统教材也常把矩阵转置为“用户为行、物品为列”。方向不同，数学对象相同。</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="GroupLens 论文 Figure 5 评分矩阵，可横向滚动">
+<table>
+<thead><tr><th>文章编号</th><th class="num">Ken</th><th class="num">Lee</th><th class="num">Meg</th><th class="num">Nan</th></tr></thead>
+<tbody>
+<tr><td>1</td><td class="num">1</td><td class="num">4</td><td class="num">2</td><td class="num">2</td></tr>
+<tr><td>2</td><td class="num">5</td><td class="num">2</td><td class="num">4</td><td class="num">4</td></tr>
+<tr><td>3</td><td class="num">—</td><td class="num">—</td><td class="num">3</td><td class="num">—</td></tr>
+<tr><td>4</td><td class="num">2</td><td class="num">5</td><td class="num">—</td><td class="num">5</td></tr>
+<tr><td>5</td><td class="num">4</td><td class="num">1</td><td class="num">—</td><td class="num">1</td></tr>
+<tr><td>6</td><td class="missing">?</td><td class="num">2</td><td class="num">5</td><td class="missing">?</td></tr>
+</tbody>
+</table>
+</div>
+<p>空白表示用户没有提交评分，不代表零分。Ken 对第 6 篇文章的格子是待预测目标；Lee 与 Meg 已经评价过第 6 篇，因此可以成为本次预测的邻居。Nan 没有评价第 6 篇，不能直接贡献这一次的目标评分。</p>
+<figure class="figure" tabindex="0" role="region" aria-label="稀疏评分矩阵和待预测单元格，可横向滚动">
+<div class="fig-kicker">FIGURE 05 · SPARSE USER–ITEM RATINGS</div>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 390" role="img" aria-labelledby="gl05-title gl05-desc">
+<title id="gl05-title">稀疏评分矩阵中的待预测单元格</title>
+<desc id="gl05-desc">文章作为行，用户作为列。许多单元格没有评分。Ken 对文章 6 的评分未知，Lee 和 Meg 已经评分，因此他们可以提供预测证据。</desc>
+<rect x="8" y="8" width="944" height="374" rx="22" fill="#f7faf7"/>
+<g font-family="Noto Sans CJK SC,system-ui,sans-serif">
+<text x="42" y="52" font-size="14" font-weight="800" letter-spacing="2" fill="#8a715b">MATRIX COMPLETION</text>
+<g font-size="15" font-weight="750" fill="#2d5358" text-anchor="middle"><text x="275" y="102">Ken</text><text x="405" y="102">Lee</text><text x="535" y="102">Meg</text><text x="665" y="102">Nan</text></g>
+<g font-size="14" fill="#557477" text-anchor="middle"><text x="120" y="147">1</text><text x="120" y="197">2</text><text x="120" y="247">3</text><text x="120" y="297">4</text><text x="120" y="347">6</text></g>
+<text x="120" y="76" text-anchor="middle" font-size="13" fill="#80918d">Article</text>
+<g stroke="#d9e6df" stroke-width="1">
+<path d="M185 116H730M185 166H730M185 216H730M185 266H730M185 316H730M185 366H730"/>
+<path d="M185 116V366M340 116V366M470 116V366M600 116V366M730 116V366"/>
+</g>
+<g fill="#e3f2ec" stroke="#b8d7c7">
+<rect x="203" y="124" width="100" height="34" rx="7"/><rect x="463" y="124" width="100" height="34" rx="7"/><rect x="333" y="174" width="100" height="34" rx="7"/><rect x="593" y="174" width="100" height="34" rx="7"/>
+</g>
+<g fill="#fff0e5" stroke="#e3b18f"><rect x="203" y="324" width="100" height="34" rx="7"/><rect x="333" y="324" width="100" height="34" rx="7"/></g>
+<g font-size="17" font-weight="800" text-anchor="middle" fill="#2c716b"><text x="253" y="148">1</text><text x="513" y="148">2</text><text x="383" y="198">2</text><text x="643" y="198">4</text></g>
+<text x="253" y="348" text-anchor="middle" font-size="19" font-weight="850" fill="#b16a46">?</text>
+<text x="383" y="348" text-anchor="middle" font-size="17" font-weight="850" fill="#8b5839">2</text>
+<rect x="215" y="311" width="76" height="58" rx="10" fill="none" stroke="#c67a55" stroke-width="2.5"/>
+<rect x="760" y="150" width="148" height="190" rx="14" fill="#fff" stroke="#dce8e1" stroke-width="1.5"/>
+<text x="834" y="185" text-anchor="middle" font-size="16" font-weight="750" fill="#2d5358">缺失 ≠ 0</text>
+<text x="834" y="218" text-anchor="middle" font-size="13" fill="#64807b">未评分的单元格</text>
+<text x="834" y="240" text-anchor="middle" font-size="13" fill="#64807b">不是负反馈</text>
+<text x="834" y="286" text-anchor="middle" font-size="13" fill="#9b6c4c">目标 ?</text>
+<text x="834" y="309" text-anchor="middle" font-size="13" fill="#9b6c4c">由邻居估计</text>
+</g>
+</svg>
+<figcaption>协同过滤需要同时回答两个问题：谁的历史评价和目标用户相似？这些相似用户是否已经评价了当前候选文章？</figcaption>
+</figure>
+<p>GroupLens 的 BBB 按 newsgroup 分别维护评分矩阵。这个细节很重要：两个人可能在技术文章上口味相似，却在笑话或体育讨论上意见不同。把不同主题的评分全部混在一个全局向量里，会抹掉这种局部兴趣结构。</p>
+</section>
+
+<section id="similarity">
+<h2><span class="n">06</span> Pearson 相似度：比较偏离各自平均值的方向</h2>
+<p>直接比较两个人的绝对评分会受到“打分尺度”的影响。一个用户可能习惯打 4–5 分，另一个用户可能习惯打 1–3 分，但两人仍可能对相同文章有相同的相对偏好。</p>
+<p>Pearson 相关系数先减去每个人在<strong>共同评价文章集合</strong>上的平均分，再比较两个中心化评分向量是否同向。</p>
+<div class="math-box">
+<div class="math-title">EQUATION 1 · PEARSON CORRELATION</div>
+<div class="math-scroll" tabindex="0" role="region" aria-label="Pearson 相似度公式，可横向滚动">
+<math display="block" aria-label="用户 u 与 v 的 Pearson 相关系数，分子为共同评分偏差乘积之和，分母为两个偏差向量范数的乘积">
+<mrow>
+<mi>sim</mi><mo>(</mo><mi>u</mi><mo>,</mo><mi>v</mi><mo>)</mo><mo>=</mo>
+<mfrac>
+<mrow><munder><mo>∑</mo><mrow><mi>i</mi><mo>∈</mo><msub><mi>I</mi><mrow><mi>u</mi><mi>v</mi></mrow></msub></mrow></munder><mo>(</mo><msub><mi>r</mi><mrow><mi>u</mi><mi>i</mi></mrow></msub><mo>−</mo><msub><mover><mi>r</mi><mo>¯</mo></mover><mi>u</mi></msub><mo>)</mo><mo>(</mo><msub><mi>r</mi><mrow><mi>v</mi><mi>i</mi></mrow></msub><mo>−</mo><msub><mover><mi>r</mi><mo>¯</mo></mover><mi>v</mi></msub><mo>)</mo></mrow>
+<mrow>
+<msqrt><munder><mo>∑</mo><mrow><mi>i</mi><mo>∈</mo><msub><mi>I</mi><mrow><mi>u</mi><mi>v</mi></mrow></msub></mrow></munder><msup><mrow><mo>(</mo><msub><mi>r</mi><mrow><mi>u</mi><mi>i</mi></mrow></msub><mo>−</mo><msub><mover><mi>r</mi><mo>¯</mo></mover><mi>u</mi></msub><mo>)</mo></mrow><mn>2</mn></msup></msqrt>
+<msqrt><munder><mo>∑</mo><mrow><mi>i</mi><mo>∈</mo><msub><mi>I</mi><mrow><mi>u</mi><mi>v</mi></mrow></msub></mrow></munder><msup><mrow><mo>(</mo><msub><mi>r</mi><mrow><mi>v</mi><mi>i</mi></mrow></msub><mo>−</mo><msub><mover><mi>r</mi><mo>¯</mo></mover><mi>v</mi></msub><mo>)</mo></mrow><mn>2</mn></msup></msqrt>
+</mrow>
+</mfrac>
+</mrow>
+</math>
+</div>
+<p class="math-note">I<sub>uv</sub> 是 u 和 v 共同评价过的文章集合。公式中的均值也只在这个共同集合上计算。</p>
+</div>
+<div class="symbols">
+<div class="symbol"><b>r<sub>ui</sub></b>用户 u 对文章 i 的实际评分。</div>
+<div class="symbol"><b>r̄<sub>u</sub></b>用户 u 在共同评分集合上的平均分。</div>
+<div class="symbol"><b>I<sub>uv</sub></b>两位用户共同评价过的文章。</div>
+<div class="symbol"><b>sim(u,v)</b>相关系数，范围为 −1 到 +1。</div>
+</div>
+<figure class="figure" tabindex="0" role="region" aria-label="Pearson 相似度几何解释，可横向滚动">
+<div class="fig-kicker">FIGURE 06 · CENTERED RATINGS</div>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 390" role="img" aria-labelledby="gl06-title gl06-desc">
+<title id="gl06-title">Pearson 相关系数比较中心化评分</title>
+<desc id="gl06-desc">Pearson 相关系数先从两位用户的共同评分中减去各自均值，再比较偏差向量。相同方向表示正相关，相反方向表示负相关。</desc>
+<rect x="8" y="8" width="944" height="374" rx="22" fill="#f7faf7"/>
+<g font-family="Noto Sans CJK SC,system-ui,sans-serif">
+<text x="42" y="52" font-size="14" font-weight="800" letter-spacing="2" fill="#8a715b">CENTER, THEN COMPARE</text>
+<g>
+<rect x="42" y="82" width="260" height="238" rx="16" fill="#fff" stroke="#dce8e1"/>
+<text x="172" y="113" text-anchor="middle" font-size="17" font-weight="750" fill="#2d5358">原始评分</text>
+<path d="M86 266H260M110 286V142" stroke="#8ba6a0" stroke-width="1.5"/>
+<g fill="#27847c"><circle cx="128" cy="250" r="7"/><circle cx="157" cy="158" r="7"/><circle cx="190" cy="223" r="7"/><circle cx="226" cy="183" r="7"/></g>
+<g fill="#c47a55"><circle cx="128" cy="158" r="7"/><circle cx="157" cy="250" r="7"/><circle cx="190" cy="183" r="7"/><circle cx="226" cy="223" r="7"/></g>
+<text x="172" y="302" text-anchor="middle" font-size="12" fill="#728781">用户打分习惯可能不同</text>
+</g>
+<path d="M320 201H371" stroke="#4d7774" stroke-width="2.5"/>
+<path d="M359 193L371 201L359 209" stroke="#4d7774" stroke-width="2.5" fill="none"/>
+<rect x="385" y="82" width="240" height="238" rx="16" fill="#e5f3ed" stroke="#8ab8a7" stroke-width="2"/>
+<text x="505" y="113" text-anchor="middle" font-size="17" font-weight="750" fill="#236b65">减去各自均值</text>
+<text x="505" y="156" text-anchor="middle" font-size="14" fill="#527b72">Ken − K̄</text>
+<text x="505" y="184" text-anchor="middle" font-size="19" font-weight="750" fill="#24746d">[−2, +2, −1, +1]</text>
+<path d="M418 204H592" stroke="#a8cfc0" stroke-width="1.5"/>
+<text x="505" y="238" text-anchor="middle" font-size="14" fill="#527b72">Lee − L̄</text>
+<text x="505" y="266" text-anchor="middle" font-size="19" font-weight="750" fill="#a76142">[+1, −1, +2, −2]</text>
+<text x="505" y="298" text-anchor="middle" font-size="12" fill="#66887f">只保留共同评分项目</text>
+<path d="M643 201H692" stroke="#4d7774" stroke-width="2.5"/>
+<path d="M680 193L692 201L680 209" stroke="#4d7774" stroke-width="2.5" fill="none"/>
+<rect x="706" y="82" width="210" height="238" rx="16" fill="#fff0e5" stroke="#dba27b" stroke-width="2"/>
+<text x="811" y="113" text-anchor="middle" font-size="17" font-weight="750" fill="#8b5839">相关方向</text>
+<path d="M750 164L870 264" stroke="#c47a55" stroke-width="5" stroke-linecap="round"/>
+<path d="M750 264L870 164" stroke="#27847c" stroke-width="5" stroke-linecap="round"/>
+<text x="811" y="294" text-anchor="middle" font-size="13" font-weight="750" fill="#8b5839">Ken–Lee = −0.8</text>
+<text x="811" y="313" text-anchor="middle" font-size="11" fill="#98745f">相对变化相反</text>
+</g>
+</svg>
+<figcaption>正相关意味着两人相对自己的平均水平，在同一批文章上倾向于一起高估或低估；负相关意味着他们经常朝相反方向变化。</figcaption>
+</figure>
+<p>当 Ken 与 Lee 的共同评分是 4 篇文章时，Ken 的评分为 [1, 5, 2, 4]，Lee 为 [4, 2, 5, 1]。两人的共同均值都是 3，中心化后分别是 [−2, 2, −1, 1] 和 [1, −1, 2, −2]。它们的点积为 −8，范数乘积为 10，因此相关系数为 −0.8。</p>
+<div class="callout"><strong>实现边界：</strong>只有一篇共同评分、或任一方在共同集合上的评分没有方差时，Pearson 分母为零或相关性不可识别。实际系统必须定义回退策略；不能把这种情况伪装成相似度 0。</div>
+</section>
+
+<section id="prediction">
+<h2><span class="n">07</span> 评分预测：从自己的基线加上邻居偏差</h2>
+<p>相似度告诉我们“谁的判断可以参考”，还没有告诉我们“如何把邻居的分数转成我的分数”。如果直接对邻居评分求平均，会把每个人打分宽松或严格的习惯混在一起。</p>
+<p>GroupLens 示例采用的做法是先从目标用户自己的平均分出发，再加上相似邻居相对于各自平均分的偏差。相似度作为权重；负相关用户的偏差会反向影响预测。</p>
+<div class="math-box">
+<div class="math-title">EQUATION 2 · WEIGHTED DEVIATION PREDICTION</div>
+<div class="math-scroll" tabindex="0" role="region" aria-label="加权评分预测公式，可横向滚动">
+<math display="block" aria-label="目标用户 u 对物品 i 的预测分数等于用户均值加上相似邻居的中心化评分偏差加权和，除以相似度绝对值之和">
+<mrow>
+<msub><mover><mi>r</mi><mo>^</mo></mover><mrow><mi>u</mi><mi>i</mi></mrow></msub><mo>=</mo>
+<msub><mover><mi>r</mi><mo>¯</mo></mover><mi>u</mi></msub><mo>+</mo>
+<mfrac>
+<mrow><munder><mo>∑</mo><mrow><mi>v</mi><mo>∈</mo><msub><mi>U</mi><mi>i</mi></msub></mrow></munder><mi>sim</mi><mo>(</mo><mi>u</mi><mo>,</mo><mi>v</mi><mo>)</mo><mo>(</mo><msub><mi>r</mi><mrow><mi>v</mi><mi>i</mi></mrow></msub><mo>−</mo><msub><mover><mi>r</mi><mo>¯</mo></mover><mi>v</mi></msub><mo>)</mo></mrow>
+<mrow><munder><mo>∑</mo><mrow><mi>v</mi><mo>∈</mo><msub><mi>U</mi><mi>i</mi></msub></mrow></munder><mo>|</mo><mi>sim</mi><mo>(</mo><mi>u</mi><mo>,</mo><mi>v</mi><mo>)</mo><mo>|</mo></mrow>
+</mfrac>
+</mrow>
+</math>
+</div>
+<p class="math-note">U<sub>i</sub> 是已经评价目标文章 i 的邻居集合。预测基线均值使用目标用户的历史评分均值；邻居偏差使用邻居在目标文章之外的历史均值，避免把待预测项本身泄漏进基线。</p>
+</div>
+<p>可以把这个式子读成三步：</p>
+<ol class="step-list">
+<li><strong>建立个人基线：</strong>目标用户 u 的平均评分是预测起点。</li>
+<li><strong>计算邻居偏差：</strong>每个邻居 v 对文章 i 的评分，减去 v 在文章 i 之外的历史平均评分。</li>
+<li><strong>按相关性加权：</strong>乘以 sim(u,v)，再除以相似度绝对值之和，控制整体尺度。</li>
+</ol>
+<p>分母使用相似度绝对值之和，而不是简单求和。这样负相关邻居仍然能参与预测，但不会因为正负权重相互抵消而造成不稳定的归一化分母。</p>
+</section>
+
+<section id="worked">
+<h2><span class="n">08</span> 逐步复算：Ken 对第 6 篇文章的预测</h2>
+<p>现在回到论文 Figure 5。Ken 尚未评价文章 6；Lee 给了 2 分，Meg 给了 5 分。Ken 与 Lee 的历史相关系数是 −0.8；Ken 与 Meg 是 +1；Ken 与 Nan 是 0。由于 Nan 没有给文章 6 打分，他不在这次预测的邻居集合里。</p>
+<div class="table-scroll" tabindex="0" role="region" aria-label="Ken 预测文章 6 所需的相似度与目标评分，可横向滚动">
+<table>
+<thead><tr><th>邻居</th><th class="num">文章 6 评分</th><th class="num">邻居均值</th><th class="num">相似度</th><th class="num">加权偏差</th></tr></thead>
+<tbody>
+<tr><td>Lee</td><td class="num">2</td><td class="num">3</td><td class="num">−0.8</td><td class="num">+0.8</td></tr>
+<tr><td>Meg</td><td class="num">5</td><td class="num">3</td><td class="num">+1.0</td><td class="num">+2.0</td></tr>
+<tr><td>Nan</td><td class="missing">—</td><td class="num">3</td><td class="num">0.0</td><td class="num">不参与</td></tr>
+</tbody>
+</table>
+</div>
+<div class="math-box">
+<div class="math-title">KEN · ARTICLE 6</div>
+<div class="math-scroll" tabindex="0" role="region" aria-label="Ken 对第六篇文章的逐步预测公式，可横向滚动">
+<math display="block" aria-label="三加上零点八乘以 Lee 的评分偏差贡献，再加上二乘以 Meg 的评分偏差贡献，除以一点八，得到四点五五六">
+<mrow>
+<mn>3</mn><mo>+</mo>
+<mfrac>
+<mrow><mo>(</mo><mn>2</mn><mo>−</mo><mn>3</mn><mo>)</mo><mo>(</mo><mo>−</mo><mn>0.8</mn><mo>)</mo><mo>+</mo><mo>(</mo><mn>5</mn><mo>−</mo><mn>3</mn><mo>)</mo><mo>(</mo><mn>1</mn><mo>)</mo></mrow>
+<mrow><mo>|</mo><mo>−</mo><mn>0.8</mn><mo>|</mo><mo>+</mo><mo>|</mo><mn>1</mn><mo>|</mo></mrow>
+</mfrac><mo>=</mo><mn>4.555…</mn>
+</mrow>
+</math>
+</div>
+</div>
+<figure class="figure" tabindex="0" role="region" aria-label="Ken 预测分数的加权贡献图，可横向滚动">
+<div class="fig-kicker">FIGURE 07 · WHY THE PREDICTION IS HIGH</div>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 390" role="img" aria-labelledby="gl07-title gl07-desc">
+<title id="gl07-title">Ken 的评分预测贡献拆解</title>
+<desc id="gl07-desc">Ken 的平均分是 3。Lee 与 Ken 负相关为负 0.8，Lee 对文章 6 的低于均值评分产生正贡献 0.8；Meg 与 Ken 正相关为 1，Meg 的高于均值评分贡献 2。除以绝对相似度之和 1.8，得到 4.56。</desc>
+<rect x="8" y="8" width="944" height="374" rx="22" fill="#f7faf7"/>
+<g font-family="Noto Sans CJK SC,system-ui,sans-serif">
+<text x="42" y="52" font-size="14" font-weight="800" letter-spacing="2" fill="#8a715b">PREDICTION BY WEIGHTED DEVIATION</text>
+<rect x="42" y="92" width="160" height="210" rx="15" fill="#e9e7f7" stroke="#aaa3d2" stroke-width="2"/>
+<text x="122" y="132" text-anchor="middle" font-size="16" font-weight="750" fill="#514a86">Ken baseline</text>
+<text x="122" y="191" text-anchor="middle" font-size="40" font-weight="850" fill="#514a86">3.00</text>
+<text x="122" y="229" text-anchor="middle" font-size="13" fill="#6b659d">个人平均评分</text>
+<text x="122" y="268" text-anchor="middle" font-size="12" fill="#7c76a7">预测起点</text>
+<rect x="236" y="92" width="205" height="210" rx="15" fill="#fff0e5" stroke="#dba27b" stroke-width="2"/>
+<text x="338" y="132" text-anchor="middle" font-size="16" font-weight="750" fill="#8b5839">Lee · sim −0.8</text>
+<text x="338" y="181" text-anchor="middle" font-size="14" fill="#946c55">rating 2 − mean 3</text>
+<text x="338" y="225" text-anchor="middle" font-size="31" font-weight="850" fill="#b56843">+0.8</text>
+<text x="338" y="268" text-anchor="middle" font-size="12" fill="#9b7b65">负相关反转偏差</text>
+<rect x="475" y="92" width="205" height="210" rx="15" fill="#e5f3ed" stroke="#8ab8a7" stroke-width="2"/>
+<text x="577" y="132" text-anchor="middle" font-size="16" font-weight="750" fill="#236b65">Meg · sim +1.0</text>
+<text x="577" y="181" text-anchor="middle" font-size="14" fill="#527b72">rating 5 − mean 3</text>
+<text x="577" y="225" text-anchor="middle" font-size="31" font-weight="850" fill="#24746d">+2.0</text>
+<text x="577" y="268" text-anchor="middle" font-size="12" fill="#66887f">正相关保留偏差</text>
+<path d="M202 198H226M441 198H465M680 198H705" stroke="#4d7774" stroke-width="2.5" fill="none"/>
+<path d="M217 190L227 198L217 206M456 190L466 198L456 206M696 190L706 198L696 206" stroke="#4d7774" stroke-width="2.5" fill="none"/>
+<rect x="716" y="92" width="198" height="210" rx="15" fill="#fff5dc" stroke="#d5b66d" stroke-width="2"/>
+<text x="815" y="132" text-anchor="middle" font-size="16" font-weight="750" fill="#80612c">Prediction</text>
+<text x="815" y="191" text-anchor="middle" font-size="40" font-weight="850" fill="#8d6b2d">4.56</text>
+<text x="815" y="229" text-anchor="middle" font-size="13" fill="#927843">3 + (0.8 + 2.0) / 1.8</text>
+<text x="815" y="268" text-anchor="middle" font-size="12" fill="#927843">归一化加权偏差</text>
+<text x="480" y="345" text-anchor="middle" font-size="13" fill="#68817c">分母 = |−0.8| + |1.0| = 1.8；Nan 没有评价文章 6，因此不进入这次求和。</text>
+</g>
+</svg>
+<figcaption>Lee 的评分虽然低于 Ken 的平均分，但 Lee 与 Ken 负相关，因此这条证据反而把 Ken 的预测向上推；Meg 与 Ken 正相关，Meg 的高分也把预测向上推。</figcaption>
+</figure>
+<p class="lead">Ken 的预测分数是 4.56，而不是把 Lee 的 2 分和 Meg 的 5 分简单平均成 3.5。</p>
+<div class="callout warn">
+<strong>一个值得保留的原论文数值差异：</strong>论文在同一段落报告 Nan 的预测值为 3.75，但没有展示该计算的中间相关系数。按 Figure 5 中可见的共同评分，用相同 Pearson 定义复算，Nan–Lee = 0.6、Nan–Meg = 1.0；将 Nan 的基线 3、Lee 的文章 6 评分 2、Meg 的文章 6 评分 5 代入同一预测式，结果为 3.875。文章和测试保留论文报告的 3.75，同时把 3.875 标为对表格的独立复算；不能把两者写成一致。
+</div>
+</section>
+
+<section id="lab">
+<h2><span class="n">09</span> 交互实验：改变邻居的判断，预测会怎样移动？</h2>
+<p>下面的实验使用论文 Figure 5 的固定历史评分。第一个控件切换用户对，重新计算 Pearson；第二个控件调整 Lee 和 Meg 对文章 6 的评分，观察 Ken 的预测。所有数值都在浏览器本地计算。</p>
+<div class="controls" id="similarity-lab">
+<h3>实验 A · 谁和 Ken 的兴趣更相似？</h3>
+<p class="hint">Pearson 均值只在两位用户共同评价的文章上计算。</p>
+<div class="field"><label for="pair-select">选择用户对</label>
+<select id="pair-select">
+<option value="Ken|Lee">Ken 与 Lee</option>
+<option value="Ken|Meg">Ken 与 Meg</option>
+<option value="Ken|Nan">Ken 与 Nan</option>
+<option value="Nan|Lee">Nan 与 Lee</option>
+</select></div>
+<div class="readout"><span>共同评价的文章</span><output id="common-items">1, 2, 4, 5</output></div>
+<div class="readout"><span>Pearson 相似度</span><output id="pair-score">−0.800</output></div>
+<p class="live" id="pair-explain" aria-live="polite">负相关：两人的评分变化方向经常相反。</p>
+</div>
+<div class="controls" id="prediction-lab">
+<h3>实验 B · 修改文章 6 的邻居评分</h3>
+<p class="hint">历史相似度固定为 Ken–Lee = −0.8、Ken–Meg = +1.0；仅修改当前文章的邻居评分。</p>
+<div class="field"><label for="lee-rating">Lee 对文章 6 的评分</label><div class="range-row"><button type="button" id="gl-example">切换 Lee 低分示例</button><input id="lee-rating" type="range" min="1" max="5" step="1" value="2"><output id="lee-value">2</output></div></div>
+<div class="field"><label for="meg-rating">Meg 对文章 6 的评分</label><div class="range-row"><input id="meg-rating" type="range" min="1" max="5" step="1" value="5"><output id="meg-value">5</output></div></div>
+<div class="readout"><span>Ken 的预测评分</span><output id="predicted-score">4.56</output></div>
+<p class="live" id="prediction-explain" aria-live="polite">Lee 的负相关会反转其评分偏差；Meg 的正相关保留偏差方向。</p>
+</div>
+<p>试着把 Lee 的评分从 2 提高到 5：由于 Ken 与 Lee 负相关，Lee 相对自身均值的正偏差会反向影响 Ken。再把 Meg 的评分降低，观察正相关邻居的贡献如何下降。</p>
+</section>
+
+<section id="limits">
+<h2><span class="n">10</span> 这个方法什么时候会失效？</h2>
+<div class="grid-two">
+<div class="tile"><b>Cold start</b><p>新用户没有历史评分，无法建立稳定邻居；新文章没有任何人评价时，系统也无法仅靠评分预测。</p></div>
+<div class="tile"><b>Sparsity</b><p>两个用户可能只共同评价很少文章。相关系数即使数值很高，也未必可靠。</p></div>
+<div class="tile"><b>Topic drift</b><p>用户在不同 newsgroup 的兴趣可能不同。论文因此按 newsgroup 分开维护评分矩阵。</p></div>
+<div class="tile"><b>Startup interval</b><p>系统刚启动时可用评分不足。论文的小规模试验观察到预测需要经历一个积累阶段。</p></div>
+<div class="tile"><b>Selection bias</b><p>用户只读自己看到或愿意读的文章，评分矩阵不是随机缺失。用它比较两个过滤器可能产生偏差。</p></div>
+<div class="tile"><b>Incentives & privacy</b><p>评分有助于他人，却需要用户额外投入；化名也不是防止兴趣推断的完整隐私方案。</p></div>
+</div>
+<h3>计算与网络成本也会增长</h3>
+<p>论文讨论了预测质量、用户等待时间、BBB 的 CPU 与磁盘、网络流量等扩展性指标。BBB 可以预取评分并预计算预测，减少用户启动客户端时的等待；也可以限制参与计算的评分子集，以在计算时间和预测质量之间折中。评分记录还可以按会话批量传输，减少消息头开销。</p>
+<p>这些是论文对规模问题的分析与设计选项，不是已经完成的百万用户性能基准。论文的网络流量表明确写的是假设估算，例如每个用户每天评价 100 篇、每条评分约 100 字节。</p>
+</section>
+
+<section id="evidence">
+<h2><span class="n">11</span> 1994 年论文究竟验证了什么？</h2>
+<p>这篇论文需要特别谨慎地区分原型、试点观察、计划中的实验和后来的实地研究。</p>
+<div class="grid-two">
+<div class="tile"><b>已经完成的试点</b><p>论文提到 Schlumberger 的早期七人试点，以及明尼苏达大学四人参与的早期版本试点。作者报告参与者认为预测逐渐贴近自己的兴趣，但样本很小，且评分函数与后续版本略有不同。</p></div>
+<div class="tile"><b>正在准备的分布式测试</b><p>MIT 与 Minnesota 建立跨站点评分组和 BBB。论文明确说，这次测试不是为了证明用户更喜欢过滤后的 Netnews，而是为了识别扩展性问题并收集评分数据。</p></div>
+</div>
+<p>作者还指出，若用户只阅读被某个过滤器推荐的文章，那么评分数据会受到选择机制影响。另一个算法可能让用户看到不同文章；只在原算法选择出的文章上比较预测，会形成有偏样本。因此他们计划让参与者对训练集中的全部文章评分，以便更公平地比较不同预测算法。</p>
+<div class="callout"><strong>结论边界：</strong>1994 年论文证明了一个开放式协同过滤系统的设计、实现路径和早期试点经验，并提出了严肃的评估问题。它没有声称已经通过大型随机实验，证明 GroupLens 提高了所有用户的阅读满意度。</div>
+<p>后续的 <em>Experiences with GroupLens: Making Usenet Useful Again</em>（Miller, Riedl &amp; Konstan, 1997）才报告了一个七周、250 名用户、超过 20,000 篇新闻文章的试验。那是后续系统与研究，不应把其数据倒填到 1994 年论文。</p>
+</section>
+
+<section id="legacy">
+<h2><span class="n">12</span> 从 GroupLens 到现代推荐系统</h2>
+<p>GroupLens 的邻域预测不是现代推荐系统的全部，但它把“用户历史行为可以为另一个用户提供信息”变成了一个清晰的系统问题：如何表示反馈、如何比较偏好、如何聚合邻居、如何评估预测，以及如何让数据跨站点流动。</p>
+<figure class="figure" tabindex="0" role="region" aria-label="协同过滤到现代推荐技术的演进路线，可横向滚动">
+<div class="fig-kicker">FIGURE 08 · A RECOMMENDER SYSTEMS LINEAGE</div>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 350" role="img" aria-labelledby="gl08-title gl08-desc">
+<title id="gl08-title">协同过滤与现代推荐系统的技术路线</title>
+<desc id="gl08-desc">从 Tapestry 与 GroupLens 的社会化和邻域协同过滤，延伸到 Item-based Collaborative Filtering、Matrix Factorization、Bayesian Personalized Ranking 与深度推荐系统。</desc>
+<defs><marker id="gl08-arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0 0L9 3L0 6" fill="none" stroke="#4d7774" stroke-width="1.6"/></marker></defs>
+<rect x="8" y="8" width="944" height="334" rx="22" fill="#f7faf7"/>
+<g font-family="Noto Sans CJK SC,system-ui,sans-serif" text-anchor="middle">
+<g>
+<rect x="35" y="102" width="150" height="120" rx="14" fill="#fff0e5" stroke="#dba27b" stroke-width="2"/>
+<text x="110" y="140" font-size="17" font-weight="750" fill="#8b5839">Tapestry</text><text x="110" y="168" font-size="12" fill="#946c55">1992</text><text x="110" y="194" font-size="12" fill="#946c55">共享主观评价</text>
+<rect x="210" y="102" width="150" height="120" rx="14" fill="#e5f3ed" stroke="#8ab8a7" stroke-width="2"/>
+<text x="285" y="140" font-size="17" font-weight="750" fill="#236b65">GroupLens</text><text x="285" y="168" font-size="12" fill="#527b72">1994</text><text x="285" y="194" font-size="12" fill="#527b72">用户邻域预测</text>
+<rect x="385" y="102" width="150" height="120" rx="14" fill="#e9e7f7" stroke="#aaa3d2" stroke-width="2"/>
+<text x="460" y="140" font-size="17" font-weight="750" fill="#514a86">ItemCF</text><text x="460" y="168" font-size="12" fill="#6b659d">2001</text><text x="460" y="194" font-size="12" fill="#6b659d">物品邻域</text>
+<rect x="560" y="102" width="150" height="120" rx="14" fill="#fff5dc" stroke="#d5b66d" stroke-width="2"/>
+<text x="635" y="140" font-size="17" font-weight="750" fill="#80612c">Matrix Factorization</text><text x="635" y="168" font-size="12" fill="#927843">latent factors</text><text x="635" y="194" font-size="12" fill="#927843">低维用户 / 物品表示</text>
+<rect x="735" y="102" width="190" height="120" rx="14" fill="#edf3f1" stroke="#9bbcb0" stroke-width="2"/>
+<text x="830" y="140" font-size="17" font-weight="750" fill="#315e5d">Ranking &amp; Deep Models</text><text x="830" y="168" font-size="12" fill="#66817a">BPR · DNN · sequence</text><text x="830" y="194" font-size="12" fill="#66817a">多阶段推荐管线</text>
+</g>
+<g stroke="#4d7774" stroke-width="2.5" fill="none" marker-end="url(#gl08-arrow)"><path d="M185 162H202"/><path d="M360 162H377"/><path d="M535 162H552"/><path d="M710 162H727"/></g>
+<text x="480" y="276" font-size="14" font-weight="750" fill="#3b7770">共同问题：从不完整的用户反馈中估计个体偏好</text>
+<text x="480" y="303" font-size="12" fill="#728781">概念路线图；不是严格的替代关系，也不是所有方法共享同一目标函数。</text>
+</g>
+</svg>
+<figcaption>这是概念上的技术路线，不表示每一代方法完全替代前一代；现代系统通常把召回、排序、上下文特征与在线反馈组合成多阶段管线。</figcaption>
+</figure>
+<div class="grid-two">
+<div class="tile"><b>Item-based CF</b><p>不直接寻找相似用户，而是比较物品之间的共现或评分关系，再用用户历史物品推断候选物品。</p></div>
+<div class="tile"><b>Matrix Factorization</b><p>用低维潜向量表示用户与物品，通过内积或偏置模型估计偏好；不再显式依赖邻居列表。</p></div>
+<div class="tile"><b>BPR & implicit feedback</b><p>面对点击、浏览、购买等隐式行为，优化用户偏好的相对顺序，而不把未点击直接当作负评分。</p></div>
+<div class="tile"><b>Deep recommendation</b><p>学习用户、物品、上下文和序列表示，常用于大规模候选召回与排序；需要独立评估延迟、偏差和业务目标。</p></div>
+</div>
+<p>GroupLens 留下的核心直觉仍然有效：用户行为是有结构的，个体偏好可以从群体反馈中估计。但当数据变得更稀疏、候选集更大、反馈更隐式、用户兴趣随时间变化时，模型和系统都需要继续演进。</p>
+</section>
+
+<section id="references">
+<h2>参考文献与延伸阅读</h2>
+<ol class="refs">
+<li id="ref1">Resnick, P., Iacovou, N., Suchak, M., Bergstrom, P., &amp; Riedl, J. (1994). <em>GroupLens: An Open Architecture for Collaborative Filtering of Netnews.</em> Proceedings of CSCW '94, 175–186. <a href="https://doi.org/10.1145/192844.192905">DOI</a> · <a href="https://pages.cpsc.ucalgary.ca/~saul/601.13/readings/p175-resnick.pdf">Full paper PDF</a>.</li>
+<li>Goldberg, D., Nichols, D., Oki, B. M., &amp; Terry, D. (1992). <em>Using Collaborative Filtering to Weave an Information Tapestry.</em> Communications of the ACM, 35(12), 61–70. <a href="https://doi.org/10.1145/138859.138867">DOI</a>.</li>
+<li>Miller, B. N., Riedl, J. T., &amp; Konstan, J. A. (1997). <em>Experiences with GroupLens: Making Usenet Useful Again.</em> USENIX Technical Conference. <a href="https://files.grouplens.org/papers/usenix97.pdf">Paper PDF</a>.</li>
+<li>Sarwar, B., Karypis, G., Konstan, J., &amp; Riedl, J. (2001). <em>Item-based Collaborative Filtering Recommendation Algorithms.</em> WWW '01. <a href="https://doi.org/10.1145/371920.372071">DOI</a>.</li>
+<li>Koren, Y., Bell, R., &amp; Volinsky, C. (2009). <em>Matrix Factorization Techniques for Recommender Systems.</em> Computer, 42(8), 30–37. <a href="https://doi.org/10.1109/MC.2009.263">DOI</a>.</li>
+<li>Rendle, S., Freudenthaler, C., Gantner, Z., &amp; Schmidt-Thieme, L. (2009). <em>BPR: Bayesian Personalized Ranking from Implicit Feedback.</em> UAI 2009. <a href="https://proceedings.mlr.press/r7/rendle09a.html">Paper</a>.</li>
+<li>Covington, P., Adams, J., &amp; Sargin, E. (2016). <em>Deep Neural Networks for YouTube Recommendations.</em> RecSys '16. <a href="https://doi.org/10.1145/2959100.2959190">DOI</a>.</li>
+</ol>
+</section>
+<footer class="footer">
+<p>下一步：<a href="../../classical-ml/knn/">Understanding KNN</a>（通用近邻模型） · <a href="../../../topics/">返回知识地图</a>。</p>
+<p>本文区分 1994 年论文原始陈述、基于 Figure 5 的独立复算与后续推荐系统研究；相关证据记录见同目录 evidence.json。</p>
+</footer>
+</article>
+</main>
+</div>
+<script>
+(() => {
+  const ratings = {
+    Ken: {"1":1,"2":5,"4":2,"5":4},
+    Lee: {"1":4,"2":2,"4":5,"5":1,"6":2},
+    Meg: {"1":2,"2":4,"3":3,"6":5},
+    Nan: {"1":2,"2":4,"4":5,"5":1}
+  };
+  const mean = values => values.reduce((a,b)=>a+b,0)/values.length;
+  function pearson(a,b){
+    const common=Object.keys(a).filter(k=>Object.prototype.hasOwnProperty.call(b,k)).sort((x,y)=>Number(x)-Number(y));
+    if(common.length<2) return {value:null,common};
+    const av=common.map(k=>a[k]), bv=common.map(k=>b[k]);
+    const am=mean(av), bm=mean(bv);
+    const ac=av.map(x=>x-am), bc=bv.map(x=>x-bm);
+    const den=Math.sqrt(ac.reduce((s,x)=>s+x*x,0))*Math.sqrt(bc.reduce((s,x)=>s+x*x,0));
+    if(den===0) return {value:null,common};
+    return {value:ac.reduce((s,x,i)=>s+x*bc[i],0)/den,common};
+  }
+  const pairSelect=document.getElementById("pair-select");
+  const commonOut=document.getElementById("common-items");
+  const scoreOut=document.getElementById("pair-score");
+  const pairExplain=document.getElementById("pair-explain");
+  function renderPair(){
+    const [a,b]=pairSelect.value.split("|");
+    const result=pearson(ratings[a],ratings[b]);
+    commonOut.textContent=result.common.length?result.common.join(", "):"无";
+    if(result.value===null){scoreOut.textContent="不可计算";pairExplain.textContent="共同评分不足，或至少一方在共同评分上的方差为零。";return;}
+    scoreOut.textContent=result.value.toFixed(3);
+    pairExplain.textContent=result.value>0.05?"正相关：两人的相对评分变化倾向于同向。":result.value< -0.05?"负相关：两人的相对评分变化倾向于反向。":"接近零相关：这组共同评分没有显示明显线性关系。";
+  }
+  pairSelect.addEventListener("change",renderPair);
+  const lee=document.getElementById("lee-rating"),meg=document.getElementById("meg-rating");
+  const leeValue=document.getElementById("lee-value"),megValue=document.getElementById("meg-value");
+  const prediction=document.getElementById("predicted-score"),explain=document.getElementById("prediction-explain");
+  function renderPrediction(){
+    const l=Number(lee.value),m=Number(meg.value);
+    leeValue.textContent=String(l);megValue.textContent=String(m);
+    const baseline=3, sLee=-0.8, sMeg=1.0;
+    const leeContribution=sLee*(l-3),megContribution=sMeg*(m-3);
+    const value=baseline+(leeContribution+megContribution)/(Math.abs(sLee)+Math.abs(sMeg));
+    prediction.textContent=value.toFixed(2);
+    explain.textContent="Lee 贡献 "+leeContribution.toFixed(2)+"；Meg 贡献 "+megContribution.toFixed(2)+"。分母为 |−0.8| + |1.0| = 1.8。预测未强制裁剪到 1–5。";
+  }
+  document.getElementById("gl-example").addEventListener("click",()=>{lee.value=lee.value==="1"?"2":"1";renderPrediction();});
+  lee.addEventListener("input",renderPrediction);
+  meg.addEventListener("input",renderPrediction);
+  renderPair();renderPrediction();
+})();
+</script>
+</body>
+</html>

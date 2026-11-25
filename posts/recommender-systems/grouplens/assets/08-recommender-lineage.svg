@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 350" role="img" aria-labelledby="gl08-title gl08-desc">
+<title id="gl08-title">协同过滤与现代推荐系统的技术路线</title>
+<desc id="gl08-desc">从 Tapestry 与 GroupLens 的社会化和邻域协同过滤，延伸到 Item-based Collaborative Filtering、Matrix Factorization、Bayesian Personalized Ranking 与深度推荐系统。</desc>
+<defs><marker id="gl08-arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0 0L9 3L0 6" fill="none" stroke="#4d7774" stroke-width="1.6"/></marker></defs>
+<rect x="8" y="8" width="944" height="334" rx="22" fill="#f7faf7"/>
+<g font-family="Noto Sans CJK SC,system-ui,sans-serif" text-anchor="middle">
+<g>
+<rect x="35" y="102" width="150" height="120" rx="14" fill="#fff0e5" stroke="#dba27b" stroke-width="2"/>
+<text x="110" y="140" font-size="17" font-weight="750" fill="#8b5839">Tapestry</text><text x="110" y="168" font-size="12" fill="#946c55">1992</text><text x="110" y="194" font-size="12" fill="#946c55">共享主观评价</text>
+<rect x="210" y="102" width="150" height="120" rx="14" fill="#e5f3ed" stroke="#8ab8a7" stroke-width="2"/>
+<text x="285" y="140" font-size="17" font-weight="750" fill="#236b65">GroupLens</text><text x="285" y="168" font-size="12" fill="#527b72">1994</text><text x="285" y="194" font-size="12" fill="#527b72">用户邻域预测</text>
+<rect x="385" y="102" width="150" height="120" rx="14" fill="#e9e7f7" stroke="#aaa3d2" stroke-width="2"/>
+<text x="460" y="140" font-size="17" font-weight="750" fill="#514a86">ItemCF</text><text x="460" y="168" font-size="12" fill="#6b659d">2001</text><text x="460" y="194" font-size="12" fill="#6b659d">物品邻域</text>
+<rect x="560" y="102" width="150" height="120" rx="14" fill="#fff5dc" stroke="#d5b66d" stroke-width="2"/>
+<text x="635" y="140" font-size="17" font-weight="750" fill="#80612c">Matrix Factorization</text><text x="635" y="168" font-size="12" fill="#927843">latent factors</text><text x="635" y="194" font-size="12" fill="#927843">低维用户 / 物品表示</text>
+<rect x="735" y="102" width="190" height="120" rx="14" fill="#edf3f1" stroke="#9bbcb0" stroke-width="2"/>
+<text x="830" y="140" font-size="17" font-weight="750" fill="#315e5d">Ranking &amp; Deep Models</text><text x="830" y="168" font-size="12" fill="#66817a">BPR · DNN · sequence</text><text x="830" y="194" font-size="12" fill="#66817a">多阶段推荐管线</text>
+</g>
+<g stroke="#4d7774" stroke-width="2.5" fill="none" marker-end="url(#gl08-arrow)"><path d="M185 162H202"/><path d="M360 162H377"/><path d="M535 162H552"/><path d="M710 162H727"/></g>
+<text x="480" y="276" font-size="14" font-weight="750" fill="#3b7770">共同问题：从不完整的用户反馈中估计个体偏好</text>
+<text x="480" y="303" font-size="12" fill="#728781">概念路线图；不是严格的替代关系，也不是所有方法共享同一目标函数。</text>
+</g>
+</svg>

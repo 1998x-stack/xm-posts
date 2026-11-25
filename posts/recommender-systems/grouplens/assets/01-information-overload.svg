@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 390" role="img" aria-labelledby="gl01-title gl01-desc">
+<title id="gl01-title">从信息过载到个性化过滤</title>
+<desc id="gl01-desc">大量 Usenet 文章分别进入内容过滤和协同过滤两条路径。内容过滤分析文章特征，协同过滤分析其他读者对文章的评分，最终形成面向个人的阅读列表。</desc>
+<defs>
+<marker id="gl01-arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0 0L9 3L0 6" fill="none" stroke="#4d7774" stroke-width="1.6"/></marker>
+</defs>
+<rect x="8" y="8" width="944" height="374" rx="22" fill="#f7faf7"/>
+<g font-family="Noto Sans CJK SC,system-ui,sans-serif">
+<text x="42" y="52" font-size="14" font-weight="800" letter-spacing="2" fill="#8a715b">THE PROBLEM</text>
+<rect x="42" y="84" width="178" height="214" rx="16" fill="#fff" stroke="#d6e5dc" stroke-width="2"/>
+<text x="131" y="117" text-anchor="middle" font-size="19" font-weight="750" fill="#244a50">Usenet</text>
+<text x="131" y="141" text-anchor="middle" font-size="13" fill="#67817e">大量新闻文章</text>
+<g fill="#e8f2ed" stroke="#a9c7ba">
+<rect x="65" y="162" width="130" height="24" rx="5"/><rect x="65" y="195" width="130" height="24" rx="5"/><rect x="65" y="228" width="130" height="24" rx="5"/><rect x="65" y="261" width="130" height="24" rx="5"/>
+</g>
+<g fill="#456b6b" font-size="12"><text x="78" y="179">Article A</text><text x="78" y="212">Article B</text><text x="78" y="245">Article C</text><text x="78" y="278">Article …</text></g>
+<path d="M220 190H273V132H313" fill="none" stroke="#4d7774" stroke-width="2.5" marker-end="url(#gl01-arrow)"/>
+<path d="M273 190V277H313" fill="none" stroke="#4d7774" stroke-width="2.5" marker-end="url(#gl01-arrow)"/>
+<rect x="318" y="82" width="252" height="102" rx="14" fill="#fff0e5" stroke="#dba27b" stroke-width="2"/>
+<text x="444" y="116" text-anchor="middle" font-size="18" font-weight="750" fill="#8b5839">Content-based</text>
+<text x="444" y="143" text-anchor="middle" font-size="14" fill="#8d6c59">关键词 · 主题 · 作者 · 文本</text>
+<text x="444" y="164" text-anchor="middle" font-size="12" fill="#9c7b66">文章自身提供证据</text>
+<rect x="318" y="226" width="252" height="102" rx="14" fill="#e5f3ed" stroke="#8ab8a7" stroke-width="2"/>
+<text x="444" y="260" text-anchor="middle" font-size="18" font-weight="750" fill="#236b65">Collaborative</text>
+<text x="444" y="287" text-anchor="middle" font-size="14" fill="#4d7971">相似读者 · 历史评分 · 偏好</text>
+<text x="444" y="308" text-anchor="middle" font-size="12" fill="#64877f">群体评价提供证据</text>
+<path d="M570 132H641V190H688" fill="none" stroke="#c17d52" stroke-width="2.5" marker-end="url(#gl01-arrow)"/>
+<path d="M570 277H641V218H688" fill="none" stroke="#27847c" stroke-width="2.5" marker-end="url(#gl01-arrow)"/>
+<rect x="695" y="132" width="218" height="142" rx="16" fill="#e9e7f7" stroke="#aaa3d2" stroke-width="2"/>
+<text x="804" y="169" text-anchor="middle" font-size="19" font-weight="750" fill="#4d4a83">My reading list</text>
+<text x="804" y="196" text-anchor="middle" font-size="14" fill="#68649a">个性化预测分数</text>
+<g fill="#fff" stroke="#d4d0eb"><rect x="730" y="213" width="148" height="13" rx="6"/><rect x="730" y="235" width="118" height="13" rx="6"/><rect x="730" y="257" width="82" height="7" rx="3"/></g>
+<text x="42" y="355" font-size="13" fill="#6c8580">同一篇文章，对不同读者可以有不同的预测分数。</text>
+</g>
+</svg>

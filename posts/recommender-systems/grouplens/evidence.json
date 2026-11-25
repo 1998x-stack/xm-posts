@@ -1,0 +1,164 @@
+[
+  {
+    "id": "GL01",
+    "claim": "GroupLens is a netnews collaborative-filtering system in which news clients display predicted scores and collect ratings while Better Bit Bureaus gather and disseminate ratings.",
+    "kind": "paper-claim",
+    "source_url": "https://doi.org/10.1145/192844.192905",
+    "locator": "Abstract; pp. 176-177",
+    "status": "verified",
+    "notes": "Primary 1994 CSCW paper; do not reduce the contribution to a similarity formula alone."
+  },
+  {
+    "id": "GL02",
+    "claim": "The paper explicitly discusses Tapestry as prior work and distinguishes GroupLens by its open, cross-site architecture and aggregate queries.",
+    "kind": "historical-context",
+    "source_url": "https://pages.cpsc.ucalgary.ca/~saul/601.13/readings/p175-resnick.pdf",
+    "locator": "Related Work, pp. 176-177",
+    "status": "verified",
+    "notes": "Avoid claiming GroupLens invented collaborative filtering."
+  },
+  {
+    "id": "GL03",
+    "claim": "The GroupLens architecture includes news clients and Better Bit Bureaus, with BBBs exchanging ratings through special newsgroups using the existing Usenet propagation scheme.",
+    "kind": "paper-claim",
+    "source_url": "https://pages.cpsc.ucalgary.ca/~saul/601.13/readings/p175-resnick.pdf",
+    "locator": "Figure 2 and Overview, p. 177; Distributing Ratings, p. 179",
+    "status": "verified",
+    "notes": "Local and remote BBB arrangements are both described."
+  },
+  {
+    "id": "GL04",
+    "claim": "Users rate articles from 1 to 5; a rating may optionally include the number of seconds spent reading, and a pseudonym can preserve continuity without exposing the user's posting identity.",
+    "kind": "paper-claim",
+    "source_url": "https://pages.cpsc.ucalgary.ca/~saul/601.13/readings/p175-resnick.pdf",
+    "locator": "Entering Ratings, p. 178",
+    "status": "verified",
+    "notes": "The reading-time field was collected but was not yet used by BBB prediction in this paper; see p. 179 and p. 181."
+  },
+  {
+    "id": "GL05",
+    "claim": "BBBs batch ratings at the reading-session level and post ratings articles to a dedicated newsgroup, relying on Usenet to propagate them.",
+    "kind": "paper-claim",
+    "source_url": "https://pages.cpsc.ucalgary.ca/~saul/601.13/readings/p175-resnick.pdf",
+    "locator": "Distributing Ratings, pp. 179-180",
+    "status": "verified",
+    "notes": "The paper also discusses alternative batching policies and the administrative cost of dedicated newsgroups."
+  },
+  {
+    "id": "GL06",
+    "claim": "The BBB predicts missing user-article scores; the original Figure 5 uses article rows and reader columns, and missing cells represent articles not examined or not rated.",
+    "kind": "paper-claim",
+    "source_url": "https://pages.cpsc.ucalgary.ca/~saul/601.13/readings/p175-resnick.pdf",
+    "locator": "Predicting Scores, Figure 5, p. 180",
+    "status": "verified",
+    "notes": "The article explicitly notes the paper's matrix orientation and distinguishes an unobserved score from zero."
+  },
+  {
+    "id": "GL07",
+    "claim": "The paper's worked example computes Ken-Lee Pearson correlation as -0.8, Ken-Meg as +1, and Ken-Nan as 0 using commonly rated articles.",
+    "kind": "paper-claim",
+    "source_url": "https://pages.cpsc.ucalgary.ca/~saul/601.13/readings/p175-resnick.pdf",
+    "locator": "Predicting Scores, pp. 180-181",
+    "status": "verified",
+    "notes": "Pairwise means and sums are computed only over the items both users rated."
+  },
+  {
+    "id": "GL08",
+    "claim": "The Pearson-weighted deviation formula predicts Ken's score for article 6 as 4.56.",
+    "kind": "paper-claim",
+    "source_url": "https://pages.cpsc.ucalgary.ca/~saul/601.13/readings/p175-resnick.pdf",
+    "locator": "Predicting Scores, p. 181",
+    "status": "verified",
+    "notes": "The target article has ratings from Lee and Meg; Nan has no rating for article 6 and is not included in the sum."
+  },
+  {
+    "id": "GL09",
+    "claim": "The paper reports Nan's predicted score as 3.75, but applying the displayed Figure 5 ratings and the same Pearson-weighted deviation formula yields 3.875.",
+    "kind": "independent-recalculation",
+    "source_url": "https://pages.cpsc.ucalgary.ca/~saul/601.13/readings/p175-resnick.pdf",
+    "locator": "Figure 5 and Predicting Scores, p. 181",
+    "status": "derived",
+    "notes": "Nan-Lee Pearson on shared articles 1,2,4,5 is 0.6; Nan-Meg on shared articles 1,2 is 1.0; Nan's mean is 3. The paper's 3.75 is preserved as the reported value; 3.875 is a transparent independent recomputation, not a replacement."
+  },
+  {
+    "id": "GL10",
+    "claim": "GroupLens keeps separate rating matrices for each newsgroup because users may agree on one topic and disagree on another.",
+    "kind": "paper-claim",
+    "source_url": "https://pages.cpsc.ucalgary.ca/~saul/601.13/readings/p175-resnick.pdf",
+    "locator": "Predicting Scores, p. 181",
+    "status": "verified",
+    "notes": "Topic-local preference structure is an explicit design choice in the original system."
+  },
+  {
+    "id": "GL11",
+    "claim": "The 1994 paper mentions a four-person Minnesota pilot of an earlier version and says a larger distributed test was being prepared, not that user preference had been established in a large-scale controlled trial.",
+    "kind": "paper-claim",
+    "source_url": "https://pages.cpsc.ucalgary.ca/~saul/601.13/readings/p175-resnick.pdf",
+    "locator": "Predicting Scores, p. 181; Ongoing Experimentation, pp. 183-184",
+    "status": "verified",
+    "notes": "The paper explicitly states that the planned test was not designed to demonstrate that users preferred filtered Netnews."
+  },
+  {
+    "id": "GL12",
+    "claim": "The 1994 paper identifies evaluation bias when users rate only items selected by an existing filter and proposes a fully rated training set for fairer algorithm comparisons.",
+    "kind": "paper-claim",
+    "source_url": "https://pages.cpsc.ucalgary.ca/~saul/601.13/readings/p175-resnick.pdf",
+    "locator": "Ongoing Experimentation, pp. 183-184",
+    "status": "verified",
+    "notes": "This is a selection-bias warning, not a claim that the proposed dataset was already released."
+  },
+  {
+    "id": "GL13",
+    "claim": "The 1994 paper discusses prediction quality, user time, BBB compute/storage and network traffic as separate scale measures.",
+    "kind": "paper-claim",
+    "source_url": "https://pages.cpsc.ucalgary.ca/~saul/601.13/readings/p175-resnick.pdf",
+    "locator": "Scale Issues, pp. 182-183",
+    "status": "verified",
+    "notes": "The traffic table is a scenario estimate under stated assumptions, not a measured production benchmark."
+  },
+  {
+    "id": "GL14",
+    "claim": "A later GroupLens study reports a seven-week trial with 250 users and over 20,000 news articles.",
+    "kind": "later-study",
+    "source_url": "https://files.grouplens.org/papers/usenix97.pdf",
+    "locator": "Abstract",
+    "status": "verified",
+    "notes": "This is the 1997 follow-up paper by Miller, Riedl and Konstan, not a result from the 1994 paper."
+  },
+  {
+    "id": "GL15",
+    "claim": "Item-based collaborative filtering estimates item-item relationships and uses them to recommend items from a user's history.",
+    "kind": "later-work",
+    "source_url": "https://doi.org/10.1145/371920.372071",
+    "locator": "Sarwar et al., WWW 2001, abstract and method",
+    "status": "verified",
+    "notes": "A later item-neighborhood family; not part of GroupLens 1994."
+  },
+  {
+    "id": "GL16",
+    "claim": "Matrix factorization models represent users and items with latent factors and became a prominent alternative to classic neighborhood methods.",
+    "kind": "later-work",
+    "source_url": "https://doi.org/10.1109/MC.2009.263",
+    "locator": "Koren, Bell & Volinsky, Computer 42(8), 2009",
+    "status": "verified",
+    "notes": "A later latent-factor family; do not attribute it to GroupLens."
+  },
+  {
+    "id": "GL17",
+    "claim": "Bayesian Personalized Ranking optimizes personalized ranking from implicit feedback rather than treating the task solely as explicit rating prediction.",
+    "kind": "later-work",
+    "source_url": "https://proceedings.mlr.press/r7/rendle09a.html",
+    "locator": "Rendle et al., UAI 2009, abstract and BPR-Opt",
+    "status": "verified",
+    "notes": "A later pairwise ranking objective; not part of the 1994 GroupLens predictor."
+  },
+  {
+    "id": "GL18",
+    "claim": "The YouTube recommendation paper describes a deep candidate-generation model and a separate deep ranking model.",
+    "kind": "later-work",
+    "source_url": "https://doi.org/10.1145/2959100.2959190",
+    "locator": "Covington, Adams & Sargin, RecSys 2016, abstract",
+    "status": "verified",
+    "notes": "A later industrial deep-recommendation architecture; used only as a broad extension pointer."
+  }
+]
