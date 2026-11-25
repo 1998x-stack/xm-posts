@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 240" class="cover-overview" role="img" aria-labelledby="fsm05cover-title fsm05cover-desc">
+<title id="fsm05cover-title">审批守卫控制 Agent 任务执行路径</title>
+<desc id="fsm05cover-desc">校验后，高风险任务先进入人工审批，低风险任务可以直接进入执行；批准后也会进入执行状态。</desc>
+<defs><marker id="fsm05cover-arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0 0 L9 3 L0 6" fill="none" stroke="#287d79" stroke-width="1.8"/></marker></defs>
+<rect x="8" y="8" width="624" height="224" rx="18" fill="#f5f8f6"/>
+<g font-family="system-ui,sans-serif" fill="#29484c" stroke-linecap="round" stroke-linejoin="round">
+<rect x="40" y="83" width="120" height="76" rx="13" fill="#e7e9fb" stroke="#7774b9" stroke-width="2.5"/><text x="100" y="131" text-anchor="middle" font-size="27" font-weight="750" stroke="none">校验</text>
+<rect x="260" y="36" width="120" height="76" rx="13" fill="#fff0dc" stroke="#c18a3d" stroke-width="2.5"/><text x="320" y="84" text-anchor="middle" font-size="27" font-weight="750" stroke="none">审批</text>
+<rect x="480" y="83" width="120" height="76" rx="13" fill="#dcefeb" stroke="#287f77" stroke-width="2.5"/><text x="540" y="131" text-anchor="middle" font-size="27" font-weight="750" stroke="none">执行</text>
+<path d="M160 102 C190 70 220 70 260 70" fill="none" stroke="#c18a3d" stroke-width="3" marker-end="url(#fsm05cover-arrow)"/><text x="210" y="58" text-anchor="middle" font-size="17" font-weight="700" stroke="none">高风险</text>
+<path d="M380 70 C420 70 450 70 480 102" fill="none" stroke="#287d79" stroke-width="3" marker-end="url(#fsm05cover-arrow)"/><text x="430" y="58" text-anchor="middle" font-size="17" font-weight="700" stroke="none">批准</text>
+<path d="M160 148 C230 218 410 218 480 148" fill="none" stroke="#287d79" stroke-width="3" marker-end="url(#fsm05cover-arrow)"/><text x="320" y="207" text-anchor="middle" font-size="17" font-weight="700" stroke="none">低风险直达</text>
+</g></svg>

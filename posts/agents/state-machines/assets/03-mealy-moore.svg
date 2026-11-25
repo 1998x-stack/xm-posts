@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 330" role="img" aria-labelledby="fsm03-title fsm03-desc">
+<title id="fsm03-title">Mealy 与 Moore 输出模型的差异</title><desc id="fsm03-desc">Mealy 机把输出标注在由输入触发的边上；Moore 机把输出绑定在状态节点上。</desc>
+<defs><marker id="fsm03-arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0 0 L9 3 L0 6" fill="none" stroke="#287d79" stroke-width="1.5"/></marker></defs><rect x="8" y="8" width="884" height="314" rx="18" fill="#f5f8f6"/>
+<g font-family="system-ui,sans-serif" fill="#29484c">
+<text x="225" y="48" text-anchor="middle" font-size="22" font-weight="700">Mealy：输出在转移上</text><text x="675" y="48" text-anchor="middle" font-size="22" font-weight="700">Moore：输出在状态上</text>
+<path d="M65 174 H130" stroke="#287d79" stroke-width="3" marker-end="url(#fsm03-arrow)"/>
+<circle cx="205" cy="174" r="48" fill="#e7e9fb" stroke="#7774b9" stroke-width="2.5"/><circle cx="400" cy="174" r="48" fill="#dcefeb" stroke="#287f77" stroke-width="2.5"/>
+<text x="205" y="181" text-anchor="middle" font-size="17" font-weight="700">锁定</text><text x="400" y="181" text-anchor="middle" font-size="17" font-weight="700">解锁</text>
+<path d="M253 174 H352" stroke="#287d79" stroke-width="3" marker-end="url(#fsm03-arrow)"/><text x="302" y="145" text-anchor="middle" font-size="15" font-weight="700">投币 / 输出解锁</text>
+<path d="M352 211 C300 274 250 274 205 222" stroke="#c18a3d" stroke-width="2.5" fill="none" marker-end="url(#fsm03-arrow)"/><text x="278" y="286" text-anchor="middle" font-size="14">复位 / 无输出</text>
+<path d="M500 174 H555" stroke="#287d79" stroke-width="3" marker-end="url(#fsm03-arrow)"/>
+<circle cx="630" cy="174" r="48" fill="#e7e9fb" stroke="#7774b9" stroke-width="2.5"/><circle cx="805" cy="174" r="48" fill="#dcefeb" stroke="#287f77" stroke-width="2.5"/>
+<text x="630" y="169" text-anchor="middle" font-size="17" font-weight="700">锁定</text><text x="630" y="192" text-anchor="middle" font-size="12">输出=0</text>
+<text x="805" y="169" text-anchor="middle" font-size="17" font-weight="700">解锁</text><text x="805" y="192" text-anchor="middle" font-size="12">输出=1</text>
+<path d="M678 174 H757" stroke="#287d79" stroke-width="3" marker-end="url(#fsm03-arrow)"/><text x="717" y="145" text-anchor="middle" font-size="14">投币</text>
+<text x="450" y="315" text-anchor="middle" font-size="13" fill="#61777a">Mealy 输出依赖状态和输入；Moore 输出只依赖状态</text></g></svg>

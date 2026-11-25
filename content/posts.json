@@ -3020,6 +3020,76 @@
     }
   },
   {
+    "slug": "state-machines",
+    "title": "Understanding State Machines",
+    "subtitle": "从有限自动机、Statecharts 到 Agent Runtime，理解状态、事件、守卫与可靠工作流控制。",
+    "category": "agents",
+    "topic": "state-machines",
+    "status": "published",
+    "published": "2026-11-23",
+    "updated": "2026-11-23",
+    "reading_minutes": 32,
+    "tags": [
+      "State Machine",
+      "Finite State Machine",
+      "FSM",
+      "DFA",
+      "NFA",
+      "Mealy Machine",
+      "Moore Machine",
+      "Statecharts",
+      "EFSM",
+      "SCXML",
+      "Protocol State",
+      "Agent Runtime",
+      "Workflow Control",
+      "Safety Properties",
+      "Liveness Properties",
+      "Transition System"
+    ],
+    "summary": "从 DFA / NFA 的形式化定义出发，比较 Mealy / Moore、EFSM 与 Harel Statecharts，推导事件、守卫、动作和合法转移；通过 Agent Runtime 交互模拟、TCP 状态机案例、Python 确定性实现与测试，连接安全性、活性、持久化、重试和并发控制，并明确区分 FSM、SSM、MDP、Event Sourcing 与 Workflow Engine。",
+    "paper": "https://doi.org/10.1016/0167-6423(87)90035-9",
+    "illustration": "state-machines",
+    "cover": {
+      "src": "assets/05-agent-runtime.svg",
+      "caption": "审批守卫决定高风险任务是否进入执行"
+    }
+  },
+  {
+    "slug": "score-centering",
+    "title": "Understanding Score Centering",
+    "subtitle": "从 Training–Inference Mismatch 出发，推导 Off-policy Policy Gradient 中的 Drift / Signal 分解，以及一种不依赖概率比裁剪的加性修正。",
+    "category": "training",
+    "topic": "rl-post-training",
+    "status": "published",
+    "published": "2026-11-24",
+    "updated": "2026-11-24",
+    "reading_minutes": 38,
+    "tags": [
+      "Score Centering",
+      "Off-policy Reinforcement Learning",
+      "Training-Inference Mismatch",
+      "Policy Staleness",
+      "Policy Gradient",
+      "Importance Sampling",
+      "Top-k Log Probabilities",
+      "Drift Cancellation",
+      "GRPO",
+      "TIS",
+      "MIS",
+      "Regularized Score Centering",
+      "RSC",
+      "LLM Post-training"
+    ],
+    "summary": "从 trainer 与 sampler 的分布差异出发，推导 score-function identity、off-policy gradient 的 drift / signal 分解与 score centering；进一步解释 GRPO 组内中心化为何不能消除 prefix 条件 drift，推导 Top-k tail reconstruction 与 stop-gradient loss，厘清 bias、variance、advantage continuation mismatch，并结合原论文实验、官方实现和 Regularized Score Centering 后续研究讨论适用边界。",
+    "paper": "https://arxiv.org/abs/2609.20807",
+    "illustration": "score-centering",
+    "cover": {
+      "src": "assets/03-drift-signal-decomposition.svg",
+      "caption": "Drift 与 reward-score covariance 的梯度分解"
+    }
+  },
+  {
     "slug": "transformer-design-evolution",
     "title": "Transformer Design Evolution",
     "subtitle": "从原始架构到现代 LLM：五条设计演进主线",
