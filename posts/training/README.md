@@ -8,6 +8,8 @@
 
 ## 已发布论文解读
 
+- [Understanding Score Centering](score-centering/index.html) — 从 training–inference mismatch 的 score drift 推导开始，覆盖 drift / signal 分解、Top-k tail reconstruction、bias 边界、GRPO group baseline 与 RSC 后续工作。二级主题：RL Post-training & Policy Optimization。
+
 - [Understanding Knowledge Distillation](knowledge-distillation/index.html) — Hinton et al. (2015) 的 soft targets、温度缩放与 KL；延伸到 DistilBERT、TinyBERT、GKD、DeepSeek-R1 与扩散模型蒸馏。二级主题：Knowledge Distillation & Teacher–Student Transfer。
 
 - [Understanding DPO](dpo/index.html) — Rafailov et al. (NeurIPS 2023)，隐式奖励、成对偏好、KL 正则化与离线对齐。

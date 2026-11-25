@@ -3079,5 +3079,39 @@
       "src": "assets/04-invoice-state-machine.svg",
       "caption": "发票流程以状态转换和人工审批处理异常"
     }
+  },
+  {
+    "slug": "score-centering",
+    "title": "Understanding Score Centering",
+    "subtitle": "从 Training–Inference Mismatch 出发，推导 Off-policy Policy Gradient 中的 Drift / Signal 分解，以及一种不依赖概率比裁剪的加性修正。",
+    "category": "training",
+    "topic": "rl-post-training",
+    "status": "published",
+    "published": "2026-11-24",
+    "updated": "2026-11-24",
+    "reading_minutes": 38,
+    "tags": [
+      "Score Centering",
+      "Off-policy Reinforcement Learning",
+      "Training-Inference Mismatch",
+      "Policy Staleness",
+      "Policy Gradient",
+      "Importance Sampling",
+      "Top-k Log Probabilities",
+      "Drift Cancellation",
+      "GRPO",
+      "TIS",
+      "MIS",
+      "Regularized Score Centering",
+      "RSC",
+      "LLM Post-training"
+    ],
+    "summary": "从 trainer 与 sampler 的分布差异出发，推导 score-function identity、off-policy gradient 的 drift / signal 分解与 score centering；进一步解释 GRPO 组内中心化为何不能消除 prefix 条件 drift，推导 Top-k tail reconstruction 与 stop-gradient loss，厘清 bias、variance、advantage continuation mismatch，并结合原论文实验、官方实现和 Regularized Score Centering 后续研究讨论适用边界。",
+    "paper": "https://arxiv.org/abs/2609.20807",
+    "illustration": "score-centering",
+    "cover": {
+      "src": "assets/03-drift-signal-decomposition.svg",
+      "caption": "Drift 与 reward-score covariance 的梯度分解"
+    }
   }
 ]
