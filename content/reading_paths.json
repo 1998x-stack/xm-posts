@@ -629,5 +629,15 @@
       "loop-engineering",
       "agent-evaluation"
     ]
+  },
+  {
+    "id": "path-rpa-workflow-control",
+    "title": "从状态机到可治理流程自动化",
+    "posts": [
+      "state-machines",
+      "rpa",
+      "function-calling",
+      "harness-engineering"
+    ]
   }
 ]

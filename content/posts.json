@@ -3054,5 +3054,30 @@
       "src": "assets/05-agent-runtime.svg",
       "caption": "审批守卫决定高风险任务是否进入执行"
     }
+  },
+  {
+    "slug": "rpa",
+    "title": "Understanding RPA & Agentic Process Automation",
+    "subtitle": "从确定性流程机器人到可治理的 LLM Agent",
+    "category": "agents",
+    "topic": "robotic-process-automation",
+    "status": "published",
+    "published": "2026-11-25",
+    "updated": "2026-11-25",
+    "reading_minutes": 25,
+    "tags": [
+      "RPA",
+      "Agentic Process Automation",
+      "State Machines",
+      "GUI Agents",
+      "Process Mining"
+    ],
+    "summary": "从传统 RPA 与 BPM、API 自动化的边界出发，解释流程选择、运行状态机、发票模拟、人机协作与 Agent 治理。",
+    "paper": "https://doi.org/10.1007/s12599-018-0542-4",
+    "illustration": "rpa",
+    "cover": {
+      "src": "assets/04-invoice-state-machine.svg",
+      "caption": "发票流程以状态转换和人工审批处理异常"
+    }
   }
 ]
