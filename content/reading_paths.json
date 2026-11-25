@@ -631,6 +631,16 @@
     ]
   },
   {
+    "id": "teacher-forcing-to-rollout",
+    "title": "从真实前缀监督到策略轨迹学习",
+    "posts": [
+      "teacher-forcing",
+      "sft",
+      "imitation-learning",
+      "ppo"
+    ]
+  },
+  {
     "id": "path-score-centering-01",
     "title": "从 SFT 与 Policy Gradient 到 Off-policy RL 稳定性",
     "posts": [

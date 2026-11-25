@@ -79,5 +79,68 @@
     "locator": "§1 motivation",
     "status": "derived",
     "notes": "Avoid claiming inevitability or interpreting teacher forcing as data leakage"
+  },
+  {
+    "id": "TF10",
+    "claim": "固定长度序列的期望 NLL 等于数据熵加联合 KL，链式 KL 由数据前缀上的条件 KL 求和。",
+    "kind": "derived",
+    "source_url": "https://arxiv.org/abs/1511.05101",
+    "locator": "Likelihood discussion; independent chain-rule derivation",
+    "status": "derived",
+    "notes": "每序列求和；固定长度时与 token 平均成比例。"
+  },
+  {
+    "id": "TF11",
+    "claim": "Scheduled Sampling 的目标可能统计不一致；两位置独立混合反例中匹配概率为 (1+q)/2。",
+    "kind": "derived",
+    "source_url": "https://arxiv.org/abs/1511.05101",
+    "locator": "Abstract; independent two-position derivation",
+    "status": "derived",
+    "notes": "原论文摘要核对；数值为独立教学构造，不是论文指标。"
+  },
+  {
+    "id": "TF12",
+    "claim": "He 等在开放式生成实验中观察到有限的前缀偏差影响及自我恢复。",
+    "kind": "paper-claim",
+    "source_url": "https://aclanthology.org/2021.emnlp-main.415/",
+    "locator": "Abstract",
+    "status": "verified",
+    "notes": "只描述摘要明确的定性结论；不扩展到推理与工具调用。"
+  },
+  {
+    "id": "TF13",
+    "claim": "GPT2LMHeadModel 在内部 shift labels，忽略 -100。",
+    "kind": "implementation",
+    "source_url": "https://huggingface.co/docs/transformers/v4.44.0/en/model_doc/gpt2",
+    "locator": "GPT2LMHeadModel forward labels parameter",
+    "status": "verified",
+    "notes": "固定版本接口；不是所有模型的普遍约定。"
+  },
+  {
+    "id": "TF14",
+    "claim": "PPO 使用当前与旧策略概率比；固定轨迹的因果前向可重算选中 token 概率。",
+    "kind": "derived",
+    "source_url": "https://arxiv.org/abs/1707.06347",
+    "locator": "§3 ratio and clipped objective; independent autoregressive factorization",
+    "status": "derived",
+    "notes": "区分行为策略、参考策略及训练概率；不是完整轨迹修正。"
+  },
+  {
+    "id": "TF15",
+    "claim": "DAgger 处理序贯决策中策略诱导的观测分布，聚合学习者访问状态的专家标注。",
+    "kind": "paper-claim",
+    "source_url": "https://proceedings.mlr.press/v15/ross11a.html",
+    "locator": "Abstract and DAgger algorithm",
+    "status": "verified",
+    "notes": "不主张语言任务总有专家标注。"
+  },
+  {
+    "id": "TF16",
+    "claim": "独立固定风险模型中至少一次错误概率为 1-(1-epsilon)^T。",
+    "kind": "toy-derivation",
+    "source_url": "https://github.com/1998x-stack/xm-posts/blob/main/posts/training/teacher-forcing/mini_teacher_forcing.py",
+    "locator": "at_least_one_error",
+    "status": "derived",
+    "notes": "只表示事件概率，不是质量退化或实际 LLM 指标。"
   }
 ]

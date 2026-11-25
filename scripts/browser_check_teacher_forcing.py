@@ -17,7 +17,7 @@ def check(out: Path) -> None:
             page.set_viewport_size({"width": width, "height": 900})
             page.goto(HTML.resolve().as_uri(), wait_until="load")
             assert page.locator("h1").count() == 1
-            assert page.locator("figure svg").count() == 5
+            assert page.locator("figure svg").count() == 8
             diagrams = page.locator("figure svg").evaluate_all(
                 "(nodes) => nodes.map(svg => ({loaded:svg.getBoundingClientRect().width > 0 && svg.getBoundingClientRect().height > 0, title:svg.querySelector('title')?.textContent}))"
             )
@@ -44,6 +44,11 @@ def check(out: Path) -> None:
             "(el) => { el.value = '0.1'; el.dispatchEvent(new Event('input', {bubbles:true})); }"
         )
         assert "1.01218" in page.locator("#loss-output").inner_text()
+        page.locator("#tf-mix").evaluate("(el) => { el.value = '0'; el.dispatchEvent(new Event('input', {bubbles:true})); }")
+        assert "50.0%" in page.locator("#tf-mix-result").inner_text()
+        page.locator("#tf-mix").evaluate("(el) => { el.value = '100'; el.dispatchEvent(new Event('input', {bubbles:true})); }")
+        assert "100.0%" in page.locator("#tf-mix-result").inner_text()
+        assert "0.0%" in page.locator("#tf-mix-result").inner_text()
         page.emulate_media(media="print")
         assert page.locator("h1").is_visible()
         assert page.locator("figure svg").first.is_visible()

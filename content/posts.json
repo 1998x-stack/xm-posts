@@ -170,8 +170,8 @@
     "topic": "pretraining",
     "status": "published",
     "published": "2026-11-20",
-    "updated": "2026-11-20",
-    "reading_minutes": 22,
+    "updated": "2026-11-25",
+    "reading_minutes": 38,
     "tags": [
       "Teacher Forcing",
       "Autoregressive Language Modeling",
@@ -181,9 +181,15 @@
       "Cross Entropy",
       "Causal Mask",
       "RNN",
-      "Transformer"
+      "Transformer",
+      "Maximum Likelihood",
+      "SFT",
+      "Loss Mask",
+      "Policy Gradient",
+      "Rollout",
+      "Distribution Shift"
     ],
-    "summary": "解释 Teacher Forcing 如何让序列模型在真实历史上预测下一词，对比推理自回馈及 exposure bias；包含右移目标、条件似然、因果 mask、四张专属 SVG、逐步交互、概率损失实验和确定性 Python 算例，并区分 Scheduled Sampling 与 Professor Forcing。",
+    "summary": "从真实前缀、目标右移、因果掩码与交叉熵出发，推导序列最大似然及链式 KL，解释 Exposure Bias 与 Scheduled Sampling 一致性反例；拆解 SFT 的三种掩码、RL rollout/learner 的概率重算与策略差异，提供原创 SVG、原生 MathML、三个交互实验及确定性 Python 算例。",
     "paper": "https://doi.org/10.1162/neco.1989.1.2.270",
     "illustration": "teacher-forcing",
     "cover": {
