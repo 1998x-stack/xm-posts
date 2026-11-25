@@ -1,0 +1,218 @@
+[
+  {
+    "id": "SC01",
+    "claim": "The paper studies training-inference mismatch from numerical implementation differences and stale sampler checkpoints.",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/abs/2609.20807",
+    "locator": "§1; §2.1",
+    "status": "verified",
+    "notes": "Distinguish numerical TIM from policy staleness; both make sampler q differ from trainer p."
+  },
+  {
+    "id": "SC02",
+    "claim": "Full sequence importance sampling requires behavior-policy support wherever the target policy has support.",
+    "kind": "theory",
+    "source_url": "https://arxiv.org/abs/2609.20807",
+    "locator": "§2.2",
+    "status": "verified",
+    "notes": "The paper's exact identity is sequence-level; practical token-level estimators target different surrogates."
+  },
+  {
+    "id": "SC03",
+    "claim": "Importance ratios can have high variance and clipping or truncation changes the estimator.",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/abs/2609.20807",
+    "locator": "§2.2",
+    "status": "verified",
+    "notes": "Do not treat PPO, GRPO and DAPO as identical clipping implementations."
+  },
+  {
+    "id": "SC04",
+    "claim": "The score is the parameter gradient of token log probability and has zero expectation under its own policy.",
+    "kind": "theory",
+    "source_url": "https://arxiv.org/abs/2609.20807",
+    "locator": "§4, Eq. (1)",
+    "status": "verified",
+    "notes": "Score is a parameter-space vector, not scalar log probability."
+  },
+  {
+    "id": "SC05",
+    "claim": "The off-policy expected gradient decomposes into E_q[A] E_q[s] plus Cov_q(A,s).",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/abs/2609.20807",
+    "locator": "§4, Eq. (3)",
+    "status": "verified",
+    "notes": "The decomposition is conditional on a fixed prefix h."
+  },
+  {
+    "id": "SC06",
+    "claim": "With q fixed, the sampler expected score is the negative gradient of KL(q||p).",
+    "kind": "derived",
+    "source_url": "https://arxiv.org/abs/2609.20807",
+    "locator": "§4, discussion after Eq. (3)",
+    "status": "derived",
+    "notes": "State the KL direction explicitly rather than using forward/reverse labels alone."
+  },
+  {
+    "id": "SC07",
+    "claim": "Group centering does not make conditional expected advantage zero at every prefix.",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/abs/2609.20807",
+    "locator": "§4, Group centering does not remove drift",
+    "status": "verified",
+    "notes": "Group centering can shrink drift but does not eliminate per-prefix drift."
+  },
+  {
+    "id": "SC08",
+    "claim": "Score centering subtracts the sampler expected score and leaves reward-score covariance under q.",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/abs/2609.20807",
+    "locator": "§4, Eqs. (4)-(8)",
+    "status": "verified",
+    "notes": "This removes drift at a fixed prefix; it does not turn q into p."
+  },
+  {
+    "id": "SC09",
+    "claim": "The top-k approximation uses sampler probabilities on the head and rescales trainer probabilities on the tail.",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/abs/2609.20807",
+    "locator": "Appendix A.1, Eqs. (10)-(11)",
+    "status": "verified",
+    "notes": "Tail-shape assumption is approximate; original experiments use k=128 and report k=32 also matches tested settings."
+  },
+  {
+    "id": "SC10",
+    "claim": "The score-centering loss uses stop-gradient coefficients in a scalar autograd objective.",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/abs/2609.20807",
+    "locator": "§4.1; Appendix A.3",
+    "status": "verified",
+    "notes": "Actual trainers additionally need token masks, normalization, numerical guards and distributed implementation."
+  },
+  {
+    "id": "SC11",
+    "claim": "The paper reports top-k 128 and 32 matching full score centering in its tested settings.",
+    "kind": "experiment",
+    "source_url": "https://arxiv.org/abs/2609.20807",
+    "locator": "§4.1; Appendix A.4",
+    "status": "verified",
+    "notes": "Empirical result, not a universal approximation guarantee."
+  },
+  {
+    "id": "SC12",
+    "claim": "Score centering is a drift/bias correction, not a general variance-reduction theorem.",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/abs/2609.20807",
+    "locator": "§4, Relation to classical baselines",
+    "status": "verified",
+    "notes": "Do not claim deterministic score subtraction always reduces estimator variance."
+  },
+  {
+    "id": "SC13",
+    "claim": "The remaining score-centered update measures covariance under sampler q rather than trainer p.",
+    "kind": "limitation",
+    "source_url": "https://arxiv.org/abs/2609.20807",
+    "locator": "§6 Limitations",
+    "status": "verified",
+    "notes": "It does not remove all off-policy bias or prefix distribution mismatch."
+  },
+  {
+    "id": "SC14",
+    "claim": "Main experiments use Qwen3-0.6B Countdown and Qwen3-30B-A3B-Base INTELLECT-2 math under deliberately severe mismatch.",
+    "kind": "experiment",
+    "source_url": "https://arxiv.org/abs/2609.20807",
+    "locator": "§5",
+    "status": "verified",
+    "notes": "Authors describe severe mismatch on shorter sequences as a proxy for longer training under milder mismatch."
+  },
+  {
+    "id": "SC15",
+    "claim": "Under INT8 sampler and INT4 KV cache, the paper reports SC around 30% training accuracy, TIS 12%, and other methods below 5%.",
+    "kind": "experiment",
+    "source_url": "https://arxiv.org/abs/2609.20807",
+    "locator": "§5.4",
+    "status": "verified",
+    "notes": "Training accuracy under the stated severe quantization setting, not independent test accuracy."
+  },
+  {
+    "id": "SC16",
+    "claim": "The official implementation provides JAX and PyTorch reference losses, top-k capture and TIS/MIS composition.",
+    "kind": "implementation",
+    "source_url": "https://github.com/martin-marek/score-centering",
+    "locator": "README.md; losses.py",
+    "status": "verified",
+    "notes": "Reference implementation and reproducibility code, not a universal production trainer."
+  },
+  {
+    "id": "SC17",
+    "claim": "verl documents score centering with bypass REINFORCE and top-k log probabilities, with configuration restrictions.",
+    "kind": "modern-implementation",
+    "source_url": "https://verl.readthedocs.io/en/latest/algo/rollout_corr.html",
+    "locator": "score_centering configuration section",
+    "status": "verified",
+    "notes": "Current docs list restrictions including no sequence-level IS in this mode."
+  },
+  {
+    "id": "SC18",
+    "claim": "NeMo-RL nightly documentation describes score centering as experimental and requiring supported rollout capture.",
+    "kind": "modern-implementation",
+    "source_url": "https://docs.nvidia.com/nemo/rl/nightly/guides/score-centering.html",
+    "locator": "Score Centering; Configuration",
+    "status": "verified",
+    "notes": "Experimental status and supported layouts are version-dependent."
+  },
+  {
+    "id": "SC19",
+    "claim": "Regularized Score Centering adds reverse KL(pi_theta||mu) to constrain learner-behavior policy separation.",
+    "kind": "later-work",
+    "source_url": "https://arxiv.org/abs/2611.21791",
+    "locator": "Abstract; §3.2",
+    "status": "verified",
+    "notes": "November 2026 follow-up preprint, not part of original SC."
+  },
+  {
+    "id": "SC20",
+    "claim": "RSC motivates its regularizer because token advantages depend on behavior-policy continuations and may differ from learner-policy advantages.",
+    "kind": "later-work",
+    "source_url": "https://arxiv.org/abs/2611.21791",
+    "locator": "§1; §3.1-§3.2",
+    "status": "verified",
+    "notes": "This clarifies continuation mismatch not removed by local score centering."
+  },
+  {
+    "id": "SC21",
+    "claim": "A 2026 theory note distinguishes group-mean baseline from population score centering and analyzes sequence-level versus token-level IS.",
+    "kind": "later-work",
+    "source_url": "https://arxiv.org/abs/2610.22263",
+    "locator": "Abstract; §2-§4",
+    "status": "verified",
+    "notes": "Treat as follow-up analysis, not a claim from the original paper."
+  },
+  {
+    "id": "SC22",
+    "claim": "The Bernoulli interactive example verifies drift/signal decomposition and zero centered expected update under constant reward.",
+    "kind": "toy-derivation",
+    "source_url": "https://arxiv.org/abs/2609.20807",
+    "locator": "§4; independent Bernoulli derivation",
+    "status": "illustrative",
+    "notes": "One-parameter toy model, not an LLM benchmark or paper reproduction."
+  },
+  {
+    "id": "SC23",
+    "claim": "TRL AsyncGRPOTrainer enables score centering by default and combines it with masked importance weights over a configured interval.",
+    "kind": "modern-implementation",
+    "source_url": "https://huggingface.co/docs/trl/main/async_grpo_trainer",
+    "locator": "Computing the loss; AsyncGRPOConfig",
+    "status": "verified",
+    "notes": "This integration is specific to AsyncGRPOTrainer; its default objective is not identical to every GRPOTrainer or pure unweighted SC."
+  },
+  {
+    "id": "SC24",
+    "claim": "NeMo-RL adds score-centering correction to its existing clipped objective and requires sampler replay for filtered sampling support.",
+    "kind": "modern-implementation",
+    "source_url": "https://docs.nvidia.com/nemo/rl/nightly/guides/score-centering.html",
+    "locator": "Objective; Configuration; Sampling filters",
+    "status": "verified",
+    "notes": "The nightly implementation explicitly says this does not exactly center an arbitrary PPO clipped gradient; feature remains experimental."
+  }
+]
