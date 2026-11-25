@@ -45,11 +45,14 @@ def test_article_semantics_math_and_local_figures():
     assert all(len(item.find_all(recursive=False)) == 2 for item in soup.select("munder"))
     assert not soup.select("svg math")
 
-    figures = soup.select("figure img[src]")
+    figures = soup.select("figure svg")
     assert len(figures) == 8
     seen = set()
-    for image in figures:
-        relative = image["src"]
+    assets = sorted((POST_DIR / "assets").glob("*.svg"))
+    assert len(assets) == len(figures)
+    for image, asset in zip(figures, assets):
+        relative = "assets/" + asset.name
+        assert asset.read_text(encoding="utf-8").strip() in html
         assert relative.startswith("assets/") and relative.endswith(".svg")
         assert relative not in seen
         seen.add(relative)
