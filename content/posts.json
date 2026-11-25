@@ -3076,6 +3076,8 @@
     "cover": {
       "src": "assets/01-parallel.svg",
       "caption": "目标隐藏特征引导块扩散一次前向并行预测未来候选"
-    }
+    },
+    "published": "2026-11-25",
+    "updated": "2026-11-25"
   }
 ]
