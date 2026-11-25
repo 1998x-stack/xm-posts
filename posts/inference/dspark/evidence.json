@@ -1,0 +1,119 @@
+[
+  {
+    "id": "E01",
+    "kind": "architecture",
+    "claim": "Parallel backbone, sequential head and confidence-scheduled verification",
+    "locator": "§3 Figure 1",
+    "source_url": "https://arxiv.org/html/2607.05147v1",
+    "status": "verified",
+    "notes": "Checked against primary source; no independent benchmark reproduction."
+  },
+  {
+    "id": "E02",
+    "kind": "algorithm",
+    "claim": "Rejection sampling accepts min(1,p/q) and discards suffix; residual repairs probability mass",
+    "locator": "§2.1; Leviathan 2023 Algorithm 1",
+    "source_url": "https://proceedings.mlr.press/v202/leviathan23a.html",
+    "status": "verified",
+    "notes": "Checked against primary source; no independent benchmark reproduction."
+  },
+  {
+    "id": "E03",
+    "kind": "architecture",
+    "claim": "DFlash KV injection and anchor-as-first-prediction position",
+    "locator": "§2.2 Eq.2–3; §3.1",
+    "source_url": "https://arxiv.org/html/2607.05147v1",
+    "status": "verified",
+    "notes": "Checked against primary source; no independent benchmark reproduction."
+  },
+  {
+    "id": "E04",
+    "kind": "architecture",
+    "claim": "Markov rank 256 default; gated recurrent alternative",
+    "locator": "§3.1 Eq.4–6",
+    "source_url": "https://arxiv.org/html/2607.05147v1",
+    "status": "verified",
+    "notes": "Checked against primary source; no independent benchmark reproduction."
+  },
+  {
+    "id": "E05",
+    "kind": "math",
+    "claim": "Acceptance label is 1−0.5 L1; confidence and STS calibration",
+    "locator": "§3.2.1 Eq.7–8",
+    "source_url": "https://arxiv.org/html/2607.05147v1",
+    "status": "verified",
+    "notes": "Checked against primary source; no independent benchmark reproduction."
+  },
+  {
+    "id": "E06",
+    "kind": "algorithm",
+    "claim": "Prefix products, batch rows and expected output times SPS; early stop",
+    "locator": "§3.2.2 Algorithm 1",
+    "source_url": "https://arxiv.org/html/2607.05147v1",
+    "status": "verified",
+    "notes": "Checked against primary source; no independent benchmark reproduction."
+  },
+  {
+    "id": "E07",
+    "kind": "theory",
+    "claim": "Retrospective schedule changes P(A) from .7 to .85",
+    "locator": "Appendix A",
+    "source_url": "https://arxiv.org/html/2607.05147v1",
+    "status": "verified",
+    "notes": "Checked against primary source; no independent benchmark reproduction."
+  },
+  {
+    "id": "E08",
+    "kind": "systems",
+    "claim": "Two-step-old scores determine K; current scores determine ranking",
+    "locator": "§5.2",
+    "source_url": "https://arxiv.org/html/2607.05147v1",
+    "status": "verified",
+    "notes": "Checked against primary source; no independent benchmark reproduction."
+  },
+  {
+    "id": "E09",
+    "kind": "training",
+    "claim": "CE, raw L1 and BCE weights .1,.9,1",
+    "locator": "§3.3 Eq.9–12",
+    "source_url": "https://arxiv.org/html/2607.05147v1",
+    "status": "verified",
+    "notes": "Checked against primary source; no independent benchmark reproduction."
+  },
+  {
+    "id": "E10",
+    "kind": "results",
+    "claim": "Qwen3-4B GSM8K/HumanEval/MT-Bench: Eagle3 5.14/4.16/2.39, DFlash 5.40/4.74/3.07, DSpark 6.11/5.38/3.64; paper reports macro gains",
+    "locator": "§4.1–4.2 Table 1; fixed 7, temperature 1, scheduler off",
+    "source_url": "https://arxiv.org/html/2607.05147v1",
+    "status": "verified",
+    "notes": "Checked against primary source; no independent benchmark reproduction."
+  },
+  {
+    "id": "E11",
+    "kind": "systems",
+    "claim": "V4 preview three MoE layers, mHC, SWA128, gamma 5; hidden-state communication and anchor packing",
+    "locator": "§5.1–5.3",
+    "source_url": "https://arxiv.org/html/2607.05147v1",
+    "status": "verified",
+    "notes": "Checked against primary source; no independent benchmark reproduction."
+  },
+  {
+    "id": "E12",
+    "kind": "results",
+    "claim": "Live preview traffic vs MTP-1: Flash +51% at 80 tok/s/user; Pro +52% at 35; matched capacity per-user gains 60–85% and 57–78%",
+    "locator": "§5.4 Figure 7",
+    "source_url": "https://arxiv.org/html/2607.05147v1",
+    "status": "verified",
+    "notes": "Checked against primary source; no independent benchmark reproduction."
+  },
+  {
+    "id": "E13",
+    "kind": "pedagogy",
+    "claim": "Toy collision, rank count, confidence and artificial SPS examples",
+    "locator": "Independent examples based on §3",
+    "source_url": "https://arxiv.org/html/2607.05147v1",
+    "status": "illustrative",
+    "notes": "Teaching numbers, not measurements."
+  }
+]
