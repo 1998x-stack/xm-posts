@@ -1301,8 +1301,8 @@
     "category": "reinforcement-learning",
     "status": "published",
     "published": "2026-11-20",
-    "updated": "2026-11-20",
-    "reading_minutes": 26,
+    "updated": "2026-11-25",
+    "reading_minutes": 42,
     "tags": [
       "REINFORCE",
       "Policy Gradient",
@@ -1310,9 +1310,13 @@
       "Monte Carlo",
       "Variance Reduction",
       "Baseline",
-      "Williams 1992"
+      "Williams 1992",
+      "RLOO",
+      "GRPO",
+      "RLHF",
+      "Importance Sampling"
     ],
-    "summary": "从两动作概率学习切入，以 Williams 1992 原文为证据推导 score-function 梯度、伯努利 logit、原始 eligibility 规则，再区分现代 reward-to-go 与 baseline，配五幅机制图、精确枚举交互及可复现 Python 测试。",
+    "summary": "从两动作概率学习、Williams 1992、score-function 与方差最优基线，到折扣回报、LLM token 梯度、RLOO、GRPO 和完整序列重要性采样；配原创机制图、交互与精确枚举测试。",
     "paper": "https://doi.org/10.1007/BF00992696",
     "illustration": "reinforce",
     "topic": "policy-gradient",

@@ -115,5 +115,86 @@
     "locator": "Article Figures 1–5",
     "status": "illustrative",
     "notes": "Not reproduced figures, experiment curves, or model schematics from paper."
+  },
+  {
+    "id": "R14",
+    "claim": "Start-state discounted finite-horizon objective requires absolute gamma^t times relative discounted return",
+    "kind": "derivation",
+    "source_url": "https://spinningup.openai.com/en/latest/spinningup/rl_intro3.html",
+    "locator": "Trajectory likelihood derivation; article Eqs. 9–10",
+    "status": "derived",
+    "notes": "Fixed initial distribution and dynamics; gamma^t can instead be absorbed by sampling weights."
+  },
+  {
+    "id": "R15",
+    "claim": "Autoregressive response log probability equals sum of generated token log probabilities",
+    "kind": "derivation",
+    "source_url": "https://aclanthology.org/2024.acl-long.662/",
+    "locator": "RLHF contextual bandit formulation, Section 2; article Eq. 11",
+    "status": "derived",
+    "notes": "EOS included if sampled; padding and prompt excluded."
+  },
+  {
+    "id": "R16",
+    "claim": "Sequence mean of summed logprobs differs from per-response length-normalized objective",
+    "kind": "derivation",
+    "source_url": "https://aclanthology.org/2024.acl-long.662/",
+    "locator": "Article Eq. 12 and direct algebra",
+    "status": "derived",
+    "notes": "No benchmark claim."
+  },
+  {
+    "id": "R17",
+    "claim": "RLOO uses other responses as the baseline",
+    "kind": "paper-claim",
+    "source_url": "https://aclanthology.org/2024.acl-long.662/",
+    "locator": "Section 2, REINFORCE Leave-One-Out",
+    "status": "verified",
+    "notes": "Independent sampling conditional on prompt."
+  },
+  {
+    "id": "R18",
+    "claim": "Self-inclusive unnormalized group mean scales gradient by (K-1)/K; RLOO corrects that scale",
+    "kind": "toy-derivation",
+    "source_url": "https://aclanthology.org/2024.acl-long.662/",
+    "locator": "Article Eq. 13; exact enumeration in test_mini_reinforce.py",
+    "status": "derived",
+    "notes": "Fixed individual reward, iid samples, no clipping or standardization."
+  },
+  {
+    "id": "R19",
+    "claim": "GRPO includes group relative advantage and PPO-style clipping and reference KL",
+    "kind": "paper-claim",
+    "source_url": "https://arxiv.org/abs/2402.03300",
+    "locator": "Sections 4.1.1–4.1.2",
+    "status": "verified",
+    "notes": "Outcome variant uses reward standardization; not identical to RLOO."
+  },
+  {
+    "id": "R20",
+    "claim": "Full sequence likelihood ratio recovers target-policy expectation if behavior support covers target",
+    "kind": "derivation",
+    "source_url": "https://spinningup.openai.com/en/latest/spinningup/rl_intro3.html",
+    "locator": "Article Eq. 14, change of measure",
+    "status": "derived",
+    "notes": "Token-local clipping is not exact sequence IS."
+  },
+  {
+    "id": "R21",
+    "claim": "For fixed reference, differentiating expected sequence KL yields score times log ratio since expected score is zero",
+    "kind": "derivation",
+    "source_url": "https://aclanthology.org/2024.acl-long.662/",
+    "locator": "Article Section 12, direct likelihood-ratio algebra",
+    "status": "derived",
+    "notes": "On-policy and regularity conditions; not a claim about any specific KL implementation."
+  },
+  {
+    "id": "R22",
+    "claim": "New discount, token, and leave-one-out illustrations are independently composed",
+    "kind": "illustration",
+    "source_url": "https://aclanthology.org/2024.acl-long.662/",
+    "locator": "Article Figures 5–7",
+    "status": "illustrative",
+    "notes": "No copied paper diagrams or empirical results."
   }
 ]
