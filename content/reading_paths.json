@@ -629,5 +629,17 @@
       "loop-engineering",
       "agent-evaluation"
     ]
+  },
+  {
+    "id": "path-score-centering-01",
+    "title": "从 SFT 与 Policy Gradient 到 Off-policy RL 稳定性",
+    "posts": [
+      "sft",
+      "reinforce",
+      "ppo",
+      "grpo",
+      "importance-sampling",
+      "score-centering"
+    ]
   }
 ]
