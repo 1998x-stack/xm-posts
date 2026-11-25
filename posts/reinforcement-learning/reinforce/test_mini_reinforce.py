@@ -44,3 +44,20 @@ def test_logit_score_matches_finite_difference():
 def test_seeded_sampling_near_exact_mean():
     for b in (0., 1.3, 2.):
         assert abs(m.monte_carlo_mean(.35, 2., 0., b) - .455) < .03
+
+
+def test_discounted_absolute_weights():
+    expected = [2.92, 1.92, 1.92]
+    for actual, target in zip(m.discounted_weights([1, 0, 3], .8), expected):
+        assert math.isclose(actual, target, abs_tol=1e-12)
+    assert m.discounted_weights([1, 0, 3], 1.) == m.reward_to_go([1, 0, 3])
+
+
+def test_loo_and_self_inclusive_group_gradient():
+    for actual, target in zip(m.leave_one_out([1,1,0,0]), [2/3,2/3,-2/3,-2/3]):
+        assert math.isclose(actual, target, abs_tol=1e-12)
+    for p in (.15, .35, .8):
+        for k in (2, 4, 8):
+            truth = p*(1-p)
+            assert math.isclose(m.exact_group_gradient(p,k,True), truth, abs_tol=1e-12)
+            assert math.isclose(m.exact_group_gradient(p,k,False), truth*(k-1)/k, abs_tol=1e-12)
