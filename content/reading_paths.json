@@ -629,5 +629,15 @@
       "loop-engineering",
       "agent-evaluation"
     ]
+  },
+  {
+    "id": "teacher-forcing-to-rollout",
+    "title": "从真实前缀监督到策略轨迹学习",
+    "posts": [
+      "teacher-forcing",
+      "sft",
+      "imitation-learning",
+      "ppo"
+    ]
   }
 ]

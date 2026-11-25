@@ -33,6 +33,26 @@ def demo_rollouts() -> dict[str, list[str]]:
             "free_inputs": free_inputs, "free_outputs": free_outputs}
 
 
+def mixed_copy_probability(q: float) -> float:
+    """Two-position toy: true prefix with probability q, else independent fair prefix."""
+    if not 0 <= q <= 1:
+        raise ValueError("q must be in [0, 1]")
+    return (1 + q) / 2
+
+
+def at_least_one_error(epsilon: float, steps: int) -> float:
+    """Independent equal-risk toy, not a model of real text quality."""
+    if not 0 <= epsilon <= 1 or steps < 0:
+        raise ValueError("invalid probability or steps")
+    return 1 - (1 - epsilon) ** steps
+
+
+def masked_token_nll(probabilities: Sequence[float], mask: Sequence[bool]) -> float:
+    if len(probabilities) != len(mask):
+        raise ValueError("mask must align with targets")
+    return token_cross_entropy([p for p, keep in zip(probabilities, mask) if keep])
+
+
 if __name__ == "__main__":
     pairs = shifted_pairs(["<bos>", "我", "爱", "机器", "学习", "<eos>"])
     assert pairs == [("<bos>", "我"), ("我", "爱"), ("爱", "机器"),
@@ -41,4 +61,17 @@ if __name__ == "__main__":
     trajectories = demo_rollouts()
     assert trajectories["teacher_outputs"] == ["We", "love", "cats"]
     assert trajectories["free_outputs"] == ["We", "like", "dogs"]
-    print("OK: shift, mean NLL, distinct training/inference feedback")
+    assert mixed_copy_probability(0) == 0.5
+    assert mixed_copy_probability(0.5) == 0.75
+    assert mixed_copy_probability(1) == 1
+    assert abs(at_least_one_error(0.02, 50) - 0.6358303) < 1e-6
+    assert at_least_one_error(0.5, 0) == 0
+    assert abs(masked_token_nll([0.1, 0.8, 0.7, 0.6], [False, True, True, True]) - 0.3635480) < 1e-6
+    try:
+        masked_token_nll([0.5], [False])
+    except ValueError:
+        pass
+    else:
+        raise AssertionError("empty supervision must not silently divide by zero")
+    assert abs(0.25 / 0.2 - 1.25) < 1e-12
+    print("OK: shift, NLL, feedback, mixed prefixes, independent risk, mask, ratio")
